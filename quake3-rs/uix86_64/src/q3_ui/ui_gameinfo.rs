@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -105,7 +105,7 @@ UI_Alloc
 pub unsafe extern "C" fn UI_Alloc(mut size: i32) -> *mut libc::c_void {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     if allocPoint + size > 128 as i32 * 1024 as i32 {
-        outOfMemory = crate::src::qcommon::q_shared::qtrue as i32;
+        outOfMemory = qtrue as i32;
         return 0 as *mut libc::c_void;
     }
     p = &mut *memoryPool.as_mut_ptr().offset(allocPoint as isize) as *mut libc::c_char;
@@ -121,7 +121,7 @@ UI_InitMemory
 
 pub unsafe extern "C" fn UI_InitMemory() {
     allocPoint = 0 as i32;
-    outOfMemory = crate::src::qcommon::q_shared::qfalse as i32;
+    outOfMemory = qfalse as i32;
 }
 /*
 ===============
@@ -141,49 +141,49 @@ pub unsafe extern "C" fn UI_ParseInfos(
     let mut info: [libc::c_char; 1024] = [0; 1024];
     count = 0 as i32;
     loop {
-        token = crate::src::qcommon::q_shared::COM_Parse(&mut buf);
+        token = COM_Parse(&mut buf);
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
-        if ::libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
-            crate::src::q3_ui::ui_atoms::Com_Printf(
+        if libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
+            Com_Printf(
                 b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char,
             );
             break;
         } else if count == max {
-            crate::src::q3_ui::ui_atoms::Com_Printf(
+            Com_Printf(
                 b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char,
             );
             break;
         } else {
             info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
             loop {
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                token = COM_ParseExt(
                     &mut buf,
-                    crate::src::qcommon::q_shared::qtrue,
+                    qtrue,
                 );
                 if *token.offset(0 as i32 as isize) == 0 {
-                    crate::src::q3_ui::ui_atoms::Com_Printf(
+                    Com_Printf(
                         b"Unexpected end of info file\n\x00" as *const u8 as *const libc::c_char,
                     );
                     break;
                 } else {
-                    if ::libc::strcmp(token, b"}\x00" as *const u8 as *const libc::c_char) == 0 {
+                    if libc::strcmp(token, b"}\x00" as *const u8 as *const libc::c_char) == 0 {
                         break;
                     }
-                    crate::src::qcommon::q_shared::Q_strncpyz(
+                    Q_strncpyz(
                         key.as_mut_ptr(),
                         token,
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
-                    token = crate::src::qcommon::q_shared::COM_ParseExt(
+                    token = COM_ParseExt(
                         &mut buf,
-                        crate::src::qcommon::q_shared::qfalse,
+                        qfalse,
                     );
                     if *token.offset(0 as i32 as isize) == 0 {
-                        ::libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
+                        libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
                     }
-                    crate::src::qcommon::q_shared::Info_SetValueForKey(
+                    Info_SetValueForKey(
                         info.as_mut_ptr(),
                         key.as_mut_ptr(),
                         token,
@@ -197,14 +197,14 @@ pub unsafe extern "C" fn UI_ParseInfos(
                     .wrapping_add(crate::stdlib::strlen(
                         b"\\num\\\x00" as *const u8 as *const libc::c_char,
                     ))
-                    .wrapping_add(crate::stdlib::strlen(crate::src::qcommon::q_shared::va(
+                    .wrapping_add(crate::stdlib::strlen(va(
                         b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         1024 as i32,
                     )))
                     .wrapping_add(1 as i32 as libc::c_ulong) as i32,
             ) as *mut libc::c_char;
             if !(*infos.offset(count as isize)).is_null() {
-                ::libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
+                libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
                 count += 1
             }
         }
@@ -219,34 +219,34 @@ UI_LoadArenasFromFile
 
 unsafe extern "C" fn UI_LoadArenasFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
-    let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = crate::src::ui::ui_syscalls::trap_FS_FOpenFile(
+    len = trap_FS_FOpenFile(
         filename,
         &mut f,
-        crate::src::qcommon::q_shared::FS_READ,
+        FS_READ,
     );
     if f == 0 {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             filename,
         ));
         return;
     }
     if len >= 8192 as i32 {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
             len,
             8192 as i32,
         ));
-        crate::src::ui::ui_syscalls::trap_FS_FCloseFile(f);
+        trap_FS_FCloseFile(f);
         return;
     }
-    crate::src::ui::ui_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
+    trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
     buf[len as usize] = 0 as i32 as libc::c_char;
-    crate::src::ui::ui_syscalls::trap_FS_FCloseFile(f);
+    trap_FS_FCloseFile(f);
     ui_numArenas += UI_ParseInfos(
         buf.as_mut_ptr(),
         1024 as i32 - ui_numArenas,
@@ -261,8 +261,8 @@ UI_LoadArenas
 
 unsafe extern "C" fn UI_LoadArenas() {
     let mut numdirs: i32 = 0;
-    let mut arenasFile: crate::src::qcommon::q_shared::vmCvar_t =
-        crate::src::qcommon::q_shared::vmCvar_t {
+    let mut arenasFile: vmCvar_t =
+        vmCvar_t {
             handle: 0,
             modificationCount: 0,
             value: 0.,
@@ -281,8 +281,8 @@ unsafe extern "C" fn UI_LoadArenas() {
     let mut specialNum: i32 = 0;
     let mut otherNum: i32 = 0;
     ui_numArenas = 0 as i32;
-    crate::src::ui::ui_syscalls::trap_Cvar_Register(
-        &mut arenasFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        &mut arenasFile as *mut _ as *mut vmCvar_t,
         b"g_arenasFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x10 as i32 | 0x40 as i32,
@@ -295,7 +295,7 @@ unsafe extern "C" fn UI_LoadArenas() {
         );
     }
     // get all arenas from .arena files
-    numdirs = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
+    numdirs = trap_FS_GetFileList(
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".arena\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
@@ -305,21 +305,21 @@ unsafe extern "C" fn UI_LoadArenas() {
     i = 0 as i32;
     while i < numdirs {
         dirlen = crate::stdlib::strlen(dirptr) as i32;
-        ::libc::strcpy(
+        libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
         );
-        ::libc::strcat(filename.as_mut_ptr(), dirptr);
+        libc::strcat(filename.as_mut_ptr(), dirptr);
         UI_LoadArenasFromFile(filename.as_mut_ptr());
         i += 1;
         dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
-    crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    trap_Print(va(
         b"%i arenas parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ui_numArenas,
     ));
     if outOfMemory != 0 {
-        crate::src::ui::ui_syscalls::trap_Print(
+        trap_Print(
             b"^3WARNING: not enough memory in pool to load all arenas\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -327,10 +327,10 @@ unsafe extern "C" fn UI_LoadArenas() {
     // set initial numbers
     n = 0 as i32;
     while n < ui_numArenas {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             ui_arenaInfos[n as usize],
             b"num\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 n,
             ),
@@ -343,16 +343,16 @@ unsafe extern "C" fn UI_LoadArenas() {
     n = 0 as i32;
     while n < ui_numArenas {
         // determine type
-        type_0 = crate::src::qcommon::q_shared::Info_ValueForKey(
+        type_0 = Info_ValueForKey(
             ui_arenaInfos[n as usize],
             b"type\x00" as *const u8 as *const libc::c_char,
         );
         // if no type specified, it will be treated as "ffa"
         if !(*type_0 == 0) {
-            if !::libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
+            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
             {
                 // check for special single player arenas (training, final)
-                tag = crate::src::qcommon::q_shared::Info_ValueForKey(
+                tag = Info_ValueForKey(
                     ui_arenaInfos[n as usize],
                     b"special\x00" as *const u8 as *const libc::c_char,
                 );
@@ -368,7 +368,7 @@ unsafe extern "C" fn UI_LoadArenas() {
     n = ui_numSinglePlayerArenas % 4 as i32;
     if n != 0 as i32 {
         ui_numSinglePlayerArenas -= n;
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"%i arenas ignored to make count divisible by %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             n,
@@ -383,26 +383,26 @@ unsafe extern "C" fn UI_LoadArenas() {
     n = 0 as i32;
     while n < ui_numArenas {
         // determine type
-        type_0 = crate::src::qcommon::q_shared::Info_ValueForKey(
+        type_0 = Info_ValueForKey(
             ui_arenaInfos[n as usize],
             b"type\x00" as *const u8 as *const libc::c_char,
         );
         // if no type specified, it will be treated as "ffa"
         if *type_0 != 0 {
-            if !::libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
+            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
             {
                 // check for special single player arenas (training, final)
-                tag = crate::src::qcommon::q_shared::Info_ValueForKey(
+                tag = Info_ValueForKey(
                     ui_arenaInfos[n as usize],
                     b"special\x00" as *const u8 as *const libc::c_char,
                 );
                 if *tag != 0 {
                     let fresh1 = specialNum;
                     specialNum = specialNum + 1;
-                    crate::src::qcommon::q_shared::Info_SetValueForKey(
+                    Info_SetValueForKey(
                         ui_arenaInfos[n as usize],
                         b"num\x00" as *const u8 as *const libc::c_char,
-                        crate::src::qcommon::q_shared::va(
+                        va(
                             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                             fresh1,
                         ),
@@ -410,10 +410,10 @@ unsafe extern "C" fn UI_LoadArenas() {
                 } else {
                     let fresh2 = singlePlayerNum;
                     singlePlayerNum = singlePlayerNum + 1;
-                    crate::src::qcommon::q_shared::Info_SetValueForKey(
+                    Info_SetValueForKey(
                         ui_arenaInfos[n as usize],
                         b"num\x00" as *const u8 as *const libc::c_char,
-                        crate::src::qcommon::q_shared::va(
+                        va(
                             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                             fresh2,
                         ),
@@ -430,10 +430,10 @@ unsafe extern "C" fn UI_LoadArenas() {
             16415152177862271243 => {
                 let fresh3 = otherNum;
                 otherNum = otherNum + 1;
-                crate::src::qcommon::q_shared::Info_SetValueForKey(
+                Info_SetValueForKey(
                     ui_arenaInfos[n as usize],
                     b"num\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         fresh3,
                     ),
@@ -455,7 +455,7 @@ pub unsafe extern "C" fn UI_GetArenaInfoByNumber(mut num: i32) -> *const libc::c
     let mut n: i32 = 0;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     if num < 0 as i32 || num >= ui_numArenas {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1Invalid arena number: %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             num,
@@ -464,7 +464,7 @@ pub unsafe extern "C" fn UI_GetArenaInfoByNumber(mut num: i32) -> *const libc::c
     }
     n = 0 as i32;
     while n < ui_numArenas {
-        value = crate::src::qcommon::q_shared::Info_ValueForKey(
+        value = Info_ValueForKey(
             ui_arenaInfos[n as usize],
             b"num\x00" as *const u8 as *const libc::c_char,
         );
@@ -486,8 +486,8 @@ pub unsafe extern "C" fn UI_GetArenaInfoByMap(mut map: *const libc::c_char) -> *
     let mut n: i32 = 0;
     n = 0 as i32;
     while n < ui_numArenas {
-        if crate::src::qcommon::q_shared::Q_stricmp(
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+        if Q_stricmp(
+            Info_ValueForKey(
                 ui_arenaInfos[n as usize],
                 b"map\x00" as *const u8 as *const libc::c_char,
             ),
@@ -513,8 +513,8 @@ pub unsafe extern "C" fn UI_GetSpecialArenaInfo(
     let mut n: i32 = 0;
     n = 0 as i32;
     while n < ui_numArenas {
-        if crate::src::qcommon::q_shared::Q_stricmp(
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+        if Q_stricmp(
+            Info_ValueForKey(
                 ui_arenaInfos[n as usize],
                 b"special\x00" as *const u8 as *const libc::c_char,
             ),
@@ -535,41 +535,41 @@ UI_LoadBotsFromFile
 
 unsafe extern "C" fn UI_LoadBotsFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
-    let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = crate::src::ui::ui_syscalls::trap_FS_FOpenFile(
+    len = trap_FS_FOpenFile(
         filename,
         &mut f,
-        crate::src::qcommon::q_shared::FS_READ,
+        FS_READ,
     );
     if f == 0 {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             filename,
         ));
         return;
     }
     if len >= 8192 as i32 {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
             len,
             8192 as i32,
         ));
-        crate::src::ui::ui_syscalls::trap_FS_FCloseFile(f);
+        trap_FS_FCloseFile(f);
         return;
     }
-    crate::src::ui::ui_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
+    trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
     buf[len as usize] = 0 as i32 as libc::c_char;
-    crate::src::ui::ui_syscalls::trap_FS_FCloseFile(f);
+    trap_FS_FCloseFile(f);
     ui_numBots += UI_ParseInfos(
         buf.as_mut_ptr(),
         1024 as i32 - ui_numBots,
         &mut *ui_botInfos.as_mut_ptr().offset(ui_numBots as isize),
     );
     if outOfMemory != 0 {
-        crate::src::ui::ui_syscalls::trap_Print(
+        trap_Print(
             b"^3WARNING: not enough memory in pool to load all bots\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -582,8 +582,8 @@ UI_LoadBots
 */
 
 unsafe extern "C" fn UI_LoadBots() {
-    let mut botsFile: crate::src::qcommon::q_shared::vmCvar_t =
-        crate::src::qcommon::q_shared::vmCvar_t {
+    let mut botsFile: vmCvar_t =
+        vmCvar_t {
             handle: 0,
             modificationCount: 0,
             value: 0.,
@@ -597,8 +597,8 @@ unsafe extern "C" fn UI_LoadBots() {
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
     ui_numBots = 0 as i32;
-    crate::src::ui::ui_syscalls::trap_Cvar_Register(
-        &mut botsFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        &mut botsFile as *mut _ as *mut vmCvar_t,
         b"g_botsFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x10 as i32 | 0x40 as i32,
@@ -611,7 +611,7 @@ unsafe extern "C" fn UI_LoadBots() {
         );
     }
     // get all bots from .bot files
-    numdirs = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
+    numdirs = trap_FS_GetFileList(
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".bot\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
@@ -621,16 +621,16 @@ unsafe extern "C" fn UI_LoadBots() {
     i = 0 as i32;
     while i < numdirs {
         dirlen = crate::stdlib::strlen(dirptr) as i32;
-        ::libc::strcpy(
+        libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
         );
-        ::libc::strcat(filename.as_mut_ptr(), dirptr);
+        libc::strcat(filename.as_mut_ptr(), dirptr);
         UI_LoadBotsFromFile(filename.as_mut_ptr());
         i += 1;
         dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
-    crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    trap_Print(va(
         b"%i bots parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ui_numBots,
     ));
@@ -644,7 +644,7 @@ UI_GetBotInfoByNumber
 
 pub unsafe extern "C" fn UI_GetBotInfoByNumber(mut num: i32) -> *mut libc::c_char {
     if num < 0 as i32 || num >= ui_numBots {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1Invalid bot number: %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             num,
@@ -665,11 +665,11 @@ pub unsafe extern "C" fn UI_GetBotInfoByName(mut name: *const libc::c_char) -> *
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     n = 0 as i32;
     while n < ui_numBots {
-        value = crate::src::qcommon::q_shared::Info_ValueForKey(
+        value = Info_ValueForKey(
             ui_botInfos[n as usize],
             b"name\x00" as *const u8 as *const libc::c_char,
         );
-        if crate::src::qcommon::q_shared::Q_stricmp(value, name) == 0 {
+        if Q_stricmp(value, name) == 0 {
             return ui_botInfos[n as usize];
         }
         n += 1
@@ -705,21 +705,21 @@ pub unsafe extern "C" fn UI_GetBestScore(mut level: i32, mut score: *mut i32, mu
     bestScoreSkill = 0 as i32;
     n = 1 as i32;
     while n <= 5 as i32 {
-        crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
-            crate::src::qcommon::q_shared::va(
+        trap_Cvar_VariableStringBuffer(
+            va(
                 b"g_spScores%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 n,
             ),
             scores.as_mut_ptr(),
             1024 as i32,
         );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             arenaKey.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             b"l%i\x00" as *const u8 as *const libc::c_char,
             level,
         );
-        skillScore = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+        skillScore = atoi(Info_ValueForKey(
             scores.as_mut_ptr(),
             arenaKey.as_mut_ptr(),
         ));
@@ -753,15 +753,15 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
         return;
     }
     // validate skill
-    skill = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    skill = trap_Cvar_VariableValue(
         b"g_spSkill\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     if skill < 1 as i32 || skill > 5 as i32 {
         return;
     }
     // get scores
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
-        crate::src::qcommon::q_shared::va(
+    trap_Cvar_VariableStringBuffer(
+        va(
             b"g_spScores%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             skill,
         ),
@@ -769,13 +769,13 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
         1024 as i32,
     );
     // see if this is better
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         arenaKey.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"l%i\x00" as *const u8 as *const libc::c_char,
         level,
     );
-    oldScore = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    oldScore = atoi(Info_ValueForKey(
         scores.as_mut_ptr(),
         arenaKey.as_mut_ptr(),
     ));
@@ -783,16 +783,16 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
         return;
     }
     // update scores
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         scores.as_mut_ptr(),
         arenaKey.as_mut_ptr(),
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             score,
         ),
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
-        crate::src::qcommon::q_shared::va(
+    trap_Cvar_Set(
+        va(
             b"g_spScores%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             skill,
         ),
@@ -813,38 +813,38 @@ pub unsafe extern "C" fn UI_LogAwardData(mut award: i32, mut data: i32) {
     if data == 0 as i32 {
         return;
     }
-    if award > crate::ui_local_h::AWARD_PERFECT as i32 {
-        crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    if award > AWARD_PERFECT as i32 {
+        trap_Print(va(
             b"^1Bad award %i in UI_LogAwardData\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             award,
         ));
         return;
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         key.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
-    oldValue = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    oldValue = atoi(Info_ValueForKey(
         awardData.as_mut_ptr(),
         key.as_mut_ptr(),
     ));
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         awardData.as_mut_ptr(),
         key.as_mut_ptr(),
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             oldValue + data,
         ),
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
     );
@@ -859,18 +859,18 @@ UI_GetAwardLevel
 pub unsafe extern "C" fn UI_GetAwardLevel(mut award: i32) -> i32 {
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut awardData: [libc::c_char; 1024] = [0; 1024];
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         key.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
-    return atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    return atoi(Info_ValueForKey(
         awardData.as_mut_ptr(),
         key.as_mut_ptr(),
     ));
@@ -894,7 +894,7 @@ pub unsafe extern "C" fn UI_TierCompleted(mut levelWon: i32) -> i32 {
     if tier == UI_GetNumSPTiers() {
         info = UI_GetSpecialArenaInfo(b"training\x00" as *const u8 as *const libc::c_char);
         if levelWon
-            == atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+            == atoi(Info_ValueForKey(
                 info,
                 b"num\x00" as *const u8 as *const libc::c_char,
             ))
@@ -904,7 +904,7 @@ pub unsafe extern "C" fn UI_TierCompleted(mut levelWon: i32) -> i32 {
         info = UI_GetSpecialArenaInfo(b"final\x00" as *const u8 as *const libc::c_char);
         if info.is_null()
             || levelWon
-                == atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+                == atoi(Info_ValueForKey(
                     info,
                     b"num\x00" as *const u8 as *const libc::c_char,
                 ))
@@ -933,43 +933,43 @@ UI_ShowTierVideo
 
 pub unsafe extern "C" fn UI_ShowTierVideo(
     mut tier: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut videos: [libc::c_char; 1024] = [0; 1024];
     if tier <= 0 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         videos.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         key.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
-    if atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    if atoi(Info_ValueForKey(
         videos.as_mut_ptr(),
         key.as_mut_ptr(),
     )) != 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         videos.as_mut_ptr(),
         key.as_mut_ptr(),
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             1 as i32,
         ),
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         videos.as_mut_ptr(),
     );
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -980,34 +980,34 @@ UI_CanShowTierVideo
 
 pub unsafe extern "C" fn UI_CanShowTierVideo(
     mut tier: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut videos: [libc::c_char; 1024] = [0; 1024];
     if tier == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if crate::src::q3_ui::ui_atoms::uis.demoversion as u32 != 0 && tier != 8 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+    if uis.demoversion as u32 != 0 && tier != 8 as i32 {
+        return qfalse;
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         videos.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         key.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
-    if atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    if atoi(Info_ValueForKey(
         videos.as_mut_ptr(),
         key.as_mut_ptr(),
     )) != 0
     {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ===============
@@ -1025,7 +1025,7 @@ pub unsafe extern "C" fn UI_GetCurrentGame() -> i32 {
     let mut info: *const libc::c_char = 0 as *const libc::c_char;
     info = UI_GetSpecialArenaInfo(b"training\x00" as *const u8 as *const libc::c_char);
     if !info.is_null() {
-        level = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+        level = atoi(Info_ValueForKey(
             info,
             b"num\x00" as *const u8 as *const libc::c_char,
         ));
@@ -1046,7 +1046,7 @@ pub unsafe extern "C" fn UI_GetCurrentGame() -> i32 {
     if info.is_null() {
         return -(1 as i32);
     }
-    return atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    return atoi(Info_ValueForKey(
         info,
         b"num\x00" as *const u8 as *const libc::c_char,
     ));
@@ -1061,31 +1061,31 @@ Clears the scores and sets the difficutly level
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_NewGame() {
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores1\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores2\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores3\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores4\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores5\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spVideos\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
     );
@@ -1143,7 +1143,7 @@ pub unsafe extern "C" fn UI_SPUnlock_f() {
     let mut level: i32 = 0;
     let mut tier: i32 = 0;
     // get scores for skill 1
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spScores1\x00" as *const u8 as *const libc::c_char,
         scores.as_mut_ptr(),
         1024 as i32,
@@ -1151,20 +1151,20 @@ pub unsafe extern "C" fn UI_SPUnlock_f() {
     // update scores
     level = 0 as i32;
     while level < ui_numSinglePlayerArenas + ui_numSpecialSinglePlayerArenas {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             arenaKey.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             b"l%i\x00" as *const u8 as *const libc::c_char,
             level,
         );
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             scores.as_mut_ptr(),
             arenaKey.as_mut_ptr(),
             b"1\x00" as *const u8 as *const libc::c_char,
         );
         level += 1
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spScores1\x00" as *const u8 as *const libc::c_char,
         scores.as_mut_ptr(),
     );
@@ -1174,10 +1174,10 @@ pub unsafe extern "C" fn UI_SPUnlock_f() {
         UI_ShowTierVideo(tier);
         tier += 1
     }
-    crate::src::ui::ui_syscalls::trap_Print(
+    trap_Print(
         b"All levels unlocked at skill level 1\n\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::q3_ui::ui_splevel::UI_SPLevelMenu_ReInit();
+    UI_SPLevelMenu_ReInit();
 }
 /*
 ===============
@@ -1190,31 +1190,31 @@ pub unsafe extern "C" fn UI_SPUnlockMedals_f() {
     let mut n: i32 = 0;
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut awardData: [libc::c_char; 1024] = [0; 1024];
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
         1024 as i32,
     );
     n = 0 as i32;
     while n < 6 as i32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             key.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             b"a%i\x00" as *const u8 as *const libc::c_char,
             n,
         );
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             awardData.as_mut_ptr(),
             key.as_mut_ptr(),
             b"100\x00" as *const u8 as *const libc::c_char,
         );
         n += 1
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
     );
-    crate::src::ui::ui_syscalls::trap_Print(
+    trap_Print(
         b"All awards unlocked at 100\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -1393,5 +1393,5 @@ pub unsafe extern "C" fn UI_InitGameinfo() {
     UI_InitMemory();
     UI_LoadArenas();
     UI_LoadBots();
-    crate::src::q3_ui::ui_atoms::uis.demoversion = crate::src::qcommon::q_shared::qfalse;
+    uis.demoversion = qfalse;
 }

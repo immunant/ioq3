@@ -235,22 +235,22 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_start_compress(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut write_all_tables: crate::jmorecfg_h::boolean,
+    mut cinfo: j_compress_ptr,
+    mut write_all_tables: boolean,
 ) {
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32; /* mark all tables to be written */
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32; /* mark all tables to be written */
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     if write_all_tables != 0 {
-        crate::src::jpeg_8c::jcapimin::jpeg_suppress_tables(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jpeg_suppress_tables(
+            cinfo as *mut jpeg_compress_struct,
             0 as i32,
         );
     }
@@ -260,7 +260,7 @@ pub unsafe extern "C" fn jpeg_start_compress(
             .reset_error_mgr
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     Some(
         (*(*cinfo).dest)
             .init_destination
@@ -268,8 +268,8 @@ pub unsafe extern "C" fn jpeg_start_compress(
     )
     .expect("non-null function pointer")(cinfo);
     /* Perform master selection of active modules */
-    crate::src::jpeg_8c::jcinit::jinit_compress_master(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_compress_master(
+        cinfo as *mut jpeg_compress_struct,
     );
     /* Set up for the first pass */
     Some(
@@ -281,7 +281,7 @@ pub unsafe extern "C" fn jpeg_start_compress(
     /* Ready for application to drive first pass through jpeg_write_scanlines
      * or jpeg_write_raw_data.
      */
-    (*cinfo).next_scanline = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    (*cinfo).next_scanline = 0 as i32 as JDIMENSION;
     (*cinfo).global_state = if (*cinfo).raw_data_in != 0 {
         102 as i32
     } else {
@@ -305,31 +305,31 @@ pub unsafe extern "C" fn jpeg_start_compress(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_write_scanlines(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut scanlines: crate::jpeglib_h::JSAMPARRAY,
-    mut num_lines: crate::jmorecfg_h::JDIMENSION,
-) -> crate::jmorecfg_h::JDIMENSION {
-    let mut row_ctr: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut rows_left: crate::jmorecfg_h::JDIMENSION = 0;
+    mut cinfo: j_compress_ptr,
+    mut scanlines: JSAMPARRAY,
+    mut num_lines: JDIMENSION,
+) -> JDIMENSION {
+    let mut row_ctr: JDIMENSION = 0;
+    let mut rows_left: JDIMENSION = 0;
     if (*cinfo).global_state != 101 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     if (*cinfo).next_scanline >= (*cinfo).image_height {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA as i32;
+        (*(*cinfo).err).msg_code = JWRN_TOO_MUCH_DATA as i32;
         Some(
             (*(*cinfo).err)
                 .emit_message
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
+            cinfo as j_common_ptr, -(1 as i32)
         );
     }
     /* Call progress monitor hook if present */
@@ -341,7 +341,7 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
                 .progress_monitor
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Give master control module another chance if this is first call to
      * jpeg_write_scanlines.  This lets output of the frame/scan headers be
@@ -361,7 +361,7 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
     if num_lines > rows_left {
         num_lines = rows_left
     }
-    row_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    row_ctr = 0 as i32 as JDIMENSION;
     Some(
         (*(*cinfo).main)
             .process_data
@@ -369,8 +369,8 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
     )
     .expect("non-null function pointer")(cinfo, scanlines, &mut row_ctr, num_lines);
     (*cinfo).next_scanline = ((*cinfo).next_scanline as u32).wrapping_add(row_ctr)
-        as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
+        as JDIMENSION
+        as JDIMENSION;
     return row_ctr;
 }
 /* Replaces jpeg_write_scanlines when writing raw downsampled data. */
@@ -381,32 +381,32 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_write_raw_data(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut data: crate::jpeglib_h::JSAMPIMAGE,
-    mut num_lines: crate::jmorecfg_h::JDIMENSION,
-) -> crate::jmorecfg_h::JDIMENSION {
-    let mut lines_per_iMCU_row: crate::jmorecfg_h::JDIMENSION = 0;
+    mut cinfo: j_compress_ptr,
+    mut data: JSAMPIMAGE,
+    mut num_lines: JDIMENSION,
+) -> JDIMENSION {
+    let mut lines_per_iMCU_row: JDIMENSION = 0;
     if (*cinfo).global_state != 102 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     if (*cinfo).next_scanline >= (*cinfo).image_height {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA as i32;
+        (*(*cinfo).err).msg_code = JWRN_TOO_MUCH_DATA as i32;
         Some(
             (*(*cinfo).err)
                 .emit_message
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
+            cinfo as j_common_ptr, -(1 as i32)
         );
-        return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        return 0 as i32 as JDIMENSION;
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
@@ -417,7 +417,7 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
                 .progress_monitor
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Give master control module another chance if this is first call to
      * jpeg_write_raw_data.  This lets output of the frame/scan headers be
@@ -433,15 +433,15 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
         .expect("non-null function pointer")(cinfo);
     }
     /* Verify that at least one iMCU row has been passed. */
-    lines_per_iMCU_row = ((*cinfo).max_v_samp_factor * 8 as i32) as crate::jmorecfg_h::JDIMENSION;
+    lines_per_iMCU_row = ((*cinfo).max_v_samp_factor * 8 as i32) as JDIMENSION;
     if num_lines < lines_per_iMCU_row {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BUFFER_SIZE as i32;
+        (*(*cinfo).err).msg_code = JERR_BUFFER_SIZE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Directly compress the row. */
     if Some(
@@ -453,11 +453,11 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
         == 0
     {
         /* If compressor did not consume the whole row, suspend processing. */
-        return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        return 0 as i32 as JDIMENSION;
     }
     /* OK, we processed one iMCU row. */
     (*cinfo).next_scanline = ((*cinfo).next_scanline as u32).wrapping_add(lines_per_iMCU_row)
-        as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
+        as JDIMENSION
+        as JDIMENSION;
     return lines_per_iMCU_row;
 }

@@ -151,17 +151,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **********************************************************************/
 #[no_mangle]
 
-pub static mut uis: crate::ui_local_h::uiStatic_t = crate::ui_local_h::uiStatic_t {
+pub static mut uis: uiStatic_t = uiStatic_t {
     frametime: 0,
     realtime: 0,
     cursorx: 0,
     cursory: 0,
     menusp: 0,
-    activemenu: 0 as *const crate::ui_local_h::menuframework_s
-        as *mut crate::ui_local_h::menuframework_s,
-    stack: [0 as *const crate::ui_local_h::menuframework_s
-        as *mut crate::ui_local_h::menuframework_s; 8],
-    glconfig: crate::tr_types_h::glconfig_t {
+    activemenu: 0 as *const menuframework_s
+        as *mut menuframework_s,
+    stack: [0 as *const menuframework_s
+        as *mut menuframework_s; 8],
+    glconfig: glconfig_t {
         renderer_string: [0; 1024],
         vendor_string: [0; 1024],
         version_string: [0; 1024],
@@ -171,20 +171,20 @@ pub static mut uis: crate::ui_local_h::uiStatic_t = crate::ui_local_h::uiStatic_
         colorBits: 0,
         depthBits: 0,
         stencilBits: 0,
-        driverType: crate::tr_types_h::GLDRV_ICD,
-        hardwareType: crate::tr_types_h::GLHW_GENERIC,
-        deviceSupportsGamma: crate::src::qcommon::q_shared::qfalse,
-        textureCompression: crate::tr_types_h::TC_NONE,
-        textureEnvAddAvailable: crate::src::qcommon::q_shared::qfalse,
+        driverType: GLDRV_ICD,
+        hardwareType: GLHW_GENERIC,
+        deviceSupportsGamma: qfalse,
+        textureCompression: TC_NONE,
+        textureEnvAddAvailable: qfalse,
         vidWidth: 0,
         vidHeight: 0,
         windowAspect: 0.,
         displayFrequency: 0,
-        isFullscreen: crate::src::qcommon::q_shared::qfalse,
-        stereoEnabled: crate::src::qcommon::q_shared::qfalse,
-        smpActive: crate::src::qcommon::q_shared::qfalse,
+        isFullscreen: qfalse,
+        stereoEnabled: qfalse,
+        smpActive: qfalse,
     },
-    debug: crate::src::qcommon::q_shared::qfalse,
+    debug: qfalse,
     whiteShader: 0,
     menuBackShader: 0,
     menuBackNoLogoShader: 0,
@@ -198,13 +198,13 @@ pub static mut uis: crate::ui_local_h::uiStatic_t = crate::ui_local_h::uiStatic_
     xscale: 0.,
     yscale: 0.,
     bias: 0.,
-    demoversion: crate::src::qcommon::q_shared::qfalse,
-    firstdraw: crate::src::qcommon::q_shared::qfalse,
+    demoversion: qfalse,
+    firstdraw: qfalse,
 };
 #[no_mangle]
 
-pub static mut m_entersound: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+pub static mut m_entersound: qboolean =
+    qfalse;
 // after a frame, so caching won't disrupt the sound
 #[no_mangle]
 
@@ -222,7 +222,7 @@ pub unsafe extern "C" fn Com_Error(
         error,
         argptr.as_va_list(),
     );
-    crate::src::ui::ui_syscalls::trap_Error(text.as_mut_ptr());
+    trap_Error(text.as_mut_ptr());
 }
 /*
 ===========================================================================
@@ -387,7 +387,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
         msg,
         argptr.as_va_list(),
     );
-    crate::src::ui::ui_syscalls::trap_Print(text.as_mut_ptr());
+    trap_Print(text.as_mut_ptr());
 }
 /*
 =================
@@ -413,8 +413,8 @@ UI_StartDemoLoop
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_StartDemoLoop() {
-    crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+    trap_Cmd_ExecuteText(
+        EXEC_APPEND as i32,
         b"d1\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -425,9 +425,9 @@ UI_PushMenu
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframework_s) {
+pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut menuframework_s) {
     let mut i: i32 = 0;
-    let mut item: *mut crate::ui_local_h::menucommon_s = 0 as *mut crate::ui_local_h::menucommon_s;
+    let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
     // avoid stacking menus invoked by hotkeys
     i = 0 as i32;
     while i < uis.menusp {
@@ -440,7 +440,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
     }
     if i == uis.menusp {
         if uis.menusp >= 8 as i32 {
-            crate::src::ui::ui_syscalls::trap_Error(
+            trap_Error(
                 b"UI_PushMenu: menu stack overflow\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -452,17 +452,17 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
     // default cursor position
     (*menu).cursor = 0 as i32;
     (*menu).cursor_prev = 0 as i32;
-    m_entersound = crate::src::qcommon::q_shared::qtrue;
-    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(0x2 as i32);
+    m_entersound = qtrue;
+    trap_Key_SetCatcher(0x2 as i32);
     // force first available item to have focus
     i = 0 as i32;
     while i < (*menu).nitems {
-        item = (*menu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
+        item = (*menu).items[i as usize] as *mut menucommon_s;
         if (*item).flags & (0x2000 as i32 as u32 | 0x800 as i32 as u32 | 0x4000 as i32 as u32) == 0
         {
             (*menu).cursor_prev = -(1 as i32);
-            crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
-                menu as *mut crate::ui_local_h::_tag_menuframework,
+            Menu_SetCursor(
+                menu as *mut _tag_menuframework,
                 i,
             );
             break;
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
             i += 1
         }
     }
-    uis.firstdraw = crate::src::qcommon::q_shared::qtrue;
+    uis.firstdraw = qtrue;
 }
 /*
 =================
@@ -480,19 +480,19 @@ UI_PopMenu
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_PopMenu() {
-    crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
-        crate::src::q3_ui::ui_qmenu::menu_out_sound,
-        crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
+    trap_S_StartLocalSound(
+        menu_out_sound,
+        CHAN_LOCAL_SOUND as i32,
     );
     uis.menusp -= 1;
     if uis.menusp < 0 as i32 {
-        crate::src::ui::ui_syscalls::trap_Error(
+        trap_Error(
             b"UI_PopMenu: menu stack underflow\x00" as *const u8 as *const libc::c_char,
         );
     }
     if uis.menusp != 0 {
         uis.activemenu = uis.stack[(uis.menusp - 1 as i32) as usize];
-        uis.firstdraw = crate::src::qcommon::q_shared::qtrue
+        uis.firstdraw = qtrue
     } else {
         UI_ForceMenuOff();
     };
@@ -501,12 +501,12 @@ pub unsafe extern "C" fn UI_PopMenu() {
 
 pub unsafe extern "C" fn UI_ForceMenuOff() {
     uis.menusp = 0 as i32;
-    uis.activemenu = 0 as *mut crate::ui_local_h::menuframework_s;
-    crate::src::ui::ui_syscalls::trap_Key_SetCatcher(
-        crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & !(0x2 as i32),
+    uis.activemenu = 0 as *mut menuframework_s;
+    trap_Key_SetCatcher(
+        trap_Key_GetCatcher() & !(0x2 as i32),
     );
-    crate::src::ui::ui_syscalls::trap_Key_ClearStates();
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Key_ClearStates();
+    trap_Cvar_Set(
         b"cl_paused\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
     );
@@ -519,9 +519,9 @@ UI_LerpColor
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_LerpColor(
-    mut a: *mut crate::src::qcommon::q_shared::vec_t,
-    mut b: *mut crate::src::qcommon::q_shared::vec_t,
-    mut c: *mut crate::src::qcommon::q_shared::vec_t,
+    mut a: *mut vec_t,
+    mut b: *mut vec_t,
+    mut c: *mut vec_t,
     mut t: f32,
 ) {
     let mut i: i32 = 0;
@@ -531,9 +531,9 @@ pub unsafe extern "C" fn UI_LerpColor(
         *c.offset(i as isize) =
             *a.offset(i as isize) + t * (*b.offset(i as isize) - *a.offset(i as isize));
         if *c.offset(i as isize) < 0 as i32 as f32 {
-            *c.offset(i as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            *c.offset(i as isize) = 0 as i32 as vec_t
         } else if *c.offset(i as isize) as f64 > 1.0f64 {
-            *c.offset(i as isize) = 1.0f64 as crate::src::qcommon::q_shared::vec_t
+            *c.offset(i as isize) = 1.0f64 as vec_t
         }
         i += 1
     }
@@ -713,7 +713,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
     mut x: i32,
     mut y: i32,
     mut str: *const libc::c_char,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut ch: u8 = 0;
@@ -726,7 +726,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
     let mut fwidth: f32 = 0.;
     let mut fheight: f32 = 0.;
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    trap_R_SetColor(color as *const f32);
     ax = x as f32 * uis.xscale + uis.bias;
     ay = y as f32 * uis.yscale;
     s = str;
@@ -742,7 +742,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
             fheight = 36 as i32 as f32 / 256.0f32;
             aw = propMapB[ch as usize][2 as i32 as usize] as f32 * uis.xscale;
             ah = 36 as i32 as f32 * uis.yscale;
-            crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+            trap_R_DrawStretchPic(
                 ax,
                 ay,
                 aw,
@@ -757,7 +757,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
         }
         s = s.offset(1)
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 #[no_mangle]
 
@@ -766,12 +766,12 @@ pub unsafe extern "C" fn UI_DrawBannerString(
     mut y: i32,
     mut str: *const libc::c_char,
     mut style: i32,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut ch: i32 = 0;
     let mut width: i32 = 0;
-    let mut drawcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut drawcolor: vec4_t = [0.; 4];
     // find the width of the drawn text
     s = str;
     width = 0 as i32;
@@ -791,7 +791,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
         0 | _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        drawcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = 0 as i32 as vec_t;
         drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
         drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
@@ -825,9 +825,9 @@ unsafe extern "C" fn UI_DrawProportionalString2(
     mut x: i32,
     mut y: i32,
     mut str: *const libc::c_char,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
     mut sizeScale: f32,
-    mut charset: crate::src::qcommon::q_shared::qhandle_t,
+    mut charset: qhandle_t,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut ch: u8 = 0;
@@ -840,7 +840,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
     let mut fwidth: f32 = 0.;
     let mut fheight: f32 = 0.;
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    trap_R_SetColor(color as *const f32);
     ax = x as f32 * uis.xscale + uis.bias;
     ay = y as f32 * uis.yscale;
     s = str;
@@ -855,7 +855,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
             fheight = 27 as i32 as f32 / 256.0f32;
             aw = propMap[ch as usize][2 as i32 as usize] as f32 * uis.xscale * sizeScale;
             ah = 27 as i32 as f32 * uis.yscale * sizeScale;
-            crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+            trap_R_DrawStretchPic(
                 ax,
                 ay,
                 aw,
@@ -870,7 +870,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
         ax += aw + 3 as i32 as f32 * uis.xscale * sizeScale;
         s = s.offset(1)
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 /*
 =================
@@ -897,9 +897,9 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
     mut y: i32,
     mut str: *const libc::c_char,
     mut style: i32,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
-    let mut drawcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut drawcolor: vec4_t = [0.; 4];
     let mut width: i32 = 0;
     let mut sizeScale: f32 = 0.;
     if str.is_null() {
@@ -918,7 +918,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         0 | _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        drawcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = 0 as i32 as vec_t;
         drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
         drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
@@ -933,11 +933,11 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
     }
     if style & 0x2000 as i32 != 0 {
         drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
             x,
@@ -951,11 +951,11 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
     }
     if style & 0x4000 as i32 != 0 {
         drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
         drawcolor[0 as i32 as usize] = *color.offset(0 as i32 as isize);
@@ -963,7 +963,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         drawcolor[2 as i32 as usize] = *color.offset(2 as i32 as isize);
         drawcolor[3 as i32 as usize] = (0.5f64
             + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64))
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         UI_DrawProportionalString2(
             x,
             y,
@@ -990,7 +990,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
     mut ystep: i32,
     mut str: *const libc::c_char,
     mut style: i32,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
     let mut width: i32 = 0;
     let mut s1: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1003,7 +1003,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString_AutoWrapped(
         return;
     }
     sizeScale = UI_ProportionalSizeScale(style);
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         buf.as_mut_ptr(),
         str,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1067,14 +1067,14 @@ unsafe extern "C" fn UI_DrawString2(
     mut x: i32,
     mut y: i32,
     mut str: *const libc::c_char,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
     mut charw: i32,
     mut charh: i32,
 ) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char; //APSFIXME;
     let mut ch: libc::c_char = 0;
-    let mut forceColor: i32 = crate::src::qcommon::q_shared::qfalse as i32;
-    let mut tempcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut forceColor: i32 = qfalse as i32;
+    let mut tempcolor: vec4_t = [0.; 4];
     let mut ax: f32 = 0.;
     let mut ay: f32 = 0.;
     let mut aw: f32 = 0.;
@@ -1086,24 +1086,24 @@ unsafe extern "C" fn UI_DrawString2(
         return;
     }
     // draw the colored text
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color as *const f32);
+    trap_R_SetColor(color as *const f32);
     ax = x as f32 * uis.xscale + uis.bias;
     ay = y as f32 * uis.yscale;
     aw = charw as f32 * uis.xscale;
     ah = charh as f32 * uis.yscale;
     s = str;
     while *s != 0 {
-        if crate::src::qcommon::q_shared::Q_IsColorString(s) as u64 != 0 {
+        if Q_IsColorString(s) as u64 != 0 {
             if forceColor == 0 {
                 crate::stdlib::memcpy(
                     tempcolor.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table
+                    g_color_table
                         [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
-                    ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
                 );
                 tempcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
-                crate::src::ui::ui_syscalls::trap_R_SetColor(tempcolor.as_mut_ptr());
+                trap_R_SetColor(tempcolor.as_mut_ptr());
             }
             s = s.offset(2 as i32 as isize)
         } else {
@@ -1111,7 +1111,7 @@ unsafe extern "C" fn UI_DrawString2(
             if ch as i32 != ' ' as i32 {
                 frow = ((ch as i32 >> 4 as i32) as f64 * 0.0625f64) as f32;
                 fcol = ((ch as i32 & 15 as i32) as f64 * 0.0625f64) as f32;
-                crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+                trap_R_DrawStretchPic(
                     ax,
                     ay,
                     aw,
@@ -1127,7 +1127,7 @@ unsafe extern "C" fn UI_DrawString2(
             s = s.offset(1)
         }
     }
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 /*
 =================
@@ -1141,15 +1141,15 @@ pub unsafe extern "C" fn UI_DrawString(
     mut y: i32,
     mut str: *const libc::c_char,
     mut style: i32,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
     let mut len: i32 = 0;
     let mut charw: i32 = 0;
     let mut charh: i32 = 0;
-    let mut newcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut lowlight: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut newcolor: vec4_t = [0.; 4];
+    let mut lowlight: vec4_t = [0.; 4];
     let mut drawcolor: *mut f32 = 0 as *mut f32;
-    let mut dropcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut dropcolor: vec4_t = [0.; 4];
     if str.is_null() {
         return;
     }
@@ -1168,13 +1168,13 @@ pub unsafe extern "C" fn UI_DrawString(
     }
     if style & 0x4000 as i32 != 0 {
         lowlight[0 as i32 as usize] = (0.8f64 * *color.offset(0 as i32 as isize) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         lowlight[1 as i32 as usize] = (0.8f64 * *color.offset(1 as i32 as isize) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         lowlight[2 as i32 as usize] = (0.8f64 * *color.offset(2 as i32 as isize) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         lowlight[3 as i32 as usize] = (0.8f64 * *color.offset(3 as i32 as isize) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         UI_LerpColor(
             color,
             lowlight.as_mut_ptr(),
@@ -1199,7 +1199,7 @@ pub unsafe extern "C" fn UI_DrawString(
         _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        dropcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        dropcolor[2 as i32 as usize] = 0 as i32 as vec_t;
         dropcolor[1 as i32 as usize] = dropcolor[2 as i32 as usize];
         dropcolor[0 as i32 as usize] = dropcolor[1 as i32 as usize];
         dropcolor[3 as i32 as usize] = *drawcolor.offset(3 as i32 as isize);
@@ -1226,7 +1226,7 @@ pub unsafe extern "C" fn UI_DrawChar(
     mut y: i32,
     mut ch: i32,
     mut style: i32,
-    mut color: *mut crate::src::qcommon::q_shared::vec_t,
+    mut color: *mut vec_t,
 ) {
     let mut buff: [libc::c_char; 2] = [0; 2];
     buff[0 as i32 as usize] = ch as libc::c_char;
@@ -1235,65 +1235,65 @@ pub unsafe extern "C" fn UI_DrawChar(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_IsFullscreen() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn UI_IsFullscreen() -> qboolean {
     if !uis.activemenu.is_null()
-        && crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as i32 != 0
+        && trap_Key_GetCatcher() & 0x2 as i32 != 0
     {
         return (*uis.activemenu).fullscreen;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 
-unsafe extern "C" fn NeedCDAction(mut result: crate::src::qcommon::q_shared::qboolean) {
+unsafe extern "C" fn NeedCDAction(mut result: qboolean) {
     if result as u64 == 0 {
-        crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+        trap_Cmd_ExecuteText(
+            EXEC_APPEND as i32,
             b"quit\n\x00" as *const u8 as *const libc::c_char,
         );
     };
 }
 
-unsafe extern "C" fn NeedCDKeyAction(mut result: crate::src::qcommon::q_shared::qboolean) {
+unsafe extern "C" fn NeedCDKeyAction(mut result: qboolean) {
     if result as u64 == 0 {
-        crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+        trap_Cmd_ExecuteText(
+            EXEC_APPEND as i32,
             b"quit\n\x00" as *const u8 as *const libc::c_char,
         );
     };
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: crate::ui_public_h::uiMenuCommand_t) {
+pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: uiMenuCommand_t) {
     // this should be the ONLY way the menu system is brought up
     // ensure minimum menu data is cached
-    crate::src::q3_ui::ui_qmenu::Menu_Cache();
+    Menu_Cache();
     match menu as u32 {
         0 => {
             UI_ForceMenuOff();
             return;
         }
         1 => {
-            crate::src::q3_ui::ui_menu::UI_MainMenu();
+            UI_MainMenu();
             return;
         }
         3 => {
-            crate::src::q3_ui::ui_confirm::UI_ConfirmMenu(
+            UI_ConfirmMenu(
                 b"Insert the CD\x00" as *const u8 as *const libc::c_char,
                 None,
                 Some(
                     NeedCDAction
-                        as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> (),
+                        as unsafe extern "C" fn(_: qboolean) -> (),
                 ),
             );
             return;
         }
         4 => {
-            crate::src::q3_ui::ui_confirm::UI_ConfirmMenu(
+            UI_ConfirmMenu(
                 b"Bad CD Key\x00" as *const u8 as *const libc::c_char,
                 None,
                 Some(
                     NeedCDKeyAction
-                        as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> (),
+                        as unsafe extern "C" fn(_: qboolean) -> (),
                 ),
             );
             return;
@@ -1304,11 +1304,11 @@ pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: crate::ui_public_h::uiMenuCo
             UI_RankingsMenu();
             return;
             */
-            crate::src::ui::ui_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"cl_paused\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::q3_ui::ui_ingame::UI_InGameMenu();
+            UI_InGameMenu();
             return;
         }
         5 | 6 | _ => {}
@@ -1322,7 +1322,7 @@ UI_KeyEvent
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_KeyEvent(mut key: i32, mut down: i32) {
-    let mut s: crate::src::qcommon::q_shared::sfxHandle_t = 0;
+    let mut s: sfxHandle_t = 0;
     if uis.activemenu.is_null() {
         return;
     }
@@ -1332,15 +1332,15 @@ pub unsafe extern "C" fn UI_KeyEvent(mut key: i32, mut down: i32) {
     if (*uis.activemenu).key.is_some() {
         s = (*uis.activemenu).key.expect("non-null function pointer")(key)
     } else {
-        s = crate::src::q3_ui::ui_qmenu::Menu_DefaultKey(
-            uis.activemenu as *mut crate::ui_local_h::_tag_menuframework,
+        s = Menu_DefaultKey(
+            uis.activemenu as *mut _tag_menuframework,
             key,
         )
     }
-    if s > 0 as i32 && s != crate::src::q3_ui::ui_qmenu::menu_null_sound {
-        crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
+    if s > 0 as i32 && s != menu_null_sound {
+        trap_S_StartLocalSound(
             s,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
+            CHAN_LOCAL_SOUND as i32,
         );
     };
 }
@@ -1354,7 +1354,7 @@ UI_MouseEvent
 pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     let mut i: i32 = 0;
     let mut bias: i32 = 0;
-    let mut m: *mut crate::ui_local_h::menucommon_s = 0 as *mut crate::ui_local_h::menucommon_s;
+    let mut m: *mut menucommon_s = 0 as *mut menucommon_s;
     if uis.activemenu.is_null() {
         return;
     }
@@ -1376,7 +1376,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     // region test the active menu items
     i = 0 as i32;
     while i < (*uis.activemenu).nitems {
-        m = (*uis.activemenu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
+        m = (*uis.activemenu).items[i as usize] as *mut menucommon_s;
         if !((*m).flags & (0x2000 as i32 as u32 | 0x4000 as i32 as u32) != 0) {
             if !(uis.cursorx < (*m).left
                 || uis.cursorx > (*m).right
@@ -1385,27 +1385,27 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
             {
                 // set focus to item at cursor
                 if (*uis.activemenu).cursor != i {
-                    crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
-                        uis.activemenu as *mut crate::ui_local_h::_tag_menuframework,
+                    Menu_SetCursor(
+                        uis.activemenu as *mut _tag_menuframework,
                         i,
                     );
                     (*((*uis.activemenu).items[(*uis.activemenu).cursor_prev as usize]
-                        as *mut crate::ui_local_h::menucommon_s))
+                        as *mut menucommon_s))
                         .flags &= !(0x200 as i32 as u32);
                     if (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
-                        as *mut crate::ui_local_h::menucommon_s))
+                        as *mut menucommon_s))
                         .flags
                         & 0x100000 as i32 as u32
                         == 0
                     {
-                        crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
-                            crate::src::q3_ui::ui_qmenu::menu_move_sound,
-                            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
+                        trap_S_StartLocalSound(
+                            menu_move_sound,
+                            CHAN_LOCAL_SOUND as i32,
                         );
                     }
                 }
                 (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
-                    as *mut crate::ui_local_h::menucommon_s))
+                    as *mut menucommon_s))
                     .flags |= 0x200 as i32 as u32;
                 return;
             }
@@ -1416,7 +1416,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     if (*uis.activemenu).nitems > 0 as i32 {
         // out of any region
         (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
-            as *mut crate::ui_local_h::menucommon_s))
+            as *mut menucommon_s))
             .flags &= !(0x200 as i32 as u32)
     };
 }
@@ -1424,7 +1424,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
 
 pub unsafe extern "C" fn UI_Argv(mut arg: i32) -> *mut libc::c_char {
     static mut buffer: [libc::c_char; 1024] = [0; 1024];
-    crate::src::ui::ui_syscalls::trap_Argv(
+    trap_Argv(
         arg,
         buffer.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1437,7 +1437,7 @@ pub unsafe extern "C" fn UI_Cvar_VariableString(
     mut var_name: *const libc::c_char,
 ) -> *mut libc::c_char {
     static mut buffer: [libc::c_char; 1024] = [0; 1024];
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         var_name,
         buffer.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1452,37 +1452,37 @@ UI_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_Cache_f() {
-    crate::src::q3_ui::ui_menu::MainMenu_Cache();
-    crate::src::q3_ui::ui_ingame::InGame_Cache();
-    crate::src::q3_ui::ui_confirm::ConfirmMenu_Cache();
-    crate::src::q3_ui::ui_playermodel::PlayerModel_Cache();
-    crate::src::q3_ui::ui_playersettings::PlayerSettings_Cache();
-    crate::src::q3_ui::ui_controls2::Controls_Cache();
-    crate::src::q3_ui::ui_demo2::Demos_Cache();
-    crate::src::q3_ui::ui_cinematics::UI_CinematicsMenu_Cache();
-    crate::src::q3_ui::ui_preferences::Preferences_Cache();
-    crate::src::q3_ui::ui_serverinfo::ServerInfo_Cache();
-    crate::src::q3_ui::ui_specifyserver::SpecifyServer_Cache();
-    crate::src::q3_ui::ui_servers2::ArenaServers_Cache();
-    crate::src::q3_ui::ui_startserver::StartServer_Cache();
-    crate::src::q3_ui::ui_startserver::ServerOptions_Cache();
-    crate::src::q3_ui::ui_video::DriverInfo_Cache();
-    crate::src::q3_ui::ui_video::GraphicsOptions_Cache();
-    crate::src::q3_ui::ui_display::UI_DisplayOptionsMenu_Cache();
-    crate::src::q3_ui::ui_sound::UI_SoundOptionsMenu_Cache();
-    crate::src::q3_ui::ui_network::UI_NetworkOptionsMenu_Cache();
-    crate::src::q3_ui::ui_splevel::UI_SPLevelMenu_Cache();
-    crate::src::q3_ui::ui_spskill::UI_SPSkillMenu_Cache();
-    crate::src::q3_ui::ui_sppostgame::UI_SPPostgameMenu_Cache();
-    crate::src::q3_ui::ui_team::TeamMain_Cache();
-    crate::src::q3_ui::ui_addbots::UI_AddBots_Cache();
-    crate::src::q3_ui::ui_removebots::UI_RemoveBots_Cache();
-    crate::src::q3_ui::ui_setup::UI_SetupMenu_Cache();
+    MainMenu_Cache();
+    InGame_Cache();
+    ConfirmMenu_Cache();
+    PlayerModel_Cache();
+    PlayerSettings_Cache();
+    Controls_Cache();
+    Demos_Cache();
+    UI_CinematicsMenu_Cache();
+    Preferences_Cache();
+    ServerInfo_Cache();
+    SpecifyServer_Cache();
+    ArenaServers_Cache();
+    StartServer_Cache();
+    ServerOptions_Cache();
+    DriverInfo_Cache();
+    GraphicsOptions_Cache();
+    UI_DisplayOptionsMenu_Cache();
+    UI_SoundOptionsMenu_Cache();
+    UI_NetworkOptionsMenu_Cache();
+    UI_SPLevelMenu_Cache();
+    UI_SPSkillMenu_Cache();
+    UI_SPPostgameMenu_Cache();
+    TeamMain_Cache();
+    UI_AddBots_Cache();
+    UI_RemoveBots_Cache();
+    UI_SetupMenu_Cache();
     //	UI_LoadConfig_Cache();
     //	UI_SaveConfigMenu_Cache();
-    crate::src::q3_ui::ui_startserver::UI_BotSelectMenu_Cache();
-    crate::src::q3_ui::ui_cdkey::UI_CDKeyMenu_Cache();
-    crate::src::q3_ui::ui_mods::UI_ModsMenu_Cache();
+    UI_BotSelectMenu_Cache();
+    UI_CDKeyMenu_Cache();
+    UI_ModsMenu_Cache();
 }
 /*
 =================
@@ -1493,78 +1493,78 @@ UI_ConsoleCommand
 
 pub unsafe extern "C" fn UI_ConsoleCommand(
     mut realTime: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     uis.frametime = realTime - uis.realtime;
     uis.realtime = realTime;
     cmd = UI_Argv(0 as i32);
     // ensure minimum menu data is available
-    crate::src::q3_ui::ui_qmenu::Menu_Cache();
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    Menu_Cache();
+    if Q_stricmp(
         cmd,
         b"levelselect\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_splevel::UI_SPLevelMenu_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_SPLevelMenu_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"postgame\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_sppostgame::UI_SPPostgameMenu_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_SPPostgameMenu_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"ui_cache\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         UI_Cache_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"ui_cinematics\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_cinematics::UI_CinematicsMenu_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_CinematicsMenu_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"ui_teamOrders\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_teamorders::UI_TeamOrdersMenu_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_TeamOrdersMenu_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"iamacheater\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_gameinfo::UI_SPUnlock_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_SPUnlock_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"iamamonkey\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_gameinfo::UI_SPUnlockMedals_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_SPUnlockMedals_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd,
         b"ui_cdkey\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::q3_ui::ui_cdkey::UI_CDKeyMenu_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        UI_CDKeyMenu_f();
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 =================
@@ -1582,11 +1582,11 @@ UI_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_Init() {
-    crate::src::q3_ui::ui_main::UI_RegisterCvars();
-    crate::src::q3_ui::ui_gameinfo::UI_InitGameinfo();
+    UI_RegisterCvars();
+    UI_InitGameinfo();
     // cache redundant calulations
-    crate::src::ui::ui_syscalls::trap_GetGlconfig(
-        &mut uis.glconfig as *mut _ as *mut crate::tr_types_h::glconfig_t,
+    trap_GetGlconfig(
+        &mut uis.glconfig as *mut _ as *mut glconfig_t,
     );
     // for 640x480 virtualized screen
     uis.xscale = (uis.glconfig.vidWidth as f64 * (1.0f64 / 640.0f64)) as f32;
@@ -1602,8 +1602,8 @@ pub unsafe extern "C" fn UI_Init() {
         uis.bias = 0 as i32 as f32
     }
     // initialize the menu system
-    crate::src::q3_ui::ui_qmenu::Menu_Cache();
-    uis.activemenu = 0 as *mut crate::ui_local_h::menuframework_s;
+    Menu_Cache();
+    uis.activemenu = 0 as *mut menuframework_s;
     uis.menusp = 0 as i32;
 }
 /*
@@ -1636,10 +1636,10 @@ pub unsafe extern "C" fn UI_DrawNamedPic(
     mut height: f32,
     mut picname: *const libc::c_char,
 ) {
-    let mut hShader: crate::src::qcommon::q_shared::qhandle_t = 0;
-    hShader = crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(picname);
+    let mut hShader: qhandle_t = 0;
+    hShader = trap_R_RegisterShaderNoMip(picname);
     UI_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x,
         y,
         width,
@@ -1658,7 +1658,7 @@ pub unsafe extern "C" fn UI_DrawHandlePic(
     mut y: f32,
     mut w: f32,
     mut h: f32,
-    mut hShader: crate::src::qcommon::q_shared::qhandle_t,
+    mut hShader: qhandle_t,
 ) {
     let mut s0: f32 = 0.;
     let mut s1: f32 = 0.;
@@ -1683,7 +1683,7 @@ pub unsafe extern "C" fn UI_DrawHandlePic(
         t1 = 1 as i32 as f32
     }
     UI_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
+    trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
 }
 /*
 ================
@@ -1701,9 +1701,9 @@ pub unsafe extern "C" fn UI_FillRect(
     mut height: f32,
     mut color: *const f32,
 ) {
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color);
+    trap_R_SetColor(color);
     UI_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x,
         y,
         width,
@@ -1714,7 +1714,7 @@ pub unsafe extern "C" fn UI_FillRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 /*
 ================
@@ -1732,9 +1732,9 @@ pub unsafe extern "C" fn UI_DrawRect(
     mut height: f32,
     mut color: *const f32,
 ) {
-    crate::src::ui::ui_syscalls::trap_R_SetColor(color);
+    trap_R_SetColor(color);
     UI_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x,
         y,
         width,
@@ -1745,7 +1745,7 @@ pub unsafe extern "C" fn UI_DrawRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x,
         y,
         1 as i32 as f32,
@@ -1756,7 +1756,7 @@ pub unsafe extern "C" fn UI_DrawRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x,
         y + height - 1 as i32 as f32,
         width,
@@ -1767,7 +1767,7 @@ pub unsafe extern "C" fn UI_DrawRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         x + width - 1 as i32 as f32,
         y,
         1 as i32 as f32,
@@ -1778,17 +1778,17 @@ pub unsafe extern "C" fn UI_DrawRect(
         0 as i32 as f32,
         uis.whiteShader,
     );
-    crate::src::ui::ui_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SetColor(mut rgba: *const f32) {
-    crate::src::ui::ui_syscalls::trap_R_SetColor(rgba);
+    trap_R_SetColor(rgba);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_UpdateScreen() {
-    crate::src::ui::ui_syscalls::trap_UpdateScreen();
+    trap_UpdateScreen();
 }
 /*
 =================
@@ -1800,10 +1800,10 @@ UI_Refresh
 pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
     uis.frametime = realtime - uis.realtime;
     uis.realtime = realtime;
-    if crate::src::ui::ui_syscalls::trap_Key_GetCatcher() & 0x2 as i32 == 0 {
+    if trap_Key_GetCatcher() & 0x2 as i32 == 0 {
         return;
     }
-    crate::src::q3_ui::ui_main::UI_UpdateCvars();
+    UI_UpdateCvars();
     if !uis.activemenu.is_null() {
         if (*uis.activemenu).fullscreen as u64 != 0 {
             // draw the background
@@ -1828,13 +1828,13 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
         if (*uis.activemenu).draw.is_some() {
             (*uis.activemenu).draw.expect("non-null function pointer")();
         } else {
-            crate::src::q3_ui::ui_qmenu::Menu_Draw(
-                uis.activemenu as *mut crate::ui_local_h::_tag_menuframework,
+            Menu_Draw(
+                uis.activemenu as *mut _tag_menuframework,
             );
         }
         if uis.firstdraw as u64 != 0 {
             UI_MouseEvent(0 as i32, 0 as i32);
-            uis.firstdraw = crate::src::qcommon::q_shared::qfalse
+            uis.firstdraw = qfalse
         }
     }
     // draw cursor
@@ -1850,11 +1850,11 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
     // menu has been drawn, to avoid delay while
     // caching images
     if m_entersound as u64 != 0 {
-        crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
-            crate::src::q3_ui::ui_qmenu::menu_in_sound,
-            crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as i32,
+        trap_S_StartLocalSound(
+            menu_in_sound,
+            CHAN_LOCAL_SOUND as i32,
         );
-        m_entersound = crate::src::qcommon::q_shared::qfalse
+        m_entersound = qfalse
     };
 }
 #[no_mangle]
@@ -1865,14 +1865,14 @@ pub unsafe extern "C" fn UI_DrawTextBox(mut x: i32, mut y: i32, mut width: i32, 
         (y + 16 as i32 / 2 as i32) as f32,
         ((width + 1 as i32) * 16 as i32) as f32,
         ((lines + 1 as i32) * 16 as i32) as f32,
-        crate::src::qcommon::q_math::colorBlack.as_mut_ptr(),
+        colorBlack.as_mut_ptr(),
     );
     UI_DrawRect(
         (x + 16 as i32 / 2 as i32) as f32,
         (y + 16 as i32 / 2 as i32) as f32,
         ((width + 1 as i32) * 16 as i32) as f32,
         ((lines + 1 as i32) * 16 as i32) as f32,
-        crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+        colorWhite.as_mut_ptr(),
     );
 }
 /*
@@ -2002,9 +2002,9 @@ pub unsafe extern "C" fn UI_CursorInRect(
     mut y: i32,
     mut width: i32,
     mut height: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if uis.cursorx < x || uis.cursory < y || uis.cursorx > x + width || uis.cursory > y + height {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }

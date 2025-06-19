@@ -128,40 +128,40 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_resampler_down2(
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut inLen: crate::opus_types_h::opus_int32,
+    mut S: *mut opus_int32,
+    mut out: *mut opus_int16,
+    mut in_0: *const opus_int16,
+    mut inLen: opus_int32,
 )
 /* I    Number of input samples                                     */
 {
-    let mut k: crate::opus_types_h::opus_int32 = 0;
-    let mut len2: crate::opus_types_h::opus_int32 = inLen >> 1 as i32;
-    let mut in32: crate::opus_types_h::opus_int32 = 0;
-    let mut out32: crate::opus_types_h::opus_int32 = 0;
-    let mut Y: crate::opus_types_h::opus_int32 = 0;
-    let mut X: crate::opus_types_h::opus_int32 = 0;
+    let mut k: opus_int32 = 0;
+    let mut len2: opus_int32 = inLen >> 1 as i32;
+    let mut in32: opus_int32 = 0;
+    let mut out32: opus_int32 = 0;
+    let mut Y: opus_int32 = 0;
+    let mut X: opus_int32 = 0;
     /* Internal variables and state are in Q10 format */
     k = 0 as i32;
     while k < len2 {
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k) as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 10 as i32) as crate::opus_types_h::opus_int32;
+        in32 = ((*in_0.offset((2 as i32 * k) as isize) as opus_int32
+            as opus_uint32)
+            << 10 as i32) as opus_int32;
         /* All-pass section for even input sample */
         Y = in32 - *S.offset(0 as i32 as isize);
         X = (Y as i64 + (Y as i64 * silk_resampler_down2_1 as i64 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         out32 = *S.offset(0 as i32 as isize) + X;
         *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 10 as i32) as crate::opus_types_h::opus_int32;
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as opus_int32
+            as opus_uint32)
+            << 10 as i32) as opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
         Y = in32 - *S.offset(1 as i32 as isize);
         X = (Y as i64 * silk_resampler_down2_0 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         out32 = out32 + *S.offset(1 as i32 as isize);
         out32 = out32 + X;
         *S.offset(1 as i32 as isize) = in32 + X;
@@ -177,14 +177,14 @@ pub unsafe extern "C" fn silk_resampler_down2(
             (out32 >> 1 as i32) + (out32 & 1 as i32)
         } else {
             ((out32 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 11 as i32 == 1 as i32 {
             (out32 >> 1 as i32) + (out32 & 1 as i32)
         } else {
             ((out32 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         k += 1
     }
 }

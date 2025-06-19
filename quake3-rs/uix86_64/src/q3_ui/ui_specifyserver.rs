@@ -31,14 +31,14 @@ pub use crate::ui_local_h::mfield_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct specifyserver_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub domain: crate::ui_local_h::menufield_s,
-    pub port: crate::ui_local_h::menufield_s,
-    pub go: crate::ui_local_h::menubitmap_s,
-    pub back: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub domain: menufield_s,
+    pub port: menufield_s,
+    pub go: menubitmap_s,
+    pub back: menubitmap_s,
 }
 
 static mut specifyserver_artlist: [*mut libc::c_char; 7] = [
@@ -52,19 +52,19 @@ static mut specifyserver_artlist: [*mut libc::c_char; 7] = [
 ];
 
 static mut s_specifyserver: specifyserver_t = specifyserver_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -74,8 +74,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -86,8 +86,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -97,8 +97,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -113,8 +113,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -124,8 +124,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -140,8 +140,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    domain: crate::ui_local_h::menufield_s {
-        generic: crate::ui_local_h::menucommon_s {
+    domain: menufield_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -151,15 +151,15 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
             statusbar: None,
             ownerdraw: None,
         },
-        field: crate::ui_local_h::mfield_t {
+        field: mfield_t {
             cursor: 0,
             scroll: 0,
             widthInChars: 0,
@@ -167,8 +167,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             maxchars: 0,
         },
     },
-    port: crate::ui_local_h::menufield_s {
-        generic: crate::ui_local_h::menucommon_s {
+    port: menufield_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -178,15 +178,15 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
             statusbar: None,
             ownerdraw: None,
         },
-        field: crate::ui_local_h::mfield_t {
+        field: mfield_t {
             cursor: 0,
             scroll: 0,
             widthInChars: 0,
@@ -194,8 +194,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             maxchars: 0,
         },
     },
-    go: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    go: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -205,8 +205,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -221,8 +221,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -232,8 +232,8 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -257,16 +257,16 @@ SpecifyServer_Event
 
 unsafe extern "C" fn SpecifyServer_Event(mut ptr: *mut libc::c_void, mut event: i32) {
     let mut buff: [libc::c_char; 256] = [0; 256];
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         103 => {
             if !(event != 3 as i32) {
                 if s_specifyserver.domain.field.buffer[0 as i32 as usize] != 0 {
-                    ::libc::strcpy(
+                    libc::strcpy(
                         buff.as_mut_ptr(),
                         s_specifyserver.domain.field.buffer.as_mut_ptr(),
                     );
                     if s_specifyserver.port.field.buffer[0 as i32 as usize] != 0 {
-                        crate::src::qcommon::q_shared::Com_sprintf(
+                        Com_sprintf(
                             buff.as_mut_ptr()
                                 .offset(crate::stdlib::strlen(buff.as_mut_ptr()) as isize),
                             128 as i32,
@@ -274,9 +274,9 @@ unsafe extern "C" fn SpecifyServer_Event(mut ptr: *mut libc::c_void, mut event: 
                             s_specifyserver.port.field.buffer.as_mut_ptr(),
                         );
                     }
-                    crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-                        crate::src::qcommon::q_shared::va(
+                    trap_Cmd_ExecuteText(
+                        EXEC_APPEND as i32,
+                        va(
                             b"connect %s\n\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                             buff.as_mut_ptr(),
@@ -287,7 +287,7 @@ unsafe extern "C" fn SpecifyServer_Event(mut ptr: *mut libc::c_void, mut event: 
         }
         102 => {
             if !(event != 3 as i32) {
-                crate::src::q3_ui::ui_atoms::UI_PopMenu();
+                UI_PopMenu();
             }
         }
         _ => {}
@@ -308,14 +308,14 @@ pub unsafe extern "C" fn SpecifyServer_MenuInit() {
         ::std::mem::size_of::<specifyserver_t>() as libc::c_ulong,
     );
     SpecifyServer_Cache();
-    s_specifyserver.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    s_specifyserver.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_specifyserver.menu.wrapAround = qtrue;
+    s_specifyserver.menu.fullscreen = qtrue;
     s_specifyserver.banner.generic.type_0 = 10 as i32;
     s_specifyserver.banner.generic.x = 320 as i32;
     s_specifyserver.banner.generic.y = 16 as i32;
     s_specifyserver.banner.string =
         b"SPECIFY SERVER\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_specifyserver.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_specifyserver.banner.color = color_white.as_mut_ptr();
     s_specifyserver.banner.style = 0x1 as i32;
     s_specifyserver.framel.generic.type_0 = 6 as i32;
     s_specifyserver.framel.generic.name =
@@ -372,35 +372,35 @@ pub unsafe extern "C" fn SpecifyServer_MenuInit() {
     s_specifyserver.back.height = 64 as i32;
     s_specifyserver.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.domain as *mut crate::ui_local_h::menufield_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.domain as *mut menufield_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.port as *mut crate::ui_local_h::menufield_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.port as *mut menufield_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.go as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.go as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_specifyserver.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_specifyserver.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         s_specifyserver.port.field.buffer.as_mut_ptr(),
         6 as i32,
         b"%i\x00" as *const u8 as *const libc::c_char,
@@ -419,7 +419,7 @@ pub unsafe extern "C" fn SpecifyServer_Cache() {
     // touch all our pics
     i = 0 as i32;
     while !specifyserver_artlist[i as usize].is_null() {
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(specifyserver_artlist[i as usize]);
+        trap_R_RegisterShaderNoMip(specifyserver_artlist[i as usize]);
         i += 1
     }
 }
@@ -435,7 +435,7 @@ UI_SpecifyServerMenu
 
 pub unsafe extern "C" fn UI_SpecifyServerMenu() {
     SpecifyServer_MenuInit();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_specifyserver.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
     );
 }

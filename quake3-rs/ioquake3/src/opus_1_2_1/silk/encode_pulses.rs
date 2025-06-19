@@ -160,7 +160,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_encode_pulses(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     signalType: i32,
     quantOffsetType: i32,
     mut pulses: *mut i8,
@@ -176,9 +176,9 @@ pub unsafe extern "C" fn silk_encode_pulses(
     let mut nLS: i32 = 0;
     let mut scale_down: i32 = 0;
     let mut RateLevelIndex: i32 = 0 as i32;
-    let mut abs_q: crate::opus_types_h::opus_int32 = 0;
-    let mut minSumBits_Q5: crate::opus_types_h::opus_int32 = 0;
-    let mut sumBits_Q5: crate::opus_types_h::opus_int32 = 0;
+    let mut abs_q: opus_int32 = 0;
+    let mut minSumBits_Q5: opus_int32 = 0;
+    let mut sumBits_Q5: opus_int32 = 0;
     let mut abs_pulses: *mut i32 = 0 as *mut i32;
     let mut sum_pulses: *mut i32 = 0 as *mut i32;
     let mut nRshifts: *mut i32 = 0 as *mut i32;
@@ -319,7 +319,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
                 .as_ptr();
         sumBits_Q5 = crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_BITS_Q5
             [(signalType >> 1 as i32) as usize][k as usize]
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         i = 0 as i32;
         while i < iter {
             if *nRshifts.offset(i as isize) > 0 as i32 {
@@ -336,7 +336,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
         k += 1
     }
     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeEnc as *mut ec_ctx,
         RateLevelIndex,
         crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF
             [(signalType >> 1 as i32) as usize]
@@ -353,21 +353,21 @@ pub unsafe extern "C" fn silk_encode_pulses(
     while i < iter {
         if *nRshifts.offset(i as isize) == 0 as i32 {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeEnc as *mut ec_ctx,
                 *sum_pulses.offset(i as isize),
                 cdf_ptr,
                 8 as i32 as u32,
             );
         } else {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeEnc as *mut ec_ctx,
                 16 as i32 + 1 as i32,
                 cdf_ptr,
                 8 as i32 as u32,
             );
             k = 0 as i32;
             while k < *nRshifts.offset(i as isize) - 1 as i32 {
-                crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx, 16 as i32 + 1 as i32,
+                crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut ec_ctx, 16 as i32 + 1 as i32,
                             crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF[(10 as i32 -
                                                             1 as i32)
                                                            as usize].as_ptr(),
@@ -375,7 +375,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
                 k += 1
             }
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeEnc as *mut ec_ctx,
                 *sum_pulses.offset(i as isize),
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
                     [(10 as i32 - 1 as i32) as usize]
@@ -392,7 +392,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     while i < iter {
         if *sum_pulses.offset(i as isize) > 0 as i32 {
             crate::src::opus_1_2_1::silk::shell_coder::silk_shell_encoder(
-                psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeEnc as *mut ec_ctx,
                 &mut *abs_pulses.offset((i * 16 as i32) as isize),
             );
         }
@@ -412,12 +412,12 @@ pub unsafe extern "C" fn silk_encode_pulses(
                     *pulses_ptr.offset(k as isize) as i32
                 } else {
                     -(*pulses_ptr.offset(k as isize) as i32)
-                } as i8 as crate::opus_types_h::opus_int32;
+                } as i8 as opus_int32;
                 j = nLS;
                 while j > 0 as i32 {
                     bit = abs_q >> j & 1 as i32;
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        psRangeEnc as *mut ec_ctx,
                         bit,
                         crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
                         8 as i32 as u32,
@@ -426,7 +426,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
                 }
                 bit = abs_q & 1 as i32;
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                    psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    psRangeEnc as *mut ec_ctx,
                     bit,
                     crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
                     8 as i32 as u32,
@@ -440,7 +440,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* Encode signs */
     /* ***************/
     crate::src::opus_1_2_1::silk::code_signs::silk_encode_signs(
-        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeEnc as *mut ec_ctx,
         pulses as *const i8,
         frame_length,
         signalType,

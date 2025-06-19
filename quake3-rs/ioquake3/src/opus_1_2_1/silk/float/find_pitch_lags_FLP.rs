@@ -119,8 +119,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut psEncCtrl: *mut silk_encoder_control_FLP,
     mut res: *mut f32,
     mut x: *const f32,
     mut arch: i32,
@@ -257,7 +257,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
             0 as i32,
             ::std::mem::size_of::<[i32; 4]>() as libc::c_ulong,
         );
-        (*psEnc).sCmn.indices.lagIndex = 0 as i32 as crate::opus_types_h::opus_int16;
+        (*psEnc).sCmn.indices.lagIndex = 0 as i32 as opus_int16;
         (*psEnc).sCmn.indices.contourIndex = 0 as i32 as i8;
         (*psEnc).LTPCorr = 0 as i32 as f32
     };

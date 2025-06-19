@@ -125,21 +125,21 @@ Written by Jean-Marc Valin */
 */
 
 unsafe extern "C" fn exp_rotation1(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut len: i32,
     mut stride: i32,
-    mut c: crate::arch_h::opus_val16,
-    mut s: crate::arch_h::opus_val16,
+    mut c: opus_val16,
+    mut s: opus_val16,
 ) {
     let mut i: i32 = 0;
-    let mut ms: crate::arch_h::opus_val16 = 0.;
-    let mut Xptr: *mut crate::arch_h::celt_norm = 0 as *mut crate::arch_h::celt_norm;
+    let mut ms: opus_val16 = 0.;
+    let mut Xptr: *mut celt_norm = 0 as *mut celt_norm;
     Xptr = X;
     ms = -s;
     i = 0 as i32;
     while i < len - stride {
-        let mut x1: crate::arch_h::celt_norm = 0.;
-        let mut x2: crate::arch_h::celt_norm = 0.;
+        let mut x1: celt_norm = 0.;
+        let mut x2: celt_norm = 0.;
         x1 = *Xptr.offset(0 as i32 as isize);
         x2 = *Xptr.offset(stride as isize);
         *Xptr.offset(stride as isize) = c * x2 + s * x1;
@@ -149,11 +149,11 @@ unsafe extern "C" fn exp_rotation1(
         i += 1
     }
     Xptr = &mut *X.offset((len - 2 as i32 * stride - 1 as i32) as isize)
-        as *mut crate::arch_h::celt_norm;
+        as *mut celt_norm;
     i = len - 2 as i32 * stride - 1 as i32;
     while i >= 0 as i32 {
-        let mut x1_0: crate::arch_h::celt_norm = 0.;
-        let mut x2_0: crate::arch_h::celt_norm = 0.;
+        let mut x1_0: celt_norm = 0.;
+        let mut x2_0: celt_norm = 0.;
         x1_0 = *Xptr.offset(0 as i32 as isize);
         x2_0 = *Xptr.offset(stride as isize);
         *Xptr.offset(stride as isize) = c * x2_0 + s * x1_0;
@@ -167,7 +167,7 @@ unsafe extern "C" fn exp_rotation1(
 #[no_mangle]
 
 pub unsafe extern "C" fn exp_rotation(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut len: i32,
     mut dir: i32,
     mut stride: i32,
@@ -176,10 +176,10 @@ pub unsafe extern "C" fn exp_rotation(
 ) {
     static mut SPREAD_FACTOR: [i32; 3] = [15 as i32, 10 as i32, 5 as i32]; /*  sin(theta) */
     let mut i: i32 = 0;
-    let mut c: crate::arch_h::opus_val16 = 0.;
-    let mut s: crate::arch_h::opus_val16 = 0.;
-    let mut gain: crate::arch_h::opus_val16 = 0.;
-    let mut theta: crate::arch_h::opus_val16 = 0.;
+    let mut c: opus_val16 = 0.;
+    let mut s: opus_val16 = 0.;
+    let mut gain: opus_val16 = 0.;
+    let mut theta: opus_val16 = 0.;
     let mut stride2: i32 = 0 as i32;
     let mut factor: i32 = 0;
     if 2 as i32 * K >= len || spread == 0 as i32 {
@@ -187,7 +187,7 @@ pub unsafe extern "C" fn exp_rotation(
     }
     factor = SPREAD_FACTOR[(spread - 1 as i32) as usize];
     gain =
-        1.0f32 * len as crate::arch_h::opus_val32 / (len + factor * K) as crate::arch_h::opus_val32;
+        1.0f32 * len as opus_val32 / (len + factor * K) as opus_val32;
     theta = 0.5f32 * (gain * gain);
     c = crate::stdlib::cos((0.5f32 * 3.141592653f32 * theta) as f64) as f32;
     s = crate::stdlib::cos((0.5f32 * 3.141592653f32 * (1.0f32 - theta)) as f64) as f32;
@@ -202,8 +202,8 @@ pub unsafe extern "C" fn exp_rotation(
     /*NOTE: As a minor optimization, we could be passing around log2(B), not B, for both this and for
     extract_collapse_mask().*/
     len = celt_udiv(
-        len as crate::opus_types_h::opus_uint32,
-        stride as crate::opus_types_h::opus_uint32,
+        len as opus_uint32,
+        stride as opus_uint32,
     ) as i32;
     i = 0 as i32;
     while i < stride {
@@ -226,19 +226,19 @@ that will give ||p+g*y||=1 and mixes the residual with the pitch. */
 
 unsafe extern "C" fn normalise_residual(
     mut iy: *mut i32,
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut N: i32,
-    mut Ryy: crate::arch_h::opus_val32,
-    mut gain: crate::arch_h::opus_val16,
+    mut Ryy: opus_val32,
+    mut gain: opus_val16,
 ) {
     let mut i: i32 = 0;
-    let mut t: crate::arch_h::opus_val32 = 0.;
-    let mut g: crate::arch_h::opus_val16 = 0.;
+    let mut t: opus_val32 = 0.;
+    let mut g: opus_val16 = 0.;
     t = Ryy;
     g = 1.0f32 / crate::stdlib::sqrt(t as f64) as f32 * gain;
     i = 0 as i32;
     loop {
-        *X.offset(i as isize) = g * *iy.offset(i as isize) as crate::arch_h::opus_val32;
+        *X.offset(i as isize) = g * *iy.offset(i as isize) as opus_val32;
         i += 1;
         if !(i < N) {
             break;
@@ -256,8 +256,8 @@ unsafe extern "C" fn extract_collapse_mask(mut iy: *mut i32, mut N: i32, mut B: 
     /*NOTE: As a minor optimization, we could be passing around log2(B), not B, for both this and for
     exp_rotation().*/
     N0 = celt_udiv(
-        N as crate::opus_types_h::opus_uint32,
-        B as crate::opus_types_h::opus_uint32,
+        N as opus_uint32,
+        B as opus_uint32,
     ) as i32;
     collapse_mask = 0 as i32 as u32;
     i = 0 as i32;
@@ -283,51 +283,51 @@ unsafe extern "C" fn extract_collapse_mask(mut iy: *mut i32, mut N: i32, mut B: 
 #[no_mangle]
 
 pub unsafe extern "C" fn op_pvq_search_c(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut iy: *mut i32,
     mut K: i32,
     mut N: i32,
     mut _arch: i32,
-) -> crate::arch_h::opus_val16 {
-    let mut y: *mut crate::arch_h::celt_norm = 0 as *mut crate::arch_h::celt_norm;
+) -> opus_val16 {
+    let mut y: *mut celt_norm = 0 as *mut celt_norm;
     let mut signx: *mut i32 = 0 as *mut i32;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut pulsesLeft: i32 = 0;
-    let mut sum: crate::arch_h::opus_val32 = 0.;
-    let mut xy: crate::arch_h::opus_val32 = 0.;
-    let mut yy: crate::arch_h::opus_val16 = 0.;
+    let mut sum: opus_val32 = 0.;
+    let mut xy: opus_val32 = 0.;
+    let mut yy: opus_val16 = 0.;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
+        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
             .wrapping_mul(N as libc::c_ulong) as usize,
     );
-    y = fresh2.as_mut_ptr() as *mut crate::arch_h::celt_norm;
+    y = fresh2.as_mut_ptr() as *mut celt_norm;
     let mut fresh3 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
     );
     signx = fresh3.as_mut_ptr() as *mut i32;
     /* Get rid of the sign */
-    sum = 0 as i32 as crate::arch_h::opus_val32;
+    sum = 0 as i32 as opus_val32;
     j = 0 as i32;
     loop {
         *signx.offset(j as isize) = (*X.offset(j as isize) < 0 as i32 as f32) as i32;
         /* OPT: Make sure the compiler doesn't use a branch on ABS16(). */
         *X.offset(j as isize) = crate::stdlib::fabs(*X.offset(j as isize) as f64) as f32;
         *iy.offset(j as isize) = 0 as i32;
-        *y.offset(j as isize) = 0 as i32 as crate::arch_h::celt_norm;
+        *y.offset(j as isize) = 0 as i32 as celt_norm;
         j += 1;
         if !(j < N) {
             break;
         }
     }
-    yy = 0 as i32 as crate::arch_h::opus_val16;
+    yy = 0 as i32 as opus_val16;
     xy = yy;
     pulsesLeft = K;
     /* Do a pre-search by projecting on the pyramid */
     if K > N >> 1 as i32 {
-        let mut rcp: crate::arch_h::opus_val16 = 0.;
+        let mut rcp: opus_val16 = 0.;
         j = 0 as i32;
         loop {
             sum += *X.offset(j as isize);
@@ -343,7 +343,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
             *X.offset(0 as i32 as isize) = 1.0f32;
             j = 1 as i32;
             loop {
-                *X.offset(j as isize) = 0 as i32 as crate::arch_h::celt_norm;
+                *X.offset(j as isize) = 0 as i32 as celt_norm;
                 j += 1;
                 if !(j < N) {
                     break;
@@ -357,7 +357,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
         loop {
             *iy.offset(j as isize) =
                 crate::stdlib::floor((rcp * *X.offset(j as isize)) as f64) as i32;
-            *y.offset(j as isize) = *iy.offset(j as isize) as crate::arch_h::celt_norm;
+            *y.offset(j as isize) = *iy.offset(j as isize) as celt_norm;
             yy = yy + *y.offset(j as isize) * *y.offset(j as isize);
             xy = xy + *X.offset(j as isize) * *y.offset(j as isize);
             let ref mut fresh4 = *y.offset(j as isize);
@@ -372,7 +372,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
     /* This should never happen, but just in case it does (e.g. on silence)
     we fill the first bin with pulses. */
     if pulsesLeft > N + 3 as i32 {
-        let mut tmp: crate::arch_h::opus_val16 = pulsesLeft as crate::arch_h::opus_val16;
+        let mut tmp: opus_val16 = pulsesLeft as opus_val16;
         yy = yy + tmp * tmp;
         yy = yy + tmp * *y.offset(0 as i32 as isize);
         *iy.offset(0 as i32 as isize) += pulsesLeft;
@@ -380,11 +380,11 @@ pub unsafe extern "C" fn op_pvq_search_c(
     }
     i = 0 as i32;
     while i < pulsesLeft {
-        let mut Rxy: crate::arch_h::opus_val16 = 0.;
-        let mut Ryy: crate::arch_h::opus_val16 = 0.;
+        let mut Rxy: opus_val16 = 0.;
+        let mut Ryy: opus_val16 = 0.;
         let mut best_id: i32 = 0;
-        let mut best_num: crate::arch_h::opus_val32 = 0.;
-        let mut best_den: crate::arch_h::opus_val16 = 0.;
+        let mut best_num: opus_val32 = 0.;
+        let mut best_den: opus_val16 = 0.;
         best_id = 0 as i32;
         /* The squared magnitude term gets added anyway, so we might as well
         add it outside the loop */
@@ -456,18 +456,18 @@ pub unsafe extern "C" fn op_pvq_search_c(
 #[no_mangle]
 
 pub unsafe extern "C" fn alg_quant(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut N: i32,
     mut K: i32,
     mut spread: i32,
     mut B: i32,
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    mut gain: crate::arch_h::opus_val16,
+    mut enc: *mut ec_enc,
+    mut gain: opus_val16,
     mut resynth: i32,
     mut arch: i32,
 ) -> u32 {
     let mut iy: *mut i32 = 0 as *mut i32;
-    let mut yy: crate::arch_h::opus_val16 = 0.;
+    let mut yy: opus_val16 = 0.;
     let mut collapse_mask: u32 = 0;
     /* Covers vectorization by up to 4. */
     let mut fresh7 = ::std::vec::from_elem(
@@ -482,7 +482,7 @@ pub unsafe extern "C" fn alg_quant(
         iy,
         N,
         K,
-        enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        enc as *mut ec_ctx,
     );
     if resynth != 0 {
         normalise_residual(iy, X, N, yy, gain);
@@ -496,15 +496,15 @@ the final normalised signal in the current band. */
 #[no_mangle]
 
 pub unsafe extern "C" fn alg_unquant(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut N: i32,
     mut K: i32,
     mut spread: i32,
     mut B: i32,
-    mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut gain: crate::arch_h::opus_val16,
+    mut dec: *mut ec_dec,
+    mut gain: opus_val16,
 ) -> u32 {
-    let mut Ryy: crate::arch_h::opus_val32 = 0.;
+    let mut Ryy: opus_val32 = 0.;
     let mut collapse_mask: u32 = 0;
     let mut iy: *mut i32 = 0 as *mut i32;
     let mut fresh8 = ::std::vec::from_elem(
@@ -516,7 +516,7 @@ pub unsafe extern "C" fn alg_unquant(
         iy,
         N,
         K,
-        dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        dec as *mut ec_ctx,
     );
     normalise_residual(iy, X, N, Ryy, gain);
     exp_rotation(X, N, -(1 as i32), B, K, spread);
@@ -526,16 +526,16 @@ pub unsafe extern "C" fn alg_unquant(
 #[no_mangle]
 
 pub unsafe extern "C" fn renormalise_vector(
-    mut X: *mut crate::arch_h::celt_norm,
+    mut X: *mut celt_norm,
     mut N: i32,
-    mut gain: crate::arch_h::opus_val16,
+    mut gain: opus_val16,
     mut _arch: i32,
 ) {
     let mut i: i32 = 0;
-    let mut E: crate::arch_h::opus_val32 = 0.;
-    let mut g: crate::arch_h::opus_val16 = 0.;
-    let mut t: crate::arch_h::opus_val32 = 0.;
-    let mut xptr: *mut crate::arch_h::celt_norm = 0 as *mut crate::arch_h::celt_norm;
+    let mut E: opus_val32 = 0.;
+    let mut g: opus_val16 = 0.;
+    let mut t: opus_val32 = 0.;
+    let mut xptr: *mut celt_norm = 0 as *mut celt_norm;
     E = 1e-15f32 + celt_inner_prod_c(X, X, N);
     t = E;
     g = 1.0f32 / crate::stdlib::sqrt(t as f64) as f32 * gain;
@@ -599,25 +599,25 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn stereo_itheta(
-    mut X: *const crate::arch_h::celt_norm,
-    mut Y: *const crate::arch_h::celt_norm,
+    mut X: *const celt_norm,
+    mut Y: *const celt_norm,
     mut stereo: i32,
     mut N: i32,
     mut _arch: i32,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut itheta: i32 = 0;
-    let mut mid: crate::arch_h::opus_val16 = 0.;
-    let mut side: crate::arch_h::opus_val16 = 0.;
-    let mut Emid: crate::arch_h::opus_val32 = 0.;
-    let mut Eside: crate::arch_h::opus_val32 = 0.;
+    let mut mid: opus_val16 = 0.;
+    let mut side: opus_val16 = 0.;
+    let mut Emid: opus_val32 = 0.;
+    let mut Eside: opus_val32 = 0.;
     Eside = 1e-15f32;
     Emid = Eside;
     if stereo != 0 {
         i = 0 as i32;
         while i < N {
-            let mut m: crate::arch_h::celt_norm = 0.;
-            let mut s: crate::arch_h::celt_norm = 0.;
+            let mut m: celt_norm = 0.;
+            let mut s: celt_norm = 0.;
             m = *X.offset(i as isize) + *Y.offset(i as isize);
             s = *X.offset(i as isize) - *Y.offset(i as isize);
             Emid = Emid + m * m;

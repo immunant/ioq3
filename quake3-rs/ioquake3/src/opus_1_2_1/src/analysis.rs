@@ -631,20 +631,20 @@ static mut tbands: [i32; 19] = [
 ];
 
 unsafe extern "C" fn silk_resampler_down2_hp(
-    mut S: *mut crate::arch_h::opus_val32,
-    mut out: *mut crate::arch_h::opus_val32,
-    mut in_0: *const crate::arch_h::opus_val32,
+    mut S: *mut opus_val32,
+    mut out: *mut opus_val32,
+    mut in_0: *const opus_val32,
     mut inLen: i32,
-) -> crate::arch_h::opus_val32
+) -> opus_val32
 /* I    Number of input samples                                     */ {
     let mut k: i32 = 0;
     let mut len2: i32 = inLen / 2 as i32;
-    let mut in32: crate::arch_h::opus_val32 = 0.;
-    let mut out32: crate::arch_h::opus_val32 = 0.;
-    let mut out32_hp: crate::arch_h::opus_val32 = 0.;
-    let mut Y: crate::arch_h::opus_val32 = 0.;
-    let mut X: crate::arch_h::opus_val32 = 0.;
-    let mut hp_ener: crate::arch_h::opus_val64 = 0 as i32 as crate::arch_h::opus_val64;
+    let mut in32: opus_val32 = 0.;
+    let mut out32: opus_val32 = 0.;
+    let mut out32_hp: opus_val32 = 0.;
+    let mut Y: opus_val32 = 0.;
+    let mut X: opus_val32 = 0.;
+    let mut hp_ener: opus_val64 = 0 as i32 as opus_val64;
     /* Internal variables and state are in Q10 format */
     k = 0 as i32;
     while k < len2 {
@@ -678,23 +678,23 @@ unsafe extern "C" fn silk_resampler_down2_hp(
 }
 
 unsafe extern "C" fn downmix_and_resample(
-    mut downmix: crate::opus_private_h::downmix_func,
+    mut downmix: downmix_func,
     mut _x: *const libc::c_void,
-    mut y: *mut crate::arch_h::opus_val32,
-    mut S: *mut crate::arch_h::opus_val32,
+    mut y: *mut opus_val32,
+    mut S: *mut opus_val32,
     mut subframe: i32,
     mut offset: i32,
     mut c1: i32,
     mut c2: i32,
     mut C: i32,
     mut Fs: i32,
-) -> crate::arch_h::opus_val32 {
-    let mut tmp: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
-    let mut scale: crate::arch_h::opus_val32 = 0.;
+) -> opus_val32 {
+    let mut tmp: *mut opus_val32 = 0 as *mut opus_val32;
+    let mut scale: opus_val32 = 0.;
     let mut j: i32 = 0;
-    let mut ret: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+    let mut ret: opus_val32 = 0 as i32 as opus_val32;
     if subframe == 0 as i32 {
-        return 0 as i32 as crate::arch_h::opus_val32;
+        return 0 as i32 as opus_val32;
     }
     if Fs == 48000 as i32 {
         subframe *= 2 as i32;
@@ -705,10 +705,10 @@ unsafe extern "C" fn downmix_and_resample(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
             .wrapping_mul(subframe as libc::c_ulong) as usize,
     );
-    tmp = fresh0.as_mut_ptr() as *mut crate::arch_h::opus_val32;
+    tmp = fresh0.as_mut_ptr() as *mut opus_val32;
     downmix.expect("non-null function pointer")(_x, tmp, subframe, offset, c1, c2, C);
     scale = 1.0f32 / 32768 as i32 as f32;
     if c2 == -(2 as i32) {
@@ -729,17 +729,17 @@ unsafe extern "C" fn downmix_and_resample(
             y as *mut libc::c_void,
             tmp as *const libc::c_void,
             (subframe as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
                 .wrapping_add((0 as i32 as isize * y.offset_from(tmp) as isize) as libc::c_ulong),
         );
     } else if Fs == 16000 as i32 {
-        let mut tmp3x: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
+        let mut tmp3x: *mut opus_val32 = 0 as *mut opus_val32;
         let mut fresh2 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+            (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
                 .wrapping_mul((3 as i32 * subframe) as libc::c_ulong) as usize,
         );
-        tmp3x = fresh2.as_mut_ptr() as *mut crate::arch_h::opus_val32;
+        tmp3x = fresh2.as_mut_ptr() as *mut opus_val32;
         /* Don't do this at home! This resampler is horrible and it's only (barely)
         usable for the purpose of the analysis because we don't care about all
         the aliasing between 8 kHz and 12 kHz. */
@@ -758,7 +758,7 @@ unsafe extern "C" fn downmix_and_resample(
 
 pub unsafe extern "C" fn tonality_analysis_init(
     mut tonal: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
 ) {
     /* Initialize reusable fields. */
     (*tonal).arch = opus_select_arch();
@@ -798,7 +798,7 @@ pub unsafe extern "C" fn tonality_analysis_reset(
 
 pub unsafe extern "C" fn tonality_get_info(
     mut tonal: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
-    mut info_out: *mut crate::celt_h::AnalysisInfo,
+    mut info_out: *mut AnalysisInfo,
     mut len: i32,
 ) {
     let mut pos: i32 = 0;
@@ -828,10 +828,10 @@ pub unsafe extern "C" fn tonality_get_info(
     }
     crate::stdlib::memcpy(
         info_out as *mut libc::c_void,
-        &mut *(*tonal).info.as_mut_ptr().offset(pos as isize) as *mut crate::celt_h::AnalysisInfo
+        &mut *(*tonal).info.as_mut_ptr().offset(pos as isize) as *mut AnalysisInfo
             as *const libc::c_void,
         (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::celt_h::AnalysisInfo>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<AnalysisInfo>() as libc::c_ulong)
             .wrapping_add(
                 (0 as i32 as isize
                     * info_out.offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
@@ -910,7 +910,7 @@ static mut std_feature_bias: [f32; 9] = [
 
 unsafe extern "C" fn tonality_analysis(
     mut tonal: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
-    mut celt_mode: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut celt_mode: *const OpusCustomMode,
     mut x: *const libc::c_void,
     mut len: i32,
     mut offset: i32,
@@ -918,16 +918,16 @@ unsafe extern "C" fn tonality_analysis(
     mut c2: i32,
     mut C: i32,
     mut lsb_depth: i32,
-    mut downmix: crate::opus_private_h::downmix_func,
+    mut downmix: downmix_func,
 ) {
     let mut i: i32 = 0;
     let mut b: i32 = 0;
-    let mut kfft: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state =
-        0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
-    let mut in_0: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
-    let mut out: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    let mut kfft: *const kiss_fft_state =
+        0 as *const kiss_fft_state;
+    let mut in_0: *mut kiss_fft_cpx =
+        0 as *mut kiss_fft_cpx;
+    let mut out: *mut kiss_fft_cpx =
+        0 as *mut kiss_fft_cpx;
     let mut N: i32 = 480 as i32;
     let mut N2: i32 = 240 as i32;
     let mut A: *mut f32 = (*tonal).angle.as_mut_ptr();
@@ -960,7 +960,7 @@ unsafe extern "C" fn tonality_analysis(
     let mut maxE: f32 = 0 as i32 as f32;
     let mut noise_floor: f32 = 0.;
     let mut remaining: i32 = 0;
-    let mut info: *mut crate::celt_h::AnalysisInfo = 0 as *mut crate::celt_h::AnalysisInfo;
+    let mut info: *mut AnalysisInfo = 0 as *mut AnalysisInfo;
     let mut hp_ener: f32 = 0.;
     let mut tonality2: [f32; 240] = [0.; 240];
     let mut midE: [f32; 8] = [0.; 8];
@@ -1033,24 +1033,24 @@ unsafe extern "C" fn tonality_analysis(
     let fresh3 = (*tonal).write_pos;
     (*tonal).write_pos = (*tonal).write_pos + 1;
     info = &mut *(*tonal).info.as_mut_ptr().offset(fresh3 as isize)
-        as *mut crate::celt_h::AnalysisInfo;
+        as *mut AnalysisInfo;
     if (*tonal).write_pos >= 100 as i32 {
         (*tonal).write_pos -= 100 as i32
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx>()
+        (::std::mem::size_of::<kiss_fft_cpx>()
             as libc::c_ulong)
             .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
-    in_0 = fresh4.as_mut_ptr() as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    in_0 = fresh4.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx>()
+        (::std::mem::size_of::<kiss_fft_cpx>()
             as libc::c_ulong)
             .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
-    out = fresh5.as_mut_ptr() as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    out = fresh5.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh6 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(240 as i32 as libc::c_ulong)
@@ -1082,7 +1082,7 @@ unsafe extern "C" fn tonality_analysis(
             .offset(720 as i32 as isize)
             .offset(-(240 as i32 as isize)) as *const libc::c_void,
         (240 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
             .wrapping_add(
                 (0 as i32 as isize
                     * (*tonal).inmem.as_mut_ptr().offset_from(
@@ -1108,10 +1108,10 @@ unsafe extern "C" fn tonality_analysis(
         (*tonal).Fs,
     );
     (*tonal).mem_fill = 240 as i32 + remaining;
-    crate::src::opus_1_2_1::celt::kiss_fft::opus_fft_c(
-        kfft as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
-        in_0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
-        out as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
+    opus_fft_c(
+        kfft as *const kiss_fft_state,
+        in_0 as *const kiss_fft_cpx,
+        out as *mut kiss_fft_cpx,
     );
     /* If there's any NaN on the input, the entire output will be NaN, so we only need to check one value. */
     if celt_isnan((*out.offset(0 as i32 as isize)).r) != 0 {
@@ -1648,9 +1648,9 @@ unsafe extern "C" fn tonality_analysis(
     features[22 as i32 as usize] = frame_stationarity - 0.743717f32;
     features[23 as i32 as usize] = (*info).tonality_slope + 0.069216f32;
     features[24 as i32 as usize] = (*tonal).lowECount - 0.067930f32;
-    crate::src::opus_1_2_1::src::mlp::mlp_process(
-        &crate::src::opus_1_2_1::src::mlp_data::net as *const _
-            as *const crate::src::opus_1_2_1::src::mlp::MLP,
+    mlp_process(
+        &net as *const _
+            as *const MLP,
         features.as_mut_ptr(),
         frame_probs.as_mut_ptr(),
     );
@@ -1875,17 +1875,17 @@ unsafe extern "C" fn tonality_analysis(
 
 pub unsafe extern "C" fn run_analysis(
     mut analysis: *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
-    mut celt_mode: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut celt_mode: *const OpusCustomMode,
     mut analysis_pcm: *const libc::c_void,
     mut analysis_frame_size: i32,
     mut frame_size: i32,
     mut c1: i32,
     mut c2: i32,
     mut C: i32,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut lsb_depth: i32,
-    mut downmix: crate::opus_private_h::downmix_func,
-    mut analysis_info: *mut crate::celt_h::AnalysisInfo,
+    mut downmix: downmix_func,
+    mut analysis_info: *mut AnalysisInfo,
 ) {
     let mut offset: i32 = 0;
     let mut pcm_len: i32 = 0;

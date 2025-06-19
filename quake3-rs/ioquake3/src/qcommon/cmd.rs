@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -59,7 +59,7 @@ pub use ::libc::strtol;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct cmd_t {
-    pub data: *mut crate::src::qcommon::q_shared::byte,
+    pub data: *mut byte,
     pub maxsize: i32,
     pub cursize: i32,
 }
@@ -78,8 +78,8 @@ pub type cmd_function_t = cmd_function_s;
 pub struct cmd_function_s {
     pub next: *mut cmd_function_s,
     pub name: *mut libc::c_char,
-    pub function: crate::qcommon_h::xcommand_t,
-    pub complete: crate::qcommon_h::completionFunc_t,
+    pub function: xcommand_t,
+    pub complete: completionFunc_t,
 }
 
 #[repr(C)]
@@ -94,14 +94,14 @@ pub static mut cmd_wait: i32 = 0;
 #[no_mangle]
 
 pub static mut cmd_text: cmd_t = cmd_t {
-    data: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    data: 0 as *const byte
+        as *mut byte,
     maxsize: 0,
     cursize: 0,
 };
 #[no_mangle]
 
-pub static mut cmd_text_buf: [crate::src::qcommon::q_shared::byte; 131072] = [0; 131072];
+pub static mut cmd_text_buf: [byte; 131072] = [0; 131072];
 //=============================================================================
 /*
 ============
@@ -174,14 +174,14 @@ pub unsafe extern "C" fn Cbuf_AddText(mut text: *const libc::c_char) {
     let mut l: i32 = 0;
     l = crate::stdlib::strlen(text) as i32;
     if cmd_text.cursize + l >= cmd_text.maxsize {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Cbuf_AddText: overflow\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     crate::stdlib::memcpy(
         &mut *cmd_text.data.offset(cmd_text.cursize as isize)
-            as *mut crate::src::qcommon::q_shared::byte as *mut libc::c_void,
+            as *mut byte as *mut libc::c_void,
         text as *const libc::c_void,
         l as libc::c_ulong,
     );
@@ -202,7 +202,7 @@ pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     let mut i: i32 = 0;
     len = crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     if len + cmd_text.cursize > cmd_text.maxsize {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Cbuf_InsertText overflowed\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -221,7 +221,7 @@ pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     );
     // add a \n
     *cmd_text.data.offset((len - 1 as i32) as isize) =
-        '\n' as i32 as crate::src::qcommon::q_shared::byte;
+        '\n' as i32 as byte;
     cmd_text.cursize += len;
 }
 // Adds command text at the end of the buffer, does NOT add a final \n
@@ -236,14 +236,14 @@ pub unsafe extern "C" fn Cbuf_ExecuteText(mut exec_when: i32, mut text: *const l
     match exec_when {
         0 => {
             if !text.is_null() && crate::stdlib::strlen(text) > 0 as i32 as libc::c_ulong {
-                crate::src::qcommon::common::Com_DPrintf(
+                Com_DPrintf(
                     b"^3EXEC_NOW %s\n\x00" as *const u8 as *const libc::c_char,
                     text,
                 );
                 Cmd_ExecuteString(text);
             } else {
                 Cbuf_Execute();
-                crate::src::qcommon::common::Com_DPrintf(
+                Com_DPrintf(
                     b"^3EXEC_NOW %s\n\x00" as *const u8 as *const libc::c_char,
                     cmd_text.data,
                 );
@@ -256,8 +256,8 @@ pub unsafe extern "C" fn Cbuf_ExecuteText(mut exec_when: i32, mut text: *const l
             Cbuf_AddText(text);
         }
         _ => {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            Com_Error(
+                ERR_FATAL as i32,
                 b"Cbuf_ExecuteText: bad exec_when\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -279,10 +279,10 @@ pub unsafe extern "C" fn Cbuf_Execute() {
     // This will keep // style comments all on one line by not breaking on
     // a semicolon.  It will keep /* ... */ style comments all on one line by not
     // breaking it for semicolon or newline.
-    let mut in_star_comment: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut in_slash_comment: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut in_star_comment: qboolean =
+        qfalse;
+    let mut in_slash_comment: qboolean =
+        qfalse;
     while cmd_text.cursize != 0 {
         if cmd_wait > 0 as i32 {
             // skip out while text still remains in buffer, leaving it
@@ -304,17 +304,17 @@ pub unsafe extern "C" fn Cbuf_Execute() {
                             && *text.offset(i as isize) as i32 == '/' as i32
                             && *text.offset((i + 1 as i32) as isize) as i32 == '/' as i32
                         {
-                            in_slash_comment = crate::src::qcommon::q_shared::qtrue
+                            in_slash_comment = qtrue
                         } else if in_slash_comment as u64 == 0
                             && *text.offset(i as isize) as i32 == '/' as i32
                             && *text.offset((i + 1 as i32) as isize) as i32 == '*' as i32
                         {
-                            in_star_comment = crate::src::qcommon::q_shared::qtrue
+                            in_star_comment = qtrue
                         } else if in_star_comment as u32 != 0
                             && *text.offset(i as isize) as i32 == '*' as i32
                             && *text.offset((i + 1 as i32) as isize) as i32 == '/' as i32
                         {
-                            in_star_comment = crate::src::qcommon::q_shared::qfalse;
+                            in_star_comment = qfalse;
                             // If we are in a star comment, then the part after it is valid
                             // Note: This will cause it to NUL out the terminating '/'
                             // but ExecuteString doesn't require it anyway.
@@ -333,7 +333,7 @@ pub unsafe extern "C" fn Cbuf_Execute() {
                     && (*text.offset(i as isize) as i32 == '\n' as i32
                         || *text.offset(i as isize) as i32 == '\r' as i32)
                 {
-                    in_slash_comment = crate::src::qcommon::q_shared::qfalse;
+                    in_slash_comment = qfalse;
                     break;
                 } else {
                     i += 1
@@ -382,17 +382,17 @@ Cmd_Exec_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Exec_f() {
-    let mut quiet: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut quiet: qboolean = qfalse;
     let mut f: C2RustUnnamed_118 = C2RustUnnamed_118 {
         c: 0 as *mut libc::c_char,
     };
     let mut filename: [libc::c_char; 64] = [0; 64];
-    quiet = (crate::src::qcommon::q_shared::Q_stricmp(
+    quiet = (Q_stricmp(
         Cmd_Argv(0 as i32),
         b"execq\x00" as *const u8 as *const libc::c_char,
-    ) == 0) as i32 as crate::src::qcommon::q_shared::qboolean;
+    ) == 0) as i32 as qboolean;
     if Cmd_Argc() != 2 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"exec%s <filename> : execute a script file%s\n\x00" as *const u8
                 as *const libc::c_char,
             if quiet as u32 != 0 {
@@ -408,32 +408,32 @@ pub unsafe extern "C" fn Cmd_Exec_f() {
         );
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         filename.as_mut_ptr(),
         Cmd_Argv(1 as i32),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::COM_DefaultExtension(
+    COM_DefaultExtension(
         filename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b".cfg\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::files::FS_ReadFile(filename.as_mut_ptr(), &mut f.v);
+    FS_ReadFile(filename.as_mut_ptr(), &mut f.v);
     if f.c.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"couldn\'t exec %s\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
         return;
     }
     if quiet as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"execing %s\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
     }
     Cbuf_InsertText(f.c);
-    crate::src::qcommon::files::FS_FreeFile(f.v);
+    FS_FreeFile(f.v);
 }
 /*
 ===============
@@ -447,14 +447,14 @@ Inserts the current value of a variable as command text
 pub unsafe extern "C" fn Cmd_Vstr_f() {
     let mut v: *mut libc::c_char = 0 as *mut libc::c_char;
     if Cmd_Argc() != 2 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"vstr <variablename> : execute a variable command\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
-    v = crate::src::qcommon::cvar::Cvar_VariableString(Cmd_Argv(1 as i32));
-    Cbuf_InsertText(crate::src::qcommon::q_shared::va(
+    v = Cvar_VariableString(Cmd_Argv(1 as i32));
+    Cbuf_InsertText(va(
         b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         v,
     ));
@@ -469,7 +469,7 @@ Just prints the rest of the line to the console
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Echo_f() {
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"%s\n\x00" as *const u8 as *const libc::c_char,
         Cmd_Args(),
     );
@@ -527,7 +527,7 @@ pub unsafe extern "C" fn Cmd_ArgvBuffer(
     mut buffer: *mut libc::c_char,
     mut bufferLength: i32,
 ) {
-    crate::src::qcommon::q_shared::Q_strncpyz(buffer, Cmd_Argv(arg), bufferLength);
+    Q_strncpyz(buffer, Cmd_Argv(arg), bufferLength);
 }
 /*
 ============
@@ -544,9 +544,9 @@ pub unsafe extern "C" fn Cmd_Args() -> *mut libc::c_char {
     cmd_args[0 as i32 as usize] = 0 as i32 as libc::c_char;
     i = 1 as i32;
     while i < cmd_argc {
-        ::libc::strcat(cmd_args.as_mut_ptr(), cmd_argv[i as usize]);
+        libc::strcat(cmd_args.as_mut_ptr(), cmd_argv[i as usize]);
         if i != cmd_argc - 1 as i32 {
-            ::libc::strcat(
+            libc::strcat(
                 cmd_args.as_mut_ptr(),
                 b" \x00" as *const u8 as *const libc::c_char,
             );
@@ -573,9 +573,9 @@ pub unsafe extern "C" fn Cmd_ArgsFrom(mut arg: i32) -> *mut libc::c_char {
     }
     i = arg;
     while i < cmd_argc {
-        ::libc::strcat(cmd_args.as_mut_ptr(), cmd_argv[i as usize]);
+        libc::strcat(cmd_args.as_mut_ptr(), cmd_argv[i as usize]);
         if i != cmd_argc - 1 as i32 {
-            ::libc::strcat(
+            libc::strcat(
                 cmd_args.as_mut_ptr(),
                 b" \x00" as *const u8 as *const libc::c_char,
             );
@@ -595,7 +595,7 @@ they can't have pointers returned to them
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_ArgsBuffer(mut buffer: *mut libc::c_char, mut bufferLength: i32) {
-    crate::src::qcommon::q_shared::Q_strncpyz(buffer, Cmd_Args(), bufferLength);
+    Q_strncpyz(buffer, Cmd_Args(), bufferLength);
 }
 /*
 ============
@@ -628,7 +628,7 @@ pub unsafe extern "C" fn Cmd_Args_Sanitize() {
             *c.offset((256 as i32 - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
         }
         loop {
-            c = ::libc::strpbrk(c, b"\n\r;\x00" as *const u8 as *const libc::c_char);
+            c = libc::strpbrk(c, b"\n\r;\x00" as *const u8 as *const libc::c_char);
             if c.is_null() {
                 break;
             }
@@ -653,7 +653,7 @@ will point into this temporary buffer.
 
 unsafe extern "C" fn Cmd_TokenizeString2(
     mut text_in: *const libc::c_char,
-    mut ignoreQuotes: crate::src::qcommon::q_shared::qboolean,
+    mut ignoreQuotes: qboolean,
 ) {
     let mut text: *const libc::c_char = 0 as *const libc::c_char;
     let mut textOut: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -662,7 +662,7 @@ unsafe extern "C" fn Cmd_TokenizeString2(
     if text_in.is_null() {
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         cmd_cmd.as_mut_ptr(),
         text_in,
         ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
@@ -777,7 +777,7 @@ Cmd_TokenizeString
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_TokenizeString(mut text_in: *const libc::c_char) {
-    Cmd_TokenizeString2(text_in, crate::src::qcommon::q_shared::qfalse);
+    Cmd_TokenizeString2(text_in, qfalse);
 }
 /*
 ============
@@ -787,7 +787,7 @@ Cmd_TokenizeStringIgnoreQuotes
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_TokenizeStringIgnoreQuotes(mut text_in: *const libc::c_char) {
-    Cmd_TokenizeString2(text_in, crate::src::qcommon::q_shared::qtrue);
+    Cmd_TokenizeString2(text_in, qtrue);
 }
 /*
 ============
@@ -800,7 +800,7 @@ pub unsafe extern "C" fn Cmd_FindCommand(mut cmd_name: *const libc::c_char) -> *
     let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
     cmd = cmd_functions;
     while !cmd.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(cmd_name, (*cmd).name) == 0 {
+        if Q_stricmp(cmd_name, (*cmd).name) == 0 {
             return cmd;
         }
         cmd = (*cmd).next
@@ -816,14 +816,14 @@ Cmd_AddCommand
 
 pub unsafe extern "C" fn Cmd_AddCommand(
     mut cmd_name: *const libc::c_char,
-    mut function: crate::qcommon_h::xcommand_t,
+    mut function: xcommand_t,
 ) {
     let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
     // fail if the command already exists
     if !Cmd_FindCommand(cmd_name).is_null() {
         // allow completion-only commands to be silently doubled
         if function.is_some() {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Cmd_AddCommand: %s already defined\n\x00" as *const u8 as *const libc::c_char,
                 cmd_name,
             );
@@ -831,10 +831,10 @@ pub unsafe extern "C" fn Cmd_AddCommand(
         return;
     }
     // use a small malloc to avoid zone fragmentation
-    cmd = crate::src::qcommon::common::S_Malloc(
+    cmd = S_Malloc(
         ::std::mem::size_of::<cmd_function_t>() as libc::c_ulong as i32
     ) as *mut cmd_function_t;
-    (*cmd).name = crate::src::qcommon::common::CopyString(cmd_name);
+    (*cmd).name = CopyString(cmd_name);
     (*cmd).function = function;
     (*cmd).complete = None;
     (*cmd).next = cmd_functions;
@@ -850,12 +850,12 @@ Cmd_SetCommandCompletionFunc
 
 pub unsafe extern "C" fn Cmd_SetCommandCompletionFunc(
     mut command: *const libc::c_char,
-    mut complete: crate::qcommon_h::completionFunc_t,
+    mut complete: completionFunc_t,
 ) {
     let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
     cmd = cmd_functions;
     while !cmd.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(command, (*cmd).name) == 0 {
+        if Q_stricmp(command, (*cmd).name) == 0 {
             (*cmd).complete = complete;
             return;
         }
@@ -884,10 +884,10 @@ pub unsafe extern "C" fn Cmd_RemoveCommand(mut cmd_name: *const libc::c_char) {
             // command wasn't active
             return;
         }
-        if ::libc::strcmp(cmd_name, (*cmd).name) == 0 {
+        if libc::strcmp(cmd_name, (*cmd).name) == 0 {
             *back = (*cmd).next;
-            crate::src::qcommon::common::Z_Free((*cmd).name as *mut libc::c_void);
-            crate::src::qcommon::common::Z_Free(cmd as *mut libc::c_void);
+            Z_Free((*cmd).name as *mut libc::c_void);
+            Z_Free(cmd as *mut libc::c_void);
             return;
         }
         back = &mut (*cmd).next
@@ -909,8 +909,8 @@ pub unsafe extern "C" fn Cmd_RemoveCommandSafe(mut cmd_name: *const libc::c_char
         return;
     }
     if (*cmd).function.is_some() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"Restricted source tried to remove system command \"%s\"\x00" as *const u8
                 as *const libc::c_char,
             cmd_name,
@@ -950,7 +950,7 @@ pub unsafe extern "C" fn Cmd_CompleteArgument(
     let mut cmd: *mut cmd_function_t = 0 as *mut cmd_function_t;
     cmd = cmd_functions;
     while !cmd.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(command, (*cmd).name) == 0 {
+        if Q_stricmp(command, (*cmd).name) == 0 {
             if (*cmd).complete.is_some() {
                 (*cmd).complete.expect("non-null function pointer")(args, argNum);
             }
@@ -983,7 +983,7 @@ pub unsafe extern "C" fn Cmd_ExecuteString(mut text: *const libc::c_char) {
     prev = &mut cmd_functions;
     while !(*prev).is_null() {
         cmd = *prev;
-        if crate::src::qcommon::q_shared::Q_stricmp(cmd_argv[0 as i32 as usize], (*cmd).name) == 0 {
+        if Q_stricmp(cmd_argv[0 as i32 as usize], (*cmd).name) == 0 {
             // rearrange the links so that the command will be
             // near the head of the list next time it is used
             *prev = (*cmd).next;
@@ -1000,33 +1000,33 @@ pub unsafe extern "C" fn Cmd_ExecuteString(mut text: *const libc::c_char) {
         }
     }
     // check cvars
-    if crate::src::qcommon::cvar::Cvar_Command() as u64 != 0 {
+    if Cvar_Command() as u64 != 0 {
         return;
     }
     // check client game commands
-    if !crate::src::qcommon::common::com_cl_running.is_null()
-        && (*crate::src::qcommon::common::com_cl_running).integer != 0
-        && crate::src::client::cl_cgame::CL_GameCommand() as u32 != 0
+    if !com_cl_running.is_null()
+        && (*com_cl_running).integer != 0
+        && CL_GameCommand() as u32 != 0
     {
         return;
     }
     // check server game commands
-    if !crate::src::qcommon::common::com_sv_running.is_null()
-        && (*crate::src::qcommon::common::com_sv_running).integer != 0
-        && crate::src::server::sv_game::SV_GameCommand() as u32 != 0
+    if !com_sv_running.is_null()
+        && (*com_sv_running).integer != 0
+        && SV_GameCommand() as u32 != 0
     {
         return;
     }
     // check ui commands
-    if !crate::src::qcommon::common::com_cl_running.is_null()
-        && (*crate::src::qcommon::common::com_cl_running).integer != 0
-        && crate::src::client::cl_ui::UI_GameCommand() as u32 != 0
+    if !com_cl_running.is_null()
+        && (*com_cl_running).integer != 0
+        && UI_GameCommand() as u32 != 0
     {
         return;
     }
     // send it as a server command if we are connected
     // this will usually result in a chat message
-    crate::src::client::cl_main::CL_ForwardCommandToServer(text);
+    CL_ForwardCommandToServer(text);
 }
 /*
 ============
@@ -1048,13 +1048,13 @@ pub unsafe extern "C" fn Cmd_List_f() {
     cmd = cmd_functions;
     while !cmd.is_null() {
         if !(!match_0.is_null()
-            && crate::src::qcommon::common::Com_Filter(
+            && Com_Filter(
                 match_0,
                 (*cmd).name,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             ) == 0)
         {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"%s\n\x00" as *const u8 as *const libc::c_char,
                 (*cmd).name,
             );
@@ -1062,7 +1062,7 @@ pub unsafe extern "C" fn Cmd_List_f() {
         }
         cmd = (*cmd).next
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"%i commands\n\x00" as *const u8 as *const libc::c_char,
         i,
     );
@@ -1076,11 +1076,11 @@ Cmd_CompleteCfgName
 
 pub unsafe extern "C" fn Cmd_CompleteCfgName(mut _args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
-        crate::src::qcommon::common::Field_CompleteFilename(
+        Field_CompleteFilename(
             b"\x00" as *const u8 as *const libc::c_char,
             b"cfg\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qfalse,
-            crate::src::qcommon::q_shared::qtrue,
+            qfalse,
+            qtrue,
         );
     };
 }
@@ -1119,7 +1119,7 @@ pub unsafe extern "C" fn Cmd_Init() {
     Cmd_SetCommandCompletionFunc(
         b"vstr\x00" as *const u8 as *const libc::c_char,
         Some(
-            crate::src::qcommon::cvar::Cvar_CompleteCvarName
+            Cvar_CompleteCvarName
                 as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
         ),
     );

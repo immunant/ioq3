@@ -38,14 +38,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_insertion_sort_increasing(
-    mut a: *mut crate::opus_types_h::opus_int32,
+    mut a: *mut opus_int32,
     mut idx: *mut i32,
     L: i32,
     K: i32,
 )
 /* I     Number of correctly sorted positions   */
 {
-    let mut value: crate::opus_types_h::opus_int32 = 0;
+    let mut value: opus_int32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     /* Safety checks */
@@ -94,7 +94,7 @@ pub unsafe extern "C" fn silk_insertion_sort_increasing(
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_insertion_sort_increasing_all_values_int16(
-    mut a: *mut crate::opus_types_h::opus_int16,
+    mut a: *mut opus_int16,
     L: i32,
 )
 /* I     Vector length                                              */
@@ -114,7 +114,7 @@ pub unsafe extern "C" fn silk_insertion_sort_increasing_all_values_int16(
             /* Write value */
             /* Shift value */
         }
-        *a.offset((j + 1 as i32) as isize) = value as crate::opus_types_h::opus_int16;
+        *a.offset((j + 1 as i32) as isize) = value as opus_int16;
         i += 1
     }
 }

@@ -367,38 +367,38 @@ pub use crate::ui_local_h::uiStatic_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct playersettings_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub player: crate::ui_local_h::menubitmap_s,
-    pub name: crate::ui_local_h::menufield_s,
-    pub handicap: crate::ui_local_h::menulist_s,
-    pub effects: crate::ui_local_h::menulist_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub model: crate::ui_local_h::menubitmap_s,
-    pub item_null: crate::ui_local_h::menubitmap_s,
-    pub fxBasePic: crate::src::qcommon::q_shared::qhandle_t,
-    pub fxPic: [crate::src::qcommon::q_shared::qhandle_t; 7],
-    pub playerinfo: crate::ui_local_h::playerInfo_t,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub player: menubitmap_s,
+    pub name: menufield_s,
+    pub handicap: menulist_s,
+    pub effects: menulist_s,
+    pub back: menubitmap_s,
+    pub model: menubitmap_s,
+    pub item_null: menubitmap_s,
+    pub fxBasePic: qhandle_t,
+    pub fxPic: [qhandle_t; 7],
+    pub playerinfo: playerInfo_t,
     pub current_fx: i32,
     pub playerModel: [libc::c_char; 64],
 }
 
 static mut s_playersettings: playersettings_t = playersettings_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -408,8 +408,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -420,8 +420,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -431,8 +431,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -447,8 +447,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -458,8 +458,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -474,8 +474,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    player: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    player: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -485,8 +485,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -501,8 +501,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    name: crate::ui_local_h::menufield_s {
-        generic: crate::ui_local_h::menucommon_s {
+    name: menufield_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -512,15 +512,15 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
             statusbar: None,
             ownerdraw: None,
         },
-        field: crate::ui_local_h::mfield_t {
+        field: mfield_t {
             cursor: 0,
             scroll: 0,
             widthInChars: 0,
@@ -528,8 +528,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             maxchars: 0,
         },
     },
-    handicap: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    handicap: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -539,8 +539,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -557,8 +557,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         columns: 0,
         separation: 0,
     },
-    effects: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    effects: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -568,8 +568,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -586,8 +586,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         columns: 0,
         separation: 0,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -597,8 +597,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -613,8 +613,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    model: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    model: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -624,8 +624,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -640,8 +640,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    item_null: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    item_null: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -651,8 +651,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -669,44 +669,44 @@ static mut s_playersettings: playersettings_t = playersettings_t {
     },
     fxBasePic: 0,
     fxPic: [0; 7],
-    playerinfo: crate::ui_local_h::playerInfo_t {
+    playerinfo: playerInfo_t {
         legsModel: 0,
         legsSkin: 0,
-        legs: crate::ui_local_h::lerpFrame_t {
+        legs: lerpFrame_t {
             oldFrame: 0,
             oldFrameTime: 0,
             frame: 0,
             frameTime: 0,
             backlerp: 0.,
             yawAngle: 0.,
-            yawing: crate::src::qcommon::q_shared::qfalse,
+            yawing: qfalse,
             pitchAngle: 0.,
-            pitching: crate::src::qcommon::q_shared::qfalse,
+            pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const crate::bg_public_h::animation_t
-                as *mut crate::bg_public_h::animation_t,
+            animation: 0 as *const animation_t
+                as *mut animation_t,
             animationTime: 0,
         },
         torsoModel: 0,
         torsoSkin: 0,
-        torso: crate::ui_local_h::lerpFrame_t {
+        torso: lerpFrame_t {
             oldFrame: 0,
             oldFrameTime: 0,
             frame: 0,
             frameTime: 0,
             backlerp: 0.,
             yawAngle: 0.,
-            yawing: crate::src::qcommon::q_shared::qfalse,
+            yawing: qfalse,
             pitchAngle: 0.,
-            pitching: crate::src::qcommon::q_shared::qfalse,
+            pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const crate::bg_public_h::animation_t
-                as *mut crate::bg_public_h::animation_t,
+            animation: 0 as *const animation_t
+                as *mut animation_t,
             animationTime: 0,
         },
         headModel: 0,
         headSkin: 0,
-        animations: [crate::bg_public_h::animation_t {
+        animations: [animation_t {
             firstFrame: 0,
             numFrames: 0,
             loopFrames: 0,
@@ -715,8 +715,8 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             reversed: 0,
             flipflop: 0,
         }; 31],
-        fixedlegs: crate::src::qcommon::q_shared::qfalse,
-        fixedtorso: crate::src::qcommon::q_shared::qfalse,
+        fixedlegs: qfalse,
+        fixedtorso: qfalse,
         weaponModel: 0,
         barrelModel: 0,
         flashModel: 0,
@@ -726,20 +726,20 @@ static mut s_playersettings: playersettings_t = playersettings_t {
         c1RGBA: [0; 4],
         viewAngles: [0.; 3],
         moveAngles: [0.; 3],
-        currentWeapon: crate::bg_public_h::WP_NONE,
+        currentWeapon: WP_NONE,
         legsAnim: 0,
         torsoAnim: 0,
-        weapon: crate::bg_public_h::WP_NONE,
-        lastWeapon: crate::bg_public_h::WP_NONE,
-        pendingWeapon: crate::bg_public_h::WP_NONE,
+        weapon: WP_NONE,
+        lastWeapon: WP_NONE,
+        pendingWeapon: WP_NONE,
         weaponTimer: 0,
         pendingLegsAnim: 0,
         torsoAnimationTimer: 0,
         pendingTorsoAnim: 0,
         legsAnimationTimer: 0,
-        chat: crate::src::qcommon::q_shared::qfalse,
-        newModel: crate::src::qcommon::q_shared::qfalse,
-        barrelSpinning: crate::src::qcommon::q_shared::qfalse,
+        chat: qfalse,
+        newModel: qfalse,
+        barrelSpinning: qfalse,
         barrelAngle: 0.,
         barrelTime: 0,
         realWeapon: 0,
@@ -786,8 +786,8 @@ PlayerSettings_DrawName
 */
 
 unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
-    let mut f: *mut crate::ui_local_h::menufield_s = 0 as *mut crate::ui_local_h::menufield_s;
-    let mut focus: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut f: *mut menufield_s = 0 as *mut menufield_s;
+    let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
     let mut txt: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut c: libc::c_char = 0;
@@ -797,18 +797,18 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut name: [libc::c_char; 32] = [0; 32];
-    f = self_0 as *mut crate::ui_local_h::menufield_s;
+    f = self_0 as *mut menufield_s;
     basex = (*f).generic.x;
     y = (*f).generic.y;
     focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
     style = 0 as i32 | 0x10 as i32;
-    color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
+    color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
         style |= 0x4000 as i32;
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr()
+        color = text_color_highlight.as_mut_ptr()
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         basex,
         y,
         b"Name\x00" as *const u8 as *const libc::c_char,
@@ -819,7 +819,7 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
     basex += 64 as i32;
     y += 27 as i32;
     txt = (*f).field.buffer.as_mut_ptr();
-    color = crate::src::qcommon::q_math::g_color_table
+    color = g_color_table
         [('7' as i32 - '0' as i32 & 0x7 as i32) as usize]
         .as_mut_ptr();
     x = basex;
@@ -828,49 +828,49 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
         if !(c as i32 != 0 as i32) {
             break;
         }
-        if focus as u64 == 0 && crate::src::qcommon::q_shared::Q_IsColorString(txt) as u32 != 0 {
+        if focus as u64 == 0 && Q_IsColorString(txt) as u32 != 0 {
             n = *txt.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32;
             if n == 0 as i32 {
                 n = 7 as i32
             }
-            color = crate::src::qcommon::q_math::g_color_table[n as usize].as_mut_ptr();
+            color = g_color_table[n as usize].as_mut_ptr();
             txt = txt.offset(2 as i32 as isize)
         } else {
-            crate::src::q3_ui::ui_atoms::UI_DrawChar(x, y, c as i32, style, color);
+            UI_DrawChar(x, y, c as i32, style, color);
             txt = txt.offset(1);
             x += 8 as i32
         }
     }
     // draw cursor if we have focus
     if focus as u64 != 0 {
-        if crate::src::ui::ui_syscalls::trap_Key_GetOverstrikeMode() as u64 != 0 {
+        if trap_Key_GetOverstrikeMode() as u64 != 0 {
             c = 11 as i32 as libc::c_char
         } else {
             c = 10 as i32 as libc::c_char
         }
         style &= !(0x4000 as i32);
         style |= 0x1000 as i32;
-        crate::src::q3_ui::ui_atoms::UI_DrawChar(
+        UI_DrawChar(
             basex + (*f).field.cursor * 8 as i32,
             y,
             c as i32,
             style,
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+            color_white.as_mut_ptr(),
         );
     }
     // draw at bottom also using proportional font
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         name.as_mut_ptr(),
         (*f).field.buffer.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_CleanStr(name.as_mut_ptr());
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    Q_CleanStr(name.as_mut_ptr());
+    UI_DrawProportionalString(
         320 as i32,
         440 as i32,
         name.as_mut_ptr(),
         0x1 as i32 | 0x20 as i32,
-        crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+        text_color_normal.as_mut_ptr(),
     );
 }
 /*
@@ -880,27 +880,27 @@ PlayerSettings_DrawHandicap
 */
 
 unsafe extern "C" fn PlayerSettings_DrawHandicap(mut self_0: *mut libc::c_void) {
-    let mut item: *mut crate::ui_local_h::menulist_s = 0 as *mut crate::ui_local_h::menulist_s;
-    let mut focus: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut item: *mut menulist_s = 0 as *mut menulist_s;
+    let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
-    item = self_0 as *mut crate::ui_local_h::menulist_s;
+    item = self_0 as *mut menulist_s;
     focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
     style = 0 as i32 | 0x10 as i32;
-    color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
+    color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
         style |= 0x4000 as i32;
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr()
+        color = text_color_highlight.as_mut_ptr()
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         (*item).generic.x,
         (*item).generic.y,
         b"Handicap\x00" as *const u8 as *const libc::c_char,
         style,
         color,
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         (*item).generic.x + 64 as i32,
         (*item).generic.y + 27 as i32,
         handicap_items[(*item).curvalue as usize],
@@ -915,34 +915,34 @@ PlayerSettings_DrawEffects
 */
 
 unsafe extern "C" fn PlayerSettings_DrawEffects(mut self_0: *mut libc::c_void) {
-    let mut item: *mut crate::ui_local_h::menulist_s = 0 as *mut crate::ui_local_h::menulist_s;
-    let mut focus: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut item: *mut menulist_s = 0 as *mut menulist_s;
+    let mut focus: qboolean = qfalse;
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
-    item = self_0 as *mut crate::ui_local_h::menulist_s;
+    item = self_0 as *mut menulist_s;
     focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
     style = 0 as i32 | 0x10 as i32;
-    color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
+    color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
         style |= 0x4000 as i32;
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr()
+        color = text_color_highlight.as_mut_ptr()
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         (*item).generic.x,
         (*item).generic.y,
         b"Effects\x00" as *const u8 as *const libc::c_char,
         style,
         color,
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
+    UI_DrawHandlePic(
         ((*item).generic.x + 64 as i32) as f32,
         ((*item).generic.y + 27 as i32 + 8 as i32) as f32,
         128 as i32 as f32,
         8 as i32 as f32,
         s_playersettings.fxBasePic,
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
+    UI_DrawHandlePic(
         ((*item).generic.x + 64 as i32 + (*item).curvalue * 16 as i32 + 8 as i32) as f32,
         ((*item).generic.y + 27 as i32 + 6 as i32) as f32,
         16 as i32 as f32,
@@ -957,42 +957,42 @@ PlayerSettings_DrawPlayer
 */
 
 unsafe extern "C" fn PlayerSettings_DrawPlayer(mut self_0: *mut libc::c_void) {
-    let mut b: *mut crate::ui_local_h::menubitmap_s = 0 as *mut crate::ui_local_h::menubitmap_s;
-    let mut viewangles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut b: *mut menubitmap_s = 0 as *mut menubitmap_s;
+    let mut viewangles: vec3_t = [0.; 3];
     let mut buf: [libc::c_char; 64] = [0; 64];
-    crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"model\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    if ::libc::strcmp(buf.as_mut_ptr(), s_playersettings.playerModel.as_mut_ptr()) != 0 as i32 {
-        crate::src::q3_ui::ui_players::UI_PlayerInfo_SetModel(
-            &mut s_playersettings.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
+    if libc::strcmp(buf.as_mut_ptr(), s_playersettings.playerModel.as_mut_ptr()) != 0 as i32 {
+        UI_PlayerInfo_SetModel(
+            &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
             buf.as_mut_ptr(),
         );
-        ::libc::strcpy(s_playersettings.playerModel.as_mut_ptr(), buf.as_mut_ptr());
+        libc::strcpy(s_playersettings.playerModel.as_mut_ptr(), buf.as_mut_ptr());
         viewangles[1 as i32 as usize] =
-            (180 as i32 - 30 as i32) as crate::src::qcommon::q_shared::vec_t;
-        viewangles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        viewangles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::q3_ui::ui_players::UI_PlayerInfo_SetInfo(
-            &mut s_playersettings.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-            crate::bg_public_h::LEGS_IDLE as i32,
-            crate::bg_public_h::TORSO_STAND as i32,
+            (180 as i32 - 30 as i32) as vec_t;
+        viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
+        viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
+        UI_PlayerInfo_SetInfo(
+            &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
+            LEGS_IDLE as i32,
+            TORSO_STAND as i32,
             viewangles.as_mut_ptr(),
-            crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
-            crate::bg_public_h::WP_MACHINEGUN,
-            crate::src::qcommon::q_shared::qfalse,
+            vec3_origin.as_mut_ptr(),
+            WP_MACHINEGUN,
+            qfalse,
         );
     }
-    b = self_0 as *mut crate::ui_local_h::menubitmap_s;
-    crate::src::q3_ui::ui_players::UI_DrawPlayer(
+    b = self_0 as *mut menubitmap_s;
+    UI_DrawPlayer(
         (*b).generic.x as f32,
         (*b).generic.y as f32,
         (*b).width as f32,
         (*b).height as f32,
-        &mut s_playersettings.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::src::q3_ui::ui_atoms::uis.realtime / 2 as i32,
+        &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
+        uis.realtime / 2 as i32,
     );
 }
 /*
@@ -1003,17 +1003,17 @@ PlayerSettings_SaveChanges
 
 unsafe extern "C" fn PlayerSettings_SaveChanges() {
     // name
-    crate::src::ui::ui_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"name\x00" as *const u8 as *const libc::c_char,
         s_playersettings.name.field.buffer.as_mut_ptr(),
     );
     // handicap
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"handicap\x00" as *const u8 as *const libc::c_char,
         (100 as i32 - s_playersettings.handicap.curvalue * 5 as i32) as f32,
     );
     // effects color
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"color1\x00" as *const u8 as *const libc::c_char,
         uitogamecode[s_playersettings.effects.curvalue as usize] as f32,
     );
@@ -1026,12 +1026,12 @@ PlayerSettings_MenuKey
 
 unsafe extern "C" fn PlayerSettings_MenuKey(
     mut key: i32,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
-    if key == crate::keycodes_h::K_MOUSE2 as i32 || key == crate::keycodes_h::K_ESCAPE as i32 {
+) -> sfxHandle_t {
+    if key == K_MOUSE2 as i32 || key == K_ESCAPE as i32 {
         PlayerSettings_SaveChanges();
     }
-    return crate::src::q3_ui::ui_qmenu::Menu_DefaultKey(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    return Menu_DefaultKey(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
         key,
     );
 }
@@ -1042,19 +1042,19 @@ PlayerSettings_SetMenuItems
 */
 
 unsafe extern "C" fn PlayerSettings_SetMenuItems() {
-    let mut viewangles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut viewangles: vec3_t = [0.; 3];
     let mut c: i32 = 0;
     let mut h: i32 = 0;
     // name
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_playersettings.name.field.buffer.as_mut_ptr(),
-        crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
+        UI_Cvar_VariableString(
             b"name\x00" as *const u8 as *const libc::c_char,
         ),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
     // effects color
-    c = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    c = (trap_Cvar_VariableValue(
         b"color1\x00" as *const u8 as *const libc::c_char,
     ) - 1 as i32 as f32) as i32;
     if c < 0 as i32 || c > 6 as i32 {
@@ -1063,35 +1063,35 @@ unsafe extern "C" fn PlayerSettings_SetMenuItems() {
     s_playersettings.effects.curvalue = gamecodetoui[c as usize];
     // model/skin
     crate::stdlib::memset(
-        &mut s_playersettings.playerinfo as *mut crate::ui_local_h::playerInfo_t
+        &mut s_playersettings.playerinfo as *mut playerInfo_t
             as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ui_local_h::playerInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
     );
     viewangles[1 as i32 as usize] =
-        (180 as i32 - 30 as i32) as crate::src::qcommon::q_shared::vec_t;
-    viewangles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    viewangles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::q3_ui::ui_players::UI_PlayerInfo_SetModel(
-        &mut s_playersettings.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
+        (180 as i32 - 30 as i32) as vec_t;
+    viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
+    viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
+    UI_PlayerInfo_SetModel(
+        &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
+        UI_Cvar_VariableString(
             b"model\x00" as *const u8 as *const libc::c_char,
         ),
     );
-    crate::src::q3_ui::ui_players::UI_PlayerInfo_SetInfo(
-        &mut s_playersettings.playerinfo as *mut _ as *mut crate::ui_local_h::playerInfo_t,
-        crate::bg_public_h::LEGS_IDLE as i32,
-        crate::bg_public_h::TORSO_STAND as i32,
+    UI_PlayerInfo_SetInfo(
+        &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
+        LEGS_IDLE as i32,
+        TORSO_STAND as i32,
         viewangles.as_mut_ptr(),
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
-        crate::bg_public_h::WP_MACHINEGUN,
-        crate::src::qcommon::q_shared::qfalse,
+        vec3_origin.as_mut_ptr(),
+        WP_MACHINEGUN,
+        qfalse,
     );
     // handicap
-    h = crate::src::qcommon::q_shared::Com_Clamp(
+    h = Com_Clamp(
         5 as i32 as f32,
         100 as i32 as f32,
-        crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        trap_Cvar_VariableValue(
             b"handicap\x00" as *const u8 as *const libc::c_char,
         ),
     ) as i32;
@@ -1107,11 +1107,11 @@ unsafe extern "C" fn PlayerSettings_MenuEvent(mut ptr: *mut libc::c_void, mut ev
     if event != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         11 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"handicap\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     100 as i32 - 25 as i32 * s_playersettings.handicap.curvalue,
                 ),
@@ -1119,11 +1119,11 @@ unsafe extern "C" fn PlayerSettings_MenuEvent(mut ptr: *mut libc::c_void, mut ev
         }
         14 => {
             PlayerSettings_SaveChanges();
-            crate::src::q3_ui::ui_playermodel::UI_PlayerModelMenu();
+            UI_PlayerModelMenu();
         }
         13 => {
             PlayerSettings_SaveChanges();
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         _ => {}
     };
@@ -1144,16 +1144,16 @@ unsafe extern "C" fn PlayerSettings_MenuInit() {
     PlayerSettings_Cache();
     s_playersettings.menu.key = Some(
         PlayerSettings_MenuKey
-            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
+            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
     );
-    s_playersettings.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    s_playersettings.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_playersettings.menu.wrapAround = qtrue;
+    s_playersettings.menu.fullscreen = qtrue;
     s_playersettings.banner.generic.type_0 = 10 as i32;
     s_playersettings.banner.generic.x = 320 as i32;
     s_playersettings.banner.generic.y = 16 as i32;
     s_playersettings.banner.string =
         b"PLAYER SETTINGS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_playersettings.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_playersettings.banner.color = color_white.as_mut_ptr();
     s_playersettings.banner.style = 0x1 as i32;
     s_playersettings.framel.generic.type_0 = 6 as i32;
     s_playersettings.framel.generic.name =
@@ -1250,45 +1250,45 @@ unsafe extern "C" fn PlayerSettings_MenuInit() {
     s_playersettings.item_null.generic.y = 0 as i32;
     s_playersettings.item_null.width = 640 as i32;
     s_playersettings.item_null.height = 480 as i32;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.name as *mut crate::ui_local_h::menufield_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.name as *mut menufield_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.handicap as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.handicap as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.effects as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.effects as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.model as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.model as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.player as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.player as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_playersettings.item_null as *mut crate::ui_local_h::menubitmap_s
+    Menu_AddItem(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_playersettings.item_null as *mut menubitmap_s
             as *mut libc::c_void,
     );
     PlayerSettings_SetMenuItems();
@@ -1301,53 +1301,53 @@ PlayerSettings_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn PlayerSettings_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/model_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/model_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
-    s_playersettings.fxBasePic = crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    s_playersettings.fxBasePic = trap_R_RegisterShaderNoMip(
         b"menu/art/fx_base\x00" as *const u8 as *const libc::c_char,
     );
     s_playersettings.fxPic[0 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_red\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[1 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_yel\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[2 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_grn\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[3 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_teal\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[4 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_blue\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[5 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_cyan\x00" as *const u8 as *const libc::c_char,
         );
     s_playersettings.fxPic[6 as i32 as usize] =
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+        trap_R_RegisterShaderNoMip(
             b"menu/art/fx_white\x00" as *const u8 as *const libc::c_char,
         );
 }
@@ -1443,7 +1443,7 @@ UI_PlayerSettingsMenu
 
 pub unsafe extern "C" fn UI_PlayerSettingsMenu() {
     PlayerSettings_MenuInit();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_playersettings.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
     );
 }

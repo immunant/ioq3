@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 
@@ -12,7 +12,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -158,11 +158,11 @@ pub use ::libc::strtod;
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]
-    pub static mut podium1: *mut crate::g_local_h::gentity_t;
+    pub static mut podium1: *mut gentity_t;
     #[no_mangle]
-    pub static mut podium2: *mut crate::g_local_h::gentity_t;
+    pub static mut podium2: *mut gentity_t;
     #[no_mangle]
-    pub static mut podium3: *mut crate::g_local_h::gentity_t;
+    pub static mut podium3: *mut gentity_t;
 }
 
 #[repr(C)]
@@ -212,8 +212,8 @@ static mut botSpawnQueue: [botSpawnQueue_t; 16] = [botSpawnQueue_t {
 }; 16];
 #[no_mangle]
 
-pub static mut bot_minplayers: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut bot_minplayers: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -224,7 +224,7 @@ pub static mut bot_minplayers: crate::src::qcommon::q_shared::vmCvar_t =
 
 pub unsafe extern "C" fn trap_Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
     let mut buf: [libc::c_char; 128] = [0; 128];
-    crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         var_name,
         buf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
@@ -249,49 +249,49 @@ pub unsafe extern "C" fn G_ParseInfos(
     let mut info: [libc::c_char; 1024] = [0; 1024];
     count = 0 as i32;
     loop {
-        token = crate::src::qcommon::q_shared::COM_Parse(&mut buf);
+        token = COM_Parse(&mut buf);
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
-        if ::libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
-            crate::src::game::g_main::Com_Printf(
+        if libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
+            Com_Printf(
                 b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char,
             );
             break;
         } else if count == max {
-            crate::src::game::g_main::Com_Printf(
+            Com_Printf(
                 b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char,
             );
             break;
         } else {
             info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
             loop {
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                token = COM_ParseExt(
                     &mut buf,
-                    crate::src::qcommon::q_shared::qtrue,
+                    qtrue,
                 );
                 if *token.offset(0 as i32 as isize) == 0 {
-                    crate::src::game::g_main::Com_Printf(
+                    Com_Printf(
                         b"Unexpected end of info file\n\x00" as *const u8 as *const libc::c_char,
                     );
                     break;
                 } else {
-                    if ::libc::strcmp(token, b"}\x00" as *const u8 as *const libc::c_char) == 0 {
+                    if libc::strcmp(token, b"}\x00" as *const u8 as *const libc::c_char) == 0 {
                         break;
                     }
-                    crate::src::qcommon::q_shared::Q_strncpyz(
+                    Q_strncpyz(
                         key.as_mut_ptr(),
                         token,
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
-                    token = crate::src::qcommon::q_shared::COM_ParseExt(
+                    token = COM_ParseExt(
                         &mut buf,
-                        crate::src::qcommon::q_shared::qfalse,
+                        qfalse,
                     );
                     if *token.offset(0 as i32 as isize) == 0 {
-                        ::libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
+                        libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
                     }
-                    crate::src::qcommon::q_shared::Info_SetValueForKey(
+                    Info_SetValueForKey(
                         info.as_mut_ptr(),
                         key.as_mut_ptr(),
                         token,
@@ -300,19 +300,19 @@ pub unsafe extern "C" fn G_ParseInfos(
             }
             //NOTE: extra space for arena number
             let ref mut fresh0 = *infos.offset(count as isize);
-            *fresh0 = crate::src::game::g_mem::G_Alloc(
+            *fresh0 = G_Alloc(
                 crate::stdlib::strlen(info.as_mut_ptr())
                     .wrapping_add(crate::stdlib::strlen(
                         b"\\num\\\x00" as *const u8 as *const libc::c_char,
                     ))
-                    .wrapping_add(crate::stdlib::strlen(crate::src::qcommon::q_shared::va(
+                    .wrapping_add(crate::stdlib::strlen(va(
                         b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         1024 as i32,
                     )))
                     .wrapping_add(1 as i32 as libc::c_ulong) as i32,
             ) as *mut libc::c_char;
             if !(*infos.offset(count as isize)).is_null() {
-                ::libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
+                libc::strcpy(*infos.offset(count as isize), info.as_mut_ptr());
                 count += 1
             }
         }
@@ -327,23 +327,23 @@ G_LoadArenasFromFile
 
 unsafe extern "C" fn G_LoadArenasFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
-    let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = crate::src::game::g_syscalls::trap_FS_FOpenFile(
+    len = trap_FS_FOpenFile(
         filename,
         &mut f,
-        crate::src::qcommon::q_shared::FS_READ,
+        FS_READ,
     );
     if f == 0 {
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             filename,
         ));
         return;
     }
     if len >= 8192 as i32 {
-        crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_FS_FCloseFile(f);
+        trap_Print(va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
@@ -352,9 +352,9 @@ unsafe extern "C" fn G_LoadArenasFromFile(mut filename: *mut libc::c_char) {
         ));
         return;
     }
-    crate::src::game::g_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
+    trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
     buf[len as usize] = 0 as i32 as libc::c_char;
-    crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
+    trap_FS_FCloseFile(f);
     g_numArenas += G_ParseInfos(
         buf.as_mut_ptr(),
         1024 as i32 - g_numArenas,
@@ -369,8 +369,8 @@ G_LoadArenas
 
 unsafe extern "C" fn G_LoadArenas() {
     let mut numdirs: i32 = 0;
-    let mut arenasFile: crate::src::qcommon::q_shared::vmCvar_t =
-        crate::src::qcommon::q_shared::vmCvar_t {
+    let mut arenasFile: vmCvar_t =
+        vmCvar_t {
             handle: 0,
             modificationCount: 0,
             value: 0.,
@@ -384,8 +384,8 @@ unsafe extern "C" fn G_LoadArenas() {
     let mut n: i32 = 0;
     let mut dirlen: i32 = 0;
     g_numArenas = 0 as i32;
-    crate::src::game::g_syscalls::trap_Cvar_Register(
-        &mut arenasFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        &mut arenasFile as *mut _ as *mut vmCvar_t,
         b"g_arenasFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x10 as i32 | 0x40 as i32,
@@ -398,7 +398,7 @@ unsafe extern "C" fn G_LoadArenas() {
         );
     }
     // get all arenas from .arena files
-    numdirs = crate::src::game::g_syscalls::trap_FS_GetFileList(
+    numdirs = trap_FS_GetFileList(
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".arena\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
@@ -408,25 +408,25 @@ unsafe extern "C" fn G_LoadArenas() {
     i = 0 as i32;
     while i < numdirs {
         dirlen = crate::stdlib::strlen(dirptr) as i32;
-        ::libc::strcpy(
+        libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
         );
-        ::libc::strcat(filename.as_mut_ptr(), dirptr);
+        libc::strcat(filename.as_mut_ptr(), dirptr);
         G_LoadArenasFromFile(filename.as_mut_ptr());
         i += 1;
         dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
-    crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    trap_Print(va(
         b"%i arenas parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         g_numArenas,
     ));
     n = 0 as i32;
     while n < g_numArenas {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             g_arenaInfos[n as usize],
             b"num\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 n,
             ),
@@ -445,8 +445,8 @@ pub unsafe extern "C" fn G_GetArenaInfoByMap(mut map: *const libc::c_char) -> *c
     let mut n: i32 = 0;
     n = 0 as i32;
     while n < g_numArenas {
-        if crate::src::qcommon::q_shared::Q_stricmp(
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+        if Q_stricmp(
+            Info_ValueForKey(
                 g_arenaInfos[n as usize],
                 b"map\x00" as *const u8 as *const libc::c_char,
             ),
@@ -468,12 +468,12 @@ PlayerIntroSound
 unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     let mut model: [libc::c_char; 64] = [0; 64];
     let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         model.as_mut_ptr(),
         modelAndSkin,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    skin = ::libc::strrchr(model.as_mut_ptr(), '/' as i32);
+    skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
     if !skin.is_null() {
         let fresh1 = skin;
         skin = skin.offset(1);
@@ -481,16 +481,16 @@ unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     } else {
         skin = model.as_mut_ptr()
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         skin,
         b"default\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         skin = model.as_mut_ptr()
     }
-    crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-        crate::src::qcommon::q_shared::va(
+    trap_SendConsoleCommand(
+        EXEC_APPEND as i32,
+        va(
             b"play sound/player/announce/%s.wav\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             skin,
@@ -514,16 +514,16 @@ pub unsafe extern "C" fn G_CountBotPlayersByName(
 ) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     num = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::g_maxclients.integer {
-        cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32) {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
+    while i < g_maxclients.integer {
+        cl = level.clients.offset(i as isize);
+        if !((*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32) {
+            if !(g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
                 if !(team >= 0 as i32 && (*cl).sess.sessionTeam as u32 != team as u32) {
                     if !(!name.is_null()
-                        && crate::src::qcommon::q_shared::Q_stricmp(
+                        && Q_stricmp(
                             name,
                             (*cl).pers.netname.as_mut_ptr(),
                         ) != 0)
@@ -563,12 +563,12 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
     bestCount = 64 as i32;
     n = 0 as i32;
     while n < g_numBots {
-        value = crate::src::qcommon::q_shared::Info_ValueForKey(
+        value = Info_ValueForKey(
             g_botInfos[n as usize],
             b"funname\x00" as *const u8 as *const libc::c_char,
         );
         if *value.offset(0 as i32 as isize) == 0 {
-            value = crate::src::qcommon::q_shared::Info_ValueForKey(
+            value = Info_ValueForKey(
                 g_botInfos[n as usize],
                 b"name\x00" as *const u8 as *const libc::c_char,
             )
@@ -590,7 +590,7 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
         n += 1
     }
     if num > 0 as i32 {
-        num = ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+        num = ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
             * (num - 1 as i32) as f32) as i32;
         return selection[num as usize];
     }
@@ -607,16 +607,16 @@ pub unsafe extern "C" fn G_AddRandomBot(mut team: i32) {
     let mut teamstr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut skill: f32 = 0.;
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
-    if team == crate::bg_public_h::TEAM_RED as i32 {
+    if team == TEAM_RED as i32 {
         teamstr = b"red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
-    } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
+    } else if team == TEAM_BLUE as i32 {
         teamstr = b"blue\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
         teamstr = b"free\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_INSERT as i32,
-        crate::src::qcommon::q_shared::va(
+    trap_SendConsoleCommand(
+        EXEC_INSERT as i32,
+        va(
             b"addbot random %f %s %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             skill as f64,
@@ -634,28 +634,28 @@ G_RemoveRandomBot
 
 pub unsafe extern "C" fn G_RemoveRandomBot(mut team: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     i = 0 as i32;
-    while i < crate::src::game::g_main::g_maxclients.integer {
-        cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
+    while i < g_maxclients.integer {
+        cl = level.clients.offset(i as isize);
+        if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
+            if !(g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
                 if !(team >= 0 as i32 && (*cl).sess.sessionTeam as u32 != team as u32) {
-                    crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                        crate::src::qcommon::q_shared::EXEC_INSERT as i32,
-                        crate::src::qcommon::q_shared::va(
+                    trap_SendConsoleCommand(
+                        EXEC_INSERT as i32,
+                        va(
                             b"clientkick %d\n\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                             i,
                         ),
                     );
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
             }
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 /*
 ===============
@@ -667,13 +667,13 @@ G_CountHumanPlayers
 pub unsafe extern "C" fn G_CountHumanPlayers(mut team: i32) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     num = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::g_maxclients.integer {
-        cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 != 0) {
+    while i < g_maxclients.integer {
+        cl = level.clients.offset(i as isize);
+        if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
+            if !(g_entities[i as usize].r.svFlags & 0x8 as i32 != 0) {
                 if !(team >= 0 as i32 && (*cl).sess.sessionTeam as u32 != team as u32) {
                     num += 1
                 }
@@ -695,13 +695,13 @@ Check connected and connecting (delay join) bots.
 pub unsafe extern "C" fn G_CountBotPlayers(mut team: i32) -> i32 {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     num = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::g_maxclients.integer {
-        cl = crate::src::game::g_main::level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32) {
-            if !(crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
+    while i < g_maxclients.integer {
+        cl = level.clients.offset(i as isize);
+        if !((*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32) {
+            if !(g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
                 if !(team >= 0 as i32 && (*cl).sess.sessionTeam as u32 != team as u32) {
                     num += 1
                 }
@@ -723,71 +723,71 @@ pub unsafe extern "C" fn G_CheckMinimumPlayers() {
     let mut humanplayers: i32 = 0;
     let mut botplayers: i32 = 0;
     static mut checkminimumplayers_time: i32 = 0;
-    if crate::src::game::g_main::level.intermissiontime != 0 {
+    if level.intermissiontime != 0 {
         return;
     }
     //only check once each 10 seconds
-    if checkminimumplayers_time > crate::src::game::g_main::level.time - 10000 as i32 {
+    if checkminimumplayers_time > level.time - 10000 as i32 {
         return;
     }
-    checkminimumplayers_time = crate::src::game::g_main::level.time;
-    crate::src::game::g_syscalls::trap_Cvar_Update(
-        &mut bot_minplayers as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    checkminimumplayers_time = level.time;
+    trap_Cvar_Update(
+        &mut bot_minplayers as *mut _ as *mut vmCvar_t,
     );
     minplayers = bot_minplayers.integer;
     if minplayers <= 0 as i32 {
         return;
     }
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-        if minplayers >= crate::src::game::g_main::g_maxclients.integer / 2 as i32 {
-            minplayers = crate::src::game::g_main::g_maxclients.integer / 2 as i32 - 1 as i32
+    if g_gametype.integer >= GT_TEAM as i32 {
+        if minplayers >= g_maxclients.integer / 2 as i32 {
+            minplayers = g_maxclients.integer / 2 as i32 - 1 as i32
         }
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_RED as i32);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_RED as i32);
+        humanplayers = G_CountHumanPlayers(TEAM_RED as i32);
+        botplayers = G_CountBotPlayers(TEAM_RED as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_RED as i32);
+            G_AddRandomBot(TEAM_RED as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_RED as i32);
+            G_RemoveRandomBot(TEAM_RED as i32);
         }
         //
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_BLUE as i32);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_BLUE as i32);
+        humanplayers = G_CountHumanPlayers(TEAM_BLUE as i32);
+        botplayers = G_CountBotPlayers(TEAM_BLUE as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_BLUE as i32);
+            G_AddRandomBot(TEAM_BLUE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_BLUE as i32);
+            G_RemoveRandomBot(TEAM_BLUE as i32);
         }
-    } else if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
+    } else if g_gametype.integer
+        == GT_TOURNAMENT as i32
     {
-        if minplayers >= crate::src::game::g_main::g_maxclients.integer {
-            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as i32
+        if minplayers >= g_maxclients.integer {
+            minplayers = g_maxclients.integer - 1 as i32
         }
         humanplayers = G_CountHumanPlayers(-(1 as i32));
         botplayers = G_CountBotPlayers(-(1 as i32));
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as i32);
+            G_AddRandomBot(TEAM_FREE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
             // try to remove spectators first
-            if G_RemoveRandomBot(crate::bg_public_h::TEAM_SPECTATOR as i32) == 0 {
+            if G_RemoveRandomBot(TEAM_SPECTATOR as i32) == 0 {
                 // just remove the bot that is playing
                 G_RemoveRandomBot(-(1 as i32));
             }
         }
-    } else if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_FFA as i32 {
-        if minplayers >= crate::src::game::g_main::g_maxclients.integer {
-            minplayers = crate::src::game::g_main::g_maxclients.integer - 1 as i32
+    } else if g_gametype.integer == GT_FFA as i32 {
+        if minplayers >= g_maxclients.integer {
+            minplayers = g_maxclients.integer - 1 as i32
         }
-        humanplayers = G_CountHumanPlayers(crate::bg_public_h::TEAM_FREE as i32);
-        botplayers = G_CountBotPlayers(crate::bg_public_h::TEAM_FREE as i32);
+        humanplayers = G_CountHumanPlayers(TEAM_FREE as i32);
+        botplayers = G_CountBotPlayers(TEAM_FREE as i32);
         //
         if humanplayers + botplayers < minplayers {
-            G_AddRandomBot(crate::bg_public_h::TEAM_FREE as i32);
+            G_AddRandomBot(TEAM_FREE as i32);
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
-            G_RemoveRandomBot(crate::bg_public_h::TEAM_FREE as i32);
+            G_RemoveRandomBot(TEAM_FREE as i32);
         }
     };
 }
@@ -805,18 +805,18 @@ pub unsafe extern "C" fn G_CheckBotSpawn() {
     n = 0 as i32;
     while n < 16 as i32 {
         if !(botSpawnQueue[n as usize].spawnTime == 0) {
-            if !(botSpawnQueue[n as usize].spawnTime > crate::src::game::g_main::level.time) {
-                crate::src::game::g_client::ClientBegin(botSpawnQueue[n as usize].clientNum);
+            if !(botSpawnQueue[n as usize].spawnTime > level.time) {
+                ClientBegin(botSpawnQueue[n as usize].clientNum);
                 botSpawnQueue[n as usize].spawnTime = 0 as i32;
-                if crate::src::game::g_main::g_gametype.integer
-                    == crate::bg_public_h::GT_SINGLE_PLAYER as i32
+                if g_gametype.integer
+                    == GT_SINGLE_PLAYER as i32
                 {
-                    crate::src::game::g_syscalls::trap_GetUserinfo(
+                    trap_GetUserinfo(
                         botSpawnQueue[n as usize].clientNum,
                         userinfo.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
-                    PlayerIntroSound(crate::src::qcommon::q_shared::Info_ValueForKey(
+                    PlayerIntroSound(Info_ValueForKey(
                         userinfo.as_mut_ptr(),
                         b"model\x00" as *const u8 as *const libc::c_char,
                     ));
@@ -837,16 +837,16 @@ unsafe extern "C" fn AddBotToSpawnQueue(mut clientNum: i32, mut delay: i32) {
     n = 0 as i32;
     while n < 16 as i32 {
         if botSpawnQueue[n as usize].spawnTime == 0 {
-            botSpawnQueue[n as usize].spawnTime = crate::src::game::g_main::level.time + delay;
+            botSpawnQueue[n as usize].spawnTime = level.time + delay;
             botSpawnQueue[n as usize].clientNum = clientNum;
             return;
         }
         n += 1
     }
-    crate::src::game::g_main::G_Printf(
+    G_Printf(
         b"^3Unable to delay spawn\n\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::game::g_client::ClientBegin(clientNum);
+    ClientBegin(clientNum);
 }
 /*
 ===============
@@ -878,43 +878,43 @@ G_BotConnect
 
 pub unsafe extern "C" fn G_BotConnect(
     mut clientNum: i32,
-    mut restart: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut settings: crate::g_local_h::bot_settings_t = crate::g_local_h::bot_settings_t {
+    mut restart: qboolean,
+) -> qboolean {
+    let mut settings: bot_settings_t = bot_settings_t {
         characterfile: [0; 144],
         skill: 0.,
     };
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    crate::src::game::g_syscalls::trap_GetUserinfo(
+    trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         settings.characterfile.as_mut_ptr(),
-        crate::src::qcommon::q_shared::Info_ValueForKey(
+        Info_ValueForKey(
             userinfo.as_mut_ptr(),
             b"characterfile\x00" as *const u8 as *const libc::c_char,
         ),
         ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
     );
-    settings.skill = atof(crate::src::qcommon::q_shared::Info_ValueForKey(
+    settings.skill = atof(Info_ValueForKey(
         userinfo.as_mut_ptr(),
         b"skill\x00" as *const u8 as *const libc::c_char,
     )) as f32;
-    if crate::src::game::ai_main::BotAISetupClient(
+    if BotAISetupClient(
         clientNum,
-        &mut settings as *mut _ as *mut crate::g_local_h::bot_settings_s,
+        &mut settings as *mut _ as *mut bot_settings_s,
         restart,
     ) == 0
     {
-        crate::src::game::g_syscalls::trap_DropClient(
+        trap_DropClient(
             clientNum,
             b"BotAISetupClient failed\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -940,21 +940,21 @@ unsafe extern "C" fn G_AddBot(
     let mut headmodel: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     // have the server allocate a client slot
-    clientNum = crate::src::game::g_syscalls::trap_BotAllocateClient();
+    clientNum = trap_BotAllocateClient();
     if clientNum == -(1 as i32) {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"^1Unable to add bot. All player slots are in use.\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        crate::src::game::g_main::G_Printf(b"^1Start server with more \'open\' slots (or check setting of sv_maxclients cvar).\n\x00"
+        G_Printf(b"^1Start server with more \'open\' slots (or check setting of sv_maxclients cvar).\n\x00"
                      as *const u8 as *const libc::c_char);
         return;
     }
     // set default team
     if team.is_null() || *team == 0 {
-        if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-            if crate::src::game::g_client::PickTeam(clientNum) as u32
-                == crate::bg_public_h::TEAM_RED as i32 as u32
+        if g_gametype.integer >= GT_TEAM as i32 {
+            if PickTeam(clientNum) as u32
+                == TEAM_RED as i32 as u32
             {
                 team = b"red\x00" as *const u8 as *const libc::c_char
             } else {
@@ -965,51 +965,51 @@ unsafe extern "C" fn G_AddBot(
         }
     }
     // get the botinfo from bots.txt
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         name,
         b"random\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             team,
             b"red\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
-            || crate::src::qcommon::q_shared::Q_stricmp(
+            || Q_stricmp(
                 team,
                 b"r\x00" as *const u8 as *const libc::c_char,
             ) == 0 as i32
         {
-            teamNum = crate::bg_public_h::TEAM_RED as i32
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            teamNum = TEAM_RED as i32
+        } else if Q_stricmp(
             team,
             b"blue\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
-            || crate::src::qcommon::q_shared::Q_stricmp(
+            || Q_stricmp(
                 team,
                 b"b\x00" as *const u8 as *const libc::c_char,
             ) == 0 as i32
         {
-            teamNum = crate::bg_public_h::TEAM_BLUE as i32
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            teamNum = TEAM_BLUE as i32
+        } else if Q_stricmp(
             team,
             b"spectator\x00" as *const u8 as *const libc::c_char,
         ) == 0
-            || crate::src::qcommon::q_shared::Q_stricmp(
+            || Q_stricmp(
                 team,
                 b"s\x00" as *const u8 as *const libc::c_char,
             ) == 0
         {
-            teamNum = crate::bg_public_h::TEAM_SPECTATOR as i32
+            teamNum = TEAM_SPECTATOR as i32
         } else {
-            teamNum = crate::bg_public_h::TEAM_FREE as i32
+            teamNum = TEAM_FREE as i32
         }
         botinfoNum = G_SelectRandomBotInfo(teamNum);
         if botinfoNum < 0 as i32 {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"^1Error: Cannot add random bot, no bot info available.\n\x00" as *const u8
                     as *const libc::c_char,
             );
-            crate::src::game::g_syscalls::trap_BotFreeClient(clientNum);
+            trap_BotFreeClient(clientNum);
             return;
         }
         botinfo = G_GetBotInfoByNumber(botinfoNum)
@@ -1017,21 +1017,21 @@ unsafe extern "C" fn G_AddBot(
         botinfo = G_GetBotInfoByName(name)
     }
     if botinfo.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"^1Error: Bot \'%s\' not defined\n\x00" as *const u8 as *const libc::c_char,
             name,
         );
-        crate::src::game::g_syscalls::trap_BotFreeClient(clientNum);
+        trap_BotFreeClient(clientNum);
         return;
     }
     // create the bot's userinfo
     userinfo[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
-    botname = crate::src::qcommon::q_shared::Info_ValueForKey(
+    botname = Info_ValueForKey(
         botinfo,
         b"funname\x00" as *const u8 as *const libc::c_char,
     );
     if *botname.offset(0 as i32 as isize) == 0 {
-        botname = crate::src::qcommon::q_shared::Info_ValueForKey(
+        botname = Info_ValueForKey(
             botinfo,
             b"name\x00" as *const u8 as *const libc::c_char,
         )
@@ -1040,127 +1040,127 @@ unsafe extern "C" fn G_AddBot(
     if !altname.is_null() && *altname.offset(0 as i32 as isize) as i32 != 0 {
         botname = altname
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"name\x00" as *const u8 as *const libc::c_char,
         botname,
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"rate\x00" as *const u8 as *const libc::c_char,
         b"25000\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"snaps\x00" as *const u8 as *const libc::c_char,
         b"20\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"skill\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%.2f\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             skill as f64,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"teampref\x00" as *const u8 as *const libc::c_char,
         team,
     );
     if skill >= 1 as i32 as f32 && skill < 2 as i32 as f32 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             userinfo.as_mut_ptr(),
             b"handicap\x00" as *const u8 as *const libc::c_char,
             b"50\x00" as *const u8 as *const libc::c_char,
         );
     } else if skill >= 2 as i32 as f32 && skill < 3 as i32 as f32 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             userinfo.as_mut_ptr(),
             b"handicap\x00" as *const u8 as *const libc::c_char,
             b"70\x00" as *const u8 as *const libc::c_char,
         );
     } else if skill >= 3 as i32 as f32 && skill < 4 as i32 as f32 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             userinfo.as_mut_ptr(),
             b"handicap\x00" as *const u8 as *const libc::c_char,
             b"90\x00" as *const u8 as *const libc::c_char,
         );
     }
     key = b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    model = crate::src::qcommon::q_shared::Info_ValueForKey(botinfo, key);
+    model = Info_ValueForKey(botinfo, key);
     if *model == 0 {
         model = b"visor/default\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, model);
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, model);
     key = b"team_model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, model);
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, model);
     key = b"headmodel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    headmodel = crate::src::qcommon::q_shared::Info_ValueForKey(botinfo, key);
+    headmodel = Info_ValueForKey(botinfo, key);
     if *headmodel == 0 {
         headmodel = model
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, headmodel);
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, headmodel);
     key = b"team_headmodel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, headmodel);
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, headmodel);
     key = b"gender\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(botinfo, key);
+    s = Info_ValueForKey(botinfo, key);
     if *s == 0 {
         s = b"male\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"sex\x00" as *const u8 as *const libc::c_char,
         s,
     );
     key = b"color1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(botinfo, key);
+    s = Info_ValueForKey(botinfo, key);
     if *s == 0 {
         s = b"4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, s);
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, s);
     key = b"color2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(botinfo, key);
+    s = Info_ValueForKey(botinfo, key);
     if *s == 0 {
         s = b"5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(userinfo.as_mut_ptr(), key, s);
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(
+    Info_SetValueForKey(userinfo.as_mut_ptr(), key, s);
+    s = Info_ValueForKey(
         botinfo,
         b"aifile\x00" as *const u8 as *const libc::c_char,
     );
     if *s == 0 {
-        crate::src::game::g_syscalls::trap_Print(
+        trap_Print(
             b"^1Error: bot has no aifile specified\n\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_BotFreeClient(clientNum);
+        trap_BotFreeClient(clientNum);
         return;
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"characterfile\x00" as *const u8 as *const libc::c_char,
         s,
     );
     // don't send tinfo to bots, they don't parse it
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         userinfo.as_mut_ptr(),
         b"teamoverlay\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
     );
     // register the userinfo
-    crate::src::game::g_syscalls::trap_SetUserinfo(clientNum, userinfo.as_mut_ptr());
+    trap_SetUserinfo(clientNum, userinfo.as_mut_ptr());
     // have it connect to the game as a normal client
-    if !crate::src::game::g_client::ClientConnect(
+    if !ClientConnect(
         clientNum,
-        crate::src::qcommon::q_shared::qtrue,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
+        qtrue,
     )
     .is_null()
     {
         return;
     }
     if delay == 0 as i32 {
-        crate::src::game::g_client::ClientBegin(clientNum);
+        ClientBegin(clientNum);
         return;
     }
     AddBotToSpawnQueue(clientNum, delay);
@@ -1180,27 +1180,27 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     let mut string: [libc::c_char; 1024] = [0; 1024];
     let mut team: [libc::c_char; 1024] = [0; 1024];
     // are bots enabled?
-    if crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    if trap_Cvar_VariableIntegerValue(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return;
     }
     // name
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         1 as i32,
         name.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if name[0 as i32 as usize] == 0 {
-        crate::src::game::g_syscalls::trap_Print(
+        trap_Print(
             b"Usage: Addbot <botname> [skill 1-5] [team] [msec delay] [altname]\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
     // skill
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         2 as i32,
         string.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1208,20 +1208,20 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     if string[0 as i32 as usize] == 0 {
         skill = 4 as i32 as f32
     } else {
-        skill = crate::src::qcommon::q_shared::Com_Clamp(
+        skill = Com_Clamp(
             1 as i32 as f32,
             5 as i32 as f32,
             atof(string.as_mut_ptr()) as f32,
         )
     }
     // team
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         3 as i32,
         team.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     // delay
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         4 as i32,
         string.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1232,7 +1232,7 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
         delay = atoi(string.as_mut_ptr())
     }
     // alternative name
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         5 as i32,
         altname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1246,13 +1246,13 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     );
     // if this was issued during gameplay and we are playing locally,
     // go ahead and load the bot's media immediately
-    if crate::src::game::g_main::level.time - crate::src::game::g_main::level.startTime
+    if level.time - level.startTime
         > 1000 as i32
-        && crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+        && trap_Cvar_VariableIntegerValue(
             b"cl_running\x00" as *const u8 as *const libc::c_char,
         ) != 0
     {
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"loaddefered\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -1272,69 +1272,69 @@ pub unsafe extern "C" fn Svcmd_BotList_f() {
     let mut funname: [libc::c_char; 1024] = [0; 1024];
     let mut model: [libc::c_char; 1024] = [0; 1024];
     let mut aifile: [libc::c_char; 1024] = [0; 1024];
-    crate::src::game::g_syscalls::trap_Print(
+    trap_Print(
         b"^1name             model            aifile              funname\n\x00" as *const u8
             as *const libc::c_char,
     );
     i = 0 as i32;
     while i < g_numBots {
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 g_botInfos[i as usize],
                 b"name\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *name.as_mut_ptr() == 0 {
-            ::libc::strcpy(
+            libc::strcpy(
                 name.as_mut_ptr(),
                 b"UnnamedPlayer\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             funname.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 g_botInfos[i as usize],
                 b"funname\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *funname.as_mut_ptr() == 0 {
-            ::libc::strcpy(
+            libc::strcpy(
                 funname.as_mut_ptr(),
                 b"\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             model.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 g_botInfos[i as usize],
                 b"model\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *model.as_mut_ptr() == 0 {
-            ::libc::strcpy(
+            libc::strcpy(
                 model.as_mut_ptr(),
                 b"visor/default\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             aifile.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 g_botInfos[i as usize],
                 b"aifile\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         if *aifile.as_mut_ptr() == 0 {
-            ::libc::strcpy(
+            libc::strcpy(
                 aifile.as_mut_ptr(),
                 b"bots/default_c.c\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"%-16s %-16s %-20s %-20s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             name.as_mut_ptr(),
@@ -1357,24 +1357,24 @@ unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: 
     let mut skill: f32 = 0.;
     let mut delay: i32 = 0;
     let mut bots: [libc::c_char; 1024] = [0; 1024];
-    podium1 = 0 as *mut crate::g_local_h::gentity_t;
-    podium2 = 0 as *mut crate::g_local_h::gentity_t;
-    podium3 = 0 as *mut crate::g_local_h::gentity_t;
+    podium1 = 0 as *mut gentity_t;
+    podium2 = 0 as *mut gentity_t;
+    podium3 = 0 as *mut gentity_t;
     skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char);
     if skill < 1 as i32 as f32 {
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"g_spSkill\x00" as *const u8 as *const libc::c_char,
             b"1\x00" as *const u8 as *const libc::c_char,
         );
         skill = 1 as i32 as f32
     } else if skill > 5 as i32 as f32 {
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"g_spSkill\x00" as *const u8 as *const libc::c_char,
             b"5\x00" as *const u8 as *const libc::c_char,
         );
         skill = 5 as i32 as f32
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         bots.as_mut_ptr(),
         botList,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1402,9 +1402,9 @@ unsafe extern "C" fn G_SpawnBots(mut botList: *mut libc::c_char, mut baseDelay: 
         }
         // we must add the bot this way, calling G_AddBot directly at this stage
         // does "Bad Things"
-        crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_INSERT as i32,
-            crate::src::qcommon::q_shared::va(
+        trap_SendConsoleCommand(
+            EXEC_INSERT as i32,
+            va(
                 b"addbot %s %f free %i\n\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 bot,
@@ -1423,34 +1423,34 @@ G_LoadBotsFromFile
 
 unsafe extern "C" fn G_LoadBotsFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
-    let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = crate::src::game::g_syscalls::trap_FS_FOpenFile(
+    len = trap_FS_FOpenFile(
         filename,
         &mut f,
-        crate::src::qcommon::q_shared::FS_READ,
+        FS_READ,
     );
     if f == 0 {
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             filename,
         ));
         return;
     }
     if len >= 8192 as i32 {
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1file too large: %s is %i, max allowed is %i\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
             filename,
             len,
             8192 as i32,
         ));
-        crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
+        trap_FS_FCloseFile(f);
         return;
     }
-    crate::src::game::g_syscalls::trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
+    trap_FS_Read(buf.as_mut_ptr() as *mut libc::c_void, len, f);
     buf[len as usize] = 0 as i32 as libc::c_char;
-    crate::src::game::g_syscalls::trap_FS_FCloseFile(f);
+    trap_FS_FCloseFile(f);
     g_numBots += G_ParseInfos(
         buf.as_mut_ptr(),
         1024 as i32 - g_numBots,
@@ -1464,8 +1464,8 @@ G_LoadBots
 */
 
 unsafe extern "C" fn G_LoadBots() {
-    let mut botsFile: crate::src::qcommon::q_shared::vmCvar_t =
-        crate::src::qcommon::q_shared::vmCvar_t {
+    let mut botsFile: vmCvar_t =
+        vmCvar_t {
             handle: 0,
             modificationCount: 0,
             value: 0.,
@@ -1478,15 +1478,15 @@ unsafe extern "C" fn G_LoadBots() {
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
-    if crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    if trap_Cvar_VariableIntegerValue(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return;
     }
     g_numBots = 0 as i32;
-    crate::src::game::g_syscalls::trap_Cvar_Register(
-        &mut botsFile as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        &mut botsFile as *mut _ as *mut vmCvar_t,
         b"g_botsFile\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x10 as i32 | 0x40 as i32,
@@ -1499,7 +1499,7 @@ unsafe extern "C" fn G_LoadBots() {
         );
     }
     // get all bots from .bot files
-    numdirs = crate::src::game::g_syscalls::trap_FS_GetFileList(
+    numdirs = trap_FS_GetFileList(
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".bot\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
@@ -1509,16 +1509,16 @@ unsafe extern "C" fn G_LoadBots() {
     i = 0 as i32;
     while i < numdirs {
         dirlen = crate::stdlib::strlen(dirptr) as i32;
-        ::libc::strcpy(
+        libc::strcpy(
             filename.as_mut_ptr(),
             b"scripts/\x00" as *const u8 as *const libc::c_char,
         );
-        ::libc::strcat(filename.as_mut_ptr(), dirptr);
+        libc::strcat(filename.as_mut_ptr(), dirptr);
         G_LoadBotsFromFile(filename.as_mut_ptr());
         i += 1;
         dirptr = dirptr.offset((dirlen + 1 as i32) as isize)
     }
-    crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    trap_Print(va(
         b"%i bots parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         g_numBots,
     ));
@@ -1532,7 +1532,7 @@ G_GetBotInfoByNumber
 
 pub unsafe extern "C" fn G_GetBotInfoByNumber(mut num: i32) -> *mut libc::c_char {
     if num < 0 as i32 || num >= g_numBots {
-        crate::src::game::g_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+        trap_Print(va(
             b"^1Invalid bot number: %i\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             num,
@@ -1553,11 +1553,11 @@ pub unsafe extern "C" fn G_GetBotInfoByName(mut name: *const libc::c_char) -> *m
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     n = 0 as i32;
     while n < g_numBots {
-        value = crate::src::qcommon::q_shared::Info_ValueForKey(
+        value = Info_ValueForKey(
             g_botInfos[n as usize],
             b"name\x00" as *const u8 as *const libc::c_char,
         );
-        if crate::src::qcommon::q_shared::Q_stricmp(value, name) == 0 {
+        if Q_stricmp(value, name) == 0 {
             return g_botInfos[n as usize];
         }
         n += 1
@@ -1571,7 +1571,7 @@ G_InitBots
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::qboolean) {
+pub unsafe extern "C" fn G_InitBots(mut restart: qboolean) {
     let mut fragLimit: i32 = 0;
     let mut timeLimit: i32 = 0;
     let mut arenainfo: *const libc::c_char = 0 as *const libc::c_char;
@@ -1581,20 +1581,20 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
     let mut serverinfo: [libc::c_char; 1024] = [0; 1024];
     G_LoadBots();
     G_LoadArenas();
-    crate::src::game::g_syscalls::trap_Cvar_Register(
-        &mut bot_minplayers as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        &mut bot_minplayers as *mut _ as *mut vmCvar_t,
         b"bot_minplayers\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x4 as i32,
     );
-    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
-        crate::src::game::g_syscalls::trap_GetServerinfo(
+    if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
+        trap_GetServerinfo(
             serverinfo.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             map.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 serverinfo.as_mut_ptr(),
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
@@ -1604,54 +1604,54 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
         if arenainfo.is_null() {
             return;
         }
-        strValue = crate::src::qcommon::q_shared::Info_ValueForKey(
+        strValue = Info_ValueForKey(
             arenainfo,
             b"fraglimit\x00" as *const u8 as *const libc::c_char,
         );
         fragLimit = atoi(strValue);
         if fragLimit != 0 {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"fraglimit\x00" as *const u8 as *const libc::c_char,
                 strValue,
             );
         } else {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"fraglimit\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
-        strValue = crate::src::qcommon::q_shared::Info_ValueForKey(
+        strValue = Info_ValueForKey(
             arenainfo,
             b"timelimit\x00" as *const u8 as *const libc::c_char,
         );
         timeLimit = atoi(strValue);
         if timeLimit != 0 {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"timelimit\x00" as *const u8 as *const libc::c_char,
                 strValue,
             );
         } else {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"timelimit\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
         if fragLimit == 0 && timeLimit == 0 {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"fraglimit\x00" as *const u8 as *const libc::c_char,
                 b"10\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"timelimit\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
         basedelay = 2000 as i32;
-        strValue = crate::src::qcommon::q_shared::Info_ValueForKey(
+        strValue = Info_ValueForKey(
             arenainfo,
             b"special\x00" as *const u8 as *const libc::c_char,
         );
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             strValue,
             b"training\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
@@ -1660,7 +1660,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: crate::src::qcommon::q_shared::
         }
         if restart as u64 == 0 {
             G_SpawnBots(
-                crate::src::qcommon::q_shared::Info_ValueForKey(
+                Info_ValueForKey(
                     arenainfo,
                     b"bots\x00" as *const u8 as *const libc::c_char,
                 ),

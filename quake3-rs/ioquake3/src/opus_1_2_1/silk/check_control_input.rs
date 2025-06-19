@@ -114,7 +114,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn check_control_input(
-    mut encControl: *mut crate::control_h::silk_EncControlStruct,
+    mut encControl: *mut silk_EncControlStruct,
 ) -> i32
 /* I    Control structure                           */ {
     if (*encControl).API_sampleRate != 8000 as i32

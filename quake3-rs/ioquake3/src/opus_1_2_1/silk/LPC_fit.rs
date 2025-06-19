@@ -226,8 +226,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LPC_fit(
-    mut a_QOUT: *mut crate::opus_types_h::opus_int16,
-    mut a_QIN: *mut crate::opus_types_h::opus_int32,
+    mut a_QOUT: *mut opus_int16,
+    mut a_QIN: *mut opus_int32,
     QOUT: i32,
     QIN: i32,
     d: i32,
@@ -237,9 +237,9 @@ pub unsafe extern "C" fn silk_LPC_fit(
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut idx: i32 = 0 as i32;
-    let mut maxabs: crate::opus_types_h::opus_int32 = 0;
-    let mut absval: crate::opus_types_h::opus_int32 = 0;
-    let mut chirp_Q16: crate::opus_types_h::opus_int32 = 0;
+    let mut maxabs: opus_int32 = 0;
+    let mut absval: opus_int32 = 0;
+    let mut chirp_Q16: opus_int32 = 0;
     /* Limit the maximum absolute value of the prediction coefficients, so that they'll fit in int16 */
     i = 0 as i32;
     while i < 10 as i32 {
@@ -273,9 +273,9 @@ pub unsafe extern "C" fn silk_LPC_fit(
             163838 as i32
         }; /* ( silk_int32_MAX >> 14 ) + silk_int16_MAX = 163838 */
         chirp_Q16 = (0.999f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32
-            - (((maxabs - 0x7fff as i32) as crate::opus_types_h::opus_uint32) << 14 as i32)
-                as crate::opus_types_h::opus_int32
+            as opus_int32
+            - (((maxabs - 0x7fff as i32) as opus_uint32) << 14 as i32)
+                as opus_int32
                 / (maxabs * (idx + 1 as i32) >> 2 as i32);
         crate::src::opus_1_2_1::silk::bwexpander_32::silk_bwexpander_32(a_QIN, d, chirp_Q16);
         i += 1
@@ -295,18 +295,18 @@ pub unsafe extern "C" fn silk_LPC_fit(
                 (*a_QIN.offset(k as isize) >> 1 as i32) + (*a_QIN.offset(k as isize) & 1 as i32)
             } else {
                 ((*a_QIN.offset(k as isize) >> QIN - QOUT - 1 as i32) + 1 as i32) >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else if QIN - QOUT == 1 as i32 {
                 (*a_QIN.offset(k as isize) >> 1 as i32) + (*a_QIN.offset(k as isize) & 1 as i32)
             } else {
                 ((*a_QIN.offset(k as isize) >> QIN - QOUT - 1 as i32) + 1 as i32) >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             *a_QIN.offset(k as isize) =
-                ((*a_QOUT.offset(k as isize) as crate::opus_types_h::opus_int32
-                    as crate::opus_types_h::opus_uint32)
-                    << QIN - QOUT) as crate::opus_types_h::opus_int32;
+                ((*a_QOUT.offset(k as isize) as opus_int32
+                    as opus_uint32)
+                    << QIN - QOUT) as opus_int32;
             k += 1
         }
     } else {
@@ -316,7 +316,7 @@ pub unsafe extern "C" fn silk_LPC_fit(
                 (*a_QIN.offset(k as isize) >> 1 as i32) + (*a_QIN.offset(k as isize) & 1 as i32)
             } else {
                 ((*a_QIN.offset(k as isize) >> QIN - QOUT - 1 as i32) + 1 as i32) >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             k += 1
         }
     };

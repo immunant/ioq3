@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 
@@ -12,7 +12,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -142,111 +142,111 @@ pub use ::libc::strtod;
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]
-    pub fn SP_info_player_start(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_player_start(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_info_player_deathmatch(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_player_deathmatch(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_info_player_intermission(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_player_intermission(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_plat(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_plat(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_static(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_static(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_rotating(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_rotating(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_bobbing(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_bobbing(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_pendulum(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_pendulum(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_button(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_button(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_door(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_door(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_train(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_train(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_func_timer(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_func_timer(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_trigger_always(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_trigger_always(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_trigger_multiple(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_trigger_multiple(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_trigger_push(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_trigger_push(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_trigger_teleport(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_trigger_teleport(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_trigger_hurt(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_trigger_hurt(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_remove_powerups(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_remove_powerups(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_give(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_give(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_delay(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_delay(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_speaker(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_speaker(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_print(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_print(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_laser(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_laser(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_score(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_score(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_teleporter(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_teleporter(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_relay(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_relay(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_kill(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_kill(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_position(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_position(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_location(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_location(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_target_push(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_target_push(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_light(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_light(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_info_null(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_null(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_info_notnull(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_notnull(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_info_camp(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_info_camp(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_path_corner(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_path_corner(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_misc_teleporter_dest(self_0: *mut crate::g_local_h::gentity_t);
+    pub fn SP_misc_teleporter_dest(self_0: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_misc_model(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_misc_model(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_misc_portal_camera(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_misc_portal_camera(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_misc_portal_surface(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_misc_portal_surface(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_shooter_rocket(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_shooter_rocket(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_shooter_plasma(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_shooter_plasma(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_shooter_grenade(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_shooter_grenade(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_team_CTF_redplayer(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_team_CTF_redplayer(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_team_CTF_blueplayer(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_team_CTF_blueplayer(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_team_CTF_redspawn(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_team_CTF_redspawn(ent: *mut gentity_t);
     #[no_mangle]
-    pub fn SP_team_CTF_bluespawn(ent: *mut crate::g_local_h::gentity_t);
+    pub fn SP_team_CTF_bluespawn(ent: *mut gentity_t);
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct spawn_t {
     pub name: *mut libc::c_char,
-    pub spawn: Option<unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ()>,
+    pub spawn: Option<unsafe extern "C" fn(_: *mut gentity_t) -> ()>,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct field_t {
     pub name: *mut libc::c_char,
-    pub ofs: crate::stddef_h::size_t,
+    pub ofs: size_t,
     pub type_0: fieldtype_t,
 }
 
@@ -289,26 +289,26 @@ pub unsafe extern "C" fn G_SpawnString(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
     mut out: *mut *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: i32 = 0;
-    if crate::src::game::g_main::level.spawning as u64 == 0 {
+    if level.spawning as u64 == 0 {
         *out = defaultString as *mut libc::c_char
         //		G_Error( "G_SpawnString() called while not spawning" );
     }
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.numSpawnVars {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+    while i < level.numSpawnVars {
+        if Q_stricmp(
             key,
-            crate::src::game::g_main::level.spawnVars[i as usize][0 as i32 as usize],
+            level.spawnVars[i as usize][0 as i32 as usize],
         ) == 0
         {
-            *out = crate::src::game::g_main::level.spawnVars[i as usize][1 as i32 as usize];
-            return crate::src::qcommon::q_shared::qtrue;
+            *out = level.spawnVars[i as usize][1 as i32 as usize];
+            return qtrue;
         }
         i += 1
     }
     *out = defaultString as *mut libc::c_char;
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 #[no_mangle]
 
@@ -316,10 +316,10 @@ pub unsafe extern "C" fn G_SpawnFloat(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
     mut out: *mut f32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut present: qboolean =
+        qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atof(s) as f32;
     return present;
@@ -330,10 +330,10 @@ pub unsafe extern "C" fn G_SpawnInt(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
     mut out: *mut i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut present: qboolean =
+        qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atoi(s);
     return present;
@@ -344,12 +344,12 @@ pub unsafe extern "C" fn G_SpawnVector(
     mut key: *const libc::c_char,
     mut defaultString: *const libc::c_char,
     mut out: *mut f32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut present: qboolean =
+        qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
-    ::libc::sscanf(
+    libc::sscanf(
         s,
         b"%f %f %f\x00" as *const u8 as *const libc::c_char,
         &mut *out.offset(0 as i32 as isize) as *mut f32,
@@ -368,7 +368,7 @@ pub static mut fields: [field_t; 20] = [field_t {
 }; 20];
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_item_botroam(mut _ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_item_botroam(mut _ent: *mut gentity_t) {}
 #[no_mangle]
 
 pub static mut spawns: [spawn_t; 49] = {
@@ -379,7 +379,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_info_player_start
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -390,7 +390,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_info_player_deathmatch
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -401,7 +401,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_info_player_intermission
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -410,7 +410,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"info_null\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_info_null as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -420,7 +420,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"info_notnull\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_info_notnull
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -429,7 +429,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"info_camp\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_info_camp as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_info_camp as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -438,7 +438,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"func_plat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_func_plat as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_func_plat as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -448,7 +448,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_button\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_button
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -457,7 +457,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"func_door\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_func_door as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_func_door as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -467,7 +467,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_static\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_static
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -477,7 +477,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_rotating\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_rotating
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -487,7 +487,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_bobbing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_bobbing
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -497,7 +497,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_pendulum\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_pendulum
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -507,7 +507,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_train\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_train
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -516,7 +516,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"func_group\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_info_null as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -526,7 +526,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"func_timer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_func_timer
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -537,7 +537,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_trigger_always
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -548,7 +548,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_trigger_multiple
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -558,7 +558,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"trigger_push\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_trigger_push
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -569,7 +569,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_trigger_teleport
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -579,7 +579,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"trigger_hurt\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_trigger_hurt
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -589,7 +589,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_give\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_give
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -600,7 +600,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_target_remove_powerups
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -610,7 +610,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_delay\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_delay
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -621,7 +621,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_target_speaker
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -631,7 +631,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_print\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_print
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -641,7 +641,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_laser\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_laser
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -651,7 +651,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_score\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_score
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -662,7 +662,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_target_teleporter
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -672,7 +672,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_relay\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_relay
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -682,7 +682,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_kill\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_kill
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -693,7 +693,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_target_position
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -704,7 +704,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_target_location
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -714,7 +714,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_push\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_target_push
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -723,7 +723,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"light\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
-                    SP_light as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    SP_light as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -733,7 +733,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"path_corner\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_path_corner
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -744,7 +744,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_misc_teleporter_dest
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -754,7 +754,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"misc_model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_misc_model
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -765,7 +765,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_misc_portal_surface
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -776,7 +776,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_misc_portal_camera
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -787,7 +787,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_shooter_rocket
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -798,7 +798,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_shooter_grenade
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -809,7 +809,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_shooter_plasma
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -820,7 +820,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_team_CTF_redplayer
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -831,7 +831,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_team_CTF_blueplayer
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -842,7 +842,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_team_CTF_redspawn
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -853,7 +853,7 @@ pub static mut spawns: [spawn_t; 49] = {
                     as *mut libc::c_char,
                 spawn: Some(
                     SP_team_CTF_bluespawn
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -863,7 +863,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"item_botroam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 spawn: Some(
                     SP_item_botroam
-                        as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -888,45 +888,45 @@ returning qfalse if not found
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CallSpawn(
-    mut ent: *mut crate::g_local_h::gentity_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut ent: *mut gentity_t,
+) -> qboolean {
     let mut s: *mut spawn_t = 0 as *mut spawn_t;
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
     if (*ent).classname.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"G_CallSpawn: NULL classname\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // check item spawn functions
-    item = crate::src::game::bg_misc::bg_itemlist
+    item = bg_itemlist
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if ::libc::strcmp((*item).classname, (*ent).classname) == 0 {
-            crate::src::game::g_items::G_SpawnItem(
-                ent as *mut crate::g_local_h::gentity_s,
-                item as *mut crate::bg_public_h::gitem_s,
+        if libc::strcmp((*item).classname, (*ent).classname) == 0 {
+            G_SpawnItem(
+                ent as *mut gentity_s,
+                item as *mut gitem_s,
             );
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         item = item.offset(1)
     }
     // check normal spawn functions
     s = spawns.as_mut_ptr();
     while !(*s).name.is_null() {
-        if ::libc::strcmp((*s).name, (*ent).classname) == 0 {
+        if libc::strcmp((*s).name, (*ent).classname) == 0 {
             // found it
             (*s).spawn.expect("non-null function pointer")(ent);
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         s = s.offset(1)
     }
-    crate::src::game::g_main::G_Printf(
+    G_Printf(
         b"%s doesn\'t have a spawn function\n\x00" as *const u8 as *const libc::c_char,
         (*ent).classname,
     );
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 =============
@@ -944,7 +944,7 @@ pub unsafe extern "C" fn G_NewString(mut string: *const libc::c_char) -> *mut li
     let mut i: i32 = 0;
     let mut l: i32 = 0;
     l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as libc::c_ulong) as i32;
-    newb = crate::src::game::g_mem::G_Alloc(l) as *mut libc::c_char;
+    newb = G_Alloc(l) as *mut libc::c_char;
     new_p = newb;
     // turn \n into a real linefeed
     i = 0 as i32;
@@ -982,33 +982,33 @@ in a gentity
 pub unsafe extern "C" fn G_ParseField(
     mut key: *const libc::c_char,
     mut value: *const libc::c_char,
-    mut ent: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
 ) {
     let mut f: *mut field_t = 0 as *mut field_t;
-    let mut b: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut b: *mut byte =
+        0 as *mut byte;
     let mut v: f32 = 0.;
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut vec: vec3_t = [0.; 3];
     f = fields.as_mut_ptr();
     while !(*f).name.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp((*f).name, key) == 0 {
+        if Q_stricmp((*f).name, key) == 0 {
             // found it
-            b = ent as *mut crate::src::qcommon::q_shared::byte;
+            b = ent as *mut byte;
             match (*f).type_0 as u32 {
                 2 => {
                     let ref mut fresh3 = *(b.offset((*f).ofs as isize) as *mut *mut libc::c_char);
                     *fresh3 = G_NewString(value)
                 }
                 3 => {
-                    ::libc::sscanf(
+                    libc::sscanf(
                         value,
                         b"%f %f %f\x00" as *const u8 as *const libc::c_char,
                         &mut *vec.as_mut_ptr().offset(0 as i32 as isize)
-                            as *mut crate::src::qcommon::q_shared::vec_t,
+                            as *mut vec_t,
                         &mut *vec.as_mut_ptr().offset(1 as i32 as isize)
-                            as *mut crate::src::qcommon::q_shared::vec_t,
+                            as *mut vec_t,
                         &mut *vec.as_mut_ptr().offset(2 as i32 as isize)
-                            as *mut crate::src::qcommon::q_shared::vec_t,
+                            as *mut vec_t,
                     );
                     *(b.offset((*f).ofs as isize) as *mut f32).offset(0 as i32 as isize) =
                         vec[0 as i32 as usize];
@@ -1046,7 +1046,7 @@ level.spawnVars[], then call the class specific spawn function
 
 pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     let mut i: i32 = 0;
-    let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut gametypeName: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1061,55 +1061,55 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         b"harvester\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ];
     // get the next free entity
-    ent = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
+    ent = G_Spawn() as *mut gentity_s;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.numSpawnVars {
+    while i < level.numSpawnVars {
         G_ParseField(
-            crate::src::game::g_main::level.spawnVars[i as usize][0 as i32 as usize],
-            crate::src::game::g_main::level.spawnVars[i as usize][1 as i32 as usize],
+            level.spawnVars[i as usize][0 as i32 as usize],
+            level.spawnVars[i as usize][1 as i32 as usize],
             ent,
         );
         i += 1
     }
     // check for "notsingle" flag
-    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
+    if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
         G_SpawnInt(
             b"notsingle\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-                crate::src::game::g_syscalls::trap_LinkEntity(
-                    ent as *mut crate::g_local_h::gentity_s,
+            if (*ent).s.eType == ET_MOVER as i32 {
+                trap_LinkEntity(
+                    ent as *mut gentity_s,
                 );
-                crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                    ent as *mut crate::g_local_h::gentity_s,
-                    crate::src::qcommon::q_shared::qtrue,
+                trap_AdjustAreaPortalState(
+                    ent as *mut gentity_s,
+                    qtrue,
                 );
             }
-            crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+            G_FreeEntity(ent as *mut gentity_s);
             return;
         }
     }
     // check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
+    if g_gametype.integer >= GT_TEAM as i32 {
         G_SpawnInt(
             b"notteam\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-                crate::src::game::g_syscalls::trap_LinkEntity(
-                    ent as *mut crate::g_local_h::gentity_s,
+            if (*ent).s.eType == ET_MOVER as i32 {
+                trap_LinkEntity(
+                    ent as *mut gentity_s,
                 );
-                crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                    ent as *mut crate::g_local_h::gentity_s,
-                    crate::src::qcommon::q_shared::qtrue,
+                trap_AdjustAreaPortalState(
+                    ent as *mut gentity_s,
+                    qtrue,
                 );
             }
-            crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+            G_FreeEntity(ent as *mut gentity_s);
             return;
         }
     } else {
@@ -1119,16 +1119,16 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
             &mut i,
         );
         if i != 0 {
-            if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-                crate::src::game::g_syscalls::trap_LinkEntity(
-                    ent as *mut crate::g_local_h::gentity_s,
+            if (*ent).s.eType == ET_MOVER as i32 {
+                trap_LinkEntity(
+                    ent as *mut gentity_s,
                 );
-                crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                    ent as *mut crate::g_local_h::gentity_s,
-                    crate::src::qcommon::q_shared::qtrue,
+                trap_AdjustAreaPortalState(
+                    ent as *mut gentity_s,
+                    qtrue,
                 );
             }
-            crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+            G_FreeEntity(ent as *mut gentity_s);
             return;
         }
     }
@@ -1138,14 +1138,14 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         &mut i,
     );
     if i != 0 {
-        if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-            crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
-            crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::src::qcommon::q_shared::qtrue,
+        if (*ent).s.eType == ET_MOVER as i32 {
+            trap_LinkEntity(ent as *mut gentity_s);
+            trap_AdjustAreaPortalState(
+                ent as *mut gentity_s,
+                qtrue,
             );
         }
-        crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(ent as *mut gentity_s);
         return;
     }
     if G_SpawnString(
@@ -1155,23 +1155,23 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     ) as u64
         != 0
     {
-        if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_FFA as i32
-            && crate::src::game::g_main::g_gametype.integer
-                < crate::bg_public_h::GT_MAX_GAME_TYPE as i32
+        if g_gametype.integer >= GT_FFA as i32
+            && g_gametype.integer
+                < GT_MAX_GAME_TYPE as i32
         {
-            gametypeName = gametypeNames[crate::src::game::g_main::g_gametype.integer as usize];
-            s = ::libc::strstr(value, gametypeName);
+            gametypeName = gametypeNames[g_gametype.integer as usize];
+            s = libc::strstr(value, gametypeName);
             if s.is_null() {
-                if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-                    crate::src::game::g_syscalls::trap_LinkEntity(
-                        ent as *mut crate::g_local_h::gentity_s,
+                if (*ent).s.eType == ET_MOVER as i32 {
+                    trap_LinkEntity(
+                        ent as *mut gentity_s,
                     );
-                    crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                        ent as *mut crate::g_local_h::gentity_s,
-                        crate::src::qcommon::q_shared::qtrue,
+                    trap_AdjustAreaPortalState(
+                        ent as *mut gentity_s,
+                        qtrue,
                     );
                 }
-                crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+                G_FreeEntity(ent as *mut gentity_s);
                 return;
             }
         }
@@ -1185,7 +1185,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // if we didn't get a classname, don't bother spawning anything
     if G_CallSpawn(ent) as u64 == 0 {
-        crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(ent as *mut gentity_s);
     };
 }
 /*
@@ -1199,21 +1199,21 @@ pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> 
     let mut l: i32 = 0;
     let mut dest: *mut libc::c_char = 0 as *mut libc::c_char;
     l = crate::stdlib::strlen(string) as i32;
-    if crate::src::game::g_main::level.numSpawnVarChars + l + 1 as i32 > 4096 as i32 {
-        crate::src::game::g_main::G_Error(
+    if level.numSpawnVarChars + l + 1 as i32 > 4096 as i32 {
+        G_Error(
             b"G_AddSpawnVarToken: MAX_SPAWN_VARS_CHARS\x00" as *const u8 as *const libc::c_char,
         );
     }
-    dest = crate::src::game::g_main::level
+    dest = level
         .spawnVarChars
         .as_mut_ptr()
-        .offset(crate::src::game::g_main::level.numSpawnVarChars as isize);
+        .offset(level.numSpawnVarChars as isize);
     crate::stdlib::memcpy(
         dest as *mut libc::c_void,
         string as *const libc::c_void,
         (l + 1 as i32) as libc::c_ulong,
     );
-    crate::src::game::g_main::level.numSpawnVarChars += l + 1 as i32;
+    level.numSpawnVarChars += l + 1 as i32;
     return dest;
 }
 /*
@@ -1228,23 +1228,23 @@ This does not actually spawn an entity.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn G_ParseSpawnVars() -> qboolean {
     let mut keyname: [libc::c_char; 1024] = [0; 1024];
     let mut com_token: [libc::c_char; 1024] = [0; 1024];
-    crate::src::game::g_main::level.numSpawnVars = 0 as i32;
-    crate::src::game::g_main::level.numSpawnVarChars = 0 as i32;
+    level.numSpawnVars = 0 as i32;
+    level.numSpawnVarChars = 0 as i32;
     // parse the opening brace
-    if crate::src::game::g_syscalls::trap_GetEntityToken(
+    if trap_GetEntityToken(
         com_token.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     ) as u64
         == 0
     {
         // end of spawn string
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if com_token[0 as i32 as usize] as i32 != '{' as i32 {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"G_ParseSpawnVars: found %s when expecting {\x00" as *const u8 as *const libc::c_char,
             com_token.as_mut_ptr(),
         );
@@ -1253,13 +1253,13 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qb
     // go through all the key / value pairs
     // parse key
     {
-        if crate::src::game::g_syscalls::trap_GetEntityToken(
+        if trap_GetEntityToken(
             keyname.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         ) as u64
             == 0
         {
-            crate::src::game::g_main::G_Error(
+            G_Error(
                 b"G_ParseSpawnVars: EOF without closing brace\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -1268,37 +1268,37 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> crate::src::qcommon::q_shared::qb
             break;
         }
         // parse value
-        if crate::src::game::g_syscalls::trap_GetEntityToken(
+        if trap_GetEntityToken(
             com_token.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         ) as u64
             == 0
         {
-            crate::src::game::g_main::G_Error(
+            G_Error(
                 b"G_ParseSpawnVars: EOF without closing brace\x00" as *const u8
                     as *const libc::c_char,
             );
         }
         if com_token[0 as i32 as usize] as i32 == '}' as i32 {
-            crate::src::game::g_main::G_Error(
+            G_Error(
                 b"G_ParseSpawnVars: closing brace without data\x00" as *const u8
                     as *const libc::c_char,
             );
         }
-        if crate::src::game::g_main::level.numSpawnVars == 64 as i32 {
-            crate::src::game::g_main::G_Error(
+        if level.numSpawnVars == 64 as i32 {
+            G_Error(
                 b"G_ParseSpawnVars: MAX_SPAWN_VARS\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::game::g_main::level.spawnVars
-            [crate::src::game::g_main::level.numSpawnVars as usize][0 as i32 as usize] =
+        level.spawnVars
+            [level.numSpawnVars as usize][0 as i32 as usize] =
             G_AddSpawnVarToken(keyname.as_mut_ptr());
-        crate::src::game::g_main::level.spawnVars
-            [crate::src::game::g_main::level.numSpawnVars as usize][1 as i32 as usize] =
+        level.spawnVars
+            [level.numSpawnVars as usize][1 as i32 as usize] =
             G_AddSpawnVarToken(com_token.as_mut_ptr());
-        crate::src::game::g_main::level.numSpawnVars += 1
+        level.numSpawnVars += 1
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*QUAKED worldspawn (0 0 0) ?
 
@@ -1316,26 +1316,26 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         s,
         b"worldspawn\x00" as *const u8 as *const libc::c_char,
     ) != 0
     {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"SP_worldspawn: The first entity isn\'t \'worldspawn\'\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // make some data visible to connecting client
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         20 as i32,
         b"baseq3-1\x00" as *const u8 as *const libc::c_char,
     ); // map specific message
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         21 as i32,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::game::g_main::level.startTime,
+            level.startTime,
         ),
     ); // message of the day
     G_SpawnString(
@@ -1343,23 +1343,23 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_SetConfigstring(2 as i32, s);
+    trap_SetConfigstring(2 as i32, s);
     G_SpawnString(
         b"message\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_SetConfigstring(3 as i32, s);
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(3 as i32, s);
+    trap_SetConfigstring(
         4 as i32,
-        crate::src::game::g_main::g_motd.string.as_mut_ptr(),
+        g_motd.string.as_mut_ptr(),
     );
     G_SpawnString(
         b"gravity\x00" as *const u8 as *const libc::c_char,
         b"800\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_gravity\x00" as *const u8 as *const libc::c_char,
         s,
     );
@@ -1368,7 +1368,7 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_enableDust\x00" as *const u8 as *const libc::c_char,
         s,
     );
@@ -1377,48 +1377,48 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    crate::src::game::g_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_enableBreath\x00" as *const u8 as *const libc::c_char,
         s,
     );
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 2 as i32;
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .classname = b"worldspawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .classname = b"nothing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // see if we want a warmup time
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         5 as i32,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    if crate::src::game::g_main::g_restarted.integer != 0 {
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+    if g_restarted.integer != 0 {
+        trap_Cvar_Set(
             b"g_restarted\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_main::level.warmupTime = 0 as i32
-    } else if crate::src::game::g_main::g_doWarmup.integer != 0 {
+        level.warmupTime = 0 as i32
+    } else if g_doWarmup.integer != 0 {
         // Turn it on
-        crate::src::game::g_main::level.warmupTime = -(1 as i32);
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        level.warmupTime = -(1 as i32);
+        trap_SetConfigstring(
             5 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::game::g_main::level.warmupTime,
+                level.warmupTime,
             ),
         );
-        crate::src::game::g_main::G_LogPrintf(b"Warmup:\n\x00" as *const u8 as *const libc::c_char);
+        G_LogPrintf(b"Warmup:\n\x00" as *const u8 as *const libc::c_char);
     };
 }
 /*
@@ -1597,13 +1597,13 @@ Parses textual entity definitions out of an entstring and spawns gentities.
 
 pub unsafe extern "C" fn G_SpawnEntitiesFromString() {
     // allow calls to G_Spawn*()
-    crate::src::game::g_main::level.spawning = crate::src::qcommon::q_shared::qtrue;
-    crate::src::game::g_main::level.numSpawnVars = 0 as i32;
+    level.spawning = qtrue;
+    level.numSpawnVars = 0 as i32;
     // the worldspawn is not an actual entity, but it still
     // has a "spawn" function to perform any global setup
     // needed by a level (setting configstrings or cvars, etc)
     if G_ParseSpawnVars() as u64 == 0 {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"SpawnEntities: no entities\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1612,7 +1612,7 @@ pub unsafe extern "C" fn G_SpawnEntitiesFromString() {
     while G_ParseSpawnVars() as u64 != 0 {
         G_SpawnGEntityFromSpawnVars();
     }
-    crate::src::game::g_main::level.spawning = crate::src::qcommon::q_shared::qfalse;
+    level.spawning = qfalse;
     // any future calls to G_Spawn*() will be errors
 }
 unsafe extern "C" fn run_static_initializers() {
@@ -1620,8 +1620,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).classname
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).classname
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1629,9 +1629,9 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).s.origin
-                    as *mut crate::src::qcommon::q_shared::vec3_t
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.origin
+                    as *mut vec3_t
+                    as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1639,8 +1639,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).model as *mut *mut libc::c_char
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).model as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1648,8 +1648,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).model2
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).model2
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1657,8 +1657,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"spawnflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).spawnflags as *mut i32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).spawnflags as *mut i32
+                    as size_t,
                 type_0: F_INT,
             };
             init
@@ -1666,8 +1666,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).speed as *mut f32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).speed as *mut f32
+                    as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1675,8 +1675,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).target
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).target
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1684,8 +1684,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetname
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetname
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1693,8 +1693,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).message
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).message
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1702,8 +1702,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).team as *mut *mut libc::c_char
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).team as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1711,8 +1711,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"wait\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).wait as *mut f32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).wait as *mut f32
+                    as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1720,8 +1720,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"random\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).random as *mut f32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).random as *mut f32
+                    as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1729,8 +1729,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"count\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).count as *mut i32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).count as *mut i32
+                    as size_t,
                 type_0: F_INT,
             };
             init
@@ -1738,8 +1738,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).health as *mut i32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).health as *mut i32
+                    as size_t,
                 type_0: F_INT,
             };
             init
@@ -1747,8 +1747,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"dmg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).damage as *mut i32
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).damage as *mut i32
+                    as size_t,
                 type_0: F_INT,
             };
             init
@@ -1756,9 +1756,9 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).s.angles
-                    as *mut crate::src::qcommon::q_shared::vec3_t
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.angles
+                    as *mut vec3_t
+                    as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1766,9 +1766,9 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).s.angles
-                    as *mut crate::src::qcommon::q_shared::vec3_t
-                    as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.angles
+                    as *mut vec3_t
+                    as size_t,
                 type_0: F_ANGLEHACK,
             };
             init
@@ -1777,8 +1777,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetShaderName
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetShaderName
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1787,8 +1787,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderNewName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetShaderNewName
-                    as *mut *mut libc::c_char as crate::stddef_h::size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetShaderNewName
+                    as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init

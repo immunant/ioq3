@@ -34,36 +34,36 @@ extern "C" {
     /* seems like major overkill now; the backend numbers will grow into
     the infrastructure soon enough */
     #[no_mangle]
-    pub static floor0_exportbundle: crate::backends_h::vorbis_func_floor;
+    pub static floor0_exportbundle: vorbis_func_floor;
     #[no_mangle]
-    pub static floor1_exportbundle: crate::backends_h::vorbis_func_floor;
+    pub static floor1_exportbundle: vorbis_func_floor;
     #[no_mangle]
-    pub static residue0_exportbundle: crate::backends_h::vorbis_func_residue;
+    pub static residue0_exportbundle: vorbis_func_residue;
     #[no_mangle]
-    pub static residue1_exportbundle: crate::backends_h::vorbis_func_residue;
+    pub static residue1_exportbundle: vorbis_func_residue;
     #[no_mangle]
-    pub static residue2_exportbundle: crate::backends_h::vorbis_func_residue;
+    pub static residue2_exportbundle: vorbis_func_residue;
     #[no_mangle]
-    pub static mapping0_exportbundle: crate::backends_h::vorbis_func_mapping;
+    pub static mapping0_exportbundle: vorbis_func_mapping;
 }
 #[no_mangle]
 
-pub static mut _floor_P: [*const crate::backends_h::vorbis_func_floor; 2] = unsafe {
+pub static mut _floor_P: [*const vorbis_func_floor; 2] = unsafe {
     [
-        &floor0_exportbundle as *const crate::backends_h::vorbis_func_floor,
-        &floor1_exportbundle as *const crate::backends_h::vorbis_func_floor,
+        &floor0_exportbundle as *const vorbis_func_floor,
+        &floor1_exportbundle as *const vorbis_func_floor,
     ]
 };
 #[no_mangle]
 
-pub static mut _residue_P: [*const crate::backends_h::vorbis_func_residue; 3] = unsafe {
+pub static mut _residue_P: [*const vorbis_func_residue; 3] = unsafe {
     [
-        &residue0_exportbundle as *const crate::backends_h::vorbis_func_residue,
-        &residue1_exportbundle as *const crate::backends_h::vorbis_func_residue,
-        &residue2_exportbundle as *const crate::backends_h::vorbis_func_residue,
+        &residue0_exportbundle as *const vorbis_func_residue,
+        &residue1_exportbundle as *const vorbis_func_residue,
+        &residue2_exportbundle as *const vorbis_func_residue,
     ]
 };
 #[no_mangle]
 
-pub static mut _mapping_P: [*const crate::backends_h::vorbis_func_mapping; 1] =
-    unsafe { [&mapping0_exportbundle as *const crate::backends_h::vorbis_func_mapping] };
+pub static mut _mapping_P: [*const vorbis_func_mapping; 1] =
+    unsafe { [&mapping0_exportbundle as *const vorbis_func_mapping] };

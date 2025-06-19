@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -148,10 +148,10 @@ Called on game shutdown
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut crate::g_local_h::gclient_t) {
+pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut gclient_t) {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut var: *const libc::c_char = 0 as *const libc::c_char;
-    s = crate::src::qcommon::q_shared::va(
+    s = va(
         b"%i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         (*client).sess.sessionTeam as u32,
         (*client).sess.spectatorNum,
@@ -161,11 +161,11 @@ pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut crate::g_loca
         (*client).sess.losses,
         (*client).sess.teamLeader as u32,
     );
-    var = crate::src::qcommon::q_shared::va(
+    var = va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.offset_from(crate::src::game::g_main::level.clients) as isize as i32,
+        client.offset_from(level.clients) as isize as i32,
     );
-    crate::src::game::g_syscalls::trap_Cvar_Set(var, s);
+    trap_Cvar_Set(var, s);
 }
 /*
 ================
@@ -176,22 +176,22 @@ Called on a reconnect
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut crate::g_local_h::gclient_t) {
+pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut gclient_t) {
     let mut s: [libc::c_char; 1024] = [0; 1024];
     let mut var: *const libc::c_char = 0 as *const libc::c_char;
     let mut teamLeader: i32 = 0;
     let mut spectatorState: i32 = 0;
     let mut sessionTeam: i32 = 0;
-    var = crate::src::qcommon::q_shared::va(
+    var = va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.offset_from(crate::src::game::g_main::level.clients) as isize as i32,
+        client.offset_from(level.clients) as isize as i32,
     );
-    crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         var,
         s.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    ::libc::sscanf(
+    libc::sscanf(
         s.as_mut_ptr(),
         b"%i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
         &mut sessionTeam as *mut i32,
@@ -202,9 +202,9 @@ pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut crate::g_local_h::gc
         &mut (*client).sess.losses as *mut i32,
         &mut teamLeader as *mut i32,
     );
-    (*client).sess.sessionTeam = sessionTeam as crate::bg_public_h::team_t;
-    (*client).sess.spectatorState = spectatorState as crate::g_local_h::spectatorState_t;
-    (*client).sess.teamLeader = teamLeader as crate::src::qcommon::q_shared::qboolean;
+    (*client).sess.sessionTeam = sessionTeam as team_t;
+    (*client).sess.spectatorState = spectatorState as spectatorState_t;
+    (*client).sess.teamLeader = teamLeader as qboolean;
 }
 /*
 ================
@@ -216,77 +216,77 @@ Called on a first-time connect
 #[no_mangle]
 
 pub unsafe extern "C" fn G_InitSessionData(
-    mut client: *mut crate::g_local_h::gclient_t,
+    mut client: *mut gclient_t,
     mut userinfo: *mut libc::c_char,
 ) {
-    let mut sess: *mut crate::g_local_h::clientSession_t =
-        0 as *mut crate::g_local_h::clientSession_t;
+    let mut sess: *mut clientSession_t =
+        0 as *mut clientSession_t;
     let mut value: *const libc::c_char = 0 as *const libc::c_char;
     sess = &mut (*client).sess;
     // check for team preference, mainly for bots
-    value = crate::src::qcommon::q_shared::Info_ValueForKey(
+    value = Info_ValueForKey(
         userinfo,
         b"teampref\x00" as *const u8 as *const libc::c_char,
     );
     // check for human's team preference set by start server menu
     if *value.offset(0 as i32 as isize) == 0
-        && crate::src::game::g_main::g_localTeamPref.string[0 as i32 as usize] as i32 != 0
+        && g_localTeamPref.string[0 as i32 as usize] as i32 != 0
         && (*client).pers.localClient as u32 != 0
     {
-        value = crate::src::game::g_main::g_localTeamPref
+        value = g_localTeamPref
             .string
             .as_mut_ptr();
         // clear team so it's only used once
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"g_localTeamPref\x00" as *const u8 as *const libc::c_char,
             b"\x00" as *const u8 as *const libc::c_char,
         );
     }
     // initial team determination
-    if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
+    if g_gametype.integer >= GT_TEAM as i32 {
         // always spawn as spectator in team games
-        (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR;
-        (*sess).spectatorState = crate::g_local_h::SPECTATOR_FREE;
+        (*sess).sessionTeam = TEAM_SPECTATOR;
+        (*sess).spectatorState = SPECTATOR_FREE;
         if *value.offset(0 as i32 as isize) as i32 != 0
-            || crate::src::game::g_main::g_teamAutoJoin.integer != 0
+            || g_teamAutoJoin.integer != 0
         {
-            crate::src::game::g_cmds::SetTeam(
-                &mut *crate::src::game::g_main::g_entities
+            SetTeam(
+                &mut *g_entities
                     .as_mut_ptr()
-                    .offset(client.offset_from(crate::src::game::g_main::level.clients) as isize)
-                    as *mut _ as *mut crate::g_local_h::gentity_s,
+                    .offset(client.offset_from(level.clients) as isize)
+                    as *mut _ as *mut gentity_s,
                 value,
             );
         }
     } else {
         if *value.offset(0 as i32 as isize) as i32 == 's' as i32 {
             // a willing spectator, not a waiting-in-line
-            (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR
+            (*sess).sessionTeam = TEAM_SPECTATOR
         } else {
-            match crate::src::game::g_main::g_gametype.integer {
+            match g_gametype.integer {
                 1 => {
                     // if the game is full, go into a waiting mode
-                    if crate::src::game::g_main::level.numNonSpectatorClients >= 2 as i32 {
-                        (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR
+                    if level.numNonSpectatorClients >= 2 as i32 {
+                        (*sess).sessionTeam = TEAM_SPECTATOR
                     } else {
-                        (*sess).sessionTeam = crate::bg_public_h::TEAM_FREE
+                        (*sess).sessionTeam = TEAM_FREE
                     }
                 }
                 0 | 2 | _ => {
-                    if crate::src::game::g_main::g_maxGameClients.integer > 0 as i32
-                        && crate::src::game::g_main::level.numNonSpectatorClients
-                            >= crate::src::game::g_main::g_maxGameClients.integer
+                    if g_maxGameClients.integer > 0 as i32
+                        && level.numNonSpectatorClients
+                            >= g_maxGameClients.integer
                     {
-                        (*sess).sessionTeam = crate::bg_public_h::TEAM_SPECTATOR
+                        (*sess).sessionTeam = TEAM_SPECTATOR
                     } else {
-                        (*sess).sessionTeam = crate::bg_public_h::TEAM_FREE
+                        (*sess).sessionTeam = TEAM_FREE
                     }
                 }
             }
         }
-        (*sess).spectatorState = crate::g_local_h::SPECTATOR_FREE
+        (*sess).spectatorState = SPECTATOR_FREE
     }
-    crate::src::game::g_main::AddTournamentQueue(client as *mut crate::g_local_h::gclient_s);
+    AddTournamentQueue(client as *mut gclient_s);
     G_WriteClientSessionData(client);
 }
 /*
@@ -300,7 +300,7 @@ G_InitWorldSession
 pub unsafe extern "C" fn G_InitWorldSession() {
     let mut s: [libc::c_char; 1024] = [0; 1024];
     let mut gt: i32 = 0;
-    crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"session\x00" as *const u8 as *const libc::c_char,
         s.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -308,9 +308,9 @@ pub unsafe extern "C" fn G_InitWorldSession() {
     gt = atoi(s.as_mut_ptr());
     // if the gametype changed since the last session, don't use any
     // client sessions
-    if crate::src::game::g_main::g_gametype.integer != gt {
-        crate::src::game::g_main::level.newSession = crate::src::qcommon::q_shared::qtrue;
-        crate::src::game::g_main::G_Printf(
+    if g_gametype.integer != gt {
+        level.newSession = qtrue;
+        G_Printf(
             b"Gametype changed, clearing session data.\n\x00" as *const u8 as *const libc::c_char,
         );
     };
@@ -552,22 +552,22 @@ G_WriteSessionData
 
 pub unsafe extern "C" fn G_WriteSessionData() {
     let mut i: i32 = 0;
-    crate::src::game::g_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"session\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::game::g_main::g_gametype.integer,
+            g_gametype.integer,
         ),
     );
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        if (*crate::src::game::g_main::level.clients.offset(i as isize))
+    while i < level.maxclients {
+        if (*level.clients.offset(i as isize))
             .pers
             .connected as u32
-            == crate::g_local_h::CON_CONNECTED as i32 as u32
+            == CON_CONNECTED as i32 as u32
         {
             G_WriteClientSessionData(
-                &mut *crate::src::game::g_main::level.clients.offset(i as isize),
+                &mut *level.clients.offset(i as isize),
             );
         }
         i += 1

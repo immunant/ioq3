@@ -38,33 +38,33 @@ for details.
 /* A complete description of Ogg framing exists in docs/framing.html */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_version(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_version(mut og: *const ogg_page) -> i32 {
     return *(*og).header.offset(4 as i32 as isize) as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_continued(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_continued(mut og: *const ogg_page) -> i32 {
     return *(*og).header.offset(5 as i32 as isize) as i32 & 0x1 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_bos(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_bos(mut og: *const ogg_page) -> i32 {
     return *(*og).header.offset(5 as i32 as isize) as i32 & 0x2 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_eos(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_eos(mut og: *const ogg_page) -> i32 {
     return *(*og).header.offset(5 as i32 as isize) as i32 & 0x4 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_page_granulepos(
-    mut og: *const crate::ogg_h::ogg_page,
-) -> crate::config_types_h::ogg_int64_t {
+    mut og: *const ogg_page,
+) -> ogg_int64_t {
     let mut page: *mut u8 = (*og).header;
-    let mut granulepos: crate::config_types_h::ogg_int64_t =
+    let mut granulepos: ogg_int64_t =
         (*page.offset(13 as i32 as isize) as i32 & 0xff as i32)
-            as crate::config_types_h::ogg_int64_t;
+            as ogg_int64_t;
     granulepos =
         granulepos << 8 as i32 | (*page.offset(12 as i32 as isize) as i32 & 0xff as i32) as isize;
     granulepos =
@@ -83,7 +83,7 @@ pub unsafe extern "C" fn ogg_page_granulepos(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_serialno(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_serialno(mut og: *const ogg_page) -> i32 {
     return *(*og).header.offset(14 as i32 as isize) as i32
         | (*(*og).header.offset(15 as i32 as isize) as i32) << 8 as i32
         | (*(*og).header.offset(16 as i32 as isize) as i32) << 16 as i32
@@ -91,7 +91,7 @@ pub unsafe extern "C" fn ogg_page_serialno(mut og: *const crate::ogg_h::ogg_page
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_pageno(mut og: *const crate::ogg_h::ogg_page) -> isize {
+pub unsafe extern "C" fn ogg_page_pageno(mut og: *const ogg_page) -> isize {
     return (*(*og).header.offset(18 as i32 as isize) as i32
         | (*(*og).header.offset(19 as i32 as isize) as i32) << 8 as i32
         | (*(*og).header.offset(20 as i32 as isize) as i32) << 16 as i32
@@ -114,7 +114,7 @@ page, it's counted */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_packets(mut og: *const crate::ogg_h::ogg_page) -> i32 {
+pub unsafe extern "C" fn ogg_page_packets(mut og: *const ogg_page) -> i32 {
     let mut i: i32 = 0;
     let mut n: i32 = *(*og).header.offset(26 as i32 as isize) as i32;
     let mut count: i32 = 0 as i32;
@@ -128,39 +128,39 @@ pub unsafe extern "C" fn ogg_page_packets(mut og: *const crate::ogg_h::ogg_page)
     return count;
 }
 
-static mut crc_lookup: [crate::config_types_h::ogg_uint32_t; 256] = [
-    0 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4c11db7 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x9823b6e as i32 as crate::config_types_h::ogg_uint32_t,
-    0xd4326d9 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x130476dc as i32 as crate::config_types_h::ogg_uint32_t,
-    0x17c56b6b as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1a864db2 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1e475005 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2608edb8 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x22c9f00f as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2f8ad6d6 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2b4bcb61 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x350c9b64 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x31cd86d3 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3c8ea00a as i32 as crate::config_types_h::ogg_uint32_t,
-    0x384fbdbd as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4c11db70 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x48d0c6c7 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4593e01e as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4152fda9 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5f15adac as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5bd4b01b as i32 as crate::config_types_h::ogg_uint32_t,
-    0x569796c2 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x52568b75 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6a1936c8 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6ed82b7f as i32 as crate::config_types_h::ogg_uint32_t,
-    0x639b0da6 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x675a1011 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x791d4014 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7ddc5da3 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x709f7b7a as i32 as crate::config_types_h::ogg_uint32_t,
-    0x745e66cd as i32 as crate::config_types_h::ogg_uint32_t,
+static mut crc_lookup: [ogg_uint32_t; 256] = [
+    0 as i32 as ogg_uint32_t,
+    0x4c11db7 as i32 as ogg_uint32_t,
+    0x9823b6e as i32 as ogg_uint32_t,
+    0xd4326d9 as i32 as ogg_uint32_t,
+    0x130476dc as i32 as ogg_uint32_t,
+    0x17c56b6b as i32 as ogg_uint32_t,
+    0x1a864db2 as i32 as ogg_uint32_t,
+    0x1e475005 as i32 as ogg_uint32_t,
+    0x2608edb8 as i32 as ogg_uint32_t,
+    0x22c9f00f as i32 as ogg_uint32_t,
+    0x2f8ad6d6 as i32 as ogg_uint32_t,
+    0x2b4bcb61 as i32 as ogg_uint32_t,
+    0x350c9b64 as i32 as ogg_uint32_t,
+    0x31cd86d3 as i32 as ogg_uint32_t,
+    0x3c8ea00a as i32 as ogg_uint32_t,
+    0x384fbdbd as i32 as ogg_uint32_t,
+    0x4c11db70 as i32 as ogg_uint32_t,
+    0x48d0c6c7 as i32 as ogg_uint32_t,
+    0x4593e01e as i32 as ogg_uint32_t,
+    0x4152fda9 as i32 as ogg_uint32_t,
+    0x5f15adac as i32 as ogg_uint32_t,
+    0x5bd4b01b as i32 as ogg_uint32_t,
+    0x569796c2 as i32 as ogg_uint32_t,
+    0x52568b75 as i32 as ogg_uint32_t,
+    0x6a1936c8 as i32 as ogg_uint32_t,
+    0x6ed82b7f as i32 as ogg_uint32_t,
+    0x639b0da6 as i32 as ogg_uint32_t,
+    0x675a1011 as i32 as ogg_uint32_t,
+    0x791d4014 as i32 as ogg_uint32_t,
+    0x7ddc5da3 as i32 as ogg_uint32_t,
+    0x709f7b7a as i32 as ogg_uint32_t,
+    0x745e66cd as i32 as ogg_uint32_t,
     0x9823b6e0 as u32,
     0x9ce2ab57 as u32,
     0x91a18d8e as u32,
@@ -193,38 +193,38 @@ static mut crc_lookup: [crate::config_types_h::ogg_uint32_t; 256] = [
     0xe5ffeb43 as u32,
     0xe8bccd9a as u32,
     0xec7dd02d as u32,
-    0x34867077 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x30476dc0 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3d044b19 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x39c556ae as i32 as crate::config_types_h::ogg_uint32_t,
-    0x278206ab as i32 as crate::config_types_h::ogg_uint32_t,
-    0x23431b1c as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2e003dc5 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2ac12072 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x128e9dcf as i32 as crate::config_types_h::ogg_uint32_t,
-    0x164f8078 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1b0ca6a1 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1fcdbb16 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x18aeb13 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x54bf6a4 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x808d07d as i32 as crate::config_types_h::ogg_uint32_t,
-    0xcc9cdca as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7897ab07 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7c56b6b0 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x71159069 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x75d48dde as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6b93dddb as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6f52c06c as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6211e6b5 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x66d0fb02 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5e9f46bf as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5a5e5b08 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x571d7dd1 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x53dc6066 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4d9b3063 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x495a2dd4 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x44190b0d as i32 as crate::config_types_h::ogg_uint32_t,
-    0x40d816ba as i32 as crate::config_types_h::ogg_uint32_t,
+    0x34867077 as i32 as ogg_uint32_t,
+    0x30476dc0 as i32 as ogg_uint32_t,
+    0x3d044b19 as i32 as ogg_uint32_t,
+    0x39c556ae as i32 as ogg_uint32_t,
+    0x278206ab as i32 as ogg_uint32_t,
+    0x23431b1c as i32 as ogg_uint32_t,
+    0x2e003dc5 as i32 as ogg_uint32_t,
+    0x2ac12072 as i32 as ogg_uint32_t,
+    0x128e9dcf as i32 as ogg_uint32_t,
+    0x164f8078 as i32 as ogg_uint32_t,
+    0x1b0ca6a1 as i32 as ogg_uint32_t,
+    0x1fcdbb16 as i32 as ogg_uint32_t,
+    0x18aeb13 as i32 as ogg_uint32_t,
+    0x54bf6a4 as i32 as ogg_uint32_t,
+    0x808d07d as i32 as ogg_uint32_t,
+    0xcc9cdca as i32 as ogg_uint32_t,
+    0x7897ab07 as i32 as ogg_uint32_t,
+    0x7c56b6b0 as i32 as ogg_uint32_t,
+    0x71159069 as i32 as ogg_uint32_t,
+    0x75d48dde as i32 as ogg_uint32_t,
+    0x6b93dddb as i32 as ogg_uint32_t,
+    0x6f52c06c as i32 as ogg_uint32_t,
+    0x6211e6b5 as i32 as ogg_uint32_t,
+    0x66d0fb02 as i32 as ogg_uint32_t,
+    0x5e9f46bf as i32 as ogg_uint32_t,
+    0x5a5e5b08 as i32 as ogg_uint32_t,
+    0x571d7dd1 as i32 as ogg_uint32_t,
+    0x53dc6066 as i32 as ogg_uint32_t,
+    0x4d9b3063 as i32 as ogg_uint32_t,
+    0x495a2dd4 as i32 as ogg_uint32_t,
+    0x44190b0d as i32 as ogg_uint32_t,
+    0x40d816ba as i32 as ogg_uint32_t,
     0xaca5c697 as u32,
     0xa864db20 as u32,
     0xa527fdf9 as u32,
@@ -257,38 +257,38 @@ static mut crc_lookup: [crate::config_types_h::ogg_uint32_t; 256] = [
     0xd1799b34 as u32,
     0xdc3abded as u32,
     0xd8fba05a as u32,
-    0x690ce0ee as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6dcdfd59 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x608edb80 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x644fc637 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7a089632 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7ec98b85 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x738aad5c as i32 as crate::config_types_h::ogg_uint32_t,
-    0x774bb0eb as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4f040d56 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4bc510e1 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x46863638 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x42472b8f as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5c007b8a as i32 as crate::config_types_h::ogg_uint32_t,
-    0x58c1663d as i32 as crate::config_types_h::ogg_uint32_t,
-    0x558240e4 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x51435d53 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x251d3b9e as i32 as crate::config_types_h::ogg_uint32_t,
-    0x21dc2629 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2c9f00f0 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x285e1d47 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x36194d42 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x32d850f5 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3f9b762c as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3b5a6b9b as i32 as crate::config_types_h::ogg_uint32_t,
-    0x315d626 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7d4cb91 as i32 as crate::config_types_h::ogg_uint32_t,
-    0xa97ed48 as i32 as crate::config_types_h::ogg_uint32_t,
-    0xe56f0ff as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1011a0fa as i32 as crate::config_types_h::ogg_uint32_t,
-    0x14d0bd4d as i32 as crate::config_types_h::ogg_uint32_t,
-    0x19939b94 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1d528623 as i32 as crate::config_types_h::ogg_uint32_t,
+    0x690ce0ee as i32 as ogg_uint32_t,
+    0x6dcdfd59 as i32 as ogg_uint32_t,
+    0x608edb80 as i32 as ogg_uint32_t,
+    0x644fc637 as i32 as ogg_uint32_t,
+    0x7a089632 as i32 as ogg_uint32_t,
+    0x7ec98b85 as i32 as ogg_uint32_t,
+    0x738aad5c as i32 as ogg_uint32_t,
+    0x774bb0eb as i32 as ogg_uint32_t,
+    0x4f040d56 as i32 as ogg_uint32_t,
+    0x4bc510e1 as i32 as ogg_uint32_t,
+    0x46863638 as i32 as ogg_uint32_t,
+    0x42472b8f as i32 as ogg_uint32_t,
+    0x5c007b8a as i32 as ogg_uint32_t,
+    0x58c1663d as i32 as ogg_uint32_t,
+    0x558240e4 as i32 as ogg_uint32_t,
+    0x51435d53 as i32 as ogg_uint32_t,
+    0x251d3b9e as i32 as ogg_uint32_t,
+    0x21dc2629 as i32 as ogg_uint32_t,
+    0x2c9f00f0 as i32 as ogg_uint32_t,
+    0x285e1d47 as i32 as ogg_uint32_t,
+    0x36194d42 as i32 as ogg_uint32_t,
+    0x32d850f5 as i32 as ogg_uint32_t,
+    0x3f9b762c as i32 as ogg_uint32_t,
+    0x3b5a6b9b as i32 as ogg_uint32_t,
+    0x315d626 as i32 as ogg_uint32_t,
+    0x7d4cb91 as i32 as ogg_uint32_t,
+    0xa97ed48 as i32 as ogg_uint32_t,
+    0xe56f0ff as i32 as ogg_uint32_t,
+    0x1011a0fa as i32 as ogg_uint32_t,
+    0x14d0bd4d as i32 as ogg_uint32_t,
+    0x19939b94 as i32 as ogg_uint32_t,
+    0x1d528623 as i32 as ogg_uint32_t,
     0xf12f560e as u32,
     0xf5ee4bb9 as u32,
     0xf8ad6d60 as u32,
@@ -321,38 +321,38 @@ static mut crc_lookup: [crate::config_types_h::ogg_uint32_t; 256] = [
     0x8cf30bad as u32,
     0x81b02d74 as u32,
     0x857130c3 as u32,
-    0x5d8a9099 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x594b8d2e as i32 as crate::config_types_h::ogg_uint32_t,
-    0x5408abf7 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x50c9b640 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4e8ee645 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x4a4ffbf2 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x470cdd2b as i32 as crate::config_types_h::ogg_uint32_t,
-    0x43cdc09c as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7b827d21 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7f436096 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x7200464f as i32 as crate::config_types_h::ogg_uint32_t,
-    0x76c15bf8 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x68860bfd as i32 as crate::config_types_h::ogg_uint32_t,
-    0x6c47164a as i32 as crate::config_types_h::ogg_uint32_t,
-    0x61043093 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x65c52d24 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x119b4be9 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x155a565e as i32 as crate::config_types_h::ogg_uint32_t,
-    0x18197087 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x1cd86d30 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x29f3d35 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x65e2082 as i32 as crate::config_types_h::ogg_uint32_t,
-    0xb1d065b as i32 as crate::config_types_h::ogg_uint32_t,
-    0xfdc1bec as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3793a651 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3352bbe6 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3e119d3f as i32 as crate::config_types_h::ogg_uint32_t,
-    0x3ad08088 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2497d08d as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2056cd3a as i32 as crate::config_types_h::ogg_uint32_t,
-    0x2d15ebe3 as i32 as crate::config_types_h::ogg_uint32_t,
-    0x29d4f654 as i32 as crate::config_types_h::ogg_uint32_t,
+    0x5d8a9099 as i32 as ogg_uint32_t,
+    0x594b8d2e as i32 as ogg_uint32_t,
+    0x5408abf7 as i32 as ogg_uint32_t,
+    0x50c9b640 as i32 as ogg_uint32_t,
+    0x4e8ee645 as i32 as ogg_uint32_t,
+    0x4a4ffbf2 as i32 as ogg_uint32_t,
+    0x470cdd2b as i32 as ogg_uint32_t,
+    0x43cdc09c as i32 as ogg_uint32_t,
+    0x7b827d21 as i32 as ogg_uint32_t,
+    0x7f436096 as i32 as ogg_uint32_t,
+    0x7200464f as i32 as ogg_uint32_t,
+    0x76c15bf8 as i32 as ogg_uint32_t,
+    0x68860bfd as i32 as ogg_uint32_t,
+    0x6c47164a as i32 as ogg_uint32_t,
+    0x61043093 as i32 as ogg_uint32_t,
+    0x65c52d24 as i32 as ogg_uint32_t,
+    0x119b4be9 as i32 as ogg_uint32_t,
+    0x155a565e as i32 as ogg_uint32_t,
+    0x18197087 as i32 as ogg_uint32_t,
+    0x1cd86d30 as i32 as ogg_uint32_t,
+    0x29f3d35 as i32 as ogg_uint32_t,
+    0x65e2082 as i32 as ogg_uint32_t,
+    0xb1d065b as i32 as ogg_uint32_t,
+    0xfdc1bec as i32 as ogg_uint32_t,
+    0x3793a651 as i32 as ogg_uint32_t,
+    0x3352bbe6 as i32 as ogg_uint32_t,
+    0x3e119d3f as i32 as ogg_uint32_t,
+    0x3ad08088 as i32 as ogg_uint32_t,
+    0x2497d08d as i32 as ogg_uint32_t,
+    0x2056cd3a as i32 as ogg_uint32_t,
+    0x2d15ebe3 as i32 as ogg_uint32_t,
+    0x29d4f654 as i32 as ogg_uint32_t,
     0xc5a92679 as u32,
     0xc1683bce as u32,
     0xcc2b1d17 as u32,
@@ -391,14 +391,14 @@ static mut crc_lookup: [crate::config_types_h::ogg_uint32_t; 256] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_init(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
+    mut os: *mut ogg_stream_state,
     mut serialno: i32,
 ) -> i32 {
     if !os.is_null() {
         crate::stdlib::memset(
             os as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::ogg_h::ogg_stream_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_stream_state>() as libc::c_ulong,
         );
         (*os).body_storage = (16 as i32 * 1024 as i32) as isize;
         (*os).lacing_storage = 1024 as i32 as isize;
@@ -412,8 +412,8 @@ pub unsafe extern "C" fn ogg_stream_init(
         ) as *mut i32;
         (*os).granule_vals =
             crate::stdlib::malloc(((*os).lacing_storage as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<crate::config_types_h::ogg_int64_t>() as libc::c_ulong,
-            )) as *mut crate::config_types_h::ogg_int64_t;
+                ::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong,
+            )) as *mut ogg_int64_t;
         if (*os).body_data.is_null() || (*os).lacing_vals.is_null() || (*os).granule_vals.is_null()
         {
             ogg_stream_clear(os);
@@ -427,7 +427,7 @@ pub unsafe extern "C" fn ogg_stream_init(
 /* async/delayed error detection for the ogg_stream_state */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_check(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
+pub unsafe extern "C" fn ogg_stream_check(mut os: *mut ogg_stream_state) -> i32 {
     if os.is_null() || (*os).body_data.is_null() {
         return -(1 as i32);
     }
@@ -436,31 +436,31 @@ pub unsafe extern "C" fn ogg_stream_check(mut os: *mut crate::ogg_h::ogg_stream_
 /* _clear does not free os, only the non-flat storage within */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_clear(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
+pub unsafe extern "C" fn ogg_stream_clear(mut os: *mut ogg_stream_state) -> i32 {
     if !os.is_null() {
         if !(*os).body_data.is_null() {
-            ::libc::free((*os).body_data as *mut libc::c_void);
+            libc::free((*os).body_data as *mut libc::c_void);
         }
         if !(*os).lacing_vals.is_null() {
-            ::libc::free((*os).lacing_vals as *mut libc::c_void);
+            libc::free((*os).lacing_vals as *mut libc::c_void);
         }
         if !(*os).granule_vals.is_null() {
-            ::libc::free((*os).granule_vals as *mut libc::c_void);
+            libc::free((*os).granule_vals as *mut libc::c_void);
         }
         crate::stdlib::memset(
             os as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::ogg_h::ogg_stream_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_stream_state>() as libc::c_ulong,
         );
     }
     return 0 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_destroy(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
+pub unsafe extern "C" fn ogg_stream_destroy(mut os: *mut ogg_stream_state) -> i32 {
     if !os.is_null() {
         ogg_stream_clear(os);
-        ::libc::free(os as *mut libc::c_void);
+        libc::free(os as *mut libc::c_void);
     }
     return 0 as i32;
 }
@@ -468,7 +468,7 @@ pub unsafe extern "C" fn ogg_stream_destroy(mut os: *mut crate::ogg_h::ogg_strea
 what's happening fairly clear */
 
 unsafe extern "C" fn _os_body_expand(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
+    mut os: *mut ogg_stream_state,
     mut needed: isize,
 ) -> i32 {
     if (*os).body_storage - needed <= (*os).body_fill {
@@ -498,7 +498,7 @@ unsafe extern "C" fn _os_body_expand(
 }
 
 unsafe extern "C" fn _os_lacing_expand(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
+    mut os: *mut ogg_stream_state,
     mut needed: isize,
 ) -> i32 {
     if (*os).lacing_storage - needed <= (*os).lacing_fill {
@@ -525,14 +525,14 @@ unsafe extern "C" fn _os_lacing_expand(
         ret = crate::stdlib::realloc(
             (*os).granule_vals as *mut libc::c_void,
             (lacing_storage as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::config_types_h::ogg_int64_t,
+                ogg_int64_t,
             >() as libc::c_ulong),
         );
         if ret.is_null() {
             ogg_stream_clear(os);
             return -(1 as i32);
         }
-        (*os).granule_vals = ret as *mut crate::config_types_h::ogg_int64_t;
+        (*os).granule_vals = ret as *mut ogg_int64_t;
         (*os).lacing_storage = lacing_storage
     }
     return 0 as i32;
@@ -542,10 +542,10 @@ unsafe extern "C" fn _os_lacing_expand(
 perform the checksum simultaneously with other copies */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_checksum_set(mut og: *mut crate::ogg_h::ogg_page) {
+pub unsafe extern "C" fn ogg_page_checksum_set(mut og: *mut ogg_page) {
     if !og.is_null() {
-        let mut crc_reg: crate::config_types_h::ogg_uint32_t =
-            0 as i32 as crate::config_types_h::ogg_uint32_t;
+        let mut crc_reg: ogg_uint32_t =
+            0 as i32 as ogg_uint32_t;
         let mut i: i32 = 0;
         /* safety; needed for API behavior, but not framing code */
         *(*og).header.offset(22 as i32 as isize) = 0 as i32 as u8;
@@ -578,11 +578,11 @@ pub unsafe extern "C" fn ogg_page_checksum_set(mut og: *mut crate::ogg_h::ogg_pa
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_iovecin(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut iov: *mut crate::ogg_h::ogg_iovec_t,
+    mut os: *mut ogg_stream_state,
+    mut iov: *mut ogg_iovec_t,
     mut count: i32,
     mut e_o_s: isize,
-    mut granulepos: crate::config_types_h::ogg_int64_t,
+    mut granulepos: ogg_int64_t,
 ) -> i32 {
     let mut bytes: isize = 0 as i32 as isize;
     let mut lacing_vals: isize = 0;
@@ -670,15 +670,15 @@ pub unsafe extern "C" fn ogg_stream_iovecin(
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_packetin(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut os: *mut ogg_stream_state,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut iov: crate::ogg_h::ogg_iovec_t = crate::ogg_h::ogg_iovec_t {
+    let mut iov: ogg_iovec_t = ogg_iovec_t {
         iov_base: 0 as *mut libc::c_void,
         iov_len: 0,
     };
     iov.iov_base = (*op).packet as *mut libc::c_void;
-    iov.iov_len = (*op).bytes as crate::stddef_h::size_t;
+    iov.iov_len = (*op).bytes as size_t;
     return ogg_stream_iovecin(os, &mut iov, 1 as i32, (*op).e_o_s, (*op).granulepos);
 }
 /* Conditionally flush a page; force==0 will only flush nominal-size
@@ -686,8 +686,8 @@ pages, force==1 forces us to flush a page regardless of page size
 so long as there's any data available at all. */
 
 unsafe extern "C" fn ogg_stream_flush_i(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
     mut force: i32,
     mut nfill: i32,
 ) -> i32 {
@@ -700,8 +700,8 @@ unsafe extern "C" fn ogg_stream_flush_i(
     } as i32;
     let mut bytes: i32 = 0 as i32;
     let mut acc: isize = 0 as i32 as isize;
-    let mut granule_pos: crate::config_types_h::ogg_int64_t =
-        -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    let mut granule_pos: ogg_int64_t =
+        -(1 as i32) as ogg_int64_t;
     if ogg_stream_check(os) != 0 {
         return 0 as i32;
     }
@@ -714,7 +714,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
     the initial header packet */
     if (*os).b_o_s == 0 as i32 {
         /* 'initial header page' case */
-        granule_pos = 0 as i32 as crate::config_types_h::ogg_int64_t;
+        granule_pos = 0 as i32 as ogg_int64_t;
         vals = 0 as i32;
         while vals < maxvals {
             if (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32) < 255 as i32 {
@@ -849,7 +849,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
         (*os).granule_vals as *mut libc::c_void,
         (*os).granule_vals.offset(vals as isize) as *const libc::c_void,
         ((*os).lacing_fill as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            crate::config_types_h::ogg_int64_t,
+            ogg_int64_t,
         >() as libc::c_ulong),
     );
     (*os).body_returned += bytes as isize;
@@ -874,8 +874,8 @@ a page regardless of size in the middle of a stream. */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_flush(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
 ) -> i32 {
     return ogg_stream_flush_i(os, og, 1 as i32, 4096 as i32);
 }
@@ -885,8 +885,8 @@ own delay based flushing */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_flush_fill(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
     mut nfill: i32,
 ) -> i32 {
     return ogg_stream_flush_i(os, og, 1 as i32, nfill);
@@ -897,8 +897,8 @@ good only until the next call (using the same ogg_stream_state) */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_pageout(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
 ) -> i32 {
     let mut force: i32 = 0 as i32;
     if ogg_stream_check(os) != 0 {
@@ -916,8 +916,8 @@ own delay based flushing */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_pageout_fill(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
     mut nfill: i32,
 ) -> i32 {
     let mut force: i32 = 0 as i32;
@@ -932,7 +932,7 @@ pub unsafe extern "C" fn ogg_stream_pageout_fill(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_eos(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
+pub unsafe extern "C" fn ogg_stream_eos(mut os: *mut ogg_stream_state) -> i32 {
     if ogg_stream_check(os) != 0 {
         return 1 as i32;
     }
@@ -955,13 +955,13 @@ ogg_stream_state. */
 /* initialize the struct to a known state */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_init(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
+pub unsafe extern "C" fn ogg_sync_init(mut oy: *mut ogg_sync_state) -> i32 {
     if !oy.is_null() {
         (*oy).storage = -(1 as i32); /* used as a readiness flag */
         crate::stdlib::memset(
             oy as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::ogg_h::ogg_sync_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_sync_state>() as libc::c_ulong,
         );
     }
     return 0 as i32;
@@ -969,31 +969,31 @@ pub unsafe extern "C" fn ogg_sync_init(mut oy: *mut crate::ogg_h::ogg_sync_state
 /* clear non-flat storage within */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_clear(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
+pub unsafe extern "C" fn ogg_sync_clear(mut oy: *mut ogg_sync_state) -> i32 {
     if !oy.is_null() {
         if !(*oy).data.is_null() {
-            ::libc::free((*oy).data as *mut libc::c_void);
+            libc::free((*oy).data as *mut libc::c_void);
         }
         crate::stdlib::memset(
             oy as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::ogg_h::ogg_sync_state>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_sync_state>() as libc::c_ulong,
         );
     }
     return 0 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_destroy(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
+pub unsafe extern "C" fn ogg_sync_destroy(mut oy: *mut ogg_sync_state) -> i32 {
     if !oy.is_null() {
         ogg_sync_clear(oy);
-        ::libc::free(oy as *mut libc::c_void);
+        libc::free(oy as *mut libc::c_void);
     }
     return 0 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_check(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
+pub unsafe extern "C" fn ogg_sync_check(mut oy: *mut ogg_sync_state) -> i32 {
     if (*oy).storage < 0 as i32 {
         return -(1 as i32);
     }
@@ -1002,7 +1002,7 @@ pub unsafe extern "C" fn ogg_sync_check(mut oy: *mut crate::ogg_h::ogg_sync_stat
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_sync_buffer(
-    mut oy: *mut crate::ogg_h::ogg_sync_state,
+    mut oy: *mut ogg_sync_state,
     mut size: isize,
 ) -> *mut libc::c_char {
     if ogg_sync_check(oy) != 0 {
@@ -1042,7 +1042,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_sync_wrote(
-    mut oy: *mut crate::ogg_h::ogg_sync_state,
+    mut oy: *mut ogg_sync_state,
     mut bytes: isize,
 ) -> i32 {
     if ogg_sync_check(oy) != 0 {
@@ -1066,8 +1066,8 @@ pub unsafe extern "C" fn ogg_sync_wrote(
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_sync_pageseek(
-    mut oy: *mut crate::ogg_h::ogg_sync_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut oy: *mut ogg_sync_state,
+    mut og: *mut ogg_page,
 ) -> isize {
     let mut current_block: u64; /* not enough for a header */
     let mut page: *mut u8 = (*oy).data.offset((*oy).returned as isize);
@@ -1115,7 +1115,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
             /* The whole test page is buffered.  Verify the checksum */
             /* Grab the checksum bytes, set the header field to zero */
             let mut chksum: [libc::c_char; 4] = [0; 4];
-            let mut log: crate::ogg_h::ogg_page = crate::ogg_h::ogg_page {
+            let mut log: ogg_page = ogg_page {
                 header: 0 as *mut u8,
                 header_len: 0,
                 body: 0 as *mut u8,
@@ -1200,8 +1200,8 @@ _stream, _clear, _init, or _buffer */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_sync_pageout(
-    mut oy: *mut crate::ogg_h::ogg_sync_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut oy: *mut ogg_sync_state,
+    mut og: *mut ogg_page,
 ) -> i32 {
     if ogg_sync_check(oy) != 0 {
         return 0 as i32;
@@ -1233,8 +1233,8 @@ into packet segments here as well. */
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_pagein(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut og: *mut crate::ogg_h::ogg_page,
+    mut os: *mut ogg_stream_state,
+    mut og: *mut ogg_page,
 ) -> i32 {
     let mut header: *mut u8 = (*og).header;
     let mut body: *mut u8 = (*og).body;
@@ -1244,7 +1244,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
     let mut continued: i32 = ogg_page_continued(og);
     let mut bos: i32 = ogg_page_bos(og);
     let mut eos: i32 = ogg_page_eos(og);
-    let mut granulepos: crate::config_types_h::ogg_int64_t = ogg_page_granulepos(og);
+    let mut granulepos: ogg_int64_t = ogg_page_granulepos(og);
     let mut serialno: i32 = ogg_page_serialno(og);
     let mut pageno: isize = ogg_page_pageno(og);
     let mut segments: i32 = *header.offset(26 as i32 as isize) as i32;
@@ -1279,7 +1279,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
                 (*os).granule_vals as *mut libc::c_void,
                 (*os).granule_vals.offset(lr as isize) as *const libc::c_void,
                 (((*os).lacing_fill - lr) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<crate::config_types_h::ogg_int64_t>()
+                    .wrapping_mul(::std::mem::size_of::<ogg_int64_t>()
                         as libc::c_ulong),
             );
         }
@@ -1359,7 +1359,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
         let mut val_0: i32 = *header.offset((27 as i32 + segptr) as isize) as i32;
         *(*os).lacing_vals.offset((*os).lacing_fill as isize) = val_0;
         *(*os).granule_vals.offset((*os).lacing_fill as isize) =
-            -(1 as i32) as crate::config_types_h::ogg_int64_t;
+            -(1 as i32) as ogg_int64_t;
         if bos != 0 {
             *(*os).lacing_vals.offset((*os).lacing_fill as isize) |= 0x100 as i32;
             bos = 0 as i32
@@ -1391,7 +1391,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
 /* clear things to an initial state.  Good to call, eg, before seeking */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_reset(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
+pub unsafe extern "C" fn ogg_sync_reset(mut oy: *mut ogg_sync_state) -> i32 {
     if ogg_sync_check(oy) != 0 {
         return -(1 as i32);
     }
@@ -1404,7 +1404,7 @@ pub unsafe extern "C" fn ogg_sync_reset(mut oy: *mut crate::ogg_h::ogg_sync_stat
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_reset(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
+pub unsafe extern "C" fn ogg_stream_reset(mut os: *mut ogg_stream_state) -> i32 {
     if ogg_stream_check(os) != 0 {
         return -(1 as i32);
     }
@@ -1417,14 +1417,14 @@ pub unsafe extern "C" fn ogg_stream_reset(mut os: *mut crate::ogg_h::ogg_stream_
     (*os).e_o_s = 0 as i32;
     (*os).b_o_s = 0 as i32;
     (*os).pageno = -(1 as i32) as isize;
-    (*os).packetno = 0 as i32 as crate::config_types_h::ogg_int64_t;
-    (*os).granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t;
+    (*os).packetno = 0 as i32 as ogg_int64_t;
+    (*os).granulepos = 0 as i32 as ogg_int64_t;
     return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_reset_serialno(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
+    mut os: *mut ogg_stream_state,
     mut serialno: i32,
 ) -> i32 {
     if ogg_stream_check(os) != 0 {
@@ -1436,8 +1436,8 @@ pub unsafe extern "C" fn ogg_stream_reset_serialno(
 }
 
 unsafe extern "C" fn _packetout(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut os: *mut ogg_stream_state,
+    mut op: *mut ogg_packet,
     mut adv: i32,
 ) -> i32 {
     /* The last part of decode. We have the stream broken into packet
@@ -1491,8 +1491,8 @@ unsafe extern "C" fn _packetout(
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_packetout(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut os: *mut ogg_stream_state,
+    mut op: *mut ogg_packet,
 ) -> i32 {
     if ogg_stream_check(os) != 0 {
         return 0 as i32;
@@ -1502,8 +1502,8 @@ pub unsafe extern "C" fn ogg_stream_packetout(
 #[no_mangle]
 
 pub unsafe extern "C" fn ogg_stream_packetpeek(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut os: *mut ogg_stream_state,
+    mut op: *mut ogg_packet,
 ) -> i32 {
     if ogg_stream_check(os) != 0 {
         return 0 as i32;
@@ -1512,11 +1512,11 @@ pub unsafe extern "C" fn ogg_stream_packetpeek(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_packet_clear(mut op: *mut crate::ogg_h::ogg_packet) {
-    ::libc::free((*op).packet as *mut libc::c_void);
+pub unsafe extern "C" fn ogg_packet_clear(mut op: *mut ogg_packet) {
+    libc::free((*op).packet as *mut libc::c_void);
     crate::stdlib::memset(
         op as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::ogg_packet>() as libc::c_ulong,
+        ::std::mem::size_of::<ogg_packet>() as libc::c_ulong,
     );
 }

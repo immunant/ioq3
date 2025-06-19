@@ -145,7 +145,7 @@ GLimp_SetGamma
 #[no_mangle]
 
 pub unsafe extern "C" fn GLimp_SetGamma(mut red: *mut u8, mut green: *mut u8, mut blue: *mut u8) {
-    let mut table: [[crate::stdlib::Uint16; 256]; 3] = [[0; 256]; 3];
+    let mut table: [[Uint16; 256]; 3] = [[0; 256]; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     if crate::src::renderergl1::tr_init::glConfig.deviceSupportsGamma as u64 == 0
@@ -156,14 +156,14 @@ pub unsafe extern "C" fn GLimp_SetGamma(mut red: *mut u8, mut green: *mut u8, mu
     i = 0 as i32;
     while i < 256 as i32 {
         table[0 as i32 as usize][i as usize] =
-            ((*red.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32
-                | *red.offset(i as isize) as i32) as crate::stdlib::Uint16;
+            ((*red.offset(i as isize) as Uint16 as i32) << 8 as i32
+                | *red.offset(i as isize) as i32) as Uint16;
         table[1 as i32 as usize][i as usize] =
-            ((*green.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32
-                | *green.offset(i as isize) as i32) as crate::stdlib::Uint16;
+            ((*green.offset(i as isize) as Uint16 as i32) << 8 as i32
+                | *green.offset(i as isize) as i32) as Uint16;
         table[2 as i32 as usize][i as usize] =
-            ((*blue.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32
-                | *blue.offset(i as isize) as i32) as crate::stdlib::Uint16;
+            ((*blue.offset(i as isize) as Uint16 as i32) << 8 as i32
+                | *blue.offset(i as isize) as i32) as Uint16;
         i += 1
     }
     // enforce constantly increasing
@@ -190,7 +190,7 @@ pub unsafe extern "C" fn GLimp_SetGamma(mut red: *mut u8, mut green: *mut u8, mu
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"SDL_SetWindowGammaRamp() failed: %s\n\x00" as *const u8 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
         );

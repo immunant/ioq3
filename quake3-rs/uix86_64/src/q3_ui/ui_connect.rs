@@ -343,8 +343,8 @@ pub static mut passwordNeeded: qboolean =
     qtrue;
 #[no_mangle]
 
-pub static mut passwordField: crate::ui_local_h::menufield_s = crate::ui_local_h::menufield_s {
-    generic: crate::ui_local_h::menucommon_s {
+pub static mut passwordField: menufield_s = menufield_s {
+    generic: menucommon_s {
         type_0: 0,
         name: 0 as *const libc::c_char,
         id: 0,
@@ -354,15 +354,15 @@ pub static mut passwordField: crate::ui_local_h::menufield_s = crate::ui_local_h
         top: 0,
         right: 0,
         bottom: 0,
-        parent: 0 as *const crate::ui_local_h::menuframework_s
-            as *mut crate::ui_local_h::menuframework_s,
+        parent: 0 as *const menuframework_s
+            as *mut menuframework_s,
         menuPosition: 0,
         flags: 0,
         callback: None,
         statusbar: None,
         ownerdraw: None,
     },
-    field: crate::ui_local_h::mfield_t {
+    field: mfield_t {
         cursor: 0,
         scroll: 0,
         widthInChars: 0,
@@ -477,49 +477,49 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     let mut leftWidth: i32 = 0;
     let mut style: i32 = 0 as i32 | 0x10 as i32 | 0x800 as i32;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    downloadSize = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    downloadSize = trap_Cvar_VariableValue(
         b"cl_downloadSize\x00" as *const u8 as *const libc::c_char,
     ) as i32;
-    downloadCount = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    downloadCount = trap_Cvar_VariableValue(
         b"cl_downloadCount\x00" as *const u8 as *const libc::c_char,
     ) as i32;
-    downloadTime = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    downloadTime = trap_Cvar_VariableValue(
         b"cl_downloadTime\x00" as *const u8 as *const libc::c_char,
     ) as i32;
-    leftWidth = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(dlText.as_mut_ptr())
+    leftWidth = (UI_ProportionalStringWidth(dlText.as_mut_ptr())
         as f32
-        * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
-    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(etaText.as_mut_ptr()) as f32
-        * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
+        * UI_ProportionalSizeScale(style)) as i32;
+    width = (UI_ProportionalStringWidth(etaText.as_mut_ptr()) as f32
+        * UI_ProportionalSizeScale(style)) as i32;
     if width > leftWidth {
         leftWidth = width
     }
-    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(xferText.as_mut_ptr()) as f32
-        * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
+    width = (UI_ProportionalStringWidth(xferText.as_mut_ptr()) as f32
+        * UI_ProportionalSizeScale(style)) as i32;
     if width > leftWidth {
         leftWidth = width
     }
     leftWidth += 16 as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         8 as i32,
         128 as i32,
         dlText.as_mut_ptr(),
         style,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         8 as i32,
         160 as i32,
         etaText.as_mut_ptr(),
         style,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         8 as i32,
         224 as i32,
         xferText.as_mut_ptr(),
         style,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     if downloadSize > 0 as i32 {
         s = va(
@@ -530,12 +530,12 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     } else {
         s = downloadName
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         leftWidth,
         128 as i32,
         s,
         style,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     UI_ReadableSize(
         dlSizeBuf.as_mut_ptr(),
@@ -548,14 +548,14 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         downloadSize,
     );
     if downloadCount < 4096 as i32 || downloadTime == 0 {
-        crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             leftWidth,
             160 as i32,
             b"estimating\x00" as *const u8 as *const libc::c_char,
             style,
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+            color_white.as_mut_ptr(),
         );
-        crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             leftWidth,
             192 as i32,
             va(
@@ -564,12 +564,12 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                 totalSizeBuf.as_mut_ptr(),
             ),
             style,
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+            color_white.as_mut_ptr(),
         );
     } else {
-        if (crate::src::q3_ui::ui_atoms::uis.realtime - downloadTime) / 1000 as i32 != 0 {
+        if (uis.realtime - downloadTime) / 1000 as i32 != 0 {
             xferRate = downloadCount
-                / ((crate::src::q3_ui::ui_atoms::uis.realtime - downloadTime) / 1000 as i32)
+                / ((uis.realtime - downloadTime) / 1000 as i32)
         //xferRate = (int)( ((float)downloadCount) / elapsedTime);
         } else {
             xferRate = 0 as i32
@@ -590,14 +590,14 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                 n,
             );
             //(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
-            crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 leftWidth,
                 160 as i32,
                 dlTimeBuf.as_mut_ptr(),
                 style,
-                crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                color_white.as_mut_ptr(),
             );
-            crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 leftWidth,
                 192 as i32,
                 va(
@@ -607,18 +607,18 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                     totalSizeBuf.as_mut_ptr(),
                 ),
                 style,
-                crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                color_white.as_mut_ptr(),
             );
         } else {
-            crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 leftWidth,
                 160 as i32,
                 b"estimating\x00" as *const u8 as *const libc::c_char,
                 style,
-                crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                color_white.as_mut_ptr(),
             );
             if downloadSize != 0 {
-                crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+                UI_DrawProportionalString(
                     leftWidth,
                     192 as i32,
                     va(
@@ -628,10 +628,10 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                         totalSizeBuf.as_mut_ptr(),
                     ),
                     style,
-                    crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                    color_white.as_mut_ptr(),
                 );
             } else {
-                crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+                UI_DrawProportionalString(
                     leftWidth,
                     192 as i32,
                     va(
@@ -639,12 +639,12 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                         dlSizeBuf.as_mut_ptr(),
                     ),
                     style,
-                    crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                    color_white.as_mut_ptr(),
                 );
             }
         }
         if xferRate != 0 {
-            crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 leftWidth,
                 224 as i32,
                 va(
@@ -652,7 +652,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
                     xferRateBuf.as_mut_ptr(),
                 ),
                 style,
-                crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+                color_white.as_mut_ptr(),
             );
         }
     };
@@ -733,7 +733,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
     mut overlay: qboolean,
 ) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut cstate: crate::ui_public_h::uiClientState_t = crate::ui_public_h::uiClientState_t {
+    let mut cstate: uiClientState_t = uiClientState_t {
         connState: CA_UNINITIALIZED,
         connectPacketCount: 0,
         clientNum: 0,
@@ -742,32 +742,32 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         messageString: [0; 1024],
     };
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    crate::src::q3_ui::ui_qmenu::Menu_Cache();
+    Menu_Cache();
     if overlay as u64 == 0 {
         // draw the dialog background
-        crate::src::q3_ui::ui_atoms::UI_SetColor(
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        UI_SetColor(
+            color_white.as_mut_ptr(),
         );
-        crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
+        UI_DrawHandlePic(
             0 as i32 as f32,
             0 as i32 as f32,
             640 as i32 as f32,
             480 as i32 as f32,
-            crate::src::q3_ui::ui_atoms::uis.menuBackShader,
+            uis.menuBackShader,
         );
     }
     // see what information we should display
-    crate::src::ui::ui_syscalls::trap_GetClientState(
-        &mut cstate as *mut _ as *mut crate::ui_public_h::uiClientState_t,
+    trap_GetClientState(
+        &mut cstate as *mut _ as *mut uiClientState_t,
     );
     info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
-    if crate::src::ui::ui_syscalls::trap_GetConfigString(
+    if trap_GetConfigString(
         0 as i32,
         info.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     ) != 0
     {
-        crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             16 as i32,
             va(
@@ -778,10 +778,10 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
                 ),
             ),
             0x20 as i32 | 0x1 as i32 | 0x800 as i32,
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+            color_white.as_mut_ptr(),
         );
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         64 as i32,
         va(
@@ -789,11 +789,11 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
             cstate.servername.as_mut_ptr(),
         ),
         0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-        crate::src::q3_ui::ui_qmenu::menu_text_color.as_mut_ptr(),
+        menu_text_color.as_mut_ptr(),
     );
     //UI_DrawProportionalString( 320, 96, "Press Esc to abort", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color );
     // display global MOTD at bottom
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         640 as i32 / 2 as i32,
         480 as i32 - 32 as i32,
         Info_ValueForKey(
@@ -801,18 +801,18 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
             b"motd\x00" as *const u8 as *const libc::c_char,
         ),
         0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-        crate::src::q3_ui::ui_qmenu::menu_text_color.as_mut_ptr(),
+        menu_text_color.as_mut_ptr(),
     );
     // print any server info (server full, bad version, etc)
     if (cstate.connState as u32) < CA_CONNECTED as i32 as u32 {
-        crate::src::q3_ui::ui_atoms::UI_DrawProportionalString_AutoWrapped(
+        UI_DrawProportionalString_AutoWrapped(
             320 as i32,
             192 as i32,
             630 as i32,
             20 as i32,
             cstate.messageString.as_mut_ptr(),
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::q3_ui::ui_qmenu::menu_text_color.as_mut_ptr(),
+            menu_text_color.as_mut_ptr(),
         );
     }
     if lastConnState as u32 > cstate.connState as u32 {
@@ -836,7 +836,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         }
         5 => {
             let mut downloadName: [libc::c_char; 1024] = [0; 1024];
-            crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+            trap_Cvar_VariableStringBuffer(
                 b"cl_downloadName\x00" as *const u8 as *const libc::c_char,
                 downloadName.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -852,12 +852,12 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         7 => return,
         _ => return,
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         128 as i32,
         s,
         0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     // password required / connection rejected information goes here
 }
@@ -869,8 +869,8 @@ UI_KeyConnect
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_KeyConnect(mut key: i32) {
-    if key == crate::keycodes_h::K_ESCAPE as i32 {
-        crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
+    if key == K_ESCAPE as i32 {
+        trap_Cmd_ExecuteText(
             EXEC_APPEND as i32,
             b"disconnect\n\x00" as *const u8 as *const libc::c_char,
         );

@@ -203,7 +203,7 @@ pub type huff_entropy_ptr = *mut huff_entropy_encoder;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct huff_entropy_encoder {
-    pub pub_0: crate::jpegint_h::jpeg_entropy_encoder,
+    pub pub_0: jpeg_entropy_encoder,
     pub saved: savable_state,
     pub restarts_to_go: u32,
     pub next_restart_num: i32,
@@ -211,10 +211,10 @@ pub struct huff_entropy_encoder {
     pub ac_derived_tbls: [*mut c_derived_tbl; 4],
     pub dc_count_ptrs: [*mut isize; 4],
     pub ac_count_ptrs: [*mut isize; 4],
-    pub gather_statistics: crate::jmorecfg_h::boolean,
-    pub next_output_byte: *mut crate::jmorecfg_h::JOCTET,
-    pub free_in_buffer: crate::stddef_h::size_t,
-    pub cinfo: crate::jpeglib_h::j_compress_ptr,
+    pub gather_statistics: boolean,
+    pub next_output_byte: *mut JOCTET,
+    pub free_in_buffer: size_t,
+    pub cinfo: j_compress_ptr,
     pub ac_tbl_no: i32,
     pub EOBRUN: u32,
     pub BE: u32,
@@ -224,7 +224,7 @@ pub struct huff_entropy_encoder {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct savable_state {
-    pub put_buffer: crate::jmorecfg_h::INT32,
+    pub put_buffer: INT32,
     pub put_bits: i32,
     pub last_dc_val: [i32; 4],
 }
@@ -232,10 +232,10 @@ pub struct savable_state {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct working_state {
-    pub next_output_byte: *mut crate::jmorecfg_h::JOCTET,
-    pub free_in_buffer: crate::stddef_h::size_t,
+    pub next_output_byte: *mut JOCTET,
+    pub free_in_buffer: size_t,
     pub cur: savable_state,
-    pub cinfo: crate::jpeglib_h::j_compress_ptr,
+    pub cinfo: j_compress_ptr,
 }
 /* Max # of correction bits I can buffer */
 /* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than INT32.
@@ -248,12 +248,12 @@ pub struct working_state {
  */
 
 unsafe extern "C" fn jpeg_make_c_derived_tbl(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut isDC: crate::jmorecfg_h::boolean,
+    mut cinfo: j_compress_ptr,
+    mut isDC: boolean,
     mut tblno: i32,
     mut pdtbl: *mut *mut c_derived_tbl,
 ) {
-    let mut htbl: *mut crate::jpeglib_h::JHUFF_TBL = 0 as *mut crate::jpeglib_h::JHUFF_TBL;
+    let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
     let mut dtbl: *mut c_derived_tbl = 0 as *mut c_derived_tbl;
     let mut p: i32 = 0;
     let mut i: i32 = 0;
@@ -269,14 +269,14 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
      */
     /* Find the input Huffman table */
     if tblno < 0 as i32 || tblno >= 4 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_HUFF_TABLE as i32;
+        (*(*cinfo).err).msg_code = JERR_NO_HUFF_TABLE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     htbl = if isDC != 0 {
         (*cinfo).dc_huff_tbl_ptrs[tblno as usize]
@@ -284,14 +284,14 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         (*cinfo).ac_huff_tbl_ptrs[tblno as usize]
     };
     if htbl.is_null() {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_HUFF_TABLE as i32;
+        (*(*cinfo).err).msg_code = JERR_NO_HUFF_TABLE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Allocate a workspace if we haven't already done so. */
     if (*pdtbl).is_null() {
@@ -301,7 +301,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             1 as i32,
             ::std::mem::size_of::<c_derived_tbl>() as libc::c_ulong,
         ) as *mut c_derived_tbl
@@ -314,14 +314,14 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         i = (*htbl).bits[l as usize] as i32;
         if i < 0 as i32 || p + i > 256 as i32 {
             /* protect against table overrun */
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         loop {
@@ -353,15 +353,15 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         /* code is now 1 more than the last code used for codelength si; but
          * it must still fit in si bits, since no code is allowed to be all ones.
          */
-        if code as crate::jmorecfg_h::INT32 >= (1 as i32 as crate::jmorecfg_h::INT32) << si {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+        if code as INT32 >= (1 as i32 as INT32) << si {
+            (*(*cinfo).err).msg_code = JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         code <<= 1 as i32;
@@ -388,14 +388,14 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
     while p < lastp {
         i = (*htbl).huffval[p as usize] as i32;
         if i < 0 as i32 || i > maxsymbol || (*dtbl).ehufsi[i as usize] as i32 != 0 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         (*dtbl).ehufco[i as usize] = huffcode[p as usize];
@@ -410,9 +410,9 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
 /* Emit a byte, taking 'action' if must suspend. */
 /* Emit a byte */
 
-unsafe extern "C" fn dump_buffer_s(mut state: *mut working_state) -> crate::jmorecfg_h::boolean
+unsafe extern "C" fn dump_buffer_s(mut state: *mut working_state) -> boolean
 /* Empty the output buffer; return TRUE if successful, FALSE if must suspend */ {
-    let mut dest: *mut crate::jpeglib_h::jpeg_destination_mgr = (*(*state).cinfo).dest;
+    let mut dest: *mut jpeg_destination_mgr = (*(*state).cinfo).dest;
     if Some(
         (*dest)
             .empty_output_buffer
@@ -432,7 +432,7 @@ unsafe extern "C" fn dump_buffer_s(mut state: *mut working_state) -> crate::jmor
 unsafe extern "C" fn dump_buffer_e(mut entropy: huff_entropy_ptr)
 /* Empty the output buffer; we do not support suspension in this case. */
 {
-    let mut dest: *mut crate::jpeglib_h::jpeg_destination_mgr = (*(*entropy).cinfo).dest;
+    let mut dest: *mut jpeg_destination_mgr = (*(*entropy).cinfo).dest;
     if Some(
         (*dest)
             .empty_output_buffer
@@ -441,14 +441,14 @@ unsafe extern "C" fn dump_buffer_e(mut entropy: huff_entropy_ptr)
     .expect("non-null function pointer")((*entropy).cinfo)
         == 0
     {
-        (*(*(*entropy).cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+        (*(*(*entropy).cinfo).err).msg_code = JERR_CANT_SUSPEND as i32;
         Some(
             (*(*(*entropy).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            (*entropy).cinfo as crate::jpeglib_h::j_common_ptr
+            (*entropy).cinfo as j_common_ptr
         );
     }
     /* After a successful buffer dump, must reset buffer pointers */
@@ -467,25 +467,25 @@ unsafe extern "C" fn emit_bits_s(
     mut state: *mut working_state,
     mut code: u32,
     mut size: i32,
-) -> crate::jmorecfg_h::boolean
+) -> boolean
 /* Emit some bits; return TRUE if successful, FALSE if must suspend */ {
     /* This routine is heavily used, so it's worth coding tightly. */
-    let mut put_buffer: crate::jmorecfg_h::INT32 = code as crate::jmorecfg_h::INT32;
+    let mut put_buffer: INT32 = code as INT32;
     let mut put_bits: i32 = (*state).cur.put_bits;
     /* if size is 0, caller used an invalid Huffman table entry */
     if size == 0 as i32 {
         (*(*(*state).cinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JERR_HUFF_MISSING_CODE as i32; /* mask off any extra bits in code */
+            JERR_HUFF_MISSING_CODE as i32; /* mask off any extra bits in code */
         Some(
             (*(*(*state).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            (*state).cinfo as crate::jpeglib_h::j_common_ptr
+            (*state).cinfo as j_common_ptr
         ); /* new number of bits in buffer */
     } /* align incoming bits */
-    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as isize; /* and merge with old buffer contents */
+    put_buffer &= ((1 as i32 as INT32) << size) - 1 as i32 as isize; /* and merge with old buffer contents */
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     put_buffer |= (*state).cur.put_buffer;
@@ -493,7 +493,7 @@ unsafe extern "C" fn emit_bits_s(
         let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as isize) as i32;
         let fresh3 = (*state).next_output_byte;
         (*state).next_output_byte = (*state).next_output_byte.offset(1);
-        *fresh3 = c as crate::jmorecfg_h::JOCTET;
+        *fresh3 = c as JOCTET;
         (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
         if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
             if dump_buffer_s(state) == 0 {
@@ -504,7 +504,7 @@ unsafe extern "C" fn emit_bits_s(
             /* need to stuff a zero byte? */
             let fresh4 = (*state).next_output_byte; /* update state variables */
             (*state).next_output_byte = (*state).next_output_byte.offset(1);
-            *fresh4 = 0 as i32 as crate::jmorecfg_h::JOCTET;
+            *fresh4 = 0 as i32 as JOCTET;
             (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
             if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
                 if dump_buffer_s(state) == 0 {
@@ -525,25 +525,25 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
 /* Emit some bits, unless we are in gather mode */
 {
     /* This routine is heavily used, so it's worth coding tightly. */
-    let mut put_buffer: crate::jmorecfg_h::INT32 = code as crate::jmorecfg_h::INT32;
+    let mut put_buffer: INT32 = code as INT32;
     let mut put_bits: i32 = (*entropy).saved.put_bits;
     /* if size is 0, caller used an invalid Huffman table entry */
     if size == 0 as i32 {
         (*(*(*entropy).cinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JERR_HUFF_MISSING_CODE as i32; /* do nothing if we're only getting stats */
+            JERR_HUFF_MISSING_CODE as i32; /* do nothing if we're only getting stats */
         Some(
             (*(*(*entropy).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            (*entropy).cinfo as crate::jpeglib_h::j_common_ptr
+            (*entropy).cinfo as j_common_ptr
         ); /* mask off any extra bits in code */
     } /* new number of bits in buffer */
     if (*entropy).gather_statistics != 0 {
         return;
     } /* align incoming bits */
-    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as isize;
+    put_buffer &= ((1 as i32 as INT32) << size) - 1 as i32 as isize;
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     /* and merge with old buffer contents */
@@ -552,7 +552,7 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
         let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as isize) as i32;
         let fresh5 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
-        *fresh5 = c as crate::jmorecfg_h::JOCTET;
+        *fresh5 = c as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
         if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
             dump_buffer_e(entropy);
@@ -561,7 +561,7 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
             /* need to stuff a zero byte? */
             let fresh6 = (*entropy).next_output_byte; /* update variables */
             (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
-            *fresh6 = 0 as i32 as crate::jmorecfg_h::JOCTET;
+            *fresh6 = 0 as i32 as JOCTET;
             (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
             if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
                 dump_buffer_e(entropy);
@@ -574,19 +574,19 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
     (*entropy).saved.put_bits = put_bits;
 }
 
-unsafe extern "C" fn flush_bits_s(mut state: *mut working_state) -> crate::jmorecfg_h::boolean {
+unsafe extern "C" fn flush_bits_s(mut state: *mut working_state) -> boolean {
     if emit_bits_s(state, 0x7f as i32 as u32, 7 as i32) == 0 {
         /* fill any partial byte with ones */
         return 0 as i32;
     } /* and reset bit-buffer to empty */
-    (*state).cur.put_buffer = 0 as i32 as crate::jmorecfg_h::INT32; /* fill any partial byte with ones */
+    (*state).cur.put_buffer = 0 as i32 as INT32; /* fill any partial byte with ones */
     (*state).cur.put_bits = 0 as i32; /* and reset bit-buffer to empty */
     return 1 as i32;
 }
 
 unsafe extern "C" fn flush_bits_e(mut entropy: huff_entropy_ptr) {
     emit_bits_e(entropy, 0x7f as i32 as u32, 7 as i32);
-    (*entropy).saved.put_buffer = 0 as i32 as crate::jmorecfg_h::INT32;
+    (*entropy).saved.put_buffer = 0 as i32 as INT32;
     (*entropy).saved.put_bits = 0 as i32;
 }
 /*
@@ -669,14 +669,14 @@ unsafe extern "C" fn emit_eobrun(mut entropy: huff_entropy_ptr) {
         /* safety check: shouldn't happen given limited correction-bit buffer */
         if nbits > 14 as i32 {
             (*(*(*entropy).cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_HUFF_MISSING_CODE as i32;
+                JERR_HUFF_MISSING_CODE as i32;
             Some(
                 (*(*(*entropy).cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                (*entropy).cinfo as crate::jpeglib_h::j_common_ptr,
+                (*entropy).cinfo as j_common_ptr,
             );
         }
         emit_ac_symbol(entropy, (*entropy).ac_tbl_no, nbits << 4 as i32);
@@ -696,14 +696,14 @@ unsafe extern "C" fn emit_eobrun(mut entropy: huff_entropy_ptr) {
 unsafe extern "C" fn emit_restart_s(
     mut state: *mut working_state,
     mut restart_num: i32,
-) -> crate::jmorecfg_h::boolean {
+) -> boolean {
     let mut ci: i32 = 0;
     if flush_bits_s(state) == 0 {
         return 0 as i32;
     }
     let fresh9 = (*state).next_output_byte;
     (*state).next_output_byte = (*state).next_output_byte.offset(1);
-    *fresh9 = 0xff as i32 as crate::jmorecfg_h::JOCTET;
+    *fresh9 = 0xff as i32 as JOCTET;
     (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
     if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
         if dump_buffer_s(state) == 0 {
@@ -712,7 +712,7 @@ unsafe extern "C" fn emit_restart_s(
     }
     let fresh10 = (*state).next_output_byte;
     (*state).next_output_byte = (*state).next_output_byte.offset(1);
-    *fresh10 = (0xd0 as i32 + restart_num) as crate::jmorecfg_h::JOCTET;
+    *fresh10 = (0xd0 as i32 + restart_num) as JOCTET;
     (*state).free_in_buffer = (*state).free_in_buffer.wrapping_sub(1);
     if (*state).free_in_buffer == 0 as i32 as libc::c_ulong {
         if dump_buffer_s(state) == 0 {
@@ -736,14 +736,14 @@ unsafe extern "C" fn emit_restart_e(mut entropy: huff_entropy_ptr, mut restart_n
         flush_bits_e(entropy);
         let fresh11 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
-        *fresh11 = 0xff as i32 as crate::jmorecfg_h::JOCTET;
+        *fresh11 = 0xff as i32 as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
         if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
             dump_buffer_e(entropy);
         }
         let fresh12 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
-        *fresh12 = (0xd0 as i32 + restart_num) as crate::jmorecfg_h::JOCTET;
+        *fresh12 = (0xd0 as i32 + restart_num) as JOCTET;
         (*entropy).free_in_buffer = (*entropy).free_in_buffer.wrapping_sub(1);
         if (*entropy).free_in_buffer == 0 as i32 as libc::c_ulong {
             dump_buffer_e(entropy);
@@ -768,9 +768,9 @@ unsafe extern "C" fn emit_restart_e(mut entropy: huff_entropy_ptr, mut restart_n
  */
 
 unsafe extern "C" fn encode_mcu_DC_first(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut temp: i32 = 0;
     let mut temp2: i32 = 0;
@@ -778,9 +778,9 @@ unsafe extern "C" fn encode_mcu_DC_first(
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut Al: i32 = (*cinfo).Al;
-    let mut block: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -820,14 +820,14 @@ unsafe extern "C" fn encode_mcu_DC_first(
          * Since we're encoding a difference, the range limit is twice as much.
          */
         if nbits > 10 as i32 + 1 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         /* Count/emit the Huffman-coded symbol for the number of bits */
@@ -859,9 +859,9 @@ unsafe extern "C" fn encode_mcu_DC_first(
  */
 
 unsafe extern "C" fn encode_mcu_AC_first(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut temp: i32 = 0;
     let mut temp2: i32 = 0;
@@ -871,7 +871,7 @@ unsafe extern "C" fn encode_mcu_AC_first(
     let mut Se: i32 = 0;
     let mut Al: i32 = 0;
     let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
+    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -933,14 +933,14 @@ unsafe extern "C" fn encode_mcu_AC_first(
                 /* Check for out-of-range coefficient values */
                 if nbits > 10 as i32 {
                     (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+                        JERR_BAD_DCT_COEF as i32;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr
+                        cinfo as j_common_ptr
                     );
                 }
                 /* Count/emit Huffman symbol for run length / number of bits */
@@ -981,14 +981,14 @@ unsafe extern "C" fn encode_mcu_AC_first(
  */
 
 unsafe extern "C" fn encode_mcu_DC_refine(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut temp: i32 = 0;
     let mut blkn: i32 = 0;
     let mut Al: i32 = (*cinfo).Al;
-    let mut block: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
+    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -1024,9 +1024,9 @@ unsafe extern "C" fn encode_mcu_DC_refine(
  */
 
 unsafe extern "C" fn encode_mcu_AC_refine(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut temp: i32 = 0;
     let mut r: i32 = 0;
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn encode_mcu_AC_refine(
     let mut Se: i32 = 0;
     let mut Al: i32 = 0;
     let mut natural_order: *const i32 = 0 as *const i32;
-    let mut block: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
+    let mut block: JBLOCKROW = 0 as *mut JBLOCK;
     let mut absvalues: [i32; 64] = [0; 64];
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
@@ -1162,11 +1162,11 @@ unsafe extern "C" fn encode_mcu_AC_refine(
 
 unsafe extern "C" fn encode_one_block(
     mut state: *mut working_state,
-    mut block: crate::jpeglib_h::JCOEFPTR,
+    mut block: JCOEFPTR,
     mut last_dc_val: i32,
     mut dctbl: *mut c_derived_tbl,
     mut actbl: *mut c_derived_tbl,
-) -> crate::jmorecfg_h::boolean {
+) -> boolean {
     let mut temp: i32 = 0;
     let mut temp2: i32 = 0;
     let mut nbits: i32 = 0;
@@ -1194,14 +1194,14 @@ unsafe extern "C" fn encode_one_block(
      * Since we're encoding a difference, the range limit is twice as much.
      */
     if nbits > 10 as i32 + 1 as i32 {
-        (*(*(*state).cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+        (*(*(*state).cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
         Some(
             (*(*(*state).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            (*state).cinfo as crate::jpeglib_h::j_common_ptr
+            (*state).cinfo as j_common_ptr
         );
     }
     /* Emit the Huffman-coded symbol for the number of bits */
@@ -1259,14 +1259,14 @@ unsafe extern "C" fn encode_one_block(
             /* Check for out-of-range coefficient values */
             if nbits > 10 as i32 {
                 (*(*(*state).cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+                    JERR_BAD_DCT_COEF as i32;
                 Some(
                     (*(*(*state).cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    (*state).cinfo as crate::jpeglib_h::j_common_ptr,
+                    (*state).cinfo as j_common_ptr,
                 );
             }
             /* Emit Huffman symbol for run length / number of bits */
@@ -1306,24 +1306,24 @@ unsafe extern "C" fn encode_one_block(
  */
 
 unsafe extern "C" fn encode_mcu_huff(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut state: working_state = working_state {
-        next_output_byte: 0 as *mut crate::jmorecfg_h::JOCTET,
+        next_output_byte: 0 as *mut JOCTET,
         free_in_buffer: 0,
         cur: savable_state {
             put_buffer: 0,
             put_bits: 0,
             last_dc_val: [0; 4],
         },
-        cinfo: 0 as *mut crate::jpeglib_h::jpeg_compress_struct,
+        cinfo: 0 as *mut jpeg_compress_struct,
     };
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     /* Load up working state */
     state.next_output_byte = (*(*cinfo).dest).next_output_byte;
     state.free_in_buffer = (*(*cinfo).dest).free_in_buffer;
@@ -1377,17 +1377,17 @@ unsafe extern "C" fn encode_mcu_huff(
  * Finish up at the end of a Huffman-compressed scan.
  */
 
-unsafe extern "C" fn finish_pass_huff(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn finish_pass_huff(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut state: working_state = working_state {
-        next_output_byte: 0 as *mut crate::jmorecfg_h::JOCTET,
+        next_output_byte: 0 as *mut JOCTET,
         free_in_buffer: 0,
         cur: savable_state {
             put_buffer: 0,
             put_bits: 0,
             last_dc_val: [0; 4],
         },
-        cinfo: 0 as *mut crate::jpeglib_h::jpeg_compress_struct,
+        cinfo: 0 as *mut jpeg_compress_struct,
     };
     if (*cinfo).progressive_mode != 0 {
         (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
@@ -1405,14 +1405,14 @@ unsafe extern "C" fn finish_pass_huff(mut cinfo: crate::jpeglib_h::j_compress_pt
         state.cinfo = cinfo;
         /* Flush out the last data */
         if flush_bits_s(&mut state) == 0 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+            (*(*cinfo).err).msg_code = JERR_CANT_SUSPEND as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         /* Update state */
@@ -1434,8 +1434,8 @@ unsafe extern "C" fn finish_pass_huff(mut cinfo: crate::jpeglib_h::j_compress_pt
 /* Process a single block's worth of coefficients */
 
 unsafe extern "C" fn htest_one_block(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut block: crate::jpeglib_h::JCOEFPTR,
+    mut cinfo: j_compress_ptr,
+    mut block: JCOEFPTR,
     mut last_dc_val: i32,
     mut dc_counts: *mut isize,
     mut ac_counts: *mut isize,
@@ -1461,13 +1461,13 @@ unsafe extern "C" fn htest_one_block(
      * Since we're encoding a difference, the range limit is twice as much.
      */
     if nbits > 10 as i32 + 1 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Count the Huffman symbol for the number of bits */
     let ref mut fresh14 = *dc_counts.offset(nbits as isize);
@@ -1501,14 +1501,14 @@ unsafe extern "C" fn htest_one_block(
             }
             /* Check for out-of-range coefficient values */
             if nbits > 10 as i32 {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             /* Count Huffman symbol for run length / number of bits */
@@ -1530,14 +1530,14 @@ unsafe extern "C" fn htest_one_block(
  */
 
 unsafe extern "C" fn encode_mcu_gather(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut MCU_data: *mut crate::jpeglib_h::JBLOCKROW,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut MCU_data: *mut JBLOCKROW,
+) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     /* Take care of restart intervals if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -1598,12 +1598,12 @@ unsafe extern "C" fn encode_mcu_gather(
  */
 
 unsafe extern "C" fn jpeg_gen_optimal_table(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut htbl: *mut crate::jpeglib_h::JHUFF_TBL,
+    mut cinfo: j_compress_ptr,
+    mut htbl: *mut JHUFF_TBL,
     mut freq: *mut isize,
 ) {
     /* assumed maximum initial code length */
-    let mut bits: [crate::jmorecfg_h::UINT8; 33] = [0; 33]; /* bits[k] = # of symbols with code length k */
+    let mut bits: [UINT8; 33] = [0; 33]; /* bits[k] = # of symbols with code length k */
     let mut codesize: [i32; 257] = [0; 257]; /* codesize[k] = code length of symbol k */
     let mut others: [i32; 257] = [0; 257]; /* next symbol in current branch of tree */
     let mut c1: i32 = 0;
@@ -1616,7 +1616,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     crate::stdlib::memset(
         bits.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::jmorecfg_h::UINT8; 33]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 33]>() as libc::c_ulong,
     ); /* init links to empty */
     crate::stdlib::memset(
         codesize.as_mut_ptr() as *mut libc::c_void,
@@ -1689,14 +1689,14 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
             /* but I'm paranoid... */
             if codesize[i as usize] > 32 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_HUFF_CLEN_OVERFLOW as i32;
+                    JERR_HUFF_CLEN_OVERFLOW as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             bits[codesize[i as usize] as usize] =
@@ -1722,10 +1722,10 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
                 j -= 1
             }
             /* symbol of this length is now a prefix */
-            bits[i as usize] = (bits[i as usize] as i32 - 2 as i32) as crate::jmorecfg_h::UINT8; /* remove two symbols */
+            bits[i as usize] = (bits[i as usize] as i32 - 2 as i32) as UINT8; /* remove two symbols */
             bits[(i - 1 as i32) as usize] = bits[(i - 1 as i32) as usize].wrapping_add(1); /* one goes in this length */
             bits[(j + 1 as i32) as usize] =
-                (bits[(j + 1 as i32) as usize] as i32 + 2 as i32) as crate::jmorecfg_h::UINT8; /* two new symbols in this length */
+                (bits[(j + 1 as i32) as usize] as i32 + 2 as i32) as UINT8; /* two new symbols in this length */
             bits[j as usize] = bits[j as usize].wrapping_sub(1)
         }
         i -= 1
@@ -1740,7 +1740,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     crate::stdlib::memcpy(
         (*htbl).bits.as_mut_ptr() as *mut libc::c_void,
         bits.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[crate::jmorecfg_h::UINT8; 17]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 17]>() as libc::c_ulong,
     );
     /* Return a list of the symbols sorted by code length */
     /* It's not real clear to me why we don't need to consider the codelength
@@ -1752,7 +1752,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
         j = 0 as i32;
         while j <= 255 as i32 {
             if codesize[j as usize] == i {
-                (*htbl).huffval[p as usize] = j as crate::jmorecfg_h::UINT8;
+                (*htbl).huffval[p as usize] = j as UINT8;
                 p += 1
             }
             j += 1
@@ -1766,16 +1766,16 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
  * Finish up a statistics-gathering pass and create the new Huffman tables.
  */
 
-unsafe extern "C" fn finish_pass_gather(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut htblptr: *mut *mut crate::jpeglib_h::JHUFF_TBL =
-        0 as *mut *mut crate::jpeglib_h::JHUFF_TBL;
-    let mut did_dc: [crate::jmorecfg_h::boolean; 4] = [0; 4];
-    let mut did_ac: [crate::jmorecfg_h::boolean; 4] = [0; 4];
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
+    let mut htblptr: *mut *mut JHUFF_TBL =
+        0 as *mut *mut JHUFF_TBL;
+    let mut did_dc: [boolean; 4] = [0; 4];
+    let mut did_ac: [boolean; 4] = [0; 4];
     /* It's important not to apply jpeg_gen_optimal_table more than once
      * per table, because it clobbers the input frequency counts!
      */
@@ -1786,12 +1786,12 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: crate::jpeglib_h::j_compress_
     crate::stdlib::memset(
         did_dc.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::jmorecfg_h::boolean; 4]>() as libc::c_ulong,
+        ::std::mem::size_of::<[boolean; 4]>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         did_ac.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::jmorecfg_h::boolean; 4]>() as libc::c_ulong,
+        ::std::mem::size_of::<[boolean; 4]>() as libc::c_ulong,
     );
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -1801,12 +1801,12 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: crate::jpeglib_h::j_compress_
             tbl = (*compptr).dc_tbl_no;
             if did_dc[tbl as usize] == 0 {
                 htblptr = &mut *(*cinfo).dc_huff_tbl_ptrs.as_mut_ptr().offset(tbl as isize)
-                    as *mut *mut crate::jpeglib_h::JHUFF_TBL;
+                    as *mut *mut JHUFF_TBL;
                 if (*htblptr).is_null() {
-                    *htblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_huff_table(
-                        cinfo as crate::jpeglib_h::j_common_ptr
-                            as *mut crate::jpeglib_h::jpeg_common_struct,
-                    ) as *mut crate::jpeglib_h::JHUFF_TBL
+                    *htblptr = jpeg_alloc_huff_table(
+                        cinfo as j_common_ptr
+                            as *mut jpeg_common_struct,
+                    ) as *mut JHUFF_TBL
                 }
                 jpeg_gen_optimal_table(cinfo, *htblptr, (*entropy).dc_count_ptrs[tbl as usize]);
                 did_dc[tbl as usize] = 1 as i32
@@ -1817,12 +1817,12 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: crate::jpeglib_h::j_compress_
             tbl = (*compptr).ac_tbl_no;
             if did_ac[tbl as usize] == 0 {
                 htblptr = &mut *(*cinfo).ac_huff_tbl_ptrs.as_mut_ptr().offset(tbl as isize)
-                    as *mut *mut crate::jpeglib_h::JHUFF_TBL;
+                    as *mut *mut JHUFF_TBL;
                 if (*htblptr).is_null() {
-                    *htblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_huff_table(
-                        cinfo as crate::jpeglib_h::j_common_ptr
-                            as *mut crate::jpeglib_h::jpeg_common_struct,
-                    ) as *mut crate::jpeglib_h::JHUFF_TBL
+                    *htblptr = jpeg_alloc_huff_table(
+                        cinfo as j_common_ptr
+                            as *mut jpeg_common_struct,
+                    ) as *mut JHUFF_TBL
                 }
                 jpeg_gen_optimal_table(cinfo, *htblptr, (*entropy).ac_count_ptrs[tbl as usize]);
                 did_ac[tbl as usize] = 1 as i32
@@ -1838,21 +1838,21 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: crate::jpeglib_h::j_compress_
  */
 
 unsafe extern "C" fn start_pass_huff(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut gather_statistics: crate::jmorecfg_h::boolean,
+    mut cinfo: j_compress_ptr,
+    mut gather_statistics: boolean,
 ) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     if gather_statistics != 0 {
         (*entropy).pub_0.finish_pass = Some(
-            finish_pass_gather as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
+            finish_pass_gather as unsafe extern "C" fn(_: j_compress_ptr) -> (),
         )
     } else {
         (*entropy).pub_0.finish_pass = Some(
-            finish_pass_huff as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
+            finish_pass_huff as unsafe extern "C" fn(_: j_compress_ptr) -> (),
         )
     }
     if (*cinfo).progressive_mode != 0 {
@@ -1865,36 +1865,36 @@ unsafe extern "C" fn start_pass_huff(
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_DC_first
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: *mut crate::jpeglib_h::JBLOCKROW,
+                            _: j_compress_ptr,
+                            _: *mut JBLOCKROW,
                         )
-                            -> crate::jmorecfg_h::boolean,
+                            -> boolean,
                 )
             } else {
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_AC_first
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: *mut crate::jpeglib_h::JBLOCKROW,
+                            _: j_compress_ptr,
+                            _: *mut JBLOCKROW,
                         )
-                            -> crate::jmorecfg_h::boolean,
+                            -> boolean,
                 )
             }
         } else if (*cinfo).Ss == 0 as i32 {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_DC_refine
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_compress_ptr,
-                        _: *mut crate::jpeglib_h::JBLOCKROW,
-                    ) -> crate::jmorecfg_h::boolean,
+                        _: j_compress_ptr,
+                        _: *mut JBLOCKROW,
+                    ) -> boolean,
             )
         } else {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_AC_refine
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_compress_ptr,
-                        _: *mut crate::jpeglib_h::JBLOCKROW,
-                    ) -> crate::jmorecfg_h::boolean,
+                        _: j_compress_ptr,
+                        _: *mut JBLOCKROW,
+                    ) -> boolean,
             );
             /* AC refinement needs a correction bit buffer */
             if (*entropy).bit_buffer.is_null() {
@@ -1904,7 +1904,7 @@ unsafe extern "C" fn start_pass_huff(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr,
+                    cinfo as j_common_ptr,
                     1 as i32,
                     (1000 as i32 as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
@@ -1919,17 +1919,17 @@ unsafe extern "C" fn start_pass_huff(
         (*entropy).pub_0.encode_mcu = Some(
             encode_mcu_gather
                 as unsafe extern "C" fn(
-                    _: crate::jpeglib_h::j_compress_ptr,
-                    _: *mut crate::jpeglib_h::JBLOCKROW,
-                ) -> crate::jmorecfg_h::boolean,
+                    _: j_compress_ptr,
+                    _: *mut JBLOCKROW,
+                ) -> boolean,
         )
     } else {
         (*entropy).pub_0.encode_mcu = Some(
             encode_mcu_huff
                 as unsafe extern "C" fn(
-                    _: crate::jpeglib_h::j_compress_ptr,
-                    _: *mut crate::jpeglib_h::JBLOCKROW,
-                ) -> crate::jmorecfg_h::boolean,
+                    _: j_compress_ptr,
+                    _: *mut JBLOCKROW,
+                ) -> boolean,
         )
     }
     ci = 0 as i32;
@@ -1943,7 +1943,7 @@ unsafe extern "C" fn start_pass_huff(
                 /* (make_c_derived_tbl does this in the other path) */
                 if tbl < 0 as i32 || tbl >= 4 as i32 {
                     (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JERR_NO_HUFF_TABLE as i32;
+                        JERR_NO_HUFF_TABLE as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                     Some(
                         (*(*cinfo).err)
@@ -1951,7 +1951,7 @@ unsafe extern "C" fn start_pass_huff(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr
+                        cinfo as j_common_ptr
                     );
                 }
                 /* Allocate and zero the statistics tables */
@@ -1963,7 +1963,7 @@ unsafe extern "C" fn start_pass_huff(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        cinfo as j_common_ptr,
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
                             .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
@@ -1994,7 +1994,7 @@ unsafe extern "C" fn start_pass_huff(
             if gather_statistics != 0 {
                 if tbl < 0 as i32 || tbl >= 4 as i32 {
                     (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JERR_NO_HUFF_TABLE as i32;
+                        JERR_NO_HUFF_TABLE as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                     Some(
                         (*(*cinfo).err)
@@ -2002,7 +2002,7 @@ unsafe extern "C" fn start_pass_huff(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr
+                        cinfo as j_common_ptr
                     );
                 }
                 if (*entropy).ac_count_ptrs[tbl as usize].is_null() {
@@ -2012,7 +2012,7 @@ unsafe extern "C" fn start_pass_huff(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        cinfo as j_common_ptr,
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
                             .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
@@ -2036,7 +2036,7 @@ unsafe extern "C" fn start_pass_huff(
         ci += 1
     }
     /* Initialize bit buffer to empty */
-    (*entropy).saved.put_buffer = 0 as i32 as crate::jmorecfg_h::INT32;
+    (*entropy).saved.put_buffer = 0 as i32 as INT32;
     (*entropy).saved.put_bits = 0 as i32;
     /* Initialize restart stuff */
     (*entropy).restarts_to_go = (*cinfo).restart_interval;
@@ -2047,7 +2047,7 @@ unsafe extern "C" fn start_pass_huff(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = 0 as *mut huff_entropy_encoder;
     let mut i: i32 = 0;
     entropy = Some(
@@ -2056,16 +2056,16 @@ pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: crate::jpeglib_h::j_compr
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<huff_entropy_encoder>() as libc::c_ulong,
     ) as huff_entropy_ptr;
-    (*cinfo).entropy = entropy as *mut crate::jpegint_h::jpeg_entropy_encoder;
+    (*cinfo).entropy = entropy as *mut jpeg_entropy_encoder;
     (*entropy).pub_0.start_pass = Some(
         start_pass_huff
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_compress_ptr,
-                _: crate::jmorecfg_h::boolean,
+                _: j_compress_ptr,
+                _: boolean,
             ) -> (),
     );
     /* Mark tables unallocated */

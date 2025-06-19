@@ -98,7 +98,7 @@ pub use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
 
 pub unsafe extern "C" fn silk_gains_quant(
     mut ind: *mut i8,
-    mut gain_Q16: *mut crate::opus_types_h::opus_int32,
+    mut gain_Q16: *mut opus_int32,
     mut prev_ind: *mut i8,
     conditional: i32,
     nb_subfr: i32,
@@ -113,10 +113,10 @@ pub unsafe extern "C" fn silk_gains_quant(
         *ind.offset(k as isize) = ((65536 as i32 * (64 as i32 - 1 as i32)
             / ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32))
             as i64
-            * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(*gain_Q16.offset(k as isize))
+            * (silk_lin2log(*gain_Q16.offset(k as isize))
                 - (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32))
-                as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
+                as opus_int16 as i64
+            >> 16 as i32) as opus_int32
             as i8;
         /* 3967 = 31 in Q7 */
         if (*ind.offset(k as isize) as i32) < *prev_ind as i32 {
@@ -186,8 +186,8 @@ pub unsafe extern "C" fn silk_gains_quant(
             /* Accumulate deltas */
             if *ind.offset(k as isize) as i32 > double_step_size_threshold {
                 *prev_ind = (*prev_ind as i32
-                    + (((*ind.offset(k as isize) as crate::opus_types_h::opus_uint32) << 1 as i32)
-                        as crate::opus_types_h::opus_int32
+                    + (((*ind.offset(k as isize) as opus_uint32) << 1 as i32)
+                        as opus_int32
                         - double_step_size_threshold)) as i8;
                 *prev_ind = silk_min_int(*prev_ind as i32, 64 as i32 - 1 as i32) as i8
             } else {
@@ -198,11 +198,11 @@ pub unsafe extern "C" fn silk_gains_quant(
             *fresh1 = (*fresh1 as i32 - -(4 as i32)) as i8
         }
         *gain_Q16.offset(k as isize) =
-            crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
+            silk_log2lin(silk_min_32(
                 ((65536 as i32 * ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32)
                     / (64 as i32 - 1 as i32)) as i64
-                    * *prev_ind as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * *prev_ind as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     + (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32),
                 3967 as i32,
             ));
@@ -214,7 +214,7 @@ pub unsafe extern "C" fn silk_gains_quant(
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_gains_dequant(
-    mut gain_Q16: *mut crate::opus_types_h::opus_int32,
+    mut gain_Q16: *mut opus_int32,
     mut ind: *const i8,
     mut prev_ind: *mut i8,
     conditional: i32,
@@ -238,8 +238,8 @@ pub unsafe extern "C" fn silk_gains_dequant(
             double_step_size_threshold = 2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
             if ind_tmp > double_step_size_threshold {
                 *prev_ind = (*prev_ind as i32
-                    + (((ind_tmp as crate::opus_types_h::opus_uint32) << 1 as i32)
-                        as crate::opus_types_h::opus_int32
+                    + (((ind_tmp as opus_uint32) << 1 as i32)
+                        as opus_int32
                         - double_step_size_threshold)) as i8
             } else {
                 *prev_ind = (*prev_ind as i32 + ind_tmp) as i8
@@ -262,11 +262,11 @@ pub unsafe extern "C" fn silk_gains_dequant(
         } as i8;
         /* 3967 = 31 in Q7 */
         *gain_Q16.offset(k as isize) =
-            crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
+            silk_log2lin(silk_min_32(
                 ((65536 as i32 * ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32)
                     / (64 as i32 - 1 as i32)) as i64
-                    * *prev_ind as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * *prev_ind as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     + (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32),
                 3967 as i32,
             ));
@@ -398,16 +398,16 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_gains_ID(
     mut ind: *const i8,
     nb_subfr: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /* I    number of subframes                         */ {
     let mut k: i32 = 0;
-    let mut gainsID: crate::opus_types_h::opus_int32 = 0;
+    let mut gainsID: opus_int32 = 0;
     gainsID = 0 as i32;
     k = 0 as i32;
     while k < nb_subfr {
         gainsID = *ind.offset(k as isize) as i32
-            + ((gainsID as crate::opus_types_h::opus_uint32) << 8 as i32)
-                as crate::opus_types_h::opus_int32;
+            + ((gainsID as opus_uint32) << 8 as i32)
+                as opus_int32;
         k += 1
     }
     return gainsID;

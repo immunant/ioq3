@@ -156,9 +156,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_interpolate(
-    mut xi: *mut crate::opus_types_h::opus_int16,
-    mut x0: *const crate::opus_types_h::opus_int16,
-    mut x1: *const crate::opus_types_h::opus_int16,
+    mut xi: *mut opus_int16,
+    mut x0: *const opus_int16,
+    mut x1: *const opus_int16,
     ifact_Q2: i32,
     d: i32,
 )
@@ -169,10 +169,10 @@ pub unsafe extern "C" fn silk_interpolate(
     while i < d {
         *xi.offset(i as isize) = (*x0.offset(i as isize) as i32
             + ((*x1.offset(i as isize) as i32 - *x0.offset(i as isize) as i32)
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * ifact_Q2 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                >> 2 as i32)) as crate::opus_types_h::opus_int16;
+                as opus_int16
+                as opus_int32
+                * ifact_Q2 as opus_int16 as opus_int32
+                >> 2 as i32)) as opus_int16;
         i += 1
     }
 }

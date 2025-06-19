@@ -493,36 +493,36 @@ POLYGON TO BOX SIDE PROJECTION
 ===================================================================================
 */
 
-static mut sky_clip: [crate::src::qcommon::q_shared::vec3_t; 6] = [
+static mut sky_clip: [vec3_t; 6] = [
     [
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as vec_t,
+        1 as i32 as vec_t,
+        0 as i32 as vec_t,
     ],
     [
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as vec_t,
+        -(1 as i32) as vec_t,
+        0 as i32 as vec_t,
     ],
     [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as vec_t,
+        -(1 as i32) as vec_t,
+        1 as i32 as vec_t,
     ],
     [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
+        1 as i32 as vec_t,
     ],
     [
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ],
     [
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        -(1 as i32) as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ],
 ];
 
@@ -541,12 +541,12 @@ AddSkyPolygon
 
 unsafe extern "C" fn AddSkyPolygon(
     mut nump: i32,
-    mut vecs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut vecs: *mut vec_t,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut av: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut v: vec3_t = [0.; 3];
+    let mut av: vec3_t = [0.; 3];
     let mut s: f32 = 0.;
     let mut t: f32 = 0.;
     let mut dv: f32 = 0.;
@@ -562,9 +562,9 @@ unsafe extern "C" fn AddSkyPolygon(
         [-(2 as i32), 1 as i32, -(3 as i32)],
     ];
     // decide which face it maps to
-    v[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
-    v[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
-    v[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
+    v[0 as i32 as usize] = vec3_origin[0 as i32 as usize];
+    v[1 as i32 as usize] = vec3_origin[1 as i32 as usize];
+    v[2 as i32 as usize] = vec3_origin[2 as i32 as usize];
     i = 0 as i32;
     vp = vecs;
     while i < nump {
@@ -575,11 +575,11 @@ unsafe extern "C" fn AddSkyPolygon(
         vp = vp.offset(3 as i32 as isize)
     }
     av[0 as i32 as usize] =
-        crate::stdlib::fabs(v[0 as i32 as usize] as f64) as crate::src::qcommon::q_shared::vec_t;
+        crate::stdlib::fabs(v[0 as i32 as usize] as f64) as vec_t;
     av[1 as i32 as usize] =
-        crate::stdlib::fabs(v[1 as i32 as usize] as f64) as crate::src::qcommon::q_shared::vec_t;
+        crate::stdlib::fabs(v[1 as i32 as usize] as f64) as vec_t;
     av[2 as i32 as usize] =
-        crate::stdlib::fabs(v[2 as i32 as usize] as f64) as crate::src::qcommon::q_shared::vec_t;
+        crate::stdlib::fabs(v[2 as i32 as usize] as f64) as vec_t;
     if av[0 as i32 as usize] > av[1 as i32 as usize]
         && av[0 as i32 as usize] > av[2 as i32 as usize]
     {
@@ -648,26 +648,26 @@ ClipSkyPolygon
 
 unsafe extern "C" fn ClipSkyPolygon(
     mut nump: i32,
-    mut vecs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut vecs: *mut vec_t,
     mut stage: i32,
 ) {
     let mut norm: *mut f32 = 0 as *mut f32;
     let mut v: *mut f32 = 0 as *mut f32;
-    let mut front: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut back: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut front: qboolean = qfalse;
+    let mut back: qboolean = qfalse;
     let mut d: f32 = 0.;
     let mut e: f32 = 0.;
     let mut dists: [f32; 64] = [0.; 64];
     let mut sides: [i32; 64] = [0; 64];
-    let mut newv: [[crate::src::qcommon::q_shared::vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
+    let mut newv: [[vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
     let mut newc: [i32; 2] = [0; 2];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     if nump > 64 as i32 - 2 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"ClipSkyPolygon: MAX_CLIP_VERTS\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -676,7 +676,7 @@ unsafe extern "C" fn ClipSkyPolygon(
         AddSkyPolygon(nump, vecs);
         return;
     }
-    back = crate::src::qcommon::q_shared::qfalse;
+    back = qfalse;
     front = back;
     norm = sky_clip[stage as usize].as_mut_ptr();
     i = 0 as i32;
@@ -686,10 +686,10 @@ unsafe extern "C" fn ClipSkyPolygon(
             + *v.offset(1 as i32 as isize) * *norm.offset(1 as i32 as isize)
             + *v.offset(2 as i32 as isize) * *norm.offset(2 as i32 as isize);
         if d > 0.1f32 {
-            front = crate::src::qcommon::q_shared::qtrue;
+            front = qtrue;
             sides[i as usize] = 0 as i32
         } else if d < -0.1f32 {
-            back = crate::src::qcommon::q_shared::qtrue;
+            back = qtrue;
             sides[i as usize] = 1 as i32
         } else {
             sides[i as usize] = 2 as i32
@@ -812,8 +812,8 @@ RB_ClipSkyPolygons
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_ClipSkyPolygons(mut input: *mut crate::tr_local_h::shaderCommands_t) {
-    let mut p: [crate::src::qcommon::q_shared::vec3_t; 5] = [[0.; 3]; 5]; // need one extra point for clipping
+pub unsafe extern "C" fn RB_ClipSkyPolygons(mut input: *mut shaderCommands_t) {
+    let mut p: [vec3_t; 5] = [[0.; 3]; 5]; // need one extra point for clipping
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     ClearSkyBox();
@@ -823,19 +823,19 @@ pub unsafe extern "C" fn RB_ClipSkyPolygons(mut input: *mut crate::tr_local_h::s
         while j < 3 as i32 {
             p[j as usize][0 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][0 as i32 as usize]
-                - crate::src::renderergl1::tr_backend::backEnd
+                - backEnd
                     .viewParms
                     .or
                     .origin[0 as i32 as usize];
             p[j as usize][1 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][1 as i32 as usize]
-                - crate::src::renderergl1::tr_backend::backEnd
+                - backEnd
                     .viewParms
                     .or
                     .origin[1 as i32 as usize];
             p[j as usize][2 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][2 as i32 as usize]
-                - crate::src::renderergl1::tr_backend::backEnd
+                - backEnd
                     .viewParms
                     .or
                     .origin[2 as i32 as usize];
@@ -863,7 +863,7 @@ unsafe extern "C" fn MakeSkyVec(
     mut t: f32,
     mut axis: i32,
     mut outSt: *mut f32,
-    mut outXYZ: *mut crate::src::qcommon::q_shared::vec_t,
+    mut outXYZ: *mut vec_t,
 ) {
     // 1 = s, 2 = t, 3 = 2048
     static mut st_to_vec: [[i32; 3]; 6] = [
@@ -874,11 +874,11 @@ unsafe extern "C" fn MakeSkyVec(
         [-(2 as i32), -(1 as i32), 3 as i32],
         [2 as i32, -(1 as i32), -(3 as i32)],
     ]; // div sqrt(3)
-    let mut b: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut b: vec3_t = [0.; 3];
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut boxSize: f32 = 0.;
-    boxSize = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as f64 / 1.75f64) as f32;
+    boxSize = (backEnd.viewParms.zFar as f64 / 1.75f64) as f32;
     b[0 as i32 as usize] = s * boxSize;
     b[1 as i32 as usize] = t * boxSize;
     b[2 as i32 as usize] = boxSize;
@@ -914,45 +914,45 @@ unsafe extern "C" fn MakeSkyVec(
 
 static mut sky_texorder: [i32; 6] = [0 as i32, 2 as i32, 1 as i32, 3 as i32, 4 as i32, 5 as i32];
 
-static mut s_skyPoints: [[crate::src::qcommon::q_shared::vec3_t; 9]; 9] = [[[0.; 3]; 9]; 9];
+static mut s_skyPoints: [[vec3_t; 9]; 9] = [[[0.; 3]; 9]; 9];
 
 static mut s_skyTexCoords: [[[f32; 2]; 9]; 9] = [[[0.; 2]; 9]; 9];
 
 unsafe extern "C" fn DrawSkySide(
-    mut image: *mut crate::tr_common_h::image_s,
+    mut image: *mut image_s,
     mut mins: *const i32,
     mut maxs: *const i32,
 ) {
     let mut s: i32 = 0;
     let mut t: i32 = 0;
-    crate::src::renderergl1::tr_backend::GL_Bind(image as *mut crate::tr_common_h::image_s);
+    GL_Bind(image as *mut image_s);
     t = *mins.offset(1 as i32 as isize) + 8 as i32 / 2 as i32;
     while t < *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
-        crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-            0x5 as i32 as crate::stdlib::GLenum,
+        qglBegin.expect("non-null function pointer")(
+            0x5 as i32 as GLenum,
         );
         s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
         while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
-            crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
+            qglTexCoord2fv.expect("non-null function pointer")(
                 s_skyTexCoords[t as usize][s as usize].as_mut_ptr(),
             );
-            crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+            qglVertex3fv.expect("non-null function pointer")(
                 s_skyPoints[t as usize][s as usize].as_mut_ptr(),
             );
-            crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
+            qglTexCoord2fv.expect("non-null function pointer")(
                 s_skyTexCoords[(t + 1 as i32) as usize][s as usize].as_mut_ptr(),
             );
-            crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+            qglVertex3fv.expect("non-null function pointer")(
                 s_skyPoints[(t + 1 as i32) as usize][s as usize].as_mut_ptr(),
             );
             s += 1
         }
-        crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
+        qglEnd.expect("non-null function pointer")();
         t += 1
     }
 }
 
-unsafe extern "C" fn DrawSkyBox(mut shader: *mut crate::tr_local_h::shader_t) {
+unsafe extern "C" fn DrawSkyBox(mut shader: *mut shader_t) {
     let mut i: i32 = 0;
     sky_min = 0 as i32 as f32;
     sky_max = 1 as i32 as f32;
@@ -1041,11 +1041,11 @@ unsafe extern "C" fn DrawSkyBox(mut shader: *mut crate::tr_local_h::shader_t) {
 unsafe extern "C" fn FillCloudySkySide(
     mut mins: *const i32,
     mut maxs: *const i32,
-    mut addIndexes: crate::src::qcommon::q_shared::qboolean,
+    mut addIndexes: qboolean,
 ) {
     let mut s: i32 = 0;
     let mut t: i32 = 0;
-    let mut vertexStart: i32 = crate::src::renderergl1::tr_shade::tess.numVertexes;
+    let mut vertexStart: i32 = tess.numVertexes;
     let mut tHeight: i32 = 0;
     let mut sWidth: i32 = 0;
     tHeight = *maxs.offset(1 as i32 as isize) - *mins.offset(1 as i32 as isize) + 1 as i32;
@@ -1054,39 +1054,39 @@ unsafe extern "C" fn FillCloudySkySide(
     while t <= *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
         s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
         while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
-            crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize] =
+            tess.xyz
+                [tess.numVertexes as usize][0 as i32 as usize] =
                 s_skyPoints[t as usize][s as usize][0 as i32 as usize]
-                    + crate::src::renderergl1::tr_backend::backEnd
+                    + backEnd
                         .viewParms
                         .or
                         .origin[0 as i32 as usize];
-            crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][1 as i32 as usize] =
+            tess.xyz
+                [tess.numVertexes as usize][1 as i32 as usize] =
                 s_skyPoints[t as usize][s as usize][1 as i32 as usize]
-                    + crate::src::renderergl1::tr_backend::backEnd
+                    + backEnd
                         .viewParms
                         .or
                         .origin[1 as i32 as usize];
-            crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][2 as i32 as usize] =
+            tess.xyz
+                [tess.numVertexes as usize][2 as i32 as usize] =
                 s_skyPoints[t as usize][s as usize][2 as i32 as usize]
-                    + crate::src::renderergl1::tr_backend::backEnd
+                    + backEnd
                         .viewParms
                         .or
                         .origin[2 as i32 as usize];
-            crate::src::renderergl1::tr_shade::tess.texCoords
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize]
+            tess.texCoords
+                [tess.numVertexes as usize][0 as i32 as usize]
                 [0 as i32 as usize] = s_skyTexCoords[t as usize][s as usize][0 as i32 as usize];
-            crate::src::renderergl1::tr_shade::tess.texCoords
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize]
+            tess.texCoords
+                [tess.numVertexes as usize][0 as i32 as usize]
                 [1 as i32 as usize] = s_skyTexCoords[t as usize][s as usize][1 as i32 as usize];
-            crate::src::renderergl1::tr_shade::tess.numVertexes += 1;
-            if crate::src::renderergl1::tr_shade::tess.numVertexes >= 1000 as i32 {
-                crate::src::renderergl1::tr_main::ri
+            tess.numVertexes += 1;
+            if tess.numVertexes >= 1000 as i32 {
+                ri
                     .Error
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::ERR_DROP as i32,
+                    ERR_DROP as i32,
                     b"SHADER_MAX_VERTEXES hit in FillCloudySkySide()\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -1101,31 +1101,31 @@ unsafe extern "C" fn FillCloudySkySide(
         while t < tHeight - 1 as i32 {
             s = 0 as i32;
             while s < sWidth - 1 as i32 {
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + t * sWidth) as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + (t + 1 as i32) * sWidth) as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as i32 + t * sWidth) as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + (t + 1 as i32) * sWidth) as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
+                tess.indexes
+                    [tess.numIndexes as usize] =
+                    (vertexStart + s + t * sWidth) as glIndex_t;
+                tess.numIndexes += 1;
+                tess.indexes
+                    [tess.numIndexes as usize] =
+                    (vertexStart + s + (t + 1 as i32) * sWidth) as glIndex_t;
+                tess.numIndexes += 1;
+                tess.indexes
+                    [tess.numIndexes as usize] =
+                    (vertexStart + s + 1 as i32 + t * sWidth) as glIndex_t;
+                tess.numIndexes += 1;
+                tess.indexes
+                    [tess.numIndexes as usize] =
+                    (vertexStart + s + (t + 1 as i32) * sWidth) as glIndex_t;
+                tess.numIndexes += 1;
+                tess.indexes
+                    [tess.numIndexes as usize] =
                     (vertexStart + s + 1 as i32 + (t + 1 as i32) * sWidth)
-                        as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [crate::src::renderergl1::tr_shade::tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as i32 + t * sWidth) as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.numIndexes += 1;
+                        as glIndex_t;
+                tess.numIndexes += 1;
+                tess.indexes
+                    [tess.numIndexes as usize] =
+                    (vertexStart + s + 1 as i32 + t * sWidth) as glIndex_t;
+                tess.numIndexes += 1;
                 s += 1
             }
             t += 1
@@ -1133,7 +1133,7 @@ unsafe extern "C" fn FillCloudySkySide(
     };
 }
 
-unsafe extern "C" fn FillCloudBox(mut _shader: *const crate::tr_local_h::shader_t, mut stage: i32) {
+unsafe extern "C" fn FillCloudBox(mut _shader: *const shader_t, mut stage: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 6 as i32 {
@@ -1166,22 +1166,22 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const crate::tr_local_h::shader_
                 || sky_mins[1 as i32 as usize][i as usize]
                     >= sky_maxs[1 as i32 as usize][i as usize])
             {
-                sky_mins_subd[0 as i32 as usize] = crate::src::renderergl1::tr_main::ri
+                sky_mins_subd[0 as i32 as usize] = ri
                     .ftol
                     .expect("non-null function pointer")(
                     sky_mins[0 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_mins_subd[1 as i32 as usize] = crate::src::renderergl1::tr_main::ri
+                sky_mins_subd[1 as i32 as usize] = ri
                     .ftol
                     .expect("non-null function pointer")(
                     sky_mins[1 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_maxs_subd[0 as i32 as usize] = crate::src::renderergl1::tr_main::ri
+                sky_maxs_subd[0 as i32 as usize] = ri
                     .ftol
                     .expect("non-null function pointer")(
                     sky_maxs[0 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_maxs_subd[1 as i32 as usize] = crate::src::renderergl1::tr_main::ri
+                sky_maxs_subd[1 as i32 as usize] = ri
                     .ftol
                     .expect("non-null function pointer")(
                     sky_maxs[1 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
@@ -1232,7 +1232,7 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const crate::tr_local_h::shader_
                 FillCloudySkySide(
                     sky_mins_subd.as_mut_ptr() as *const i32,
                     sky_maxs_subd.as_mut_ptr() as *const i32,
-                    (stage == 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean,
+                    (stage == 0 as i32) as i32 as qboolean,
                 );
             }
         }
@@ -1245,19 +1245,19 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const crate::tr_local_h::shader_
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut crate::tr_local_h::shaderCommands_t) {
+pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut shaderCommands_t) {
     let mut i: i32 = 0; // FIXME: not correct?
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
     shader = (*input).shader;
     sky_min = (1.0f64 / 256.0f32 as f64) as f32;
     sky_max = (255.0f64 / 256.0f32 as f64) as f32;
     // set up for drawing
-    crate::src::renderergl1::tr_shade::tess.numIndexes = 0 as i32;
-    crate::src::renderergl1::tr_shade::tess.numVertexes = 0 as i32;
+    tess.numIndexes = 0 as i32;
+    tess.numVertexes = 0 as i32;
     if (*shader).sky.cloudHeight != 0. {
         i = 0 as i32;
         while i < 8 as i32 {
-            if (*crate::src::renderergl1::tr_shade::tess
+            if (*tess
                 .xstages
                 .offset(i as isize))
             .is_null()
@@ -1283,11 +1283,11 @@ pub unsafe extern "C" fn R_InitSkyTexCoords(mut heightCloud: f32) {
     let mut p: f32 = 0.;
     let mut sRad: f32 = 0.;
     let mut tRad: f32 = 0.;
-    let mut skyVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut skyVec: vec3_t = [0.; 3];
+    let mut v: vec3_t = [0.; 3];
     // init zfar so MakeSkyVec works even though
     // a world hasn't been bounded
-    crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar = 1024 as i32 as f32;
+    backEnd.viewParms.zFar = 1024 as i32 as f32;
     i = 0 as i32;
     while i < 6 as i32 {
         t = 0 as i32;
@@ -1345,9 +1345,9 @@ pub unsafe extern "C" fn R_InitSkyTexCoords(mut heightCloud: f32) {
                 v[2 as i32 as usize] = skyVec[2 as i32 as usize] * p;
                 v[2 as i32 as usize] += radiusWorld;
                 // compute vector from world origin to intersection point 'v'
-                crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
-                sRad = crate::src::qcommon::q_math::Q_acos(v[0 as i32 as usize]);
-                tRad = crate::src::qcommon::q_math::Q_acos(v[1 as i32 as usize]);
+                VectorNormalize(v.as_mut_ptr());
+                sRad = Q_acos(v[0 as i32 as usize]);
+                tRad = Q_acos(v[1 as i32 as usize]);
                 s_cloudTexCoords[i as usize][t as usize][s as usize][0 as i32 as usize] = sRad;
                 s_cloudTexCoords[i as usize][t as usize][s as usize][1 as i32 as usize] = tRad;
                 s += 1
@@ -1398,61 +1398,61 @@ SKIES
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_DrawSun(mut scale: f32, mut shader: *mut crate::tr_local_h::shader_t) {
+pub unsafe extern "C" fn RB_DrawSun(mut scale: f32, mut shader: *mut shader_t) {
     let mut size: f32 = 0.; // div sqrt(3)
     let mut dist: f32 = 0.;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sunColor: [crate::src::qcommon::q_shared::byte; 4] = [
-        255 as i32 as crate::src::qcommon::q_shared::byte,
-        255 as i32 as crate::src::qcommon::q_shared::byte,
-        255 as i32 as crate::src::qcommon::q_shared::byte,
-        255 as i32 as crate::src::qcommon::q_shared::byte,
+    let mut origin: vec3_t = [0.; 3];
+    let mut vec1: vec3_t = [0.; 3];
+    let mut vec2: vec3_t = [0.; 3];
+    let mut sunColor: [byte; 4] = [
+        255 as i32 as byte,
+        255 as i32 as byte,
+        255 as i32 as byte,
+        255 as i32 as byte,
     ];
-    if crate::src::renderergl1::tr_backend::backEnd.skyRenderedThisView as u64 == 0 {
+    if backEnd.skyRenderedThisView as u64 == 0 {
         return;
     }
-    crate::src::sdl::sdl_glimp::qglLoadMatrixf.expect("non-null function pointer")(
-        crate::src::renderergl1::tr_backend::backEnd
+    qglLoadMatrixf.expect("non-null function pointer")(
+        backEnd
             .viewParms
             .world
             .modelMatrix
             .as_mut_ptr(),
     );
-    crate::src::sdl::sdl_glimp::qglTranslatef.expect("non-null function pointer")(
-        crate::src::renderergl1::tr_backend::backEnd
+    qglTranslatef.expect("non-null function pointer")(
+        backEnd
             .viewParms
             .or
             .origin[0 as i32 as usize],
-        crate::src::renderergl1::tr_backend::backEnd
+        backEnd
             .viewParms
             .or
             .origin[1 as i32 as usize],
-        crate::src::renderergl1::tr_backend::backEnd
+        backEnd
             .viewParms
             .or
             .origin[2 as i32 as usize],
     );
-    dist = (crate::src::renderergl1::tr_backend::backEnd.viewParms.zFar as f64 / 1.75f64) as f32;
+    dist = (backEnd.viewParms.zFar as f64 / 1.75f64) as f32;
     size = dist * scale;
     origin[0 as i32 as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] * dist;
+        tr.sunDirection[0 as i32 as usize] * dist;
     origin[1 as i32 as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize] * dist;
+        tr.sunDirection[1 as i32 as usize] * dist;
     origin[2 as i32 as usize] =
-        crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize] * dist;
-    crate::src::qcommon::q_math::PerpendicularVector(
+        tr.sunDirection[2 as i32 as usize] * dist;
+    PerpendicularVector(
         vec1.as_mut_ptr(),
-        crate::src::renderergl1::tr_main::tr
+        tr
             .sunDirection
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
     );
     CrossProduct(
-        crate::src::renderergl1::tr_main::tr
+        tr
             .sunDirection
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        vec1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
+        vec1.as_mut_ptr() as *const vec_t,
         vec2.as_mut_ptr(),
     );
     vec1[0 as i32 as usize] = vec1[0 as i32 as usize] * size;
@@ -1462,20 +1462,20 @@ pub unsafe extern "C" fn RB_DrawSun(mut scale: f32, mut shader: *mut crate::tr_l
     vec2[1 as i32 as usize] = vec2[1 as i32 as usize] * size;
     vec2[2 as i32 as usize] = vec2[2 as i32 as usize] * size;
     // farthest depth range
-    crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(1.0f64, 1.0f64);
-    crate::src::renderergl1::tr_shade::RB_BeginSurface(
-        shader as *mut crate::tr_local_h::shader_s,
+    qglDepthRange.expect("non-null function pointer")(1.0f64, 1.0f64);
+    RB_BeginSurface(
+        shader as *mut shader_s,
         0 as i32,
     );
-    crate::src::renderergl1::tr_surface::RB_AddQuadStamp(
+    RB_AddQuadStamp(
         origin.as_mut_ptr(),
         vec1.as_mut_ptr(),
         vec2.as_mut_ptr(),
         sunColor.as_mut_ptr(),
     );
-    crate::src::renderergl1::tr_shade::RB_EndSurface();
+    RB_EndSurface();
     // back to normal depth range
-    crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(0.0f64, 1.0f64);
+    qglDepthRange.expect("non-null function pointer")(0.0f64, 1.0f64);
 }
 /*
 ===========================================================================
@@ -1820,68 +1820,68 @@ Other things could be stuck in here, like birds in the sky, etc
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StageIteratorSky() {
-    if (*crate::src::renderergl1::tr_init::r_fastsky).integer != 0 {
+    if (*r_fastsky).integer != 0 {
         return;
     }
     // go through all the polygons and project them onto
     // the sky box to see which blocks on each side need
     // to be drawn
-    RB_ClipSkyPolygons(&mut crate::src::renderergl1::tr_shade::tess);
+    RB_ClipSkyPolygons(&mut tess);
     // r_showsky will let all the sky blocks be drawn in
     // front of everything to allow developers to see how
     // much sky is getting sucked in
-    if (*crate::src::renderergl1::tr_init::r_showsky).integer != 0 {
-        crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
+    if (*r_showsky).integer != 0 {
+        qglDepthRange.expect("non-null function pointer")(
             0.0f64, 0.0f64,
         );
     } else {
-        crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
+        qglDepthRange.expect("non-null function pointer")(
             1.0f64, 1.0f64,
         );
     }
     // draw the outer skybox
-    if !(*crate::src::renderergl1::tr_shade::tess.shader)
+    if !(*tess.shader)
         .sky
         .outerbox[0 as i32 as usize]
         .is_null()
-        && (*crate::src::renderergl1::tr_shade::tess.shader)
+        && (*tess.shader)
             .sky
             .outerbox[0 as i32 as usize]
-            != crate::src::renderergl1::tr_main::tr.defaultImage
+            != tr.defaultImage
     {
-        crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-            crate::src::renderergl1::tr_main::tr.identityLight,
-            crate::src::renderergl1::tr_main::tr.identityLight,
-            crate::src::renderergl1::tr_main::tr.identityLight,
+        qglColor3f.expect("non-null function pointer")(
+            tr.identityLight,
+            tr.identityLight,
+            tr.identityLight,
         );
-        crate::src::sdl::sdl_glimp::qglPushMatrix.expect("non-null function pointer")();
-        crate::src::renderergl1::tr_backend::GL_State(0 as i32 as libc::c_ulong);
-        crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_FRONT_SIDED as i32);
-        crate::src::sdl::sdl_glimp::qglTranslatef.expect("non-null function pointer")(
-            crate::src::renderergl1::tr_backend::backEnd
+        qglPushMatrix.expect("non-null function pointer")();
+        GL_State(0 as i32 as libc::c_ulong);
+        GL_Cull(CT_FRONT_SIDED as i32);
+        qglTranslatef.expect("non-null function pointer")(
+            backEnd
                 .viewParms
                 .or
                 .origin[0 as i32 as usize],
-            crate::src::renderergl1::tr_backend::backEnd
+            backEnd
                 .viewParms
                 .or
                 .origin[1 as i32 as usize],
-            crate::src::renderergl1::tr_backend::backEnd
+            backEnd
                 .viewParms
                 .or
                 .origin[2 as i32 as usize],
         );
-        DrawSkyBox(crate::src::renderergl1::tr_shade::tess.shader);
-        crate::src::sdl::sdl_glimp::qglPopMatrix.expect("non-null function pointer")();
+        DrawSkyBox(tess.shader);
+        qglPopMatrix.expect("non-null function pointer")();
     }
     // generate the vertexes for all the clouds, which will be drawn
     // by the generic shader routine
-    R_BuildCloudData(&mut crate::src::renderergl1::tr_shade::tess);
-    crate::src::renderergl1::tr_shade::RB_StageIteratorGeneric();
+    R_BuildCloudData(&mut tess);
+    RB_StageIteratorGeneric();
     // draw the inner skybox
     // back to normal depth range
-    crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(0.0f64, 1.0f64);
+    qglDepthRange.expect("non-null function pointer")(0.0f64, 1.0f64);
     // note that sky was drawn so we will draw a sun later
-    crate::src::renderergl1::tr_backend::backEnd.skyRenderedThisView =
-        crate::src::qcommon::q_shared::qtrue;
+    backEnd.skyRenderedThisView =
+        qtrue;
 }

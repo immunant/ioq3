@@ -205,13 +205,13 @@ pub type my_cquantize_ptr = *mut my_cquantizer;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_cquantizer {
-    pub pub_0: crate::jpegint_h::jpeg_color_quantizer,
-    pub sv_colormap: crate::jpeglib_h::JSAMPARRAY,
+    pub pub_0: jpeg_color_quantizer,
+    pub sv_colormap: JSAMPARRAY,
     pub desired: i32,
     pub histogram: hist3d,
-    pub needs_zeroed: crate::jmorecfg_h::boolean,
+    pub needs_zeroed: boolean,
     pub fserrors: FSERRPTR,
-    pub on_odd_row: crate::jmorecfg_h::boolean,
+    pub on_odd_row: boolean,
     pub error_limiter: *mut i32,
 }
 /* use 'int' for calculation temps */
@@ -242,7 +242,7 @@ pub type FSERRPTR = *mut FSERROR;
  * segment to hold the error array; so it is allocated with alloc_large.
  */
 
-pub type FSERROR = crate::jmorecfg_h::INT16;
+pub type FSERROR = INT16;
 /* type for the 2nd-level pointers */
 
 pub type hist3d = *mut hist2d;
@@ -253,7 +253,7 @@ pub type hist2d = *mut hist1d;
 
 pub type hist1d = [histcell; 32];
 
-pub type histcell = crate::jmorecfg_h::UINT16;
+pub type histcell = UINT16;
 
 pub type boxptr = *mut box_0;
 
@@ -266,7 +266,7 @@ pub struct box_0 {
     pub c1max: i32,
     pub c2min: i32,
     pub c2max: i32,
-    pub volume: crate::jmorecfg_h::INT32,
+    pub volume: INT32,
     pub colorcount: isize,
 }
 /* histogram cell; prefer an unsigned type */
@@ -285,18 +285,18 @@ pub type LOCFSERROR = i32;
  */
 
 unsafe extern "C" fn prescan_quantize(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut _output_buf: crate::jpeglib_h::JSAMPARRAY,
+    mut cinfo: j_decompress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut _output_buf: JSAMPARRAY,
     mut num_rows: i32,
 ) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
-    let mut ptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut ptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut histp: histptr = 0 as *mut histcell;
     let mut histogram: hist3d = (*cquantize).histogram;
     let mut row: i32 = 0;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut width: crate::jmorecfg_h::JDIMENSION = (*cinfo).output_width;
+    let mut col: JDIMENSION = 0;
+    let mut width: JDIMENSION = (*cinfo).output_width;
     row = 0 as i32;
     while row < num_rows {
         ptr = *input_buf.offset(row as isize);
@@ -346,7 +346,7 @@ unsafe extern "C" fn find_biggest_volume(mut boxlist: boxptr, mut numboxes: i32)
 /* Returns NULL if no splittable boxes remain */ {
     let mut boxp: boxptr = 0 as *mut box_0;
     let mut i: i32 = 0;
-    let mut maxv: crate::jmorecfg_h::INT32 = 0 as i32 as crate::jmorecfg_h::INT32;
+    let mut maxv: INT32 = 0 as i32 as INT32;
     let mut which: boxptr = 0 as boxptr;
     i = 0 as i32;
     boxp = boxlist;
@@ -361,7 +361,7 @@ unsafe extern "C" fn find_biggest_volume(mut boxlist: boxptr, mut numboxes: i32)
     return which;
 }
 
-unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, mut boxp: boxptr)
+unsafe extern "C" fn update_box(mut cinfo: j_decompress_ptr, mut boxp: boxptr)
 /* Shrink the min/max bounds of a box to enclose only nonzero elements, */
 /* and recompute its volume and population */
 {
@@ -377,9 +377,9 @@ unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, m
     let mut c1max: i32 = 0;
     let mut c2min: i32 = 0;
     let mut c2max: i32 = 0;
-    let mut dist0: crate::jmorecfg_h::INT32 = 0;
-    let mut dist1: crate::jmorecfg_h::INT32 = 0;
-    let mut dist2: crate::jmorecfg_h::INT32 = 0;
+    let mut dist0: INT32 = 0;
+    let mut dist1: INT32 = 0;
+    let mut dist2: INT32 = 0;
     let mut ccount: isize = 0;
     c0min = (*boxp).c0min;
     c0max = (*boxp).c0max;
@@ -543,9 +543,9 @@ unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, m
      * we have to shift back to JSAMPLE units to get consistent distances;
      * after which, we scale according to the selected distance scale factors.
      */
-    dist0 = ((c0max - c0min << 8 as i32 - 5 as i32) * 2 as i32) as crate::jmorecfg_h::INT32;
-    dist1 = ((c1max - c1min << 8 as i32 - 6 as i32) * 3 as i32) as crate::jmorecfg_h::INT32;
-    dist2 = ((c2max - c2min << 8 as i32 - 5 as i32) * 1 as i32) as crate::jmorecfg_h::INT32;
+    dist0 = ((c0max - c0min << 8 as i32 - 5 as i32) * 2 as i32) as INT32;
+    dist1 = ((c1max - c1min << 8 as i32 - 6 as i32) * 3 as i32) as INT32;
+    dist2 = ((c2max - c2min << 8 as i32 - 5 as i32) * 1 as i32) as INT32;
     (*boxp).volume = dist0 * dist0 + dist1 * dist1 + dist2 * dist2;
     /* Now scan remaining volume of box and compute population */
     ccount = 0 as i32 as isize;
@@ -572,7 +572,7 @@ unsafe extern "C" fn update_box(mut cinfo: crate::jpeglib_h::j_decompress_ptr, m
 }
 
 unsafe extern "C" fn median_cut(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut boxlist: boxptr,
     mut numboxes: i32,
     mut desired_colors: i32,
@@ -658,7 +658,7 @@ unsafe extern "C" fn median_cut(
 }
 
 unsafe extern "C" fn compute_color(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut boxp: boxptr,
     mut icolor: i32,
 )
@@ -723,15 +723,15 @@ unsafe extern "C" fn compute_color(
         c0 += 1
     }
     *(*(*cinfo).colormap.offset(0 as i32 as isize)).offset(icolor as isize) =
-        ((c0total + (total >> 1 as i32)) / total) as crate::jmorecfg_h::JSAMPLE;
+        ((c0total + (total >> 1 as i32)) / total) as JSAMPLE;
     *(*(*cinfo).colormap.offset(1 as i32 as isize)).offset(icolor as isize) =
-        ((c1total + (total >> 1 as i32)) / total) as crate::jmorecfg_h::JSAMPLE;
+        ((c1total + (total >> 1 as i32)) / total) as JSAMPLE;
     *(*(*cinfo).colormap.offset(2 as i32 as isize)).offset(icolor as isize) =
-        ((c2total + (total >> 1 as i32)) / total) as crate::jmorecfg_h::JSAMPLE;
+        ((c2total + (total >> 1 as i32)) / total) as JSAMPLE;
 }
 
 unsafe extern "C" fn select_colors(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut desired_colors: i32,
 )
 /* Master routine for color selection */
@@ -746,7 +746,7 @@ unsafe extern "C" fn select_colors(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         (desired_colors as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<box_0>() as libc::c_ulong),
@@ -770,14 +770,14 @@ unsafe extern "C" fn select_colors(
         i += 1
     }
     (*cinfo).actual_number_of_colors = numboxes;
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_QUANT_SELECTED as i32;
+    (*(*cinfo).err).msg_code = JTRC_QUANT_SELECTED as i32;
     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = numboxes;
     Some(
         (*(*cinfo).err)
             .emit_message
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr, 1 as i32);
+    .expect("non-null function pointer")(cinfo as j_common_ptr, 1 as i32);
 }
 /*
  * The next three routines implement inverse colormap filling.  They could
@@ -788,11 +788,11 @@ unsafe extern "C" fn select_colors(
  */
 
 unsafe extern "C" fn find_nearby_colors(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut minc0: i32,
     mut minc1: i32,
     mut minc2: i32,
-    mut colorlist: *mut crate::jmorecfg_h::JSAMPLE,
+    mut colorlist: *mut JSAMPLE,
 ) -> i32
 /* Locate the colormap entries close enough to an update box to be candidates
  * for the nearest entry to some cell(s) in the update box.  The update box
@@ -812,11 +812,11 @@ unsafe extern "C" fn find_nearby_colors(
     let mut i: i32 = 0;
     let mut x: i32 = 0;
     let mut ncolors: i32 = 0;
-    let mut minmaxdist: crate::jmorecfg_h::INT32 = 0;
-    let mut min_dist: crate::jmorecfg_h::INT32 = 0;
-    let mut max_dist: crate::jmorecfg_h::INT32 = 0;
-    let mut tdist: crate::jmorecfg_h::INT32 = 0;
-    let mut mindist: [crate::jmorecfg_h::INT32; 256] = [0; 256];
+    let mut minmaxdist: INT32 = 0;
+    let mut min_dist: INT32 = 0;
+    let mut max_dist: INT32 = 0;
+    let mut tdist: INT32 = 0;
+    let mut mindist: [INT32; 256] = [0; 256];
     /* Compute true coordinates of update box's upper corner and center.
      * Actually we compute the coordinates of the center of the upper-corner
      * histogram cell, which are the upper bounds of the volume we care about.
@@ -849,60 +849,60 @@ unsafe extern "C" fn find_nearby_colors(
         /* We compute the squared-c0-distance term, then add in the other two. */
         x = *(*(*cinfo).colormap.offset(0 as i32 as isize)).offset(i as isize) as i32;
         if x < minc0 {
-            tdist = ((x - minc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc0) * 2 as i32) as INT32;
             min_dist = tdist * tdist;
-            tdist = ((x - maxc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc0) * 2 as i32) as INT32;
             max_dist = tdist * tdist
         } else if x > maxc0 {
-            tdist = ((x - maxc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc0) * 2 as i32) as INT32;
             min_dist = tdist * tdist;
-            tdist = ((x - minc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc0) * 2 as i32) as INT32;
             max_dist = tdist * tdist
         } else {
             /* within cell range so no contribution to min_dist */
-            min_dist = 0 as i32 as crate::jmorecfg_h::INT32;
+            min_dist = 0 as i32 as INT32;
             if x <= centerc0 {
-                tdist = ((x - maxc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+                tdist = ((x - maxc0) * 2 as i32) as INT32;
                 max_dist = tdist * tdist
             } else {
-                tdist = ((x - minc0) * 2 as i32) as crate::jmorecfg_h::INT32;
+                tdist = ((x - minc0) * 2 as i32) as INT32;
                 max_dist = tdist * tdist
             }
         }
         x = *(*(*cinfo).colormap.offset(1 as i32 as isize)).offset(i as isize) as i32;
         if x < minc1 {
-            tdist = ((x - minc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc1) * 3 as i32) as INT32;
             min_dist += tdist * tdist;
-            tdist = ((x - maxc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc1) * 3 as i32) as INT32;
             max_dist += tdist * tdist
         } else if x > maxc1 {
-            tdist = ((x - maxc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc1) * 3 as i32) as INT32;
             min_dist += tdist * tdist;
-            tdist = ((x - minc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc1) * 3 as i32) as INT32;
             max_dist += tdist * tdist
         } else if x <= centerc1 {
-            tdist = ((x - maxc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc1) * 3 as i32) as INT32;
             max_dist += tdist * tdist
         } else {
-            tdist = ((x - minc1) * 3 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc1) * 3 as i32) as INT32;
             max_dist += tdist * tdist
         }
         x = *(*(*cinfo).colormap.offset(2 as i32 as isize)).offset(i as isize) as i32;
         if x < minc2 {
-            tdist = ((x - minc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc2) * 1 as i32) as INT32;
             min_dist += tdist * tdist;
-            tdist = ((x - maxc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc2) * 1 as i32) as INT32;
             max_dist += tdist * tdist
         } else if x > maxc2 {
-            tdist = ((x - maxc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc2) * 1 as i32) as INT32;
             min_dist += tdist * tdist;
-            tdist = ((x - minc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc2) * 1 as i32) as INT32;
             max_dist += tdist * tdist
         } else if x <= centerc2 {
-            tdist = ((x - maxc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - maxc2) * 1 as i32) as INT32;
             max_dist += tdist * tdist
         } else {
-            tdist = ((x - minc2) * 1 as i32) as crate::jmorecfg_h::INT32;
+            tdist = ((x - minc2) * 1 as i32) as INT32;
             max_dist += tdist * tdist
         }
         /* within cell range so no contribution to min_dist */
@@ -923,7 +923,7 @@ unsafe extern "C" fn find_nearby_colors(
         if mindist[i as usize] <= minmaxdist {
             let fresh5 = ncolors;
             ncolors = ncolors + 1;
-            *colorlist.offset(fresh5 as isize) = i as crate::jmorecfg_h::JSAMPLE
+            *colorlist.offset(fresh5 as isize) = i as JSAMPLE
         }
         i += 1
     }
@@ -931,13 +931,13 @@ unsafe extern "C" fn find_nearby_colors(
 }
 
 unsafe extern "C" fn find_best_colors(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut minc0: i32,
     mut minc1: i32,
     mut minc2: i32,
     mut numcolors: i32,
-    mut colorlist: *mut crate::jmorecfg_h::JSAMPLE,
-    mut bestcolor: *mut crate::jmorecfg_h::JSAMPLE,
+    mut colorlist: *mut JSAMPLE,
+    mut bestcolor: *mut JSAMPLE,
 )
 /* Find the closest colormap entry for each cell in the update box,
  * given the list of candidate colors prepared by find_nearby_colors.
@@ -951,19 +951,19 @@ unsafe extern "C" fn find_best_colors(
     let mut ic2: i32 = 0; /* initial distance values */
     let mut i: i32 = 0; /* current distance in inner loop */
     let mut icolor: i32 = 0; /* distance increments */
-    let mut bptr: *mut crate::jmorecfg_h::INT32 = 0 as *mut crate::jmorecfg_h::INT32; /* initial values for increments */
-    let mut cptr: *mut crate::jmorecfg_h::JSAMPLE = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut dist0: crate::jmorecfg_h::INT32 = 0;
-    let mut dist1: crate::jmorecfg_h::INT32 = 0;
-    let mut dist2: crate::jmorecfg_h::INT32 = 0;
-    let mut xx0: crate::jmorecfg_h::INT32 = 0;
-    let mut xx1: crate::jmorecfg_h::INT32 = 0;
-    let mut xx2: crate::jmorecfg_h::INT32 = 0;
-    let mut inc0: crate::jmorecfg_h::INT32 = 0;
-    let mut inc1: crate::jmorecfg_h::INT32 = 0;
-    let mut inc2: crate::jmorecfg_h::INT32 = 0;
+    let mut bptr: *mut INT32 = 0 as *mut INT32; /* initial values for increments */
+    let mut cptr: *mut JSAMPLE = 0 as *mut JSAMPLE;
+    let mut dist0: INT32 = 0;
+    let mut dist1: INT32 = 0;
+    let mut dist2: INT32 = 0;
+    let mut xx0: INT32 = 0;
+    let mut xx1: INT32 = 0;
+    let mut xx2: INT32 = 0;
+    let mut inc0: INT32 = 0;
+    let mut inc1: INT32 = 0;
+    let mut inc2: INT32 = 0;
     /* This array holds the distance to the nearest-so-far color for each cell */
-    let mut bestdist: [crate::jmorecfg_h::INT32; 128] = [0; 128];
+    let mut bestdist: [INT32; 128] = [0; 128];
     /* Initialize best-distance for each cell of the update box */
     bptr = bestdist.as_mut_ptr();
     i = ((1 as i32) << 5 as i32 - 3 as i32)
@@ -987,15 +987,15 @@ unsafe extern "C" fn find_best_colors(
         /* Compute (square of) distance from minc0/c1/c2 to this color */
         inc0 = ((minc0
             - *(*(*cinfo).colormap.offset(0 as i32 as isize)).offset(icolor as isize) as i32)
-            * 2 as i32) as crate::jmorecfg_h::INT32;
+            * 2 as i32) as INT32;
         dist0 = inc0 * inc0;
         inc1 = ((minc1
             - *(*(*cinfo).colormap.offset(1 as i32 as isize)).offset(icolor as isize) as i32)
-            * 3 as i32) as crate::jmorecfg_h::INT32;
+            * 3 as i32) as INT32;
         dist0 += inc1 * inc1;
         inc2 = ((minc2
             - *(*(*cinfo).colormap.offset(2 as i32 as isize)).offset(icolor as isize) as i32)
-            * 1 as i32) as crate::jmorecfg_h::INT32;
+            * 1 as i32) as INT32;
         dist0 += inc2 * inc2;
         /* Form the initial difference increments */
         inc0 = inc0 * (2 as i32 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as isize
@@ -1026,7 +1026,7 @@ unsafe extern "C" fn find_best_colors(
                 while ic2 >= 0 as i32 {
                     if dist2 < *bptr {
                         *bptr = dist2;
-                        *cptr = icolor as crate::jmorecfg_h::JSAMPLE
+                        *cptr = icolor as JSAMPLE
                     }
                     dist2 += xx2;
                     xx2 += (2 as i32
@@ -1055,7 +1055,7 @@ unsafe extern "C" fn find_best_colors(
 }
 
 unsafe extern "C" fn fill_inverse_cmap(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
     mut c0: i32,
     mut c1: i32,
     mut c2: i32,
@@ -1072,13 +1072,13 @@ unsafe extern "C" fn fill_inverse_cmap(
     let mut ic0: i32 = 0;
     let mut ic1: i32 = 0;
     let mut ic2: i32 = 0;
-    let mut cptr: *mut crate::jmorecfg_h::JSAMPLE = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut cptr: *mut JSAMPLE = 0 as *mut JSAMPLE;
     let mut cachep: histptr = 0 as *mut histcell;
     /* This array lists the candidate colormap indexes. */
-    let mut colorlist: [crate::jmorecfg_h::JSAMPLE; 256] = [0; 256]; /* number of candidate colors */
+    let mut colorlist: [JSAMPLE; 256] = [0; 256]; /* number of candidate colors */
     let mut numcolors: i32 = 0;
     /* This array holds the actually closest colormap index for each cell. */
-    let mut bestcolor: [crate::jmorecfg_h::JSAMPLE; 128] = [0; 128];
+    let mut bestcolor: [JSAMPLE; 128] = [0; 128];
     /* Convert cell coordinates to update box ID */
     c0 >>= 5 as i32 - 3 as i32;
     c1 >>= 6 as i32 - 3 as i32;
@@ -1138,24 +1138,24 @@ unsafe extern "C" fn fill_inverse_cmap(
  */
 
 unsafe extern "C" fn pass2_no_dither(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
+    mut cinfo: j_decompress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPARRAY,
     mut num_rows: i32,
 )
 /* This version performs no dithering */
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut cachep: histptr = 0 as *mut histcell;
     let mut c0: i32 = 0;
     let mut c1: i32 = 0;
     let mut c2: i32 = 0;
     let mut row: i32 = 0;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut width: crate::jmorecfg_h::JDIMENSION = (*cinfo).output_width;
+    let mut col: JDIMENSION = 0;
+    let mut width: JDIMENSION = (*cinfo).output_width;
     row = 0 as i32;
     while row < num_rows {
         inptr = *input_buf.offset(row as isize);
@@ -1183,7 +1183,7 @@ unsafe extern "C" fn pass2_no_dither(
             /* Now emit the colormap index for this cell */
             let fresh12 = outptr;
             outptr = outptr.offset(1);
-            *fresh12 = (*cachep as i32 - 1 as i32) as crate::jmorecfg_h::JSAMPLE;
+            *fresh12 = (*cachep as i32 - 1 as i32) as JSAMPLE;
             col = col.wrapping_sub(1)
         }
         row += 1
@@ -1191,9 +1191,9 @@ unsafe extern "C" fn pass2_no_dither(
 }
 
 unsafe extern "C" fn pass2_fs_dither(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
+    mut cinfo: j_decompress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPARRAY,
     mut num_rows: i32,
 )
 /* This version performs Floyd-Steinberg dithering */
@@ -1210,19 +1210,19 @@ unsafe extern "C" fn pass2_fs_dither(
     let mut bpreverr1: LOCFSERROR = 0;
     let mut bpreverr2: LOCFSERROR = 0;
     let mut errorptr: FSERRPTR = 0 as *mut FSERROR;
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut cachep: histptr = 0 as *mut histcell;
     let mut dir: i32 = 0;
     let mut dir3: i32 = 0;
     let mut row: i32 = 0;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut width: crate::jmorecfg_h::JDIMENSION = (*cinfo).output_width;
-    let mut range_limit: *mut crate::jmorecfg_h::JSAMPLE = (*cinfo).sample_range_limit;
+    let mut col: JDIMENSION = 0;
+    let mut width: JDIMENSION = (*cinfo).output_width;
+    let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit;
     let mut error_limit: *mut i32 = (*cquantize).error_limiter;
-    let mut colormap0: crate::jpeglib_h::JSAMPROW = *(*cinfo).colormap.offset(0 as i32 as isize);
-    let mut colormap1: crate::jpeglib_h::JSAMPROW = *(*cinfo).colormap.offset(1 as i32 as isize);
-    let mut colormap2: crate::jpeglib_h::JSAMPROW = *(*cinfo).colormap.offset(2 as i32 as isize);
+    let mut colormap0: JSAMPROW = *(*cinfo).colormap.offset(0 as i32 as isize);
+    let mut colormap1: JSAMPROW = *(*cinfo).colormap.offset(1 as i32 as isize);
+    let mut colormap2: JSAMPROW = *(*cinfo).colormap.offset(2 as i32 as isize);
     row = 0 as i32;
     while row < num_rows {
         inptr = *input_buf.offset(row as isize);
@@ -1302,7 +1302,7 @@ unsafe extern "C" fn pass2_fs_dither(
                 );
             }
             let mut pixcode: i32 = *cachep as i32 - 1 as i32;
-            *outptr = pixcode as crate::jmorecfg_h::JSAMPLE;
+            *outptr = pixcode as JSAMPLE;
             cur0 -= *colormap0.offset(pixcode as isize) as i32;
             cur1 -= *colormap1.offset(pixcode as isize) as i32;
             cur2 -= *colormap2.offset(pixcode as isize) as i32;
@@ -1386,7 +1386,7 @@ unsafe extern "C" fn pass2_fs_dither(
  * to Aaron Giles for this idea.
  */
 
-unsafe extern "C" fn init_error_limit(mut cinfo: crate::jpeglib_h::j_decompress_ptr)
+unsafe extern "C" fn init_error_limit(mut cinfo: j_decompress_ptr)
 /* Allocate and fill in the error_limiter table */
 {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr; /* so can index -MAXJSAMPLE .. +MAXJSAMPLE */
@@ -1399,7 +1399,7 @@ unsafe extern "C" fn init_error_limit(mut cinfo: crate::jpeglib_h::j_decompress_
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ((255 as i32 * 2 as i32 + 1 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
@@ -1437,7 +1437,7 @@ unsafe extern "C" fn init_error_limit(mut cinfo: crate::jpeglib_h::j_decompress_
  * Finish up at the end of each pass.
  */
 
-unsafe extern "C" fn finish_pass1(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn finish_pass1(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     /* Select the representative colors and fill in cinfo->colormap */
     (*cinfo).colormap = (*cquantize).sv_colormap;
@@ -1446,7 +1446,7 @@ unsafe extern "C" fn finish_pass1(mut cinfo: crate::jpeglib_h::j_decompress_ptr)
     (*cquantize).needs_zeroed = 1 as i32;
 }
 
-unsafe extern "C" fn finish_pass2(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn finish_pass2(mut _cinfo: j_decompress_ptr) {
     /* no work */
 }
 /*
@@ -1454,41 +1454,41 @@ unsafe extern "C" fn finish_pass2(mut _cinfo: crate::jpeglib_h::j_decompress_ptr
  */
 
 unsafe extern "C" fn start_pass_2_quant(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut is_pre_scan: crate::jmorecfg_h::boolean,
+    mut cinfo: j_decompress_ptr,
+    mut is_pre_scan: boolean,
 ) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
     let mut i: i32 = 0;
     /* Only F-S dithering or no dithering is supported. */
     /* If user asks for ordered dither, give him F-S. */
-    if (*cinfo).dither_mode as u32 != crate::jpeglib_h::JDITHER_NONE as i32 as u32 {
-        (*cinfo).dither_mode = crate::jpeglib_h::JDITHER_FS
+    if (*cinfo).dither_mode as u32 != JDITHER_NONE as i32 as u32 {
+        (*cinfo).dither_mode = JDITHER_FS
     }
     if is_pre_scan != 0 {
         /* Set up method pointers */
         (*cquantize).pub_0.color_quantize = Some(
             prescan_quantize
                 as unsafe extern "C" fn(
-                    _: crate::jpeglib_h::j_decompress_ptr,
-                    _: crate::jpeglib_h::JSAMPARRAY,
-                    _: crate::jpeglib_h::JSAMPARRAY,
+                    _: j_decompress_ptr,
+                    _: JSAMPARRAY,
+                    _: JSAMPARRAY,
                     _: i32,
                 ) -> (),
         );
         (*cquantize).pub_0.finish_pass =
-            Some(finish_pass1 as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ());
+            Some(finish_pass1 as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
         (*cquantize).needs_zeroed = 1 as i32
     /* Always zero histogram */
     } else {
         /* Set up method pointers */
-        if (*cinfo).dither_mode as u32 == crate::jpeglib_h::JDITHER_FS as i32 as u32 {
+        if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
             (*cquantize).pub_0.color_quantize = Some(
                 pass2_fs_dither
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_decompress_ptr,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: crate::jpeglib_h::JSAMPARRAY,
+                        _: j_decompress_ptr,
+                        _: JSAMPARRAY,
+                        _: JSAMPARRAY,
                         _: i32,
                     ) -> (),
             )
@@ -1496,19 +1496,19 @@ unsafe extern "C" fn start_pass_2_quant(
             (*cquantize).pub_0.color_quantize = Some(
                 pass2_no_dither
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_decompress_ptr,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: crate::jpeglib_h::JSAMPARRAY,
+                        _: j_decompress_ptr,
+                        _: JSAMPARRAY,
+                        _: JSAMPARRAY,
                         _: i32,
                     ) -> (),
             )
         }
         (*cquantize).pub_0.finish_pass =
-            Some(finish_pass2 as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ());
+            Some(finish_pass2 as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
         /* Make sure color count is acceptable */
         i = (*cinfo).actual_number_of_colors;
         if i < 1 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_QUANT_FEW_COLORS as i32;
+            (*(*cinfo).err).msg_code = JERR_QUANT_FEW_COLORS as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 1 as i32;
             Some(
                 (*(*cinfo).err)
@@ -1516,11 +1516,11 @@ unsafe extern "C" fn start_pass_2_quant(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         if i > 255 as i32 + 1 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_QUANT_MANY_COLORS as i32;
+            (*(*cinfo).err).msg_code = JERR_QUANT_MANY_COLORS as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 255 as i32 + 1 as i32;
             Some(
                 (*(*cinfo).err)
@@ -1528,11 +1528,11 @@ unsafe extern "C" fn start_pass_2_quant(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
-        if (*cinfo).dither_mode as u32 == crate::jpeglib_h::JDITHER_FS as i32 as u32 {
-            let mut arraysize: crate::stddef_h::size_t =
+        if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
+            let mut arraysize: size_t =
                 ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong)
                     .wrapping_mul(
                         (3 as i32 as libc::c_ulong)
@@ -1546,13 +1546,13 @@ unsafe extern "C" fn start_pass_2_quant(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr,
+                    cinfo as j_common_ptr,
                     1 as i32,
                     arraysize,
                 ) as FSERRPTR
             }
             /* Initialize the propagated errors to zero. */
-            crate::src::jpeg_8c::jutils::jzero_far(
+            jzero_far(
                 (*cquantize).fserrors as *mut libc::c_void,
                 arraysize,
             );
@@ -1567,7 +1567,7 @@ unsafe extern "C" fn start_pass_2_quant(
     if (*cquantize).needs_zeroed != 0 {
         i = 0 as i32;
         while i < (1 as i32) << 5 as i32 {
-            crate::src::jpeg_8c::jutils::jzero_far(
+            jzero_far(
                 *histogram.offset(i as isize) as *mut libc::c_void,
                 ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<histcell>() as libc::c_ulong),
@@ -1581,7 +1581,7 @@ unsafe extern "C" fn start_pass_2_quant(
  * Switch to a new external colormap between output passes.
  */
 
-unsafe extern "C" fn new_color_map_2_quant(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn new_color_map_2_quant(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     /* Reset the inverse color map */
     (*cquantize).needs_zeroed = 1 as i32;
@@ -1591,7 +1591,7 @@ unsafe extern "C" fn new_color_map_2_quant(mut cinfo: crate::jpeglib_h::j_decomp
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
     let mut cquantize: my_cquantize_ptr = 0 as *mut my_cquantizer; /* flag optional arrays not allocated */
     let mut i: i32 = 0;
     cquantize = Some(
@@ -1600,32 +1600,32 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<my_cquantizer>() as libc::c_ulong,
     ) as my_cquantize_ptr;
-    (*cinfo).cquantize = cquantize as *mut crate::jpegint_h::jpeg_color_quantizer;
+    (*cinfo).cquantize = cquantize as *mut jpeg_color_quantizer;
     (*cquantize).pub_0.start_pass = Some(
         start_pass_2_quant
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_decompress_ptr,
-                _: crate::jmorecfg_h::boolean,
+                _: j_decompress_ptr,
+                _: boolean,
             ) -> (),
     );
     (*cquantize).pub_0.new_color_map = Some(
-        new_color_map_2_quant as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> (),
+        new_color_map_2_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
     );
     (*cquantize).fserrors = 0 as FSERRPTR;
     (*cquantize).error_limiter = 0 as *mut i32;
     /* Make sure jdmaster didn't give me a case I can't handle */
     if (*cinfo).out_color_components != 3 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NOTIMPL as i32;
+        (*(*cinfo).err).msg_code = JERR_NOTIMPL as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Allocate the histogram/inverse colormap storage */
     (*cquantize).histogram = Some(
@@ -1634,7 +1634,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         (((1 as i32) << 5 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<hist2d>() as libc::c_ulong),
@@ -1648,7 +1648,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             1 as i32,
             ((((1 as i32) << 6 as i32) * ((1 as i32) << 5 as i32)) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<histcell>() as libc::c_ulong),
@@ -1665,7 +1665,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
         let mut desired: i32 = (*cinfo).desired_number_of_colors;
         /* Lower bound on # of colors ... somewhat arbitrary as long as > 0 */
         if desired < 8 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_QUANT_FEW_COLORS as i32;
+            (*(*cinfo).err).msg_code = JERR_QUANT_FEW_COLORS as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 8 as i32;
             Some(
                 (*(*cinfo).err)
@@ -1673,12 +1673,12 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         /* Make sure colormap indexes can be represented by JSAMPLEs */
         if desired > 255 as i32 + 1 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_QUANT_MANY_COLORS as i32;
+            (*(*cinfo).err).msg_code = JERR_QUANT_MANY_COLORS as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 255 as i32 + 1 as i32;
             Some(
                 (*(*cinfo).err)
@@ -1686,7 +1686,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         (*cquantize).sv_colormap = Some(
@@ -1695,33 +1695,33 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: crate::jpeglib_h::j_de
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             1 as i32,
-            desired as crate::jmorecfg_h::JDIMENSION,
-            3 as i32 as crate::jmorecfg_h::JDIMENSION,
+            desired as JDIMENSION,
+            3 as i32 as JDIMENSION,
         );
         (*cquantize).desired = desired
     } else {
-        (*cquantize).sv_colormap = 0 as crate::jpeglib_h::JSAMPARRAY
+        (*cquantize).sv_colormap = 0 as JSAMPARRAY
     }
     /* Only F-S dithering or no dithering is supported. */
     /* If user asks for ordered dither, give him F-S. */
-    if (*cinfo).dither_mode as u32 != crate::jpeglib_h::JDITHER_NONE as i32 as u32 {
-        (*cinfo).dither_mode = crate::jpeglib_h::JDITHER_FS
+    if (*cinfo).dither_mode as u32 != JDITHER_NONE as i32 as u32 {
+        (*cinfo).dither_mode = JDITHER_FS
     }
     /* Allocate Floyd-Steinberg workspace if necessary.
      * This isn't really needed until pass 2, but again it is FAR storage.
      * Although we will cope with a later change in dither_mode,
      * we do not promise to honor max_memory_to_use if dither_mode changes.
      */
-    if (*cinfo).dither_mode as u32 == crate::jpeglib_h::JDITHER_FS as i32 as u32 {
+    if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
         (*cquantize).fserrors = Some(
             (*(*cinfo).mem)
                 .alloc_large
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             1 as i32,
             ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong).wrapping_mul(
                 (3 as i32 as libc::c_ulong)

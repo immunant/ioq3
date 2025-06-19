@@ -181,27 +181,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut sv_voip: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_voip: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_voipProtocol: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_voipProtocol: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut svs: crate::server_h::serverStatic_t = crate::server_h::serverStatic_t {
-    initialized: crate::src::qcommon::q_shared::qfalse,
+pub static mut svs: serverStatic_t = serverStatic_t {
+    initialized: qfalse,
     time: 0,
     snapFlagServerBit: 0,
-    clients: 0 as *const crate::server_h::client_t as *mut crate::server_h::client_t,
+    clients: 0 as *const client_t as *mut client_t,
     numSnapshotEntities: 0,
     nextSnapshotEntities: 0,
-    snapshotEntities: 0 as *const crate::src::qcommon::q_shared::entityState_t
-        as *mut crate::src::qcommon::q_shared::entityState_t,
+    snapshotEntities: 0 as *const entityState_t
+        as *mut entityState_t,
     nextHeartbeatTime: 0,
-    challenges: [crate::server_h::challenge_t {
-        adr: crate::qcommon_h::netadr_t {
-            type_0: crate::qcommon_h::NA_BAD,
+    challenges: [challenge_t {
+        adr: netadr_t {
+            type_0: NA_BAD,
             ip: [0; 4],
             ip6: [0; 16],
             port: 0,
@@ -212,18 +212,18 @@ pub static mut svs: crate::server_h::serverStatic_t = crate::server_h::serverSta
         time: 0,
         pingTime: 0,
         firstTime: 0,
-        wasrefused: crate::src::qcommon::q_shared::qfalse,
-        connected: crate::src::qcommon::q_shared::qfalse,
+        wasrefused: qfalse,
+        connected: qfalse,
     }; 2048],
-    redirectAddress: crate::qcommon_h::netadr_t {
-        type_0: crate::qcommon_h::NA_BAD,
+    redirectAddress: netadr_t {
+        type_0: NA_BAD,
         ip: [0; 4],
         ip6: [0; 16],
         port: 0,
         scope_id: 0,
     },
-    authorizeAddress: crate::qcommon_h::netadr_t {
-        type_0: crate::qcommon_h::NA_BAD,
+    authorizeAddress: netadr_t {
+        type_0: NA_BAD,
         ip: [0; 4],
         ip6: [0; 16],
         port: 0,
@@ -234,9 +234,9 @@ pub static mut svs: crate::server_h::serverStatic_t = crate::server_h::serverSta
 // persistant server info
 #[no_mangle]
 
-pub static mut sv: crate::server_h::server_t = crate::server_h::server_t {
-    state: crate::server_h::SS_DEAD,
-    restarting: crate::src::qcommon::q_shared::qfalse,
+pub static mut sv: server_t = server_t {
+    state: SS_DEAD,
+    restarting: qfalse,
     serverId: 0,
     restartedServerId: 0,
     checksumFeed: 0,
@@ -245,24 +245,24 @@ pub static mut sv: crate::server_h::server_t = crate::server_h::server_t {
     timeResidual: 0,
     nextFrameTime: 0,
     configstrings: [0 as *const libc::c_char as *mut libc::c_char; 1024],
-    svEntities: [crate::server_h::svEntity_t {
-        worldSector: 0 as *const crate::server_h::worldSector_s
-            as *mut crate::server_h::worldSector_s,
-        nextEntityInWorldSector: 0 as *const crate::server_h::svEntity_s
-            as *mut crate::server_h::svEntity_s,
-        baseline: crate::src::qcommon::q_shared::entityState_t {
+    svEntities: [svEntity_t {
+        worldSector: 0 as *const worldSector_s
+            as *mut worldSector_s,
+        nextEntityInWorldSector: 0 as *const svEntity_s
+            as *mut svEntity_s,
+        baseline: entityState_t {
             number: 0,
             eType: 0,
             eFlags: 0,
-            pos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            pos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
                 trDelta: [0.; 3],
             },
-            apos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            apos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
@@ -300,12 +300,12 @@ pub static mut sv: crate::server_h::server_t = crate::server_h::server_t {
         snapshotCounter: 0,
     }; 1024],
     entityParsePoint: 0 as *const libc::c_char as *mut libc::c_char,
-    gentities: 0 as *const crate::g_public_h::sharedEntity_t
-        as *mut crate::g_public_h::sharedEntity_t,
+    gentities: 0 as *const sharedEntity_t
+        as *mut sharedEntity_t,
     gentitySize: 0,
     num_entities: 0,
-    gameClients: 0 as *const crate::src::qcommon::q_shared::playerState_t
-        as *mut crate::src::qcommon::q_shared::playerState_t,
+    gameClients: 0 as *const playerState_t
+        as *mut playerState_t,
     gameClientSize: 0,
     restartTime: 0,
     time: 0,
@@ -313,146 +313,146 @@ pub static mut sv: crate::server_h::server_t = crate::server_h::server_t {
 // local server
 #[no_mangle]
 
-pub static mut gvm: *mut crate::qcommon_h::vm_t =
-    0 as *const crate::qcommon_h::vm_t as *mut crate::qcommon_h::vm_t;
+pub static mut gvm: *mut vm_t =
+    0 as *const vm_t as *mut vm_t;
 // game virtual machine
 #[no_mangle]
 
-pub static mut sv_fps: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_fps: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // time rate for running non-clients
 #[no_mangle]
 
-pub static mut sv_timeout: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_timeout: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // seconds without any message
 #[no_mangle]
 
-pub static mut sv_zombietime: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_zombietime: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // seconds to sink messages after disconnect
 #[no_mangle]
 
-pub static mut sv_rconPassword: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_rconPassword: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // password for remote server commands
 #[no_mangle]
 
-pub static mut sv_privatePassword: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_privatePassword: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // password for the privateClient slots
 #[no_mangle]
 
-pub static mut sv_allowDownload: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_allowDownload: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxclients: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_maxclients: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_privateClients: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_privateClients: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // number of clients reserved for password
 #[no_mangle]
 
-pub static mut sv_hostname: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_hostname: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_master: [*mut crate::src::qcommon::q_shared::cvar_t; 5] =
-    [0 as *const crate::src::qcommon::q_shared::cvar_t
-        as *mut crate::src::qcommon::q_shared::cvar_t; 5];
+pub static mut sv_master: [*mut cvar_t; 5] =
+    [0 as *const cvar_t
+        as *mut cvar_t; 5];
 // master server ip address
 #[no_mangle]
 
-pub static mut sv_reconnectlimit: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_reconnectlimit: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // minimum seconds between connect messages
 #[no_mangle]
 
-pub static mut sv_showloss: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_showloss: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // report when usercmds are lost
 #[no_mangle]
 
-pub static mut sv_padPackets: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_padPackets: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // add nop bytes to messages
 #[no_mangle]
 
-pub static mut sv_killserver: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_killserver: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // menu system can set to 1 to shut server down
 #[no_mangle]
 
-pub static mut sv_mapname: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_mapname: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_mapChecksum: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_mapChecksum: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_serverid: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_serverid: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_minRate: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_minRate: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxRate: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_maxRate: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_dlRate: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_dlRate: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_minPing: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_minPing: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxPing: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_maxPing: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_gametype: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_gametype: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_pure: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_pure: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_floodProtect: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_floodProtect: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_lanForceRate: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_lanForceRate: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
 #[no_mangle]
 
-pub static mut sv_strictAuth: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_strictAuth: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_banFile: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut sv_banFile: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut serverBans: [crate::server_h::serverBan_t; 1024] = [crate::server_h::serverBan_t {
-    ip: crate::qcommon_h::netadr_t {
-        type_0: crate::qcommon_h::NA_BAD,
+pub static mut serverBans: [serverBan_t; 1024] = [serverBan_t {
+    ip: netadr_t {
+        type_0: NA_BAD,
         ip: [0; 4],
         ip6: [0; 16],
         port: 0,
         scope_id: 0,
     },
     subnet: 0,
-    isexception: crate::src::qcommon::q_shared::qfalse,
+    isexception: qfalse,
 }; 1024];
 #[no_mangle]
 
@@ -517,7 +517,7 @@ not have future snapshot_t executed before it is executed
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_AddServerCommand(
-    mut client: *mut crate::server_h::client_t,
+    mut client: *mut client_t,
     mut cmd: *const libc::c_char,
 ) {
     let mut index: i32 = 0;
@@ -528,7 +528,7 @@ pub unsafe extern "C" fn SV_AddServerCommand(
     //		return;
     //	}
     // do not send commands until the gamestate has been sent
-    if ((*client).state as u32) < crate::server_h::CS_PRIMED as i32 as u32 {
+    if ((*client).state as u32) < CS_PRIMED as i32 as u32 {
         return;
     }
     (*client).reliableSequence += 1;
@@ -537,31 +537,31 @@ pub unsafe extern "C" fn SV_AddServerCommand(
     // we check == instead of >= so a broadcast print added by SV_DropClient()
     // doesn't cause a recursive drop client
     if (*client).reliableSequence - (*client).reliableAcknowledge == 64 as i32 + 1 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"===== pending server commands =====\n\x00" as *const u8 as *const libc::c_char,
         );
         i = (*client).reliableAcknowledge + 1 as i32;
         while i <= (*client).reliableSequence {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"cmd %5d: %s\n\x00" as *const u8 as *const libc::c_char,
                 i,
                 (*client).reliableCommands[(i & 64 as i32 - 1 as i32) as usize].as_mut_ptr(),
             );
             i += 1
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"cmd %5d: %s\n\x00" as *const u8 as *const libc::c_char,
             i,
             cmd,
         );
-        crate::src::server::sv_client::SV_DropClient(
-            client as *mut crate::server_h::client_s,
+        SV_DropClient(
+            client as *mut client_s,
             b"Server command overflow\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     index = (*client).reliableSequence & 64 as i32 - 1 as i32;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*client).reliableCommands[index as usize].as_mut_ptr(),
         cmd,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -579,18 +579,18 @@ A NULL client will broadcast to all clients
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_SendServerCommand(
-    mut cl: *mut crate::server_h::client_t,
+    mut cl: *mut client_t,
     mut fmt: *const libc::c_char,
     mut args: ...
 ) {
     let mut argptr: ::std::ffi::VaListImpl;
-    let mut message: [crate::src::qcommon::q_shared::byte; 16384] = [0; 16384];
-    let mut client: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
+    let mut message: [byte; 16384] = [0; 16384];
+    let mut client: *mut client_t = 0 as *mut client_t;
     let mut j: i32 = 0;
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         message.as_mut_ptr() as *mut libc::c_char,
-        ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16384]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong,
         fmt,
         argptr.as_va_list(),
     );
@@ -608,14 +608,14 @@ pub unsafe extern "C" fn SV_SendServerCommand(
         return;
     }
     // hack to echo broadcast prints to console
-    if (*crate::src::qcommon::common::com_dedicated).integer != 0
+    if (*com_dedicated).integer != 0
         && crate::stdlib::strncmp(
             message.as_mut_ptr() as *mut libc::c_char,
             b"print\x00" as *const u8 as *const libc::c_char,
             5 as i32 as libc::c_ulong,
         ) == 0
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"broadcast: %s\n\x00" as *const u8 as *const libc::c_char,
             SV_ExpandNewlines(message.as_mut_ptr() as *mut libc::c_char),
         );
@@ -632,8 +632,8 @@ pub unsafe extern "C" fn SV_SendServerCommand(
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
-    static mut adr: [[crate::qcommon_h::netadr_t; 2]; 5] = [[crate::qcommon_h::netadr_t {
-        type_0: crate::qcommon_h::NA_BAD,
+    static mut adr: [[netadr_t; 2]; 5] = [[netadr_t {
+        type_0: NA_BAD,
         ip: [0; 4],
         ip6: [0; 16],
         port: 0,
@@ -642,12 +642,12 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut res: i32 = 0;
     let mut netenabled: i32 = 0;
-    netenabled = crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
+    netenabled = Cvar_VariableIntegerValue(
         b"net_enabled\x00" as *const u8 as *const libc::c_char,
     );
     // "dedicated 1" is for lan play, "dedicated 2" is for inet public play
-    if crate::src::qcommon::common::com_dedicated.is_null()
-        || (*crate::src::qcommon::common::com_dedicated).integer != 2 as i32
+    if com_dedicated.is_null()
+        || (*com_dedicated).integer != 2 as i32
         || netenabled & (0x1 as i32 | 0x2 as i32) == 0
     {
         return;
@@ -656,8 +656,8 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
     if svs.time < svs.nextHeartbeatTime {
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
-        (*crate::src::qcommon::common::com_gamename).string,
+    if Q_stricmp(
+        (*com_gamename).string,
         b"Quake3Arena\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -673,21 +673,21 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
             if (*sv_master[i as usize]).modified as u32 != 0
                 || svs.time > svs.masterResolveTime[i as usize]
             {
-                (*sv_master[i as usize]).modified = crate::src::qcommon::q_shared::qfalse;
+                (*sv_master[i as usize]).modified = qfalse;
                 svs.masterResolveTime[i as usize] =
                     svs.time + 24 as i32 * 60 as i32 * 60 as i32 * 1000 as i32;
                 if netenabled & 0x1 as i32 != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"Resolving %s (IPv4)\n\x00" as *const u8 as *const libc::c_char,
                         (*sv_master[i as usize]).string,
                     );
-                    res = crate::src::qcommon::net_chan::NET_StringToAdr(
+                    res = NET_StringToAdr(
                         (*sv_master[i as usize]).string,
                         &mut *(*adr.as_mut_ptr().offset(i as isize))
                             .as_mut_ptr()
                             .offset(0 as i32 as isize) as *mut _
-                            as *mut crate::qcommon_h::netadr_t,
-                        crate::qcommon_h::NA_IP,
+                            as *mut netadr_t,
+                        NA_IP,
                     );
                     if res == 2 as i32 {
                         // if no port was specified, use the default master port
@@ -695,32 +695,32 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                             crate::src::qcommon::q_shared::ShortSwap(27950 as i32 as i16) as u16
                     }
                     if res != 0 {
-                        crate::src::qcommon::common::Com_Printf(
+                        Com_Printf(
                             b"%s resolved to %s\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
-                            crate::src::qcommon::net_ip::NET_AdrToStringwPort(
-                                adr[i as usize][0 as i32 as usize] as crate::qcommon_h::netadr_t,
+                            NET_AdrToStringwPort(
+                                adr[i as usize][0 as i32 as usize] as netadr_t,
                             ),
                         );
                     } else {
-                        crate::src::qcommon::common::Com_Printf(
+                        Com_Printf(
                             b"%s has no IPv4 address.\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
                         );
                     }
                 }
                 if netenabled & 0x2 as i32 != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"Resolving %s (IPv6)\n\x00" as *const u8 as *const libc::c_char,
                         (*sv_master[i as usize]).string,
                     );
-                    res = crate::src::qcommon::net_chan::NET_StringToAdr(
+                    res = NET_StringToAdr(
                         (*sv_master[i as usize]).string,
                         &mut *(*adr.as_mut_ptr().offset(i as isize))
                             .as_mut_ptr()
                             .offset(1 as i32 as isize) as *mut _
-                            as *mut crate::qcommon_h::netadr_t,
-                        crate::qcommon_h::NA_IP6,
+                            as *mut netadr_t,
+                        NA_IP6,
                     );
                     if res == 2 as i32 {
                         // if no port was specified, use the default master port
@@ -728,15 +728,15 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                             crate::src::qcommon::q_shared::ShortSwap(27950 as i32 as i16) as u16
                     }
                     if res != 0 {
-                        crate::src::qcommon::common::Com_Printf(
+                        Com_Printf(
                             b"%s resolved to %s\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
-                            crate::src::qcommon::net_ip::NET_AdrToStringwPort(
-                                adr[i as usize][1 as i32 as usize] as crate::qcommon_h::netadr_t,
+                            NET_AdrToStringwPort(
+                                adr[i as usize][1 as i32 as usize] as netadr_t,
                             ),
                         );
                     } else {
-                        crate::src::qcommon::common::Com_Printf(
+                        Com_Printf(
                             b"%s has no IPv6 address.\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
                         );
@@ -744,32 +744,32 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                 }
             }
             if !(adr[i as usize][0 as i32 as usize].type_0 as u32
-                == crate::qcommon_h::NA_BAD as i32 as u32
+                == NA_BAD as i32 as u32
                 && adr[i as usize][1 as i32 as usize].type_0 as u32
-                    == crate::qcommon_h::NA_BAD as i32 as u32)
+                    == NA_BAD as i32 as u32)
             {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"Sending heartbeat to %s\n\x00" as *const u8 as *const libc::c_char,
                     (*sv_master[i as usize]).string,
                 );
                 // this command should be changed if the server info / status format
                 // ever incompatably changes
                 if adr[i as usize][0 as i32 as usize].type_0 as u32
-                    != crate::qcommon_h::NA_BAD as i32 as u32
+                    != NA_BAD as i32 as u32
                 {
-                    crate::src::qcommon::net_chan::NET_OutOfBandPrint(
-                        crate::qcommon_h::NS_SERVER,
-                        adr[i as usize][0 as i32 as usize] as crate::qcommon_h::netadr_t,
+                    NET_OutOfBandPrint(
+                        NS_SERVER,
+                        adr[i as usize][0 as i32 as usize] as netadr_t,
                         b"heartbeat %s\n\x00" as *const u8 as *const libc::c_char,
                         message,
                     );
                 }
                 if adr[i as usize][1 as i32 as usize].type_0 as u32
-                    != crate::qcommon_h::NA_BAD as i32 as u32
+                    != NA_BAD as i32 as u32
                 {
-                    crate::src::qcommon::net_chan::NET_OutOfBandPrint(
-                        crate::qcommon_h::NS_SERVER,
-                        adr[i as usize][1 as i32 as usize] as crate::qcommon_h::netadr_t,
+                    NET_OutOfBandPrint(
+                        NS_SERVER,
+                        adr[i as usize][1 as i32 as usize] as netadr_t,
                         b"heartbeat %s\n\x00" as *const u8 as *const libc::c_char,
                         message,
                     );
@@ -799,29 +799,29 @@ pub unsafe extern "C" fn SV_MasterShutdown() {
     // it will be removed from the list
 }
 
-static mut buckets: [crate::server_h::leakyBucket_t; 16384] = [crate::server_h::leakyBucket_t {
-    type_0: crate::qcommon_h::NA_BAD,
-    ipv: crate::server_h::C2RustUnnamed_164 { _4: [0; 4] },
+static mut buckets: [leakyBucket_t; 16384] = [leakyBucket_t {
+    type_0: NA_BAD,
+    ipv: C2RustUnnamed_164 { _4: [0; 4] },
     lastTime: 0,
     burst: 0,
     hash: 0,
-    prev: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
-    next: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
+    prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+    next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
 }; 16384];
 
-static mut bucketHashes: [*mut crate::server_h::leakyBucket_t; 1024] =
-    [0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t; 1024];
+static mut bucketHashes: [*mut leakyBucket_t; 1024] =
+    [0 as *const leakyBucket_t as *mut leakyBucket_t; 1024];
 #[no_mangle]
 
-pub static mut outboundLeakyBucket: crate::server_h::leakyBucket_t =
-    crate::server_h::leakyBucket_t {
-        type_0: crate::qcommon_h::NA_BAD,
-        ipv: crate::server_h::C2RustUnnamed_164 { _4: [0; 4] },
+pub static mut outboundLeakyBucket: leakyBucket_t =
+    leakyBucket_t {
+        type_0: NA_BAD,
+        ipv: C2RustUnnamed_164 { _4: [0; 4] },
         lastTime: 0,
         burst: 0,
         hash: 0,
-        prev: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
-        next: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
+        prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+        next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
     };
 /*
 ================
@@ -829,20 +829,20 @@ SVC_HashForAddress
 ================
 */
 
-unsafe extern "C" fn SVC_HashForAddress(mut address: crate::qcommon_h::netadr_t) -> isize {
-    let mut ip: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut size: crate::stddef_h::size_t = 0 as i32 as crate::stddef_h::size_t;
+unsafe extern "C" fn SVC_HashForAddress(mut address: netadr_t) -> isize {
+    let mut ip: *mut byte =
+        0 as *mut byte;
+    let mut size: size_t = 0 as i32 as size_t;
     let mut i: i32 = 0;
     let mut hash: isize = 0 as i32 as isize;
     match address.type_0 as u32 {
         4 => {
             ip = address.ip.as_mut_ptr();
-            size = 4 as i32 as crate::stddef_h::size_t
+            size = 4 as i32 as size_t
         }
         5 => {
             ip = address.ip6.as_mut_ptr();
-            size = 16 as i32 as crate::stddef_h::size_t
+            size = 16 as i32 as size_t
         }
         _ => {}
     }
@@ -864,14 +864,14 @@ Find or allocate a bucket for an address
 */
 
 unsafe extern "C" fn SVC_BucketForAddress(
-    mut address: crate::qcommon_h::netadr_t,
+    mut address: netadr_t,
     mut burst: i32,
     mut period: i32,
-) -> *mut crate::server_h::leakyBucket_t {
-    let mut bucket: *mut crate::server_h::leakyBucket_t = 0 as *mut crate::server_h::leakyBucket_t;
+) -> *mut leakyBucket_t {
+    let mut bucket: *mut leakyBucket_t = 0 as *mut leakyBucket_t;
     let mut i: i32 = 0;
     let mut hash: isize = SVC_HashForAddress(address);
-    let mut now: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
+    let mut now: i32 = Sys_Milliseconds();
     bucket = bucketHashes[hash as usize];
     while !bucket.is_null() {
         match (*bucket).type_0 as u32 {
@@ -903,7 +903,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
     while i < 16384 as i32 {
         let mut interval: i32 = 0;
         bucket =
-            &mut *buckets.as_mut_ptr().offset(i as isize) as *mut crate::server_h::leakyBucket_t;
+            &mut *buckets.as_mut_ptr().offset(i as isize) as *mut leakyBucket_t;
         interval = now - (*bucket).lastTime;
         // Reclaim expired buckets
         if (*bucket).lastTime > 0 as i32 && (interval > burst * period || interval < 0 as i32) {
@@ -918,10 +918,10 @@ unsafe extern "C" fn SVC_BucketForAddress(
             crate::stdlib::memset(
                 bucket as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<crate::server_h::leakyBucket_t>() as libc::c_ulong,
+                ::std::mem::size_of::<leakyBucket_t>() as libc::c_ulong,
             );
         }
-        if (*bucket).type_0 as u32 == crate::qcommon_h::NA_BAD as i32 as u32 {
+        if (*bucket).type_0 as u32 == NA_BAD as i32 as u32 {
             (*bucket).type_0 = address.type_0;
             match address.type_0 as u32 {
                 4 => {
@@ -948,14 +948,14 @@ unsafe extern "C" fn SVC_BucketForAddress(
             if !bucketHashes[hash as usize].is_null() {
                 (*bucketHashes[hash as usize]).prev = bucket
             }
-            (*bucket).prev = 0 as *mut crate::server_h::leakyBucket_t;
+            (*bucket).prev = 0 as *mut leakyBucket_t;
             bucketHashes[hash as usize] = bucket;
             return bucket;
         }
         i += 1
     }
     // Couldn't allocate a bucket for this address
-    return 0 as *mut crate::server_h::leakyBucket_t;
+    return 0 as *mut leakyBucket_t;
 }
 /*
 ================
@@ -965,12 +965,12 @@ SVC_RateLimit
 #[no_mangle]
 
 pub unsafe extern "C" fn SVC_RateLimit(
-    mut bucket: *mut crate::server_h::leakyBucket_t,
+    mut bucket: *mut leakyBucket_t,
     mut burst: i32,
     mut period: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if !bucket.is_null() {
-        let mut now: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
+        let mut now: i32 = Sys_Milliseconds();
         let mut interval: i32 = now - (*bucket).lastTime;
         let mut expired: i32 = interval / period;
         let mut expiredRemainder: i32 = interval % period;
@@ -983,10 +983,10 @@ pub unsafe extern "C" fn SVC_RateLimit(
         }
         if ((*bucket).burst as i32) < burst {
             (*bucket).burst += 1;
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ================
@@ -998,11 +998,11 @@ Rate limit for a particular address
 #[no_mangle]
 
 pub unsafe extern "C" fn SVC_RateLimitAddress(
-    mut from: crate::qcommon_h::netadr_t,
+    mut from: netadr_t,
     mut burst: i32,
     mut period: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut bucket: *mut crate::server_h::leakyBucket_t = SVC_BucketForAddress(from, burst, period);
+) -> qboolean {
+    let mut bucket: *mut leakyBucket_t = SVC_BucketForAddress(from, burst, period);
     return SVC_RateLimit(bucket, burst, period);
 }
 /*
@@ -1015,21 +1015,21 @@ the simple info query.
 ================
 */
 
-unsafe extern "C" fn SVC_Status(mut from: crate::qcommon_h::netadr_t) {
+unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
     let mut player: [libc::c_char; 1024] = [0; 1024];
     let mut status: [libc::c_char; 16384] = [0; 16384];
     let mut i: i32 = 0;
-    let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
-    let mut ps: *mut crate::src::qcommon::q_shared::playerState_t =
-        0 as *mut crate::src::qcommon::q_shared::playerState_t;
+    let mut cl: *mut client_t = 0 as *mut client_t;
+    let mut ps: *mut playerState_t =
+        0 as *mut playerState_t;
     let mut statusLength: i32 = 0;
     let mut playerLength: i32 = 0;
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
     // ignore if we are in single player
-    if crate::src::qcommon::cvar::Cvar_VariableValue(
+    if Cvar_VariableValue(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
-    ) == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as f32
-        || crate::src::qcommon::cvar::Cvar_VariableValue(
+    ) == GT_SINGLE_PLAYER as i32 as f32
+        || Cvar_VariableValue(
             b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
         ) != 0.
     {
@@ -1037,48 +1037,48 @@ unsafe extern "C" fn SVC_Status(mut from: crate::qcommon_h::netadr_t) {
     }
     // Prevent using getstatus as an amplifier
     if SVC_RateLimitAddress(from, 10 as i32, 1000 as i32) as u64 != 0 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"SVC_Status: rate limit from %s exceeded, dropping request\n\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
+            NET_AdrToString(from as netadr_t),
         );
         return;
     }
     // Allow getstatus to be DoSed relatively easily, but prevent
     // excess outbound bandwidth usage when being flooded inbound
     if SVC_RateLimit(&mut outboundLeakyBucket, 10 as i32, 100 as i32) as u64 != 0 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"SVC_Status: rate limit exceeded, dropping request\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(crate::src::qcommon::cmd::Cmd_Argv(1 as i32))
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32))
         > 128 as i32 as libc::c_ulong
     {
         return;
     }
-    ::libc::strcpy(
+    libc::strcpy(
         infostring.as_mut_ptr(),
-        crate::src::qcommon::cvar::Cvar_InfoString(0x4 as i32),
+        Cvar_InfoString(0x4 as i32),
     );
     // echo back the parameter to status. so master servers can use it as a challenge
     // to prevent timed spoofed reply packets that add ghost servers
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"challenge\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+        Cmd_Argv(1 as i32),
     );
     status[0 as i32 as usize] = 0 as i32 as libc::c_char;
     statusLength = 0 as i32;
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
-        cl = &mut *svs.clients.offset(i as isize) as *mut crate::server_h::client_t;
-        if (*cl).state as u32 >= crate::server_h::CS_CONNECTED as i32 as u32 {
-            ps = crate::src::server::sv_game::SV_GameClientNum(i)
-                as *mut crate::src::qcommon::q_shared::playerState_s;
-            crate::src::qcommon::q_shared::Com_sprintf(
+        cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
+        if (*cl).state as u32 >= CS_CONNECTED as i32 as u32 {
+            ps = SV_GameClientNum(i)
+                as *mut playerState_s;
+            Com_sprintf(
                 player.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 b"%i %i \"%s\"\n\x00" as *const u8 as *const libc::c_char,
@@ -1092,7 +1092,7 @@ unsafe extern "C" fn SVC_Status(mut from: crate::qcommon_h::netadr_t) {
             {
                 break;
             }
-            ::libc::strcpy(
+            libc::strcpy(
                 status.as_mut_ptr().offset(statusLength as isize),
                 player.as_mut_ptr(),
             );
@@ -1100,9 +1100,9 @@ unsafe extern "C" fn SVC_Status(mut from: crate::qcommon_h::netadr_t) {
         }
         i += 1
     }
-    crate::src::qcommon::net_chan::NET_OutOfBandPrint(
-        crate::qcommon_h::NS_SERVER,
-        from as crate::qcommon_h::netadr_t,
+    NET_OutOfBandPrint(
+        NS_SERVER,
+        from as netadr_t,
         b"statusResponse\n%s\n%s\x00" as *const u8 as *const libc::c_char,
         infostring.as_mut_ptr(),
         status.as_mut_ptr(),
@@ -1118,17 +1118,17 @@ if a user is interested in a server to do a full status
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SVC_Info(mut from: crate::qcommon_h::netadr_t) {
+pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut humans: i32 = 0;
     let mut gamedir: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
     // ignore if we are in single player
-    if crate::src::qcommon::cvar::Cvar_VariableValue(
+    if Cvar_VariableValue(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
-    ) == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as f32
-        || crate::src::qcommon::cvar::Cvar_VariableValue(
+    ) == GT_SINGLE_PLAYER as i32 as f32
+        || Cvar_VariableValue(
             b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
         ) != 0.
     {
@@ -1136,17 +1136,17 @@ pub unsafe extern "C" fn SVC_Info(mut from: crate::qcommon_h::netadr_t) {
     }
     // Prevent using getinfo as an amplifier
     if SVC_RateLimitAddress(from, 10 as i32, 1000 as i32) as u64 != 0 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"SVC_Info: rate limit from %s exceeded, dropping request\n\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
+            NET_AdrToString(from as netadr_t),
         );
         return;
     }
     // Allow getinfo to be DoSed relatively easily, but prevent
     // excess outbound bandwidth usage when being flooded inbound
     if SVC_RateLimit(&mut outboundLeakyBucket, 10 as i32, 100 as i32) as u64 != 0 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"SVC_Info: rate limit exceeded, dropping request\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -1157,7 +1157,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: crate::qcommon_h::netadr_t) {
      * to the Infostring bug discovered by Luigi Auriemma. See http://aluigi.altervista.org/ for the advisory.
      */
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(crate::src::qcommon::cmd::Cmd_Argv(1 as i32))
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32))
         > 128 as i32 as libc::c_ulong
     {
         return;
@@ -1168,14 +1168,14 @@ pub unsafe extern "C" fn SVC_Info(mut from: crate::qcommon_h::netadr_t) {
     i = (*sv_privateClients).integer;
     while i < (*sv_maxclients).integer {
         if (*svs.clients.offset(i as isize)).state as u32
-            >= crate::server_h::CS_CONNECTED as i32 as u32
+            >= CS_CONNECTED as i32 as u32
         {
             count += 1;
             if (*svs.clients.offset(i as isize))
                 .netchan
                 .remoteAddress
                 .type_0 as u32
-                != crate::qcommon_h::NA_BOT as i32 as u32
+                != NA_BOT as i32 as u32
             {
                 humans += 1
             }
@@ -1185,135 +1185,135 @@ pub unsafe extern "C" fn SVC_Info(mut from: crate::qcommon_h::netadr_t) {
     infostring[0 as i32 as usize] = 0 as i32 as libc::c_char;
     // echo back the parameter to status. so servers can use it as a challenge
     // to prevent timed spoofed reply packets that add ghost servers
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"challenge\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+        Cmd_Argv(1 as i32),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"gamename\x00" as *const u8 as *const libc::c_char,
-        (*crate::src::qcommon::common::com_gamename).string,
+        (*com_gamename).string,
     );
-    if (*crate::src::qcommon::common::com_legacyprotocol).integer > 0 as i32 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+    if (*com_legacyprotocol).integer > 0 as i32 {
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"protocol\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                (*crate::src::qcommon::common::com_legacyprotocol).integer,
+                (*com_legacyprotocol).integer,
             ),
         );
     } else {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"protocol\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                (*crate::src::qcommon::common::com_protocol).integer,
+                (*com_protocol).integer,
             ),
         );
     }
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"hostname\x00" as *const u8 as *const libc::c_char,
         (*sv_hostname).string,
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"mapname\x00" as *const u8 as *const libc::c_char,
         (*sv_mapname).string,
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"clients\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             count,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"g_humanplayers\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             humans,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*sv_maxclients).integer - (*sv_privateClients).integer,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"gametype\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*sv_gametype).integer,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"pure\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*sv_pure).integer,
         ),
     );
-    crate::src::qcommon::q_shared::Info_SetValueForKey(
+    Info_SetValueForKey(
         infostring.as_mut_ptr(),
         b"g_needpass\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
+            Cvar_VariableIntegerValue(
                 b"g_needpass\x00" as *const u8 as *const libc::c_char,
             ),
         ),
     );
     if !(*sv_voipProtocol).string.is_null() && *(*sv_voipProtocol).string as i32 != 0 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"voip\x00" as *const u8 as *const libc::c_char,
             (*sv_voipProtocol).string,
         );
     }
     if (*sv_minPing).integer != 0 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"minPing\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*sv_minPing).integer,
             ),
         );
     }
     if (*sv_maxPing).integer != 0 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"maxPing\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*sv_maxPing).integer,
             ),
         );
     }
-    gamedir = crate::src::qcommon::cvar::Cvar_VariableString(
+    gamedir = Cvar_VariableString(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
     );
     if *gamedir != 0 {
-        crate::src::qcommon::q_shared::Info_SetValueForKey(
+        Info_SetValueForKey(
             infostring.as_mut_ptr(),
             b"game\x00" as *const u8 as *const libc::c_char,
             gamedir,
         );
     }
-    crate::src::qcommon::net_chan::NET_OutOfBandPrint(
-        crate::qcommon_h::NS_SERVER,
-        from as crate::qcommon_h::netadr_t,
+    NET_OutOfBandPrint(
+        NS_SERVER,
+        from as netadr_t,
         b"infoResponse\n%s\x00" as *const u8 as *const libc::c_char,
         infostring.as_mut_ptr(),
     );
@@ -1326,9 +1326,9 @@ SVC_FlushRedirect
 */
 
 unsafe extern "C" fn SV_FlushRedirect(mut outputbuf: *mut libc::c_char) {
-    crate::src::qcommon::net_chan::NET_OutOfBandPrint(
-        crate::qcommon_h::NS_SERVER,
-        svs.redirectAddress as crate::qcommon_h::netadr_t,
+    NET_OutOfBandPrint(
+        NS_SERVER,
+        svs.redirectAddress as netadr_t,
         b"print\n%s\x00" as *const u8 as *const libc::c_char,
         outputbuf,
     );
@@ -1344,10 +1344,10 @@ Redirect all printfs
 */
 
 unsafe extern "C" fn SVC_RemoteCommand(
-    mut from: crate::qcommon_h::netadr_t,
-    mut _msg: *mut crate::qcommon_h::msg_t,
+    mut from: netadr_t,
+    mut _msg: *mut msg_t,
 ) {
-    let mut valid: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut valid: qboolean = qfalse;
     let mut remaining: [libc::c_char; 1024] = [0; 1024];
     // TTimo - scaled down to accumulate, but not overflow anything network wise, print wise etc.
     // (OOB messages are the bottleneck here)
@@ -1355,63 +1355,63 @@ unsafe extern "C" fn SVC_RemoteCommand(
     let mut cmd_aux: *mut libc::c_char = 0 as *mut libc::c_char;
     // Prevent using rcon as an amplifier and make dictionary attacks impractical
     if SVC_RateLimitAddress(from, 10 as i32, 1000 as i32) as u64 != 0 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"SVC_RemoteCommand: rate limit from %s exceeded, dropping request\n\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
+            NET_AdrToString(from as netadr_t),
         );
         return;
     }
     if crate::stdlib::strlen((*sv_rconPassword).string) == 0
-        || ::libc::strcmp(
-            crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+        || libc::strcmp(
+            Cmd_Argv(1 as i32),
             (*sv_rconPassword).string,
         ) != 0
     {
-        static mut bucket: crate::server_h::leakyBucket_t = crate::server_h::leakyBucket_t {
-            type_0: crate::qcommon_h::NA_BAD,
-            ipv: crate::server_h::C2RustUnnamed_164 { _4: [0; 4] },
+        static mut bucket: leakyBucket_t = leakyBucket_t {
+            type_0: NA_BAD,
+            ipv: C2RustUnnamed_164 { _4: [0; 4] },
             lastTime: 0,
             burst: 0,
             hash: 0,
-            prev: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
-            next: 0 as *const crate::server_h::leakyBucket_t as *mut crate::server_h::leakyBucket_t,
+            prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+            next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
         };
         // Make DoS via rcon impractical
         if SVC_RateLimit(&mut bucket, 10 as i32, 1000 as i32) as u64 != 0 {
-            crate::src::qcommon::common::Com_DPrintf(
+            Com_DPrintf(
                 b"SVC_RemoteCommand: rate limit exceeded, dropping request\n\x00" as *const u8
                     as *const libc::c_char,
             );
             return;
         }
-        valid = crate::src::qcommon::q_shared::qfalse;
-        crate::src::qcommon::common::Com_Printf(
+        valid = qfalse;
+        Com_Printf(
             b"Bad rcon from %s: %s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
-            crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32),
+            NET_AdrToString(from as netadr_t),
+            Cmd_ArgsFrom(2 as i32),
         );
     } else {
-        valid = crate::src::qcommon::q_shared::qtrue;
-        crate::src::qcommon::common::Com_Printf(
+        valid = qtrue;
+        Com_Printf(
             b"Rcon from %s: %s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
-            crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32),
+            NET_AdrToString(from as netadr_t),
+            Cmd_ArgsFrom(2 as i32),
         );
     }
     // start redirecting all print outputs to the packet
     svs.redirectAddress = from;
-    crate::src::qcommon::common::Com_BeginRedirect(
+    Com_BeginRedirect(
         sv_outputbuf.as_mut_ptr(),
         1024 as i32 - 16 as i32,
         Some(SV_FlushRedirect as unsafe extern "C" fn(_: *mut libc::c_char) -> ()),
     );
     if crate::stdlib::strlen((*sv_rconPassword).string) == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"No rconpassword set on the server.\n\x00" as *const u8 as *const libc::c_char,
         );
     } else if valid as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Bad rconpassword.\n\x00" as *const u8 as *const libc::c_char,
         );
     } else {
@@ -1420,7 +1420,7 @@ unsafe extern "C" fn SVC_RemoteCommand(
         // get the command directly, "rcon <pass> <command>" to avoid quoting issues
         // extract the command by walking
         // since the cmd formatting can fuckup (amount of spaces), using a dumb step by step parsing
-        cmd_aux = crate::src::qcommon::cmd::Cmd_Cmd();
+        cmd_aux = Cmd_Cmd();
         cmd_aux = cmd_aux.offset(4 as i32 as isize);
         while *cmd_aux.offset(0 as i32 as isize) as i32 == ' ' as i32 {
             cmd_aux = cmd_aux.offset(1)
@@ -1434,14 +1434,14 @@ unsafe extern "C" fn SVC_RemoteCommand(
         while *cmd_aux.offset(0 as i32 as isize) as i32 == ' ' as i32 {
             cmd_aux = cmd_aux.offset(1)
         }
-        crate::src::qcommon::q_shared::Q_strcat(
+        Q_strcat(
             remaining.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             cmd_aux,
         );
-        crate::src::qcommon::cmd::Cmd_ExecuteString(remaining.as_mut_ptr());
+        Cmd_ExecuteString(remaining.as_mut_ptr());
     }
-    crate::src::qcommon::common::Com_EndRedirect();
+    Com_EndRedirect();
 }
 /*
 =================
@@ -1455,77 +1455,77 @@ connectionless packets.
 */
 
 unsafe extern "C" fn SV_ConnectionlessPacket(
-    mut from: crate::qcommon_h::netadr_t,
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut from: netadr_t,
+    mut msg: *mut msg_t,
 ) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // skip the -1 marker
     let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
-    crate::src::qcommon::msg::MSG_BeginReadingOOB(msg as *mut crate::qcommon_h::msg_t);
-    crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t);
-    if crate::src::qcommon::q_shared::Q_strncmp(
+    MSG_BeginReadingOOB(msg as *mut msg_t);
+    MSG_ReadLong(msg as *mut msg_t);
+    if Q_strncmp(
         b"connect\x00" as *const u8 as *const libc::c_char,
-        &mut *(*msg).data.offset(4 as i32 as isize) as *mut crate::src::qcommon::q_shared::byte
+        &mut *(*msg).data.offset(4 as i32 as isize) as *mut byte
             as *mut libc::c_char,
         7 as i32,
     ) == 0
     {
-        crate::src::qcommon::huffman::Huff_Decompress(
-            msg as *mut crate::qcommon_h::msg_t,
+        Huff_Decompress(
+            msg as *mut msg_t,
             12 as i32,
         );
     }
-    s = crate::src::qcommon::msg::MSG_ReadStringLine(msg as *mut crate::qcommon_h::msg_t);
-    crate::src::qcommon::cmd::Cmd_TokenizeString(s);
-    c = crate::src::qcommon::cmd::Cmd_Argv(0 as i32);
-    crate::src::qcommon::common::Com_DPrintf(
+    s = MSG_ReadStringLine(msg as *mut msg_t);
+    Cmd_TokenizeString(s);
+    c = Cmd_Argv(0 as i32);
+    Com_DPrintf(
         b"SV packet %s : %s\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
+        NET_AdrToString(from as netadr_t),
         c,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         c,
         b"getstatus\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         SVC_Status(from);
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+    } else if Q_stricmp(
         c,
         b"getinfo\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         SVC_Info(from);
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+    } else if Q_stricmp(
         c,
         b"getchallenge\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        crate::src::server::sv_client::SV_GetChallenge(from as crate::qcommon_h::netadr_t);
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        SV_GetChallenge(from as netadr_t);
+    } else if Q_stricmp(
         c,
         b"connect\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        crate::src::server::sv_client::SV_DirectConnect(from as crate::qcommon_h::netadr_t);
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        SV_DirectConnect(from as netadr_t);
+    } else if Q_stricmp(
         c,
         b"ipAuthorize\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        crate::src::server::sv_client::SV_AuthorizeIpPacket(from as crate::qcommon_h::netadr_t);
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        SV_AuthorizeIpPacket(from as netadr_t);
+    } else if Q_stricmp(
         c,
         b"rcon\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         SVC_RemoteCommand(from, msg);
-    } else if !(crate::src::qcommon::q_shared::Q_stricmp(
+    } else if !(Q_stricmp(
         c,
         b"disconnect\x00" as *const u8 as *const libc::c_char,
     ) == 0)
     {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"bad connectionless packet from %s:\n%s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(from as crate::qcommon_h::netadr_t),
+            NET_AdrToString(from as netadr_t),
             s,
         );
     };
@@ -1539,11 +1539,11 @@ SV_PacketEvent
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_PacketEvent(
-    mut from: crate::qcommon_h::netadr_t,
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut from: netadr_t,
+    mut msg: *mut msg_t,
 ) {
     let mut i: i32 = 0;
-    let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
+    let mut cl: *mut client_t = 0 as *mut client_t;
     let mut qport: i32 = 0;
     // check for connectionless packet (0xffffffff) first
     if (*msg).cursize >= 4 as i32 && *((*msg).data as *mut i32) == -(1 as i32) {
@@ -1552,18 +1552,18 @@ pub unsafe extern "C" fn SV_PacketEvent(
     }
     // read the qport out of the message so we can fix up
     // stupid address translating routers
-    crate::src::qcommon::msg::MSG_BeginReadingOOB(msg as *mut crate::qcommon_h::msg_t); // sequence number
-    crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t);
-    qport = crate::src::qcommon::msg::MSG_ReadShort(msg as *mut crate::qcommon_h::msg_t)
+    MSG_BeginReadingOOB(msg as *mut msg_t); // sequence number
+    MSG_ReadLong(msg as *mut msg_t);
+    qport = MSG_ReadShort(msg as *mut msg_t)
         & 0xffff as i32;
     // find which client the message is from
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
-        if !((*cl).state as u32 == crate::server_h::CS_FREE as i32 as u32) {
-            if !(crate::src::qcommon::net_ip::NET_CompareBaseAdr(
-                from as crate::qcommon_h::netadr_t,
-                (*cl).netchan.remoteAddress as crate::qcommon_h::netadr_t,
+        if !((*cl).state as u32 == CS_FREE as i32 as u32) {
+            if !(NET_CompareBaseAdr(
+                from as netadr_t,
+                (*cl).netchan.remoteAddress as netadr_t,
             ) as u64
                 == 0)
             {
@@ -1574,27 +1574,27 @@ pub unsafe extern "C" fn SV_PacketEvent(
                     // some address translating routers periodically change UDP
                     // port assignments
                     if (*cl).netchan.remoteAddress.port as i32 != from.port as i32 {
-                        crate::src::qcommon::common::Com_Printf(
+                        Com_Printf(
                             b"SV_PacketEvent: fixing up a translated port\n\x00" as *const u8
                                 as *const libc::c_char,
                         );
                         (*cl).netchan.remoteAddress.port = from.port
                     }
                     // make sure it is a valid, in sequence packet
-                    if crate::src::server::sv_net_chan::SV_Netchan_Process(
-                        cl as *mut crate::server_h::client_s,
-                        msg as *mut crate::qcommon_h::msg_t,
+                    if SV_Netchan_Process(
+                        cl as *mut client_s,
+                        msg as *mut msg_t,
                     ) as u64
                         != 0
                     {
                         // zombie clients still need to do the Netchan_Process
                         // to make sure they don't need to retransmit the final
                         // reliable message, but they don't do any other processing
-                        if (*cl).state as u32 != crate::server_h::CS_ZOMBIE as i32 as u32 {
+                        if (*cl).state as u32 != CS_ZOMBIE as i32 as u32 {
                             (*cl).lastPacketTime = svs.time; // don't timeout
-                            crate::src::server::sv_client::SV_ExecuteClientMessage(
-                                cl as *mut crate::server_h::client_s,
-                                msg as *mut crate::qcommon_h::msg_t,
+                            SV_ExecuteClientMessage(
+                                cl as *mut client_s,
+                                msg as *mut msg_t,
                             );
                         }
                     }
@@ -1617,16 +1617,16 @@ Updates the cl->ping variables
 unsafe extern "C" fn SV_CalcPings() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
+    let mut cl: *mut client_t = 0 as *mut client_t;
     let mut total: i32 = 0;
     let mut count: i32 = 0;
     let mut delta: i32 = 0;
-    let mut ps: *mut crate::src::qcommon::q_shared::playerState_t =
-        0 as *mut crate::src::qcommon::q_shared::playerState_t;
+    let mut ps: *mut playerState_t =
+        0 as *mut playerState_t;
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
-        cl = &mut *svs.clients.offset(i as isize) as *mut crate::server_h::client_t;
-        if (*cl).state as u32 != crate::server_h::CS_ACTIVE as i32 as u32 {
+        cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
+        if (*cl).state as u32 != CS_ACTIVE as i32 as u32 {
             (*cl).ping = 999 as i32
         } else if (*cl).gentity.is_null() {
             (*cl).ping = 999 as i32
@@ -1654,8 +1654,8 @@ unsafe extern "C" fn SV_CalcPings() {
                 }
             }
             // let the game dll know about the ping
-            ps = crate::src::server::sv_game::SV_GameClientNum(i)
-                as *mut crate::src::qcommon::q_shared::playerState_s;
+            ps = SV_GameClientNum(i)
+                as *mut playerState_s;
             (*ps).ping = (*cl).ping
         }
         i += 1
@@ -1677,7 +1677,7 @@ if necessary
 
 unsafe extern "C" fn SV_CheckTimeouts() {
     let mut i: i32 = 0;
-    let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
+    let mut cl: *mut client_t = 0 as *mut client_t;
     let mut droppoint: i32 = 0;
     let mut zombiepoint: i32 = 0;
     droppoint = svs.time - 1000 as i32 * (*sv_timeout).integer;
@@ -1689,28 +1689,28 @@ unsafe extern "C" fn SV_CheckTimeouts() {
         if (*cl).lastPacketTime > svs.time {
             (*cl).lastPacketTime = svs.time
         }
-        if (*cl).state as u32 == crate::server_h::CS_ZOMBIE as i32 as u32
+        if (*cl).state as u32 == CS_ZOMBIE as i32 as u32
             && (*cl).lastPacketTime < zombiepoint
         {
             // using the client id cause the cl->name is empty at this point
-            crate::src::qcommon::common::Com_DPrintf(
+            Com_DPrintf(
                 b"Going from CS_ZOMBIE to CS_FREE for client %d\n\x00" as *const u8
                     as *const libc::c_char,
                 i,
             ); // can now be reused
-            (*cl).state = crate::server_h::CS_FREE
-        } else if (*cl).state as u32 >= crate::server_h::CS_CONNECTED as i32 as u32
+            (*cl).state = CS_FREE
+        } else if (*cl).state as u32 >= CS_CONNECTED as i32 as u32
             && (*cl).lastPacketTime < droppoint
         {
             // wait several frames so a debugger session doesn't
             // cause a timeout
             (*cl).timeoutCount += 1;
             if (*cl).timeoutCount > 5 as i32 {
-                crate::src::server::sv_client::SV_DropClient(
-                    cl as *mut crate::server_h::client_s,
+                SV_DropClient(
+                    cl as *mut client_s,
                     b"timed out\x00" as *const u8 as *const libc::c_char,
                 );
-                (*cl).state = crate::server_h::CS_FREE
+                (*cl).state = CS_FREE
                 // don't bother with zombie state
             }
         } else {
@@ -1726,20 +1726,20 @@ SV_CheckPaused
 ==================
 */
 
-unsafe extern "C" fn SV_CheckPaused() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn SV_CheckPaused() -> qboolean {
     let mut count: i32 = 0;
-    let mut cl: *mut crate::server_h::client_t = 0 as *mut crate::server_h::client_t;
+    let mut cl: *mut client_t = 0 as *mut client_t;
     let mut i: i32 = 0;
-    if (*crate::src::qcommon::common::cl_paused).integer == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+    if (*cl_paused).integer == 0 {
+        return qfalse;
     }
     // only pause if there is just a single client connected
     count = 0 as i32;
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
-        if (*cl).state as u32 >= crate::server_h::CS_CONNECTED as i32 as u32
-            && (*cl).netchan.remoteAddress.type_0 as u32 != crate::qcommon_h::NA_BOT as i32 as u32
+        if (*cl).state as u32 >= CS_CONNECTED as i32 as u32
+            && (*cl).netchan.remoteAddress.type_0 as u32 != NA_BOT as i32 as u32
         {
             count += 1
         }
@@ -1748,21 +1748,21 @@ unsafe extern "C" fn SV_CheckPaused() -> crate::src::qcommon::q_shared::qboolean
     }
     if count > 1 as i32 {
         // don't pause
-        if (*crate::src::qcommon::common::sv_paused).integer != 0 {
-            crate::src::qcommon::cvar::Cvar_Set(
+        if (*sv_paused).integer != 0 {
+            Cvar_Set(
                 b"sv_paused\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if (*crate::src::qcommon::common::sv_paused).integer == 0 {
-        crate::src::qcommon::cvar::Cvar_Set(
+    if (*sv_paused).integer == 0 {
+        Cvar_Set(
             b"sv_paused\x00" as *const u8 as *const libc::c_char,
             b"1\x00" as *const u8 as *const libc::c_char,
         );
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ==================
@@ -1800,16 +1800,16 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
     let mut startTime: i32 = 0;
     // the menu kills the server with this cvar
     if (*sv_killserver).integer != 0 {
-        crate::src::server::sv_init::SV_Shutdown(
+        SV_Shutdown(
             b"Server was killed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        crate::src::qcommon::cvar::Cvar_Set(
+        Cvar_Set(
             b"sv_killserver\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
+    if (*com_sv_running).integer == 0 {
         // Running as a server, but no map loaded
         return;
     }
@@ -1819,18 +1819,18 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
     }
     // if it isn't time for the next frame, do nothing
     if (*sv_fps).integer < 1 as i32 {
-        crate::src::qcommon::cvar::Cvar_Set(
+        Cvar_Set(
             b"sv_fps\x00" as *const u8 as *const libc::c_char,
             b"10\x00" as *const u8 as *const libc::c_char,
         );
     }
     frameMsec = ((1000 as i32 / (*sv_fps).integer) as f32
-        * (*crate::src::qcommon::common::com_timescale).value) as i32;
+        * (*com_timescale).value) as i32;
     // don't let it scale below 1ms
     if frameMsec < 1 as i32 {
-        crate::src::qcommon::cvar::Cvar_Set(
+        Cvar_Set(
             b"timescale\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%f\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 ((*sv_fps).integer as f32 / 1000.0f32) as f64,
             ),
@@ -1838,21 +1838,21 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
         frameMsec = 1 as i32
     }
     sv.timeResidual += msec;
-    if (*crate::src::qcommon::common::com_dedicated).integer == 0 {
-        crate::src::server::sv_bot::SV_BotFrame(sv.time + sv.timeResidual);
+    if (*com_dedicated).integer == 0 {
+        SV_BotFrame(sv.time + sv.timeResidual);
     }
     // if time is about to hit the 32nd bit, kick all clients
     // and clear sv.time, rather
     // than checking for negative time wraparound everywhere.
     // 2giga-milliseconds = 23 days, so it won't be too often
     if svs.time > 0x70000000 as i32 {
-        crate::src::server::sv_init::SV_Shutdown(
+        SV_Shutdown(
             b"Restarting server due to time wrapping\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        crate::src::qcommon::cmd::Cbuf_AddText(crate::src::qcommon::q_shared::va(
+        Cbuf_AddText(va(
             b"map %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::qcommon::cvar::Cvar_VariableString(
+            Cvar_VariableString(
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
         ));
@@ -1860,13 +1860,13 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
     }
     // this can happen considerably earlier when lots of clients play and the map doesn't change
     if svs.nextSnapshotEntities >= 0x7ffffffe as i32 - svs.numSnapshotEntities {
-        crate::src::server::sv_init::SV_Shutdown(
+        SV_Shutdown(
             b"Restarting server due to numSnapshotEntities wrapping\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
         );
-        crate::src::qcommon::cmd::Cbuf_AddText(crate::src::qcommon::q_shared::va(
+        Cbuf_AddText(va(
             b"map %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::qcommon::cvar::Cvar_VariableString(
+            Cvar_VariableString(
                 b"mapname\x00" as *const u8 as *const libc::c_char,
             ),
         ));
@@ -1874,36 +1874,36 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
     }
     if sv.restartTime != 0 && sv.time >= sv.restartTime {
         sv.restartTime = 0 as i32;
-        crate::src::qcommon::cmd::Cbuf_AddText(
+        Cbuf_AddText(
             b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     // update infostrings if anything has been changed
-    if crate::src::qcommon::cvar::cvar_modifiedFlags & 0x4 as i32 != 0 {
-        crate::src::server::sv_init::SV_SetConfigstring(
+    if cvar_modifiedFlags & 0x4 as i32 != 0 {
+        SV_SetConfigstring(
             0 as i32,
-            crate::src::qcommon::cvar::Cvar_InfoString(0x4 as i32),
+            Cvar_InfoString(0x4 as i32),
         );
-        crate::src::qcommon::cvar::cvar_modifiedFlags &= !(0x4 as i32)
+        cvar_modifiedFlags &= !(0x4 as i32)
     }
-    if crate::src::qcommon::cvar::cvar_modifiedFlags & 0x8 as i32 != 0 {
-        crate::src::server::sv_init::SV_SetConfigstring(
+    if cvar_modifiedFlags & 0x8 as i32 != 0 {
+        SV_SetConfigstring(
             1 as i32,
-            crate::src::qcommon::cvar::Cvar_InfoString_Big(0x8 as i32),
+            Cvar_InfoString_Big(0x8 as i32),
         );
-        crate::src::qcommon::cvar::cvar_modifiedFlags &= !(0x8 as i32)
+        cvar_modifiedFlags &= !(0x8 as i32)
     }
-    if (*crate::src::qcommon::common::com_speeds).integer != 0 {
-        startTime = crate::src::sys::sys_unix::Sys_Milliseconds()
+    if (*com_speeds).integer != 0 {
+        startTime = Sys_Milliseconds()
     } else {
         startTime = 0 as i32
         // quite a compiler warning
     }
     // update ping based on the all received frames
     SV_CalcPings();
-    if (*crate::src::qcommon::common::com_dedicated).integer != 0 {
-        crate::src::server::sv_bot::SV_BotFrame(sv.time);
+    if (*com_dedicated).integer != 0 {
+        SV_BotFrame(sv.time);
     }
     // run the game simulation in chunks
     while sv.timeResidual >= frameMsec {
@@ -1911,16 +1911,16 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
         svs.time += frameMsec;
         sv.time += frameMsec;
         // let everything in the world think and move
-        crate::src::qcommon::vm::VM_Call(gvm, crate::g_public_h::GAME_RUN_FRAME as i32, sv.time);
+        VM_Call(gvm, GAME_RUN_FRAME as i32, sv.time);
     }
-    if (*crate::src::qcommon::common::com_speeds).integer != 0 {
-        crate::src::qcommon::common::time_game =
-            crate::src::sys::sys_unix::Sys_Milliseconds() - startTime
+    if (*com_speeds).integer != 0 {
+        time_game =
+            Sys_Milliseconds() - startTime
     }
     // check timeouts
     SV_CheckTimeouts();
     // send messages back to the clients
-    crate::src::server::sv_snapshot::SV_SendClientMessages();
+    SV_SendClientMessages();
     // send a heartbeat to the master if needed
     SV_MasterHeartbeat(b"DarkPlaces\x00" as *const u8 as *const libc::c_char);
 }
@@ -2053,7 +2053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_RateMsec(mut client: *mut crate::server_h::client_t) -> i32 {
+pub unsafe extern "C" fn SV_RateMsec(mut client: *mut client_t) -> i32 {
     let mut rate: i32 = 0;
     let mut rateMsec: i32 = 0;
     let mut messageSize: i32 = 0;
@@ -2061,7 +2061,7 @@ pub unsafe extern "C" fn SV_RateMsec(mut client: *mut crate::server_h::client_t)
     rate = (*client).rate;
     if (*sv_maxRate).integer != 0 {
         if (*sv_maxRate).integer < 1000 as i32 {
-            crate::src::qcommon::cvar::Cvar_Set(
+            Cvar_Set(
                 b"sv_MaxRate\x00" as *const u8 as *const libc::c_char,
                 b"1000\x00" as *const u8 as *const libc::c_char,
             );
@@ -2072,7 +2072,7 @@ pub unsafe extern "C" fn SV_RateMsec(mut client: *mut crate::server_h::client_t)
     }
     if (*sv_minRate).integer != 0 {
         if (*sv_minRate).integer < 1000 as i32 {
-            crate::src::qcommon::cvar::Cvar_Set(
+            Cvar_Set(
                 b"sv_minRate\x00" as *const u8 as *const libc::c_char,
                 b"1000\x00" as *const u8 as *const libc::c_char,
             );
@@ -2081,14 +2081,14 @@ pub unsafe extern "C" fn SV_RateMsec(mut client: *mut crate::server_h::client_t)
             rate = (*sv_minRate).integer
         }
     }
-    if (*client).netchan.remoteAddress.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
+    if (*client).netchan.remoteAddress.type_0 as u32 == NA_IP6 as i32 as u32 {
         messageSize += 48 as i32
     } else {
         messageSize += 28 as i32
     }
     rateMsec = messageSize * 1000 as i32
-        / (rate as f32 * (*crate::src::qcommon::common::com_timescale).value) as i32;
-    rate = crate::src::sys::sys_unix::Sys_Milliseconds() - (*client).netchan.lastSentTime;
+        / (rate as f32 * (*com_timescale).value) as i32;
+    rate = Sys_Milliseconds() - (*client).netchan.lastSentTime;
     if rate > rateMsec {
         return 0 as i32;
     } else {
@@ -2460,24 +2460,24 @@ pub unsafe extern "C" fn SV_SendQueuedPackets() -> i32 {
     static mut dlNextRound: i32 = 0 as i32;
     let mut timeVal: i32 = 2147483647 as i32;
     // Send out fragmented packets now that we're idle
-    delayT = crate::src::server::sv_client::SV_SendQueuedMessages();
+    delayT = SV_SendQueuedMessages();
     if delayT >= 0 as i32 {
         timeVal = delayT
     }
     if (*sv_dlRate).integer != 0 {
         // Rate limiting. This is very imprecise for high
         // download rates due to millisecond timedelta resolution
-        dlStart = crate::src::sys::sys_unix::Sys_Milliseconds();
+        dlStart = Sys_Milliseconds();
         deltaT = dlNextRound - dlStart;
         if deltaT > 0 as i32 {
             if deltaT < timeVal {
                 timeVal = deltaT + 1 as i32
             }
         } else {
-            numBlocks = crate::src::server::sv_client::SV_SendDownloadMessages();
+            numBlocks = SV_SendDownloadMessages();
             if numBlocks != 0 {
                 // There are active downloads
-                deltaT = crate::src::sys::sys_unix::Sys_Milliseconds() - dlStart;
+                deltaT = Sys_Milliseconds() - dlStart;
                 delayT = 1000 as i32 * numBlocks * 1024 as i32;
                 delayT /= (*sv_dlRate).integer * 1024 as i32;
                 if delayT <= deltaT + 1 as i32 {
@@ -2501,7 +2501,7 @@ pub unsafe extern "C" fn SV_SendQueuedPackets() -> i32 {
                 }
             }
         }
-    } else if crate::src::server::sv_client::SV_SendDownloadMessages() != 0 {
+    } else if SV_SendDownloadMessages() != 0 {
         timeVal = 0 as i32
     }
     return timeVal;

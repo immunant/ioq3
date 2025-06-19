@@ -33,13 +33,13 @@ pub use crate::ui_local_h::menutext_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct mods_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub list: crate::ui_local_h::menulist_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub go: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub list: menulist_s,
+    pub back: menubitmap_s,
+    pub go: menubitmap_s,
     pub description: [libc::c_char; 3072],
     pub fs_game: [libc::c_char; 1024],
     pub descriptionPtr: *mut libc::c_char,
@@ -49,19 +49,19 @@ pub struct mods_t {
 }
 
 static mut s_mods: mods_t = mods_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -71,8 +71,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -83,8 +83,8 @@ static mut s_mods: mods_t = mods_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -94,8 +94,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -110,8 +110,8 @@ static mut s_mods: mods_t = mods_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -121,8 +121,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -137,8 +137,8 @@ static mut s_mods: mods_t = mods_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    list: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    list: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -148,8 +148,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -166,8 +166,8 @@ static mut s_mods: mods_t = mods_t {
         columns: 0,
         separation: 0,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -177,8 +177,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -193,8 +193,8 @@ static mut s_mods: mods_t = mods_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    go: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    go: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -204,8 +204,8 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -237,20 +237,20 @@ unsafe extern "C" fn UI_Mods_MenuEvent(mut ptr: *mut libc::c_void, mut event: i3
     if event != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         11 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"fs_game\x00" as *const u8 as *const libc::c_char,
                 s_mods.fs_gameList[s_mods.list.curvalue as usize],
             );
-            crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+            trap_Cmd_ExecuteText(
+                EXEC_APPEND as i32,
                 b"vid_restart;\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         10 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         _ => {}
     };
@@ -266,9 +266,9 @@ unsafe extern "C" fn UI_Mods_ParseInfos(
     mut modDesc: *mut libc::c_char,
 ) {
     s_mods.fs_gameList[s_mods.list.numitems as usize] = s_mods.fs_gamePtr;
-    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.fs_gamePtr, modDir, 16 as i32);
+    Q_strncpyz(s_mods.fs_gamePtr, modDir, 16 as i32);
     s_mods.descriptionList[s_mods.list.numitems as usize] = s_mods.descriptionPtr;
-    crate::src::qcommon::q_shared::Q_strncpyz(s_mods.descriptionPtr, modDesc, 48 as i32);
+    Q_strncpyz(s_mods.descriptionPtr, modDesc, 48 as i32);
     let ref mut fresh0 = *s_mods.list.itemnames.offset(s_mods.list.numitems as isize);
     *fresh0 = s_mods.descriptionPtr;
     s_mods.descriptionPtr = s_mods.descriptionPtr.offset(
@@ -304,7 +304,7 @@ unsafe extern "C" fn UI_Mods_LoadMods() {
     *fresh1 = s_mods.descriptionList[0 as i32 as usize];
     s_mods.fs_gameList[0 as i32 as usize] =
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    numdirs = crate::src::ui::ui_syscalls::trap_FS_GetFileList(
+    numdirs = trap_FS_GetFileList(
         b"$modlist\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         dirlist.as_mut_ptr(),
@@ -323,7 +323,7 @@ unsafe extern "C" fn UI_Mods_LoadMods() {
         );
         i += 1
     }
-    crate::src::ui::ui_syscalls::trap_Print(crate::src::qcommon::q_shared::va(
+    trap_Print(va(
         b"%i mods parsed\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         s_mods.list.numitems,
     ));
@@ -344,13 +344,13 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
         0 as i32,
         ::std::mem::size_of::<mods_t>() as libc::c_ulong,
     );
-    s_mods.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    s_mods.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_mods.menu.wrapAround = qtrue;
+    s_mods.menu.fullscreen = qtrue;
     s_mods.banner.generic.type_0 = 10 as i32;
     s_mods.banner.generic.x = 320 as i32;
     s_mods.banner.generic.y = 16 as i32;
     s_mods.banner.string = b"MODS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_mods.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_mods.banner.color = color_white.as_mut_ptr();
     s_mods.banner.style = 0x1 as i32;
     s_mods.framel.generic.type_0 = 6 as i32;
     s_mods.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
@@ -401,29 +401,29 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
     s_mods.list.width = 48 as i32;
     s_mods.list.height = 14 as i32;
     UI_Mods_LoadMods();
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.list as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.list as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_mods.go as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_mods.go as *mut menubitmap_s as *mut libc::c_void,
     );
 }
 /*
@@ -434,22 +434,22 @@ UI_Mods_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ModsMenu_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/load_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/load_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -536,7 +536,7 @@ UI_ModsMenu
 
 pub unsafe extern "C" fn UI_ModsMenu() {
     UI_Mods_MenuInit();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_mods.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
     );
 }

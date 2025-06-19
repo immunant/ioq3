@@ -164,19 +164,19 @@ MARK POLYS
 */
 #[no_mangle]
 
-pub static mut cg_activeMarkPolys: crate::cg_local_h::markPoly_t = crate::cg_local_h::markPoly_t {
-    prevMark: 0 as *const crate::cg_local_h::markPoly_s as *mut crate::cg_local_h::markPoly_s,
-    nextMark: 0 as *const crate::cg_local_h::markPoly_s as *mut crate::cg_local_h::markPoly_s,
+pub static mut cg_activeMarkPolys: markPoly_t = markPoly_t {
+    prevMark: 0 as *const markPoly_s as *mut markPoly_s,
+    nextMark: 0 as *const markPoly_s as *mut markPoly_s,
     time: 0,
     markShader: 0,
-    alphaFade: crate::src::qcommon::q_shared::qfalse,
+    alphaFade: qfalse,
     color: [0.; 4],
-    poly: crate::tr_types_h::poly_t {
+    poly: poly_t {
         hShader: 0,
         numVerts: 0,
-        verts: 0 as *const crate::tr_types_h::polyVert_t as *mut crate::tr_types_h::polyVert_t,
+        verts: 0 as *const polyVert_t as *mut polyVert_t,
     },
-    verts: [crate::tr_types_h::polyVert_t {
+    verts: [polyVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         modulate: [0; 4],
@@ -185,25 +185,25 @@ pub static mut cg_activeMarkPolys: crate::cg_local_h::markPoly_t = crate::cg_loc
 // double linked list
 #[no_mangle]
 
-pub static mut cg_freeMarkPolys: *mut crate::cg_local_h::markPoly_t =
-    0 as *const crate::cg_local_h::markPoly_t as *mut crate::cg_local_h::markPoly_t;
+pub static mut cg_freeMarkPolys: *mut markPoly_t =
+    0 as *const markPoly_t as *mut markPoly_t;
 // single linked list
 #[no_mangle]
 
-pub static mut cg_markPolys: [crate::cg_local_h::markPoly_t; 256] =
-    [crate::cg_local_h::markPoly_t {
-        prevMark: 0 as *const crate::cg_local_h::markPoly_s as *mut crate::cg_local_h::markPoly_s,
-        nextMark: 0 as *const crate::cg_local_h::markPoly_s as *mut crate::cg_local_h::markPoly_s,
+pub static mut cg_markPolys: [markPoly_t; 256] =
+    [markPoly_t {
+        prevMark: 0 as *const markPoly_s as *mut markPoly_s,
+        nextMark: 0 as *const markPoly_s as *mut markPoly_s,
         time: 0,
         markShader: 0,
-        alphaFade: crate::src::qcommon::q_shared::qfalse,
+        alphaFade: qfalse,
         color: [0.; 4],
-        poly: crate::tr_types_h::poly_t {
+        poly: poly_t {
             hShader: 0,
             numVerts: 0,
-            verts: 0 as *const crate::tr_types_h::polyVert_t as *mut crate::tr_types_h::polyVert_t,
+            verts: 0 as *const polyVert_t as *mut polyVert_t,
         },
-        verts: [crate::tr_types_h::polyVert_t {
+        verts: [polyVert_t {
             xyz: [0.; 3],
             st: [0.; 2],
             modulate: [0; 4],
@@ -225,7 +225,7 @@ pub unsafe extern "C" fn CG_InitMarkPolys() {
     crate::stdlib::memset(
         cg_markPolys.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::markPoly_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[markPoly_t; 256]>() as libc::c_ulong,
     );
     cg_activeMarkPolys.nextMark = &mut cg_activeMarkPolys;
     cg_activeMarkPolys.prevMark = &mut cg_activeMarkPolys;
@@ -234,7 +234,7 @@ pub unsafe extern "C" fn CG_InitMarkPolys() {
     while i < 256 as i32 - 1 as i32 {
         cg_markPolys[i as usize].nextMark =
             &mut *cg_markPolys.as_mut_ptr().offset((i + 1 as i32) as isize)
-                as *mut crate::cg_local_h::markPoly_t;
+                as *mut markPoly_t;
         i += 1
     }
 }
@@ -245,9 +245,9 @@ CG_FreeMarkPoly
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_FreeMarkPoly(mut le: *mut crate::cg_local_h::markPoly_t) {
+pub unsafe extern "C" fn CG_FreeMarkPoly(mut le: *mut markPoly_t) {
     if (*le).prevMark.is_null() || (*le).nextMark.is_null() {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -267,8 +267,8 @@ Will allways succeed, even if it requires freeing an old active mark
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AllocMark() -> *mut crate::cg_local_h::markPoly_t {
-    let mut le: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
+pub unsafe extern "C" fn CG_AllocMark() -> *mut markPoly_t {
+    let mut le: *mut markPoly_t = 0 as *mut markPoly_t;
     let mut time: i32 = 0;
     if cg_freeMarkPolys.is_null() {
         // no free entities, so free the one at the end of the chain
@@ -284,7 +284,7 @@ pub unsafe extern "C" fn CG_AllocMark() -> *mut crate::cg_local_h::markPoly_t {
     crate::stdlib::memset(
         le as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::markPoly_t>() as libc::c_ulong,
+        ::std::mem::size_of::<markPoly_t>() as libc::c_ulong,
     );
     // link into the active list
     (*le).nextMark = cg_activeMarkPolys.nextMark;
@@ -296,39 +296,39 @@ pub unsafe extern "C" fn CG_AllocMark() -> *mut crate::cg_local_h::markPoly_t {
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ImpactMark(
-    mut markShader: crate::src::qcommon::q_shared::qhandle_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut dir: *const crate::src::qcommon::q_shared::vec_t,
+    mut markShader: qhandle_t,
+    mut origin: *const vec_t,
+    mut dir: *const vec_t,
     mut orientation: f32,
     mut red: f32,
     mut green: f32,
     mut blue: f32,
     mut alpha: f32,
-    mut alphaFade: crate::src::qcommon::q_shared::qboolean,
+    mut alphaFade: qboolean,
     mut radius: f32,
-    mut temporary: crate::src::qcommon::q_shared::qboolean,
+    mut temporary: qboolean,
 ) {
-    let mut axis: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
+    let mut axis: [vec3_t; 3] = [[0.; 3]; 3];
     let mut texCoordScale: f32 = 0.;
-    let mut originalPoints: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
-    let mut colors: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
+    let mut originalPoints: [vec3_t; 4] = [[0.; 3]; 4];
+    let mut colors: [byte; 4] = [0; 4];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut numFragments: i32 = 0;
-    let mut markFragments: [crate::src::qcommon::q_shared::markFragment_t; 128] =
-        [crate::src::qcommon::q_shared::markFragment_t {
+    let mut markFragments: [markFragment_t; 128] =
+        [markFragment_t {
             firstPoint: 0,
             numPoints: 0,
         }; 128];
-    let mut mf: *mut crate::src::qcommon::q_shared::markFragment_t =
-        0 as *mut crate::src::qcommon::q_shared::markFragment_t;
-    let mut markPoints: [crate::src::qcommon::q_shared::vec3_t; 384] = [[0.; 3]; 384];
-    let mut projection: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    if crate::src::cgame::cg_main::cg_addMarks.integer == 0 {
+    let mut mf: *mut markFragment_t =
+        0 as *mut markFragment_t;
+    let mut markPoints: [vec3_t; 384] = [[0.; 3]; 384];
+    let mut projection: vec3_t = [0.; 3];
+    if cg_addMarks.integer == 0 {
         return;
     }
     if radius <= 0 as i32 as f32 {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_ImpactMark called with <= 0 radius\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -336,20 +336,20 @@ pub unsafe extern "C" fn CG_ImpactMark(
     //	return;
     //}
     // create the texture axis
-    crate::src::qcommon::q_math::VectorNormalize2(dir, axis[0 as i32 as usize].as_mut_ptr());
-    crate::src::qcommon::q_math::PerpendicularVector(
+    VectorNormalize2(dir, axis[0 as i32 as usize].as_mut_ptr());
+    PerpendicularVector(
         axis[1 as i32 as usize].as_mut_ptr(),
-        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
     );
-    crate::src::qcommon::q_math::RotatePointAroundVector(
+    RotatePointAroundVector(
         axis[2 as i32 as usize].as_mut_ptr(),
-        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        axis[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+        axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
         orientation,
     );
     CrossProduct(
-        axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        axis[2 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+        axis[2 as i32 as usize].as_mut_ptr() as *const vec_t,
         axis[1 as i32 as usize].as_mut_ptr(),
     );
     texCoordScale = (0.5f64 * 1.0f64 / radius as f64) as f32;
@@ -374,30 +374,30 @@ pub unsafe extern "C" fn CG_ImpactMark(
     projection[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * -(20 as i32) as f32;
     projection[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * -(20 as i32) as f32;
     projection[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * -(20 as i32) as f32;
-    numFragments = crate::src::cgame::cg_syscalls::trap_CM_MarkFragments(
+    numFragments = trap_CM_MarkFragments(
         4 as i32,
         originalPoints.as_mut_ptr() as *mut libc::c_void
-            as *const crate::src::qcommon::q_shared::vec3_t,
-        projection.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec3_t,
+        projection.as_mut_ptr() as *const vec_t,
         384 as i32,
         markPoints[0 as i32 as usize].as_mut_ptr(),
         128 as i32,
-        markFragments.as_mut_ptr() as *mut crate::src::qcommon::q_shared::markFragment_t,
+        markFragments.as_mut_ptr() as *mut markFragment_t,
     );
-    colors[0 as i32 as usize] = (red * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[1 as i32 as usize] = (green * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[2 as i32 as usize] = (blue * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[3 as i32 as usize] = (alpha * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[0 as i32 as usize] = (red * 255 as i32 as f32) as byte;
+    colors[1 as i32 as usize] = (green * 255 as i32 as f32) as byte;
+    colors[2 as i32 as usize] = (blue * 255 as i32 as f32) as byte;
+    colors[3 as i32 as usize] = (alpha * 255 as i32 as f32) as byte;
     i = 0 as i32;
     mf = markFragments.as_mut_ptr();
     while i < numFragments {
-        let mut v: *mut crate::tr_types_h::polyVert_t = 0 as *mut crate::tr_types_h::polyVert_t;
-        let mut verts: [crate::tr_types_h::polyVert_t; 10] = [crate::tr_types_h::polyVert_t {
+        let mut v: *mut polyVert_t = 0 as *mut polyVert_t;
+        let mut verts: [polyVert_t; 10] = [polyVert_t {
             xyz: [0.; 3],
             st: [0.; 2],
             modulate: [0; 4],
         }; 10];
-        let mut mark: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
+        let mut mark: *mut markPoly_t = 0 as *mut markPoly_t;
         // we have an upper limit on the complexity of polygons
         // that we store persistantly
         if (*mf).numPoints > 10 as i32 {
@@ -406,7 +406,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
         j = 0 as i32;
         v = verts.as_mut_ptr();
         while j < (*mf).numPoints {
-            let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+            let mut delta: vec3_t = [0.; 3];
             (*v).xyz[0 as i32 as usize] =
                 markPoints[((*mf).firstPoint + j) as usize][0 as i32 as usize];
             (*v).xyz[1 as i32 as usize] =
@@ -435,15 +435,15 @@ pub unsafe extern "C" fn CG_ImpactMark(
         }
         // if it is a temporary (shadow) mark, add it immediately and forget about it
         if temporary as u64 != 0 {
-            crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene(
+            trap_R_AddPolyToScene(
                 markShader,
                 (*mf).numPoints,
-                verts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
+                verts.as_mut_ptr() as *const polyVert_t,
             );
         } else {
             // otherwise save it persistantly
             mark = CG_AllocMark();
-            (*mark).time = crate::src::cgame::cg_main::cg.time;
+            (*mark).time = cg.time;
             (*mark).alphaFade = alphaFade;
             (*mark).markShader = markShader;
             (*mark).poly.numVerts = (*mf).numPoints;
@@ -456,7 +456,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
                 verts.as_mut_ptr() as *const libc::c_void,
                 ((*mf).numPoints as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::tr_types_h::polyVert_t>() as libc::c_ulong
+                        ::std::mem::size_of::<polyVert_t>() as libc::c_ulong
                     ),
             );
             markTotal += 1
@@ -699,27 +699,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn CG_AddMarks() {
     let mut j: i32 = 0;
-    let mut mp: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
-    let mut next: *mut crate::cg_local_h::markPoly_t = 0 as *mut crate::cg_local_h::markPoly_t;
+    let mut mp: *mut markPoly_t = 0 as *mut markPoly_t;
+    let mut next: *mut markPoly_t = 0 as *mut markPoly_t;
     let mut t: i32 = 0;
     let mut fade: i32 = 0;
-    if crate::src::cgame::cg_main::cg_addMarks.integer == 0 {
+    if cg_addMarks.integer == 0 {
         return;
     }
     mp = cg_activeMarkPolys.nextMark;
-    while mp != &mut cg_activeMarkPolys as *mut crate::cg_local_h::markPoly_t {
+    while mp != &mut cg_activeMarkPolys as *mut markPoly_t {
         // grab next now, so if the local entity is freed we
         // still have it
         next = (*mp).nextMark;
         // see if it is time to completely remove it
-        if crate::src::cgame::cg_main::cg.time > (*mp).time + 10000 as i32 {
+        if cg.time > (*mp).time + 10000 as i32 {
             CG_FreeMarkPoly(mp);
         } else {
             // fade out the energy bursts
-            if (*mp).markShader == crate::src::cgame::cg_main::cgs.media.energyMarkShader {
+            if (*mp).markShader == cgs.media.energyMarkShader {
                 fade = (450 as i32 as f64
                     - 450 as i32 as f64
-                        * ((crate::src::cgame::cg_main::cg.time - (*mp).time) as f64 / 3000.0f64))
+                        * ((cg.time - (*mp).time) as f64 / 3000.0f64))
                     as i32;
                 if fade < 255 as i32 {
                     if fade < 0 as i32 {
@@ -731,27 +731,27 @@ pub unsafe extern "C" fn CG_AddMarks() {
                         while j < (*mp).poly.numVerts {
                             (*mp).verts[j as usize].modulate[0 as i32 as usize] =
                                 ((*mp).color[0 as i32 as usize] * fade as f32)
-                                    as crate::src::qcommon::q_shared::byte;
+                                    as byte;
                             (*mp).verts[j as usize].modulate[1 as i32 as usize] =
                                 ((*mp).color[1 as i32 as usize] * fade as f32)
-                                    as crate::src::qcommon::q_shared::byte;
+                                    as byte;
                             (*mp).verts[j as usize].modulate[2 as i32 as usize] =
                                 ((*mp).color[2 as i32 as usize] * fade as f32)
-                                    as crate::src::qcommon::q_shared::byte;
+                                    as byte;
                             j += 1
                         }
                     }
                 }
             }
             // fade all marks out with time
-            t = (*mp).time + 10000 as i32 - crate::src::cgame::cg_main::cg.time;
+            t = (*mp).time + 10000 as i32 - cg.time;
             if t < 1000 as i32 {
                 fade = 255 as i32 * t / 1000 as i32;
                 if (*mp).alphaFade as u64 != 0 {
                     j = 0 as i32;
                     while j < (*mp).poly.numVerts {
                         (*mp).verts[j as usize].modulate[3 as i32 as usize] =
-                            fade as crate::src::qcommon::q_shared::byte;
+                            fade as byte;
                         j += 1
                     }
                 } else {
@@ -759,21 +759,21 @@ pub unsafe extern "C" fn CG_AddMarks() {
                     while j < (*mp).poly.numVerts {
                         (*mp).verts[j as usize].modulate[0 as i32 as usize] =
                             ((*mp).color[0 as i32 as usize] * fade as f32)
-                                as crate::src::qcommon::q_shared::byte;
+                                as byte;
                         (*mp).verts[j as usize].modulate[1 as i32 as usize] =
                             ((*mp).color[1 as i32 as usize] * fade as f32)
-                                as crate::src::qcommon::q_shared::byte;
+                                as byte;
                         (*mp).verts[j as usize].modulate[2 as i32 as usize] =
                             ((*mp).color[2 as i32 as usize] * fade as f32)
-                                as crate::src::qcommon::q_shared::byte;
+                                as byte;
                         j += 1
                     }
                 }
             }
-            crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene(
+            trap_R_AddPolyToScene(
                 (*mp).markShader,
                 (*mp).poly.numVerts,
-                (*mp).verts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
+                (*mp).verts.as_mut_ptr() as *const polyVert_t,
             );
         }
         mp = next

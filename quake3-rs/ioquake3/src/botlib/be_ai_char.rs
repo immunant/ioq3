@@ -285,7 +285,7 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
                     )
                     .wrapping_add(1 as i32 as libc::c_ulong),
                 ) as *mut libc::c_char;
-                ::libc::strcpy(
+                libc::strcpy(
                     (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string,
                     (*(*defaultch).c.as_mut_ptr().offset(i as isize))
                         .value
@@ -315,9 +315,9 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     let mut index: i32 = 0;
     let mut foundcharacter: i32 = 0;
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut source: *mut source_t =
+        0 as *mut source_t;
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -327,15 +327,15 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    foundcharacter = crate::src::qcommon::q_shared::qfalse as i32;
+    foundcharacter = qfalse as i32;
     //a bot character is parsed in two phases
-    crate::src::botlib::l_precomp::PC_SetBaseFolder(
+    PC_SetBaseFolder(
         b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ); //end if
-    source = crate::src::botlib::l_precomp::LoadSourceFile(charfile)
-        as *mut crate::src::botlib::l_precomp::source_s;
+    source = LoadSourceFile(charfile)
+        as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -352,41 +352,41 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 .wrapping_mul(::std::mem::size_of::<bot_characteristic_t>() as libc::c_ulong),
         ),
     ) as *mut bot_character_t;
-    ::libc::strcpy((*ch).filename.as_mut_ptr(), charfile);
+    libc::strcpy((*ch).filename.as_mut_ptr(), charfile);
     //end else
-    while crate::src::botlib::l_precomp::PC_ReadToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    while PC_ReadToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) != 0
     {
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"skill\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             //end while
-            if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            if PC_ExpectTokenType(
+                source as *mut source_s,
                 3 as i32,
                 0 as i32,
-                &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                &mut token as *mut _ as *mut token_s,
             ) == 0
             {
-                crate::src::botlib::l_precomp::FreeSource(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                FreeSource(
+                    source as *mut source_s,
                 ); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                 return 0 as *mut bot_character_t;
             }
             //end else
-            if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            if PC_ExpectTokenString(
+                source as *mut source_s,
                 b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ) == 0
             {
-                crate::src::botlib::l_precomp::FreeSource(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                FreeSource(
+                    source as *mut source_s,
                 ); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
@@ -394,14 +394,14 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
             }
             if skill < 0 as i32 || token.intvalue == skill as libc::c_ulong {
                 //if it's the correct skill
-                foundcharacter = crate::src::qcommon::q_shared::qtrue as i32; //end if
+                foundcharacter = qtrue as i32; //end if
                 (*ch).skill = token.intvalue as f32;
-                while crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                while PC_ExpectAnyToken(
+                    source as *mut source_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) != 0
                 {
-                    if ::libc::strcmp(
+                    if libc::strcmp(
                         token.string.as_mut_ptr(),
                         b"}\x00" as *const u8 as *const libc::c_char,
                     ) == 0
@@ -410,15 +410,15 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         //end else
                     } //end if
                     if token.type_0 != 3 as i32 || token.subtype & 0x1000 as i32 == 0 {
-                        crate::src::botlib::l_precomp::SourceError(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        SourceError(
+                            source as *mut source_s,
                             b"expected integer index, found %s\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
                             token.string.as_mut_ptr(),
                         ); //end if
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         ); //end if
                         BotFreeCharacterStrings(ch); //end if
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void); //end if
@@ -426,42 +426,42 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                     } //end if
                     index = token.intvalue as i32;
                     if index < 0 as i32 || index > 80 as i32 {
-                        crate::src::botlib::l_precomp::SourceError(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        SourceError(
+                            source as *mut source_s,
                             b"characteristic index out of range [0, %d]\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
                             80 as i32,
                         );
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
                     }
                     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 != 0 {
-                        crate::src::botlib::l_precomp::SourceError(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        SourceError(
+                            source as *mut source_s,
                             b"characteristic %d already initialized\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
                             index,
                         );
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
                     }
-                    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
-                        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    if PC_ExpectAnyToken(
+                        source as *mut source_s,
+                        &mut token as *mut _ as *mut token_s,
                     ) == 0
                     {
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
@@ -481,29 +481,29 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         }
                     //end else
                     } else if token.type_0 == 1 as i32 {
-                        crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr()); //end else if
+                        StripDoubleQuotes(token.string.as_mut_ptr()); //end else if
                         let ref mut fresh1 =
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string;
                         *fresh1 = crate::src::botlib::l_memory::GetMemory(
                             crate::stdlib::strlen(token.string.as_mut_ptr())
                                 .wrapping_add(1 as i32 as libc::c_ulong),
                         ) as *mut libc::c_char;
-                        ::libc::strcpy(
+                        libc::strcpy(
                             (*(*ch).c.as_mut_ptr().offset(index as isize)).value.string,
                             token.string.as_mut_ptr(),
                         );
                         (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 =
                             3 as i32 as libc::c_char
                     } else {
-                        crate::src::botlib::l_precomp::SourceError(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        SourceError(
+                            source as *mut source_s,
                             b"expected integer, float or string, found %s\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
                             token.string.as_mut_ptr(),
                         );
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
@@ -515,25 +515,25 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 indent = 1 as i32;
                 while indent != 0 {
                     //end while
-                    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
-                        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    if PC_ExpectAnyToken(
+                        source as *mut source_s,
+                        &mut token as *mut _ as *mut token_s,
                     ) == 0
                     {
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         ); //end if
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
                     }
-                    if ::libc::strcmp(
+                    if libc::strcmp(
                         token.string.as_mut_ptr(),
                         b"{\x00" as *const u8 as *const libc::c_char,
                     ) == 0
                     {
                         indent += 1
-                    } else if ::libc::strcmp(
+                    } else if libc::strcmp(
                         token.string.as_mut_ptr(),
                         b"}\x00" as *const u8 as *const libc::c_char,
                     ) == 0
@@ -543,22 +543,22 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 }
             }
         } else {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"unknown definition %s\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
-            crate::src::botlib::l_precomp::FreeSource(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            FreeSource(
+                source as *mut source_s,
             );
             BotFreeCharacterStrings(ch);
             crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
             return 0 as *mut bot_character_t;
         }
     }
-    crate::src::botlib::l_precomp::FreeSource(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    FreeSource(
+        source as *mut source_s,
     );
     //
     if foundcharacter == 0 {
@@ -585,7 +585,7 @@ pub unsafe extern "C" fn BotFindCachedCharacter(
     handle = 1 as i32;
     while handle <= 64 as i32 {
         if !botcharacters[handle as usize].is_null() {
-            if ::libc::strcmp(
+            if libc::strcmp(
                 (*botcharacters[handle as usize]).filename.as_mut_ptr(),
                 charfile,
             ) == 0 as i32
@@ -822,7 +822,7 @@ pub unsafe extern "C" fn BotLoadCharacterSkill(
     defaultch = BotLoadCachedCharacter(
         b"bots/default_c.c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         skill,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        qfalse as i32,
     );
     ch = BotLoadCachedCharacter(
         charfile,
@@ -882,7 +882,7 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
         ),
     ) as *mut bot_character_t;
     (*out).skill = desiredskill;
-    ::libc::strcpy((*out).filename.as_mut_ptr(), (*ch1).filename.as_mut_ptr());
+    libc::strcpy((*out).filename.as_mut_ptr(), (*ch1).filename.as_mut_ptr());
     botcharacters[handle as usize] = out;
     scale = (desiredskill - (*ch1).skill) / ((*ch2).skill - (*ch1).skill);
     i = 0 as i32;
@@ -908,7 +908,7 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
                 crate::stdlib::strlen((*(*ch1).c.as_mut_ptr().offset(i as isize)).value.string)
                     .wrapping_add(1 as i32 as libc::c_ulong),
             ) as *mut libc::c_char;
-            ::libc::strcpy(
+            libc::strcpy(
                 (*(*out).c.as_mut_ptr().offset(i as isize)).value.string,
                 (*(*ch1).c.as_mut_ptr().offset(i as isize)).value.string,
             );
@@ -1030,7 +1030,7 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index:
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t; //end if
     ch = BotCharacterFromHandle(character); //end if
     if ch.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if index < 0 as i32 || index >= 80 as i32 {
         crate::src::botlib::be_interface::botimport
@@ -1041,7 +1041,7 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index:
                 as *mut libc::c_char,
             index,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 == 0 {
         crate::src::botlib::be_interface::botimport
@@ -1052,9 +1052,9 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index:
                 as *mut libc::c_char,
             index,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //returns a float characteristic
 //end of the function CheckCharacteristicIndex

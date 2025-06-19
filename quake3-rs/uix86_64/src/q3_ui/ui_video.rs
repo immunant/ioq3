@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -79,36 +79,36 @@ pub use ::libc::strtol;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct graphicsoptions_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub graphics: crate::ui_local_h::menutext_s,
-    pub display: crate::ui_local_h::menutext_s,
-    pub sound: crate::ui_local_h::menutext_s,
-    pub network: crate::ui_local_h::menutext_s,
-    pub list: crate::ui_local_h::menulist_s,
-    pub ratio: crate::ui_local_h::menulist_s,
-    pub mode: crate::ui_local_h::menulist_s,
-    pub driver: crate::ui_local_h::menulist_s,
-    pub tq: crate::ui_local_h::menuslider_s,
-    pub fs: crate::ui_local_h::menulist_s,
-    pub lighting: crate::ui_local_h::menulist_s,
-    pub allow_extensions: crate::ui_local_h::menulist_s,
-    pub texturebits: crate::ui_local_h::menulist_s,
-    pub colordepth: crate::ui_local_h::menulist_s,
-    pub geometry: crate::ui_local_h::menulist_s,
-    pub filter: crate::ui_local_h::menulist_s,
-    pub driverinfo: crate::ui_local_h::menutext_s,
-    pub apply: crate::ui_local_h::menubitmap_s,
-    pub back: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub graphics: menutext_s,
+    pub display: menutext_s,
+    pub sound: menutext_s,
+    pub network: menutext_s,
+    pub list: menulist_s,
+    pub ratio: menulist_s,
+    pub mode: menulist_s,
+    pub driver: menulist_s,
+    pub tq: menuslider_s,
+    pub fs: menulist_s,
+    pub lighting: menulist_s,
+    pub allow_extensions: menulist_s,
+    pub texturebits: menulist_s,
+    pub colordepth: menulist_s,
+    pub geometry: menulist_s,
+    pub filter: menulist_s,
+    pub driverinfo: menutext_s,
+    pub apply: menubitmap_s,
+    pub back: menubitmap_s,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct InitialVideoOptions_s {
     pub mode: i32,
-    pub fullscreen: crate::src::qcommon::q_shared::qboolean,
+    pub fullscreen: qboolean,
     pub tq: i32,
     pub lighting: i32,
     pub colordepth: i32,
@@ -116,17 +116,17 @@ pub struct InitialVideoOptions_s {
     pub geometry: i32,
     pub filter: i32,
     pub driver: i32,
-    pub extensions: crate::src::qcommon::q_shared::qboolean,
+    pub extensions: qboolean,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct driverinfo_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub back: menubitmap_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
     pub stringbuff: [libc::c_char; 1024],
     pub strings: [*mut libc::c_char; 64],
     pub numstrings: i32,
@@ -141,19 +141,19 @@ static mut driverinfo_artlist: [*mut libc::c_char; 5] = [
 ];
 
 static mut s_driverinfo: driverinfo_t = driverinfo_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -163,8 +163,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -175,8 +175,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -186,8 +186,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -202,8 +202,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -213,8 +213,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -229,8 +229,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -240,8 +240,8 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -270,9 +270,9 @@ unsafe extern "C" fn DriverInfo_Event(mut ptr: *mut libc::c_void, mut event: i32
     if event != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         100 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         _ => {}
     };
@@ -286,101 +286,101 @@ DriverInfo_MenuDraw
 unsafe extern "C" fn DriverInfo_MenuDraw() {
     let mut i: i32 = 0;
     let mut y: i32 = 0;
-    crate::src::q3_ui::ui_qmenu::Menu_Draw(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    Menu_Draw(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         80 as i32,
         b"VENDOR\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         152 as i32,
         b"PIXELFORMAT\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         192 as i32,
         b"EXTENSIONS\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         80 as i32 + 16 as i32,
-        crate::src::q3_ui::ui_atoms::uis
+        uis
             .glconfig
             .vendor_string
             .as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+        text_color_normal.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         96 as i32 + 16 as i32,
-        crate::src::q3_ui::ui_atoms::uis
+        uis
             .glconfig
             .version_string
             .as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+        text_color_normal.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         112 as i32 + 16 as i32,
-        crate::src::q3_ui::ui_atoms::uis
+        uis
             .glconfig
             .renderer_string
             .as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+        text_color_normal.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         152 as i32 + 16 as i32,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"color(%d-bits) Z(%d-bits) stencil(%d-bits)\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
-            crate::src::q3_ui::ui_atoms::uis.glconfig.colorBits,
-            crate::src::q3_ui::ui_atoms::uis.glconfig.depthBits,
-            crate::src::q3_ui::ui_atoms::uis.glconfig.stencilBits,
+            uis.glconfig.colorBits,
+            uis.glconfig.depthBits,
+            uis.glconfig.stencilBits,
         ),
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+        text_color_normal.as_mut_ptr(),
     );
     // double column
     y = 192 as i32 + 16 as i32;
     i = 0 as i32;
     while i < s_driverinfo.numstrings / 2 as i32 {
-        crate::src::q3_ui::ui_atoms::UI_DrawString(
+        UI_DrawString(
             320 as i32 - 4 as i32,
             y,
             s_driverinfo.strings[(i * 2 as i32) as usize],
             0x2 as i32 | 0x10 as i32,
-            crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+            text_color_normal.as_mut_ptr(),
         );
-        crate::src::q3_ui::ui_atoms::UI_DrawString(
+        UI_DrawString(
             320 as i32 + 4 as i32,
             y,
             s_driverinfo.strings[(i * 2 as i32 + 1 as i32) as usize],
             0 as i32 | 0x10 as i32,
-            crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+            text_color_normal.as_mut_ptr(),
         );
         y += 16 as i32;
         i += 1
     }
     if s_driverinfo.numstrings & 1 as i32 != 0 {
-        crate::src::q3_ui::ui_atoms::UI_DrawString(
+        UI_DrawString(
             320 as i32,
             y,
             s_driverinfo.strings[(s_driverinfo.numstrings - 1 as i32) as usize],
             0x1 as i32 | 0x10 as i32,
-            crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr(),
+            text_color_normal.as_mut_ptr(),
         );
     };
 }
@@ -396,7 +396,7 @@ pub unsafe extern "C" fn DriverInfo_Cache() {
     // touch all our pics
     i = 0 as i32;
     while !driverinfo_artlist[i as usize].is_null() {
-        crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(driverinfo_artlist[i as usize]);
+        trap_R_RegisterShaderNoMip(driverinfo_artlist[i as usize]);
         i += 1
     }
 }
@@ -417,14 +417,14 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
         ::std::mem::size_of::<driverinfo_t>() as libc::c_ulong,
     );
     DriverInfo_Cache();
-    s_driverinfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_driverinfo.menu.fullscreen = qtrue;
     s_driverinfo.menu.draw = Some(DriverInfo_MenuDraw as unsafe extern "C" fn() -> ());
     s_driverinfo.banner.generic.type_0 = 10 as i32;
     s_driverinfo.banner.generic.x = 320 as i32;
     s_driverinfo.banner.generic.y = 16 as i32;
     s_driverinfo.banner.string =
         b"DRIVER INFO\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_driverinfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_driverinfo.banner.color = color_white.as_mut_ptr();
     s_driverinfo.banner.style = 0x1 as i32;
     s_driverinfo.framel.generic.type_0 = 6 as i32;
     s_driverinfo.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
@@ -456,9 +456,9 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=399
     // NOTE: could have pushed the size of stringbuff, but the list is already out of the screen
     // (no matter what your resolution)
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_driverinfo.stringbuff.as_mut_ptr(),
-        crate::src::q3_ui::ui_atoms::uis
+        uis
             .glconfig
             .extensions_string
             .as_mut_ptr(),
@@ -493,30 +493,30 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
         }
         i += 1
     }
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_driverinfo.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_driverinfo.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_driverinfo.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_driverinfo.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_driverinfo.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_driverinfo.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_driverinfo.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_driverinfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_driverinfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
     );
 }
 
 static mut s_ivo: InitialVideoOptions_s = InitialVideoOptions_s {
     mode: 0,
-    fullscreen: crate::src::qcommon::q_shared::qfalse,
+    fullscreen: qfalse,
     tq: 0,
     lighting: 0,
     colordepth: 0,
@@ -524,23 +524,23 @@ static mut s_ivo: InitialVideoOptions_s = InitialVideoOptions_s {
     geometry: 0,
     filter: 0,
     driver: 0,
-    extensions: crate::src::qcommon::q_shared::qfalse,
+    extensions: qfalse,
 };
 
 static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -550,8 +550,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -562,8 +562,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -573,8 +573,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -589,8 +589,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -600,8 +600,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -616,8 +616,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    graphics: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    graphics: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -627,8 +627,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -639,8 +639,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    display: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    display: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -650,8 +650,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -662,8 +662,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    sound: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    sound: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -673,8 +673,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -685,8 +685,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    network: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    network: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -696,8 +696,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -708,8 +708,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    list: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    list: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -719,8 +719,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -737,8 +737,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    ratio: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    ratio: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -748,8 +748,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -766,8 +766,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    mode: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    mode: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -777,8 +777,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -795,8 +795,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    driver: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    driver: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -806,8 +806,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -824,8 +824,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    tq: crate::ui_local_h::menuslider_s {
-        generic: crate::ui_local_h::menucommon_s {
+    tq: menuslider_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -835,8 +835,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -848,8 +848,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         curvalue: 0.,
         range: 0.,
     },
-    fs: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    fs: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -859,8 +859,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -877,8 +877,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    lighting: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    lighting: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -888,8 +888,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -906,8 +906,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    allow_extensions: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    allow_extensions: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -917,8 +917,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -935,8 +935,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    texturebits: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    texturebits: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -946,8 +946,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -964,8 +964,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    colordepth: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    colordepth: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -975,8 +975,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -993,8 +993,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    geometry: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    geometry: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -1004,8 +1004,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1022,8 +1022,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    filter: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    filter: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -1033,8 +1033,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1051,8 +1051,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         columns: 0,
         separation: 0,
     },
-    driverinfo: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    driverinfo: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -1062,8 +1062,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1074,8 +1074,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    apply: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    apply: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -1085,8 +1085,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1101,8 +1101,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -1112,8 +1112,8 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1134,7 +1134,7 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
     {
         let mut init = InitialVideoOptions_s {
             mode: 6 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 3 as i32,
             lighting: 0 as i32,
             colordepth: 2 as i32,
@@ -1142,14 +1142,14 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 2 as i32,
             filter: 1 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
             mode: 4 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 2 as i32,
             lighting: 0 as i32,
             colordepth: 2 as i32,
@@ -1157,14 +1157,14 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 1 as i32,
             filter: 1 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
             mode: 3 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 2 as i32,
             lighting: 0 as i32,
             colordepth: 0 as i32,
@@ -1172,14 +1172,14 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 1 as i32,
             filter: 0 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
             mode: 2 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 1 as i32,
             lighting: 0 as i32,
             colordepth: 1 as i32,
@@ -1187,14 +1187,14 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 0 as i32,
             filter: 0 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
             mode: 2 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 1 as i32,
             lighting: 1 as i32,
             colordepth: 1 as i32,
@@ -1202,14 +1202,14 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 0 as i32,
             filter: 0 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
     {
         let mut init = InitialVideoOptions_s {
             mode: 3 as i32,
-            fullscreen: crate::src::qcommon::q_shared::qtrue,
+            fullscreen: qtrue,
             tq: 1 as i32,
             lighting: 0 as i32,
             colordepth: 0 as i32,
@@ -1217,7 +1217,7 @@ static mut s_ivo_templates: [InitialVideoOptions_s; 6] = [
             geometry: 1 as i32,
             filter: 0 as i32,
             driver: 0 as i32,
-            extensions: crate::src::qcommon::q_shared::qtrue,
+            extensions: qtrue,
         };
         init
     },
@@ -1285,8 +1285,8 @@ static mut detectedResolutions: [*const libc::c_char; 32] = [0 as *const libc::c
 
 static mut resolutions: *mut *const libc::c_char = unsafe { builtinResolutions.as_ptr() as *mut _ };
 
-static mut resolutionsDetected: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut resolutionsDetected: qboolean =
+    qfalse;
 /*
 =================
 GraphicsOptions_FindBuiltinResolution
@@ -1303,7 +1303,7 @@ unsafe extern "C" fn GraphicsOptions_FindBuiltinResolution(mut mode: i32) -> i32
     }
     i = 0 as i32;
     while !builtinResolutions[i as usize].is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             builtinResolutions[i as usize],
             detectedResolutions[mode as usize],
         ) == 0
@@ -1330,7 +1330,7 @@ unsafe extern "C" fn GraphicsOptions_FindDetectedResolution(mut mode: i32) -> i3
     }
     i = 0 as i32;
     while !detectedResolutions[i as usize].is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             builtinResolutions[mode as usize],
             detectedResolutions[i as usize],
         ) == 0
@@ -1358,15 +1358,15 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         let mut x: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut str: [libc::c_char; 8] = [0; 8];
         // calculate resolution's aspect ratio
-        x = ::libc::strchr(*resolutions.offset(r as isize), 'x' as i32).offset(1 as i32 as isize);
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        x = libc::strchr(*resolutions.offset(r as isize), 'x' as i32).offset(1 as i32 as isize);
+        Q_strncpyz(
             str.as_mut_ptr(),
             *resolutions.offset(r as isize),
             x.offset_from(*resolutions.offset(r as isize)) as isize as i32,
         );
         w = atoi(str.as_mut_ptr());
         h = atoi(x);
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             str.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
             b"%.2f:1\x00" as *const u8 as *const libc::c_char,
@@ -1375,12 +1375,12 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         // rename common ratios ("1.33:1" -> "4:3")
         i = 0 as i32;
         while !knownRatios[i as usize][0 as i32 as usize].is_null() {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 str.as_mut_ptr(),
                 knownRatios[i as usize][0 as i32 as usize],
             ) == 0
             {
-                crate::src::qcommon::q_shared::Q_strncpyz(
+                Q_strncpyz(
                     str.as_mut_ptr(),
                     knownRatios[i as usize][1 as i32 as usize],
                     ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
@@ -1394,7 +1394,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         // establish res/ratio relationship
         i = 0 as i32;
         while ratioBuf[i as usize][0 as i32 as usize] != 0 {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 str.as_mut_ptr(),
                 ratioBuf[i as usize].as_mut_ptr(),
             ) == 0
@@ -1404,7 +1404,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
             i += 1
         }
         if ratioBuf[i as usize][0 as i32 as usize] == 0 {
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 ratioBuf[i as usize].as_mut_ptr(),
                 str.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 8]>() as libc::c_ulong as i32,
@@ -1427,9 +1427,9 @@ unsafe extern "C" fn GraphicsOptions_GetInitialVideo() {
     s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
     s_ivo.driver = s_graphicsoptions.driver.curvalue;
     s_ivo.mode = s_graphicsoptions.mode.curvalue;
-    s_ivo.fullscreen = s_graphicsoptions.fs.curvalue as crate::src::qcommon::q_shared::qboolean;
+    s_ivo.fullscreen = s_graphicsoptions.fs.curvalue as qboolean;
     s_ivo.extensions =
-        s_graphicsoptions.allow_extensions.curvalue as crate::src::qcommon::q_shared::qboolean;
+        s_graphicsoptions.allow_extensions.curvalue as qboolean;
     s_ivo.tq = s_graphicsoptions.tq.curvalue as i32;
     s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
     s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
@@ -1443,9 +1443,9 @@ GraphicsOptions_GetResolutions
 */
 
 unsafe extern "C" fn GraphicsOptions_GetResolutions() {
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         resbuf.as_mut_ptr(),
-        crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
+        UI_Cvar_VariableString(
             b"r_availableModes\x00" as *const u8 as *const libc::c_char,
         ),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1462,7 +1462,7 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
             let fresh2 = i;
             i = i.wrapping_add(1);
             detectedResolutions[fresh2 as usize] = s;
-            s = ::libc::strchr(s, ' ' as i32);
+            s = libc::strchr(s, ' ' as i32);
             if !s.is_null() {
                 let fresh3 = s;
                 s = s.offset(1);
@@ -1472,7 +1472,7 @@ unsafe extern "C" fn GraphicsOptions_GetResolutions() {
         detectedResolutions[i as usize] = 0 as *const libc::c_char;
         if i > 0 as i32 as u32 {
             resolutions = detectedResolutions.as_mut_ptr();
-            resolutionsDetected = crate::src::qcommon::q_shared::qtrue
+            resolutionsDetected = qtrue
         }
     };
 }
@@ -1602,30 +1602,30 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
     }
     match s_graphicsoptions.texturebits.curvalue {
         0 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
                 0 as i32 as f32,
             );
         }
         1 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
                 16 as i32 as f32,
             );
         }
         2 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_texturebits\x00" as *const u8 as *const libc::c_char,
                 32 as i32 as f32,
             );
         }
         _ => {}
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"r_picmip\x00" as *const u8 as *const libc::c_char,
         3 as i32 as f32 - s_graphicsoptions.tq.curvalue,
     );
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
         s_graphicsoptions.allow_extensions.curvalue as f32,
     );
@@ -1643,133 +1643,133 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
         if mode == -(1 as i32) {
             let mut w: [libc::c_char; 16] = [0; 16];
             let mut h: [libc::c_char; 16] = [0; 16];
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 w.as_mut_ptr(),
                 detectedResolutions[s_graphicsoptions.mode.curvalue as usize],
                 ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             );
-            *::libc::strchr(w.as_mut_ptr(), 'x' as i32) = 0 as i32 as libc::c_char;
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            *libc::strchr(w.as_mut_ptr(), 'x' as i32) = 0 as i32 as libc::c_char;
+            Q_strncpyz(
                 h.as_mut_ptr(),
-                ::libc::strchr(
+                libc::strchr(
                     detectedResolutions[s_graphicsoptions.mode.curvalue as usize],
                     'x' as i32,
                 )
                 .offset(1 as i32 as isize),
                 ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
                 w.as_mut_ptr(),
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,
                 h.as_mut_ptr(),
             );
         }
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
             mode as f32,
         );
     } else {
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
             s_graphicsoptions.mode.curvalue as f32,
         );
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
         s_graphicsoptions.fs.curvalue as f32,
     );
     match s_graphicsoptions.colordepth.curvalue {
         0 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
                 0 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
                 0 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_Reset(
+            trap_Cvar_Reset(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
             );
         }
         1 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
                 16 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
                 16 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
                 0 as i32 as f32,
             );
         }
         2 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_colorbits\x00" as *const u8 as *const libc::c_char,
                 32 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
                 24 as i32 as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
                 8 as i32 as f32,
             );
         }
         _ => {}
     }
-    crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+    trap_Cvar_SetValue(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
         s_graphicsoptions.lighting.curvalue as f32,
     );
     if s_graphicsoptions.geometry.curvalue == 2 as i32 {
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
             0 as i32 as f32,
         );
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
             4 as i32 as f32,
         );
     } else if s_graphicsoptions.geometry.curvalue == 1 as i32 {
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
             1 as i32 as f32,
         );
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
             12 as i32 as f32,
         );
     } else {
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_lodBias\x00" as *const u8 as *const libc::c_char,
             1 as i32 as f32,
         );
-        crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+        trap_Cvar_SetValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
             20 as i32 as f32,
         );
     }
     if s_graphicsoptions.filter.curvalue != 0 {
-        crate::src::ui::ui_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"r_textureMode\x00" as *const u8 as *const libc::c_char,
             b"GL_LINEAR_MIPMAP_LINEAR\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::ui::ui_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"r_textureMode\x00" as *const u8 as *const libc::c_char,
             b"GL_LINEAR_MIPMAP_NEAREST\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+    trap_Cmd_ExecuteText(
+        EXEC_APPEND as i32,
         b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -1785,7 +1785,7 @@ unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event
         return;
     }
     let mut current_block_28: u64;
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         110 => {
             s_graphicsoptions.mode.curvalue = ratioToRes[s_graphicsoptions.ratio.curvalue as usize];
             current_block_28 = 6581794399938936269;
@@ -1814,22 +1814,22 @@ unsafe extern "C" fn GraphicsOptions_Event(mut ptr: *mut libc::c_void, mut event
             current_block_28 = 652864300344834934;
         }
         101 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
             current_block_28 = 652864300344834934;
         }
         107 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_display::UI_DisplayOptionsMenu();
+            UI_PopMenu();
+            UI_DisplayOptionsMenu();
             current_block_28 = 652864300344834934;
         }
         108 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_sound::UI_SoundOptionsMenu();
+            UI_PopMenu();
+            UI_SoundOptionsMenu();
             current_block_28 = 652864300344834934;
         }
         109 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_network::UI_NetworkOptionsMenu();
+            UI_PopMenu();
+            UI_NetworkOptionsMenu();
             current_block_28 = 652864300344834934;
         }
         106 | _ => {
@@ -1875,8 +1875,8 @@ GraphicsOptions_MenuDraw
 pub unsafe extern "C" fn GraphicsOptions_MenuDraw() {
     //APSFIX - rework this
     GraphicsOptions_UpdateMenuItems();
-    crate::src::q3_ui::ui_qmenu::Menu_Draw(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    Menu_Draw(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
     );
 }
 /*
@@ -1887,7 +1887,7 @@ GraphicsOptions_SetMenuItems
 
 unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(
-        crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        trap_Cvar_VariableValue(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
         ) as i32,
     );
@@ -1895,7 +1895,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
         if resolutionsDetected as u64 != 0 {
             let mut i: i32 = 0;
             let mut buf: [libc::c_char; 1024] = [0; 1024];
-            crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+            trap_Cvar_VariableStringBuffer(
                 b"r_customwidth\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr(),
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
@@ -1904,7 +1904,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
             buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
                 as usize] = 0 as i32 as libc::c_char;
             buf[crate::stdlib::strlen(buf.as_mut_ptr()) as usize] = 'x' as i32 as libc::c_char;
-            crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
+            trap_Cvar_VariableStringBuffer(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr()
                     .offset(crate::stdlib::strlen(buf.as_mut_ptr()) as isize),
@@ -1913,7 +1913,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
             );
             i = 0 as i32;
             while !detectedResolutions[i as usize].is_null() {
-                if crate::src::qcommon::q_shared::Q_stricmp(
+                if Q_stricmp(
                     buf.as_mut_ptr(),
                     detectedResolutions[i as usize],
                 ) == 0
@@ -1932,15 +1932,15 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
         }
     }
     s_graphicsoptions.ratio.curvalue = resToRatio[s_graphicsoptions.mode.curvalue as usize];
-    s_graphicsoptions.fs.curvalue = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_graphicsoptions.fs.curvalue = trap_Cvar_VariableValue(
         b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     s_graphicsoptions.allow_extensions.curvalue =
-        crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        trap_Cvar_VariableValue(
             b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
         ) as i32;
     s_graphicsoptions.tq.curvalue = 3 as i32 as f32
-        - crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        - trap_Cvar_VariableValue(
             b"r_picmip\x00" as *const u8 as *const libc::c_char,
         );
     if s_graphicsoptions.tq.curvalue < 0 as i32 as f32 {
@@ -1948,10 +1948,10 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     } else if s_graphicsoptions.tq.curvalue > 3 as i32 as f32 {
         s_graphicsoptions.tq.curvalue = 3 as i32 as f32
     }
-    s_graphicsoptions.lighting.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_graphicsoptions.lighting.curvalue = (trap_Cvar_VariableValue(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    match crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    match trap_Cvar_VariableValue(
         b"r_texturebits\x00" as *const u8 as *const libc::c_char,
     ) as i32
     {
@@ -1959,8 +1959,8 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
         32 => s_graphicsoptions.texturebits.curvalue = 2 as i32,
         0 | _ => s_graphicsoptions.texturebits.curvalue = 0 as i32,
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
-        crate::src::q3_ui::ui_atoms::UI_Cvar_VariableString(
+    if Q_stricmp(
+        UI_Cvar_VariableString(
             b"r_textureMode\x00" as *const u8 as *const libc::c_char,
         ),
         b"GL_LINEAR_MIPMAP_NEAREST\x00" as *const u8 as *const libc::c_char,
@@ -1970,11 +1970,11 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     } else {
         s_graphicsoptions.filter.curvalue = 1 as i32
     }
-    if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    if trap_Cvar_VariableValue(
         b"r_lodBias\x00" as *const u8 as *const libc::c_char,
     ) > 0 as i32 as f32
     {
-        if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        if trap_Cvar_VariableValue(
             b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
         ) >= 20 as i32 as f32
         {
@@ -1985,7 +1985,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     } else {
         s_graphicsoptions.geometry.curvalue = 2 as i32
     }
-    match crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    match trap_Cvar_VariableValue(
         b"r_colorbits\x00" as *const u8 as *const libc::c_char,
     ) as i32
     {
@@ -2087,15 +2087,15 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     GraphicsOptions_GetResolutions();
     GraphicsOptions_GetAspectRatios();
     GraphicsOptions_Cache();
-    s_graphicsoptions.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    s_graphicsoptions.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_graphicsoptions.menu.wrapAround = qtrue;
+    s_graphicsoptions.menu.fullscreen = qtrue;
     s_graphicsoptions.menu.draw = Some(GraphicsOptions_MenuDraw as unsafe extern "C" fn() -> ());
     s_graphicsoptions.banner.generic.type_0 = 10 as i32;
     s_graphicsoptions.banner.generic.x = 320 as i32;
     s_graphicsoptions.banner.generic.y = 16 as i32;
     s_graphicsoptions.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_graphicsoptions.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_graphicsoptions.banner.color = color_white.as_mut_ptr();
     s_graphicsoptions.banner.style = 0x1 as i32;
     s_graphicsoptions.framel.generic.type_0 = 6 as i32;
     s_graphicsoptions.framel.generic.name =
@@ -2123,7 +2123,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.graphics.style = 0x2 as i32;
-    s_graphicsoptions.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    s_graphicsoptions.graphics.color = color_red.as_mut_ptr();
     s_graphicsoptions.display.generic.type_0 = 9 as i32;
     s_graphicsoptions.display.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.display.generic.id = 107 as i32;
@@ -2134,7 +2134,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.display.style = 0x2 as i32;
-    s_graphicsoptions.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    s_graphicsoptions.display.color = color_red.as_mut_ptr();
     s_graphicsoptions.sound.generic.type_0 = 9 as i32;
     s_graphicsoptions.sound.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.sound.generic.id = 108 as i32;
@@ -2145,7 +2145,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.sound.style = 0x2 as i32;
-    s_graphicsoptions.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    s_graphicsoptions.sound.color = color_red.as_mut_ptr();
     s_graphicsoptions.network.generic.type_0 = 9 as i32;
     s_graphicsoptions.network.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.network.generic.id = 109 as i32;
@@ -2156,7 +2156,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.network.style = 0x2 as i32;
-    s_graphicsoptions.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    s_graphicsoptions.network.color = color_red.as_mut_ptr();
     y = 240 as i32 - 7 as i32 * (16 as i32 + 2 as i32);
     s_graphicsoptions.list.generic.type_0 = 3 as i32;
     s_graphicsoptions.list.generic.name =
@@ -2176,8 +2176,8 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.driver.generic.y = y;
     s_graphicsoptions.driver.itemnames = s_driver_names.as_mut_ptr();
     s_graphicsoptions.driver.curvalue =
-        (crate::src::q3_ui::ui_atoms::uis.glconfig.driverType as u32
-            == crate::tr_types_h::GLDRV_VOODOO as i32 as u32) as i32;
+        (uis.glconfig.driverType as u32
+            == GLDRV_VOODOO as i32 as u32) as i32;
     y += 16 as i32 + 2 as i32;
     // references/modifies "r_allowExtensions"
     s_graphicsoptions.allow_extensions.generic.type_0 = 3 as i32;
@@ -2282,7 +2282,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.driverinfo.string =
         b"Driver Info\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.driverinfo.style = 0x1 as i32 | 0x10 as i32;
-    s_graphicsoptions.driverinfo.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    s_graphicsoptions.driverinfo.color = color_red.as_mut_ptr();
     s_graphicsoptions.back.generic.type_0 = 6 as i32;
     s_graphicsoptions.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
@@ -2310,104 +2310,104 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.apply.height = 64 as i32;
     s_graphicsoptions.apply.focuspic =
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.graphics as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.graphics as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.display as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.display as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.sound as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.sound as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.network as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.network as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.list as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.list as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.driver as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.driver as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.allow_extensions as *mut crate::ui_local_h::menulist_s
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.allow_extensions as *mut menulist_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.ratio as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.ratio as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.mode as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.mode as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.colordepth as *mut crate::ui_local_h::menulist_s
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.colordepth as *mut menulist_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.fs as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.fs as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.lighting as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.lighting as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.geometry as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.geometry as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.tq as *mut crate::ui_local_h::menuslider_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.tq as *mut menuslider_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.texturebits as *mut crate::ui_local_h::menulist_s
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.texturebits as *mut menulist_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.filter as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.filter as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.driverinfo as *mut crate::ui_local_h::menutext_s
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.driverinfo as *mut menutext_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.apply as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.apply as *mut menubitmap_s as *mut libc::c_void,
     );
     GraphicsOptions_SetMenuItems();
     GraphicsOptions_GetInitialVideo();
-    if crate::src::q3_ui::ui_atoms::uis.glconfig.driverType as u32
-        == crate::tr_types_h::GLDRV_ICD as i32 as u32
-        && crate::src::q3_ui::ui_atoms::uis.glconfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_3DFX_2D3D as i32 as u32
+    if uis.glconfig.driverType as u32
+        == GLDRV_ICD as i32 as u32
+        && uis.glconfig.hardwareType as u32
+            == GLHW_3DFX_2D3D as i32 as u32
     {
         s_graphicsoptions.driver.generic.flags |= 0x1000 as i32 as u32 | 0x4000 as i32 as u32
     };
@@ -2420,22 +2420,22 @@ GraphicsOptions_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn GraphicsOptions_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2451,11 +2451,11 @@ UI_GraphicsOptionsMenu
 
 pub unsafe extern "C" fn UI_GraphicsOptionsMenu() {
     GraphicsOptions_MenuInit();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_SetCursorToItem(
-        &mut s_graphicsoptions.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_graphicsoptions.graphics as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_SetCursorToItem(
+        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_graphicsoptions.graphics as *mut menutext_s as *mut libc::c_void,
     );
 }

@@ -434,12 +434,12 @@ pub use crate::tr_local_h::TMOD_TURBULENT;
 
 unsafe extern "C" fn R_ChopPolyBehindPlane(
     mut numInPoints: i32,
-    mut inPoints: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut inPoints: *mut vec3_t,
     mut numOutPoints: *mut i32,
-    mut outPoints: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut normal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dist: crate::src::qcommon::q_shared::vec_t,
-    mut epsilon: crate::src::qcommon::q_shared::vec_t,
+    mut outPoints: *mut vec3_t,
+    mut normal: *mut vec_t,
+    mut dist: vec_t,
+    mut epsilon: vec_t,
 ) {
     let mut dists: [f32; 68] = [
         0 as i32 as f32,
@@ -562,7 +562,7 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
             outPoints as *mut libc::c_void,
             inPoints as *const libc::c_void,
             (numInPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::src::qcommon::q_shared::vec3_t,
+                vec3_t,
             >() as libc::c_ulong),
         );
         return;
@@ -617,25 +617,25 @@ R_BoxSurfaces_r
 #[no_mangle]
 
 pub unsafe extern "C" fn R_BoxSurfaces_r(
-    mut node: *mut crate::tr_local_h::mnode_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut list: *mut *mut crate::tr_local_h::surfaceType_t,
+    mut node: *mut mnode_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut list: *mut *mut surfaceType_t,
     mut listsize: i32,
     mut listlength: *mut i32,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
 ) {
     let mut s: i32 = 0;
     let mut c: i32 = 0;
-    let mut surf: *mut crate::tr_local_h::msurface_t = 0 as *mut crate::tr_local_h::msurface_t;
-    let mut mark: *mut *mut crate::tr_local_h::msurface_t =
-        0 as *mut *mut crate::tr_local_h::msurface_t;
+    let mut surf: *mut msurface_t = 0 as *mut msurface_t;
+    let mut mark: *mut *mut msurface_t =
+        0 as *mut *mut msurface_t;
     // do the tail recursion in a loop
     while (*node).contents == -(1 as i32) {
-        s = crate::src::qcommon::q_math::BoxOnPlaneSide(
+        s = BoxOnPlaneSide(
             mins,
             maxs,
-            (*node).plane as *mut crate::src::qcommon::q_shared::cplane_s,
+            (*node).plane as *mut cplane_s,
         );
         if s == 1 as i32 {
             node = (*node).children[0 as i32 as usize]
@@ -673,44 +673,44 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
         if (*(*surf).shader).surfaceFlags & (0x10 as i32 | 0x20 as i32) != 0
             || (*(*surf).shader).contentFlags & 64 as i32 != 0
         {
-            (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
-        } else if *(*surf).data as u32 == crate::tr_local_h::SF_FACE as i32 as u32 {
+            (*surf).viewCount = tr.viewCount
+        } else if *(*surf).data as u32 == SF_FACE as i32 as u32 {
             // extra check for surfaces to avoid list overflows
             // the face plane should go through the box
-            s = crate::src::qcommon::q_math::BoxOnPlaneSide(
+            s = BoxOnPlaneSide(
                 mins,
                 maxs,
-                &mut (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t)).plane as *mut _
-                    as *mut crate::src::qcommon::q_shared::cplane_s,
+                &mut (*((*surf).data as *mut srfSurfaceFace_t)).plane as *mut _
+                    as *mut cplane_s,
             );
             if s == 1 as i32 || s == 2 as i32 {
-                (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
-            } else if ((*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
+                (*surf).viewCount = tr.viewCount
+            } else if ((*((*surf).data as *mut srfSurfaceFace_t))
                 .plane
                 .normal[0 as i32 as usize]
                 * *dir.offset(0 as i32 as isize)
-                + (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
+                + (*((*surf).data as *mut srfSurfaceFace_t))
                     .plane
                     .normal[1 as i32 as usize]
                     * *dir.offset(1 as i32 as isize)
-                + (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t))
+                + (*((*surf).data as *mut srfSurfaceFace_t))
                     .plane
                     .normal[2 as i32 as usize]
                     * *dir.offset(2 as i32 as isize)) as f64
                 > -0.5f64
             {
                 // don't add faces that make sharp angles with the projection direction
-                (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
+                (*surf).viewCount = tr.viewCount
             }
-        } else if *(*surf).data as u32 != crate::tr_local_h::SF_GRID as i32 as u32
-            && *(*surf).data as u32 != crate::tr_local_h::SF_TRIANGLES as i32 as u32
+        } else if *(*surf).data as u32 != SF_GRID as i32 as u32
+            && *(*surf).data as u32 != SF_TRIANGLES as i32 as u32
         {
-            (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount
+            (*surf).viewCount = tr.viewCount
         }
         // check the viewCount because the surface may have
         // already been added if it spans multiple leafs
-        if (*surf).viewCount != crate::src::renderergl1::tr_main::tr.viewCount {
-            (*surf).viewCount = crate::src::renderergl1::tr_main::tr.viewCount;
+        if (*surf).viewCount != tr.viewCount {
+            (*surf).viewCount = tr.viewCount;
             let ref mut fresh4 = *list.offset(*listlength as isize);
             *fresh4 = (*surf).data;
             *listlength += 1
@@ -728,23 +728,23 @@ R_AddMarkFragments
 
 pub unsafe extern "C" fn R_AddMarkFragments(
     mut numClipPoints: i32,
-    mut clipPoints: *mut [crate::src::qcommon::q_shared::vec3_t; 64],
+    mut clipPoints: *mut [vec3_t; 64],
     mut numPlanes: i32,
-    mut normals: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut normals: *mut vec3_t,
     mut dists: *mut f32,
     mut maxPoints: i32,
-    mut pointBuffer: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pointBuffer: *mut vec_t,
     mut _maxFragments: i32,
-    mut fragmentBuffer: *mut crate::src::qcommon::q_shared::markFragment_t,
+    mut fragmentBuffer: *mut markFragment_t,
     mut returnedPoints: *mut i32,
     mut returnedFragments: *mut i32,
-    mut _mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _mins: *mut vec_t,
+    mut _maxs: *mut vec_t,
 ) {
     let mut pingPong: i32 = 0;
     let mut i: i32 = 0;
-    let mut mf: *mut crate::src::qcommon::q_shared::markFragment_t =
-        0 as *mut crate::src::qcommon::q_shared::markFragment_t;
+    let mut mf: *mut markFragment_t =
+        0 as *mut markFragment_t;
     // chop the surface by all the bounding planes of the to be projected polygon
     pingPong = 0 as i32;
     i = 0 as i32;
@@ -756,7 +756,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
             (*clipPoints.offset((pingPong == 0) as i32 as isize)).as_mut_ptr(),
             (*normals.offset(i as isize)).as_mut_ptr(),
             *dists.offset(i as isize),
-            0.5f64 as crate::src::qcommon::q_shared::vec_t,
+            0.5f64 as vec_t,
         );
         pingPong ^= 1 as i32;
         if numClipPoints == 0 as i32 {
@@ -792,7 +792,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
         pointBuffer.offset((*returnedPoints * 3 as i32) as isize) as *mut libc::c_void,
         (*clipPoints.offset(pingPong as isize)).as_mut_ptr() as *const libc::c_void,
         (numClipPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            crate::src::qcommon::q_shared::vec3_t,
+            vec3_t,
         >() as libc::c_ulong),
     );
     *returnedPoints += numClipPoints;
@@ -1188,12 +1188,12 @@ R_MarkFragments
 
 pub unsafe extern "C" fn R_MarkFragments(
     mut numPoints: i32,
-    mut points: *const crate::src::qcommon::q_shared::vec3_t,
-    mut projection: *const crate::src::qcommon::q_shared::vec_t,
+    mut points: *const vec3_t,
+    mut projection: *const vec_t,
     mut maxPoints: i32,
-    mut pointBuffer: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pointBuffer: *mut vec_t,
     mut maxFragments: i32,
-    mut fragmentBuffer: *mut crate::src::qcommon::q_shared::markFragment_t,
+    mut fragmentBuffer: *mut markFragment_t,
 ) -> i32 {
     let mut numsurfaces: i32 = 0;
     let mut numPlanes: i32 = 0;
@@ -1202,37 +1202,37 @@ pub unsafe extern "C" fn R_MarkFragments(
     let mut k: i32 = 0;
     let mut m: i32 = 0;
     let mut n: i32 = 0;
-    let mut surfaces: [*mut crate::tr_local_h::surfaceType_t; 64] =
-        [0 as *mut crate::tr_local_h::surfaceType_t; 64];
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut surfaces: [*mut surfaceType_t; 64] =
+        [0 as *mut surfaceType_t; 64];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     let mut returnedFragments: i32 = 0;
     let mut returnedPoints: i32 = 0;
-    let mut normals: [crate::src::qcommon::q_shared::vec3_t; 66] = [[0.; 3]; 66];
+    let mut normals: [vec3_t; 66] = [[0.; 3]; 66];
     let mut dists: [f32; 66] = [0.; 66];
-    let mut clipPoints: [[crate::src::qcommon::q_shared::vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
+    let mut clipPoints: [[vec3_t; 64]; 2] = [[[0.; 3]; 64]; 2];
     let mut numClipPoints: i32 = 0;
     let mut v: *mut f32 = 0 as *mut f32;
-    let mut cv: *mut crate::tr_local_h::srfGridMesh_t = 0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut dv: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut projectionDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut cv: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut normal: vec3_t = [0.; 3];
+    let mut projectionDir: vec3_t = [0.; 3];
+    let mut v1: vec3_t = [0.; 3];
+    let mut v2: vec3_t = [0.; 3];
     let mut indexes: *mut i32 = 0 as *mut i32;
     if numPoints <= 0 as i32 {
         return 0 as i32;
     }
     //increment view count for double check prevention
-    crate::src::renderergl1::tr_main::tr.viewCount += 1;
+    tr.viewCount += 1;
     //
-    crate::src::qcommon::q_math::VectorNormalize2(projection, projectionDir.as_mut_ptr());
+    VectorNormalize2(projection, projectionDir.as_mut_ptr());
     // find all the brushes that are to be considered
-    crate::src::qcommon::q_math::ClearBounds(mins.as_mut_ptr(), maxs.as_mut_ptr());
+    ClearBounds(mins.as_mut_ptr(), maxs.as_mut_ptr());
     i = 0 as i32;
     while i < numPoints {
-        let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        crate::src::qcommon::q_math::AddPointToBounds(
+        let mut temp: vec3_t = [0.; 3];
+        AddPointToBounds(
             (*points.offset(i as isize)).as_ptr(),
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
@@ -1243,8 +1243,8 @@ pub unsafe extern "C" fn R_MarkFragments(
             (*points.offset(i as isize))[1 as i32 as usize] + *projection.offset(1 as i32 as isize);
         temp[2 as i32 as usize] =
             (*points.offset(i as isize))[2 as i32 as usize] + *projection.offset(2 as i32 as isize);
-        crate::src::qcommon::q_math::AddPointToBounds(
-            temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AddPointToBounds(
+            temp.as_mut_ptr() as *const vec_t,
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
@@ -1255,8 +1255,8 @@ pub unsafe extern "C" fn R_MarkFragments(
             + projectionDir[1 as i32 as usize] * -(20 as i32) as f32;
         temp[2 as i32 as usize] = (*points.offset(i as isize))[2 as i32 as usize]
             + projectionDir[2 as i32 as usize] * -(20 as i32) as f32;
-        crate::src::qcommon::q_math::AddPointToBounds(
-            temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AddPointToBounds(
+            temp.as_mut_ptr() as *const vec_t,
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
@@ -1290,8 +1290,8 @@ pub unsafe extern "C" fn R_MarkFragments(
         v2[2 as i32 as usize] =
             (*points.offset(i as isize))[2 as i32 as usize] - v2[2 as i32 as usize];
         CrossProduct(
-            v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            v1.as_mut_ptr() as *const vec_t,
+            v2.as_mut_ptr() as *const vec_t,
             normals[i as usize].as_mut_ptr(),
         );
         VectorNormalizeFast(normals[i as usize].as_mut_ptr());
@@ -1329,7 +1329,7 @@ pub unsafe extern "C" fn R_MarkFragments(
     numPlanes = numPoints + 2 as i32;
     numsurfaces = 0 as i32;
     R_BoxSurfaces_r(
-        (*crate::src::renderergl1::tr_main::tr.world).nodes,
+        (*tr.world).nodes,
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
         surfaces.as_mut_ptr(),
@@ -1343,8 +1343,8 @@ pub unsafe extern "C" fn R_MarkFragments(
     returnedFragments = 0 as i32;
     i = 0 as i32;
     while i < numsurfaces {
-        if *surfaces[i as usize] as u32 == crate::tr_local_h::SF_GRID as i32 as u32 {
-            cv = surfaces[i as usize] as *mut crate::tr_local_h::srfGridMesh_t;
+        if *surfaces[i as usize] as u32 == SF_GRID as i32 as u32 {
+            cv = surfaces[i as usize] as *mut srfGridMesh_t;
             m = 0 as i32;
             while m < (*cv).height - 1 as i32 {
                 n = 0 as i32;
@@ -1449,8 +1449,8 @@ pub unsafe extern "C" fn R_MarkFragments(
                         [2 as i32 as usize]
                         - clipPoints[0 as i32 as usize][1 as i32 as usize][2 as i32 as usize];
                     CrossProduct(
-                        v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                        v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                        v1.as_mut_ptr() as *const vec_t,
+                        v2.as_mut_ptr() as *const vec_t,
                         normal.as_mut_ptr(),
                     );
                     VectorNormalizeFast(normal.as_mut_ptr());
@@ -1555,8 +1555,8 @@ pub unsafe extern "C" fn R_MarkFragments(
                         [2 as i32 as usize]
                         - clipPoints[0 as i32 as usize][1 as i32 as usize][2 as i32 as usize];
                     CrossProduct(
-                        v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                        v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                        v1.as_mut_ptr() as *const vec_t,
+                        v2.as_mut_ptr() as *const vec_t,
                         normal.as_mut_ptr(),
                     );
                     VectorNormalizeFast(normal.as_mut_ptr());
@@ -1591,9 +1591,9 @@ pub unsafe extern "C" fn R_MarkFragments(
                 }
                 m += 1
             }
-        } else if *surfaces[i as usize] as u32 == crate::tr_local_h::SF_FACE as i32 as u32 {
-            let mut surf: *mut crate::tr_local_h::srfSurfaceFace_t =
-                surfaces[i as usize] as *mut crate::tr_local_h::srfSurfaceFace_t;
+        } else if *surfaces[i as usize] as u32 == SF_FACE as i32 as u32 {
+            let mut surf: *mut srfSurfaceFace_t =
+                surfaces[i as usize] as *mut srfSurfaceFace_t;
             // check the normal of this face
             if !(((*surf).plane.normal[0 as i32 as usize] * projectionDir[0 as i32 as usize]
                 + (*surf).plane.normal[1 as i32 as usize] * projectionDir[1 as i32 as usize]
@@ -1601,7 +1601,7 @@ pub unsafe extern "C" fn R_MarkFragments(
                 as f64
                 > -0.5f64)
             {
-                indexes = (surf as *mut crate::src::qcommon::q_shared::byte)
+                indexes = (surf as *mut byte)
                     .offset((*surf).ofsIndices as isize) as *mut i32;
                 k = 0 as i32;
                 while k < (*surf).numIndices {
@@ -1645,11 +1645,11 @@ pub unsafe extern "C" fn R_MarkFragments(
                     k += 3 as i32
                 }
             }
-        } else if *surfaces[i as usize] as u32 == crate::tr_local_h::SF_TRIANGLES as i32 as u32
-            && (*crate::src::renderergl1::tr_init::r_marksOnTriangleMeshes).integer != 0
+        } else if *surfaces[i as usize] as u32 == SF_TRIANGLES as i32 as u32
+            && (*r_marksOnTriangleMeshes).integer != 0
         {
-            let mut surf_0: *mut crate::tr_local_h::srfTriangles_t =
-                surfaces[i as usize] as *mut crate::tr_local_h::srfTriangles_t;
+            let mut surf_0: *mut srfTriangles_t =
+                surfaces[i as usize] as *mut srfTriangles_t;
             k = 0 as i32;
             while k < (*surf_0).numIndexes {
                 j = 0 as i32;

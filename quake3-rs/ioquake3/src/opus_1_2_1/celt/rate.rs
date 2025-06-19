@@ -103,7 +103,7 @@ static mut LOG2_FRAC_TABLE: [u8; 24] = [
 #[inline]
 
 unsafe extern "C" fn interp_bits2pulses(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
     mut skip_start: i32,
@@ -111,8 +111,8 @@ unsafe extern "C" fn interp_bits2pulses(
     mut bits2: *const i32,
     mut thresh: *const i32,
     mut cap: *const i32,
-    mut total: crate::opus_types_h::opus_int32,
-    mut _balance: *mut crate::opus_types_h::opus_int32,
+    mut total: opus_int32,
+    mut _balance: *mut opus_int32,
     mut skip_rsv: i32,
     mut intensity: *mut i32,
     mut intensity_rsv: i32,
@@ -123,12 +123,12 @@ unsafe extern "C" fn interp_bits2pulses(
     mut fine_priority: *mut i32,
     mut C: i32,
     mut LM: i32,
-    mut ec: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+    mut ec: *mut ec_ctx,
     mut encode: i32,
     mut prev: i32,
     mut signalBandwidth: i32,
 ) -> i32 {
-    let mut psum: crate::opus_types_h::opus_int32 = 0;
+    let mut psum: opus_int32 = 0;
     let mut lo: i32 = 0;
     let mut hi: i32 = 0;
     let mut i: i32 = 0;
@@ -137,10 +137,10 @@ unsafe extern "C" fn interp_bits2pulses(
     let mut stereo: i32 = 0;
     let mut codedBands: i32 = -(1 as i32);
     let mut alloc_floor: i32 = 0;
-    let mut left: crate::opus_types_h::opus_int32 = 0;
-    let mut percoeff: crate::opus_types_h::opus_int32 = 0;
+    let mut left: opus_int32 = 0;
+    let mut percoeff: opus_int32 = 0;
     let mut done: i32 = 0;
-    let mut balance: crate::opus_types_h::opus_int32 = 0;
+    let mut balance: opus_int32 = 0;
     alloc_floor = C << 3 as i32;
     stereo = (C > 1 as i32) as i32;
     logM = LM << 3 as i32;
@@ -231,11 +231,11 @@ unsafe extern "C" fn interp_bits2pulses(
             This can include bits we've stolen back from higher, skipped bands.*/
             left = total - psum;
             percoeff = celt_udiv(
-                left as crate::opus_types_h::opus_uint32,
+                left as opus_uint32,
                 (*(*m).eBands.offset(codedBands as isize) as i32
                     - *(*m).eBands.offset(start as isize) as i32)
-                    as crate::opus_types_h::opus_uint32,
-            ) as crate::opus_types_h::opus_int32;
+                    as opus_uint32,
+            ) as opus_int32;
             left -= (*(*m).eBands.offset(codedBands as isize) as i32
                 - *(*m).eBands.offset(start as isize) as i32)
                 * percoeff;
@@ -280,20 +280,20 @@ unsafe extern "C" fn interp_bits2pulses(
                             && j <= signalBandwidth
                     {
                         crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                            ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                            ec as *mut ec_ctx,
                             1 as i32,
                             1 as i32 as u32,
                         );
                         break;
                     } else {
                         crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                            ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                            ec as *mut ec_ctx,
                             0 as i32,
                             1 as i32 as u32,
                         );
                     }
                 } else if crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp(
-                    ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    ec as *mut ec_ctx,
                     1 as i32 as u32,
                 ) != 0
                 {
@@ -329,15 +329,15 @@ unsafe extern "C" fn interp_bits2pulses(
                 codedBands
             };
             crate::src::opus_1_2_1::celt::entenc::ec_enc_uint(
-                ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                (*intensity - start) as crate::opus_types_h::opus_uint32,
-                (codedBands + 1 as i32 - start) as crate::opus_types_h::opus_uint32,
+                ec as *mut ec_ctx,
+                (*intensity - start) as opus_uint32,
+                (codedBands + 1 as i32 - start) as opus_uint32,
             );
         } else {
             *intensity =
                 (start as u32).wrapping_add(crate::src::opus_1_2_1::celt::entdec::ec_dec_uint(
-                    ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    (codedBands + 1 as i32 - start) as crate::opus_types_h::opus_uint32,
+                    ec as *mut ec_ctx,
+                    (codedBands + 1 as i32 - start) as opus_uint32,
                 )) as i32
         }
     } else {
@@ -350,13 +350,13 @@ unsafe extern "C" fn interp_bits2pulses(
     if dual_stereo_rsv > 0 as i32 {
         if encode != 0 {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                ec as *mut ec_ctx,
                 *dual_stereo,
                 1 as i32 as u32,
             );
         } else {
             *dual_stereo = crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp(
-                ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                ec as *mut ec_ctx,
                 1 as i32 as u32,
             )
         }
@@ -366,11 +366,11 @@ unsafe extern "C" fn interp_bits2pulses(
     /* Allocate the remaining bits */
     left = total - psum;
     percoeff = celt_udiv(
-        left as crate::opus_types_h::opus_uint32,
+        left as opus_uint32,
         (*(*m).eBands.offset(codedBands as isize) as i32
             - *(*m).eBands.offset(start as isize) as i32)
-            as crate::opus_types_h::opus_uint32,
-    ) as crate::opus_types_h::opus_int32;
+            as opus_uint32,
+    ) as opus_int32;
     left -= (*(*m).eBands.offset(codedBands as isize) as i32
         - *(*m).eBands.offset(start as isize) as i32)
         * percoeff;
@@ -405,8 +405,8 @@ unsafe extern "C" fn interp_bits2pulses(
         let mut den: i32 = 0;
         let mut offset: i32 = 0;
         let mut NClogN: i32 = 0;
-        let mut excess: crate::opus_types_h::opus_int32 = 0;
-        let mut bit: crate::opus_types_h::opus_int32 = 0;
+        let mut excess: opus_int32 = 0;
+        let mut bit: opus_int32 = 0;
         N0 = *(*m).eBands.offset((j + 1 as i32) as isize) as i32
             - *(*m).eBands.offset(j as isize) as i32;
         N = N0 << LM;
@@ -448,8 +448,8 @@ unsafe extern "C" fn interp_bits2pulses(
                     (*bits.offset(j as isize) + offset) + (den << 3 as i32 - 1 as i32)
                 };
             *ebits.offset(j as isize) = (celt_udiv(
-                *ebits.offset(j as isize) as crate::opus_types_h::opus_uint32,
-                den as crate::opus_types_h::opus_uint32,
+                *ebits.offset(j as isize) as opus_uint32,
+                den as opus_uint32,
             ) >> 3 as i32) as i32;
             /* Make sure not to bust */
             if C * *ebits.offset(j as isize) > *bits.offset(j as isize) >> 3 as i32 {
@@ -522,7 +522,7 @@ unsafe extern "C" fn interp_bits2pulses(
 #[no_mangle]
 
 pub unsafe extern "C" fn compute_allocation(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
     mut offsets: *const i32,
@@ -530,14 +530,14 @@ pub unsafe extern "C" fn compute_allocation(
     mut alloc_trim: i32,
     mut intensity: *mut i32,
     mut dual_stereo: *mut i32,
-    mut total: crate::opus_types_h::opus_int32,
-    mut balance: *mut crate::opus_types_h::opus_int32,
+    mut total: opus_int32,
+    mut balance: *mut opus_int32,
     mut pulses: *mut i32,
     mut ebits: *mut i32,
     mut fine_priority: *mut i32,
     mut C: i32,
     mut LM: i32,
-    mut ec: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+    mut ec: *mut ec_ctx,
     mut encode: i32,
     mut prev: i32,
     mut signalBandwidth: i32,

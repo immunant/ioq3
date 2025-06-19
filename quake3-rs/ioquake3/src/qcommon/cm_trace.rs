@@ -299,11 +299,11 @@ RotatePoint
 #[no_mangle]
 
 pub unsafe extern "C" fn RotatePoint(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut point: *mut vec_t,
+    mut matrix: *mut vec3_t,
 ) {
     // FIXME
-    let mut tvec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut tvec: vec3_t = [0.; 3];
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
     tvec[2 as i32 as usize] = *point.offset(2 as i32 as isize);
@@ -328,8 +328,8 @@ TransposeMatrix
 #[no_mangle]
 
 pub unsafe extern "C" fn TransposeMatrix(
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut transpose: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut matrix: *mut vec3_t,
+    mut transpose: *mut vec3_t,
 ) {
     // FIXME
     let mut i: i32 = 0;
@@ -352,10 +352,10 @@ CreateRotationMatrix
 #[no_mangle]
 
 pub unsafe extern "C" fn CreateRotationMatrix(
-    mut angles: *const crate::src::qcommon::q_shared::vec_t,
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut angles: *const vec_t,
+    mut matrix: *mut vec3_t,
 ) {
-    crate::src::qcommon::q_math::AngleVectors(
+    AngleVectors(
         angles,
         (*matrix.offset(0 as i32 as isize)).as_mut_ptr(),
         (*matrix.offset(1 as i32 as isize)).as_mut_ptr(),
@@ -371,12 +371,12 @@ CM_ProjectPointOntoVector
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_ProjectPointOntoVector(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vStart: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vDir: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vProj: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
+    mut vStart: *mut vec_t,
+    mut vDir: *mut vec_t,
+    mut vProj: *mut vec_t,
 ) {
-    let mut pVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut pVec: vec3_t = [0.; 3];
     pVec[0 as i32 as usize] = *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
     pVec[1 as i32 as usize] = *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
     pVec[2 as i32 as usize] = *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
@@ -405,13 +405,13 @@ CM_DistanceFromLineSquared
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_DistanceFromLineSquared(
-    mut p: *mut crate::src::qcommon::q_shared::vec_t,
-    mut lp1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut lp2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p: *mut vec_t,
+    mut lp1: *mut vec_t,
+    mut lp2: *mut vec_t,
+    mut dir: *mut vec_t,
 ) -> f32 {
-    let mut proj: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut t: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut proj: vec3_t = [0.; 3];
+    let mut t: vec3_t = [0.; 3];
     let mut j: i32 = 0;
     CM_ProjectPointOntoVector(p, lp1, dir, proj.as_mut_ptr());
     j = 0 as i32;
@@ -436,12 +436,12 @@ pub unsafe extern "C" fn CM_DistanceFromLineSquared(
             t[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
             t[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
         }
-        return VectorLengthSquared(t.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        return VectorLengthSquared(t.as_mut_ptr() as *const vec_t);
     }
     t[0 as i32 as usize] = *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
     t[1 as i32 as usize] = *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
     t[2 as i32 as usize] = *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
-    return VectorLengthSquared(t.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLengthSquared(t.as_mut_ptr() as *const vec_t);
 }
 /*
 ================
@@ -451,14 +451,14 @@ CM_VectorDistanceSquared
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_VectorDistanceSquared(
-    mut p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p1: *mut vec_t,
+    mut p2: *mut vec_t,
 ) -> f32 {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
-    return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
 }
 /*
 ================
@@ -468,8 +468,8 @@ SquareRootFloat
 #[no_mangle]
 
 pub unsafe extern "C" fn SquareRootFloat(mut number: f32) -> f32 {
-    let mut t: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut t: floatint_t =
+        floatint_t { f: 0. };
     let mut x: f32 = 0.;
     let mut y: f32 = 0.;
     let f: f32 = 1.5f32;
@@ -496,17 +496,17 @@ CM_TestBoxInBrush
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TestBoxInBrush(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut brush: *mut crate::cm_local_h::cbrush_t,
+    mut tw: *mut traceWork_t,
+    mut brush: *mut cbrush_t,
 ) {
     let mut i: i32 = 0;
-    let mut plane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    let mut plane: *mut cplane_t =
+        0 as *mut cplane_t;
     let mut dist: f32 = 0.;
     let mut d1: f32 = 0.;
-    let mut side: *mut crate::cm_local_h::cbrushside_t = 0 as *mut crate::cm_local_h::cbrushside_t;
+    let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
     let mut t: f32 = 0.;
-    let mut startp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut startp: vec3_t = [0.; 3];
     if (*brush).numsides == 0 {
         return;
     }
@@ -591,7 +591,7 @@ pub unsafe extern "C" fn CM_TestBoxInBrush(
         }
     }
     // inside this brush
-    (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+    (*tw).trace.allsolid = qtrue;
     (*tw).trace.startsolid = (*tw).trace.allsolid;
     (*tw).trace.fraction = 0 as i32 as f32;
     (*tw).trace.contents = (*brush).contents;
@@ -604,24 +604,24 @@ CM_TestInLeaf
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TestInLeaf(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut leaf: *mut crate::cm_local_h::cLeaf_t,
+    mut tw: *mut traceWork_t,
+    mut leaf: *mut cLeaf_t,
 ) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut b: *mut crate::cm_local_h::cbrush_t = 0 as *mut crate::cm_local_h::cbrush_t;
-    let mut patch: *mut crate::cm_local_h::cPatch_t = 0 as *mut crate::cm_local_h::cPatch_t;
+    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
+    let mut patch: *mut cPatch_t = 0 as *mut cPatch_t;
     // test box position against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *crate::src::qcommon::cm_load::cm
+        brushnum = *cm
             .leafbrushes
             .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *crate::src::qcommon::cm_load::cm
+        b = &mut *cm
             .brushes
-            .offset(brushnum as isize) as *mut crate::cm_local_h::cbrush_t;
-        if !((*b).checkcount == crate::src::qcommon::cm_load::cm.checkcount) {
-            (*b).checkcount = crate::src::qcommon::cm_load::cm.checkcount;
+            .offset(brushnum as isize) as *mut cbrush_t;
+        if !((*b).checkcount == cm.checkcount) {
+            (*b).checkcount = cm.checkcount;
             if !((*b).contents & (*tw).contents == 0) {
                 CM_TestBoxInBrush(tw, b);
                 if (*tw).trace.allsolid as u64 != 0 {
@@ -633,26 +633,26 @@ pub unsafe extern "C" fn CM_TestInLeaf(
         // already checked this brush in another leaf
     }
     // test against all patches
-    if (*crate::src::qcommon::cm_load::cm_noCurves).integer == 0 {
+    if (*cm_noCurves).integer == 0 {
         //BSPC
         k = 0 as i32;
         while k < (*leaf).numLeafSurfaces {
-            patch = *crate::src::qcommon::cm_load::cm.surfaces.offset(
-                *crate::src::qcommon::cm_load::cm
+            patch = *cm.surfaces.offset(
+                *cm
                     .leafsurfaces
                     .offset(((*leaf).firstLeafSurface + k) as isize) as isize,
             );
             if !patch.is_null() {
-                if !((*patch).checkcount == crate::src::qcommon::cm_load::cm.checkcount) {
-                    (*patch).checkcount = crate::src::qcommon::cm_load::cm.checkcount;
+                if !((*patch).checkcount == cm.checkcount) {
+                    (*patch).checkcount = cm.checkcount;
                     if !((*patch).contents & (*tw).contents == 0) {
-                        if crate::src::qcommon::cm_patch::CM_PositionTestInPatchCollide(
-                            tw as *mut crate::cm_local_h::traceWork_t,
+                        if CM_PositionTestInPatchCollide(
+                            tw as *mut traceWork_t,
                             (*patch).pc,
                         ) as u64
                             != 0
                         {
-                            (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+                            (*tw).trace.allsolid = qtrue;
                             (*tw).trace.startsolid = (*tw).trace.allsolid;
                             (*tw).trace.fraction = 0 as i32 as f32;
                             (*tw).trace.contents = (*patch).contents;
@@ -676,19 +676,19 @@ capsule inside capsule check
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut tw: *mut traceWork_t,
+    mut model: clipHandle_t,
 ) {
     let mut i: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut top: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottom: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut tmp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut symetricSize: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut top: vec3_t = [0.; 3];
+    let mut bottom: vec3_t = [0.; 3];
+    let mut p1: vec3_t = [0.; 3];
+    let mut p2: vec3_t = [0.; 3];
+    let mut tmp: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut symetricSize: [vec3_t; 2] = [[0.; 3]; 2];
     let mut radius: f32 = 0.;
     let mut halfwidth: f32 = 0.;
     let mut halfheight: f32 = 0.;
@@ -710,7 +710,7 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         i += 1
@@ -732,16 +732,16 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
     tmp[0 as i32 as usize] = p1[0 as i32 as usize] - top[0 as i32 as usize];
     tmp[1 as i32 as usize] = p1[1 as i32 as usize] - top[1 as i32 as usize];
     tmp[2 as i32 as usize] = p1[2 as i32 as usize] - top[2 as i32 as usize];
-    if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
-        (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+    if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r {
+        (*tw).trace.allsolid = qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
     tmp[0 as i32 as usize] = p1[0 as i32 as usize] - bottom[0 as i32 as usize];
     tmp[1 as i32 as usize] = p1[1 as i32 as usize] - bottom[1 as i32 as usize];
     tmp[2 as i32 as usize] = p1[2 as i32 as usize] - bottom[2 as i32 as usize];
-    if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
-        (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+    if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r {
+        (*tw).trace.allsolid = qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
@@ -752,16 +752,16 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
     tmp[0 as i32 as usize] = p2[0 as i32 as usize] - top[0 as i32 as usize];
     tmp[1 as i32 as usize] = p2[1 as i32 as usize] - top[1 as i32 as usize];
     tmp[2 as i32 as usize] = p2[2 as i32 as usize] - top[2 as i32 as usize];
-    if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
-        (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+    if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r {
+        (*tw).trace.allsolid = qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
     tmp[0 as i32 as usize] = p2[0 as i32 as usize] - bottom[0 as i32 as usize];
     tmp[1 as i32 as usize] = p2[1 as i32 as usize] - bottom[1 as i32 as usize];
     tmp[2 as i32 as usize] = p2[2 as i32 as usize] - bottom[2 as i32 as usize];
-    if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
-        (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+    if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r {
+        (*tw).trace.allsolid = qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
@@ -772,15 +772,15 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
             && bottom[2 as i32 as usize] <= p2[2 as i32 as usize]
     {
         // 2d coordinates
-        p1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        p1[2 as i32 as usize] = 0 as i32 as vec_t;
         top[2 as i32 as usize] = p1[2 as i32 as usize];
         // if the cylinders overlap
         tmp[0 as i32 as usize] = top[0 as i32 as usize] - p1[0 as i32 as usize];
         tmp[1 as i32 as usize] = top[1 as i32 as usize] - p1[1 as i32 as usize];
         tmp[2 as i32 as usize] = top[2 as i32 as usize] - p1[2 as i32 as usize];
-        if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r
+        if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r
         {
-            (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+            (*tw).trace.allsolid = qtrue;
             (*tw).trace.startsolid = (*tw).trace.allsolid;
             (*tw).trace.fraction = 0 as i32 as f32
         }
@@ -796,15 +796,15 @@ bounding box inside capsule check
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut tw: *mut traceWork_t,
+    mut model: clipHandle_t,
 ) {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut size: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut h: crate::src::qcommon::q_shared::clipHandle_t = 0;
-    let mut cmod: *mut crate::cm_local_h::cmodel_t = 0 as *mut crate::cm_local_h::cmodel_t;
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut size: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut h: clipHandle_t = 0;
+    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
     let mut i: i32 = 0;
     // mins maxs of the capsule
     crate::src::qcommon::cm_load::CM_ModelBounds(model, mins.as_mut_ptr(), maxs.as_mut_ptr());
@@ -812,7 +812,7 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         size[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         size[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         (*tw).start[i as usize] -= offset[i as usize];
@@ -820,7 +820,7 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
         i += 1
     }
     // replace the bounding box with the capsule
-    (*tw).sphere.use_0 = crate::src::qcommon::q_shared::qtrue;
+    (*tw).sphere.use_0 = qtrue;
     (*tw).sphere.radius = if size[1 as i32 as usize][0 as i32 as usize]
         > size[1 as i32 as usize][2 as i32 as usize]
     {
@@ -829,30 +829,30 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
         size[1 as i32 as usize][0 as i32 as usize]
     };
     (*tw).sphere.halfheight = size[1 as i32 as usize][2 as i32 as usize];
-    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as vec_t;
     (*tw).sphere.offset[2 as i32 as usize] =
         size[1 as i32 as usize][2 as i32 as usize] - (*tw).sphere.radius;
     // replace the capsule with the bounding box
     h = crate::src::qcommon::cm_load::CM_TempBoxModel(
-        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const vec_t,
+        qfalse as i32,
     );
     // calculate collision
     cmod =
-        crate::src::qcommon::cm_load::CM_ClipHandleToModel(h) as *mut crate::cm_local_h::cmodel_s;
+        CM_ClipHandleToModel(h) as *mut cmodel_s;
     CM_TestInLeaf(tw, &mut (*cmod).leaf);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut crate::cm_local_h::traceWork_t) {
+pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut traceWork_t) {
     let mut leafs: [i32; 1024] = [0; 1024];
     let mut i: i32 = 0;
-    let mut ll: crate::cm_local_h::leafList_t = crate::cm_local_h::leafList_t {
+    let mut ll: leafList_t = leafList_t {
         count: 0,
         maxcount: 0,
-        overflowed: crate::src::qcommon::q_shared::qfalse,
+        overflowed: qfalse,
         list: 0 as *mut i32,
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
@@ -881,23 +881,23 @@ pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut crate::cm_local_h::traceWo
     ll.maxcount = 1024 as i32;
     ll.list = leafs.as_mut_ptr();
     ll.storeLeafs = Some(
-        crate::src::qcommon::cm_test::CM_StoreLeafs
-            as unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_t, _: i32) -> (),
+        CM_StoreLeafs
+            as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
     );
     ll.lastLeaf = 0 as i32;
-    ll.overflowed = crate::src::qcommon::q_shared::qfalse;
-    crate::src::qcommon::cm_load::cm.checkcount += 1;
-    crate::src::qcommon::cm_test::CM_BoxLeafnums_r(
-        &mut ll as *mut _ as *mut crate::cm_local_h::leafList_s,
+    ll.overflowed = qfalse;
+    cm.checkcount += 1;
+    CM_BoxLeafnums_r(
+        &mut ll as *mut _ as *mut leafList_s,
         0 as i32,
     );
-    crate::src::qcommon::cm_load::cm.checkcount += 1;
+    cm.checkcount += 1;
     // test the contents of the leafs
     i = 0 as i32;
     while i < ll.count {
         CM_TestInLeaf(
             tw,
-            &mut *crate::src::qcommon::cm_load::cm
+            &mut *cm
                 .leafs
                 .offset(*leafs.as_mut_ptr().offset(i as isize) as isize),
         );
@@ -922,14 +922,14 @@ CM_TraceThroughPatch
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughPatch(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut patch: *mut crate::cm_local_h::cPatch_t,
+    mut tw: *mut traceWork_t,
+    mut patch: *mut cPatch_t,
 ) {
     let mut oldFrac: f32 = 0.;
-    crate::src::qcommon::cm_load::c_patch_traces += 1;
+    c_patch_traces += 1;
     oldFrac = (*tw).trace.fraction;
-    crate::src::qcommon::cm_patch::CM_TraceThroughPatchCollide(
-        tw as *mut crate::cm_local_h::traceWork_t,
+    CM_TraceThroughPatchCollide(
+        tw as *mut traceWork_t,
         (*patch).pc,
     );
     if (*tw).trace.fraction < oldFrac {
@@ -945,39 +945,39 @@ CM_TraceThroughBrush
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughBrush(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut brush: *mut crate::cm_local_h::cbrush_t,
+    mut tw: *mut traceWork_t,
+    mut brush: *mut cbrush_t,
 ) {
     let mut i: i32 = 0;
-    let mut plane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
-    let mut clipplane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    let mut plane: *mut cplane_t =
+        0 as *mut cplane_t;
+    let mut clipplane: *mut cplane_t =
+        0 as *mut cplane_t;
     let mut dist: f32 = 0.;
     let mut enterFrac: f32 = 0.;
     let mut leaveFrac: f32 = 0.;
     let mut d1: f32 = 0.;
     let mut d2: f32 = 0.;
-    let mut getout: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut startout: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut getout: qboolean = qfalse;
+    let mut startout: qboolean =
+        qfalse;
     let mut f: f32 = 0.;
-    let mut side: *mut crate::cm_local_h::cbrushside_t = 0 as *mut crate::cm_local_h::cbrushside_t;
-    let mut leadside: *mut crate::cm_local_h::cbrushside_t =
-        0 as *mut crate::cm_local_h::cbrushside_t;
+    let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
+    let mut leadside: *mut cbrushside_t =
+        0 as *mut cbrushside_t;
     let mut t: f32 = 0.;
-    let mut startp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut endp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut startp: vec3_t = [0.; 3];
+    let mut endp: vec3_t = [0.; 3];
     enterFrac = -1.0f64 as f32;
     leaveFrac = 1.0f64 as f32;
-    clipplane = 0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    clipplane = 0 as *mut cplane_t;
     if (*brush).numsides == 0 {
         return;
     }
-    crate::src::qcommon::cm_load::c_brush_traces += 1;
-    getout = crate::src::qcommon::q_shared::qfalse;
-    startout = crate::src::qcommon::q_shared::qfalse;
-    leadside = 0 as *mut crate::cm_local_h::cbrushside_t;
+    c_brush_traces += 1;
+    getout = qfalse;
+    startout = qfalse;
+    leadside = 0 as *mut cbrushside_t;
     if (*tw).sphere.use_0 as u64 != 0 {
         //
         // compare the trace against all planes of the brush
@@ -1030,11 +1030,11 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                 + endp[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - dist;
             if d2 > 0 as i32 as f32 {
-                getout = crate::src::qcommon::q_shared::qtrue
+                getout = qtrue
                 // endpoint is not in solid
             }
             if d1 > 0 as i32 as f32 {
-                startout = crate::src::qcommon::q_shared::qtrue
+                startout = qtrue
             }
             // if completely in front of face, no intersection with the entire brush
             if d1 > 0 as i32 as f32 && (d2 as f64 >= 0.125f64 || d2 >= d1) {
@@ -1093,11 +1093,11 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                 + (*tw).end[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - dist;
             if d2 > 0 as i32 as f32 {
-                getout = crate::src::qcommon::q_shared::qtrue
+                getout = qtrue
                 // endpoint is not in solid
             }
             if d1 > 0 as i32 as f32 {
-                startout = crate::src::qcommon::q_shared::qtrue
+                startout = qtrue
             }
             // if completely in front of face, no intersection with the entire brush
             if d1 > 0 as i32 as f32 && (d2 as f64 >= 0.125f64 || d2 >= d1) {
@@ -1136,9 +1136,9 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
     //
     if startout as u64 == 0 {
         // original point was inside brush
-        (*tw).trace.startsolid = crate::src::qcommon::q_shared::qtrue;
+        (*tw).trace.startsolid = qtrue;
         if getout as u64 == 0 {
-            (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
+            (*tw).trace.allsolid = qtrue;
             (*tw).trace.fraction = 0 as i32 as f32;
             (*tw).trace.contents = (*brush).contents
         }
@@ -1168,34 +1168,34 @@ CM_TraceThroughLeaf
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughLeaf(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut leaf: *mut crate::cm_local_h::cLeaf_t,
+    mut tw: *mut traceWork_t,
+    mut leaf: *mut cLeaf_t,
 ) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut b: *mut crate::cm_local_h::cbrush_t = 0 as *mut crate::cm_local_h::cbrush_t;
-    let mut patch: *mut crate::cm_local_h::cPatch_t = 0 as *mut crate::cm_local_h::cPatch_t;
+    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
+    let mut patch: *mut cPatch_t = 0 as *mut cPatch_t;
     // trace line against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *crate::src::qcommon::cm_load::cm
+        brushnum = *cm
             .leafbrushes
             .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *crate::src::qcommon::cm_load::cm
+        b = &mut *cm
             .brushes
-            .offset(brushnum as isize) as *mut crate::cm_local_h::cbrush_t;
-        if !((*b).checkcount == crate::src::qcommon::cm_load::cm.checkcount) {
-            (*b).checkcount = crate::src::qcommon::cm_load::cm.checkcount;
+            .offset(brushnum as isize) as *mut cbrush_t;
+        if !((*b).checkcount == cm.checkcount) {
+            (*b).checkcount = cm.checkcount;
             if !((*b).contents & (*tw).contents == 0) {
-                if !(crate::src::qcommon::cm_test::CM_BoundsIntersect(
+                if !(CM_BoundsIntersect(
                     (*tw).bounds[0 as i32 as usize].as_mut_ptr()
-                        as *const crate::src::qcommon::q_shared::vec_t,
+                        as *const vec_t,
                     (*tw).bounds[1 as i32 as usize].as_mut_ptr()
-                        as *const crate::src::qcommon::q_shared::vec_t,
+                        as *const vec_t,
                     (*b).bounds[0 as i32 as usize].as_mut_ptr()
-                        as *const crate::src::qcommon::q_shared::vec_t,
+                        as *const vec_t,
                     (*b).bounds[1 as i32 as usize].as_mut_ptr()
-                        as *const crate::src::qcommon::q_shared::vec_t,
+                        as *const vec_t,
                 ) as u64
                     == 0)
                 {
@@ -1210,17 +1210,17 @@ pub unsafe extern "C" fn CM_TraceThroughLeaf(
         // already checked this brush in another leaf
     }
     // trace line against all patches in the leaf
-    if (*crate::src::qcommon::cm_load::cm_noCurves).integer == 0 {
+    if (*cm_noCurves).integer == 0 {
         k = 0 as i32;
         while k < (*leaf).numLeafSurfaces {
-            patch = *crate::src::qcommon::cm_load::cm.surfaces.offset(
-                *crate::src::qcommon::cm_load::cm
+            patch = *cm.surfaces.offset(
+                *cm
                     .leafsurfaces
                     .offset(((*leaf).firstLeafSurface + k) as isize) as isize,
             );
             if !patch.is_null() {
-                if !((*patch).checkcount == crate::src::qcommon::cm_load::cm.checkcount) {
-                    (*patch).checkcount = crate::src::qcommon::cm_load::cm.checkcount;
+                if !((*patch).checkcount == cm.checkcount) {
+                    (*patch).checkcount = cm.checkcount;
                     if !((*patch).contents & (*tw).contents == 0) {
                         CM_TraceThroughPatch(tw, patch);
                         if (*tw).trace.fraction == 0. {
@@ -1244,11 +1244,11 @@ get the first intersection of the ray with the sphere
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughSphere(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut tw: *mut traceWork_t,
+    mut origin: *mut vec_t,
     mut radius: f32,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
 ) {
     let mut l1: f32 = 0.;
     let mut l2: f32 = 0.;
@@ -1260,24 +1260,24 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
     let mut c: f32 = 0.;
     let mut d: f32 = 0.;
     let mut sqrtd: f32 = 0.;
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut intersection: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut v1: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut intersection: vec3_t = [0.; 3];
     // if inside the sphere
     dir[0 as i32 as usize] = *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
-    l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    l1 = VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
     if l1 < radius * radius {
         (*tw).trace.fraction = 0 as i32 as f32;
-        (*tw).trace.startsolid = crate::src::qcommon::q_shared::qtrue;
+        (*tw).trace.startsolid = qtrue;
         // test for allsolid
         dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
         dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
         dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
-        l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        l1 = VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
         if l1 < radius * radius {
-            (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue
+            (*tw).trace.allsolid = qtrue
         }
         return;
     }
@@ -1285,13 +1285,13 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
     dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-    length = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    length = VectorNormalize(dir.as_mut_ptr());
     //
     l1 = CM_DistanceFromLineSquared(origin, start, end, dir.as_mut_ptr());
     v1[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
     v1[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
     v1[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
-    l2 = VectorLengthSquared(v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    l2 = VectorLengthSquared(v1.as_mut_ptr() as *const vec_t);
     // if no intersection with the sphere and the end point is at least an epsilon away
     if l1 >= radius * radius && l2 as f64 > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
     {
@@ -1382,12 +1382,12 @@ the cylinder extends halfheight above and below the origin
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut tw: *mut traceWork_t,
+    mut origin: *mut vec_t,
     mut radius: f32,
     mut halfheight: f32,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
 ) {
     let mut length: f32 = 0.;
     let mut scale: f32 = 0.;
@@ -1399,22 +1399,22 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
     let mut c: f32 = 0.;
     let mut d: f32 = 0.;
     let mut sqrtd: f32 = 0.;
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start2d: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end2d: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org2d: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut intersection: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut v1: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut start2d: vec3_t = [0.; 3];
+    let mut end2d: vec3_t = [0.; 3];
+    let mut org2d: vec3_t = [0.; 3];
+    let mut intersection: vec3_t = [0.; 3];
     // 2d coordinates
     start2d[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     start2d[1 as i32 as usize] = *start.offset(1 as i32 as isize);
-    start2d[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    start2d[2 as i32 as usize] = 0 as i32 as vec_t;
     end2d[0 as i32 as usize] = *end.offset(0 as i32 as isize);
     end2d[1 as i32 as usize] = *end.offset(1 as i32 as isize);
-    end2d[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    end2d[2 as i32 as usize] = 0 as i32 as vec_t;
     org2d[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org2d[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
-    org2d[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    org2d[2 as i32 as usize] = 0 as i32 as vec_t;
     // if between lower and upper cylinder bounds
     if *start.offset(2 as i32 as isize) <= *origin.offset(2 as i32 as isize) + halfheight
         && *start.offset(2 as i32 as isize) >= *origin.offset(2 as i32 as isize) - halfheight
@@ -1423,18 +1423,18 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
         dir[0 as i32 as usize] = start2d[0 as i32 as usize] - org2d[0 as i32 as usize];
         dir[1 as i32 as usize] = start2d[1 as i32 as usize] - org2d[1 as i32 as usize];
         dir[2 as i32 as usize] = start2d[2 as i32 as usize] - org2d[2 as i32 as usize];
-        l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        l1 = VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
         if l1 < radius * radius {
             (*tw).trace.fraction = 0 as i32 as f32;
-            (*tw).trace.startsolid = crate::src::qcommon::q_shared::qtrue;
+            (*tw).trace.startsolid = qtrue;
             dir[0 as i32 as usize] = end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
             dir[1 as i32 as usize] = end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
             dir[2 as i32 as usize] = end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
             l1 = VectorLengthSquared(
-                dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                dir.as_mut_ptr() as *const vec_t
             );
             if l1 < radius * radius {
-                (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue
+                (*tw).trace.allsolid = qtrue
             }
             return;
         }
@@ -1443,7 +1443,7 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
     dir[0 as i32 as usize] = end2d[0 as i32 as usize] - start2d[0 as i32 as usize];
     dir[1 as i32 as usize] = end2d[1 as i32 as usize] - start2d[1 as i32 as usize];
     dir[2 as i32 as usize] = end2d[2 as i32 as usize] - start2d[2 as i32 as usize];
-    length = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    length = VectorNormalize(dir.as_mut_ptr());
     //
     l1 = CM_DistanceFromLineSquared(
         org2d.as_mut_ptr(),
@@ -1454,7 +1454,7 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
     v1[0 as i32 as usize] = end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
     v1[1 as i32 as usize] = end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
     v1[2 as i32 as usize] = end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
-    l2 = VectorLengthSquared(v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    l2 = VectorLengthSquared(v1.as_mut_ptr() as *const vec_t);
     // if no intersection with the cylinder and the end point is at least an epsilon away
     if l1 >= radius * radius && l2 as f64 > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
     {
@@ -1516,7 +1516,7 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
                     intersection[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
                 dir[2 as i32 as usize] =
                     intersection[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
-                dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                dir[2 as i32 as usize] = 0 as i32 as vec_t;
                 scale = 1 as i32 as f32 / (radius + 1.0f32);
                 dir[0 as i32 as usize] = dir[0 as i32 as usize] * scale;
                 dir[1 as i32 as usize] = dir[1 as i32 as usize] * scale;
@@ -1552,20 +1552,20 @@ capsule vs. capsule collision (not rotated)
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceCapsuleThroughCapsule(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut tw: *mut traceWork_t,
+    mut model: clipHandle_t,
 ) {
     let mut i: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut top: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottom: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut starttop: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut startbottom: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut endtop: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut endbottom: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut symetricSize: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut top: vec3_t = [0.; 3];
+    let mut bottom: vec3_t = [0.; 3];
+    let mut starttop: vec3_t = [0.; 3];
+    let mut startbottom: vec3_t = [0.; 3];
+    let mut endtop: vec3_t = [0.; 3];
+    let mut endbottom: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut symetricSize: [vec3_t; 2] = [[0.; 3]; 2];
     let mut radius: f32 = 0.;
     let mut halfwidth: f32 = 0.;
     let mut halfheight: f32 = 0.;
@@ -1611,7 +1611,7 @@ pub unsafe extern "C" fn CM_TraceCapsuleThroughCapsule(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         i += 1
@@ -1679,15 +1679,15 @@ bounding box vs. capsule collision
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut tw: *mut traceWork_t,
+    mut model: clipHandle_t,
 ) {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut size: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut h: crate::src::qcommon::q_shared::clipHandle_t = 0;
-    let mut cmod: *mut crate::cm_local_h::cmodel_t = 0 as *mut crate::cm_local_h::cmodel_t;
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut size: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut h: clipHandle_t = 0;
+    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
     let mut i: i32 = 0;
     // mins maxs of the capsule
     crate::src::qcommon::cm_load::CM_ModelBounds(model, mins.as_mut_ptr(), maxs.as_mut_ptr());
@@ -1695,7 +1695,7 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         size[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         size[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         (*tw).start[i as usize] -= offset[i as usize];
@@ -1703,7 +1703,7 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
         i += 1
     }
     // replace the bounding box with the capsule
-    (*tw).sphere.use_0 = crate::src::qcommon::q_shared::qtrue;
+    (*tw).sphere.use_0 = qtrue;
     (*tw).sphere.radius = if size[1 as i32 as usize][0 as i32 as usize]
         > size[1 as i32 as usize][2 as i32 as usize]
     {
@@ -1712,19 +1712,19 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
         size[1 as i32 as usize][0 as i32 as usize]
     };
     (*tw).sphere.halfheight = size[1 as i32 as usize][2 as i32 as usize];
-    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as vec_t;
     (*tw).sphere.offset[2 as i32 as usize] =
         size[1 as i32 as usize][2 as i32 as usize] - (*tw).sphere.radius;
     // replace the capsule with the bounding box
     h = crate::src::qcommon::cm_load::CM_TempBoxModel(
-        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const vec_t,
+        qfalse as i32,
     );
     // calculate collision
     cmod =
-        crate::src::qcommon::cm_load::CM_ClipHandleToModel(h) as *mut crate::cm_local_h::cmodel_s;
+        CM_ClipHandleToModel(h) as *mut cmodel_s;
     CM_TraceThroughLeaf(tw, &mut (*cmod).leaf);
 }
 //=========================================================================================
@@ -1741,23 +1741,23 @@ a smaller intercept fraction.
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TraceThroughTree(
-    mut tw: *mut crate::cm_local_h::traceWork_t,
+    mut tw: *mut traceWork_t,
     mut num: i32,
     mut p1f: f32,
     mut p2f: f32,
-    mut p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p1: *mut vec_t,
+    mut p2: *mut vec_t,
 ) {
-    let mut node: *mut crate::cm_local_h::cNode_t = 0 as *mut crate::cm_local_h::cNode_t;
-    let mut plane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    let mut node: *mut cNode_t = 0 as *mut cNode_t;
+    let mut plane: *mut cplane_t =
+        0 as *mut cplane_t;
     let mut t1: f32 = 0.;
     let mut t2: f32 = 0.;
     let mut offset: f32 = 0.;
     let mut frac: f32 = 0.;
     let mut frac2: f32 = 0.;
     let mut idist: f32 = 0.;
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
     let mut side: i32 = 0;
     let mut midf: f32 = 0.;
     if (*tw).trace.fraction <= p1f {
@@ -1768,7 +1768,7 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
     if num < 0 as i32 {
         CM_TraceThroughLeaf(
             tw,
-            &mut *crate::src::qcommon::cm_load::cm
+            &mut *cm
                 .leafs
                 .offset((-(1 as i32) - num) as isize),
         );
@@ -1778,7 +1778,7 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
     // find the point distances to the separating plane
     // and the offset for the size of the box
     //
-    node = crate::src::qcommon::cm_load::cm.nodes.offset(num as isize);
+    node = cm.nodes.offset(num as isize);
     plane = (*node).plane;
     // adjust the plane distance appropriately for mins/maxs
     if ((*plane).type_0 as i32) < 3 as i32 {
@@ -1880,19 +1880,19 @@ CM_Trace
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_Trace(
-    mut results: *mut crate::src::qcommon::q_shared::trace_t,
-    mut start: *const crate::src::qcommon::q_shared::vec_t,
-    mut end: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
+    mut results: *mut trace_t,
+    mut start: *const vec_t,
+    mut end: *const vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut model: clipHandle_t,
+    mut origin: *const vec_t,
     mut brushmask: i32,
     mut capsule: i32,
-    mut sphere: *mut crate::cm_local_h::sphere_t,
+    mut sphere: *mut sphere_t,
 ) {
     let mut i: i32 = 0; // for multi-check avoidance
-    let mut tw: crate::cm_local_h::traceWork_t = crate::cm_local_h::traceWork_t {
+    let mut tw: traceWork_t = traceWork_t {
         start: [0.; 3],
         end: [0.; 3],
         size: [[0.; 3]; 2],
@@ -1902,13 +1902,13 @@ pub unsafe extern "C" fn CM_Trace(
         bounds: [[0.; 3]; 2],
         modelOrigin: [0.; 3],
         contents: 0,
-        isPoint: crate::src::qcommon::q_shared::qfalse,
-        trace: crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        isPoint: qfalse,
+        trace: trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -1919,40 +1919,40 @@ pub unsafe extern "C" fn CM_Trace(
             contents: 0,
             entityNum: 0,
         },
-        sphere: crate::cm_local_h::sphere_t {
-            use_0: crate::src::qcommon::q_shared::qfalse,
+        sphere: sphere_t {
+            use_0: qfalse,
             radius: 0.,
             halfheight: 0.,
             offset: [0.; 3],
         },
     }; // for statistics, may be zeroed
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmod: *mut crate::cm_local_h::cmodel_t = 0 as *mut crate::cm_local_h::cmodel_t;
-    cmod = crate::src::qcommon::cm_load::CM_ClipHandleToModel(model)
-        as *mut crate::cm_local_h::cmodel_s;
-    crate::src::qcommon::cm_load::cm.checkcount += 1;
-    crate::src::qcommon::cm_load::c_traces += 1;
+    let mut offset: vec3_t = [0.; 3];
+    let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
+    cmod = CM_ClipHandleToModel(model)
+        as *mut cmodel_s;
+    cm.checkcount += 1;
+    c_traces += 1;
     // fill in a default trace
     crate::stdlib::memset(
-        &mut tw as *mut crate::cm_local_h::traceWork_t as *mut libc::c_void,
+        &mut tw as *mut traceWork_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cm_local_h::traceWork_t>() as libc::c_ulong,
+        ::std::mem::size_of::<traceWork_t>() as libc::c_ulong,
     ); // assume it goes the entire distance until shown otherwise
     tw.trace.fraction = 1 as i32 as f32;
     tw.modelOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     tw.modelOrigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     tw.modelOrigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    if crate::src::qcommon::cm_load::cm.numNodes == 0 {
+    if cm.numNodes == 0 {
         *results = tw.trace;
         return;
         // map not loaded, shouldn't happen
     }
     // allow NULL to be passed in for 0,0,0
     if mins.is_null() {
-        mins = crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
+        mins = vec3_origin.as_mut_ptr()
     }
     if maxs.is_null() {
-        maxs = crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
+        maxs = vec3_origin.as_mut_ptr()
     }
     // set basic parms
     tw.contents = brushmask;
@@ -1962,7 +1962,7 @@ pub unsafe extern "C" fn CM_Trace(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         tw.size[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
         tw.size[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         tw.start[i as usize] = *start.offset(i as isize) + offset[i as usize];
@@ -1973,7 +1973,7 @@ pub unsafe extern "C" fn CM_Trace(
     if !sphere.is_null() {
         tw.sphere = *sphere
     } else {
-        tw.sphere.use_0 = capsule as crate::src::qcommon::q_shared::qboolean;
+        tw.sphere.use_0 = capsule as qboolean;
         tw.sphere.radius = if tw.size[1 as i32 as usize][0 as i32 as usize]
             > tw.size[1 as i32 as usize][2 as i32 as usize]
         {
@@ -1982,8 +1982,8 @@ pub unsafe extern "C" fn CM_Trace(
             tw.size[1 as i32 as usize][0 as i32 as usize]
         };
         tw.sphere.halfheight = tw.size[1 as i32 as usize][2 as i32 as usize];
-        tw.sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        tw.sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tw.sphere.offset[0 as i32 as usize] = 0 as i32 as vec_t;
+        tw.sphere.offset[1 as i32 as usize] = 0 as i32 as vec_t;
         tw.sphere.offset[2 as i32 as usize] =
             tw.size[1 as i32 as usize][2 as i32 as usize] - tw.sphere.radius
     }
@@ -2049,20 +2049,20 @@ pub unsafe extern "C" fn CM_Trace(
                 tw.bounds[0 as i32 as usize][i as usize] = (tw.start[i as usize] as f64
                     - crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     - tw.sphere.radius as f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 tw.bounds[1 as i32 as usize][i as usize] = (tw.end[i as usize] as f64
                     + crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     + tw.sphere.radius as f64)
-                    as crate::src::qcommon::q_shared::vec_t
+                    as vec_t
             } else {
                 tw.bounds[0 as i32 as usize][i as usize] = (tw.end[i as usize] as f64
                     - crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     - tw.sphere.radius as f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 tw.bounds[1 as i32 as usize][i as usize] = (tw.start[i as usize] as f64
                     + crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     + tw.sphere.radius as f64)
-                    as crate::src::qcommon::q_shared::vec_t
+                    as vec_t
             }
             i += 1
         }
@@ -2112,12 +2112,12 @@ pub unsafe extern "C" fn CM_Trace(
             && tw.size[0 as i32 as usize][1 as i32 as usize] == 0 as i32 as f32
             && tw.size[0 as i32 as usize][2 as i32 as usize] == 0 as i32 as f32
         {
-            tw.isPoint = crate::src::qcommon::q_shared::qtrue;
-            tw.extents[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            tw.isPoint = qtrue;
+            tw.extents[2 as i32 as usize] = 0 as i32 as vec_t;
             tw.extents[1 as i32 as usize] = tw.extents[2 as i32 as usize];
             tw.extents[0 as i32 as usize] = tw.extents[1 as i32 as usize]
         } else {
-            tw.isPoint = crate::src::qcommon::q_shared::qfalse;
+            tw.isPoint = qfalse;
             tw.extents[0 as i32 as usize] = tw.size[1 as i32 as usize][0 as i32 as usize];
             tw.extents[1 as i32 as usize] = tw.size[1 as i32 as usize][1 as i32 as usize];
             tw.extents[2 as i32 as usize] = tw.size[1 as i32 as usize][2 as i32 as usize]
@@ -2172,12 +2172,12 @@ CM_BoxTrace
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoxTrace(
-    mut results: *mut crate::src::qcommon::q_shared::trace_t,
-    mut start: *const crate::src::qcommon::q_shared::vec_t,
-    mut end: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut results: *mut trace_t,
+    mut start: *const vec_t,
+    mut end: *const vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut model: clipHandle_t,
     mut brushmask: i32,
     mut capsule: i32,
 ) {
@@ -2188,11 +2188,11 @@ pub unsafe extern "C" fn CM_BoxTrace(
         mins,
         maxs,
         model,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
         brushmask,
         capsule,
-        0 as *mut crate::cm_local_h::sphere_t,
+        0 as *mut sphere_t,
     );
 }
 /*
@@ -2229,24 +2229,24 @@ rotating entities
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TransformedBoxTrace(
-    mut results: *mut crate::src::qcommon::q_shared::trace_t,
-    mut start: *const crate::src::qcommon::q_shared::vec_t,
-    mut end: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut results: *mut trace_t,
+    mut start: *const vec_t,
+    mut end: *const vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut model: clipHandle_t,
     mut brushmask: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut angles: *const crate::src::qcommon::q_shared::vec_t,
+    mut origin: *const vec_t,
+    mut angles: *const vec_t,
     mut capsule: i32,
 ) {
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -2257,29 +2257,29 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
             contents: 0,
             entityNum: 0,
         };
-    let mut start_l: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end_l: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut rotated: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut symetricSize: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut matrix: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
-    let mut transpose: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
+    let mut start_l: vec3_t = [0.; 3];
+    let mut end_l: vec3_t = [0.; 3];
+    let mut rotated: qboolean =
+        qfalse;
+    let mut offset: vec3_t = [0.; 3];
+    let mut symetricSize: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut matrix: [vec3_t; 3] = [[0.; 3]; 3];
+    let mut transpose: [vec3_t; 3] = [[0.; 3]; 3];
     let mut i: i32 = 0;
     let mut halfwidth: f32 = 0.;
     let mut halfheight: f32 = 0.;
     let mut t: f32 = 0.;
-    let mut sphere: crate::cm_local_h::sphere_t = crate::cm_local_h::sphere_t {
-        use_0: crate::src::qcommon::q_shared::qfalse,
+    let mut sphere: sphere_t = sphere_t {
+        use_0: qfalse,
         radius: 0.,
         halfheight: 0.,
         offset: [0.; 3],
     };
     if mins.is_null() {
-        mins = crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
+        mins = vec3_origin.as_mut_ptr()
     }
     if maxs.is_null() {
-        maxs = crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
+        maxs = vec3_origin.as_mut_ptr()
     }
     // adjust so that mins and maxs are always symetric, which
     // avoids some complications with plane expanding of rotated
@@ -2287,7 +2287,7 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
     i = 0 as i32;
     while i < 3 as i32 {
         offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         start_l[i as usize] = *start.offset(i as isize) + offset[i as usize];
@@ -2307,13 +2307,13 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
             || *angles.offset(1 as i32 as isize) != 0.
             || *angles.offset(2 as i32 as isize) != 0.)
     {
-        rotated = crate::src::qcommon::q_shared::qtrue
+        rotated = qtrue
     } else {
-        rotated = crate::src::qcommon::q_shared::qfalse
+        rotated = qfalse
     }
     halfwidth = symetricSize[1 as i32 as usize][0 as i32 as usize];
     halfheight = symetricSize[1 as i32 as usize][2 as i32 as usize];
-    sphere.use_0 = capsule as crate::src::qcommon::q_shared::qboolean;
+    sphere.use_0 = capsule as qboolean;
     sphere.radius = if halfwidth > halfheight {
         halfheight
     } else {
@@ -2336,15 +2336,15 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
         sphere.offset[1 as i32 as usize] = -matrix[1 as i32 as usize][2 as i32 as usize] * t;
         sphere.offset[2 as i32 as usize] = matrix[2 as i32 as usize][2 as i32 as usize] * t
     } else {
-        sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        sphere.offset[0 as i32 as usize] = 0 as i32 as vec_t;
+        sphere.offset[1 as i32 as usize] = 0 as i32 as vec_t;
         sphere.offset[2 as i32 as usize] = t
     }
     // sweep the box through the model
     CM_Trace(
         &mut trace,
-        start_l.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        end_l.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        start_l.as_mut_ptr() as *const vec_t,
+        end_l.as_mut_ptr() as *const vec_t,
         symetricSize[0 as i32 as usize].as_mut_ptr(),
         symetricSize[1 as i32 as usize].as_mut_ptr(),
         model,

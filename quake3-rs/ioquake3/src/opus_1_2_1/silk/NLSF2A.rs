@@ -13,25 +13,25 @@ pub use crate::opus_types_h::opus_uint32;
 #[inline]
 
 unsafe extern "C" fn silk_NLSF2A_find_poly(
-    mut out: *mut crate::opus_types_h::opus_int32,
-    mut cLSF: *const crate::opus_types_h::opus_int32,
+    mut out: *mut opus_int32,
+    mut cLSF: *const opus_int32,
     mut dd: i32,
 )
 /* I    polynomial order (= 1/2 * filter order)   */
 {
     let mut k: i32 = 0; /* QA*/
     let mut n: i32 = 0;
-    let mut ftmp: crate::opus_types_h::opus_int32 = 0;
-    *out.offset(0 as i32 as isize) = ((1 as i32 as crate::opus_types_h::opus_uint32) << 16 as i32)
-        as crate::opus_types_h::opus_int32;
+    let mut ftmp: opus_int32 = 0;
+    *out.offset(0 as i32 as isize) = ((1 as i32 as opus_uint32) << 16 as i32)
+        as opus_int32;
     *out.offset(1 as i32 as isize) = -*cLSF.offset(0 as i32 as isize);
     k = 1 as i32;
     while k < dd {
         ftmp = *cLSF.offset((2 as i32 * k) as isize);
         *out.offset((k + 1 as i32) as isize) = ((*out.offset((k - 1 as i32) as isize)
-            as crate::opus_types_h::opus_uint32)
+            as opus_uint32)
             << 1 as i32)
-            as crate::opus_types_h::opus_int32
+            as opus_int32
             - (if 16 as i32 == 1 as i32 {
                 (ftmp as i64 * *out.offset(k as isize) as i64 >> 1 as i32)
                     + (ftmp as i64 * *out.offset(k as isize) as i64 & 1 as i32 as i64)
@@ -39,7 +39,7 @@ unsafe extern "C" fn silk_NLSF2A_find_poly(
                 ((ftmp as i64 * *out.offset(k as isize) as i64 >> 16 as i32 - 1 as i32)
                     + 1 as i32 as i64)
                     >> 1 as i32
-            }) as crate::opus_types_h::opus_int32;
+            }) as opus_int32;
         n = k;
         while n > 1 as i32 {
             let ref mut fresh0 = *out.offset(n as isize);
@@ -53,7 +53,7 @@ unsafe extern "C" fn silk_NLSF2A_find_poly(
                         >> 16 as i32 - 1 as i32)
                         + 1 as i32 as i64)
                         >> 1 as i32
-                }) as crate::opus_types_h::opus_int32;
+                }) as opus_int32;
             n -= 1
         }
         let ref mut fresh1 = *out.offset(1 as i32 as isize);
@@ -248,8 +248,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_NLSF2A(
-    mut a_Q12: *mut crate::opus_types_h::opus_int16,
-    mut NLSF: *const crate::opus_types_h::opus_int16,
+    mut a_Q12: *mut opus_int16,
+    mut NLSF: *const opus_int16,
     d: i32,
     mut _arch: i32,
 )
@@ -291,16 +291,16 @@ pub unsafe extern "C" fn silk_NLSF2A(
     let mut k: i32 = 0;
     let mut i: i32 = 0;
     let mut dd: i32 = 0;
-    let mut cos_LSF_QA: [crate::opus_types_h::opus_int32; 24] = [0; 24];
-    let mut P: [crate::opus_types_h::opus_int32; 13] = [0; 13];
-    let mut Q: [crate::opus_types_h::opus_int32; 13] = [0; 13];
-    let mut Ptmp: crate::opus_types_h::opus_int32 = 0;
-    let mut Qtmp: crate::opus_types_h::opus_int32 = 0;
-    let mut f_int: crate::opus_types_h::opus_int32 = 0;
-    let mut f_frac: crate::opus_types_h::opus_int32 = 0;
-    let mut cos_val: crate::opus_types_h::opus_int32 = 0;
-    let mut delta: crate::opus_types_h::opus_int32 = 0;
-    let mut a32_QA1: [crate::opus_types_h::opus_int32; 24] = [0; 24];
+    let mut cos_LSF_QA: [opus_int32; 24] = [0; 24];
+    let mut P: [opus_int32; 13] = [0; 13];
+    let mut Q: [opus_int32; 13] = [0; 13];
+    let mut Ptmp: opus_int32 = 0;
+    let mut Qtmp: opus_int32 = 0;
+    let mut f_int: opus_int32 = 0;
+    let mut f_frac: opus_int32 = 0;
+    let mut cos_val: opus_int32 = 0;
+    let mut delta: opus_int32 = 0;
+    let mut a32_QA1: [opus_int32; 24] = [0; 24];
     /* convert LSFs to 2*cos(LSF), using piecewise linear curve from table */
     ordering = if d == 16 as i32 {
         ordering16.as_ptr()
@@ -313,25 +313,25 @@ pub unsafe extern "C" fn silk_NLSF2A(
         f_int = *NLSF.offset(k as isize) as i32 >> 15 as i32 - 7 as i32;
         /* QA */
         f_frac = *NLSF.offset(k as isize) as i32
-            - ((f_int as crate::opus_types_h::opus_uint32) << 15 as i32 - 7 as i32)
-                as crate::opus_types_h::opus_int32;
+            - ((f_int as opus_uint32) << 15 as i32 - 7 as i32)
+                as opus_int32;
         cos_val = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
-            [f_int as usize] as crate::opus_types_h::opus_int32;
+            [f_int as usize] as opus_int32;
         delta = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
             [(f_int + 1 as i32) as usize] as i32
             - cos_val;
         cos_LSF_QA[*ordering.offset(k as isize) as usize] = if 20 as i32 - 16 as i32 == 1 as i32 {
-            (((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
-                as crate::opus_types_h::opus_int32
+            (((cos_val as opus_uint32) << 8 as i32)
+                as opus_int32
                 + delta * f_frac
                 >> 1 as i32)
-                + (((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
-                    as crate::opus_types_h::opus_int32
+                + (((cos_val as opus_uint32) << 8 as i32)
+                    as opus_int32
                     + delta * f_frac
                     & 1 as i32)
         } else {
-            ((((cos_val as crate::opus_types_h::opus_uint32) << 8 as i32)
-                as crate::opus_types_h::opus_int32
+            ((((cos_val as opus_uint32) << 8 as i32)
+                as opus_int32
                 + delta * f_frac
                 >> 20 as i32 - 16 as i32 - 1 as i32)
                 + 1 as i32)
@@ -387,8 +387,8 @@ pub unsafe extern "C" fn silk_NLSF2A(
             a32_QA1.as_mut_ptr(),
             d,
             65536 as i32
-                - ((2 as i32 as crate::opus_types_h::opus_uint32) << i)
-                    as crate::opus_types_h::opus_int32,
+                - ((2 as i32 as opus_uint32) << i)
+                    as opus_int32,
         );
         k = 0 as i32;
         while k < d {
@@ -397,7 +397,7 @@ pub unsafe extern "C" fn silk_NLSF2A(
             } else {
                 ((a32_QA1[k as usize] >> 16 as i32 + 1 as i32 - 12 as i32 - 1 as i32) + 1 as i32)
                     >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             k += 1
             /* QA+1 -> Q12 */
         }

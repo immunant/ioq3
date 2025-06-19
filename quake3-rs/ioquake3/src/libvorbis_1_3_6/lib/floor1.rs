@@ -62,21 +62,21 @@ pub struct lsfit_acc {
 /* **********************************************/
 
 unsafe extern "C" fn floor1_free_info(mut i: *mut libc::c_void) {
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 =
-        i as *mut crate::backends_h::vorbis_info_floor1;
+    let mut info: *mut vorbis_info_floor1 =
+        i as *mut vorbis_info_floor1;
     if !info.is_null() {
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::backends_h::vorbis_info_floor1>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_info_floor1>() as libc::c_ulong,
         );
-        ::libc::free(info as *mut libc::c_void);
+        free(info as *mut libc::c_void);
     };
 }
 
 unsafe extern "C" fn floor1_free_look(mut i: *mut libc::c_void) {
-    let mut look: *mut crate::codec_internal_h::vorbis_look_floor1 =
-        i as *mut crate::codec_internal_h::vorbis_look_floor1;
+    let mut look: *mut vorbis_look_floor1 =
+        i as *mut vorbis_look_floor1;
     if !look.is_null() {
         /*fprintf(stderr,"floor 1 bit usage %f:%f (%f total)\n",
         (float)look->phrasebits/look->frames,
@@ -85,18 +85,18 @@ unsafe extern "C" fn floor1_free_look(mut i: *mut libc::c_void) {
         crate::stdlib::memset(
             look as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::codec_internal_h::vorbis_look_floor1>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_look_floor1>() as libc::c_ulong,
         );
-        ::libc::free(look as *mut libc::c_void);
+        free(look as *mut libc::c_void);
     };
 }
 
 unsafe extern "C" fn floor1_pack(
     mut i: *mut libc::c_void,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut opb: *mut oggpack_buffer,
 ) {
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 =
-        i as *mut crate::backends_h::vorbis_info_floor1;
+    let mut info: *mut vorbis_info_floor1 =
+        i as *mut vorbis_info_floor1;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut count: i32 = 0 as i32;
@@ -104,15 +104,15 @@ unsafe extern "C" fn floor1_pack(
     let mut maxposit: i32 = (*info).postlist[1 as i32 as usize];
     let mut maxclass: i32 = -(1 as i32);
     /* save out partitions */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*info).partitions as libc::c_ulong,
         5 as i32,
     ); /* only 0 to 31 legal */
     j = 0 as i32; /* only 0 to 15 legal */
     while j < (*info).partitions {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             (*info).partitionclass[j as usize] as libc::c_ulong,
             4 as i32,
         );
@@ -124,27 +124,27 @@ unsafe extern "C" fn floor1_pack(
     /* save out partition classes */
     j = 0 as i32; /* 1 to 8 */
     while j < maxclass + 1 as i32 {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             ((*info).class_dim[j as usize] - 1 as i32) as libc::c_ulong,
             3 as i32,
         ); /* 0 to 3 */
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             (*info).class_subs[j as usize] as libc::c_ulong,
             2 as i32,
         );
         if (*info).class_subs[j as usize] != 0 {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 (*info).class_book[j as usize] as libc::c_ulong,
                 8 as i32,
             );
         }
         k = 0 as i32;
         while k < (1 as i32) << (*info).class_subs[j as usize] {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 ((*info).class_subbook[j as usize][k as usize] + 1 as i32) as libc::c_ulong,
                 8 as i32,
             );
@@ -153,30 +153,30 @@ unsafe extern "C" fn floor1_pack(
         j += 1
     }
     /* save out the post list */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         ((*info).mult - 1 as i32) as libc::c_ulong,
         2 as i32,
     ); /* only 1,2,3,4 legal now */
     /* maxposit cannot legally be less than 1; this is encode-side, we
     can assume our setup is OK */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-            (maxposit - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+            (maxposit - 1 as i32) as ogg_uint32_t,
         ) as libc::c_ulong,
         4 as i32,
     );
     rangebits = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        (maxposit - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+        (maxposit - 1 as i32) as ogg_uint32_t,
     );
     j = 0 as i32;
     k = 0 as i32;
     while j < (*info).partitions {
         count += (*info).class_dim[(*info).partitionclass[j as usize] as usize];
         while k < count {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 (*info).postlist[(k + 2 as i32) as usize] as libc::c_ulong,
                 rangebits,
             );
@@ -191,25 +191,25 @@ unsafe extern "C" fn icomp(mut a: *const libc::c_void, mut b: *const libc::c_voi
 }
 
 unsafe extern "C" fn floor1_unpack(
-    mut vi: *mut crate::codec_h::vorbis_info,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut vi: *mut vorbis_info,
+    mut opb: *mut oggpack_buffer,
 ) -> *mut libc::c_void {
     let mut current_block: u64;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut count: i32 = 0 as i32;
     let mut maxclass: i32 = -(1 as i32);
     let mut rangebits: i32 = 0;
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 = crate::stdlib::calloc(
+    let mut info: *mut vorbis_info_floor1 = calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::backends_h::vorbis_info_floor1>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_info_floor1>() as libc::c_ulong,
     )
-        as *mut crate::backends_h::vorbis_info_floor1;
+        as *mut vorbis_info_floor1;
     /* read partitions */
-    (*info).partitions = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*info).partitions = oggpack_read(
+        opb as *mut oggpack_buffer,
         5 as i32,
     ) as i32; /* only 0 to 31 legal */
     j = 0 as i32; /* only 0 to 15 legal */
@@ -218,8 +218,8 @@ unsafe extern "C" fn floor1_unpack(
             current_block = 13183875560443969876;
             break;
         }
-        (*info).partitionclass[j as usize] = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*info).partitionclass[j as usize] = oggpack_read(
+            opb as *mut oggpack_buffer,
             4 as i32,
         ) as i32;
         if (*info).partitionclass[j as usize] < 0 as i32 {
@@ -242,13 +242,13 @@ unsafe extern "C" fn floor1_unpack(
                     break;
                 }
                 (*info).class_dim[j as usize] =
-                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    (oggpack_read(
+                        opb as *mut oggpack_buffer,
                         3 as i32,
                     ) + 1 as i32 as isize) as i32;
                 (*info).class_subs[j as usize] =
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_read(
+                        opb as *mut oggpack_buffer,
                         2 as i32,
                     ) as i32;
                 if (*info).class_subs[j as usize] < 0 as i32 {
@@ -257,8 +257,8 @@ unsafe extern "C" fn floor1_unpack(
                 }
                 if (*info).class_subs[j as usize] != 0 {
                     (*info).class_book[j as usize] =
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_read(
+                            opb as *mut oggpack_buffer,
                             8 as i32,
                         ) as i32
                 }
@@ -271,8 +271,8 @@ unsafe extern "C" fn floor1_unpack(
                 k = 0 as i32;
                 while k < (1 as i32) << (*info).class_subs[j as usize] {
                     (*info).class_subbook[j as usize][k as usize] =
-                        (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        (oggpack_read(
+                            opb as *mut oggpack_buffer,
                             8 as i32,
                         ) - 1 as i32 as isize) as i32;
                     if (*info).class_subbook[j as usize][k as usize] < -(1 as i32)
@@ -289,12 +289,12 @@ unsafe extern "C" fn floor1_unpack(
                 4682380797242156875 => {}
                 _ => {
                     /* read the post list */
-                    (*info).mult = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    (*info).mult = (oggpack_read(
+                        opb as *mut oggpack_buffer,
                         2 as i32,
                     ) + 1 as i32 as isize) as i32; /* only 1,2,3,4 legal now */
-                    rangebits = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    rangebits = oggpack_read(
+                        opb as *mut oggpack_buffer,
                         4 as i32,
                     ) as i32;
                     if !(rangebits < 0 as i32) {
@@ -312,8 +312,8 @@ unsafe extern "C" fn floor1_unpack(
                             }
                             while k < count {
                                 (*info).postlist[(k + 2 as i32) as usize] =
-                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                        opb as *mut crate::ogg_h::oggpack_buffer,
+                                    oggpack_read(
+                                        opb as *mut oggpack_buffer,
                                         rangebits,
                                     ) as i32;
                                 let mut t: i32 = (*info).postlist[(k + 2 as i32) as usize];
@@ -339,9 +339,9 @@ unsafe extern "C" fn floor1_unpack(
                                         (*info).postlist.as_mut_ptr().offset(j as isize);
                                     j += 1
                                 }
-                                crate::stdlib::qsort(
+                                qsort(
                                     sortpointer.as_mut_ptr() as *mut libc::c_void,
-                                    (count + 2 as i32) as crate::stddef_h::size_t,
+                                    (count + 2 as i32) as size_t,
                                     ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
                                     Some(
                                         icomp
@@ -383,17 +383,17 @@ unsafe extern "C" fn floor1_unpack(
 }
 
 unsafe extern "C" fn floor1_look(
-    mut _vd: *mut crate::codec_h::vorbis_dsp_state,
+    mut _vd: *mut vorbis_dsp_state,
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 =
-        in_0 as *mut crate::backends_h::vorbis_info_floor1;
-    let mut look: *mut crate::codec_internal_h::vorbis_look_floor1 = crate::stdlib::calloc(
+    let mut info: *mut vorbis_info_floor1 =
+        in_0 as *mut vorbis_info_floor1;
+    let mut look: *mut vorbis_look_floor1 = calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::codec_internal_h::vorbis_look_floor1>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_look_floor1>() as libc::c_ulong,
     )
-        as *mut crate::codec_internal_h::vorbis_look_floor1;
+        as *mut vorbis_look_floor1;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut n: i32 = 0 as i32;
@@ -418,9 +418,9 @@ unsafe extern "C" fn floor1_look(
         sortpointer[i as usize] = (*info).postlist.as_mut_ptr().offset(i as isize);
         i += 1
     }
-    crate::stdlib::qsort(
+    qsort(
         sortpointer.as_mut_ptr() as *mut libc::c_void,
-        n as crate::stddef_h::size_t,
+        n as size_t,
         ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
         Some(icomp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
@@ -504,7 +504,7 @@ unsafe extern "C" fn render_point(
     y1 &= 0x7fff as i32;
     let mut dy: i32 = y1 - y0;
     let mut adx: i32 = x1 - x0;
-    let mut ady: i32 = ::libc::abs(dy);
+    let mut ady: i32 = abs(dy);
     let mut err: i32 = ady * (x - x0);
     let mut off: i32 = err / adx;
     if dy < 0 as i32 {
@@ -793,7 +793,7 @@ unsafe extern "C" fn render_line(
 ) {
     let mut dy: i32 = y1 - y0;
     let mut adx: i32 = x1 - x0;
-    let mut ady: i32 = ::libc::abs(dy);
+    let mut ady: i32 = abs(dy);
     let mut base: i32 = dy / adx;
     let mut sy: i32 = if dy < 0 as i32 {
         (base) - 1 as i32
@@ -803,7 +803,7 @@ unsafe extern "C" fn render_line(
     let mut x: i32 = x0;
     let mut y: i32 = y0;
     let mut err: i32 = 0 as i32;
-    ady -= ::libc::abs(base * adx);
+    ady -= abs(base * adx);
     if n > x1 {
         n = x1
     }
@@ -836,7 +836,7 @@ unsafe extern "C" fn render_line0(
 ) {
     let mut dy: i32 = y1 - y0;
     let mut adx: i32 = x1 - x0;
-    let mut ady: i32 = ::libc::abs(dy);
+    let mut ady: i32 = abs(dy);
     let mut base: i32 = dy / adx;
     let mut sy: i32 = if dy < 0 as i32 {
         (base) - 1 as i32
@@ -846,7 +846,7 @@ unsafe extern "C" fn render_line0(
     let mut x: i32 = x0;
     let mut y: i32 = y0;
     let mut err: i32 = 0 as i32;
-    ady -= ::libc::abs(base * adx);
+    ady -= abs(base * adx);
     if n > x1 {
         n = x1
     }
@@ -877,7 +877,7 @@ unsafe extern "C" fn accumulate_fit(
     mut x1: i32,
     mut a: *mut lsfit_acc,
     mut n: i32,
-    mut info: *mut crate::backends_h::vorbis_info_floor1,
+    mut info: *mut vorbis_info_floor1,
 ) -> i32 {
     let mut i: isize = 0;
     let mut xa: i32 = 0 as i32;
@@ -944,7 +944,7 @@ unsafe extern "C" fn fit_line(
     mut fits: i32,
     mut y0: *mut i32,
     mut y1: *mut i32,
-    mut info: *mut crate::backends_h::vorbis_info_floor1,
+    mut info: *mut vorbis_info_floor1,
 ) -> i32 {
     let mut xb: f64 = 0 as i32 as f64;
     let mut yb: f64 = 0 as i32 as f64;
@@ -1019,11 +1019,11 @@ unsafe extern "C" fn inspect_error(
     mut y1: i32,
     mut mask: *const f32,
     mut mdct: *const f32,
-    mut info: *mut crate::backends_h::vorbis_info_floor1,
+    mut info: *mut vorbis_info_floor1,
 ) -> i32 {
     let mut dy: i32 = y1 - y0; /* no neighbor yet */
     let mut adx: i32 = x1 - x0;
-    let mut ady: i32 = ::libc::abs(dy);
+    let mut ady: i32 = abs(dy);
     let mut base: i32 = dy / adx;
     let mut sy: i32 = if dy < 0 as i32 {
         (base) - 1 as i32
@@ -1036,7 +1036,7 @@ unsafe extern "C" fn inspect_error(
     let mut val: i32 = vorbis_dBquant(mask.offset(x as isize));
     let mut mse: i32 = 0 as i32;
     let mut n: i32 = 0 as i32;
-    ady -= ::libc::abs(base * adx);
+    ady -= abs(base * adx);
     mse = y - val;
     mse *= mse;
     n += 1;
@@ -1098,14 +1098,14 @@ unsafe extern "C" fn post_Y(mut A: *mut i32, mut B: *mut i32, mut pos: i32) -> i
 #[no_mangle]
 
 pub unsafe extern "C" fn floor1_fit(
-    mut vb: *mut crate::codec_h::vorbis_block,
-    mut look: *mut crate::codec_internal_h::vorbis_look_floor1,
+    mut vb: *mut vorbis_block,
+    mut look: *mut vorbis_look_floor1,
     mut logmdct: *const f32,
     mut logmask: *const f32,
 ) -> *mut i32 {
     let mut i: isize = 0;
     let mut j: isize = 0;
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
+    let mut info: *mut vorbis_info_floor1 = (*look).vi;
     let mut n: isize = (*look).n as isize;
     let mut posts: isize = (*look).posts as isize;
     let mut nonzero: isize = 0 as i32 as isize;
@@ -1219,7 +1219,7 @@ pub unsafe extern "C" fn floor1_fit(
                 let mut ly: i32 = post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), ln);
                 let mut hy: i32 = post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), hn);
                 if ly == -(1 as i32) || hy == -(1 as i32) {
-                    ::libc::exit(1 as i32);
+                    exit(1 as i32);
                 }
                 if inspect_error(lx, hx, ly, hy, logmask, logmdct, info) != 0 {
                     /* outside error bounds/begin search area.  Split it. */
@@ -1292,7 +1292,7 @@ pub unsafe extern "C" fn floor1_fit(
             i += 1
         }
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
+            vb as *mut vorbis_block,
             (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
                 as isize,
         ) as *mut i32;
@@ -1326,8 +1326,8 @@ pub unsafe extern "C" fn floor1_fit(
 #[no_mangle]
 
 pub unsafe extern "C" fn floor1_interpolate_fit(
-    mut vb: *mut crate::codec_h::vorbis_block,
-    mut look: *mut crate::codec_internal_h::vorbis_look_floor1,
+    mut vb: *mut vorbis_block,
+    mut look: *mut vorbis_look_floor1,
     mut A: *mut i32,
     mut B: *mut i32,
     mut del: i32,
@@ -1337,7 +1337,7 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
     let mut output: *mut i32 = 0 as *mut i32;
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
+            vb as *mut vorbis_block,
             (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
                 as isize,
         ) as *mut i32;
@@ -1387,22 +1387,22 @@ improves clarity of program flow. */
 #[no_mangle]
 
 pub unsafe extern "C" fn floor1_encode(
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
-    mut vb: *mut crate::codec_h::vorbis_block,
-    mut look: *mut crate::codec_internal_h::vorbis_look_floor1,
+    mut opb: *mut oggpack_buffer,
+    mut vb: *mut vorbis_block,
+    mut look: *mut vorbis_look_floor1,
     mut post: *mut i32,
     mut ilogmask: *mut i32,
 ) -> i32 {
     let mut i: isize = 0;
     let mut j: isize = 0;
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
+    let mut info: *mut vorbis_info_floor1 = (*look).vi;
     let mut posts: isize = (*look).posts as isize;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut out: [i32; 65] = [0; 65];
-    let mut sbooks: *mut *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook =
+    let mut sbooks: *mut *mut static_codebook =
         (*ci).book_param.as_mut_ptr();
-    let mut books: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook = (*ci).fullbooks;
+    let mut books: *mut codebook = (*ci).fullbooks;
     /* quantize values to multiplier spec */
     if !post.is_null() {
         i = 0 as i32 as isize;
@@ -1479,28 +1479,28 @@ pub unsafe extern "C" fn floor1_encode(
         }
         /* we have everything we need. pack it out */
         /* mark nontrivial floor */
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             1 as i32 as libc::c_ulong,
             1 as i32,
         );
         /* beginning/end post */
         (*look).frames += 1;
         (*look).postbits += (crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-            ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+            ((*look).quant_q - 1 as i32) as ogg_uint32_t,
         ) * 2 as i32) as isize;
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             out[0 as i32 as usize] as libc::c_ulong,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+                ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
         );
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             out[1 as i32 as usize] as libc::c_ulong,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+                ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
         );
         /* partition by partition */
@@ -1554,11 +1554,11 @@ pub unsafe extern "C" fn floor1_encode(
                     k += 1
                 }
                 /* write it */
-                (*look).phrasebits += crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_encode(
+                (*look).phrasebits += vorbis_book_encode(
                     books.offset((*info).class_book[class as usize] as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+                        as *mut codebook,
                     cval,
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                    opb as *mut oggpack_buffer,
                 ) as isize
             }
             /* write post values */
@@ -1572,11 +1572,11 @@ pub unsafe extern "C" fn floor1_encode(
                         < (*books.offset(book as isize)).entries
                     {
                         (*look).postbits +=
-                            crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_encode(
+                            vorbis_book_encode(
                                 books.offset(book as isize)
-                                    as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+                                    as *mut codebook,
                                 out[(j + k as isize) as usize],
-                                opb as *mut crate::ogg_h::oggpack_buffer,
+                                opb as *mut oggpack_buffer,
                             ) as isize
                     }
                     /*else
@@ -1613,8 +1613,8 @@ pub unsafe extern "C" fn floor1_encode(
         }
         return 1 as i32;
     } else {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             0 as i32 as libc::c_ulong,
             1 as i32,
         );
@@ -1629,40 +1629,40 @@ pub unsafe extern "C" fn floor1_encode(
 }
 
 unsafe extern "C" fn floor1_inverse1(
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut vb: *mut vorbis_block,
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut current_block: u64;
-    let mut look: *mut crate::codec_internal_h::vorbis_look_floor1 =
-        in_0 as *mut crate::codec_internal_h::vorbis_look_floor1;
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut look: *mut vorbis_look_floor1 =
+        in_0 as *mut vorbis_look_floor1;
+    let mut info: *mut vorbis_info_floor1 = (*look).vi;
+    let mut ci: *mut codec_setup_info =
+        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut books: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook = (*ci).fullbooks;
+    let mut books: *mut codebook = (*ci).fullbooks;
     /* unpack wrapped/predicted values from stream */
-    if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    if oggpack_read(
+        &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
         1 as i32,
     ) == 1 as i32 as isize
     {
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
+            vb as *mut vorbis_block,
             ((*look).posts as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
         ) as *mut i32;
-        *fit_value.offset(0 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        *fit_value.offset(0 as i32 as isize) = oggpack_read(
+            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+                ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
         ) as i32;
-        *fit_value.offset(1 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        *fit_value.offset(1 as i32 as isize) = oggpack_read(
+            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+                ((*look).quant_q - 1 as i32) as ogg_uint32_t,
             ),
         ) as i32;
         /* partition by partition */
@@ -1680,10 +1680,10 @@ unsafe extern "C" fn floor1_inverse1(
             let mut cval: i32 = 0 as i32;
             /* decode the partition's first stage cascade value */
             if csubbits != 0 {
-                cval = crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decode(
+                cval = vorbis_book_decode(
                     books.offset((*info).class_book[class as usize] as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-                    &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                        as *mut codebook,
+                    &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
                 ) as i32;
                 if cval == -(1 as i32) {
                     current_block = 11812956849860977184;
@@ -1697,10 +1697,10 @@ unsafe extern "C" fn floor1_inverse1(
                 cval >>= csubbits;
                 if book >= 0 as i32 {
                     let ref mut fresh0 = *fit_value.offset((j + k) as isize);
-                    *fresh0 = crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decode(
+                    *fresh0 = vorbis_book_decode(
                         books.offset(book as isize)
-                            as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-                        &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                            as *mut codebook,
+                        &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
                     ) as i32;
                     if *fresh0 == -(1 as i32) {
                         current_block = 11812956849860977184;
@@ -1761,16 +1761,16 @@ unsafe extern "C" fn floor1_inverse1(
 }
 
 unsafe extern "C" fn floor1_inverse2(
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut vb: *mut vorbis_block,
     mut in_0: *mut libc::c_void,
     mut memo: *mut libc::c_void,
     mut out: *mut f32,
 ) -> i32 {
-    let mut look: *mut crate::codec_internal_h::vorbis_look_floor1 =
-        in_0 as *mut crate::codec_internal_h::vorbis_look_floor1;
-    let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut look: *mut vorbis_look_floor1 =
+        in_0 as *mut vorbis_look_floor1;
+    let mut info: *mut vorbis_info_floor1 = (*look).vi;
+    let mut ci: *mut codec_setup_info =
+        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as isize) as i32;
     let mut j: i32 = 0;
     if !memo.is_null() {
@@ -1825,26 +1825,26 @@ unsafe extern "C" fn floor1_inverse2(
 /* export hooks */
 #[no_mangle]
 
-pub static mut floor1_exportbundle: crate::backends_h::vorbis_func_floor = {
-    let mut init = crate::backends_h::vorbis_func_floor {
+pub static mut floor1_exportbundle: vorbis_func_floor = {
+    let mut init = vorbis_func_floor {
         pack: Some(
             floor1_pack
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: *mut crate::ogg_h::oggpack_buffer,
+                    _: *mut oggpack_buffer,
                 ) -> (),
         ),
         unpack: Some(
             floor1_unpack
                 as unsafe extern "C" fn(
-                    _: *mut crate::codec_h::vorbis_info,
-                    _: *mut crate::ogg_h::oggpack_buffer,
+                    _: *mut vorbis_info,
+                    _: *mut oggpack_buffer,
                 ) -> *mut libc::c_void,
         ),
         look: Some(
             floor1_look
                 as unsafe extern "C" fn(
-                    _: *mut crate::codec_h::vorbis_dsp_state,
+                    _: *mut vorbis_dsp_state,
                     _: *mut libc::c_void,
                 ) -> *mut libc::c_void,
         ),
@@ -1853,14 +1853,14 @@ pub static mut floor1_exportbundle: crate::backends_h::vorbis_func_floor = {
         inverse1: Some(
             floor1_inverse1
                 as unsafe extern "C" fn(
-                    _: *mut crate::codec_h::vorbis_block,
+                    _: *mut vorbis_block,
                     _: *mut libc::c_void,
                 ) -> *mut libc::c_void,
         ),
         inverse2: Some(
             floor1_inverse2
                 as unsafe extern "C" fn(
-                    _: *mut crate::codec_h::vorbis_block,
+                    _: *mut vorbis_block,
                     _: *mut libc::c_void,
                     _: *mut libc::c_void,
                     _: *mut f32,

@@ -786,7 +786,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 pub use crate::bg_public_h::C2RustUnnamed_0;
@@ -832,9 +832,9 @@ pub unsafe extern "C" fn Q_IsColorString(mut p: *const libc::c_char) -> qboolean
     if (*p.offset(1 as i32 as isize) as i32) < 0 as i32 {
         return qfalse;
     }
-    if *(*crate::stdlib::__ctype_b_loc()).offset(*p.offset(1 as i32 as isize) as i32 as isize)
+    if *(*__ctype_b_loc()).offset(*p.offset(1 as i32 as isize) as i32 as isize)
         as i32
-        & crate::stdlib::_ISalnum as i32 as u16 as i32
+        & _ISalnum as i32 as u16 as i32
         == 0 as i32
     {
         return qfalse;
@@ -865,10 +865,10 @@ pub unsafe extern "C" fn COM_SkipPath(mut pathname: *mut libc::c_char) -> *mut l
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_GetExtension(mut name: *const libc::c_char) -> *const libc::c_char {
-    let mut dot: *const libc::c_char = ::libc::strrchr(name, '.' as i32);
+    let mut dot: *const libc::c_char = libc::strrchr(name, '.' as i32);
     let mut slash: *const libc::c_char = 0 as *const libc::c_char;
     if !dot.is_null() && {
-        slash = ::libc::strrchr(name, '/' as i32);
+        slash = libc::strrchr(name, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
         return dot.offset(1 as i32 as isize);
@@ -882,10 +882,10 @@ pub unsafe extern "C" fn COM_StripExtension(
     mut out: *mut libc::c_char,
     mut destsize: i32,
 ) {
-    let mut dot: *const libc::c_char = ::libc::strrchr(in_0, '.' as i32);
+    let mut dot: *const libc::c_char = libc::strrchr(in_0, '.' as i32);
     let mut slash: *const libc::c_char = 0 as *const libc::c_char;
     if !dot.is_null() && {
-        slash = ::libc::strrchr(in_0, '/' as i32);
+        slash = libc::strrchr(in_0, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
         destsize = if (destsize as isize) < dot.offset_from(in_0) as isize + 1 as i32 as isize {
@@ -923,10 +923,10 @@ pub unsafe extern "C" fn COM_DefaultExtension(
     mut maxSize: i32,
     mut extension: *const libc::c_char,
 ) {
-    let mut dot: *const libc::c_char = ::libc::strrchr(path, '.' as i32);
+    let mut dot: *const libc::c_char = libc::strrchr(path, '.' as i32);
     let mut slash: *const libc::c_char = 0 as *const libc::c_char;
     if !dot.is_null() && {
-        slash = ::libc::strrchr(path, '/' as i32);
+        slash = libc::strrchr(path, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
         return;
@@ -1055,7 +1055,7 @@ pub unsafe extern "C" fn COM_ParseError(mut format: *mut libc::c_char, mut args:
         format,
         argptr.as_va_list(),
     );
-    crate::src::game::g_main::Com_Printf(
+    Com_Printf(
         b"ERROR: %s, line %d: %s\n\x00" as *const u8 as *const libc::c_char,
         com_parsename.as_mut_ptr(),
         COM_GetCurrentParseLine(),
@@ -1073,7 +1073,7 @@ pub unsafe extern "C" fn COM_ParseWarning(mut format: *mut libc::c_char, mut arg
         format,
         argptr.as_va_list(),
     );
-    crate::src::game::g_main::Com_Printf(
+    Com_Printf(
         b"WARNING: %s, line %d: %s\n\x00" as *const u8 as *const libc::c_char,
         com_parsename.as_mut_ptr(),
         COM_GetCurrentParseLine(),
@@ -1292,8 +1292,8 @@ pub unsafe extern "C" fn COM_MatchToken(
 ) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     token = COM_Parse(buf_p);
-    if ::libc::strcmp(token, match_0) != 0 {
-        crate::src::game::g_main::Com_Error(
+    if libc::strcmp(token, match_0) != 0 {
+        Com_Error(
             ERR_DROP as i32,
             b"MatchToken: %s != %s\x00" as *const u8 as *const libc::c_char,
             token,
@@ -1440,13 +1440,13 @@ pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> i32 {
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
                             __c
                         } else {
-                            *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
+                            *(*__ctype_tolower_loc()).offset(__c as isize)
                         }
                     } else {
                         __res = tolower(*str.offset(i as isize) as i32)
                     }
                 } else {
-                    __res = *(*crate::stdlib::__ctype_tolower_loc())
+                    __res = *(*__ctype_tolower_loc())
                         .offset(*str.offset(i as isize) as i32 as isize)
                 }
                 __res
@@ -1499,7 +1499,7 @@ pub unsafe extern "C" fn Q_isanumber(mut s: *const libc::c_char) -> qboolean {
     if *s as i32 == '\u{0}' as i32 {
         return qfalse;
     }
-    ::libc::strtod(s, &mut p);
+    libc::strtod(s, &mut p);
     return (*p as i32 == '\u{0}' as i32) as i32 as qboolean;
 }
 #[no_mangle]
@@ -1513,19 +1513,19 @@ pub unsafe extern "C" fn Q_strncpyz(
     mut destsize: i32,
 ) {
     if dest.is_null() {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_FATAL as i32,
             b"Q_strncpyz: NULL dest\x00" as *const u8 as *const libc::c_char,
         );
     }
     if src.is_null() {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_FATAL as i32,
             b"Q_strncpyz: NULL src\x00" as *const u8 as *const libc::c_char,
         );
     }
     if destsize < 1 as i32 {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_FATAL as i32,
             b"Q_strncpyz: destsize < 1\x00" as *const u8 as *const libc::c_char,
         );
@@ -1638,13 +1638,13 @@ pub unsafe extern "C" fn Q_strlwr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
+                        *(*__ctype_tolower_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = tolower(*s as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_tolower_loc()).offset(*s as i32 as isize)
+                __res = *(*__ctype_tolower_loc()).offset(*s as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -1665,13 +1665,13 @@ pub unsafe extern "C" fn Q_strupr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
+                        *(*__ctype_toupper_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = toupper(*s as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_toupper_loc()).offset(*s as i32 as isize)
+                __res = *(*__ctype_toupper_loc()).offset(*s as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -1688,7 +1688,7 @@ pub unsafe extern "C" fn Q_strcat(
     let mut l1: i32 = 0;
     l1 = crate::stdlib::strlen(dest) as i32;
     if l1 >= size {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_FATAL as i32,
             b"Q_strcat: already overflowed\x00" as *const u8 as *const libc::c_char,
         );
@@ -1702,7 +1702,7 @@ pub unsafe extern "C" fn Q_stristr(
 ) -> *const libc::c_char {
     let mut c: libc::c_char = 0;
     let mut sc: libc::c_char = 0;
-    let mut len: crate::stddef_h::size_t = 0;
+    let mut len: size_t = 0;
     let fresh13 = find;
     find = find.offset(1);
     c = *fresh13;
@@ -1804,7 +1804,7 @@ pub unsafe extern "C" fn Com_sprintf(
     argptr = args.clone();
     len = crate::stdlib::vsnprintf(dest, size as libc::c_ulong, fmt, argptr.as_va_list());
     if len >= size {
-        crate::src::game::g_main::Com_Printf(
+        Com_Printf(
             b"Com_sprintf: Output length %d too short, require %d bytes.\n\x00" as *const u8
                 as *const libc::c_char,
             size,
@@ -1868,7 +1868,7 @@ pub unsafe extern "C" fn Info_ValueForKey(
         return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     }
     if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_DROP as i32,
             b"Info_ValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
@@ -1957,12 +1957,12 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
     let mut value: [libc::c_char; 1024] = [0; 1024];
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     if crate::stdlib::strlen(s) >= 1024 as i32 as libc::c_ulong {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_DROP as i32,
             b"Info_RemoveKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if !::libc::strchr(key, '\\' as i32).is_null() {
+    if !libc::strchr(key, '\\' as i32).is_null() {
         return;
     }
     loop {
@@ -1995,7 +1995,7 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
             *fresh27 = *fresh26
         }
         *o = 0 as i32 as libc::c_char;
-        if ::libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
+        if libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
             crate::stdlib::memmove(
                 start as *mut libc::c_void,
                 s as *const libc::c_void,
@@ -2018,12 +2018,12 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     let mut value: [libc::c_char; 8192] = [0; 8192];
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_DROP as i32,
             b"Info_RemoveKey_Big: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if !::libc::strchr(key, '\\' as i32).is_null() {
+    if !libc::strchr(key, '\\' as i32).is_null() {
         return;
     }
     loop {
@@ -2056,7 +2056,7 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
             *fresh31 = *fresh30
         }
         *o = 0 as i32 as libc::c_char;
-        if ::libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
+        if libc::strcmp(key, pkey.as_mut_ptr()) == 0 {
             crate::stdlib::memmove(
                 start as *mut libc::c_void,
                 s as *const libc::c_void,
@@ -2071,10 +2071,10 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
 }
 #[no_mangle]
 pub unsafe extern "C" fn Info_Validate(mut s: *const libc::c_char) -> qboolean {
-    if !::libc::strchr(s, '\"' as i32).is_null() {
+    if !libc::strchr(s, '\"' as i32).is_null() {
         return qfalse;
     }
-    if !::libc::strchr(s, ';' as i32).is_null() {
+    if !libc::strchr(s, ';' as i32).is_null() {
         return qfalse;
     }
     return qtrue;
@@ -2088,16 +2088,16 @@ pub unsafe extern "C" fn Info_SetValueForKey(
     let mut newi: [libc::c_char; 1024] = [0; 1024];
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
     if crate::stdlib::strlen(s) >= 1024 as i32 as libc::c_ulong {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_DROP as i32,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
     while *blacklist != 0 {
-        if !::libc::strchr(key, *blacklist as i32).is_null()
-            || !::libc::strchr(value, *blacklist as i32).is_null()
+        if !libc::strchr(key, *blacklist as i32).is_null()
+            || !libc::strchr(value, *blacklist as i32).is_null()
         {
-            crate::src::game::g_main::Com_Printf(
+            Com_Printf(
                 b"^3Can\'t use keys or values with a \'%c\': %s = %s\n\x00" as *const u8
                     as *const libc::c_char,
                 *blacklist as i32,
@@ -2122,13 +2122,13 @@ pub unsafe extern "C" fn Info_SetValueForKey(
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
         >= 1024 as i32 as libc::c_ulong
     {
-        crate::src::game::g_main::Com_Printf(
+        Com_Printf(
             b"Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    ::libc::strcat(newi.as_mut_ptr(), s);
-    ::libc::strcpy(s, newi.as_mut_ptr());
+    libc::strcat(newi.as_mut_ptr(), s);
+    libc::strcpy(s, newi.as_mut_ptr());
 }
 #[no_mangle]
 pub unsafe extern "C" fn Info_SetValueForKey_Big(
@@ -2139,16 +2139,16 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
     let mut newi: [libc::c_char; 8192] = [0; 8192];
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
     if crate::stdlib::strlen(s) >= 8192 as i32 as libc::c_ulong {
-        crate::src::game::g_main::Com_Error(
+        Com_Error(
             ERR_DROP as i32,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
     while *blacklist != 0 {
-        if !::libc::strchr(key, *blacklist as i32).is_null()
-            || !::libc::strchr(value, *blacklist as i32).is_null()
+        if !libc::strchr(key, *blacklist as i32).is_null()
+            || !libc::strchr(value, *blacklist as i32).is_null()
         {
-            crate::src::game::g_main::Com_Printf(
+            Com_Printf(
                 b"^3Can\'t use keys or values with a \'%c\': %s = %s\n\x00" as *const u8
                     as *const libc::c_char,
                 *blacklist as i32,
@@ -2173,12 +2173,12 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
         >= 8192 as i32 as libc::c_ulong
     {
-        crate::src::game::g_main::Com_Printf(
+        Com_Printf(
             b"BIG Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    ::libc::strcat(s, newi.as_mut_ptr());
+    libc::strcat(s, newi.as_mut_ptr());
 }
 unsafe extern "C" fn Com_CharIsOneOfCharset(
     mut c: libc::c_char,

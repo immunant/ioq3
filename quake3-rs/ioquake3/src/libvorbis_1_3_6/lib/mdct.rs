@@ -381,10 +381,10 @@ pub unsafe extern "C" fn mdct_clear(
 ) {
     if !l.is_null() {
         if !(*l).trig.is_null() {
-            ::libc::free((*l).trig as *mut libc::c_void);
+            libc::free((*l).trig as *mut libc::c_void);
         }
         if !(*l).bitrev.is_null() {
-            ::libc::free((*l).bitrev as *mut libc::c_void);
+            libc::free((*l).bitrev as *mut libc::c_void);
         }
         crate::stdlib::memset(
             l as *mut libc::c_void,

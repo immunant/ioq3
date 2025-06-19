@@ -45,7 +45,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -168,7 +168,7 @@ extern "C" {
     #[no_mangle]
     pub fn Sys_MilliSeconds() -> i32;
     #[no_mangle]
-    pub static mut botimport: crate::botlib_h::botlib_import_t;
+    pub static mut botimport: botlib_import_t;
 }
 //linked reachability
 
@@ -180,8 +180,8 @@ pub struct aas_lreachability_s {
     pub areanum: i32,
     pub facenum: i32,
     pub edgenum: i32,
-    pub start: crate::src::qcommon::q_shared::vec3_t,
-    pub end: crate::src::qcommon::q_shared::vec3_t,
+    pub start: vec3_t,
+    pub end: vec3_t,
     pub traveltype: i32,
     pub traveltime: u16,
     pub next: *mut aas_lreachability_s,
@@ -304,25 +304,25 @@ pub static mut numlreachabilities: i32 = 0;
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut crate::aasfile_h::aas_face_t) -> f32 {
+pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut aas_face_t) -> f32 {
     let mut i: i32 = 0; //end for
     let mut edgenum: i32 = 0;
     let mut side: i32 = 0;
     let mut total: f32 = 0.;
-    let mut v: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut d1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut d2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cross: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
+    let mut v: *mut vec_t =
+        0 as *mut vec_t;
+    let mut d1: vec3_t = [0.; 3];
+    let mut d2: vec3_t = [0.; 3];
+    let mut cross: vec3_t = [0.; 3];
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
     edgenum = *crate::src::botlib::be_aas_main::aasworld
         .edgeindex
         .offset((*face).firstedge as isize);
     side = (edgenum < 0 as i32) as i32;
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
-        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
-        as *mut crate::aasfile_h::aas_edge_t;
+        .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+        as *mut aas_edge_t;
     v = (*crate::src::botlib::be_aas_main::aasworld
         .vertexes
         .offset((*edge).v[side as usize] as isize))
@@ -336,8 +336,8 @@ pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut crate::aasfile_h::aas_face_
         side = (edgenum < 0 as i32) as i32;
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
-            as *mut crate::aasfile_h::aas_edge_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut aas_edge_t;
         d1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
             .offset((*edge).v[side as usize] as isize))[0 as i32 as usize]
@@ -363,13 +363,13 @@ pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut crate::aasfile_h::aas_face_
             .offset((*edge).v[(side == 0) as i32 as usize] as isize))[2 as i32 as usize]
             - *v.offset(2 as i32 as isize);
         CrossProduct(
-            d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            d1.as_mut_ptr() as *const vec_t,
+            d2.as_mut_ptr() as *const vec_t,
             cross.as_mut_ptr(),
         );
         total = (total as f64
             + 0.5f64
-                * VectorLength(cross.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+                * VectorLength(cross.as_mut_ptr() as *const vec_t)
                     as f64) as f32;
         i += 1
     }
@@ -390,31 +390,31 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
     let mut edgenum: i32 = 0;
     let mut facenum: i32 = 0;
     let mut side: i32 = 0;
-    let mut d: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut a: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut volume: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut corner: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut d: vec_t = 0.;
+    let mut a: vec_t = 0.;
+    let mut volume: vec_t = 0.;
+    let mut corner: vec3_t = [0.; 3];
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(areanum as isize) as *mut aas_area_t;
     facenum = *crate::src::botlib::be_aas_main::aasworld
         .faceindex
         .offset((*area).firstface as isize);
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
-        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
-        as *mut crate::aasfile_h::aas_face_t;
+        .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+        as *mut aas_face_t;
     edgenum = *crate::src::botlib::be_aas_main::aasworld
         .edgeindex
         .offset((*face).firstedge as isize);
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
-        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
-        as *mut crate::aasfile_h::aas_edge_t;
+        .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+        as *mut aas_edge_t;
     //
     corner[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
         .vertexes
@@ -426,22 +426,22 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
         .vertexes
         .offset((*edge).v[0 as i32 as usize] as isize))[2 as i32 as usize];
     //make tetrahedrons to all other faces
-    volume = 0 as i32 as crate::src::qcommon::q_shared::vec_t; //end for
+    volume = 0 as i32 as vec_t; //end for
     i = 0 as i32;
     while i < (*area).numfaces {
-        facenum = ::libc::abs(
+        facenum = abs(
             *crate::src::botlib::be_aas_main::aasworld
                 .faceindex
                 .offset(((*area).firstface + i) as isize),
         );
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(facenum as isize) as *mut crate::aasfile_h::aas_face_t;
+            .offset(facenum as isize) as *mut aas_face_t;
         side = ((*face).backarea != areanum) as i32;
         plane = &mut *crate::src::botlib::be_aas_main::aasworld
             .planes
             .offset(((*face).planenum ^ side) as isize)
-            as *mut crate::aasfile_h::aas_plane_t;
+            as *mut aas_plane_t;
         d = -(corner[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
             + corner[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
             + corner[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
@@ -463,9 +463,9 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableLinkArea(
-    mut areas: *mut crate::be_aas_def_h::aas_link_t,
+    mut areas: *mut aas_link_t,
 ) -> i32 {
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t; //end for
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t; //end for
     link = areas;
     while !link.is_null() {
         if AAS_AreaGrounded((*link).areanum) != 0 || AAS_AreaSwim((*link).areanum) != 0 {
@@ -500,10 +500,10 @@ pub unsafe extern "C" fn AAS_BestReachableLinkArea(
 
 pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     mut ent: i32,
-    mut areastart: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
+    mut areastart: *mut vec_t,
+    mut absmins: *mut vec_t,
+    mut absmaxs: *mut vec_t,
+    mut velocity: *mut vec_t,
 ) -> i32 {
     let mut modelnum: i32 = 0;
     let mut ent2: i32 = 0;
@@ -513,12 +513,12 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     let mut time: f32 = 0.;
     let mut dist: f32 = 0.;
     let mut forward: f32 = 0.;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut teststart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut ent2origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut origin: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
+    let mut teststart: vec3_t = [0.; 3];
+    let mut ent2origin: vec3_t = [0.; 3];
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -538,7 +538,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     if speed == 0. {
         speed = 1000 as i32 as f32
     }
-    angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    angles[2 as i32 as usize] = 0 as i32 as vec_t;
     angles[1 as i32 as usize] = angles[2 as i32 as usize];
     angles[0 as i32 as usize] = angles[1 as i32 as usize];
     //get the mins, maxs and origin of the model
@@ -579,11 +579,11 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     origin[2 as i32 as usize] =
         *absmins.offset(2 as i32 as isize) + *absmaxs.offset(2 as i32 as isize);
     origin[0 as i32 as usize] =
-        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     origin[1 as i32 as usize] =
-        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
     origin[2 as i32 as usize] =
-        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     //get the start areas
     teststart[0 as i32 as usize] = origin[0 as i32 as usize]; //end else
     teststart[1 as i32 as usize] = origin[1 as i32 as usize]; //end if
@@ -594,7 +594,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
         origin.as_mut_ptr(),
         4 as i32,
         -(1 as i32),
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     if trace.startsolid as u64 != 0 {
         botimport.Print.expect("non-null function pointer")(
             1 as i32,
@@ -610,7 +610,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
         *areastart.offset(2 as i32 as isize) = trace.endpos[2 as i32 as usize]
     }
     let ref mut fresh0 = *areastart.offset(2 as i32 as isize);
-    *fresh0 = (*fresh0 as f64 + 0.125f64) as crate::src::qcommon::q_shared::vec_t;
+    *fresh0 = (*fresh0 as f64 + 0.125f64) as vec_t;
     //
     //AAS_DrawPermanentCross(origin, 4, 4);
     //get the target entity
@@ -629,7 +629,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
             128 as i32,
         ) == 0)
         {
-            if ::libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr()) == 0 {
+            if libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr()) == 0 {
                 break;
             }
         }
@@ -642,7 +642,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
                 as *mut libc::c_char,
             target.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey(
         ent2,
@@ -659,13 +659,13 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
             b"trigger_push without time\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     // set s.origin2 to the push velocity
     *velocity.offset(0 as i32 as isize) = ent2origin[0 as i32 as usize] - origin[0 as i32 as usize];
     *velocity.offset(1 as i32 as isize) = ent2origin[1 as i32 as usize] - origin[1 as i32 as usize];
     *velocity.offset(2 as i32 as isize) = ent2origin[2 as i32 as usize] - origin[2 as i32 as usize];
-    dist = crate::src::qcommon::q_math::VectorNormalize(velocity);
+    dist = VectorNormalize(velocity);
     forward = dist / time;
     //FIXME: why multiply by 1.1
     forward *= 1.1f32;
@@ -673,7 +673,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     *velocity.offset(1 as i32 as isize) = *velocity.offset(1 as i32 as isize) * forward;
     *velocity.offset(2 as i32 as isize) = *velocity.offset(2 as i32 as isize) * forward;
     *velocity.offset(2 as i32 as isize) = time * gravity;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function AAS_GetJumpPadInfo
 //===========================================================================
@@ -685,28 +685,28 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) -> i32 {
     let mut ent: i32 = 0; //end for
     let mut bot_visualizejumppads: i32 = 0;
     let mut bestareanum: i32 = 0;
     let mut volume: f32 = 0.;
     let mut bestareavolume: f32 = 0.;
-    let mut areastart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bboxmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bboxmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut areastart: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut bboxmins: vec3_t = [0.; 3];
+    let mut bboxmaxs: vec3_t = [0.; 3];
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -720,8 +720,8 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
         time: 0.,
         frames: 0,
     };
-    let mut areas: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
     let mut classname: [libc::c_char; 128] = [0; 128];
     bot_visualizejumppads = crate::src::botlib::l_libvar::LibVarValue(
         b"bot_visualizejumppads\x00" as *const u8 as *const libc::c_char,
@@ -748,7 +748,7 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
             128 as i32,
         ) == 0)
         {
-            if !(::libc::strcmp(
+            if !(libc::strcmp(
                 classname.as_mut_ptr(),
                 b"trigger_push\x00" as *const u8 as *const libc::c_char,
             ) != 0)
@@ -768,7 +768,7 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
                         absmaxs.as_mut_ptr(),
                         -(1 as i32),
                         4 as i32,
-                    ) as *mut crate::be_aas_def_h::aas_link_s; //end for
+                    ) as *mut aas_link_s; //end for
                     link = areas; //end if
                     while !link.is_null() {
                         if AAS_AreaJumpPad((*link).areanum) != 0 {
@@ -784,31 +784,31 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
                                 as *mut libc::c_char,
                         );
                         crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                            areas as *mut crate::be_aas_def_h::aas_link_s,
+                            areas as *mut aas_link_s,
                         );
                     } else {
                         //
                         //botimport.Print(PRT_MESSAGE, "found a trigger_push with velocity %f %f %f\n", velocity[0], velocity[1], velocity[2]);
                         //
                         cmdmove[0 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
+                            0 as i32 as vec_t; //end if
                         cmdmove[1 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
+                            0 as i32 as vec_t; //end if
                         cmdmove[2 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         crate::stdlib::memset(
-                            &mut move_0 as *mut crate::be_aas_h::aas_clientmove_t
+                            &mut move_0 as *mut aas_clientmove_t
                                 as *mut libc::c_void,
                             0 as i32,
-                            ::std::mem::size_of::<crate::be_aas_h::aas_clientmove_t>()
+                            ::std::mem::size_of::<aas_clientmove_t>()
                                 as libc::c_ulong,
                         );
                         crate::src::botlib::be_aas_move::AAS_ClientMovementHitBBox(
-                            &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                            &mut move_0 as *mut _ as *mut aas_clientmove_s,
                             -(1 as i32),
                             areastart.as_mut_ptr(),
                             2 as i32,
-                            crate::src::qcommon::q_shared::qfalse as i32,
+                            qfalse as i32,
                             velocity.as_mut_ptr(),
                             cmdmove.as_mut_ptr(),
                             0 as i32,
@@ -834,12 +834,12 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
                                 //end if
                             }
                             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                                areas as *mut crate::be_aas_def_h::aas_link_s,
+                                areas as *mut aas_link_s,
                             );
                             return bestareanum;
                         }
                         crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                            areas as *mut crate::be_aas_def_h::aas_link_s,
+                            areas as *mut aas_link_s,
                         );
                     }
                 }
@@ -859,24 +859,24 @@ pub unsafe extern "C" fn AAS_BestReachableFromJumpPadArea(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableArea(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut goalorigin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut goalorigin: *mut vec_t,
 ) -> i32 {
     let mut areanum: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
-    let mut areas: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
     //vec3_t bbmins, bbmaxs;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut start: vec3_t = [0.; 3]; //end if
+    let mut end: vec3_t = [0.; 3];
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -933,14 +933,14 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
         end[1 as i32 as usize] = start[1 as i32 as usize];
         end[2 as i32 as usize] = start[2 as i32 as usize];
         start[2 as i32 as usize] =
-            (start[2 as i32 as usize] as f64 + 0.25f64) as crate::src::qcommon::q_shared::vec_t;
+            (start[2 as i32 as usize] as f64 + 0.25f64) as vec_t;
         end[2 as i32 as usize] -= 50 as i32 as f32;
         trace = crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
             start.as_mut_ptr(),
             end.as_mut_ptr(),
             4 as i32,
             -(1 as i32),
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         if trace.startsolid as u64 == 0 {
             //end else
             areanum =
@@ -994,12 +994,12 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
         absmaxs.as_mut_ptr(),
         -(1 as i32),
         4 as i32,
-    ) as *mut crate::be_aas_def_h::aas_link_s;
+    ) as *mut aas_link_s;
     //get the reachable link area
     areanum = AAS_BestReachableLinkArea(areas);
     //unlink the invalid entity
     crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-        areas as *mut crate::be_aas_def_h::aas_link_s,
+        areas as *mut aas_link_s,
     );
     //
     return areanum;
@@ -1129,21 +1129,21 @@ pub unsafe extern "C" fn AAS_AreaReachability(mut areanum: i32) -> i32 {
 pub unsafe extern "C" fn AAS_AreaGroundFaceArea(mut areanum: i32) -> f32 {
     let mut i: i32 = 0; //end for
     let mut total: f32 = 0.;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
     total = 0 as i32 as f32;
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(areanum as isize) as *mut aas_area_t;
     i = 0 as i32;
     while i < (*area).numfaces {
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                 *crate::src::botlib::be_aas_main::aasworld
                     .faceindex
                     .offset(((*area).firstface + i) as isize),
-            ) as isize) as *mut crate::aasfile_h::aas_face_t;
+            ) as isize) as *mut aas_face_t;
         if !((*face).faceflags & 4 as i32 == 0) {
             //
             total += AAS_FaceArea(face)
@@ -1164,17 +1164,17 @@ pub unsafe extern "C" fn AAS_AreaGroundFaceArea(mut areanum: i32) -> f32 {
 
 pub unsafe extern "C" fn AAS_FaceCenter(
     mut facenum: i32,
-    mut center: *mut crate::src::qcommon::q_shared::vec_t,
+    mut center: *mut vec_t,
 ) {
     let mut i: i32 = 0; //end for
     let mut scale: f32 = 0.;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
-        .offset(facenum as isize) as *mut crate::aasfile_h::aas_face_t;
+        .offset(facenum as isize) as *mut aas_face_t;
     let ref mut fresh3 = *center.offset(2 as i32 as isize);
-    *fresh3 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *fresh3 = 0 as i32 as vec_t;
     let ref mut fresh4 = *center.offset(1 as i32 as isize);
     *fresh4 = *fresh3;
     *center.offset(0 as i32 as isize) = *fresh4;
@@ -1182,11 +1182,11 @@ pub unsafe extern "C" fn AAS_FaceCenter(
     while i < (*face).numedges {
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                 *crate::src::botlib::be_aas_main::aasworld
                     .edgeindex
                     .offset(((*face).firstedge + i) as isize),
-            ) as isize) as *mut crate::aasfile_h::aas_edge_t;
+            ) as isize) as *mut aas_edge_t;
         *center.offset(0 as i32 as isize) = *center.offset(0 as i32 as isize)
             + (*crate::src::botlib::be_aas_main::aasworld
                 .vertexes
@@ -1320,9 +1320,9 @@ pub unsafe extern "C" fn AAS_AreaCrouch(mut areanum: i32) -> i32 {
         & 2 as i32
         == 0
     {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     } else {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     };
 }
 //end of the function AAS_AreaCrouch
@@ -1343,9 +1343,9 @@ pub unsafe extern "C" fn AAS_AreaSwim(mut areanum: i32) -> i32 {
         & 4 as i32
         != 0
     {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     } else {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     };
 }
 //end of the function AAS_AreaSwim
@@ -1366,9 +1366,9 @@ pub unsafe extern "C" fn AAS_AreaLiquid(mut areanum: i32) -> i32 {
         & 4 as i32
         != 0
     {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     } else {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     };
 }
 //end of the function AAS_AreaLiquid
@@ -1560,16 +1560,16 @@ pub unsafe extern "C" fn AAS_BarrierJumpTravelTime() -> u16 {
 pub unsafe extern "C" fn AAS_ReachabilityExists(
     mut area1num: i32,
     mut area2num: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut r: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t; //end for
     r = *areareachability.offset(area1num as isize);
     while !r.is_null() {
         if (*r).areanum == area2num {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         r = (*r).next
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 //end of the function AAS_ReachabilityExists
 //===========================================================================
@@ -1583,17 +1583,17 @@ pub unsafe extern "C" fn AAS_ReachabilityExists(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_NearbySolidOrGap(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
 ) -> i32 {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
-    let mut testpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
+    let mut dir: vec3_t = [0.; 3]; //end if
+    let mut testpoint: vec3_t = [0.; 3]; //end if
     let mut areanum: i32 = 0;
     dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-    dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    dir[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(dir.as_mut_ptr());
     testpoint[0 as i32 as usize] =
         *end.offset(0 as i32 as isize) + dir[0 as i32 as usize] * 48 as i32 as f32;
     testpoint[1 as i32 as usize] =
@@ -1605,7 +1605,7 @@ pub unsafe extern "C" fn AAS_NearbySolidOrGap(
         testpoint[2 as i32 as usize] += 16 as i32 as f32;
         areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(testpoint.as_mut_ptr());
         if areanum == 0 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
     testpoint[0 as i32 as usize] =
@@ -1617,10 +1617,10 @@ pub unsafe extern "C" fn AAS_NearbySolidOrGap(
     areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(testpoint.as_mut_ptr());
     if areanum != 0 {
         if AAS_AreaSwim(areanum) == 0 && AAS_AreaGrounded(areanum) == 0 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_SolidGapTime
 //===========================================================================
@@ -1638,14 +1638,14 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
     let mut face1num: i32 = 0;
     let mut face2num: i32 = 0;
     let mut side1: i32 = 0;
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut face1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut start: vec3_t = [0.; 3];
     if AAS_AreaSwim(area1num) == 0 || AAS_AreaSwim(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the second area is crouch only
     if (*crate::src::botlib::be_aas_main::aasworld
@@ -1655,22 +1655,22 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
         & 2 as i32
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //if the areas are not near enough
     i = 0 as i32; //end for
     while i < 3 as i32 {
         if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
@@ -1681,11 +1681,11 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
             .faceindex
             .offset(((*area1).firstface + i) as isize);
         side1 = (face1num < 0 as i32) as i32;
-        face1num = ::libc::abs(face1num);
+        face1num = abs(face1num);
         //end for
         j = 0 as i32;
         while j < (*area2).numfaces {
-            face2num = ::libc::abs(
+            face2num = abs(
                 *crate::src::botlib::be_aas_main::aasworld
                     .faceindex
                     .offset(((*area2).firstface + j) as isize),
@@ -1705,11 +1705,11 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
                     face1 = &mut *crate::src::botlib::be_aas_main::aasworld
                         .faces
                         .offset(face1num as isize)
-                        as *mut crate::aasfile_h::aas_face_t;
+                        as *mut aas_face_t;
                     //create a new reachability link
                     lreach = AAS_AllocReachability();
                     if lreach.is_null() {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = face1num;
@@ -1720,7 +1720,7 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
                     plane = &mut *crate::src::botlib::be_aas_main::aasworld
                         .planes
                         .offset(((*face1).planenum ^ side1) as isize)
-                        as *mut crate::aasfile_h::aas_plane_t;
+                        as *mut aas_plane_t;
                     (*lreach).end[0 as i32 as usize] = (*lreach).start[0 as i32 as usize]
                         + (*plane).normal[0 as i32 as usize] * -(2 as i32) as f32;
                     (*lreach).end[1 as i32 as usize] = (*lreach).start[1 as i32 as usize]
@@ -1739,14 +1739,14 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: 
                     let ref mut fresh5 = *areareachability.offset(area1num as isize);
                     *fresh5 = lreach;
                     reach_swim += 1;
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
             }
             j += 1
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_Swim
 //===========================================================================
@@ -1774,23 +1774,23 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     let mut bestheight: f32 = 0.;
     let mut length: f32 = 0.;
     let mut bestlength: f32 = 0.;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut invgravity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut gravitydirection: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut dir: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut normal: vec3_t = [0.; 3];
+    let mut invgravity: vec3_t = [0.; 3];
+    let mut gravitydirection: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        -(1 as i32) as vec_t,
     ];
-    let mut edgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut plane2: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut edgevec: vec3_t = [0.; 3];
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
     let mut lr: aas_lreachability_t = aas_lreachability_t {
         areanum: 0,
         facenum: 0,
@@ -1803,28 +1803,28 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     };
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
     if AAS_AreaGrounded(area1num) == 0 || AAS_AreaGrounded(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //if the areas are not near enough in the x-y direction
     i = 0 as i32; //end for
     while i < 2 as i32 {
         if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
     //if area 2 is too high above area 1
     if (*area2).mins[2 as i32 as usize] > (*area1).maxs[2 as i32 as usize] {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     invgravity[0 as i32 as usize] = gravitydirection[0 as i32 as usize];
@@ -1834,7 +1834,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     //
     bestheight = 99999 as i32 as f32; //make the compiler happy
     bestlength = 0 as i32 as f32;
-    foundreach = crate::src::qcommon::q_shared::qfalse as i32;
+    foundreach = qfalse as i32;
     crate::stdlib::memset(
         &mut lr as *mut aas_lreachability_t as *mut libc::c_void,
         0 as i32,
@@ -1847,11 +1847,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     while i < (*area1).numfaces {
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                 *crate::src::botlib::be_aas_main::aasworld
                     .faceindex
                     .offset(((*area1).firstface + i) as isize),
-            ) as isize) as *mut crate::aasfile_h::aas_face_t;
+            ) as isize) as *mut aas_face_t;
         if !((*face1).faceflags & 4 as i32 == 0) {
             //end for
             //
@@ -1859,11 +1859,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
             while j < (*area2).numfaces {
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                         *crate::src::botlib::be_aas_main::aasworld
                             .faceindex
                             .offset(((*area2).firstface + j) as isize),
-                    ) as isize) as *mut crate::aasfile_h::aas_face_t;
+                    ) as isize) as *mut aas_face_t;
                 if !((*face2).faceflags & 4 as i32 == 0) {
                     //end for
                     //if there is a common edge
@@ -1871,11 +1871,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                     while edgenum1 < (*face1).numedges {
                         edgenum2 = 0 as i32;
                         while edgenum2 < (*face2).numedges {
-                            if !(::libc::abs(
+                            if !(abs(
                                 *crate::src::botlib::be_aas_main::aasworld
                                     .edgeindex
                                     .offset(((*face1).firstedge + edgenum1) as isize),
-                            ) != ::libc::abs(
+                            ) != abs(
                                 *crate::src::botlib::be_aas_main::aasworld
                                     .edgeindex
                                     .offset(((*face2).firstedge + edgenum2) as isize),
@@ -1886,10 +1886,10 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                 side = (edgenum < 0 as i32) as i32;
                                 edge = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .edges
-                                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                                         edgenum,
                                     ) as isize)
-                                    as *mut crate::aasfile_h::aas_edge_t;
+                                    as *mut aas_edge_t;
                                 //get the length of the edge
                                 dir[0 as i32 as usize] =
                                     (*crate::src::botlib::be_aas_main::aasworld
@@ -1920,7 +1920,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                             [2 as i32 as usize];
                                 length =
                                     VectorLength(dir.as_mut_ptr()
-                                        as *const crate::src::qcommon::q_shared::vec_t);
+                                        as *const vec_t);
                                 //get the start point
                                 start[0 as i32 as usize] =
                                     (*crate::src::botlib::be_aas_main::aasworld
@@ -1951,13 +1951,13 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                             [2 as i32 as usize];
                                 start[0 as i32 as usize] = (start[0 as i32 as usize] as f64
                                     * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 start[1 as i32 as usize] = (start[1 as i32 as usize] as f64
                                     * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 start[2 as i32 as usize] = (start[2 as i32 as usize] as f64
                                     * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 end[0 as i32 as usize] = start[0 as i32 as usize];
                                 end[1 as i32 as usize] = start[1 as i32 as usize];
                                 end[2 as i32 as usize] = start[2 as i32 as usize];
@@ -1998,15 +1998,15 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                 plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .planes
                                     .offset((*face2).planenum as isize)
-                                    as *mut crate::aasfile_h::aas_plane_t;
+                                    as *mut aas_plane_t;
                                 CrossProduct(
                                     edgevec.as_mut_ptr()
-                                        as *const crate::src::qcommon::q_shared::vec_t,
+                                        as *const vec_t,
                                     (*plane2).normal.as_mut_ptr()
-                                        as *const crate::src::qcommon::q_shared::vec_t,
+                                        as *const vec_t,
                                     normal.as_mut_ptr(),
                                 );
-                                crate::src::qcommon::q_math::VectorNormalize(normal.as_mut_ptr());
+                                VectorNormalize(normal.as_mut_ptr());
                                 //
                                 //VectorMA(start, -1, normal, start);
                                 end[0 as i32 as usize] = end[0 as i32 as usize]
@@ -2017,15 +2017,15 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                     + normal[2 as i32 as usize] * 5 as i32 as f32;
                                 start[0 as i32 as usize] = (start[0 as i32 as usize] as f64
                                     + normal[0 as i32 as usize] as f64 * 0.1f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 start[1 as i32 as usize] = (start[1 as i32 as usize] as f64
                                     + normal[1 as i32 as usize] as f64 * 0.1f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 start[2 as i32 as usize] = (start[2 as i32 as usize] as f64
                                     + normal[2 as i32 as usize] as f64 * 0.1f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 end[2 as i32 as usize] = (end[2 as i32 as usize] as f64 + 0.125f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 //
                                 height = invgravity[0 as i32 as usize] * start[0 as i32 as usize]
                                     + invgravity[1 as i32 as usize] * start[1 as i32 as usize]
@@ -2053,7 +2053,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                     lr.end[2 as i32 as usize] = end[2 as i32 as usize];
                                     lr.traveltype = 2 as i32;
                                     lr.traveltime = 1 as i32 as u16;
-                                    foundreach = crate::src::qcommon::q_shared::qtrue as i32
+                                    foundreach = qtrue as i32
                                 }
                             }
                             edgenum2 += 1
@@ -2072,7 +2072,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
         //create a new reachability link
         lreach = AAS_AllocReachability();
         if lreach.is_null() {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         (*lreach).areanum = lr.areanum;
         (*lreach).facenum = lr.facenum;
@@ -2105,9 +2105,9 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
         //if (AAS_AreaGroundFaceArea(lreach->areanum) < 500) lreach->traveltime += 100;
         //
         reach_equalfloor += 1;
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_EqualFloorHeight
 //===========================================================================
@@ -2160,67 +2160,67 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
     let mut water_bestlength: f32 = 0.;
     let mut ground_bestdist: f32 = 0.;
     let mut water_bestdist: f32 = 0.;
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v3: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v4: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut tmpv: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p1area1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p1area2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p2area1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p2area2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut ort: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut edgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut ground_beststart: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut v1: vec3_t = [0.; 3];
+    let mut v2: vec3_t = [0.; 3];
+    let mut v3: vec3_t = [0.; 3];
+    let mut v4: vec3_t = [0.; 3];
+    let mut tmpv: vec3_t = [0.; 3];
+    let mut p1area1: vec3_t = [0.; 3];
+    let mut p1area2: vec3_t = [0.; 3];
+    let mut p2area1: vec3_t = [0.; 3];
+    let mut p2area2: vec3_t = [0.; 3];
+    let mut normal: vec3_t = [0.; 3];
+    let mut ort: vec3_t = [0.; 3];
+    let mut edgevec: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut ground_beststart: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut ground_bestend: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut ground_bestend: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut ground_bestnormal: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut ground_bestnormal: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut water_beststart: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut water_beststart: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut water_bestend: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut water_bestend: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut water_bestnormal: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut water_bestnormal: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut invgravity: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut invgravity: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut testpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut groundface1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut groundface2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge1: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut edge2: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
+    let mut testpoint: vec3_t = [0.; 3];
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut groundface1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut groundface2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge2: *mut aas_edge_t = 0 as *mut aas_edge_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -2230,39 +2230,39 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
     };
     //must be able to walk or swim in the first area
     if AAS_AreaGrounded(area1num) == 0 && AAS_AreaSwim(area1num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     if AAS_AreaGrounded(area2num) == 0 && AAS_AreaSwim(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //if the first area contains a liquid
     area1swim = AAS_AreaSwim(area1num);
     //if the areas are not near enough in the x-y direction
     i = 0 as i32; //end for
     while i < 2 as i32 {
         if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
     //
-    ground_foundreach = crate::src::qcommon::q_shared::qfalse as i32;
+    ground_foundreach = qfalse as i32;
     ground_bestdist = 99999 as i32 as f32;
     ground_bestlength = 0 as i32 as f32;
     ground_bestarea2groundedgenum = 0 as i32;
     //
-    water_foundreach = crate::src::qcommon::q_shared::qfalse as i32;
+    water_foundreach = qfalse as i32;
     water_bestdist = 99999 as i32 as f32;
     water_bestlength = 0 as i32 as f32;
     water_bestarea2groundedgenum = 0 as i32;
@@ -2276,8 +2276,8 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
         faceside1 = (groundface1num < 0 as i32) as i32;
         groundface1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(groundface1num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(groundface1num) as isize)
+            as *mut aas_face_t;
         //end for
         //if this isn't a ground face
         if (*groundface1).faceflags & 4 as i32 == 0 {
@@ -2287,7 +2287,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
                     .offset(((*groundface1).planenum ^ (faceside1 == 0) as i32) as isize)
-                    as *mut crate::aasfile_h::aas_plane_t; //end if
+                    as *mut aas_plane_t; //end if
                 if (((*plane).normal[0 as i32 as usize] * invgravity[0 as i32 as usize]
                     + (*plane).normal[1 as i32 as usize] * invgravity[1 as i32 as usize]
                     + (*plane).normal[2 as i32 as usize] * invgravity[2 as i32 as usize])
@@ -2319,11 +2319,11 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     if (*groundface1).faceflags & 4 as i32 == 0 {
                         side1 = (side1 == faceside1) as i32
                     }
-                    edge1num = ::libc::abs(edge1num);
+                    edge1num = abs(edge1num);
                     edge1 = &mut *crate::src::botlib::be_aas_main::aasworld
                         .edges
                         .offset(edge1num as isize)
-                        as *mut crate::aasfile_h::aas_edge_t;
+                        as *mut aas_edge_t;
                     v1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                         .vertexes
                         .offset((*edge1).v[(side1 == 0) as i32 as usize] as isize))
@@ -2349,24 +2349,24 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     edgevec[1 as i32 as usize] = v2[1 as i32 as usize] - v1[1 as i32 as usize];
                     edgevec[2 as i32 as usize] = v2[2 as i32 as usize] - v1[2 as i32 as usize];
                     CrossProduct(
-                        edgevec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                        invgravity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                        edgevec.as_mut_ptr() as *const vec_t,
+                        invgravity.as_mut_ptr() as *const vec_t,
                         normal.as_mut_ptr(),
                     );
-                    crate::src::qcommon::q_math::VectorNormalize(normal.as_mut_ptr());
+                    VectorNormalize(normal.as_mut_ptr());
                     dist = normal[0 as i32 as usize] * v1[0 as i32 as usize]
                         + normal[1 as i32 as usize] * v1[1 as i32 as usize]
                         + normal[2 as i32 as usize] * v1[2 as i32 as usize];
                     j = 0 as i32;
                     while j < (*area2).numfaces {
                         groundface2 = &mut *crate::src::botlib::be_aas_main::aasworld.faces.offset(
-                            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                            (abs as unsafe extern "C" fn(_: i32) -> i32)(
                                 *crate::src::botlib::be_aas_main::aasworld
                                     .faceindex
                                     .offset(((*area2).firstface + j) as isize),
                             ) as isize,
                         )
-                            as *mut crate::aasfile_h::aas_face_t;
+                            as *mut aas_face_t;
                         //NOTE: for water faces we must take the side area 1 is
                         // on into account because the face is shared and doesn't
                         // have to be oriented correctly
@@ -2381,7 +2381,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             //check the edges of this ground face
                             l = 0 as i32;
                             while l < (*groundface2).numedges {
-                                edge2num = ::libc::abs(
+                                edge2num = abs(
                                     *crate::src::botlib::be_aas_main::aasworld
                                         .edgeindex
                                         .offset(((*groundface2).firstedge + l) as isize),
@@ -2389,7 +2389,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                 edge2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .edges
                                     .offset(edge2num as isize)
-                                    as *mut crate::aasfile_h::aas_edge_t;
+                                    as *mut aas_edge_t;
                                 //end else
                                 //vertexes of the edge
                                 v3[0 as i32 as usize] =
@@ -2441,9 +2441,9 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                         //the gravity direction
                                         CrossProduct(
                                             invgravity.as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t,
+                                                as *const vec_t,
                                             normal.as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t,
+                                                as *const vec_t,
                                             ort.as_mut_ptr(),
                                         );
                                         //invgravitydot = DotProduct(invgravity, invgravity);
@@ -2654,13 +2654,13 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     + p2area1[2 as i32 as usize];
                                                 start[0 as i32 as usize] =
                                                     (start[0 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                 start[1 as i32 as usize] =
                                                     (start[1 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                 start[2 as i32 as usize] =
                                                     (start[2 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                 end[0 as i32 as usize] = p1area2[0 as i32 as usize]
                                                     + p2area2[0 as i32 as usize];
                                                 end[1 as i32 as usize] = p1area2[1 as i32 as usize]
@@ -2669,13 +2669,13 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     + p2area2[2 as i32 as usize];
                                                 end[0 as i32 as usize] =
                                                     (end[0 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                 end[1 as i32 as usize] =
                                                     (end[1 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                 end[2 as i32 as usize] =
                                                     (end[2 as i32 as usize] as f64 * 0.5f64)
-                                                        as crate::src::qcommon::q_shared::vec_t
+                                                        as vec_t
                                             } else if dist1 < dist2 {
                                                 dist = dist1;
                                                 start[0 as i32 as usize] =
@@ -2707,7 +2707,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                             dir[2 as i32 as usize] = p2area2[2 as i32 as usize]
                                                 - p1area2[2 as i32 as usize];
                                             length = VectorLength(dir.as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t);
+                                                as *const vec_t);
                                             //
                                             if (*groundface1).faceflags & 4 as i32 != 0 {
                                                 //if the vertical distance is smaller
@@ -2718,7 +2718,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     ground_bestdist = dist;
                                                     ground_bestlength = length;
                                                     ground_foundreach =
-                                                        crate::src::qcommon::q_shared::qtrue as i32;
+                                                        qtrue as i32;
                                                     ground_bestarea2groundedgenum = edge1num;
                                                     //best point towards area1
                                                     ground_beststart[0 as i32 as usize] =
@@ -2750,7 +2750,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                 water_bestdist = dist;
                                                 water_bestlength = length;
                                                 water_foundreach =
-                                                    crate::src::qcommon::q_shared::qtrue as i32;
+                                                    qtrue as i32;
                                                 water_bestarea2groundedgenum = edge1num;
                                                 //if the vertical distance is smaller
                                                 //best point towards area1
@@ -2822,20 +2822,20 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             //create walk reachability from area1 to area2
             lreach = AAS_AllocReachability(); //1;
             if lreach.is_null() {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             (*lreach).areanum = area2num;
             (*lreach).facenum = 0 as i32;
             (*lreach).edgenum = ground_bestarea2groundedgenum;
             (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize] as f64
                 + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize] as f64
                 + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize] as f64
                 + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
                 + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
             (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
@@ -2864,7 +2864,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             //if (AAS_AreaGroundFaceArea(lreach->areanum) < 500) lreach->traveltime += 100;
             //
             reach_step += 1;
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         //end if
     }
@@ -2933,7 +2933,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     //create water jump reachability from area1 to area2
                     lreach = AAS_AllocReachability();
                     if lreach.is_null() {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = 0 as i32;
@@ -2955,7 +2955,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     *fresh8 = lreach;
                     //we've got another waterjump reachability
                     reach_waterjump += 1;
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
                 //end if
             }
@@ -2993,7 +2993,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     //create barrier jump reachability from area1 to area2
                     lreach = AAS_AllocReachability(); //AAS_BarrierJumpTravelTime();
                     if lreach.is_null() {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = 0 as i32;
@@ -3001,15 +3001,15 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize]
                         as f64
                         + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize]
                         as f64
                         + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize]
                         as f64
                         + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
                         + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
                     (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
@@ -3024,7 +3024,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     *fresh9 = lreach;
                     //we've got another barrierjump reachability
                     reach_barrier += 1;
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
                 //end if
             }
@@ -3062,20 +3062,20 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                 //create walk reachability from area1 to area2
                 lreach = AAS_AllocReachability();
                 if lreach.is_null() {
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 (*lreach).areanum = area2num;
                 (*lreach).facenum = 0 as i32;
                 (*lreach).edgenum = ground_bestarea2groundedgenum;
                 (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize] as f64
                     + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize] as f64
                     + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize] as f64
                     + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
                     + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
                 (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
@@ -3089,7 +3089,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                 *fresh10 = lreach;
                 //we've got another walk reachability
                 reach_walk += 1;
-                return crate::src::qcommon::q_shared::qtrue as i32;
+                return qtrue as i32;
             }
             //end if
             if crate::src::botlib::be_aas_move::aassettings.rs_maxfallheight == 0.
@@ -3117,7 +3117,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     end.as_mut_ptr(),
                     2 as i32,
                     -(1 as i32),
-                ) as crate::be_aas_h::aas_trace_s;
+                ) as aas_trace_s;
                 //end if
                 if trace.startsolid as u64 == 0 && trace.fraction as f64 >= 1.0f64 {
                     //if no solids were found
@@ -3133,7 +3133,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             start.as_mut_ptr(),
                             end.as_mut_ptr(),
                             areas.as_mut_ptr(),
-                            0 as *mut crate::src::qcommon::q_shared::vec3_t,
+                            0 as *mut vec3_t,
                             (::std::mem::size_of::<[i32; 10]>() as libc::c_ulong)
                                 .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
                                 as i32,
@@ -3150,7 +3150,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             //create a walk off ledge reachability from area1 to area2
                             lreach = AAS_AllocReachability();
                             if lreach.is_null() {
-                                return crate::src::qcommon::q_shared::qfalse as i32;
+                                return qfalse as i32;
                             }
                             (*lreach).areanum = area2num;
                             (*lreach).facenum = 0 as i32;
@@ -3201,7 +3201,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                             //NOTE: don't create a weapon (rl, bfg) jump reachability here
                             //because it interferes with other reachabilities
                             //like the ladder reachability
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                     }
                 }
@@ -3209,7 +3209,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
         }
         //end else
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge
 //===========================================================================
@@ -3222,14 +3222,14 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorDistance(
-    mut v1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v1: *mut vec_t,
+    mut v2: *mut vec_t,
 ) -> f32 {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     dir[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
-    return VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLength(dir.as_mut_ptr() as *const vec_t);
 }
 //end of the function VectorDistance
 //===========================================================================
@@ -3242,12 +3242,12 @@ pub unsafe extern "C" fn VectorDistance(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorBetweenVectors(
-    mut v: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v: *mut vec_t,
+    mut v1: *mut vec_t,
+    mut v2: *mut vec_t,
 ) -> i32 {
-    let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir1: vec3_t = [0.; 3];
+    let mut dir2: vec3_t = [0.; 3];
     dir1[0 as i32 as usize] = *v.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
     dir1[1 as i32 as usize] = *v.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
     dir1[2 as i32 as usize] = *v.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
@@ -3270,9 +3270,9 @@ pub unsafe extern "C" fn VectorBetweenVectors(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorMiddle(
-    mut v1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut middle: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v1: *mut vec_t,
+    mut v2: *mut vec_t,
+    mut middle: *mut vec_t,
 ) {
     *middle.offset(0 as i32 as isize) =
         *v1.offset(0 as i32 as isize) + *v2.offset(0 as i32 as isize);
@@ -3281,11 +3281,11 @@ pub unsafe extern "C" fn VectorMiddle(
     *middle.offset(2 as i32 as isize) =
         *v1.offset(2 as i32 as isize) + *v2.offset(2 as i32 as isize);
     *middle.offset(0 as i32 as isize) =
-        (*middle.offset(0 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(0 as i32 as isize) as f64 * 0.5f64) as vec_t;
     *middle.offset(1 as i32 as isize) =
-        (*middle.offset(1 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(1 as i32 as isize) as f64 * 0.5f64) as vec_t;
     *middle.offset(2 as i32 as isize) =
-        (*middle.offset(2 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(2 as i32 as isize) as f64 * 0.5f64) as vec_t;
 }
 //end of the function VectorMiddle
 //===========================================================================
@@ -3477,24 +3477,24 @@ float AAS_ClosestEdgePoints(vec3_t v1, vec3_t v2, vec3_t v3, vec3_t v4,
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ClosestEdgePoints(
-    mut v1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v3: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v4: *mut crate::src::qcommon::q_shared::vec_t,
-    mut plane1: *mut crate::aasfile_h::aas_plane_t,
-    mut plane2: *mut crate::aasfile_h::aas_plane_t,
-    mut beststart1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut bestend1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut beststart2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut bestend2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v1: *mut vec_t,
+    mut v2: *mut vec_t,
+    mut v3: *mut vec_t,
+    mut v4: *mut vec_t,
+    mut plane1: *mut aas_plane_t,
+    mut plane2: *mut aas_plane_t,
+    mut beststart1: *mut vec_t,
+    mut bestend1: *mut vec_t,
+    mut beststart2: *mut vec_t,
+    mut bestend2: *mut vec_t,
     mut bestdist: f32,
 ) -> f32 {
-    let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p3: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut p4: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir1: vec3_t = [0.; 3];
+    let mut dir2: vec3_t = [0.; 3];
+    let mut p1: vec3_t = [0.; 3];
+    let mut p2: vec3_t = [0.; 3];
+    let mut p3: vec3_t = [0.; 3];
+    let mut p4: vec3_t = [0.; 3];
     let mut a1: f32 = 0.;
     let mut a2: f32 = 0.;
     let mut b1: f32 = 0.;
@@ -3511,8 +3511,8 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     dir2[1 as i32 as usize] = *v4.offset(1 as i32 as isize) - *v3.offset(1 as i32 as isize);
     dir2[2 as i32 as usize] = *v4.offset(2 as i32 as isize) - *v3.offset(2 as i32 as isize);
     //get the horizontal directions
-    dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    dir1[2 as i32 as usize] = 0 as i32 as vec_t;
+    dir2[2 as i32 as usize] = 0 as i32 as vec_t;
     //
     // p1 = point on an edge vector of area2 closest to v1
     // p2 = point on an edge vector of area2 closest to v2
@@ -3574,10 +3574,10 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
         p4[1 as i32 as usize] = *v4.offset(1 as i32 as isize)
     }
     //start with zero z-coordinates
-    p1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    p2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    p3[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    p4[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    p1[2 as i32 as usize] = 0 as i32 as vec_t;
+    p2[2 as i32 as usize] = 0 as i32 as vec_t;
+    p3[2 as i32 as usize] = 0 as i32 as vec_t;
+    p4[2 as i32 as usize] = 0 as i32 as vec_t;
     //calculate the z-coordinates from the ground planes
     p1[2 as i32 as usize] = ((*plane2).dist
         - ((*plane2).normal[0 as i32 as usize] * p1[0 as i32 as usize]
@@ -3600,7 +3600,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             + (*plane1).normal[2 as i32 as usize] * p4[2 as i32 as usize]))
         / (*plane1).normal[2 as i32 as usize];
     //
-    founddist = crate::src::qcommon::q_shared::qfalse as i32;
+    founddist = qfalse as i32;
     //
     if VectorBetweenVectors(p1.as_mut_ptr(), v3, v4) != 0 {
         dist = VectorDistance(v1, p1.as_mut_ptr()); //end if
@@ -3648,7 +3648,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             *bestend2.offset(1 as i32 as isize) = p1[1 as i32 as usize];
             *bestend2.offset(2 as i32 as isize) = p1[2 as i32 as usize]
         }
-        founddist = crate::src::qcommon::q_shared::qtrue as i32
+        founddist = qtrue as i32
     }
     if VectorBetweenVectors(p2.as_mut_ptr(), v3, v4) != 0 {
         dist = VectorDistance(v2, p2.as_mut_ptr());
@@ -3696,7 +3696,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             *bestend2.offset(1 as i32 as isize) = p2[1 as i32 as usize];
             *bestend2.offset(2 as i32 as isize) = p2[2 as i32 as usize]
         }
-        founddist = crate::src::qcommon::q_shared::qtrue as i32
+        founddist = qtrue as i32
     }
     if VectorBetweenVectors(p3.as_mut_ptr(), v1, v2) != 0 {
         dist = VectorDistance(v3, p3.as_mut_ptr());
@@ -3744,7 +3744,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             *bestend2.offset(1 as i32 as isize) = *v3.offset(1 as i32 as isize);
             *bestend2.offset(2 as i32 as isize) = *v3.offset(2 as i32 as isize)
         }
-        founddist = crate::src::qcommon::q_shared::qtrue as i32
+        founddist = qtrue as i32
     }
     if VectorBetweenVectors(p4.as_mut_ptr(), v1, v2) != 0 {
         dist = VectorDistance(v4, p4.as_mut_ptr());
@@ -3792,7 +3792,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             *bestend2.offset(1 as i32 as isize) = *v4.offset(1 as i32 as isize);
             *bestend2.offset(2 as i32 as isize) = *v4.offset(2 as i32 as isize)
         }
-        founddist = crate::src::qcommon::q_shared::qtrue as i32
+        founddist = qtrue as i32
     }
     //if no shortest distance was found the shortest distance
     //is between one of the vertexes of edge1 and one of edge2
@@ -3902,44 +3902,44 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
     let mut height: f32 = 0.;
     let mut bestdist: f32 = 0.;
     let mut speed: f32 = 0.;
-    let mut v1: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut v2: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut v3: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut v4: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut beststart: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut beststart2: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut bestend: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut bestend2: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut teststart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut testend: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut v1: *mut vec_t =
+        0 as *mut vec_t;
+    let mut v2: *mut vec_t =
+        0 as *mut vec_t;
+    let mut v3: *mut vec_t =
+        0 as *mut vec_t;
+    let mut v4: *mut vec_t =
+        0 as *mut vec_t;
+    let mut beststart: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut beststart2: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut bestend: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut bestend2: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut teststart: vec3_t = [0.; 3];
+    let mut testend: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut sidewards: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge1: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut edge2: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut plane1: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut plane2: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut sidewards: vec3_t = [0.; 3];
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge2: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut plane1: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -3947,12 +3947,12 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
         area: 0,
         planenum: 0,
     };
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -3968,19 +3968,19 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
     };
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
     if AAS_AreaGrounded(area1num) == 0 || AAS_AreaGrounded(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //cannot jump from or to a crouch area
     if AAS_AreaCrouch(area1num) != 0 || AAS_AreaCrouch(area2num) != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //
     phys_jumpvel = crate::src::botlib::be_aas_move::aassettings.phys_jumpvel;
     //maximum distance a player can jump
@@ -3991,16 +3991,16 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
     i = 0 as i32; //end for
     while i < 2 as i32 {
         if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + maxjumpdistance {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - maxjumpdistance {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
     //if area2 is way to high to jump up to
     if (*area2).mins[2 as i32 as usize] > (*area1).maxs[2 as i32 as usize] + maxjumpheight {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     bestdist = 999999 as i32 as f32;
@@ -4012,8 +4012,8 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             .offset(((*area1).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut aas_face_t;
         //end for
         //if not a ground face
         if !((*face1).faceflags & 4 as i32 == 0) {
@@ -4025,15 +4025,15 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                     .offset(((*area2).firstface + j) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
-                    as *mut crate::aasfile_h::aas_face_t;
+                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut aas_face_t;
                 //end for
                 //if not a ground face
                 if !((*face2).faceflags & 4 as i32 == 0) {
                     //
                     k = 0 as i32;
                     while k < (*face1).numedges {
-                        edge1num = ::libc::abs(
+                        edge1num = abs(
                             *crate::src::botlib::be_aas_main::aasworld
                                 .edgeindex
                                 .offset(((*face1).firstedge + k) as isize),
@@ -4041,10 +4041,10 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                         edge1 = &mut *crate::src::botlib::be_aas_main::aasworld
                             .edges
                             .offset(edge1num as isize)
-                            as *mut crate::aasfile_h::aas_edge_t;
+                            as *mut aas_edge_t;
                         l = 0 as i32;
                         while l < (*face2).numedges {
-                            edge2num = ::libc::abs(
+                            edge2num = abs(
                                 *crate::src::botlib::be_aas_main::aasworld
                                     .edgeindex
                                     .offset(((*face2).firstedge + l) as isize),
@@ -4052,7 +4052,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                             edge2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                 .edges
                                 .offset(edge2num as isize)
-                                as *mut crate::aasfile_h::aas_edge_t;
+                                as *mut aas_edge_t;
                             //end for
                             //calculate the minimum distance between the two edges
                             v1 = (*crate::src::botlib::be_aas_main::aasworld
@@ -4075,11 +4075,11 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                             plane1 = &mut *crate::src::botlib::be_aas_main::aasworld
                                 .planes
                                 .offset((*face1).planenum as isize)
-                                as *mut crate::aasfile_h::aas_plane_t;
+                                as *mut aas_plane_t;
                             plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                 .planes
                                 .offset((*face2).planenum as isize)
-                                as *mut crate::aasfile_h::aas_plane_t;
+                                as *mut aas_plane_t;
                             //
                             bestdist = AAS_ClosestEdgePoints(
                                 v1,
@@ -4145,7 +4145,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 &mut speed,
             ) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             speed *= 1.05f32;
             traveltype = 5 as i32;
@@ -4154,18 +4154,18 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
             dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
             dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+            dir[2 as i32 as usize] = 0 as i32 as vec_t;
+            if VectorLength(dir.as_mut_ptr() as *const vec_t)
                 < 10 as i32 as f32
             {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         }
         //
         dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
         dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
         dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-        crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+        VectorNormalize(dir.as_mut_ptr());
         teststart[0 as i32 as usize] =
             beststart[0 as i32 as usize] + dir[0 as i32 as usize] * 1 as i32 as f32;
         teststart[1 as i32 as usize] =
@@ -4182,16 +4182,16 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             testend.as_mut_ptr(),
             2 as i32,
             -(1 as i32),
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         //
         if trace.startsolid as u64 != 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         } //end if
         if trace.fraction < 1 as i32 as f32 {
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset(trace.planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //end if
             if ((*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
@@ -4207,7 +4207,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                     if teststart[2 as i32 as usize] - trace.endpos[2 as i32 as usize]
                         <= crate::src::botlib::be_aas_move::aassettings.phys_maxbarrier
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                 }
                 //end if
@@ -4230,16 +4230,16 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             testend.as_mut_ptr(),
             2 as i32,
             -(1 as i32),
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         //
         if trace.startsolid as u64 != 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         } //end if
         if trace.fraction < 1 as i32 as f32 {
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset(trace.planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //end if
             if ((*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
@@ -4255,7 +4255,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                     if teststart[2 as i32 as usize] - trace.endpos[2 as i32 as usize]
                         <= crate::src::botlib::be_aas_move::aassettings.phys_maxbarrier
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                 }
                 //end if
@@ -4263,23 +4263,23 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
         }
         //
         // get command movement
-        cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[2 as i32 as usize] = 0 as i32 as vec_t;
         cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
         cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
         if traveltype & 0xffffff as i32 == 5 as i32 {
             cmdmove[2 as i32 as usize] = crate::src::botlib::be_aas_move::aassettings.phys_jumpvel
         } else {
-            cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            cmdmove[2 as i32 as usize] = 0 as i32 as vec_t
         }
         //
         dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
         dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
         dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+        dir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(dir.as_mut_ptr());
         CrossProduct(
-            dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            dir.as_mut_ptr() as *const vec_t,
+            up.as_mut_ptr() as *const vec_t,
             sidewards.as_mut_ptr(),
         );
         //
@@ -4313,18 +4313,18 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             dir[0 as i32 as usize] = testend[0 as i32 as usize] - beststart[0 as i32 as usize];
             dir[1 as i32 as usize] = testend[1 as i32 as usize] - beststart[1 as i32 as usize];
             dir[2 as i32 as usize] = testend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+            dir[2 as i32 as usize] = 0 as i32 as vec_t;
+            VectorNormalize(dir.as_mut_ptr());
             velocity[0 as i32 as usize] = dir[0 as i32 as usize] * speed;
             velocity[1 as i32 as usize] = dir[1 as i32 as usize] * speed;
             velocity[2 as i32 as usize] = dir[2 as i32 as usize] * speed;
             //
             crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
-                &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                &mut move_0 as *mut _ as *mut aas_clientmove_s,
                 -(1 as i32),
                 beststart.as_mut_ptr(),
                 2 as i32,
-                crate::src::qcommon::q_shared::qtrue as i32,
+                qtrue as i32,
                 velocity.as_mut_ptr(),
                 cmdmove.as_mut_ptr(),
                 3 as i32,
@@ -4332,19 +4332,19 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 0.1f32,
                 stopevent,
                 0 as i32,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
             // if prediction time wasn't enough to fully predict the movement
             if move_0.frames >= 30 as i32 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             // don't enter slime or lava and don't fall from too high
             if move_0.stopevent & (8 as i32 | 16 as i32) != 0 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             // never jump or fall through a cluster portal
             if move_0.stopevent & 4096 as i32 != 0 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             //the end position should be in area2, also test a little bit back
             //because the predicted jump could have rushed through the area
@@ -4359,7 +4359,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 move_0.endpos.as_mut_ptr(),
                 teststart.as_mut_ptr(),
                 areas.as_mut_ptr(),
-                0 as *mut crate::src::qcommon::q_shared::vec3_t,
+                0 as *mut vec3_t,
                 (::std::mem::size_of::<[i32; 10]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
                     as i32,
@@ -4377,14 +4377,14 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             i += 1
         }
         if i >= 3 as i32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //
         //REACH_DEBUG
         //create a new reachability link
         lreach = AAS_AllocReachability(); //end if
         if lreach.is_null() {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         (*lreach).areanum = area2num;
         (*lreach).facenum = 0 as i32;
@@ -4400,10 +4400,10 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
         dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
         dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
         height = dir[2 as i32 as usize];
-        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        dir[2 as i32 as usize] = 0 as i32 as vec_t;
         if traveltype & 0xffffff as i32 == 7 as i32
             && height
-                > VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+                > VectorLength(dir.as_mut_ptr() as *const vec_t)
         {
             (*lreach).traveltime = (crate::src::botlib::be_aas_move::aassettings
                 .rs_startwalkoffledge
@@ -4444,7 +4444,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
             reach_walkoffledge += 1
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_Jump
 //===========================================================================
@@ -4478,38 +4478,38 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
     let mut bestface2area: f32 = -(9999 as i32) as f32;
     let mut phys_jumpvel: f32 = 0.;
     let mut maxjumpheight: f32 = 0.;
-    let mut area1point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut area2point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut area1point: vec3_t = [0.; 3];
+    let mut area2point: vec3_t = [0.; 3];
+    let mut v1: vec3_t = [0.; 3];
+    let mut v2: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lowestpoint: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mid: vec3_t = [0.; 3];
+    let mut lowestpoint: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
         0.,
     ];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sharededgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut ladderface1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut ladderface2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut plane1: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut plane2: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut sharededge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut edge1: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut sharededgevec: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut ladderface1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut ladderface2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut plane1: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut sharededge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut edge1: *mut aas_edge_t = 0 as *mut aas_edge_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -4518,7 +4518,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
         planenum: 0,
     };
     if AAS_AreaLadder(area1num) == 0 || AAS_AreaLadder(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     phys_jumpvel = crate::src::botlib::be_aas_move::aassettings.phys_jumpvel;
@@ -4526,10 +4526,10 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
     maxjumpheight = AAS_MaxJumpHeight(phys_jumpvel); //end for
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     i = 0 as i32;
     while i < (*area1).numfaces {
         face1num = *crate::src::botlib::be_aas_main::aasworld
@@ -4537,8 +4537,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             .offset(((*area1).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut aas_face_t;
         //end for
         //if not a ladder face
         if !((*face1).faceflags & 2 as i32 == 0) {
@@ -4550,8 +4550,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     .offset(((*area2).firstface + j) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
-                    as *mut crate::aasfile_h::aas_face_t;
+                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut aas_face_t;
                 //end for
                 //if not a ladder face
                 if !((*face2).faceflags & 2 as i32 == 0) {
@@ -4566,7 +4566,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                             edge2num = *crate::src::botlib::be_aas_main::aasworld
                                 .edgeindex
                                 .offset(((*face2).firstedge + l) as isize);
-                            if ::libc::abs(edge1num) == ::libc::abs(edge2num) {
+                            if abs(edge1num) == abs(edge2num) {
                                 //end if
                                 //get the face with the largest area
                                 face1area = AAS_FaceArea(face1); //end if
@@ -4602,8 +4602,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
         //get the middle of the shared edge
         sharededge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(sharededgenum) as isize)
-            as *mut crate::aasfile_h::aas_edge_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(sharededgenum) as isize)
+            as *mut aas_edge_t;
         firstv = (sharededgenum < 0 as i32) as i32;
         //end if
         v1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -4628,31 +4628,31 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
         area1point[1 as i32 as usize] = v1[1 as i32 as usize] + v2[1 as i32 as usize];
         area1point[2 as i32 as usize] = v1[2 as i32 as usize] + v2[2 as i32 as usize];
         area1point[0 as i32 as usize] =
-            (area1point[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (area1point[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
         area1point[1 as i32 as usize] =
-            (area1point[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (area1point[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
         area1point[2 as i32 as usize] =
-            (area1point[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (area1point[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
         area2point[0 as i32 as usize] = area1point[0 as i32 as usize];
         area2point[1 as i32 as usize] = area1point[1 as i32 as usize];
         area2point[2 as i32 as usize] = area1point[2 as i32 as usize];
         plane1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .planes
             .offset(((*ladderface1).planenum ^ (ladderface1num < 0 as i32) as i32) as isize)
-            as *mut crate::aasfile_h::aas_plane_t;
+            as *mut aas_plane_t;
         plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .planes
             .offset(((*ladderface2).planenum ^ (ladderface2num < 0 as i32) as i32) as isize)
-            as *mut crate::aasfile_h::aas_plane_t;
+            as *mut aas_plane_t;
         sharededgevec[0 as i32 as usize] = v2[0 as i32 as usize] - v1[0 as i32 as usize];
         sharededgevec[1 as i32 as usize] = v2[1 as i32 as usize] - v1[1 as i32 as usize];
         sharededgevec[2 as i32 as usize] = v2[2 as i32 as usize] - v1[2 as i32 as usize];
         CrossProduct(
-            (*plane1).normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            sharededgevec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            (*plane1).normal.as_mut_ptr() as *const vec_t,
+            sharededgevec.as_mut_ptr() as *const vec_t,
             dir.as_mut_ptr(),
         );
-        crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+        VectorNormalize(dir.as_mut_ptr());
         area1point[0 as i32 as usize] =
             area1point[0 as i32 as usize] + dir[0 as i32 as usize] * -(32 as i32) as f32;
         area1point[1 as i32 as usize] =
@@ -4678,7 +4678,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
         ) as f64)
             < 0.1f64) as i32;
         if ladderface1vertical == 0 && ladderface2vertical == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if ladderface1vertical != 0
             && ladderface2vertical != 0
@@ -4707,11 +4707,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //create a new reachability link
             lreach = AAS_AllocReachability();
             if lreach.is_null() {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             (*lreach).areanum = area2num;
             (*lreach).facenum = ladderface1num;
-            (*lreach).edgenum = ::libc::abs(sharededgenum);
+            (*lreach).edgenum = abs(sharededgenum);
             (*lreach).start[0 as i32 as usize] = area1point[0 as i32 as usize];
             (*lreach).start[1 as i32 as usize] = area1point[1 as i32 as usize];
             (*lreach).start[2 as i32 as usize] = area1point[2 as i32 as usize];
@@ -4732,11 +4732,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //create a new reachability link
             lreach = AAS_AllocReachability();
             if lreach.is_null() {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             (*lreach).areanum = area1num;
             (*lreach).facenum = ladderface2num;
-            (*lreach).edgenum = ::libc::abs(sharededgenum);
+            (*lreach).edgenum = abs(sharededgenum);
             (*lreach).start[0 as i32 as usize] = area2point[0 as i32 as usize];
             (*lreach).start[1 as i32 as usize] = area2point[1 as i32 as usize];
             (*lreach).start[2 as i32 as usize] = area2point[2 as i32 as usize];
@@ -4755,7 +4755,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //
             reach_ladder += 1;
             //
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if ladderface1vertical != 0 && (*ladderface2).faceflags & 4 as i32 != 0 {
             //if the second ladder face is also a ground face
@@ -4765,11 +4765,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //create a new reachability link
             lreach = AAS_AllocReachability();
             if lreach.is_null() {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             (*lreach).areanum = area2num;
             (*lreach).facenum = ladderface1num;
-            (*lreach).edgenum = ::libc::abs(sharededgenum);
+            (*lreach).edgenum = abs(sharededgenum);
             (*lreach).start[0 as i32 as usize] = area1point[0 as i32 as usize];
             (*lreach).start[1 as i32 as usize] = area1point[1 as i32 as usize];
             (*lreach).start[2 as i32 as usize] = area1point[2 as i32 as usize];
@@ -4793,11 +4793,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //create a new reachability link
             lreach = AAS_AllocReachability();
             if lreach.is_null() {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             (*lreach).areanum = area1num;
             (*lreach).facenum = ladderface2num;
-            (*lreach).edgenum = ::libc::abs(sharededgenum);
+            (*lreach).edgenum = abs(sharededgenum);
             (*lreach).start[0 as i32 as usize] = area2point[0 as i32 as usize];
             (*lreach).start[1 as i32 as usize] = area2point[1 as i32 as usize];
             (*lreach).start[2 as i32 as usize] = area2point[2 as i32 as usize];
@@ -4812,12 +4812,12 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             //
             reach_walkoffledge += 1;
             //
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if ladderface1vertical != 0 {
             //
             //find lowest edge of the ladder face
-            lowestpoint[2 as i32 as usize] = 99999 as i32 as crate::src::qcommon::q_shared::vec_t;
+            lowestpoint[2 as i32 as usize] = 99999 as i32 as vec_t;
             //end if
             /*//if slime or lava below the ladder
             //try jump reachability from far towards the ladder
@@ -4866,7 +4866,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             } //end if*/
             i = 0 as i32; //end for
             while i < (*ladderface1).numedges {
-                edge1num = ::libc::abs(
+                edge1num = abs(
                     *crate::src::botlib::be_aas_main::aasworld
                         .edgeindex
                         .offset(((*ladderface1).firstedge + i) as isize),
@@ -4874,7 +4874,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                 edge1 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .edges
                     .offset(edge1num as isize)
-                    as *mut crate::aasfile_h::aas_edge_t;
+                    as *mut aas_edge_t;
                 //end if
                 v1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
@@ -4898,11 +4898,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                 mid[1 as i32 as usize] = v1[1 as i32 as usize] + v2[1 as i32 as usize];
                 mid[2 as i32 as usize] = v1[2 as i32 as usize] + v2[2 as i32 as usize];
                 mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+                    as vec_t;
                 if mid[2 as i32 as usize] < lowestpoint[2 as i32 as usize] {
                     lowestpoint[0 as i32 as usize] = mid[0 as i32 as usize];
                     lowestpoint[1 as i32 as usize] = mid[1 as i32 as usize];
@@ -4914,7 +4914,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             plane1 = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset((*ladderface1).planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             start[0 as i32 as usize] = lowestpoint[0 as i32 as usize]
                 + (*plane1).normal[0 as i32 as usize] * 5 as i32 as f32;
             start[1 as i32 as usize] = lowestpoint[1 as i32 as usize]
@@ -4931,13 +4931,13 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                 end.as_mut_ptr(),
                 2 as i32,
                 -(1 as i32),
-            ) as crate::be_aas_h::aas_trace_s;
+            ) as aas_trace_s;
             trace.endpos[2 as i32 as usize] += 1 as i32 as f32;
             area2num =
                 crate::src::botlib::be_aas_sample::AAS_PointAreaNum(trace.endpos.as_mut_ptr());
             area2 = &mut *crate::src::botlib::be_aas_main::aasworld
                 .areas
-                .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+                .offset(area2num as isize) as *mut aas_area_t;
             i = 0 as i32;
             while i < (*area2).numfaces {
                 face2num = *crate::src::botlib::be_aas_main::aasworld
@@ -4945,8 +4945,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     .offset(((*area2).firstface + i) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
-                    as *mut crate::aasfile_h::aas_face_t;
+                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut aas_face_t;
                 //
                 //
                 //
@@ -4965,7 +4965,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
                         .planes
                         .offset((*face2).planenum as isize)
-                        as *mut crate::aasfile_h::aas_plane_t;
+                        as *mut aas_plane_t;
                     if (crate::stdlib::fabsf(
                         (*plane2).normal[0 as i32 as usize] * up[0 as i32 as usize]
                             + (*plane2).normal[1 as i32 as usize] * up[1 as i32 as usize]
@@ -4989,7 +4989,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     //create a new reachability link
                     lreach = AAS_AllocReachability();
                     if lreach.is_null() {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = ladderface1num;
@@ -5009,7 +5009,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     reach_ladder += 1;
                     lreach = AAS_AllocReachability();
                     if lreach.is_null() {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     (*lreach).areanum = area1num;
                     (*lreach).facenum = ladderface1num;
@@ -5030,7 +5030,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
                     let ref mut fresh18 = *areareachability.offset(area2num as isize);
                     *fresh18 = lreach;
                     reach_jump += 1;
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
                 //
                 //create a new reachability link
@@ -5043,7 +5043,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num
             }
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_Ladder
 //===========================================================================
@@ -5103,22 +5103,22 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
     let mut ent: i32 = 0;
     let mut dest: i32 = 0;
     let mut angle: f32 = 0.;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut destorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut destorigin: vec3_t = [0.; 3];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -5132,8 +5132,8 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
         time: 0.,
         frames: 0,
     };
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -5141,8 +5141,8 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
         area: 0,
         planenum: 0,
     };
-    let mut areas: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
     let mut current_block_61: u64;
     ent = crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity(0 as i32);
     while ent != 0 {
@@ -5153,7 +5153,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
             128 as i32,
         ) == 0)
         {
-            if ::libc::strcmp(
+            if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"trigger_multiple\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -5173,7 +5173,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                     model.as_mut_ptr(),
                 );
                 //#endif REACH_DEBUG
-                angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                angles[2 as i32 as usize] = 0 as i32 as vec_t;
                 angles[1 as i32 as usize] = angles[2 as i32 as usize];
                 angles[0 as i32 as usize] = angles[1 as i32 as usize];
                 crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -5212,7 +5212,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                             128 as i32,
                         ) == 0)
                         {
-                            if ::libc::strcmp(
+                            if libc::strcmp(
                                 classname.as_mut_ptr(),
                                 b"target_teleporter\x00" as *const u8 as *const libc::c_char,
                             ) == 0
@@ -5225,7 +5225,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                     128 as i32,
                                 ) == 0)
                                 {
-                                    if ::libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr())
+                                    if libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr())
                                         == 0
                                     {
                                         break;
@@ -5257,7 +5257,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                         current_block_61 = 3123434771885419771;
                     }
                 }
-            } else if ::libc::strcmp(
+            } else if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"trigger_teleport\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -5277,7 +5277,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                     model.as_mut_ptr(),
                 );
                 //#endif REACH_DEBUG
-                angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                angles[2 as i32 as usize] = 0 as i32 as vec_t;
                 angles[1 as i32 as usize] = angles[2 as i32 as usize];
                 angles[0 as i32 as usize] = angles[1 as i32 as usize];
                 crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -5327,7 +5327,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                             128 as i32,
                         ) != 0
                         {
-                            if ::libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr()) == 0 {
+                            if libc::strcmp(targetname.as_mut_ptr(), target.as_mut_ptr()) == 0 {
                                 break;
                                 //end if
                             }
@@ -5372,7 +5372,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                 end.as_mut_ptr(),
                                 4 as i32,
                                 -(1 as i32),
-                            ) as crate::be_aas_h::aas_trace_s;
+                            ) as aas_trace_s;
                             //end else
                             if trace.startsolid as u64 != 0 {
                                 botimport.Print.expect("non-null function pointer")(
@@ -5403,16 +5403,16 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                 ); //end if
                                 if angle != 0. {
                                     angles[0 as i32 as usize] =
-                                        0 as i32 as crate::src::qcommon::q_shared::vec_t; //end else
+                                        0 as i32 as vec_t; //end else
                                     angles[1 as i32 as usize] = angle; //qtrue);
                                     angles[2 as i32 as usize] =
-                                        0 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
-                                    crate::src::qcommon::q_math::AngleVectors(
+                                        0 as i32 as vec_t; //end if
+                                    AngleVectors(
                                         angles.as_mut_ptr()
-                                            as *const crate::src::qcommon::q_shared::vec_t,
+                                            as *const vec_t,
                                         velocity.as_mut_ptr(),
-                                        0 as *mut crate::src::qcommon::q_shared::vec_t,
-                                        0 as *mut crate::src::qcommon::q_shared::vec_t,
+                                        0 as *mut vec_t,
+                                        0 as *mut vec_t,
                                     );
                                     velocity[0 as i32 as usize] =
                                         velocity[0 as i32 as usize] * 400 as i32 as f32;
@@ -5422,20 +5422,20 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                         velocity[2 as i32 as usize] * 400 as i32 as f32
                                 } else {
                                     velocity[2 as i32 as usize] =
-                                        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                        0 as i32 as vec_t;
                                     velocity[1 as i32 as usize] = velocity[2 as i32 as usize];
                                     velocity[0 as i32 as usize] = velocity[1 as i32 as usize]
                                 }
                                 cmdmove[2 as i32 as usize] =
-                                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                    0 as i32 as vec_t;
                                 cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
                                 cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
                                 crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
-                                    &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                                    &mut move_0 as *mut _ as *mut aas_clientmove_s,
                                     -(1 as i32),
                                     destorigin.as_mut_ptr(),
                                     2 as i32,
-                                    crate::src::qcommon::q_shared::qfalse as i32,
+                                    qfalse as i32,
                                     velocity.as_mut_ptr(),
                                     cmdmove.as_mut_ptr(),
                                     0 as i32,
@@ -5449,7 +5449,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                         | 128 as i32
                                         | 256 as i32,
                                     0 as i32,
-                                    crate::src::qcommon::q_shared::qfalse as i32,
+                                    qfalse as i32,
                                 );
                                 area2num = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                                     move_0.endpos.as_mut_ptr(),
@@ -5499,11 +5499,11 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                 mid[2 as i32 as usize] =
                                     mins[2 as i32 as usize] + maxs[2 as i32 as usize];
                                 mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 //link an invalid (-1) entity
                                 areas = crate::src::botlib::be_aas_sample::AAS_LinkEntityClientBBox(
                                     mins.as_mut_ptr(),
@@ -5511,7 +5511,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                     -(1 as i32),
                                     4 as i32,
                                 )
-                                    as *mut crate::be_aas_def_h::aas_link_s;
+                                    as *mut aas_link_s;
                                 if areas.is_null() {
                                     botimport.Print.expect("non-null function pointer")(
                                         1 as i32,
@@ -5561,7 +5561,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                 }
                                 //unlink the invalid entity
                                 crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                                    areas as *mut crate::be_aas_def_h::aas_link_s,
+                                    areas as *mut aas_link_s,
                                 );
                             }
                         }
@@ -5600,31 +5600,31 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
     let mut model: [libc::c_char; 128] = [0; 128];
     let mut classname: [libc::c_char; 128] = [0; 128];
     let mut ent: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut pos1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut pos2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mids: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut platbottom: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut plattop: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottomorg: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut toporg: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xvals: [crate::src::qcommon::q_shared::vec_t; 8] = [0.; 8];
-    let mut yvals: [crate::src::qcommon::q_shared::vec_t; 8] = [0.; 8];
-    let mut xvals_top: [crate::src::qcommon::q_shared::vec_t; 8] = [0.; 8];
-    let mut yvals_top: [crate::src::qcommon::q_shared::vec_t; 8] = [0.; 8];
+    let mut pos1: vec3_t = [0.; 3];
+    let mut pos2: vec3_t = [0.; 3];
+    let mut mids: vec3_t = [0.; 3];
+    let mut platbottom: vec3_t = [0.; 3];
+    let mut plattop: vec3_t = [0.; 3];
+    let mut bottomorg: vec3_t = [0.; 3];
+    let mut toporg: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut xvals: [vec_t; 8] = [0.; 8];
+    let mut yvals: [vec_t; 8] = [0.; 8];
+    let mut xvals_top: [vec_t; 8] = [0.; 8];
+    let mut yvals_top: [vec_t; 8] = [0.; 8];
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -5642,7 +5642,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
             128 as i32,
         ) == 0)
         {
-            if ::libc::strcmp(
+            if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"func_plat\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -5730,13 +5730,13 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                         mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
                         platbottom[0 as i32 as usize] = (pos2[0 as i32 as usize] as f64
                             + mids[0 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         platbottom[1 as i32 as usize] = (pos2[1 as i32 as usize] as f64
                             + mids[1 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         platbottom[2 as i32 as usize] = (pos2[2 as i32 as usize] as f64
                             + mids[2 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         platbottom[2 as i32 as usize] = maxs[2 as i32 as usize]
                             - (pos1[2 as i32 as usize] - pos2[2 as i32 as usize])
                             + 2 as i32 as f32;
@@ -5746,13 +5746,13 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                         mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
                         plattop[0 as i32 as usize] = (pos2[0 as i32 as usize] as f64
                             + mids[0 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         plattop[1 as i32 as usize] = (pos2[1 as i32 as usize] as f64
                             + mids[1 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         plattop[2 as i32 as usize] = (pos2[2 as i32 as usize] as f64
                             + mids[2 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         plattop[2 as i32 as usize] = maxs[2 as i32 as usize] + 2 as i32 as f32;
                         //
                         /*if (!area1num)
@@ -5774,11 +5774,11 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                         mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
                         mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
                         mids[0 as i32 as usize] = (mids[0 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         mids[1 as i32 as usize] = (mids[1 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         mids[2 as i32 as usize] = (mids[2 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         //
                         xvals[0 as i32 as usize] = mins[0 as i32 as usize];
                         xvals[1 as i32 as usize] = mids[0 as i32 as usize];
@@ -5929,7 +5929,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                                                 -(1
                                                                                       as
                                                                                       i32)) as
-    crate::be_aas_h::aas_trace_s;
+    aas_trace_s;
                                                         if trace.fraction >= 1 as i32 as f32 {
                                                             break;
                                                         }
@@ -5964,7 +5964,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                             dir[2 as i32 as usize] = bottomorg
                                                                 [2 as i32 as usize]
                                                                 - platbottom[2 as i32 as usize];
-                                                            crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+                                                            VectorNormalize(dir.as_mut_ptr());
                                                             dir[0 as i32 as usize] = bottomorg
                                                                 [0 as i32 as usize]
                                                                 + 24 as i32 as f32
@@ -6088,9 +6088,9 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_FindFaceReachabilities(
-    mut facepoints: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut facepoints: *mut vec3_t,
     mut numpoints: i32,
-    mut plane: *mut crate::aasfile_h::aas_plane_t,
+    mut plane: *mut aas_plane_t,
     mut towardsface: i32,
 ) -> *mut aas_lreachability_t {
     let mut i: i32 = 0;
@@ -6108,36 +6108,36 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
     let mut speed: f32 = 0.;
     let mut hordist: f32 = 0.;
     let mut dist: f32 = 0.;
-    let mut beststart: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut beststart2: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut bestend: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut bestend2: crate::src::qcommon::q_shared::vec3_t =
-        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
-    let mut tmp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut testpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut beststart: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut beststart2: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut bestend: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut bestend2: vec3_t =
+        [0 as i32 as vec_t, 0., 0.];
+    let mut tmp: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut testpoint: vec3_t = [0.; 3];
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
     let mut lreachabilities: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut faceplane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut bestfaceplane: *mut crate::aasfile_h::aas_plane_t =
-        0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut faceplane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut bestfaceplane: *mut aas_plane_t =
+        0 as *mut aas_plane_t;
     //
     lreachabilities = 0 as *mut aas_lreachability_t;
     bestfacenum = 0 as i32;
-    bestfaceplane = 0 as *mut crate::aasfile_h::aas_plane_t;
+    bestfaceplane = 0 as *mut aas_plane_t;
     let mut current_block_61: u64;
     //
     i = 1 as i32; //end for
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         area = &mut *crate::src::botlib::be_aas_main::aasworld
             .areas
-            .offset(i as isize) as *mut crate::aasfile_h::aas_area_t;
+            .offset(i as isize) as *mut aas_area_t;
         // get the shortest distance between one of the func_bob start edges and
         // one of the face edges of area1
         bestdist = 999999 as i32 as f32; //end for
@@ -6148,8 +6148,8 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                 .offset(((*area).firstface + j) as isize);
             face = &mut *crate::src::botlib::be_aas_main::aasworld
                 .faces
-                .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
-                as *mut crate::aasfile_h::aas_face_t;
+                .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+                as *mut aas_face_t;
             //end for
             //if not a ground face
             if !((*face).faceflags & 4 as i32 == 0) {
@@ -6157,11 +6157,11 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                 faceplane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
                     .offset((*face).planenum as isize)
-                    as *mut crate::aasfile_h::aas_plane_t;
+                    as *mut aas_plane_t;
                 //
                 k = 0 as i32;
                 while k < (*face).numedges {
-                    edgenum = ::libc::abs(
+                    edgenum = abs(
                         *crate::src::botlib::be_aas_main::aasworld
                             .edgeindex
                             .offset(((*face).firstedge + k) as isize),
@@ -6169,7 +6169,7 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                     edge = &mut *crate::src::botlib::be_aas_main::aasworld
                         .edges
                         .offset(edgenum as isize)
-                        as *mut crate::aasfile_h::aas_edge_t;
+                        as *mut aas_edge_t;
                     //end for
                     v1 = (*crate::src::botlib::be_aas_main::aasworld
                         .vertexes
@@ -6241,9 +6241,9 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
             hordir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
             hordir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
             hordir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t;
             hordist =
-                VectorLength(hordir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+                VectorLength(hordir.as_mut_ptr() as *const vec_t);
             //
             if !(hordist
                 > 2 as i32 as f32
@@ -6302,7 +6302,7 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                                         / (*bestfaceplane).normal[2 as i32 as usize]
                                 } else {
                                     testpoint[2 as i32 as usize] =
-                                        0 as i32 as crate::src::qcommon::q_shared::vec_t
+                                        0 as i32 as vec_t
                                 }
                                 //
                                 if crate::src::botlib::be_aas_sample::AAS_PointInsideFace(
@@ -6394,33 +6394,33 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
     let mut areas: [i32; 10] = [0; 10];
     let mut classname: [libc::c_char; 128] = [0; 128];
     let mut model: [libc::c_char; 128] = [0; 128];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_start_top: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_end_top: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut origin: vec3_t = [0.; 3];
+    let mut move_end: vec3_t = [0.; 3];
+    let mut move_start: vec3_t = [0.; 3];
+    let mut move_start_top: vec3_t = [0.; 3];
+    let mut move_end_top: vec3_t = [0.; 3];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut start_edgeverts: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
-    let mut end_edgeverts: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut points: [crate::src::qcommon::q_shared::vec3_t; 10] = [[0.; 3]; 10];
+    let mut start_edgeverts: [vec3_t; 4] = [[0.; 3]; 4];
+    let mut end_edgeverts: [vec3_t; 4] = [[0.; 3]; 4];
+    let mut mid: vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut points: [vec3_t; 10] = [[0.; 3]; 10];
     let mut height: f32 = 0.;
-    let mut start_plane: crate::aasfile_h::aas_plane_t = crate::aasfile_h::aas_plane_t {
+    let mut start_plane: aas_plane_t = aas_plane_t {
         normal: [0.; 3],
         dist: 0.,
         type_0: 0,
     };
-    let mut end_plane: crate::aasfile_h::aas_plane_t = crate::aasfile_h::aas_plane_t {
+    let mut end_plane: aas_plane_t = aas_plane_t {
         normal: [0.; 3],
         dist: 0.,
         type_0: 0,
@@ -6441,7 +6441,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
             128 as i32,
         ) == 0)
         {
-            if !(::libc::strcmp(
+            if !(libc::strcmp(
                 classname.as_mut_ptr(),
                 b"func_bobbing\x00" as *const u8 as *const libc::c_char,
             ) != 0)
@@ -6486,11 +6486,11 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         ) == 0
                         {
                             origin[0 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             origin[1 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             origin[2 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t
+                                0 as i32 as vec_t
                         }
                         //
                         crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -6498,7 +6498,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                             angles.as_mut_ptr(),
                             mins.as_mut_ptr(),
                             maxs.as_mut_ptr(),
-                            0 as *mut crate::src::qcommon::q_shared::vec_t,
+                            0 as *mut vec_t,
                         );
                         //
                         mins[0 as i32 as usize] =
@@ -6518,11 +6518,11 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
                         mid[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
                         mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         origin[0 as i32 as usize] = mid[0 as i32 as usize];
                         origin[1 as i32 as usize] = mid[1 as i32 as usize];
                         origin[2 as i32 as usize] = mid[2 as i32 as usize];
@@ -6606,11 +6606,11 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         //
                         start_plane.dist = start_edgeverts[0 as i32 as usize][2 as i32 as usize];
                         start_plane.normal[0 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         start_plane.normal[1 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         start_plane.normal[2 as i32 as usize] =
-                            1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            1 as i32 as vec_t;
                         //
                         i = 0 as i32; //end for
                         while i < 4 as i32 {
@@ -6645,11 +6645,11 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         //
                         end_plane.dist = end_edgeverts[0 as i32 as usize][2 as i32 as usize];
                         end_plane.normal[0 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         end_plane.normal[1 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         end_plane.normal[2 as i32 as usize] =
-                            1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            1 as i32 as vec_t;
                         //
                         move_start_top[0 as i32 as usize] = move_start[0 as i32 as usize]; //+ bbox maxs z
                         move_start_top[1 as i32 as usize] = move_start[1 as i32 as usize]; //+ bbox maxs z
@@ -6680,26 +6680,26 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                             start_edgeverts.as_mut_ptr(),
                                             4 as i32,
                                             &mut start_plane,
-                                            crate::src::qcommon::q_shared::qtrue as i32,
+                                            qtrue as i32,
                                         ); //end if
                                         firstendreach = AAS_FindFaceReachabilities(
                                             end_edgeverts.as_mut_ptr(),
                                             4 as i32,
                                             &mut end_plane,
-                                            crate::src::qcommon::q_shared::qfalse as i32,
+                                            qfalse as i32,
                                         )
                                     } else {
                                         firststartreach = AAS_FindFaceReachabilities(
                                             end_edgeverts.as_mut_ptr(),
                                             4 as i32,
                                             &mut end_plane,
-                                            crate::src::qcommon::q_shared::qtrue as i32,
+                                            qtrue as i32,
                                         );
                                         firstendreach = AAS_FindFaceReachabilities(
                                             start_edgeverts.as_mut_ptr(),
                                             4 as i32,
                                             &mut start_plane,
-                                            crate::src::qcommon::q_shared::qfalse as i32,
+                                            qfalse as i32,
                                         )
                                     }
                                     //
@@ -6755,8 +6755,8 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                                 [2 as i32 as usize]
                                                 - org[2 as i32 as usize];
                                             dir[2 as i32 as usize] =
-                                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
-                                            crate::src::qcommon::q_math::VectorNormalize(
+                                                0 as i32 as vec_t;
+                                            VectorNormalize(
                                                 dir.as_mut_ptr(),
                                             );
                                             start[0 as i32 as usize] =
@@ -7013,23 +7013,23 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
     let mut speed: f32 = 0.;
     let mut zvel: f32 = 0.;
     //float hordist;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut areastart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut facecenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut areastart: vec3_t = [0.; 3];
+    let mut facecenter: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
     //vec3_t origin, ent2origin, angles, teststart;
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -7044,8 +7044,8 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
         frames: 0,
     };
     //aas_trace_t trace;
-    let mut areas: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
     //char target[MAX_EPAIRKEY], targetname[MAX_EPAIRKEY], model[MAX_EPAIRKEY];
     let mut classname: [libc::c_char; 128] = [0; 128];
     bot_visualizejumppads = crate::src::botlib::l_libvar::LibVarValue(
@@ -7061,7 +7061,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
             128 as i32,
         ) == 0)
         {
-            if !(::libc::strcmp(
+            if !(libc::strcmp(
                 classname.as_mut_ptr(),
                 b"trigger_push\x00" as *const u8 as *const libc::c_char,
             ) != 0)
@@ -7151,7 +7151,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                         absmaxs.as_mut_ptr(),
                         -(1 as i32),
                         4 as i32,
-                    ) as *mut crate::be_aas_def_h::aas_link_s;
+                    ) as *mut aas_link_s;
                     /*
                     for (link = areas; link; link = link->next_area)
                     {
@@ -7176,7 +7176,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                 as *mut libc::c_char,
                         );
                         crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                            areas as *mut crate::be_aas_def_h::aas_link_s,
+                            areas as *mut aas_link_s,
                         );
                     } else {
                         //
@@ -7192,28 +7192,28 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                         //if there is a horizontal velocity check for a reachability without air control
                         if velocity[0 as i32 as usize] != 0. || velocity[1 as i32 as usize] != 0. {
                             cmdmove[0 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
+                                0 as i32 as vec_t; //end if
                             cmdmove[1 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             cmdmove[2 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             //end if
                             crate::stdlib::memset(
-                                &mut move_0 as *mut crate::be_aas_h::aas_clientmove_t
+                                &mut move_0 as *mut aas_clientmove_t
                                     as *mut libc::c_void,
                                 0 as i32,
-                                ::std::mem::size_of::<crate::be_aas_h::aas_clientmove_t>()
+                                ::std::mem::size_of::<aas_clientmove_t>()
                                     as libc::c_ulong,
                             );
                             area2num = 0 as i32;
                             i = 0 as i32;
                             while i < 20 as i32 {
                                 crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
-                                    &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                                    &mut move_0 as *mut _ as *mut aas_clientmove_s,
                                     -(1 as i32),
                                     areastart.as_mut_ptr(),
                                     2 as i32,
-                                    crate::src::qcommon::q_shared::qfalse as i32,
+                                    qfalse as i32,
                                     velocity.as_mut_ptr(),
                                     cmdmove.as_mut_ptr(),
                                     0 as i32,
@@ -7264,7 +7264,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                             //create a rocket or bfg jump reachability from area1 to area2
                                             lreach = AAS_AllocReachability(); //end if
                                             if lreach.is_null() {
-                                                crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(areas as *mut crate::be_aas_def_h::aas_link_s);
+                                                crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(areas as *mut aas_link_s);
                                                 return;
                                             }
                                             (*lreach).areanum = area2num;
@@ -7320,7 +7320,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                             //check for areas we can reach with air control
                             area2num = 1 as i32; //end for
                             while area2num < crate::src::botlib::be_aas_main::aasworld.numareas {
-                                visualize = crate::src::qcommon::q_shared::qfalse as i32;
+                                visualize = qfalse as i32;
                                 //end for
                                 /*
                                 if (area2num == 3568)
@@ -7355,7 +7355,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                         .areas
                                         .offset(area2num as isize)
-                                        as *mut crate::aasfile_h::aas_area_t;
+                                        as *mut aas_area_t;
                                     i = 0 as i32;
                                     while i < (*area2).numfaces {
                                         face2num = *crate::src::botlib::be_aas_main::aasworld
@@ -7363,12 +7363,12 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                             .offset(((*area2).firstface + i) as isize);
                                         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                             .faces
-                                            .offset((::libc::abs
+                                            .offset((abs
                                                 as unsafe extern "C" fn(_: i32) -> i32)(
                                                 face2num
                                             )
                                                 as isize)
-                                            as *mut crate::aasfile_h::aas_face_t;
+                                            as *mut aas_face_t;
                                         //end for
                                         //if it is not a ground face
                                         if !((*face2).faceflags & 4 as i32 == 0) {
@@ -7399,7 +7399,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                         [2 as i32 as usize]
                                                         - areastart[2 as i32 as usize];
                                                     dir[2 as i32 as usize] = 0 as i32
-                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                        as vec_t;
                                                     //end if
                                                     //hordist = VectorNormalize(dir);
                                                     //if (hordist < 1.6 * facecenter[2] - areastart[2])
@@ -7410,7 +7410,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                         dir[1 as i32 as usize] * speed;
                                                     cmdmove[2 as i32 as usize] =
                                                         dir[2 as i32 as usize] * speed;
-                                                    crate::src::botlib::be_aas_move::AAS_PredictClientMovement(&mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                                                    crate::src::botlib::be_aas_move::AAS_PredictClientMovement(&mut move_0 as *mut _ as *mut aas_clientmove_s,
                                                                               -(1
                                                                                     as
                                                                                     i32),
@@ -7418,7 +7418,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                               2
                                                                                   as
                                                                                   i32,
-                                                                              crate::src::qcommon::q_shared::qfalse
+                                                                              qfalse
                                                                                   as
                                                                                   i32,
                                                                               velocity.as_mut_ptr(),
@@ -7497,7 +7497,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                         lreach =
                                                                             AAS_AllocReachability(); //end if
                                                                         if lreach.is_null() {
-                                                                            crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(areas as *mut crate::be_aas_def_h::aas_link_s);
+                                                                            crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(areas as *mut aas_link_s);
                                                                             return;
                                                                         }
                                                                         (*lreach).areanum =
@@ -7602,7 +7602,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                 area2num += 1
                             }
                             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                                areas as *mut crate::be_aas_def_h::aas_link_s,
+                                areas as *mut aas_link_s,
                             );
                         }
                     }
@@ -7636,12 +7636,12 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
     let mut mingrappleangle: f32 = 0.;
     let mut z: f32 = 0.;
     let mut hordist: f32 = 0.;
-    let mut bsptrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut bsptrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -7650,7 +7650,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -7658,8 +7658,8 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         contents: 0,
         ent: 0,
     };
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -7667,48 +7667,48 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         area: 0,
         planenum: 0,
     };
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut areastart: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut areastart: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut facecenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut down: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut facecenter: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut down: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        -(1 as i32) as vec_t,
     ];
-    let mut v: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
+    let mut v: *mut vec_t =
+        0 as *mut vec_t;
     //only grapple when on the ground or swimming
     if AAS_AreaGrounded(area1num) == 0 && AAS_AreaSwim(area1num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //don't grapple from a crouch area
     if crate::src::botlib::be_aas_sample::AAS_AreaPresenceType(area1num) & 2 as i32 == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //NOTE: disabled area swim it doesn't work right
     if AAS_AreaSwim(area1num) != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //don't grapple towards way lower areas
     if (*area2).maxs[2 as i32 as usize] < (*area1).mins[2 as i32 as usize] {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     start[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -7745,9 +7745,9 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
             end.as_mut_ptr(),
             4 as i32,
             -(1 as i32),
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         if trace.startsolid as u64 != 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         areastart[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
         areastart[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
@@ -7756,7 +7756,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         & (8 as i32 | 16 as i32 | 32 as i32)
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     //start is now the start point
@@ -7768,15 +7768,15 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
             .offset(((*area2).firstface + i) as isize);
         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+            as *mut aas_face_t;
         //if it is not a solid face
         if !((*face2).faceflags & 1 as i32 == 0) {
             //direction towards the first vertex of the face
             v = (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
                 (*crate::src::botlib::be_aas_main::aasworld
                     .edges
-                    .offset(::libc::abs(
+                    .offset(abs(
                         *crate::src::botlib::be_aas_main::aasworld
                             .edgeindex
                             .offset((*face2).firstedge as isize),
@@ -7838,9 +7838,9 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                             facecenter[2 as i32 as usize] - areastart[2 as i32 as usize];
                         //
                         z = dir[2 as i32 as usize];
-                        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                        dir[2 as i32 as usize] = 0 as i32 as vec_t;
                         hordist = VectorLength(
-                            dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                            dir.as_mut_ptr() as *const vec_t
                         );
                         if !(hordist == 0.) {
                             //if too far
@@ -7880,13 +7880,13 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                     //
                                     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
                                         start.as_mut_ptr(),
-                                        0 as *mut crate::src::qcommon::q_shared::vec_t,
-                                        0 as *mut crate::src::qcommon::q_shared::vec_t,
+                                        0 as *mut vec_t,
+                                        0 as *mut vec_t,
                                         end.as_mut_ptr(),
                                         0 as i32,
                                         1 as i32,
                                     )
-                                        as crate::botlib_h::bsp_trace_s;
+                                        as bsp_trace_s;
                                     //the grapple won't stick to the sky and the grapple point should be near the AAS wall
                                     if !(bsptrace.surface.flags & 0x4 as i32 != 0
                                         || bsptrace.fraction * 500 as i32 as f32 > 32 as i32 as f32)
@@ -7899,7 +7899,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                             - areastart[1 as i32 as usize];
                                         dir[2 as i32 as usize] = facecenter[2 as i32 as usize]
                                             - areastart[2 as i32 as usize];
-                                        crate::src::qcommon::q_math::VectorNormalize(
+                                        VectorNormalize(
                                             dir.as_mut_ptr(),
                                         );
                                         start[0 as i32 as usize] = areastart[0 as i32 as usize]
@@ -7918,7 +7918,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                 2 as i32,
                                                 -(1 as i32),
                                             )
-                                                as crate::be_aas_h::aas_trace_s;
+                                                as aas_trace_s;
                                         dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
                                             - facecenter[0 as i32 as usize];
                                         dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
@@ -7926,7 +7926,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                         dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
                                             - facecenter[2 as i32 as usize];
                                         if !(VectorLength(dir.as_mut_ptr()
-                                            as *const crate::src::qcommon::q_shared::vec_t)
+                                            as *const vec_t)
                                             > 24 as i32 as f32)
                                         {
                                             //
@@ -7952,7 +7952,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                                         i32,
                                                                     -(1 as
                                                                           i32)) as
-    crate::be_aas_h::aas_trace_s;
+    aas_trace_s;
                                             if !(trace.fraction >= 1 as i32 as f32) {
                                                 //area to end in
                                                 areanum =
@@ -7984,7 +7984,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                                                    areas.as_mut_ptr(),
                                                                                    0
                                                                                        as
-                                                                                       *mut crate::src::qcommon::q_shared::vec3_t,
+                                                                                       *mut vec3_t,
                                                                                    20
                                                                                        as
                                                                                        i32); //end for
@@ -8013,7 +8013,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                                         lreach =
                                                                             AAS_AllocReachability();
                                                                         if lreach.is_null() {
-                                                                            return crate::src::qcommon::q_shared::qfalse
+                                                                            return qfalse
                                                                                        as
                                                                                        i32;
                                                                         }
@@ -8075,7 +8075,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
                                                                                  +
                                                                                  VectorLength(dir.as_mut_ptr()
                                                                                                   as
-                                                                                                  *const crate::src::qcommon::q_shared::vec_t)
+                                                                                                  *const vec_t)
                                                                                      as
                                                                                      f64
                                                                                      *
@@ -8116,7 +8116,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
         i += 1
     }
     //
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_Grapple
 //===========================================================================
@@ -8130,17 +8130,17 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2nu
 pub unsafe extern "C" fn AAS_SetWeaponJumpAreaFlags() {
     let mut ent: i32 = 0; //end for
     let mut i: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [
+        -(15 as i32) as vec_t,
+        -(15 as i32) as vec_t,
+        -(15 as i32) as vec_t,
     ];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [
-        15 as i32 as crate::src::qcommon::q_shared::vec_t,
-        15 as i32 as crate::src::qcommon::q_shared::vec_t,
-        15 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut maxs: vec3_t = [
+        15 as i32 as vec_t,
+        15 as i32 as vec_t,
+        15 as i32 as vec_t,
     ];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
     let mut areanum: i32 = 0;
     let mut weaponjumpareas: i32 = 0;
     let mut spawnflags: i32 = 0;
@@ -8155,51 +8155,51 @@ pub unsafe extern "C" fn AAS_SetWeaponJumpAreaFlags() {
             128 as i32,
         ) == 0)
         {
-            if ::libc::strcmp(
+            if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"item_armor_body\x00" as *const u8 as *const libc::c_char,
             ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"item_armor_combat\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"item_health_mega\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_grenadelauncher\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_rocketlauncher\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_lightning\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_plasmagun\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_railgun\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"weapon_bfg\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"item_quad\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"item_regen\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || ::libc::strcmp(
+                || libc::strcmp(
                     classname.as_mut_ptr(),
                     b"item_invulnerability\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -8308,23 +8308,23 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
     let mut speed: f32 = 0.;
     let mut zvel: f32 = 0.;
     //float hordist;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t; // teststart;
-    let mut area1: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t; // teststart;
+    let mut area1: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut areastart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut facecenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut areastart: vec3_t = [0.; 3];
+    let mut facecenter: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -8338,8 +8338,8 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
         time: 0.,
         frames: 0,
     };
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -8347,16 +8347,16 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
         area: 0,
         planenum: 0,
     };
-    visualize = crate::src::qcommon::q_shared::qfalse as i32;
+    visualize = qfalse as i32;
     //	if (area1num == 4436 && area2num == 4318)
     //	{
     //		visualize = qtrue;
     //	}
     if AAS_AreaGrounded(area1num) == 0 || AAS_AreaSwim(area1num) != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if AAS_AreaGrounded(area2num) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //NOTE: only weapon jump towards areas with an interesting item in it??
     if (*crate::src::botlib::be_aas_main::aasworld
@@ -8366,18 +8366,18 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
         & 8192 as i32
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     area1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area1num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area1num as isize) as *mut aas_area_t;
     area2 = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(area2num as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(area2num as isize) as *mut aas_area_t;
     //don't weapon jump towards way lower areas
     if (*area2).maxs[2 as i32 as usize] < (*area1).mins[2 as i32 as usize] {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     start[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -8412,9 +8412,9 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
         end.as_mut_ptr(),
         4 as i32,
         -(1 as i32),
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     areastart[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     areastart[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
@@ -8429,8 +8429,8 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
             .offset(((*area2).firstface + i) as isize);
         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+            as *mut aas_face_t;
         //end for
         //if it is not a solid face
         if !((*face2).faceflags & 4 as i32 == 0) {
@@ -8468,7 +8468,7 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
                             facecenter[1 as i32 as usize] - areastart[1 as i32 as usize];
                         dir[2 as i32 as usize] =
                             facecenter[2 as i32 as usize] - areastart[2 as i32 as usize];
-                        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                        dir[2 as i32 as usize] = 0 as i32 as vec_t;
                         //end if
                         //hordist = VectorNormalize(dir);
                         //if (hordist < 1.6 * (facecenter[2] - areastart[2]))
@@ -8477,16 +8477,16 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
                         cmdmove[1 as i32 as usize] = dir[1 as i32 as usize] * speed;
                         cmdmove[2 as i32 as usize] = dir[2 as i32 as usize] * speed;
                         velocity[0 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         velocity[1 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            0 as i32 as vec_t;
                         velocity[2 as i32 as usize] = zvel;
                         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
-                            &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+                            &mut move_0 as *mut _ as *mut aas_clientmove_s,
                             -(1 as i32),
                             areastart.as_mut_ptr(),
                             2 as i32,
-                            crate::src::qcommon::q_shared::qtrue as i32,
+                            qtrue as i32,
                             velocity.as_mut_ptr(),
                             cmdmove.as_mut_ptr(),
                             30 as i32,
@@ -8517,7 +8517,7 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
                             //create a rocket or bfg jump reachability from area1 to area2
                             lreach = AAS_AllocReachability(); //end else
                             if lreach.is_null() {
-                                return crate::src::qcommon::q_shared::qfalse as i32;
+                                return qfalse as i32;
                             } //end if
                             (*lreach).areanum = area2num;
                             (*lreach).facenum = 0 as i32;
@@ -8543,7 +8543,7 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
                             *fresh25 = lreach;
                             //
                             reach_rocketjump += 1;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                     }
                     n += 1
@@ -8555,7 +8555,7 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area
     //if prediction time wasn't enough to fully predict the movement
     //don't enter slime or lava and don't fall from too high
     //
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Reachability_WeaponJump
 //===========================================================================
@@ -8587,24 +8587,24 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
     let mut gap: i32 = 0;
     let mut reachareanum: i32 = 0;
     let mut side: i32 = 0;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut area2: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face1: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut face2: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut face3: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut v1: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut v2: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut sharededgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut testend: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut area2: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face1: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face2: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut face3: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut v1: *mut vec_t =
+        0 as *mut vec_t;
+    let mut v2: *mut vec_t =
+        0 as *mut vec_t;
+    let mut sharededgevec: vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut testend: vec3_t = [0.; 3];
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -8618,7 +8618,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
     //
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(areanum as isize) as *mut aas_area_t;
     //
     i = 0 as i32;
     while i < (*area).numfaces {
@@ -8627,8 +8627,8 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
             .offset(((*area).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut aas_face_t;
         //end for
         //face 1 must be a ground face
         if !((*face1).faceflags & 4 as i32 == 0) {
@@ -8648,9 +8648,9 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                         &mut *crate::src::botlib::be_aas_main::aasworld
                             .faces
                             .offset(
-                                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num)
+                                (abs as unsafe extern "C" fn(_: i32) -> i32)(face2num)
                                     as isize,
-                            ) as *mut crate::aasfile_h::aas_face_t;
+                            ) as *mut aas_face_t;
                     //find another not ground face using this same edge
                     //end for
                     //face 2 may not be a ground face
@@ -8661,7 +8661,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                             edge2num = *crate::src::botlib::be_aas_main::aasworld
                                 .edgeindex
                                 .offset(((*face2).firstedge + l) as isize);
-                            if ::libc::abs(edge1num) == ::libc::abs(edge2num) {
+                            if abs(edge1num) == abs(edge2num) {
                                 //end if
                                 //get the area at the other side of the face
                                 if (*face2).frontarea == areanum {
@@ -8673,7 +8673,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 area2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .areas
                                     .offset(otherareanum as isize)
-                                    as *mut crate::aasfile_h::aas_area_t;
+                                    as *mut aas_area_t;
                                 //if the other area is grounded!
                                 if (*crate::src::botlib::be_aas_main::aasworld
                                     .areasettings
@@ -8684,23 +8684,23 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 {
                                     //end if
                                     //check for a possible gap
-                                    gap = crate::src::qcommon::q_shared::qfalse as i32; //end for
+                                    gap = qfalse as i32; //end for
                                     n = 0 as i32;
                                     while n < (*area2).numfaces {
                                         face3num = *crate::src::botlib::be_aas_main::aasworld
                                             .faceindex
                                             .offset(((*area2).firstface + n) as isize);
                                         //may not be the shared face of the two areas
-                                        if !(::libc::abs(face3num) == ::libc::abs(face2num)) {
+                                        if !(abs(face3num) == abs(face2num)) {
                                             //
                                             face3 = &mut *crate::src::botlib::be_aas_main::aasworld
                                                 .faces
-                                                .offset((::libc::abs
+                                                .offset((abs
                                                     as unsafe extern "C" fn(_: i32) -> i32)(
                                                     face3num,
                                                 )
                                                     as isize)
-                                                as *mut crate::aasfile_h::aas_face_t;
+                                                as *mut aas_face_t;
                                             //find an edge shared by all three faces
                                             m = 0 as i32; //end for
                                             while m < (*face3).numedges {
@@ -8709,21 +8709,21 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                         .edgeindex
                                                         .offset(((*face3).firstedge + m) as isize);
                                                 //end if
-                                                if ::libc::abs(edge3num) == ::libc::abs(edge1num) {
+                                                if abs(edge3num) == abs(edge1num) {
                                                     //but the edge should be shared by all three faces
                                                     if (*face3).faceflags & 1 as i32 == 0 {
-                                                        gap = crate::src::qcommon::q_shared::qtrue
+                                                        gap = qtrue
                                                             as i32; //end if
                                                         break;
                                                     } else if (*face3).faceflags & 4 as i32 != 0 {
-                                                        gap = crate::src::qcommon::q_shared::qfalse
+                                                        gap = qfalse
                                                             as i32;
                                                         break;
                                                     } else {
                                                         //
                                                         //end if
                                                         //FIXME: there are more situations to be handled
-                                                        gap = crate::src::qcommon::q_shared::qtrue
+                                                        gap = qtrue
                                                             as i32;
                                                         break;
                                                     }
@@ -8744,10 +8744,10 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 //check for a walk off ledge reachability
                                 edge = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .edges
-                                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                                    .offset((abs as unsafe extern "C" fn(_: i32) -> i32)(
                                         edge1num,
                                     ) as isize)
-                                    as *mut crate::aasfile_h::aas_edge_t;
+                                    as *mut aas_edge_t;
                                 side = (edge1num < 0 as i32) as i32;
                                 //
                                 v1 = (*crate::src::botlib::be_aas_main::aasworld
@@ -8762,7 +8762,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .planes
                                     .offset((*face1).planenum as isize)
-                                    as *mut crate::aasfile_h::aas_plane_t;
+                                    as *mut aas_plane_t;
                                 //get the points really into the areas
                                 sharededgevec[0 as i32 as usize] =
                                     *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
@@ -8772,12 +8772,12 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                     *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
                                 CrossProduct(
                                     (*plane).normal.as_mut_ptr()
-                                        as *const crate::src::qcommon::q_shared::vec_t,
+                                        as *const vec_t,
                                     sharededgevec.as_mut_ptr()
-                                        as *const crate::src::qcommon::q_shared::vec_t,
+                                        as *const vec_t,
                                     dir.as_mut_ptr(),
                                 );
-                                crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+                                VectorNormalize(dir.as_mut_ptr());
                                 //
                                 mid[0 as i32 as usize] =
                                     *v1.offset(0 as i32 as isize) + *v2.offset(0 as i32 as isize);
@@ -8786,11 +8786,11 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 mid[2 as i32 as usize] =
                                     *v1.offset(2 as i32 as isize) + *v2.offset(2 as i32 as isize);
                                 mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
-                                    as crate::src::qcommon::q_shared::vec_t;
+                                    as vec_t;
                                 mid[0 as i32 as usize] = mid[0 as i32 as usize]
                                     + dir[0 as i32 as usize] * 8 as i32 as f32;
                                 mid[1 as i32 as usize] = mid[1 as i32 as usize]
@@ -8808,7 +8808,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                     4 as i32,
                                     -(1 as i32),
                                 )
-                                    as crate::be_aas_h::aas_trace_s;
+                                    as aas_trace_s;
                                 //
                                 if trace.startsolid as u64 != 0 {
                                     //end if
@@ -8849,7 +8849,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 mid.as_mut_ptr(),
                                                 testend.as_mut_ptr(),
                                                 areas.as_mut_ptr(),
-                                                0 as *mut crate::src::qcommon::q_shared::vec3_t,
+                                                0 as *mut vec3_t,
                                                 (::std::mem::size_of::<[i32; 10]>()
                                                     as libc::c_ulong)
                                                     .wrapping_div(::std::mem::size_of::<i32>()
@@ -8970,11 +8970,11 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
 
 pub unsafe extern "C" fn AAS_StoreReachability() {
     let mut i: i32 = 0; //end for
-    let mut areasettings: *mut crate::aasfile_h::aas_areasettings_t =
-        0 as *mut crate::aasfile_h::aas_areasettings_t;
+    let mut areasettings: *mut aas_areasettings_t =
+        0 as *mut aas_areasettings_t;
     let mut lreach: *mut aas_lreachability_t = 0 as *mut aas_lreachability_t;
-    let mut reach: *mut crate::aasfile_h::aas_reachability_t =
-        0 as *mut crate::aasfile_h::aas_reachability_t;
+    let mut reach: *mut aas_reachability_t =
+        0 as *mut aas_reachability_t;
     if !crate::src::botlib::be_aas_main::aasworld
         .reachability
         .is_null()
@@ -8986,15 +8986,15 @@ pub unsafe extern "C" fn AAS_StoreReachability() {
     crate::src::botlib::be_aas_main::aasworld.reachability =
         crate::src::botlib::l_memory::GetClearedMemory(
             ((numlreachabilities + 10 as i32) as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<crate::aasfile_h::aas_reachability_t>() as libc::c_ulong,
+                ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
             ),
-        ) as *mut crate::aasfile_h::aas_reachability_t;
+        ) as *mut aas_reachability_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = 1 as i32;
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         areasettings = &mut *crate::src::botlib::be_aas_main::aasworld
             .areasettings
-            .offset(i as isize) as *mut crate::aasfile_h::aas_areasettings_t;
+            .offset(i as isize) as *mut aas_areasettings_t;
         (*areasettings).firstreachablearea =
             crate::src::botlib::be_aas_main::aasworld.reachabilitysize;
         (*areasettings).numreachableareas = 0 as i32;
@@ -9005,7 +9005,7 @@ pub unsafe extern "C" fn AAS_StoreReachability() {
                 .offset(
                     ((*areasettings).firstreachablearea + (*areasettings).numreachableareas)
                         as isize,
-                ) as *mut crate::aasfile_h::aas_reachability_t;
+                ) as *mut aas_reachability_t;
             (*reach).areanum = (*lreach).areanum;
             (*reach).facenum = (*lreach).facenum;
             (*reach).edgenum = (*lreach).edgenum;
@@ -9065,13 +9065,13 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: f32) -> i32 {
     static mut reachability_delay: f32 = 0.;
     static mut lastpercentage: i32 = 0;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if reachability is calculated for all areas
     if crate::src::botlib::be_aas_main::aasworld.numreachabilityareas
         >= crate::src::botlib::be_aas_main::aasworld.numareas + 2 as i32
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if starting with area 1 (area 0 is a dummy)
     if crate::src::botlib::be_aas_main::aasworld.numreachabilityareas == 1 as i32 {
@@ -9268,7 +9268,7 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: f32) -> i32 {
         );
     }
     //not yet finished
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 /*
 ===========================================================================
@@ -9359,7 +9359,7 @@ pub unsafe extern "C" fn AAS_InitReachability() {
         b"grapplereach\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     crate::src::botlib::be_aas_main::aasworld.savefile =
-        crate::src::qcommon::q_shared::qtrue as i32;
+        qtrue as i32;
     //start with area 1 because area zero is a dummy
     crate::src::botlib::be_aas_main::aasworld.numreachabilityareas = 1 as i32;
     // //aasworld.numreachabilityareas = aasworld.numareas + 1;		//only calculate entity reachabilities

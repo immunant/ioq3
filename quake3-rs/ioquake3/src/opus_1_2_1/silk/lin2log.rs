@@ -398,17 +398,17 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_lin2log(
-    inLin: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32
+    inLin: opus_int32,
+) -> opus_int32
 /* I  input in linear scale                                         */ {
-    let mut lz: crate::opus_types_h::opus_int32 = 0;
-    let mut frac_Q7: crate::opus_types_h::opus_int32 = 0;
+    let mut lz: opus_int32 = 0;
+    let mut frac_Q7: opus_int32 = 0;
     silk_CLZ_FRAC(inLin, &mut lz, &mut frac_Q7);
     /* Piece-wise parabolic approximation */
     return (frac_Q7 as i64
         + ((frac_Q7 * (128 as i32 - frac_Q7)) as i64
-            * 179 as i32 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32)) as crate::opus_types_h::opus_int32
-        + (((31 as i32 - lz) as crate::opus_types_h::opus_uint32) << 7 as i32)
-            as crate::opus_types_h::opus_int32;
+            * 179 as i32 as opus_int16 as i64
+            >> 16 as i32)) as opus_int32
+        + (((31 as i32 - lz) as opus_uint32) << 7 as i32)
+            as opus_int32;
 }

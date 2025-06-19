@@ -159,13 +159,13 @@ pub const ET_GENERAL: C2RustUnnamed_1 = 0;
 
 pub unsafe extern "C" fn AAS_UpdateEntity(
     mut entnum: i32,
-    mut state: *mut crate::botlib_h::bot_entitystate_t,
+    mut state: *mut bot_entitystate_t,
 ) -> i32 {
     let mut relink: i32 = 0; //end if
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -178,20 +178,20 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
     }
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
-        .offset(entnum as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+        .offset(entnum as isize) as *mut aas_entity_t;
     if state.is_null() {
         //unlink the entity
         crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-            (*ent).areas as *mut crate::be_aas_def_h::aas_link_s,
+            (*ent).areas as *mut aas_link_s,
         );
         //unlink the entity from the BSP leaves
         crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves(
-            (*ent).leaves as *mut crate::be_aas_def_h::bsp_link_s,
+            (*ent).leaves as *mut bsp_link_s,
         );
         //
-        (*ent).areas = 0 as *mut crate::be_aas_def_h::aas_link_t;
+        (*ent).areas = 0 as *mut aas_link_t;
         //
-        (*ent).leaves = 0 as *mut crate::be_aas_def_h::bsp_link_t;
+        (*ent).leaves = 0 as *mut bsp_link_t;
         return 0 as i32;
     }
     (*ent).i.update_time = crate::src::botlib::be_aas_main::AAS_Time() - (*ent).i.ltime;
@@ -218,25 +218,25 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
     //number of the entity
     (*ent).i.number = entnum;
     //updated so set valid flag
-    (*ent).i.valid = crate::src::qcommon::q_shared::qtrue as i32;
+    (*ent).i.valid = qtrue as i32;
     //link everything the first frame
     if crate::src::botlib::be_aas_main::aasworld.numframes == 1 as i32 {
-        relink = crate::src::qcommon::q_shared::qtrue as i32
+        relink = qtrue as i32
     } else {
-        relink = crate::src::qcommon::q_shared::qfalse as i32
+        relink = qfalse as i32
     }
     //
-    if (*ent).i.solid == crate::be_aas_h::SOLID_BSP as i32 {
+    if (*ent).i.solid == SOLID_BSP as i32 {
         //end if
         if VectorCompare(
-            (*state).angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).i.angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            (*state).angles.as_mut_ptr() as *const vec_t,
+            (*ent).i.angles.as_mut_ptr() as *const vec_t,
         ) == 0
         {
             (*ent).i.angles[0 as i32 as usize] = (*state).angles[0 as i32 as usize]; //end if
             (*ent).i.angles[1 as i32 as usize] = (*state).angles[1 as i32 as usize];
             (*ent).i.angles[2 as i32 as usize] = (*state).angles[2 as i32 as usize];
-            relink = crate::src::qcommon::q_shared::qtrue as i32
+            relink = qtrue as i32
         }
         //if the angles of the model changed
         //end if
@@ -247,17 +247,17 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
             (*ent).i.angles.as_mut_ptr(),
             (*ent).i.mins.as_mut_ptr(),
             (*ent).i.maxs.as_mut_ptr(),
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
         );
-    } else if (*ent).i.solid == crate::be_aas_h::SOLID_BBOX as i32 {
+    } else if (*ent).i.solid == SOLID_BBOX as i32 {
         //if the bounding box size changed
         if VectorCompare(
-            (*state).mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).i.mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            (*state).mins.as_mut_ptr() as *const vec_t,
+            (*ent).i.mins.as_mut_ptr() as *const vec_t,
         ) == 0
             || VectorCompare(
-                (*state).maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (*ent).i.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                (*state).maxs.as_mut_ptr() as *const vec_t,
+                (*ent).i.maxs.as_mut_ptr() as *const vec_t,
             ) == 0
         {
             (*ent).i.mins[0 as i32 as usize] = (*state).mins[0 as i32 as usize]; //end if
@@ -266,7 +266,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
             (*ent).i.maxs[0 as i32 as usize] = (*state).maxs[0 as i32 as usize];
             (*ent).i.maxs[1 as i32 as usize] = (*state).maxs[1 as i32 as usize];
             (*ent).i.maxs[2 as i32 as usize] = (*state).maxs[2 as i32 as usize];
-            relink = crate::src::qcommon::q_shared::qtrue as i32
+            relink = qtrue as i32
         }
         (*ent).i.angles[0 as i32 as usize] = (*state).angles[0 as i32 as usize];
         (*ent).i.angles[1 as i32 as usize] = (*state).angles[1 as i32 as usize];
@@ -274,14 +274,14 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
     }
     //if the origin changed
     if VectorCompare(
-        (*state).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*ent).i.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        (*state).origin.as_mut_ptr() as *const vec_t,
+        (*ent).i.origin.as_mut_ptr() as *const vec_t,
     ) == 0
     {
         (*ent).i.origin[0 as i32 as usize] = (*state).origin[0 as i32 as usize]; //end if
         (*ent).i.origin[1 as i32 as usize] = (*state).origin[1 as i32 as usize];
         (*ent).i.origin[2 as i32 as usize] = (*state).origin[2 as i32 as usize];
-        relink = crate::src::qcommon::q_shared::qtrue as i32
+        relink = qtrue as i32
     }
     //if the entity should be relinked
     if relink != 0 {
@@ -303,7 +303,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
                 (*ent).i.maxs[2 as i32 as usize] + (*ent).i.origin[2 as i32 as usize];
             //unlink the entity
             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                (*ent).areas as *mut crate::be_aas_def_h::aas_link_s,
+                (*ent).areas as *mut aas_link_s,
             );
             //relink the entity to the AAS areas (use the larges bbox)
             (*ent).areas = crate::src::botlib::be_aas_sample::AAS_LinkEntityClientBBox(
@@ -311,10 +311,10 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
                 absmaxs.as_mut_ptr(),
                 entnum,
                 2 as i32,
-            ) as *mut crate::be_aas_def_h::aas_link_s;
+            ) as *mut aas_link_s;
             //unlink the entity from the BSP leaves
             crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves(
-                (*ent).leaves as *mut crate::be_aas_def_h::bsp_link_s,
+                (*ent).leaves as *mut bsp_link_s,
             );
             //link the entity to the world BSP tree
             (*ent).leaves = crate::src::botlib::be_aas_bspq3::AAS_BSPLinkEntity(
@@ -322,7 +322,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
                 absmaxs.as_mut_ptr(),
                 entnum,
                 0 as i32,
-            ) as *mut crate::be_aas_def_h::bsp_link_s
+            ) as *mut bsp_link_s
         }
         //end if
     }
@@ -339,7 +339,7 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
 
 pub unsafe extern "C" fn AAS_EntityInfo(
     mut entnum: i32,
-    mut info: *mut crate::be_aas_h::aas_entityinfo_t,
+    mut info: *mut aas_entityinfo_t,
 ) {
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         crate::src::botlib::be_interface::botimport
@@ -352,7 +352,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::be_aas_h::aas_entityinfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
         ); //end if
         return;
     }
@@ -368,7 +368,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(
         crate::stdlib::memset(
             info as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::be_aas_h::aas_entityinfo_t>() as libc::c_ulong,
+            ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
         );
         return;
     }
@@ -377,8 +377,8 @@ pub unsafe extern "C" fn AAS_EntityInfo(
         &mut (*crate::src::botlib::be_aas_main::aasworld
             .entities
             .offset(entnum as isize))
-        .i as *mut crate::be_aas_h::aas_entityinfo_t as *const libc::c_void,
-        ::std::mem::size_of::<crate::be_aas_h::aas_entityinfo_t>() as libc::c_ulong,
+        .i as *mut aas_entityinfo_t as *const libc::c_void,
+        ::std::mem::size_of::<aas_entityinfo_t>() as libc::c_ulong,
     );
 }
 //end of the function AAS_EntityInfo
@@ -392,7 +392,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(
 
 pub unsafe extern "C" fn AAS_EntityOrigin(
     mut entnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) {
     if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
@@ -404,7 +404,7 @@ pub unsafe extern "C" fn AAS_EntityOrigin(
             entnum,
         ); //end if
         let ref mut fresh0 = *origin.offset(2 as i32 as isize);
-        *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *fresh0 = 0 as i32 as vec_t;
         let ref mut fresh1 = *origin.offset(1 as i32 as isize);
         *fresh1 = *fresh0;
         *origin.offset(0 as i32 as isize) = *fresh1;
@@ -607,29 +607,29 @@ pub unsafe extern "C" fn AAS_EntityModelNum(mut entnum: i32) -> i32 {
 
 pub unsafe extern "C" fn AAS_OriginOfMoverWithModelNum(
     mut modelnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> i32 {
     let mut i: i32 = 0; //end for
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.maxentities {
         ent = &mut *crate::src::botlib::be_aas_main::aasworld
             .entities
-            .offset(i as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+            .offset(i as isize) as *mut aas_entity_t;
         if (*ent).i.type_0 == ET_MOVER as i32 {
             if (*ent).i.modelindex == modelnum {
                 *origin.offset(0 as i32 as isize) = (*ent).i.origin[0 as i32 as usize];
                 *origin.offset(1 as i32 as isize) = (*ent).i.origin[1 as i32 as usize];
                 *origin.offset(2 as i32 as isize) = (*ent).i.origin[2 as i32 as usize];
-                return crate::src::qcommon::q_shared::qtrue as i32;
+                return qtrue as i32;
             }
             //end if
             //end if
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_OriginOfMoverWithModelNum
 //===========================================================================
@@ -642,11 +642,11 @@ pub unsafe extern "C" fn AAS_OriginOfMoverWithModelNum(
 
 pub unsafe extern "C" fn AAS_EntitySize(
     mut entnum: i32,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) {
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t; //end if
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t; //end if
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return;
     }
@@ -663,7 +663,7 @@ pub unsafe extern "C" fn AAS_EntitySize(
     }
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
-        .offset(entnum as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+        .offset(entnum as isize) as *mut aas_entity_t;
     *mins.offset(0 as i32 as isize) = (*ent).i.mins[0 as i32 as usize];
     *mins.offset(1 as i32 as isize) = (*ent).i.mins[1 as i32 as usize];
     *mins.offset(2 as i32 as isize) = (*ent).i.mins[2 as i32 as usize];
@@ -682,13 +682,13 @@ pub unsafe extern "C" fn AAS_EntitySize(
 
 pub unsafe extern "C" fn AAS_EntityBSPData(
     mut entnum: i32,
-    mut entdata: *mut crate::be_aas_def_h::bsp_entdata_t,
+    mut entdata: *mut bsp_entdata_t,
 ) {
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
-        .offset(entnum as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+        .offset(entnum as isize) as *mut aas_entity_t;
     (*entdata).origin[0 as i32 as usize] = (*ent).i.origin[0 as i32 as usize];
     (*entdata).origin[1 as i32 as usize] = (*ent).i.origin[1 as i32 as usize];
     (*entdata).origin[2 as i32 as usize] = (*ent).i.origin[2 as i32 as usize];
@@ -727,12 +727,12 @@ pub unsafe extern "C" fn AAS_ResetEntityLinks() {
             .entities
             .offset(i as isize))
         .areas;
-        *fresh2 = 0 as *mut crate::be_aas_def_h::aas_link_t;
+        *fresh2 = 0 as *mut aas_link_t;
         let ref mut fresh3 = (*crate::src::botlib::be_aas_main::aasworld
             .entities
             .offset(i as isize))
         .leaves;
-        *fresh3 = 0 as *mut crate::be_aas_def_h::bsp_link_t;
+        *fresh3 = 0 as *mut bsp_link_t;
         i += 1
     }
     //end for
@@ -754,7 +754,7 @@ pub unsafe extern "C" fn AAS_InvalidateEntities() {
             .entities
             .offset(i as isize))
         .i
-        .valid = crate::src::qcommon::q_shared::qfalse as i32;
+        .valid = qfalse as i32;
         (*crate::src::botlib::be_aas_main::aasworld
             .entities
             .offset(i as isize))
@@ -775,22 +775,22 @@ pub unsafe extern "C" fn AAS_InvalidateEntities() {
 
 pub unsafe extern "C" fn AAS_UnlinkInvalidEntities() {
     let mut i: i32 = 0;
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.maxentities {
         ent = &mut *crate::src::botlib::be_aas_main::aasworld
             .entities
-            .offset(i as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+            .offset(i as isize) as *mut aas_entity_t;
         if (*ent).i.valid == 0 {
             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
-                (*ent).areas as *mut crate::be_aas_def_h::aas_link_s,
+                (*ent).areas as *mut aas_link_s,
             );
-            (*ent).areas = 0 as *mut crate::be_aas_def_h::aas_link_t;
+            (*ent).areas = 0 as *mut aas_link_t;
             crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves(
-                (*ent).leaves as *mut crate::be_aas_def_h::bsp_link_s,
+                (*ent).leaves as *mut bsp_link_s,
             );
-            (*ent).leaves = 0 as *mut crate::be_aas_def_h::bsp_link_t
+            (*ent).leaves = 0 as *mut bsp_link_t
         }
         i += 1
         //end for
@@ -807,23 +807,23 @@ pub unsafe extern "C" fn AAS_UnlinkInvalidEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_NearestEntity(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut modelindex: i32,
 ) -> i32 {
     let mut i: i32 = 0; //end for
     let mut bestentnum: i32 = 0;
     let mut dist: f32 = 0.;
     let mut bestdist: f32 = 0.;
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
+    let mut dir: vec3_t = [0.; 3];
     bestentnum = 0 as i32;
     bestdist = 99999 as i32 as f32;
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.maxentities {
         ent = &mut *crate::src::botlib::be_aas_main::aasworld
             .entities
-            .offset(i as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+            .offset(i as isize) as *mut aas_entity_t;
         if !((*ent).i.modelindex != modelindex) {
             dir[0 as i32 as usize] =
                 (*ent).i.origin[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
@@ -834,7 +834,7 @@ pub unsafe extern "C" fn AAS_NearestEntity(
             if crate::stdlib::fabsf(dir[0 as i32 as usize]) < 40 as i32 as f32 {
                 if crate::stdlib::fabsf(dir[1 as i32 as usize]) < 40 as i32 as f32 {
                     dist = VectorLength(
-                        dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                        dir.as_mut_ptr() as *const vec_t
                     );
                     if dist < bestdist {
                         bestdist = dist;
@@ -860,13 +860,13 @@ pub unsafe extern "C" fn AAS_NearestEntity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BestReachableEntityArea(mut entnum: i32) -> i32 {
-    let mut ent: *mut crate::be_aas_def_h::aas_entity_t =
-        0 as *mut crate::be_aas_def_h::aas_entity_t;
+    let mut ent: *mut aas_entity_t =
+        0 as *mut aas_entity_t;
     ent = &mut *crate::src::botlib::be_aas_main::aasworld
         .entities
-        .offset(entnum as isize) as *mut crate::be_aas_def_h::aas_entity_t;
+        .offset(entnum as isize) as *mut aas_entity_t;
     return crate::src::botlib::be_aas_reach::AAS_BestReachableLinkArea(
-        (*ent).areas as *mut crate::be_aas_def_h::aas_link_s,
+        (*ent).areas as *mut aas_link_s,
     );
 }
 //end of the function AAS_BestReachableEntityArea

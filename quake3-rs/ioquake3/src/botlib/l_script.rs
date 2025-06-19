@@ -1425,17 +1425,17 @@ pub unsafe extern "C" fn PS_ReadNumber(
     } else {
         //BINARYNUMBERS
         //decimal or octal integer or floating point number
-        octal = crate::src::qcommon::q_shared::qfalse as i32; //end while
-        dot = crate::src::qcommon::q_shared::qfalse as i32; //end for
+        octal = qfalse as i32; //end while
+        dot = qfalse as i32; //end for
         if *(*script).script_p as i32 == '0' as i32 {
-            octal = crate::src::qcommon::q_shared::qtrue as i32
+            octal = qtrue as i32
         }
         loop {
             c = *(*script).script_p;
             if c as i32 == '.' as i32 {
-                dot = crate::src::qcommon::q_shared::qtrue as i32
+                dot = qtrue as i32
             } else if c as i32 == '8' as i32 || c as i32 == '9' as i32 {
-                octal = crate::src::qcommon::q_shared::qfalse as i32
+                octal = qfalse as i32
             } else if (c as i32) < '0' as i32 || c as i32 > '9' as i32 {
                 break;
             }
@@ -1594,7 +1594,7 @@ pub unsafe extern "C" fn PS_ReadPunctuation(
             //if the script contains at least as much characters as the punctuation
             //if the script contains the punctuation
             if crate::stdlib::strncmp((*script).script_p, p, len as libc::c_ulong) == 0 {
-                crate::src::qcommon::q_shared::Q_strncpyz(
+                Q_strncpyz(
                     (*token).string.as_mut_ptr(),
                     p,
                     1024 as i32,
@@ -1791,7 +1791,7 @@ pub unsafe extern "C" fn PS_ExpectTokenString(
         ); //end if
         return 0 as i32;
     }
-    if ::libc::strcmp(token.string.as_mut_ptr(), string) != 0 {
+    if libc::strcmp(token.string.as_mut_ptr(), string) != 0 {
         ScriptError(
             script,
             b"expected %s, found %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1828,36 +1828,36 @@ pub unsafe extern "C" fn PS_ExpectTokenType(
         return 0 as i32;
     } //end else if
     if (*token).type_0 != type_0 {
-        ::libc::strcpy(
+        libc::strcpy(
             str.as_mut_ptr(),
             b"\x00" as *const u8 as *const libc::c_char,
         );
         if type_0 == 1 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"string\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 2 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"literal\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 3 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"number\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 4 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"name\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 5 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"punctuation\x00" as *const u8 as *const libc::c_char,
             );
@@ -1872,54 +1872,54 @@ pub unsafe extern "C" fn PS_ExpectTokenType(
     }
     if (*token).type_0 == 3 as i32 {
         if (*token).subtype & subtype != subtype {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"\x00" as *const u8 as *const libc::c_char,
             );
             if subtype & 0x8 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"decimal\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x100 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"hex\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x200 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"octal\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x400 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"binary\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x2000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" long\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x4000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" unsigned\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x800 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" float\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x1000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" integer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -2013,7 +2013,7 @@ pub unsafe extern "C" fn PS_CheckTokenString(
         return 0 as i32;
     }
     //if the token is available
-    if ::libc::strcmp(tok.string.as_mut_ptr(), string) == 0 {
+    if libc::strcmp(tok.string.as_mut_ptr(), string) == 0 {
         return 1 as i32;
     }
     //token not available
@@ -2091,7 +2091,7 @@ pub unsafe extern "C" fn PS_SkipUntilString(
         next: 0 as *mut crate::src::botlib::l_script::token_s,
     }; //end while
     while PS_ReadToken(script, &mut token) != 0 {
-        if ::libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
+        if libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
             return 1 as i32;
         }
     }
@@ -2241,7 +2241,7 @@ pub unsafe extern "C" fn ReadSignedFloat(
     };
     let mut sign: f32 = 1.0f64 as f32;
     PS_ExpectAnyToken(script, &mut token);
-    if ::libc::strcmp(
+    if libc::strcmp(
         token.string.as_mut_ptr(),
         b"-\x00" as *const u8 as *const libc::c_char,
     ) == 0
@@ -2293,7 +2293,7 @@ pub unsafe extern "C" fn ReadSignedInt(
     };
     let mut sign: isize = 1 as i32 as isize;
     PS_ExpectAnyToken(script, &mut token);
-    if ::libc::strcmp(
+    if libc::strcmp(
         token.string.as_mut_ptr(),
         b"-\x00" as *const u8 as *const libc::c_char,
     ) == 0
@@ -2454,14 +2454,14 @@ pub unsafe extern "C" fn ScriptSkipTo(
 pub unsafe extern "C" fn LoadScriptFile(
     mut filename: *const libc::c_char,
 ) -> *mut crate::src::botlib::l_script::script_t {
-    let mut fp: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut fp: fileHandle_t = 0;
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut length: i32 = 0;
     let mut buffer: *mut libc::c_void = 0 as *mut libc::c_void;
     let mut script: *mut crate::src::botlib::l_script::script_t =
         0 as *mut crate::src::botlib::l_script::script_t;
     if crate::stdlib::strlen(basefolder.as_mut_ptr()) != 0 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             pathname.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
@@ -2469,7 +2469,7 @@ pub unsafe extern "C" fn LoadScriptFile(
             filename,
         );
     } else {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             pathname.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
@@ -2481,7 +2481,7 @@ pub unsafe extern "C" fn LoadScriptFile(
         .expect("non-null function pointer")(
         pathname.as_mut_ptr(),
         &mut fp,
-        crate::src::qcommon::q_shared::FS_READ,
+        FS_READ,
     );
     if fp == 0 {
         return 0 as *mut crate::src::botlib::l_script::script_t;
@@ -2497,7 +2497,7 @@ pub unsafe extern "C" fn LoadScriptFile(
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*script).filename.as_mut_ptr(),
         filename,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -2561,7 +2561,7 @@ pub unsafe extern "C" fn LoadScriptMemory(
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*script).filename.as_mut_ptr(),
         name,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -2624,7 +2624,7 @@ pub unsafe extern "C" fn FreeScript(mut script: *mut crate::src::botlib::l_scrip
 #[no_mangle]
 
 pub unsafe extern "C" fn PS_SetBaseFolder(mut path: *mut libc::c_char) {
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         basefolder.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,

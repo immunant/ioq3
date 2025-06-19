@@ -94,9 +94,9 @@ static mut delay_matrix_dec: [[i8; 5]; 3] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_resampler_init(
-    mut S: *mut crate::resampler_structs_h::silk_resampler_state_struct,
-    mut Fs_Hz_in: crate::opus_types_h::opus_int32,
-    mut Fs_Hz_out: crate::opus_types_h::opus_int32,
+    mut S: *mut silk_resampler_state_struct,
+    mut Fs_Hz_in: opus_int32,
+    mut Fs_Hz_out: opus_int32,
     mut forEnc: i32,
 ) -> i32
 /* I    If 1: encoder; if 0: decoder                                */ {
@@ -105,7 +105,7 @@ pub unsafe extern "C" fn silk_resampler_init(
     crate::stdlib::memset(
         S as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
+        ::std::mem::size_of::<silk_resampler_state_struct>()
             as libc::c_ulong,
     );
     /* Input checking */
@@ -209,15 +209,15 @@ pub unsafe extern "C" fn silk_resampler_init(
         (*S).resampler_function = 0 as i32
     }
     /* Ratio of input/output samples */
-    (*S).invRatio_Q16 = (((((Fs_Hz_in as crate::opus_types_h::opus_uint32) << 14 as i32 + up2x)
-        as crate::opus_types_h::opus_int32
-        / Fs_Hz_out) as crate::opus_types_h::opus_uint32)
-        << 2 as i32) as crate::opus_types_h::opus_int32;
+    (*S).invRatio_Q16 = (((((Fs_Hz_in as opus_uint32) << 14 as i32 + up2x)
+        as opus_int32
+        / Fs_Hz_out) as opus_uint32)
+        << 2 as i32) as opus_int32;
     /* Make sure the ratio is rounded up */
     while (((*S).invRatio_Q16 as i64 * Fs_Hz_out as i64 >> 16 as i32)
-        as crate::opus_types_h::opus_int32)
-        < ((Fs_Hz_in as crate::opus_types_h::opus_uint32) << up2x)
-            as crate::opus_types_h::opus_int32
+        as opus_int32)
+        < ((Fs_Hz_in as opus_uint32) << up2x)
+            as opus_int32
     {
         (*S).invRatio_Q16 += 1
     }
@@ -271,10 +271,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_resampler(
-    mut S: *mut crate::resampler_structs_h::silk_resampler_state_struct,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut inLen: crate::opus_types_h::opus_int32,
+    mut S: *mut silk_resampler_state_struct,
+    mut out: *mut opus_int16,
+    mut in_0: *const opus_int16,
+    mut inLen: opus_int32,
 ) -> i32
 /* I    Number of input samples                                     */ {
     let mut nSamples: i32 = 0;
@@ -282,10 +282,10 @@ pub unsafe extern "C" fn silk_resampler(
     nSamples = (*S).Fs_in_kHz - (*S).inputDelay;
     /* Copy to delay buffer */
     crate::stdlib::memcpy(&mut *(*S).delayBuf.as_mut_ptr().offset((*S).inputDelay as isize)
-               as *mut crate::opus_types_h::opus_int16 as *mut libc::c_void,
+               as *mut opus_int16 as *mut libc::c_void,
            in_0 as *const libc::c_void,
            (nSamples as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
     match (*S).resampler_function {
         1 => {
@@ -304,7 +304,7 @@ pub unsafe extern "C" fn silk_resampler(
             crate::src::opus_1_2_1::silk::resampler_private_IIR_FIR::silk_resampler_private_IIR_FIR(
                 S as *mut libc::c_void,
                 out,
-                (*S).delayBuf.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
+                (*S).delayBuf.as_mut_ptr() as *const opus_int16,
                 (*S).Fs_in_kHz,
             );
             crate::src::opus_1_2_1::silk::resampler_private_IIR_FIR::silk_resampler_private_IIR_FIR(
@@ -317,7 +317,7 @@ pub unsafe extern "C" fn silk_resampler(
         3 => {
             crate::src::opus_1_2_1::silk::resampler_private_down_FIR::silk_resampler_private_down_FIR(S as *mut libc::c_void, out,
                                             (*S).delayBuf.as_mut_ptr() as
-                                                *const crate::opus_types_h::opus_int16,
+                                                *const opus_int16,
                                             (*S).Fs_in_kHz);
             crate::src::opus_1_2_1::silk::resampler_private_down_FIR::silk_resampler_private_down_FIR(S as *mut libc::c_void,
                                             &mut *out.offset((*S).Fs_out_kHz
@@ -331,17 +331,17 @@ pub unsafe extern "C" fn silk_resampler(
                 (*S).delayBuf.as_mut_ptr() as *const libc::c_void,
                 ((*S).Fs_in_kHz as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_int16>() as libc::c_ulong
                     ),
             );
             crate::stdlib::memcpy(
-                &mut *out.offset((*S).Fs_out_kHz as isize) as *mut crate::opus_types_h::opus_int16
+                &mut *out.offset((*S).Fs_out_kHz as isize) as *mut opus_int16
                     as *mut libc::c_void,
-                &*in_0.offset(nSamples as isize) as *const crate::opus_types_h::opus_int16
+                &*in_0.offset(nSamples as isize) as *const opus_int16
                     as *const libc::c_void,
                 ((inLen - (*S).Fs_in_kHz) as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_int16>() as libc::c_ulong
                     ),
             );
         }
@@ -349,9 +349,9 @@ pub unsafe extern "C" fn silk_resampler(
     /* Copy to delay buffer */
     crate::stdlib::memcpy((*S).delayBuf.as_mut_ptr() as *mut libc::c_void,
            &*in_0.offset((inLen - (*S).inputDelay) as isize) as
-               *const crate::opus_types_h::opus_int16 as *const libc::c_void,
+               *const opus_int16 as *const libc::c_void,
            ((*S).inputDelay as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
     return 0 as i32;
 }

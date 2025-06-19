@@ -48,15 +48,15 @@ pub use crate::src::qcommon::q_shared::FS_SEEK_SET;
 // Q3 Ogg Opus codec
 #[no_mangle]
 
-pub static mut opus_codec: crate::src::client::snd_codec::snd_codec_t = {
+pub static mut opus_codec: snd_codec_t = {
     {
-        let mut init = crate::src::client::snd_codec::snd_codec_s {
+        let mut init = snd_codec_s {
             ext: b"opus\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             load: Some(
                 S_OggOpus_CodecLoad
                     as unsafe extern "C" fn(
                         _: *const libc::c_char,
-                        _: *mut crate::src::client::snd_codec::snd_info_t,
+                        _: *mut snd_info_t,
                     ) -> *mut libc::c_void,
             ),
             open: Some(
@@ -64,12 +64,12 @@ pub static mut opus_codec: crate::src::client::snd_codec::snd_codec_t = {
                     as unsafe extern "C" fn(
                         _: *const libc::c_char,
                     )
-                        -> *mut crate::src::client::snd_codec::snd_stream_t,
+                        -> *mut snd_stream_t,
             ),
             read: Some(
                 S_OggOpus_CodecReadStream
                     as unsafe extern "C" fn(
-                        _: *mut crate::src::client::snd_codec::snd_stream_t,
+                        _: *mut snd_stream_t,
                         _: i32,
                         _: *mut libc::c_void,
                     ) -> i32,
@@ -77,11 +77,11 @@ pub static mut opus_codec: crate::src::client::snd_codec::snd_codec_t = {
             close: Some(
                 S_OggOpus_CodecCloseStream
                     as unsafe extern "C" fn(
-                        _: *mut crate::src::client::snd_codec::snd_stream_t,
+                        _: *mut snd_stream_t,
                     ) -> (),
             ),
-            next: 0 as *const crate::src::client::snd_codec::snd_codec_t
-                as *mut crate::src::client::snd_codec::snd_codec_t,
+            next: 0 as *const snd_codec_t
+                as *mut snd_codec_t,
         };
         init
     }
@@ -95,29 +95,29 @@ pub unsafe extern "C" fn S_OggOpus_Callback_read(
     mut ptr: *mut u8,
     mut size: i32,
 ) -> i32 {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    let mut stream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
     let mut bytesRead: i32 = 0 as i32;
     // check if input is valid
     if ptr.is_null() {
-        *::libc::__errno_location() = 14 as i32;
+        *libc::__errno_location() = 14 as i32;
         return -(1 as i32);
     }
     if size == 0 {
         // It's not an error, caller just wants zero bytes!
-        *::libc::__errno_location() = 0 as i32;
+        *libc::__errno_location() = 0 as i32;
         return 0 as i32;
     }
     if size < 0 as i32 {
-        *::libc::__errno_location() = 22 as i32;
+        *libc::__errno_location() = 22 as i32;
         return -(1 as i32);
     }
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as i32;
+        *libc::__errno_location() = 9 as i32;
         return -(1 as i32);
     }
     // we use a snd_stream_t in the generic pointer to pass around
-    stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
+    stream = datasource as *mut snd_stream_t;
     // read it with the Q3 function FS_Read()
     bytesRead = crate::src::qcommon::files::FS_Read(ptr as *mut libc::c_void, size, (*stream).file);
     // update the file position
@@ -132,16 +132,16 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
     mut offset: i64,
     mut whence: i32,
 ) -> i32 {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    let mut stream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
     let mut retVal: i32 = 0 as i32;
     // check if input is valid
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as i32;
+        *libc::__errno_location() = 9 as i32;
         return -(1 as i32);
     }
     // snd_stream_t in the generic pointer
-    stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
+    stream = datasource as *mut snd_stream_t;
     // we must map the whence to its Q3 counterpart
     match whence {
         0 => {
@@ -149,7 +149,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as isize,
-                crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
+                FS_SEEK_SET as i32,
             );
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
@@ -163,7 +163,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as isize,
-                crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
+                FS_SEEK_CUR as i32,
             );
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
@@ -177,7 +177,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
                 offset as isize,
-                crate::src::qcommon::q_shared::FS_SEEK_END as i32,
+                FS_SEEK_END as i32,
             );
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
@@ -188,7 +188,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
         }
         _ => {
             // unknown whence, so we return an error
-            *::libc::__errno_location() = 22 as i32;
+            *libc::__errno_location() = 22 as i32;
             return -(1 as i32);
         }
     }
@@ -216,22 +216,22 @@ pub unsafe extern "C" fn S_OggOpus_Callback_close(mut _datasource: *mut libc::c_
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_Callback_tell(mut datasource: *mut libc::c_void) -> i64 {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    let mut stream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
     // check if input is valid
     if datasource.is_null() {
-        *::libc::__errno_location() = 9 as i32;
+        *libc::__errno_location() = 9 as i32;
         return -(1 as i32) as i64;
     }
     // snd_stream_t in the generic pointer
-    stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
+    stream = datasource as *mut snd_stream_t;
     return crate::src::qcommon::files::FS_FTell((*stream).file) as i64;
 }
 // the callback structure
 #[no_mangle]
 
-pub static mut S_OggOpus_Callbacks: crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks = {
-    let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
+pub static mut S_OggOpus_Callbacks: OpusFileCallbacks = {
+    let mut init = OpusFileCallbacks {
         read: Some(
             S_OggOpus_Callback_read
                 as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut u8, _: i32) -> i32,
@@ -254,84 +254,84 @@ S_OggOpus_CodecOpenStream
 
 pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
     mut filename: *const libc::c_char,
-) -> *mut crate::src::client::snd_codec::snd_stream_t {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
+) -> *mut snd_stream_t {
+    let mut stream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
     // Opus codec control structure
-    let mut of: *mut crate::internal_h::OggOpusFile = 0 as *mut crate::internal_h::OggOpusFile;
+    let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
     // some variables used to get informations about the file
-    let mut opusInfo: *const crate::src::opusfile_0_9::src::opusfile::OpusHead =
-        0 as *const crate::src::opusfile_0_9::src::opusfile::OpusHead;
-    let mut numSamples: crate::config_types_h::ogg_int64_t = 0;
+    let mut opusInfo: *const OpusHead =
+        0 as *const OpusHead;
+    let mut numSamples: ogg_int64_t = 0;
     // check if input is valid
     if filename.is_null() {
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     // Open the stream
-    stream = crate::src::client::snd_codec::S_CodecUtilOpen(
+    stream = S_CodecUtilOpen(
         filename,
-        &mut opus_codec as *mut _ as *mut crate::src::client::snd_codec::snd_codec_s,
-    ) as *mut crate::src::client::snd_codec::snd_stream_s;
+        &mut opus_codec as *mut _ as *mut snd_codec_s,
+    ) as *mut snd_stream_s;
     if stream.is_null() {
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     // open the codec with our callbacks and stream as the generic pointer
-    of = crate::src::opusfile_0_9::src::opusfile::op_open_callbacks(
+    of = op_open_callbacks(
         stream as *mut libc::c_void,
         &S_OggOpus_Callbacks as *const _
-            as *const crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks,
+            as *const OpusFileCallbacks,
         0 as *const u8,
-        0 as i32 as crate::stddef_h::size_t,
+        0 as i32 as size_t,
         0 as *mut i32,
     );
     if of.is_null() {
-        crate::src::client::snd_codec::S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+        S_CodecUtilClose(
+            &mut stream as *mut _ as *mut *mut snd_stream_s,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     // the stream must be seekable
-    if crate::src::opusfile_0_9::src::opusfile::op_seekable(of) == 0 {
-        crate::src::opusfile_0_9::src::opusfile::op_free(of);
-        crate::src::client::snd_codec::S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+    if op_seekable(of) == 0 {
+        op_free(of);
+        S_CodecUtilClose(
+            &mut stream as *mut _ as *mut *mut snd_stream_s,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     // get the info about channels and rate
-    opusInfo = crate::src::opusfile_0_9::src::opusfile::op_head(of, -(1 as i32))
-        as *const crate::src::opusfile_0_9::src::opusfile::OpusHead;
+    opusInfo = op_head(of, -(1 as i32))
+        as *const OpusHead;
     if opusInfo.is_null() {
-        crate::src::opusfile_0_9::src::opusfile::op_free(of);
-        crate::src::client::snd_codec::S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+        op_free(of);
+        S_CodecUtilClose(
+            &mut stream as *mut _ as *mut *mut snd_stream_s,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     if (*opusInfo).stream_count != 1 as i32 {
-        crate::src::opusfile_0_9::src::opusfile::op_free(of);
-        crate::src::client::snd_codec::S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+        op_free(of);
+        S_CodecUtilClose(
+            &mut stream as *mut _ as *mut *mut snd_stream_s,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Only Ogg Opus files with one stream are support\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     if (*opusInfo).channel_count != 1 as i32 && (*opusInfo).channel_count != 2 as i32 {
-        crate::src::opusfile_0_9::src::opusfile::op_free(of);
-        crate::src::client::snd_codec::S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+        op_free(of);
+        S_CodecUtilClose(
+            &mut stream as *mut _ as *mut *mut snd_stream_s,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Only mono and stereo Ogg Opus files are supported\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+        return 0 as *mut snd_stream_t;
     }
     // get the number of sample-frames in the file
-    numSamples = crate::src::opusfile_0_9::src::opusfile::op_pcm_total(of, -(1 as i32));
+    numSamples = op_pcm_total(of, -(1 as i32));
     // fill in the info-structure in the stream
     (*stream).info.rate = 48000 as i32;
     (*stream).info.width = 2 as i32;
@@ -353,19 +353,19 @@ S_OggOpus_CodecCloseStream
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_CodecCloseStream(
-    mut stream: *mut crate::src::client::snd_codec::snd_stream_t,
+    mut stream: *mut snd_stream_t,
 ) {
     // check if input is valid
     if stream.is_null() {
         return;
     }
     // let the opus codec cleanup its stuff
-    crate::src::opusfile_0_9::src::opusfile::op_free(
-        (*stream).ptr as *mut crate::internal_h::OggOpusFile,
+    op_free(
+        (*stream).ptr as *mut OggOpusFile,
     );
     // close the stream
-    crate::src::client::snd_codec::S_CodecUtilClose(
-        &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,
+    S_CodecUtilClose(
+        &mut stream as *mut _ as *mut *mut snd_stream_s,
     );
 }
 /*
@@ -376,7 +376,7 @@ S_OggOpus_CodecReadStream
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_CodecReadStream(
-    mut stream: *mut crate::src::client::snd_codec::snd_stream_t,
+    mut stream: *mut snd_stream_t,
     mut bytes: i32,
     mut buffer: *mut libc::c_void,
 ) -> i32 {
@@ -384,8 +384,8 @@ pub unsafe extern "C" fn S_OggOpus_CodecReadStream(
     let mut samplesRead: i32 = 0;
     let mut samplesLeft: i32 = 0;
     let mut c: i32 = 0;
-    let mut bufPtr: *mut crate::opus_types_h::opus_int16 =
-        0 as *mut crate::opus_types_h::opus_int16;
+    let mut bufPtr: *mut opus_int16 =
+        0 as *mut opus_int16;
     // check if input is valid
     if !(!stream.is_null() && !buffer.is_null()) {
         return 0 as i32;
@@ -395,15 +395,15 @@ pub unsafe extern "C" fn S_OggOpus_CodecReadStream(
     }
     samplesRead = 0 as i32;
     samplesLeft = bytes / (*stream).info.channels / (*stream).info.width;
-    bufPtr = buffer as *mut crate::opus_types_h::opus_int16;
+    bufPtr = buffer as *mut opus_int16;
     if samplesLeft <= 0 as i32 {
         return 0 as i32;
     }
     // cycle until we have the requested or all available bytes read
     while -(1 as i32) != 0 {
         // read some samples from the opus codec
-        c = crate::src::opusfile_0_9::src::opusfile::op_read(
-            (*stream).ptr as *mut crate::internal_h::OggOpusFile,
+        c = op_read(
+            (*stream).ptr as *mut OggOpusFile,
             bufPtr.offset((samplesRead * (*stream).info.channels) as isize),
             samplesLeft * (*stream).info.channels,
             0 as *mut i32,
@@ -435,12 +435,12 @@ where we read the whole stream at once.
 
 pub unsafe extern "C" fn S_OggOpus_CodecLoad(
     mut filename: *const libc::c_char,
-    mut info: *mut crate::src::client::snd_codec::snd_info_t,
+    mut info: *mut snd_info_t,
 ) -> *mut libc::c_void {
-    let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
-    let mut buffer: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut stream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
+    let mut buffer: *mut byte =
+        0 as *mut byte;
     let mut bytesRead: i32 = 0;
     // check if input is valid
     if !(!filename.is_null() && !info.is_null()) {
@@ -461,7 +461,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecLoad(
     // allocate a buffer
     // this buffer must be free-ed by the caller of this function
     buffer = crate::src::qcommon::common::Hunk_AllocateTempMemory((*info).size)
-        as *mut crate::src::qcommon::q_shared::byte;
+        as *mut byte;
     if buffer.is_null() {
         S_OggOpus_CodecCloseStream(stream);
         return 0 as *mut libc::c_void;

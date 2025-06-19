@@ -173,8 +173,8 @@ pub use crate::tr_types_h::TC_S3TC_ARB;
 //
 //  wins/losses are drawn on bot icon now
 
-static mut localClient: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut localClient: qboolean =
+    qfalse;
 // true if local client has been displayed
 /*
 =================
@@ -184,131 +184,131 @@ CG_DrawScoreboard
 
 unsafe extern "C" fn CG_DrawClientScore(
     mut y: i32,
-    mut score: *mut crate::cg_local_h::score_t,
+    mut score: *mut score_t,
     mut color: *mut f32,
     mut fade: f32,
-    mut largeFormat: crate::src::qcommon::q_shared::qboolean,
+    mut largeFormat: qboolean,
 ) {
     let mut string: [libc::c_char; 1024] = [0; 1024];
-    let mut headAngles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut headAngles: vec3_t = [0.; 3];
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut iconx: i32 = 0;
     let mut headx: i32 = 0;
-    if (*score).client < 0 as i32 || (*score).client >= crate::src::cgame::cg_main::cgs.maxclients {
-        crate::src::cgame::cg_main::Com_Printf(
+    if (*score).client < 0 as i32 || (*score).client >= cgs.maxclients {
+        Com_Printf(
             b"Bad score->client: %i\n\x00" as *const u8 as *const libc::c_char,
             (*score).client,
         );
         return;
     }
-    ci = &mut *crate::src::cgame::cg_main::cgs
+    ci = &mut *cgs
         .clientinfo
         .as_mut_ptr()
-        .offset((*score).client as isize) as *mut crate::cg_local_h::clientInfo_t;
+        .offset((*score).client as isize) as *mut clientInfo_t;
     iconx = 0 as i32 + 32 as i32 + 6 as i32 * 16 as i32 / 2 as i32;
     headx = 0 as i32 + 64 as i32 + 6 as i32 * 16 as i32 / 2 as i32;
     // draw the handicap or bot skill marker (unless player has flag)
-    if (*ci).powerups & (1 as i32) << crate::bg_public_h::PW_NEUTRALFLAG as i32 != 0 {
+    if (*ci).powerups & (1 as i32) << PW_NEUTRALFLAG as i32 != 0 {
         if largeFormat as u64 != 0 {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 (y - (32 as i32 - 16 as i32) / 2 as i32) as f32,
                 32 as i32 as f32,
                 32 as i32 as f32,
-                crate::bg_public_h::TEAM_FREE as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_FREE as i32,
+                qfalse,
             );
         } else {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 y as f32,
                 16 as i32 as f32,
                 16 as i32 as f32,
-                crate::bg_public_h::TEAM_FREE as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_FREE as i32,
+                qfalse,
             );
         }
-    } else if (*ci).powerups & (1 as i32) << crate::bg_public_h::PW_REDFLAG as i32 != 0 {
+    } else if (*ci).powerups & (1 as i32) << PW_REDFLAG as i32 != 0 {
         if largeFormat as u64 != 0 {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 (y - (32 as i32 - 16 as i32) / 2 as i32) as f32,
                 32 as i32 as f32,
                 32 as i32 as f32,
-                crate::bg_public_h::TEAM_RED as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_RED as i32,
+                qfalse,
             );
         } else {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 y as f32,
                 16 as i32 as f32,
                 16 as i32 as f32,
-                crate::bg_public_h::TEAM_RED as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_RED as i32,
+                qfalse,
             );
         }
-    } else if (*ci).powerups & (1 as i32) << crate::bg_public_h::PW_BLUEFLAG as i32 != 0 {
+    } else if (*ci).powerups & (1 as i32) << PW_BLUEFLAG as i32 != 0 {
         if largeFormat as u64 != 0 {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 (y - (32 as i32 - 16 as i32) / 2 as i32) as f32,
                 32 as i32 as f32,
                 32 as i32 as f32,
-                crate::bg_public_h::TEAM_BLUE as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_BLUE as i32,
+                qfalse,
             );
         } else {
-            crate::src::cgame::cg_draw::CG_DrawFlagModel(
+            CG_DrawFlagModel(
                 iconx as f32,
                 y as f32,
                 16 as i32 as f32,
                 16 as i32 as f32,
-                crate::bg_public_h::TEAM_BLUE as i32,
-                crate::src::qcommon::q_shared::qfalse,
+                TEAM_BLUE as i32,
+                qfalse,
             );
         }
     } else {
         if (*ci).botSkill > 0 as i32 && (*ci).botSkill <= 5 as i32 {
-            if crate::src::cgame::cg_main::cg_drawIcons.integer != 0 {
+            if cg_drawIcons.integer != 0 {
                 if largeFormat as u64 != 0 {
-                    crate::src::cgame::cg_drawtools::CG_DrawPic(
+                    CG_DrawPic(
                         iconx as f32,
                         (y - (32 as i32 - 16 as i32) / 2 as i32) as f32,
                         32 as i32 as f32,
                         32 as i32 as f32,
-                        crate::src::cgame::cg_main::cgs.media.botSkillShaders
+                        cgs.media.botSkillShaders
                             [((*ci).botSkill - 1 as i32) as usize],
                     );
                 } else {
-                    crate::src::cgame::cg_drawtools::CG_DrawPic(
+                    CG_DrawPic(
                         iconx as f32,
                         y as f32,
                         16 as i32 as f32,
                         16 as i32 as f32,
-                        crate::src::cgame::cg_main::cgs.media.botSkillShaders
+                        cgs.media.botSkillShaders
                             [((*ci).botSkill - 1 as i32) as usize],
                     );
                 }
             }
         } else if (*ci).handicap < 100 as i32 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 string.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 (*ci).handicap,
             );
-            if crate::src::cgame::cg_main::cgs.gametype as u32
-                == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
+            if cgs.gametype as u32
+                == GT_TOURNAMENT as i32 as u32
             {
-                crate::src::cgame::cg_drawtools::CG_DrawSmallStringColor(
+                CG_DrawSmallStringColor(
                     iconx,
                     y - 16 as i32 / 2 as i32,
                     string.as_mut_ptr(),
                     color,
                 );
             } else {
-                crate::src::cgame::cg_drawtools::CG_DrawSmallStringColor(
+                CG_DrawSmallStringColor(
                     iconx,
                     y,
                     string.as_mut_ptr(),
@@ -317,10 +317,10 @@ unsafe extern "C" fn CG_DrawClientScore(
             }
         }
         // draw the wins / losses
-        if crate::src::cgame::cg_main::cgs.gametype as u32
-            == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
+        if cgs.gametype as u32
+            == GT_TOURNAMENT as i32 as u32
         {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 string.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 b"%i/%i\x00" as *const u8 as *const libc::c_char,
@@ -328,14 +328,14 @@ unsafe extern "C" fn CG_DrawClientScore(
                 (*ci).losses,
             );
             if (*ci).handicap < 100 as i32 && (*ci).botSkill == 0 {
-                crate::src::cgame::cg_drawtools::CG_DrawSmallStringColor(
+                CG_DrawSmallStringColor(
                     iconx,
                     y + 16 as i32 / 2 as i32,
                     string.as_mut_ptr(),
                     color,
                 );
             } else {
-                crate::src::cgame::cg_drawtools::CG_DrawSmallStringColor(
+                CG_DrawSmallStringColor(
                     iconx,
                     y,
                     string.as_mut_ptr(),
@@ -345,12 +345,12 @@ unsafe extern "C" fn CG_DrawClientScore(
         }
     }
     // draw the face
-    headAngles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    headAngles[2 as i32 as usize] = 0 as i32 as vec_t;
     headAngles[1 as i32 as usize] = headAngles[2 as i32 as usize];
     headAngles[0 as i32 as usize] = headAngles[1 as i32 as usize];
-    headAngles[1 as i32 as usize] = 180 as i32 as crate::src::qcommon::q_shared::vec_t;
+    headAngles[1 as i32 as usize] = 180 as i32 as vec_t;
     if largeFormat as u64 != 0 {
-        crate::src::cgame::cg_draw::CG_DrawHead(
+        CG_DrawHead(
             headx as f32,
             (y - (48 as i32 - 16 as i32) / 2 as i32) as f32,
             48 as i32 as f32,
@@ -359,7 +359,7 @@ unsafe extern "C" fn CG_DrawClientScore(
             headAngles.as_mut_ptr(),
         );
     } else {
-        crate::src::cgame::cg_draw::CG_DrawHead(
+        CG_DrawHead(
             headx as f32,
             y as f32,
             16 as i32 as f32,
@@ -370,14 +370,14 @@ unsafe extern "C" fn CG_DrawClientScore(
     }
     // draw the score line
     if (*score).ping == -(1 as i32) {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             string.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b" connecting    %s\x00" as *const u8 as *const libc::c_char,
             (*ci).name.as_mut_ptr(),
         );
-    } else if (*ci).team as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    } else if (*ci).team as u32 == TEAM_SPECTATOR as i32 as u32 {
+        Com_sprintf(
             string.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b" SPECT %3i %4i %s\x00" as *const u8 as *const libc::c_char,
@@ -386,7 +386,7 @@ unsafe extern "C" fn CG_DrawClientScore(
             (*ci).name.as_mut_ptr(),
         );
     } else {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             string.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b"%5i %4i %4i %s\x00" as *const u8 as *const libc::c_char,
@@ -397,20 +397,20 @@ unsafe extern "C" fn CG_DrawClientScore(
         );
     }
     // highlight your position
-    if (*score).client == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+    if (*score).client == (*cg.snap).ps.clientNum {
         let mut hcolor: [f32; 4] = [0.; 4];
         let mut rank: i32 = 0;
-        localClient = crate::src::qcommon::q_shared::qtrue;
-        if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-            == crate::bg_public_h::TEAM_SPECTATOR as i32
-            || crate::src::cgame::cg_main::cgs.gametype as u32
-                >= crate::bg_public_h::GT_TEAM as i32 as u32
+        localClient = qtrue;
+        if (*cg.snap).ps.persistant
+            [PERS_TEAM as i32 as usize]
+            == TEAM_SPECTATOR as i32
+            || cgs.gametype as u32
+                >= GT_TEAM as i32 as u32
         {
             rank = -(1 as i32)
         } else {
-            rank = (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                [crate::bg_public_h::PERS_RANK as i32 as usize]
+            rank = (*cg.snap).ps.persistant
+                [PERS_RANK as i32 as usize]
                 & !(0x4000 as i32)
         }
         if rank == 0 as i32 {
@@ -431,7 +431,7 @@ unsafe extern "C" fn CG_DrawClientScore(
             hcolor[2 as i32 as usize] = 0.7f32
         }
         hcolor[3 as i32 as usize] = (fade as f64 * 0.7f64) as f32;
-        crate::src::cgame::cg_drawtools::CG_FillRect(
+        CG_FillRect(
             (112 as i32 + 16 as i32 + 6 as i32 * 16 as i32 / 2 as i32) as f32,
             y as f32,
             (640 as i32 - 112 as i32 - 16 as i32) as f32,
@@ -439,19 +439,19 @@ unsafe extern "C" fn CG_DrawClientScore(
             hcolor.as_mut_ptr(),
         );
     }
-    crate::src::cgame::cg_drawtools::CG_DrawBigString(
+    CG_DrawBigString(
         112 as i32 + 6 as i32 * 16 as i32 / 2 as i32,
         y,
         string.as_mut_ptr(),
         fade,
     );
     // add the "ready" marker for intermission exiting
-    if (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_CLIENTS_READY as i32 as usize]
+    if (*cg.snap).ps.stats
+        [STAT_CLIENTS_READY as i32 as usize]
         & (1 as i32) << (*score).client
         != 0
     {
-        crate::src::cgame::cg_drawtools::CG_DrawBigStringColor(
+        CG_DrawBigStringColor(
             iconx,
             y,
             b"READY\x00" as *const u8 as *const libc::c_char,
@@ -467,38 +467,38 @@ CG_TeamScoreboard
 
 unsafe extern "C" fn CG_TeamScoreboard(
     mut y: i32,
-    mut team: crate::bg_public_h::team_t,
+    mut team: team_t,
     mut fade: f32,
     mut maxClients: i32,
     mut lineHeight: i32,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut score: *mut crate::cg_local_h::score_t = 0 as *mut crate::cg_local_h::score_t;
+    let mut score: *mut score_t = 0 as *mut score_t;
     let mut color: [f32; 4] = [0.; 4];
     let mut count: i32 = 0;
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     color[2 as i32 as usize] = 1.0f64 as f32;
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
     color[3 as i32 as usize] = fade;
     count = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::cgame::cg_main::cg.numScores && count < maxClients {
-        score = &mut *crate::src::cgame::cg_main::cg
+    while i < cg.numScores && count < maxClients {
+        score = &mut *cg
             .scores
             .as_mut_ptr()
-            .offset(i as isize) as *mut crate::cg_local_h::score_t;
-        ci = &mut *crate::src::cgame::cg_main::cgs
+            .offset(i as isize) as *mut score_t;
+        ci = &mut *cgs
             .clientinfo
             .as_mut_ptr()
-            .offset((*score).client as isize) as *mut crate::cg_local_h::clientInfo_t;
+            .offset((*score).client as isize) as *mut clientInfo_t;
         if !(team as u32 != (*ci).team as u32) {
             CG_DrawClientScore(
                 y + lineHeight * count,
                 score,
                 color.as_mut_ptr(),
                 fade,
-                (lineHeight == 40 as i32) as i32 as crate::src::qcommon::q_shared::qboolean,
+                (lineHeight == 40 as i32) as i32 as qboolean,
             );
             count += 1
         }
@@ -515,7 +515,7 @@ Draw the normal in-game scoreboard
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut w: i32 = 0;
@@ -530,140 +530,140 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
     let mut topBorderSize: i32 = 0;
     let mut bottomBorderSize: i32 = 0;
     // don't draw amuthing if the menu or console is up
-    if crate::src::cgame::cg_main::cg_paused.integer != 0 {
-        crate::src::cgame::cg_main::cg.deferredPlayerLoading = 0 as i32;
-        return crate::src::qcommon::q_shared::qfalse;
+    if cg_paused.integer != 0 {
+        cg.deferredPlayerLoading = 0 as i32;
+        return qfalse;
     }
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as u32
-        && crate::src::cgame::cg_main::cg.predictedPlayerState.pm_type
-            == crate::bg_public_h::PM_INTERMISSION as i32
+    if cgs.gametype as u32
+        == GT_SINGLE_PLAYER as i32 as u32
+        && cg.predictedPlayerState.pm_type
+            == PM_INTERMISSION as i32
     {
-        crate::src::cgame::cg_main::cg.deferredPlayerLoading = 0 as i32;
-        return crate::src::qcommon::q_shared::qfalse;
+        cg.deferredPlayerLoading = 0 as i32;
+        return qfalse;
     }
     // don't draw scoreboard during death while warmup up
-    if crate::src::cgame::cg_main::cg.warmup != 0
-        && crate::src::cgame::cg_main::cg.showScores as u64 == 0
+    if cg.warmup != 0
+        && cg.showScores as u64 == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if crate::src::cgame::cg_main::cg.showScores as u32 != 0
-        || crate::src::cgame::cg_main::cg.predictedPlayerState.pm_type
-            == crate::bg_public_h::PM_DEAD as i32
-        || crate::src::cgame::cg_main::cg.predictedPlayerState.pm_type
-            == crate::bg_public_h::PM_INTERMISSION as i32
+    if cg.showScores as u32 != 0
+        || cg.predictedPlayerState.pm_type
+            == PM_DEAD as i32
+        || cg.predictedPlayerState.pm_type
+            == PM_INTERMISSION as i32
     {
         fade = 1.0f64 as f32;
-        fadeColor = crate::src::qcommon::q_math::colorWhite.as_mut_ptr()
+        fadeColor = colorWhite.as_mut_ptr()
     } else {
-        fadeColor = crate::src::cgame::cg_drawtools::CG_FadeColor(
-            crate::src::cgame::cg_main::cg.scoreFadeTime,
+        fadeColor = CG_FadeColor(
+            cg.scoreFadeTime,
             200 as i32,
         );
         if fadeColor.is_null() {
             // next time scoreboard comes up, don't print killer
-            crate::src::cgame::cg_main::cg.deferredPlayerLoading = 0 as i32;
-            crate::src::cgame::cg_main::cg.killerName[0 as i32 as usize] = 0 as i32 as libc::c_char;
-            return crate::src::qcommon::q_shared::qfalse;
+            cg.deferredPlayerLoading = 0 as i32;
+            cg.killerName[0 as i32 as usize] = 0 as i32 as libc::c_char;
+            return qfalse;
         }
         fade = *fadeColor
     }
     // fragged by ... line
-    if crate::src::cgame::cg_main::cg.killerName[0 as i32 as usize] != 0 {
-        s = crate::src::qcommon::q_shared::va(
+    if cg.killerName[0 as i32 as usize] != 0 {
+        s = va(
             b"Fragged by %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::cgame::cg_main::cg.killerName.as_mut_ptr(),
+            cg.killerName.as_mut_ptr(),
         );
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as i32;
+        w = CG_DrawStrlen(s) * 16 as i32;
         x = (640 as i32 - w) / 2 as i32;
         y = 40 as i32;
-        crate::src::cgame::cg_drawtools::CG_DrawBigString(x, y, s, fade);
+        CG_DrawBigString(x, y, s, fade);
     }
     // current rank
-    if (crate::src::cgame::cg_main::cgs.gametype as u32) < crate::bg_public_h::GT_TEAM as i32 as u32
+    if (cgs.gametype as u32) < GT_TEAM as i32 as u32
     {
-        if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-            != crate::bg_public_h::TEAM_SPECTATOR as i32
+        if (*cg.snap).ps.persistant
+            [PERS_TEAM as i32 as usize]
+            != TEAM_SPECTATOR as i32
         {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"%s place with %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::cgame::cg_event::CG_PlaceString(
-                    (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                CG_PlaceString(
+                    (*cg.snap).ps.persistant
+                        [PERS_RANK as i32 as usize]
                         + 1 as i32,
                 ),
-                (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                    [crate::bg_public_h::PERS_SCORE as i32 as usize],
+                (*cg.snap).ps.persistant
+                    [PERS_SCORE as i32 as usize],
             );
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as i32;
+            w = CG_DrawStrlen(s) * 16 as i32;
             x = (640 as i32 - w) / 2 as i32;
             y = 60 as i32;
-            crate::src::cgame::cg_drawtools::CG_DrawBigString(x, y, s, fade);
+            CG_DrawBigString(x, y, s, fade);
         }
     } else {
-        if crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize]
-            == crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize]
+        if cg.teamScores[0 as i32 as usize]
+            == cg.teamScores[1 as i32 as usize]
         {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"Teams are tied at %i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize],
+                cg.teamScores[0 as i32 as usize],
             )
-        } else if crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize]
-            >= crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize]
+        } else if cg.teamScores[0 as i32 as usize]
+            >= cg.teamScores[1 as i32 as usize]
         {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"Red leads %i to %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize],
-                crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize],
+                cg.teamScores[0 as i32 as usize],
+                cg.teamScores[1 as i32 as usize],
             )
         } else {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"Blue leads %i to %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize],
-                crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize],
+                cg.teamScores[1 as i32 as usize],
+                cg.teamScores[0 as i32 as usize],
             )
         }
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as i32;
+        w = CG_DrawStrlen(s) * 16 as i32;
         x = (640 as i32 - w) / 2 as i32;
         y = 60 as i32;
-        crate::src::cgame::cg_drawtools::CG_DrawBigString(x, y, s, fade);
+        CG_DrawBigString(x, y, s, fade);
     }
     // scoreboard
     y = 86 as i32;
-    crate::src::cgame::cg_drawtools::CG_DrawPic(
+    CG_DrawPic(
         (112 as i32 + 16 as i32 + 6 as i32 * 16 as i32 / 2 as i32) as f32,
         y as f32,
         64 as i32 as f32,
         32 as i32 as f32,
-        crate::src::cgame::cg_main::cgs.media.scoreboardScore,
+        cgs.media.scoreboardScore,
     );
-    crate::src::cgame::cg_drawtools::CG_DrawPic(
+    CG_DrawPic(
         (112 as i32 + 12 as i32 * 16 as i32 + 8 as i32 - 6 as i32 * 16 as i32 / 2 as i32) as f32,
         y as f32,
         64 as i32 as f32,
         32 as i32 as f32,
-        crate::src::cgame::cg_main::cgs.media.scoreboardPing,
+        cgs.media.scoreboardPing,
     );
-    crate::src::cgame::cg_drawtools::CG_DrawPic(
+    CG_DrawPic(
         (112 as i32 + 17 as i32 * 16 as i32 + 8 as i32 - 6 as i32 * 16 as i32 / 2 as i32) as f32,
         y as f32,
         64 as i32 as f32,
         32 as i32 as f32,
-        crate::src::cgame::cg_main::cgs.media.scoreboardTime,
+        cgs.media.scoreboardTime,
     );
-    crate::src::cgame::cg_drawtools::CG_DrawPic(
+    CG_DrawPic(
         (112 as i32 + 22 as i32 * 16 as i32 - 6 as i32 * 16 as i32 / 2 as i32) as f32,
         y as f32,
         64 as i32 as f32,
         32 as i32 as f32,
-        crate::src::cgame::cg_main::cgs.media.scoreboardName,
+        cgs.media.scoreboardName,
     );
     y = 86 as i32 + 32 as i32;
     // If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores
-    if crate::src::cgame::cg_main::cg.numScores > (420 as i32 - (86 as i32 + 32 as i32)) / 40 as i32
+    if cg.numScores > (420 as i32 - (86 as i32 + 32 as i32)) / 40 as i32
     {
         maxClients = (420 as i32 - (86 as i32 + 32 as i32)) / 16 as i32 - 1 as i32;
         lineHeight = 16 as i32;
@@ -675,89 +675,89 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
         topBorderSize = 16 as i32;
         bottomBorderSize = 16 as i32
     }
-    localClient = crate::src::qcommon::q_shared::qfalse;
-    if crate::src::cgame::cg_main::cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+    localClient = qfalse;
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
     {
         //
         // teamplay scoreboard
         //
         y += lineHeight / 2 as i32;
-        if crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize]
-            >= crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize]
+        if cg.teamScores[0 as i32 as usize]
+            >= cg.teamScores[1 as i32 as usize]
         {
             n1 = CG_TeamScoreboard(
                 y,
-                crate::bg_public_h::TEAM_RED,
+                TEAM_RED,
                 fade,
                 maxClients,
                 lineHeight,
             );
-            crate::src::cgame::cg_draw::CG_DrawTeamBackground(
+            CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
                 640 as i32,
                 n1 * lineHeight + bottomBorderSize,
                 0.33f32,
-                crate::bg_public_h::TEAM_RED as i32,
+                TEAM_RED as i32,
             );
             y += n1 * lineHeight + 16 as i32;
             maxClients -= n1;
             n2 = CG_TeamScoreboard(
                 y,
-                crate::bg_public_h::TEAM_BLUE,
+                TEAM_BLUE,
                 fade,
                 maxClients,
                 lineHeight,
             );
-            crate::src::cgame::cg_draw::CG_DrawTeamBackground(
+            CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
                 640 as i32,
                 n2 * lineHeight + bottomBorderSize,
                 0.33f32,
-                crate::bg_public_h::TEAM_BLUE as i32,
+                TEAM_BLUE as i32,
             );
             y += n2 * lineHeight + 16 as i32;
             maxClients -= n2
         } else {
             n1 = CG_TeamScoreboard(
                 y,
-                crate::bg_public_h::TEAM_BLUE,
+                TEAM_BLUE,
                 fade,
                 maxClients,
                 lineHeight,
             );
-            crate::src::cgame::cg_draw::CG_DrawTeamBackground(
+            CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
                 640 as i32,
                 n1 * lineHeight + bottomBorderSize,
                 0.33f32,
-                crate::bg_public_h::TEAM_BLUE as i32,
+                TEAM_BLUE as i32,
             );
             y += n1 * lineHeight + 16 as i32;
             maxClients -= n1;
             n2 = CG_TeamScoreboard(
                 y,
-                crate::bg_public_h::TEAM_RED,
+                TEAM_RED,
                 fade,
                 maxClients,
                 lineHeight,
             );
-            crate::src::cgame::cg_draw::CG_DrawTeamBackground(
+            CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
                 640 as i32,
                 n2 * lineHeight + bottomBorderSize,
                 0.33f32,
-                crate::bg_public_h::TEAM_RED as i32,
+                TEAM_RED as i32,
             );
             y += n2 * lineHeight + 16 as i32;
             maxClients -= n2
         }
         n1 = CG_TeamScoreboard(
             y,
-            crate::bg_public_h::TEAM_SPECTATOR,
+            TEAM_SPECTATOR,
             fade,
             maxClients,
             lineHeight,
@@ -769,7 +769,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
         //
         n1 = CG_TeamScoreboard(
             y,
-            crate::bg_public_h::TEAM_FREE,
+            TEAM_FREE,
             fade,
             maxClients,
             lineHeight,
@@ -777,7 +777,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
         y += n1 * lineHeight + 16 as i32;
         n2 = CG_TeamScoreboard(
             y,
-            crate::bg_public_h::TEAM_SPECTATOR,
+            TEAM_SPECTATOR,
             fade,
             maxClients - n1,
             lineHeight,
@@ -787,19 +787,19 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
     if localClient as u64 == 0 {
         // draw local client at the bottom
         i = 0 as i32;
-        while i < crate::src::cgame::cg_main::cg.numScores {
-            if crate::src::cgame::cg_main::cg.scores[i as usize].client
-                == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum
+        while i < cg.numScores {
+            if cg.scores[i as usize].client
+                == (*cg.snap).ps.clientNum
             {
                 CG_DrawClientScore(
                     y,
-                    &mut *crate::src::cgame::cg_main::cg
+                    &mut *cg
                         .scores
                         .as_mut_ptr()
                         .offset(i as isize),
                     fadeColor,
                     fade,
-                    (lineHeight == 40 as i32) as i32 as crate::src::qcommon::q_shared::qboolean,
+                    (lineHeight == 40 as i32) as i32 as qboolean,
                 );
                 break;
             } else {
@@ -808,11 +808,11 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> crate::src::qcommon::q_shared
         }
     }
     // load any models that have been deferred
-    crate::src::cgame::cg_main::cg.deferredPlayerLoading += 1;
-    if crate::src::cgame::cg_main::cg.deferredPlayerLoading > 10 as i32 {
-        crate::src::cgame::cg_players::CG_LoadDeferredPlayers();
+    cg.deferredPlayerLoading += 1;
+    if cg.deferredPlayerLoading > 10 as i32 {
+        CG_LoadDeferredPlayers();
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //================================================================================
 /*
@@ -823,21 +823,21 @@ CG_CenterGiantLine
 
 unsafe extern "C" fn CG_CenterGiantLine(mut y: f32, mut string: *const libc::c_char) {
     let mut x: f32 = 0.;
-    let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    color[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[3 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    let mut color: vec4_t = [0.; 4];
+    color[0 as i32 as usize] = 1 as i32 as vec_t;
+    color[1 as i32 as usize] = 1 as i32 as vec_t;
+    color[2 as i32 as usize] = 1 as i32 as vec_t;
+    color[3 as i32 as usize] = 1 as i32 as vec_t;
     x = (0.5f64
-        * (640 as i32 - 32 as i32 * crate::src::cgame::cg_drawtools::CG_DrawStrlen(string)) as f64)
+        * (640 as i32 - 32 as i32 * CG_DrawStrlen(string)) as f64)
         as f32;
-    crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+    CG_DrawStringExt(
         x as i32,
         y as i32,
         string,
         color.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
+        qtrue,
         32 as i32,
         48 as i32,
         0 as i32,
@@ -1099,52 +1099,52 @@ Draw the oversize scoreboard for tournements
 
 pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut color: vec4_t = [0.; 4];
     let mut min: i32 = 0;
     let mut tens: i32 = 0;
     let mut ones: i32 = 0;
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut y: i32 = 0;
     let mut i: i32 = 0;
     // request more scores regularly
-    if (crate::src::cgame::cg_main::cg.scoresRequestTime + 2000 as i32)
-        < crate::src::cgame::cg_main::cg.time
+    if (cg.scoresRequestTime + 2000 as i32)
+        < cg.time
     {
-        crate::src::cgame::cg_main::cg.scoresRequestTime = crate::src::cgame::cg_main::cg.time;
-        crate::src::cgame::cg_syscalls::trap_SendClientCommand(
+        cg.scoresRequestTime = cg.time;
+        trap_SendClientCommand(
             b"score\x00" as *const u8 as *const libc::c_char,
         );
     }
     // draw the dialog background
-    color[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    color[2 as i32 as usize] = 0 as i32 as vec_t;
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
-    color[3 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::cgame::cg_drawtools::CG_FillRect(
+    color[3 as i32 as usize] = 1 as i32 as vec_t;
+    CG_FillRect(
         0 as i32 as f32,
         0 as i32 as f32,
         640 as i32 as f32,
         480 as i32 as f32,
         color.as_mut_ptr(),
     );
-    color[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    color[3 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    color[0 as i32 as usize] = 1 as i32 as vec_t;
+    color[1 as i32 as usize] = 1 as i32 as vec_t;
+    color[2 as i32 as usize] = 1 as i32 as vec_t;
+    color[3 as i32 as usize] = 1 as i32 as vec_t;
     // print the mesage of the day
-    s = crate::src::cgame::cg_main::CG_ConfigString(4 as i32);
+    s = CG_ConfigString(4 as i32);
     if *s.offset(0 as i32 as isize) == 0 {
         s = b"Scoreboard\x00" as *const u8 as *const libc::c_char
     }
     // print optional title
     CG_CenterGiantLine(8 as i32 as f32, s);
     // print server time
-    ones = crate::src::cgame::cg_main::cg.time / 1000 as i32;
+    ones = cg.time / 1000 as i32;
     min = ones / 60 as i32;
     ones %= 60 as i32;
     tens = ones / 10 as i32;
     ones %= 10 as i32;
-    s = crate::src::qcommon::q_shared::va(
+    s = va(
         b"%i:%i%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         min,
         tens,
@@ -1153,64 +1153,64 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
     CG_CenterGiantLine(64 as i32 as f32, s);
     // print the two scores
     y = 160 as i32;
-    if crate::src::cgame::cg_main::cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
     {
         //
         // teamplay scoreboard
         //
-        crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+        CG_DrawStringExt(
             8 as i32,
             y,
             b"Red Team\x00" as *const u8 as *const libc::c_char,
             color.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qtrue,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
+            qtrue,
             32 as i32,
             48 as i32,
             0 as i32,
         );
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::cgame::cg_main::cg.teamScores[0 as i32 as usize],
+            cg.teamScores[0 as i32 as usize],
         );
-        crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+        CG_DrawStringExt(
             (632 as i32 as libc::c_ulong)
                 .wrapping_sub((32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)))
                 as i32,
             y,
             s,
             color.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qtrue,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
+            qtrue,
             32 as i32,
             48 as i32,
             0 as i32,
         );
         y += 64 as i32;
-        crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+        CG_DrawStringExt(
             8 as i32,
             y,
             b"Blue Team\x00" as *const u8 as *const libc::c_char,
             color.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qtrue,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
+            qtrue,
             32 as i32,
             48 as i32,
             0 as i32,
         );
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::cgame::cg_main::cg.teamScores[1 as i32 as usize],
+            cg.teamScores[1 as i32 as usize],
         );
-        crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+        CG_DrawStringExt(
             (632 as i32 as libc::c_ulong)
                 .wrapping_sub((32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)))
                 as i32,
             y,
             s,
             color.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qtrue,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
+            qtrue,
             32 as i32,
             48 as i32,
             0 as i32,
@@ -1221,36 +1221,36 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
         //
         i = 0 as i32;
         while i < 64 as i32 {
-            ci = &mut *crate::src::cgame::cg_main::cgs
+            ci = &mut *cgs
                 .clientinfo
                 .as_mut_ptr()
-                .offset(i as isize) as *mut crate::cg_local_h::clientInfo_t;
+                .offset(i as isize) as *mut clientInfo_t;
             if !((*ci).infoValid as u64 == 0) {
-                if !((*ci).team as u32 != crate::bg_public_h::TEAM_FREE as i32 as u32) {
-                    crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+                if !((*ci).team as u32 != TEAM_FREE as i32 as u32) {
+                    CG_DrawStringExt(
                         8 as i32,
                         y,
                         (*ci).name.as_mut_ptr(),
                         color.as_mut_ptr(),
-                        crate::src::qcommon::q_shared::qtrue,
-                        crate::src::qcommon::q_shared::qtrue,
+                        qtrue,
+                        qtrue,
                         32 as i32,
                         48 as i32,
                         0 as i32,
                     );
-                    s = crate::src::qcommon::q_shared::va(
+                    s = va(
                         b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         (*ci).score,
                     );
-                    crate::src::cgame::cg_drawtools::CG_DrawStringExt(
+                    CG_DrawStringExt(
                         (632 as i32 as libc::c_ulong).wrapping_sub(
                             (32 as i32 as libc::c_ulong).wrapping_mul(crate::stdlib::strlen(s)),
                         ) as i32,
                         y,
                         s,
                         color.as_mut_ptr(),
-                        crate::src::qcommon::q_shared::qtrue,
-                        crate::src::qcommon::q_shared::qtrue,
+                        qtrue,
+                        qtrue,
                         32 as i32,
                         48 as i32,
                         0 as i32,

@@ -458,9 +458,9 @@ static mut weights: [f32; 450] = [
 static mut topo: [i32; 3] = [25 as i32, 16 as i32, 2 as i32];
 #[no_mangle]
 
-pub static mut net: crate::src::opus_1_2_1::src::mlp::MLP = unsafe {
+pub static mut net: MLP = unsafe {
     {
-        let mut init = crate::src::opus_1_2_1::src::mlp::MLP {
+        let mut init = MLP {
             layers: 3 as i32,
             topo: topo.as_ptr(),
             weights: weights.as_ptr(),

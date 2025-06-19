@@ -289,16 +289,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub static mut podium1: *mut crate::g_local_h::gentity_t =
-    0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t;
+pub static mut podium1: *mut gentity_t =
+    0 as *const gentity_t as *mut gentity_t;
 #[no_mangle]
 
-pub static mut podium2: *mut crate::g_local_h::gentity_t =
-    0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t;
+pub static mut podium2: *mut gentity_t =
+    0 as *const gentity_t as *mut gentity_t;
 #[no_mangle]
 
-pub static mut podium3: *mut crate::g_local_h::gentity_t =
-    0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t;
+pub static mut podium3: *mut gentity_t =
+    0 as *const gentity_t as *mut gentity_t;
 /*
 ==================
 UpdateTournamentInfo
@@ -308,7 +308,7 @@ UpdateTournamentInfo
 
 pub unsafe extern "C" fn UpdateTournamentInfo() {
     let mut i: i32 = 0;
-    let mut player: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut player: *mut gentity_t = 0 as *mut gentity_t;
     let mut playerClientNum: i32 = 0;
     let mut n: i32 = 0;
     let mut accuracy: i32 = 0;
@@ -317,12 +317,12 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
     let mut buf: [libc::c_char; 32] = [0; 32];
     let mut msg: [libc::c_char; 1024] = [0; 1024];
     // find the real player
-    player = 0 as *mut crate::g_local_h::gentity_t;
+    player = 0 as *mut gentity_t;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        player = &mut *crate::src::game::g_main::g_entities
+    while i < level.maxclients {
+        player = &mut *g_entities
             .as_mut_ptr()
-            .offset(i as isize) as *mut crate::g_local_h::gentity_t;
+            .offset(i as isize) as *mut gentity_t;
         if !((*player).inuse as u64 == 0) {
             if (*player).r.svFlags & 0x8 as i32 == 0 {
                 break;
@@ -331,23 +331,23 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         i += 1
     }
     // this should never happen!
-    if player.is_null() || i == crate::src::game::g_main::level.maxclients {
+    if player.is_null() || i == level.maxclients {
         return;
     } // could be ET_INVISIBLE
     playerClientNum = i; // clear EF_TALK, etc
-    crate::src::game::g_main::CalculateRanks(); // clear powerups
-    if (*crate::src::game::g_main::level
+    CalculateRanks(); // clear powerups
+    if (*level
         .clients
         .offset(playerClientNum as isize))
     .sess
     .sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+        == TEAM_SPECTATOR as i32 as u32
     {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             msg.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b"postgame %i %i 0 0 0 0 0 0\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_main::level.numNonSpectatorClients,
+            level.numNonSpectatorClients,
             playerClientNum,
         ); // clear lava burning
     } else {
@@ -357,51 +357,51 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         } else {
             accuracy = 0 as i32
         } // don't bounce
-        perfect = if (*crate::src::game::g_main::level
+        perfect = if (*level
             .clients
             .offset(playerClientNum as isize))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+        .persistant[PERS_RANK as i32 as usize]
             == 0 as i32
-            && (*(*player).client).ps.persistant[crate::bg_public_h::PERS_KILLED as i32 as usize]
+            && (*(*player).client).ps.persistant[PERS_KILLED as i32 as usize]
                 == 0 as i32
         {
             1 as i32
         } else {
             0 as i32
         };
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             msg.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b"postgame %i %i %i %i %i %i %i %i\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_main::level.numNonSpectatorClients,
+            level.numNonSpectatorClients,
             playerClientNum,
             accuracy,
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize],
+                [PERS_IMPRESSIVE_COUNT as i32 as usize],
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize],
+                [PERS_EXCELLENT_COUNT as i32 as usize],
             (*(*player).client).ps.persistant
-                [crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
-            (*(*player).client).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                [PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
+            (*(*player).client).ps.persistant[PERS_SCORE as i32 as usize],
             perfect,
         );
     }
     msglen = crate::stdlib::strlen(msg.as_mut_ptr()) as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.numNonSpectatorClients {
-        n = crate::src::game::g_main::level.sortedClients[i as usize];
-        crate::src::qcommon::q_shared::Com_sprintf(
+    while i < level.numNonSpectatorClients {
+        n = level.sortedClients[i as usize];
+        Com_sprintf(
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b" %i %i %i\x00" as *const u8 as *const libc::c_char,
             n,
-            (*crate::src::game::g_main::level.clients.offset(n as isize))
+            (*level.clients.offset(n as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize],
-            (*crate::src::game::g_main::level.clients.offset(n as isize))
+                .persistant[PERS_RANK as i32 as usize],
+            (*level.clients.offset(n as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                .persistant[PERS_SCORE as i32 as usize],
         );
         msglen =
             (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
@@ -409,55 +409,55 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         {
             break;
         }
-        ::libc::strcat(msg.as_mut_ptr(), buf.as_mut_ptr());
+        libc::strcat(msg.as_mut_ptr(), buf.as_mut_ptr());
         i += 1
     }
-    crate::src::game::g_syscalls::trap_SendConsoleCommand(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+    trap_SendConsoleCommand(
+        EXEC_APPEND as i32,
         msg.as_mut_ptr(),
     );
 }
 
 unsafe extern "C" fn SpawnModelOnVictoryPad(
-    mut pad: *mut crate::g_local_h::gentity_t,
-    mut offset: *mut crate::src::qcommon::q_shared::vec_t,
-    mut ent: *mut crate::g_local_h::gentity_t,
+    mut pad: *mut gentity_t,
+    mut offset: *mut vec_t,
+    mut ent: *mut gentity_t,
     mut place: i32,
-) -> *mut crate::g_local_h::gentity_t {
-    let mut body: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut f: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut r: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut u: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    body = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
+) -> *mut gentity_t {
+    let mut body: *mut gentity_t = 0 as *mut gentity_t;
+    let mut vec: vec3_t = [0.; 3];
+    let mut f: vec3_t = [0.; 3];
+    let mut r: vec3_t = [0.; 3];
+    let mut u: vec3_t = [0.; 3];
+    body = G_Spawn() as *mut gentity_s;
     if body.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"^1ERROR: out of gentities\n\x00" as *const u8 as *const libc::c_char,
         );
-        return 0 as *mut crate::g_local_h::gentity_t;
+        return 0 as *mut gentity_t;
     }
     (*body).classname = (*(*ent).client).pers.netname.as_mut_ptr();
     (*body).client = (*ent).client;
     (*body).s = (*ent).s;
-    (*body).s.eType = crate::bg_public_h::ET_PLAYER as i32;
+    (*body).s.eType = ET_PLAYER as i32;
     (*body).s.eFlags = 0 as i32;
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
     (*body).s.number =
-        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
-    (*body).timestamp = crate::src::game::g_main::level.time;
-    (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
+        body.offset_from(g_entities.as_mut_ptr()) as isize as i32;
+    (*body).timestamp = level.time;
+    (*body).physicsObject = qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
     (*body).s.event = 0 as i32;
-    (*body).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY;
+    (*body).s.pos.trType = TR_STATIONARY;
     (*body).s.groundEntityNum = ((1 as i32) << 10 as i32) - 2 as i32;
-    (*body).s.legsAnim = crate::bg_public_h::LEGS_IDLE as i32;
-    (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND as i32;
-    if (*body).s.weapon == crate::bg_public_h::WP_NONE as i32 {
-        (*body).s.weapon = crate::bg_public_h::WP_MACHINEGUN as i32
+    (*body).s.legsAnim = LEGS_IDLE as i32;
+    (*body).s.torsoAnim = TORSO_STAND as i32;
+    if (*body).s.weapon == WP_NONE as i32 {
+        (*body).s.weapon = WP_MACHINEGUN as i32
     }
-    if (*body).s.weapon == crate::bg_public_h::WP_GAUNTLET as i32 {
-        (*body).s.torsoAnim = crate::bg_public_h::TORSO_STAND2 as i32
+    if (*body).s.weapon == WP_GAUNTLET as i32 {
+        (*body).s.torsoAnim = TORSO_STAND2 as i32
     }
     (*body).s.event = 0 as i32;
     (*body).r.svFlags = (*ent).r.svFlags;
@@ -476,21 +476,21 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).clipmask = 1 as i32 | 0x10000 as i32;
     (*body).r.contents = 0x2000000 as i32;
     (*body).r.ownerNum = (*ent).r.ownerNum;
-    (*body).takedamage = crate::src::qcommon::q_shared::qfalse;
-    vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[0 as i32 as usize]
+    (*body).takedamage = qfalse;
+    vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         - (*pad).r.currentOrigin[0 as i32 as usize];
-    vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[1 as i32 as usize]
+    vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
         - (*pad).r.currentOrigin[1 as i32 as usize];
-    vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[2 as i32 as usize]
+    vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
         - (*pad).r.currentOrigin[2 as i32 as usize];
-    crate::src::qcommon::q_math::vectoangles(
-        vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        vec.as_mut_ptr() as *const vec_t,
         (*body).s.apos.trBase.as_mut_ptr(),
     );
-    (*body).s.apos.trBase[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*body).s.apos.trBase[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::AngleVectors(
-        (*body).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    (*body).s.apos.trBase[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*body).s.apos.trBase[2 as i32 as usize] = 0 as i32 as vec_t;
+    AngleVectors(
+        (*body).s.apos.trBase.as_mut_ptr() as *const vec_t,
         f.as_mut_ptr(),
         r.as_mut_ptr(),
         u.as_mut_ptr(),
@@ -513,122 +513,122 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
         vec[1 as i32 as usize] + u[1 as i32 as usize] * *offset.offset(2 as i32 as isize);
     vec[2 as i32 as usize] =
         vec[2 as i32 as usize] + u[2 as i32 as usize] * *offset.offset(2 as i32 as isize);
-    crate::src::game::g_utils::G_SetOrigin(
-        body as *mut crate::g_local_h::gentity_s,
+    G_SetOrigin(
+        body as *mut gentity_s,
         vec.as_mut_ptr(),
     );
-    crate::src::game::g_syscalls::trap_LinkEntity(body as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(body as *mut gentity_s);
     (*body).count = place;
     return body;
 }
 
-unsafe extern "C" fn CelebrateStop(mut player: *mut crate::g_local_h::gentity_t) {
+unsafe extern "C" fn CelebrateStop(mut player: *mut gentity_t) {
     let mut anim: i32 = 0;
-    if (*player).s.weapon == crate::bg_public_h::WP_GAUNTLET as i32 {
-        anim = crate::bg_public_h::TORSO_STAND2 as i32
+    if (*player).s.weapon == WP_GAUNTLET as i32 {
+        anim = TORSO_STAND2 as i32
     } else {
-        anim = crate::bg_public_h::TORSO_STAND as i32
+        anim = TORSO_STAND as i32
     }
     (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | anim;
 }
 
-unsafe extern "C" fn CelebrateStart(mut player: *mut crate::g_local_h::gentity_t) {
+unsafe extern "C" fn CelebrateStart(mut player: *mut gentity_t) {
     (*player).s.torsoAnim =
-        (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | crate::bg_public_h::TORSO_GESTURE as i32;
+        (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | TORSO_GESTURE as i32;
     (*player).nextthink =
-        crate::src::game::g_main::level.time + (34 as i32 * 66 as i32 + 50 as i32);
+        level.time + (34 as i32 * 66 as i32 + 50 as i32);
     (*player).think =
-        Some(CelebrateStop as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
+        Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     /*
     player->client->ps.events[player->client->ps.eventSequence & (MAX_PS_EVENTS-1)] = EV_TAUNT;
     player->client->ps.eventParms[player->client->ps.eventSequence & (MAX_PS_EVENTS-1)] = 0;
     player->client->ps.eventSequence++;
     */
-    crate::src::game::g_utils::G_AddEvent(
-        player as *mut crate::g_local_h::gentity_s,
-        crate::bg_public_h::EV_TAUNT as i32,
+    G_AddEvent(
+        player as *mut gentity_s,
+        EV_TAUNT as i32,
         0 as i32,
     );
 }
 
-static mut offsetFirst: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    74 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut offsetFirst: vec3_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    74 as i32 as vec_t,
 ];
 
-static mut offsetSecond: crate::src::qcommon::q_shared::vec3_t = [
-    -(10 as i32) as crate::src::qcommon::q_shared::vec_t,
-    60 as i32 as crate::src::qcommon::q_shared::vec_t,
-    54 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut offsetSecond: vec3_t = [
+    -(10 as i32) as vec_t,
+    60 as i32 as vec_t,
+    54 as i32 as vec_t,
 ];
 
-static mut offsetThird: crate::src::qcommon::q_shared::vec3_t = [
-    -(19 as i32) as crate::src::qcommon::q_shared::vec_t,
-    -(60 as i32) as crate::src::qcommon::q_shared::vec_t,
-    45 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut offsetThird: vec3_t = [
+    -(19 as i32) as vec_t,
+    -(60 as i32) as vec_t,
+    45 as i32 as vec_t,
 ];
 
-unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gentity_t) {
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut f: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut r: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut u: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as i32;
-    crate::src::qcommon::q_math::AngleVectors(
-        crate::src::game::g_main::level
+unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
+    let mut vec: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut f: vec3_t = [0.; 3];
+    let mut r: vec3_t = [0.; 3];
+    let mut u: vec3_t = [0.; 3];
+    (*podium).nextthink = level.time + 100 as i32;
+    AngleVectors(
+        level
             .intermission_angle
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
     );
-    origin[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[0 as i32 as usize] = level.intermission_origin
         [0 as i32 as usize]
         + vec[0 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[1 as i32 as usize] = level.intermission_origin
         [1 as i32 as usize]
         + vec[1 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[2 as i32 as usize] = level.intermission_origin
         [2 as i32 as usize]
         + vec[2 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] -= crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    origin[2 as i32 as usize] -= trap_Cvar_VariableIntegerValue(
         b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
     ) as f32;
-    crate::src::game::g_utils::G_SetOrigin(
-        podium as *mut crate::g_local_h::gentity_s,
+    G_SetOrigin(
+        podium as *mut gentity_s,
         origin.as_mut_ptr(),
     );
     if !podium1.is_null() {
-        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[0 as i32 as usize] = level.intermission_origin
             [0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[1 as i32 as usize] = level.intermission_origin
             [1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[2 as i32 as usize] = level.intermission_origin
             [2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
-        crate::src::qcommon::q_math::vectoangles(
-            vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vectoangles(
+            vec.as_mut_ptr() as *const vec_t,
             (*podium1).s.apos.trBase.as_mut_ptr(),
         );
         (*podium1).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            0 as i32 as vec_t;
         (*podium1).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::AngleVectors(
-            (*podium1).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            0 as i32 as vec_t;
+        AngleVectors(
+            (*podium1).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
@@ -651,31 +651,31 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gen
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetFirst[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetFirst[2 as i32 as usize];
-        crate::src::game::g_utils::G_SetOrigin(
-            podium1 as *mut crate::g_local_h::gentity_s,
+        G_SetOrigin(
+            podium1 as *mut gentity_s,
             vec.as_mut_ptr(),
         );
     }
     if !podium2.is_null() {
-        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[0 as i32 as usize] = level.intermission_origin
             [0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[1 as i32 as usize] = level.intermission_origin
             [1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[2 as i32 as usize] = level.intermission_origin
             [2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
-        crate::src::qcommon::q_math::vectoangles(
-            vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vectoangles(
+            vec.as_mut_ptr() as *const vec_t,
             (*podium2).s.apos.trBase.as_mut_ptr(),
         );
         (*podium2).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            0 as i32 as vec_t;
         (*podium2).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::AngleVectors(
-            (*podium2).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            0 as i32 as vec_t;
+        AngleVectors(
+            (*podium2).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
@@ -698,31 +698,31 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gen
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetSecond[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetSecond[2 as i32 as usize];
-        crate::src::game::g_utils::G_SetOrigin(
-            podium2 as *mut crate::g_local_h::gentity_s,
+        G_SetOrigin(
+            podium2 as *mut gentity_s,
             vec.as_mut_ptr(),
         );
     }
     if !podium3.is_null() {
-        vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[0 as i32 as usize] = level.intermission_origin
             [0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[1 as i32 as usize] = level.intermission_origin
             [1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+        vec[2 as i32 as usize] = level.intermission_origin
             [2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
-        crate::src::qcommon::q_math::vectoangles(
-            vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vectoangles(
+            vec.as_mut_ptr() as *const vec_t,
             (*podium3).s.apos.trBase.as_mut_ptr(),
         );
         (*podium3).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            0 as i32 as vec_t;
         (*podium3).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::AngleVectors(
-            (*podium3).s.apos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            0 as i32 as vec_t;
+        AngleVectors(
+            (*podium3).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
             r.as_mut_ptr(),
             u.as_mut_ptr(),
@@ -745,78 +745,78 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut crate::g_local_h::gen
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetThird[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetThird[2 as i32 as usize];
-        crate::src::game::g_utils::G_SetOrigin(
-            podium3 as *mut crate::g_local_h::gentity_s,
+        G_SetOrigin(
+            podium3 as *mut gentity_s,
             vec.as_mut_ptr(),
         );
     };
 }
 
-unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
-    let mut podium: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    podium = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
+unsafe extern "C" fn SpawnPodium() -> *mut gentity_t {
+    let mut podium: *mut gentity_t = 0 as *mut gentity_t;
+    let mut vec: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    podium = G_Spawn() as *mut gentity_s;
     if podium.is_null() {
-        return 0 as *mut crate::g_local_h::gentity_t;
+        return 0 as *mut gentity_t;
     }
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*podium).s.eType = crate::bg_public_h::ET_GENERAL as i32;
+    (*podium).s.eType = ET_GENERAL as i32;
     (*podium).s.number =
-        podium.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
+        podium.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*podium).clipmask = 1 as i32;
     (*podium).r.contents = 1 as i32;
-    (*podium).s.modelindex = crate::src::game::g_utils::G_ModelIndex(
+    (*podium).s.modelindex = G_ModelIndex(
         b"models/mapobjects/podium/podium4.md3\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
-    crate::src::qcommon::q_math::AngleVectors(
-        crate::src::game::g_main::level
+    AngleVectors(
+        level
             .intermission_angle
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
     );
-    origin[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[0 as i32 as usize] = level.intermission_origin
         [0 as i32 as usize]
         + vec[0 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[1 as i32 as usize] = level.intermission_origin
         [1 as i32 as usize]
         + vec[1 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin
+    origin[2 as i32 as usize] = level.intermission_origin
         [2 as i32 as usize]
         + vec[2 as i32 as usize]
-            * crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+            * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] -= crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    origin[2 as i32 as usize] -= trap_Cvar_VariableIntegerValue(
         b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
     ) as f32;
-    crate::src::game::g_utils::G_SetOrigin(
-        podium as *mut crate::g_local_h::gentity_s,
+    G_SetOrigin(
+        podium as *mut gentity_s,
         origin.as_mut_ptr(),
     );
-    vec[0 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[0 as i32 as usize]
+    vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         - (*podium).r.currentOrigin[0 as i32 as usize];
-    vec[1 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[1 as i32 as usize]
+    vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
         - (*podium).r.currentOrigin[1 as i32 as usize];
-    vec[2 as i32 as usize] = crate::src::game::g_main::level.intermission_origin[2 as i32 as usize]
+    vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
         - (*podium).r.currentOrigin[2 as i32 as usize];
-    (*podium).s.apos.trBase[1 as i32 as usize] = crate::src::game::g_utils::vectoyaw(
-        vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    (*podium).s.apos.trBase[1 as i32 as usize] = vectoyaw(
+        vec.as_mut_ptr() as *const vec_t,
     );
-    crate::src::game::g_syscalls::trap_LinkEntity(podium as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(podium as *mut gentity_s);
     (*podium).think = Some(
-        PodiumPlacementThink as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+        PodiumPlacementThink as unsafe extern "C" fn(_: *mut gentity_t) -> (),
     );
-    (*podium).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+    (*podium).nextthink = level.time + 100 as i32;
     return podium;
 }
 /*
@@ -827,68 +827,68 @@ SpawnModelsOnVictoryPads
 #[no_mangle]
 
 pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
-    let mut player: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut podium: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    podium1 = 0 as *mut crate::g_local_h::gentity_t;
-    podium2 = 0 as *mut crate::g_local_h::gentity_t;
-    podium3 = 0 as *mut crate::g_local_h::gentity_t;
+    let mut player: *mut gentity_t = 0 as *mut gentity_t;
+    let mut podium: *mut gentity_t = 0 as *mut gentity_t;
+    podium1 = 0 as *mut gentity_t;
+    podium2 = 0 as *mut gentity_t;
+    podium3 = 0 as *mut gentity_t;
     podium = SpawnPodium();
     player = SpawnModelOnVictoryPad(
         podium,
         offsetFirst.as_mut_ptr(),
-        &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
-            *crate::src::game::g_main::level
+        &mut *g_entities.as_mut_ptr().offset(
+            *level
                 .sortedClients
                 .as_mut_ptr()
                 .offset(0 as i32 as isize) as isize,
         ),
-        (*crate::src::game::g_main::level
+        (*level
             .clients
-            .offset(crate::src::game::g_main::level.sortedClients[0 as i32 as usize] as isize))
+            .offset(level.sortedClients[0 as i32 as usize] as isize))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+        .persistant[PERS_RANK as i32 as usize]
             & !(0x4000 as i32),
     );
     if !player.is_null() {
-        (*player).nextthink = crate::src::game::g_main::level.time + 2000 as i32;
+        (*player).nextthink = level.time + 2000 as i32;
         (*player).think =
-            Some(CelebrateStart as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
+            Some(CelebrateStart as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         podium1 = player
     }
     player = SpawnModelOnVictoryPad(
         podium,
         offsetSecond.as_mut_ptr(),
-        &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
-            *crate::src::game::g_main::level
+        &mut *g_entities.as_mut_ptr().offset(
+            *level
                 .sortedClients
                 .as_mut_ptr()
                 .offset(1 as i32 as isize) as isize,
         ),
-        (*crate::src::game::g_main::level
+        (*level
             .clients
-            .offset(crate::src::game::g_main::level.sortedClients[1 as i32 as usize] as isize))
+            .offset(level.sortedClients[1 as i32 as usize] as isize))
         .ps
-        .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+        .persistant[PERS_RANK as i32 as usize]
             & !(0x4000 as i32),
     );
     if !player.is_null() {
         podium2 = player
     }
-    if crate::src::game::g_main::level.numNonSpectatorClients > 2 as i32 {
+    if level.numNonSpectatorClients > 2 as i32 {
         player = SpawnModelOnVictoryPad(
             podium,
             offsetThird.as_mut_ptr(),
-            &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
-                *crate::src::game::g_main::level
+            &mut *g_entities.as_mut_ptr().offset(
+                *level
                     .sortedClients
                     .as_mut_ptr()
                     .offset(2 as i32 as isize) as isize,
             ),
-            (*crate::src::game::g_main::level
+            (*level
                 .clients
-                .offset(crate::src::game::g_main::level.sortedClients[2 as i32 as usize] as isize))
+                .offset(level.sortedClients[2 as i32 as usize] as isize))
             .ps
-            .persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
+            .persistant[PERS_RANK as i32 as usize]
                 & !(0x4000 as i32),
         );
         if !player.is_null() {
@@ -1134,12 +1134,12 @@ Svcmd_AbortPodium_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_AbortPodium_f() {
-    if crate::src::game::g_main::g_gametype.integer != crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
+    if g_gametype.integer != GT_SINGLE_PLAYER as i32 {
         return;
     }
     if !podium1.is_null() {
-        (*podium1).nextthink = crate::src::game::g_main::level.time;
+        (*podium1).nextthink = level.time;
         (*podium1).think =
-            Some(CelebrateStop as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ())
+            Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ())
     };
 }

@@ -220,8 +220,8 @@ pub use crate::src::opus_1_2_1::silk::control_codec::SigProc_FLP_h::silk_short2f
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_control_encoder(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut encControl: *mut crate::control_h::silk_EncControlStruct,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut encControl: *mut silk_EncControlStruct,
     allow_bw_switch: i32,
     channelNb: i32,
     force_fs_kHz: i32,
@@ -255,8 +255,8 @@ pub unsafe extern "C" fn silk_control_encoder(
     /* Determine internal sampling rate         */
     /* *******************************************/
     fs_kHz = crate::src::opus_1_2_1::silk::control_audio_bandwidth::silk_control_audio_bandwidth(
-        &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
-        encControl as *mut crate::control_h::silk_EncControlStruct,
+        &mut (*psEnc).sCmn as *mut _ as *mut silk_encoder_state,
+        encControl as *mut silk_EncControlStruct,
     );
     if force_fs_kHz != 0 {
         fs_kHz = force_fs_kHz
@@ -312,7 +312,7 @@ POSSIBILITY OF SUCH DAMAGE.
 ***********************************************************************/
 
 unsafe extern "C" fn silk_setup_resamplers(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
     mut fs_kHz: i32,
 ) -> i32
 /* I                        */ {
@@ -320,33 +320,33 @@ unsafe extern "C" fn silk_setup_resamplers(
     if (*psEnc).sCmn.fs_kHz != fs_kHz || (*psEnc).sCmn.prev_API_fs_Hz != (*psEnc).sCmn.API_fs_Hz {
         if (*psEnc).sCmn.fs_kHz == 0 as i32 {
             /* Initialize the resampler for enc_API.c preparing resampling from API_fs_Hz to fs_kHz */
-            ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler_init(
+            ret += silk_resampler_init(
                 &mut (*psEnc).sCmn.resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 (*psEnc).sCmn.API_fs_Hz,
                 fs_kHz * 1000 as i32,
                 1 as i32,
             )
         } else {
-            let mut x_buf_API_fs_Hz: *mut crate::opus_types_h::opus_int16 =
-                0 as *mut crate::opus_types_h::opus_int16;
-            let mut temp_resampler_state: *mut crate::resampler_structs_h::silk_resampler_state_struct =
-                0 as *mut crate::resampler_structs_h::silk_resampler_state_struct;
-            let mut x_bufFIX: *mut crate::opus_types_h::opus_int16 =
-                0 as *mut crate::opus_types_h::opus_int16;
-            let mut new_buf_samples: crate::opus_types_h::opus_int32 = 0;
-            let mut api_buf_samples: crate::opus_types_h::opus_int32 = 0;
-            let mut old_buf_samples: crate::opus_types_h::opus_int32 = 0;
-            let mut buf_length_ms: crate::opus_types_h::opus_int32 = 0;
+            let mut x_buf_API_fs_Hz: *mut opus_int16 =
+                0 as *mut opus_int16;
+            let mut temp_resampler_state: *mut silk_resampler_state_struct =
+                0 as *mut silk_resampler_state_struct;
+            let mut x_bufFIX: *mut opus_int16 =
+                0 as *mut opus_int16;
+            let mut new_buf_samples: opus_int32 = 0;
+            let mut api_buf_samples: opus_int32 = 0;
+            let mut old_buf_samples: opus_int32 = 0;
+            let mut buf_length_ms: opus_int32 = 0;
             buf_length_ms = ((((*psEnc).sCmn.nb_subfr * 5 as i32)
-                as crate::opus_types_h::opus_uint32)
-                << 1 as i32) as crate::opus_types_h::opus_int32
+                as opus_uint32)
+                << 1 as i32) as opus_int32
                 + 5 as i32;
             old_buf_samples = buf_length_ms * (*psEnc).sCmn.fs_kHz;
             new_buf_samples = buf_length_ms * fs_kHz;
             let mut fresh0 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+                (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
                     .wrapping_mul(
                         (if old_buf_samples > new_buf_samples {
                             old_buf_samples
@@ -355,24 +355,24 @@ unsafe extern "C" fn silk_setup_resamplers(
                         }) as libc::c_ulong,
                     ) as usize,
             );
-            x_bufFIX = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+            x_bufFIX = fresh0.as_mut_ptr() as *mut opus_int16;
             silk_float2short_array(x_bufFIX, (*psEnc).x_buf.as_mut_ptr(), old_buf_samples);
             /* Initialize resampler for temporary resampling of x_buf data to API_fs_Hz */
             let mut fresh1 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
+                (::std::mem::size_of::<silk_resampler_state_struct>()
                     as libc::c_ulong)
                     .wrapping_mul(1 as i32 as libc::c_ulong) as usize,
             );
             temp_resampler_state =
-                fresh1.as_mut_ptr() as *mut crate::resampler_structs_h::silk_resampler_state_struct;
-            ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler_init(
+                fresh1.as_mut_ptr() as *mut silk_resampler_state_struct;
+            ret += silk_resampler_init(
                 temp_resampler_state
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                (*psEnc).sCmn.fs_kHz as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * 1000 as i32 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32,
+                    as *mut _silk_resampler_state_struct,
+                (*psEnc).sCmn.fs_kHz as opus_int16
+                    as opus_int32
+                    * 1000 as i32 as opus_int16
+                        as opus_int32,
                 (*psEnc).sCmn.API_fs_Hz,
                 0 as i32,
             );
@@ -381,33 +381,33 @@ unsafe extern "C" fn silk_setup_resamplers(
             /* Temporary resampling of x_buf data to API_fs_Hz */
             let mut fresh2 = ::std::vec::from_elem(
                 0,
-                (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+                (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
                     .wrapping_mul(api_buf_samples as libc::c_ulong) as usize,
             );
-            x_buf_API_fs_Hz = fresh2.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
-            ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
+            x_buf_API_fs_Hz = fresh2.as_mut_ptr() as *mut opus_int16;
+            ret += silk_resampler(
                 temp_resampler_state
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 x_buf_API_fs_Hz,
-                x_bufFIX as *const crate::opus_types_h::opus_int16,
+                x_bufFIX as *const opus_int16,
                 old_buf_samples,
             );
             /* Initialize the resampler for enc_API.c preparing resampling from API_fs_Hz to fs_kHz */
-            ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler_init(
+            ret += silk_resampler_init(
                 &mut (*psEnc).sCmn.resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 (*psEnc).sCmn.API_fs_Hz,
-                fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * 1000 as i32 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32,
+                fs_kHz as opus_int16 as opus_int32
+                    * 1000 as i32 as opus_int16
+                        as opus_int32,
                 1 as i32,
             );
             /* Correct resampler state by resampling buffered data from API_fs_Hz to fs_kHz */
-            ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
+            ret += silk_resampler(
                 &mut (*psEnc).sCmn.resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 x_bufFIX,
-                x_buf_API_fs_Hz as *const crate::opus_types_h::opus_int16,
+                x_buf_API_fs_Hz as *const opus_int16,
                 api_buf_samples,
             );
             silk_short2float_array((*psEnc).x_buf.as_mut_ptr(), x_bufFIX, new_buf_samples);
@@ -418,7 +418,7 @@ unsafe extern "C" fn silk_setup_resamplers(
 }
 
 unsafe extern "C" fn silk_setup_fs(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
     mut fs_kHz: i32,
     mut PacketSize_ms: i32,
 ) -> i32
@@ -440,13 +440,13 @@ unsafe extern "C" fn silk_setup_fs(
             } else {
                 1 as i32
             };
-            (*psEnc).sCmn.frame_length = PacketSize_ms as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+            (*psEnc).sCmn.frame_length = PacketSize_ms as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32;
             (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32 + ((2 as i32) << 1 as i32))
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+                as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32;
             if (*psEnc).sCmn.fs_kHz == 8 as i32 {
                 (*psEnc).sCmn.pitch_contour_iCDF =
                     crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_NB_iCDF
@@ -459,13 +459,13 @@ unsafe extern "C" fn silk_setup_fs(
         } else {
             (*psEnc).sCmn.nFramesPerPacket = PacketSize_ms / (5 as i32 * 4 as i32);
             (*psEnc).sCmn.nb_subfr = 4 as i32;
-            (*psEnc).sCmn.frame_length = 20 as i32 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+            (*psEnc).sCmn.frame_length = 20 as i32 as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32;
             (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32 + ((2 as i32) << 1 as i32))
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+                as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32;
             if (*psEnc).sCmn.fs_kHz == 8 as i32 {
                 (*psEnc).sCmn.pitch_contour_iCDF =
                     crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_NB_iCDF
@@ -483,26 +483,26 @@ unsafe extern "C" fn silk_setup_fs(
     if (*psEnc).sCmn.fs_kHz != fs_kHz {
         /* reset part of the state */
         crate::stdlib::memset(
-            &mut (*psEnc).sShape as *mut crate::structs_FLP_h::silk_shape_state_FLP
+            &mut (*psEnc).sShape as *mut silk_shape_state_FLP
                 as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::structs_FLP_h::silk_shape_state_FLP>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_shape_state_FLP>() as libc::c_ulong,
         ); /* trigger new SNR computation */
         crate::stdlib::memset(
-            &mut (*psEnc).sCmn.sNSQ as *mut crate::structs_h::silk_nsq_state as *mut libc::c_void,
+            &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::structs_h::silk_nsq_state>() as libc::c_ulong,
+            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
         );
         crate::stdlib::memset(
             (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 16]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 16]>() as libc::c_ulong,
         );
         crate::stdlib::memset(
-            &mut (*psEnc).sCmn.sLP.In_LP_State as *mut [crate::opus_types_h::opus_int32; 2]
+            &mut (*psEnc).sCmn.sLP.In_LP_State as *mut [opus_int32; 2]
                 as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
         );
         (*psEnc).sCmn.inputBufIx = 0 as i32;
         (*psEnc).sCmn.nFramesEncoded = 0 as i32;
@@ -543,29 +543,29 @@ unsafe extern "C" fn silk_setup_fs(
                 &crate::src::opus_1_2_1::silk::tables_NLSF_CB_WB::silk_NLSF_CB_WB
         }
         (*psEnc).sCmn.subfr_length = 5 as i32 * fs_kHz;
-        (*psEnc).sCmn.frame_length = (*psEnc).sCmn.subfr_length as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * (*psEnc).sCmn.nb_subfr as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32;
-        (*psEnc).sCmn.ltp_mem_length = 20 as i32 as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-        (*psEnc).sCmn.la_pitch = 2 as i32 as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-        (*psEnc).sCmn.max_pitch_lag = 18 as i32 as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+        (*psEnc).sCmn.frame_length = (*psEnc).sCmn.subfr_length as opus_int16
+            as opus_int32
+            * (*psEnc).sCmn.nb_subfr as opus_int16
+                as opus_int32;
+        (*psEnc).sCmn.ltp_mem_length = 20 as i32 as opus_int16
+            as opus_int32
+            * fs_kHz as opus_int16 as opus_int32;
+        (*psEnc).sCmn.la_pitch = 2 as i32 as opus_int16
+            as opus_int32
+            * fs_kHz as opus_int16 as opus_int32;
+        (*psEnc).sCmn.max_pitch_lag = 18 as i32 as opus_int16
+            as opus_int32
+            * fs_kHz as opus_int16 as opus_int32;
         if (*psEnc).sCmn.nb_subfr == 4 as i32 {
             (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32 + ((2 as i32) << 1 as i32))
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+                as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32
         } else {
             (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32 + ((2 as i32) << 1 as i32))
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+                as opus_int16
+                as opus_int32
+                * fs_kHz as opus_int16 as opus_int32
         }
         if (*psEnc).sCmn.fs_kHz == 16 as i32 {
             (*psEnc).sCmn.pitch_lag_low_bits_iCDF =
@@ -583,7 +583,7 @@ unsafe extern "C" fn silk_setup_fs(
 }
 
 unsafe extern "C" fn silk_setup_complexity(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
+    mut psEncC: *mut silk_encoder_state,
     mut Complexity: i32,
 ) -> i32
 /* I                        */ {
@@ -593,7 +593,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).pitchEstimationComplexity = 0 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 6 as i32;
         (*psEncC).shapingLPCOrder = 12 as i32;
         (*psEncC).la_shape = 3 as i32 * (*psEncC).fs_kHz;
@@ -605,7 +605,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).pitchEstimationComplexity = 1 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 8 as i32;
         (*psEncC).shapingLPCOrder = 14 as i32;
         (*psEncC).la_shape = 5 as i32 * (*psEncC).fs_kHz;
@@ -617,7 +617,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).pitchEstimationComplexity = 0 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 6 as i32;
         (*psEncC).shapingLPCOrder = 12 as i32;
         (*psEncC).la_shape = 3 as i32 * (*psEncC).fs_kHz;
@@ -629,7 +629,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).pitchEstimationComplexity = 1 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 8 as i32;
         (*psEncC).shapingLPCOrder = 14 as i32;
         (*psEncC).la_shape = 5 as i32 * (*psEncC).fs_kHz;
@@ -641,7 +641,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).pitchEstimationComplexity = 1 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.74f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 10 as i32;
         (*psEncC).shapingLPCOrder = 16 as i32;
         (*psEncC).la_shape = 5 as i32 * (*psEncC).fs_kHz;
@@ -650,12 +650,12 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).NLSF_MSVQ_Survivors = 6 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
             * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
     } else if Complexity < 8 as i32 {
         (*psEncC).pitchEstimationComplexity = 1 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.72f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 12 as i32;
         (*psEncC).shapingLPCOrder = 20 as i32;
         (*psEncC).la_shape = 5 as i32 * (*psEncC).fs_kHz;
@@ -664,12 +664,12 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).NLSF_MSVQ_Survivors = 8 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
             * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
     } else {
         (*psEncC).pitchEstimationComplexity = 2 as i32;
         (*psEncC).pitchEstimationThreshold_Q16 = (0.7f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 16 as i32;
         (*psEncC).shapingLPCOrder = 24 as i32;
         (*psEncC).la_shape = 5 as i32 * (*psEncC).fs_kHz;
@@ -678,7 +678,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).NLSF_MSVQ_Survivors = 16 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
             * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
     }
     /* Do not allow higher pitch estimation LPC order than predict LPC order */
     (*psEncC).pitchEstimationLPCOrder =
@@ -690,8 +690,8 @@ unsafe extern "C" fn silk_setup_complexity(
 #[inline]
 
 unsafe extern "C" fn silk_setup_LBRR(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut encControl: *const crate::control_h::silk_EncControlStruct,
+    mut psEncC: *mut silk_encoder_state,
+    mut encControl: *const silk_EncControlStruct,
 ) -> i32
 /* I                        */ {
     let mut LBRR_in_previous_packet: i32 = 0;
@@ -708,9 +708,9 @@ unsafe extern "C" fn silk_setup_LBRR(
                 7 as i32
                     - ((*psEncC).PacketLoss_perc as i64
                         * (0.4f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                            as crate::opus_types_h::opus_int32
-                            as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32,
+                            as opus_int32
+                            as opus_int16 as i64
+                        >> 16 as i32) as opus_int32,
                 2 as i32,
             )
         }

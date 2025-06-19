@@ -142,7 +142,7 @@ pub unsafe extern "C" fn LibVarAlloc(
     (*v).name = crate::src::botlib::l_memory::GetMemory(
         crate::stdlib::strlen(var_name).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy((*v).name, var_name);
+    libc::strcpy((*v).name, var_name);
     //add the variable in the list
     (*v).next = libvarlist;
     libvarlist = v;
@@ -202,7 +202,7 @@ pub unsafe extern "C" fn LibVarGet(
         0 as *mut crate::src::botlib::l_libvar::libvar_t; //end for
     v = libvarlist;
     while !v.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp((*v).name, var_name) == 0 {
+        if Q_stricmp((*v).name, var_name) == 0 {
             return v;
         }
         v = (*v).next
@@ -278,11 +278,11 @@ pub unsafe extern "C" fn LibVar(
     (*v).string = crate::src::botlib::l_memory::GetMemory(
         crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy((*v).string, value);
+    libc::strcpy((*v).string, value);
     //the value
     (*v).value = LibVarStringValue((*v).string);
     //variable is modified
-    (*v).modified = crate::src::qcommon::q_shared::qtrue;
+    (*v).modified = qtrue;
     //
     return v;
 }
@@ -350,11 +350,11 @@ pub unsafe extern "C" fn LibVarSet(
     (*v).string = crate::src::botlib::l_memory::GetMemory(
         crate::stdlib::strlen(value).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy((*v).string, value);
+    libc::strcpy((*v).string, value);
     //the value
     (*v).value = LibVarStringValue((*v).string);
     //variable is modified
-    (*v).modified = crate::src::qcommon::q_shared::qtrue;
+    (*v).modified = qtrue;
 }
 //returns true if the library variable has been modified
 //end of the function LibVarSet
@@ -368,14 +368,14 @@ pub unsafe extern "C" fn LibVarSet(
 
 pub unsafe extern "C" fn LibVarChanged(
     mut var_name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
         0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
     v = LibVarGet(var_name);
     if !v.is_null() {
         return (*v).modified;
     } else {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     };
     //end else
 }
@@ -394,7 +394,7 @@ pub unsafe extern "C" fn LibVarSetNotModified(mut var_name: *const libc::c_char)
         0 as *mut crate::src::botlib::l_libvar::libvar_t;
     v = LibVarGet(var_name);
     if !v.is_null() {
-        (*v).modified = crate::src::qcommon::q_shared::qfalse
+        (*v).modified = qfalse
     };
     //end if
 }

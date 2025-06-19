@@ -121,19 +121,19 @@ unsafe extern "C" fn S_CodecGetSound(
         0 as *mut crate::src::client::snd_codec::snd_codec_t;
     let mut orgCodec: *mut crate::src::client::snd_codec::snd_codec_t =
         0 as *mut crate::src::client::snd_codec::snd_codec_t;
-    let mut orgNameFailed: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut orgNameFailed: qboolean =
+        qfalse;
     let mut localName: [libc::c_char; 64] = [0; 64];
     let mut ext: *const libc::c_char = 0 as *const libc::c_char;
     let mut altName: [libc::c_char; 64] = [0; 64];
     let mut rtn: *mut libc::c_void = 0 as *mut libc::c_void;
-    crate::src::qcommon::q_shared::Q_strncpyz(localName.as_mut_ptr(), filename, 64 as i32);
-    ext = crate::src::qcommon::q_shared::COM_GetExtension(localName.as_mut_ptr());
+    Q_strncpyz(localName.as_mut_ptr(), filename, 64 as i32);
+    ext = COM_GetExtension(localName.as_mut_ptr());
     if *ext != 0 {
         // Look for the correct loader and use it
         codec = codecs;
         while !codec.is_null() {
-            if crate::src::qcommon::q_shared::Q_stricmp(ext, (*codec).ext) == 0 {
+            if Q_stricmp(ext, (*codec).ext) == 0 {
                 // Load
                 if !info.is_null() {
                     rtn = (*codec).load.expect("non-null function pointer")(
@@ -154,9 +154,9 @@ unsafe extern "C" fn S_CodecGetSound(
             if rtn.is_null() {
                 // Loader failed, most likely because the file isn't there;
                 // try again without the extension
-                orgNameFailed = crate::src::qcommon::q_shared::qtrue;
+                orgNameFailed = qtrue;
                 orgCodec = codec;
-                crate::src::qcommon::q_shared::COM_StripExtension(
+                COM_StripExtension(
                     filename,
                     localName.as_mut_ptr(),
                     64 as i32,
@@ -172,7 +172,7 @@ unsafe extern "C" fn S_CodecGetSound(
     codec = codecs;
     while !codec.is_null() {
         if !(codec == orgCodec) {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 altName.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                 b"%s.%s\x00" as *const u8 as *const libc::c_char,
@@ -200,7 +200,7 @@ unsafe extern "C" fn S_CodecGetSound(
         }
         codec = (*codec).next
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"^3WARNING: Failed to %s sound %s!\n\x00" as *const u8 as *const libc::c_char,
         if !info.is_null() {
             b"load\x00" as *const u8 as *const libc::c_char
@@ -221,10 +221,10 @@ S_CodecInit
 
 pub unsafe extern "C" fn S_CodecInit() {
     codecs = 0 as *mut crate::src::client::snd_codec::snd_codec_t;
-    S_CodecRegister(&mut crate::src::client::snd_codec_opus::opus_codec);
-    S_CodecRegister(&mut crate::src::client::snd_codec_ogg::ogg_codec);
+    S_CodecRegister(&mut opus_codec);
+    S_CodecRegister(&mut ogg_codec);
     // Register wav codec last so that it is always tried first when a file extension was not found
-    S_CodecRegister(&mut crate::src::client::snd_codec_wav::wav_codec);
+    S_CodecRegister(&mut wav_codec);
 }
 /*
 =================
@@ -309,13 +309,13 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
 ) -> *mut crate::src::client::snd_codec::snd_stream_t {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
-    let mut hnd: crate::src::qcommon::q_shared::fileHandle_t = 0;
+    let mut hnd: fileHandle_t = 0;
     let mut length: i32 = 0;
     // Try to open the file
     length = crate::src::qcommon::files::FS_FOpenFileRead(
         filename,
         &mut hnd,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     ) as i32;
     if hnd == 0 {
         crate::src::qcommon::common::Com_DPrintf(

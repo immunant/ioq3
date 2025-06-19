@@ -35,11 +35,11 @@ POSSIBILITY OF SUCH DAMAGE.
 ***********************************************************************/
 /* Coefficients for 2-band filter bank based on first-order allpass filters */
 
-static mut A_fb1_20: crate::opus_types_h::opus_int16 =
-    ((5394 as i32) << 1 as i32) as crate::opus_types_h::opus_int16;
+static mut A_fb1_20: opus_int16 =
+    ((5394 as i32) << 1 as i32) as opus_int16;
 
-static mut A_fb1_21: crate::opus_types_h::opus_int16 =
-    -(24290 as i32) as crate::opus_types_h::opus_int16;
+static mut A_fb1_21: opus_int16 =
+    -(24290 as i32) as opus_int16;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -144,41 +144,41 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_ana_filt_bank_1(
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut outL: *mut crate::opus_types_h::opus_int16,
-    mut outH: *mut crate::opus_types_h::opus_int16,
-    N: crate::opus_types_h::opus_int32,
+    mut in_0: *const opus_int16,
+    mut S: *mut opus_int32,
+    mut outL: *mut opus_int16,
+    mut outH: *mut opus_int16,
+    N: opus_int32,
 )
 /* I    Number of input samples                                     */
 {
     let mut k: i32 = 0;
     let mut N2: i32 = N >> 1 as i32;
-    let mut in32: crate::opus_types_h::opus_int32 = 0;
-    let mut X: crate::opus_types_h::opus_int32 = 0;
-    let mut Y: crate::opus_types_h::opus_int32 = 0;
-    let mut out_1: crate::opus_types_h::opus_int32 = 0;
-    let mut out_2: crate::opus_types_h::opus_int32 = 0;
+    let mut in32: opus_int32 = 0;
+    let mut X: opus_int32 = 0;
+    let mut Y: opus_int32 = 0;
+    let mut out_1: opus_int32 = 0;
+    let mut out_2: opus_int32 = 0;
     /* Internal variables and state are in Q10 format */
     k = 0 as i32;
     while k < N2 {
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k) as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 10 as i32) as crate::opus_types_h::opus_int32;
+        in32 = ((*in_0.offset((2 as i32 * k) as isize) as opus_int32
+            as opus_uint32)
+            << 10 as i32) as opus_int32;
         /* All-pass section for even input sample */
         Y = in32 - *S.offset(0 as i32 as isize);
         X = (Y as i64 + (Y as i64 * A_fb1_21 as i64 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         out_1 = *S.offset(0 as i32 as isize) + X;
         *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 10 as i32) as crate::opus_types_h::opus_int32;
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as opus_int32
+            as opus_uint32)
+            << 10 as i32) as opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
         Y = in32 - *S.offset(1 as i32 as isize);
-        X = (Y as i64 * A_fb1_20 as i64 >> 16 as i32) as crate::opus_types_h::opus_int32;
+        X = (Y as i64 * A_fb1_20 as i64 >> 16 as i32) as opus_int32;
         out_2 = *S.offset(1 as i32 as isize) + X;
         *S.offset(1 as i32 as isize) = in32 + X;
         /* Add/subtract, convert back to int16 and store to output */
@@ -193,14 +193,14 @@ pub unsafe extern "C" fn silk_ana_filt_bank_1(
             (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
             ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 11 as i32 == 1 as i32 {
             (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
             ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         *outH.offset(k as isize) = if (if 11 as i32 == 1 as i32 {
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
@@ -212,14 +212,14 @@ pub unsafe extern "C" fn silk_ana_filt_bank_1(
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
             ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 11 as i32 == 1 as i32 {
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
             ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         k += 1
     }
 }

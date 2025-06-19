@@ -42,7 +42,7 @@ pub mod os_support_h {
     #[inline]
 
     pub unsafe extern "C" fn opus_free(mut ptr: *mut libc::c_void) {
-        ::libc::free(ptr);
+        libc::free(ptr);
     }
 
     /* OS_SUPPORT_H */
@@ -101,42 +101,42 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_get_size() -> i32 {
-    return ::std::mem::size_of::<crate::opus_private_h::OpusRepacketizer>() as libc::c_ulong
+    return ::std::mem::size_of::<OpusRepacketizer>() as libc::c_ulong
         as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_init(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
-) -> *mut crate::opus_private_h::OpusRepacketizer {
+    mut rp: *mut OpusRepacketizer,
+) -> *mut OpusRepacketizer {
     (*rp).nb_frames = 0 as i32;
     return rp;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_repacketizer_create() -> *mut crate::opus_private_h::OpusRepacketizer
+pub unsafe extern "C" fn opus_repacketizer_create() -> *mut OpusRepacketizer
 {
-    let mut rp: *mut crate::opus_private_h::OpusRepacketizer =
-        0 as *mut crate::opus_private_h::OpusRepacketizer;
-    rp = opus_alloc(opus_repacketizer_get_size() as crate::stddef_h::size_t)
-        as *mut crate::opus_private_h::OpusRepacketizer;
+    let mut rp: *mut OpusRepacketizer =
+        0 as *mut OpusRepacketizer;
+    rp = opus_alloc(opus_repacketizer_get_size() as size_t)
+        as *mut OpusRepacketizer;
     if rp.is_null() {
-        return 0 as *mut crate::opus_private_h::OpusRepacketizer;
+        return 0 as *mut OpusRepacketizer;
     }
     return opus_repacketizer_init(rp);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_destroy(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
 ) {
     opus_free(rp as *mut libc::c_void);
 }
 
 unsafe extern "C" fn opus_repacketizer_cat_impl(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
     mut data: *const u8,
-    mut len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
     mut self_delimited: i32,
 ) -> i32 {
     let mut tmp_toc: u8 = 0;
@@ -164,7 +164,7 @@ unsafe extern "C" fn opus_repacketizer_cat_impl(
     if (curr_nb_frames + (*rp).nb_frames) * (*rp).framesize > 960 as i32 {
         return -(4 as i32);
     }
-    ret = crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl(
+    ret = opus_packet_parse_impl(
         data,
         len,
         self_delimited,
@@ -172,7 +172,7 @@ unsafe extern "C" fn opus_repacketizer_cat_impl(
         &mut *(*rp).frames.as_mut_ptr().offset((*rp).nb_frames as isize),
         &mut *(*rp).len.as_mut_ptr().offset((*rp).nb_frames as isize),
         0 as *mut i32,
-        0 as *mut crate::opus_types_h::opus_int32,
+        0 as *mut opus_int32,
     );
     if ret < 1 as i32 {
         return ret;
@@ -183,34 +183,34 @@ unsafe extern "C" fn opus_repacketizer_cat_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_cat(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
     mut data: *const u8,
-    mut len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
 ) -> i32 {
     return opus_repacketizer_cat_impl(rp, data, len, 0 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_get_nb_frames(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
 ) -> i32 {
     return (*rp).nb_frames;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
     mut begin: i32,
     mut end: i32,
     mut data: *mut u8,
-    mut maxlen: crate::opus_types_h::opus_int32,
+    mut maxlen: opus_int32,
     mut self_delimited: i32,
     mut pad: i32,
-) -> crate::opus_types_h::opus_int32 {
+) -> opus_int32 {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    let mut tot_size: crate::opus_types_h::opus_int32 = 0;
-    let mut len: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
+    let mut tot_size: opus_int32 = 0;
+    let mut len: *mut opus_int16 = 0 as *mut opus_int16;
     let mut frames: *mut *const u8 = 0 as *mut *const u8;
     let mut ptr: *mut u8 = 0 as *mut u8;
     if begin < 0 as i32 || begin >= end || end > (*rp).nb_frames {
@@ -257,7 +257,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             let fresh2 = ptr;
             ptr = ptr.offset(1);
             *fresh2 = ((*rp).toc as i32 & 0xfc as i32 | 0x2 as i32) as u8;
-            ptr = ptr.offset(crate::src::opus_1_2_1::src::opus::encode_size(
+            ptr = ptr.offset(encode_size(
                 *len.offset(0 as i32 as isize) as i32,
                 ptr,
             ) as isize)
@@ -341,7 +341,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         if vbr != 0 {
             i = 0 as i32;
             while i < count - 1 as i32 {
-                ptr = ptr.offset(crate::src::opus_1_2_1::src::opus::encode_size(
+                ptr = ptr.offset(encode_size(
                     *len.offset(i as isize) as i32,
                     ptr,
                 ) as isize);
@@ -350,7 +350,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         }
     }
     if self_delimited != 0 {
-        let mut sdlen: i32 = crate::src::opus_1_2_1::src::opus::encode_size(
+        let mut sdlen: i32 = encode_size(
             *len.offset((count - 1 as i32) as isize) as i32,
             ptr,
         );
@@ -387,21 +387,21 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_out_range(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
     mut begin: i32,
     mut end: i32,
     mut data: *mut u8,
-    mut maxlen: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
+    mut maxlen: opus_int32,
+) -> opus_int32 {
     return opus_repacketizer_out_range_impl(rp, begin, end, data, maxlen, 0 as i32, 0 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_out(
-    mut rp: *mut crate::opus_private_h::OpusRepacketizer,
+    mut rp: *mut OpusRepacketizer,
     mut data: *mut u8,
-    mut maxlen: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
+    mut maxlen: opus_int32,
+) -> opus_int32 {
     return opus_repacketizer_out_range_impl(
         rp,
         0 as i32,
@@ -416,17 +416,17 @@ pub unsafe extern "C" fn opus_repacketizer_out(
 
 pub unsafe extern "C" fn opus_packet_pad(
     mut data: *mut u8,
-    mut len: crate::opus_types_h::opus_int32,
-    mut new_len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
+    mut new_len: opus_int32,
 ) -> i32 {
-    let mut rp: crate::opus_private_h::OpusRepacketizer = crate::opus_private_h::OpusRepacketizer {
+    let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
         frames: [0 as *const u8; 48],
         len: [0; 48],
         framesize: 0,
     };
-    let mut ret: crate::opus_types_h::opus_int32 = 0;
+    let mut ret: opus_int32 = 0;
     if len < 1 as i32 {
         return -(1 as i32);
     }
@@ -1080,16 +1080,16 @@ pub unsafe extern "C" fn opus_packet_pad(
 
 pub unsafe extern "C" fn opus_packet_unpad(
     mut data: *mut u8,
-    mut len: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
-    let mut rp: crate::opus_private_h::OpusRepacketizer = crate::opus_private_h::OpusRepacketizer {
+    mut len: opus_int32,
+) -> opus_int32 {
+    let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
         frames: [0 as *const u8; 48],
         len: [0; 48],
         framesize: 0,
     };
-    let mut ret: crate::opus_types_h::opus_int32 = 0;
+    let mut ret: opus_int32 = 0;
     if len < 1 as i32 {
         return -(1 as i32);
     }
@@ -1127,16 +1127,16 @@ pub unsafe extern "C" fn opus_packet_unpad(
 
 pub unsafe extern "C" fn opus_multistream_packet_pad(
     mut data: *mut u8,
-    mut len: crate::opus_types_h::opus_int32,
-    mut new_len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
+    mut new_len: opus_int32,
     mut nb_streams: i32,
 ) -> i32 {
     let mut s: i32 = 0;
     let mut count: i32 = 0;
     let mut toc: u8 = 0;
-    let mut size: [crate::opus_types_h::opus_int16; 48] = [0; 48];
-    let mut packet_offset: crate::opus_types_h::opus_int32 = 0;
-    let mut amount: crate::opus_types_h::opus_int32 = 0;
+    let mut size: [opus_int16; 48] = [0; 48];
+    let mut packet_offset: opus_int32 = 0;
+    let mut amount: opus_int32 = 0;
     if len < 1 as i32 {
         return -(1 as i32);
     }
@@ -1154,7 +1154,7 @@ pub unsafe extern "C" fn opus_multistream_packet_pad(
         if len <= 0 as i32 {
             return -(4 as i32);
         }
-        count = crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl(
+        count = opus_packet_parse_impl(
             data,
             len,
             1 as i32,
@@ -1190,14 +1190,14 @@ pub unsafe extern "C" fn opus_multistream_packet_pad(
 
 pub unsafe extern "C" fn opus_multistream_packet_unpad(
     mut data: *mut u8,
-    mut len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
     mut nb_streams: i32,
-) -> crate::opus_types_h::opus_int32 {
+) -> opus_int32 {
     let mut s: i32 = 0;
     let mut toc: u8 = 0;
-    let mut size: [crate::opus_types_h::opus_int16; 48] = [0; 48];
-    let mut packet_offset: crate::opus_types_h::opus_int32 = 0;
-    let mut rp: crate::opus_private_h::OpusRepacketizer = crate::opus_private_h::OpusRepacketizer {
+    let mut size: [opus_int16; 48] = [0; 48];
+    let mut packet_offset: opus_int32 = 0;
+    let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
         frames: [0 as *const u8; 48],
@@ -1205,7 +1205,7 @@ pub unsafe extern "C" fn opus_multistream_packet_unpad(
         framesize: 0,
     };
     let mut dst: *mut u8 = 0 as *mut u8;
-    let mut dst_len: crate::opus_types_h::opus_int32 = 0;
+    let mut dst_len: opus_int32 = 0;
     if len < 1 as i32 {
         return -(1 as i32);
     }
@@ -1214,13 +1214,13 @@ pub unsafe extern "C" fn opus_multistream_packet_unpad(
     /* Unpad all frames */
     s = 0 as i32;
     while s < nb_streams {
-        let mut ret: crate::opus_types_h::opus_int32 = 0;
+        let mut ret: opus_int32 = 0;
         let mut self_delimited: i32 = (s != nb_streams - 1 as i32) as i32;
         if len <= 0 as i32 {
             return -(4 as i32);
         }
         opus_repacketizer_init(&mut rp);
-        ret = crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl(
+        ret = opus_packet_parse_impl(
             data,
             len,
             self_delimited,

@@ -373,30 +373,30 @@ pub use crate::src::opus_1_2_1::silk::NSQ_del_dec::SigProc_FIX_h::silk_min_int;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct NSQ_del_dec_struct {
-    pub sLPC_Q14: [crate::opus_types_h::opus_int32; 96],
-    pub RandState: [crate::opus_types_h::opus_int32; 40],
-    pub Q_Q10: [crate::opus_types_h::opus_int32; 40],
-    pub Xq_Q14: [crate::opus_types_h::opus_int32; 40],
-    pub Pred_Q15: [crate::opus_types_h::opus_int32; 40],
-    pub Shape_Q14: [crate::opus_types_h::opus_int32; 40],
-    pub sAR2_Q14: [crate::opus_types_h::opus_int32; 24],
-    pub LF_AR_Q14: crate::opus_types_h::opus_int32,
-    pub Diff_Q14: crate::opus_types_h::opus_int32,
-    pub Seed: crate::opus_types_h::opus_int32,
-    pub SeedInit: crate::opus_types_h::opus_int32,
-    pub RD_Q10: crate::opus_types_h::opus_int32,
+    pub sLPC_Q14: [opus_int32; 96],
+    pub RandState: [opus_int32; 40],
+    pub Q_Q10: [opus_int32; 40],
+    pub Xq_Q14: [opus_int32; 40],
+    pub Pred_Q15: [opus_int32; 40],
+    pub Shape_Q14: [opus_int32; 40],
+    pub sAR2_Q14: [opus_int32; 24],
+    pub LF_AR_Q14: opus_int32,
+    pub Diff_Q14: opus_int32,
+    pub Seed: opus_int32,
+    pub SeedInit: opus_int32,
+    pub RD_Q10: opus_int32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct NSQ_sample_struct {
-    pub Q_Q10: crate::opus_types_h::opus_int32,
-    pub RD_Q10: crate::opus_types_h::opus_int32,
-    pub xq_Q14: crate::opus_types_h::opus_int32,
-    pub LF_AR_Q14: crate::opus_types_h::opus_int32,
-    pub Diff_Q14: crate::opus_types_h::opus_int32,
-    pub sLTP_shp_Q14: crate::opus_types_h::opus_int32,
-    pub LPC_exc_Q14: crate::opus_types_h::opus_int32,
+    pub Q_Q10: opus_int32,
+    pub RD_Q10: opus_int32,
+    pub xq_Q14: opus_int32,
+    pub LF_AR_Q14: opus_int32,
+    pub Diff_Q14: opus_int32,
+    pub sLTP_shp_Q14: opus_int32,
+    pub LPC_exc_Q14: opus_int32,
 }
 
 pub type NSQ_sample_pair = [NSQ_sample_struct; 2];
@@ -573,18 +573,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_NSQ_del_dec_c(
-    mut psEncC: *const crate::structs_h::silk_encoder_state,
-    mut NSQ: *mut crate::structs_h::silk_nsq_state,
-    mut psIndices: *mut crate::structs_h::SideInfoIndices,
-    mut x16: *const crate::opus_types_h::opus_int16,
+    mut psEncC: *const silk_encoder_state,
+    mut NSQ: *mut silk_nsq_state,
+    mut psIndices: *mut SideInfoIndices,
+    mut x16: *const opus_int16,
     mut pulses: *mut i8,
-    mut PredCoef_Q12: *const crate::opus_types_h::opus_int16,
-    mut LTPCoef_Q14: *const crate::opus_types_h::opus_int16,
-    mut AR_Q13: *const crate::opus_types_h::opus_int16,
+    mut PredCoef_Q12: *const opus_int16,
+    mut LTPCoef_Q14: *const opus_int16,
+    mut AR_Q13: *const opus_int16,
     mut HarmShapeGain_Q14: *const i32,
     mut Tilt_Q14: *const i32,
-    mut LF_shp_Q14: *const crate::opus_types_h::opus_int32,
-    mut Gains_Q16: *const crate::opus_types_h::opus_int32,
+    mut LF_shp_Q14: *const opus_int32,
+    mut Gains_Q16: *const opus_int32,
     mut pitchL: *const i32,
     Lambda_Q10: i32,
     LTP_scale_Q14: i32,
@@ -601,24 +601,24 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     let mut last_smple_idx: i32 = 0;
     let mut smpl_buf_idx: i32 = 0;
     let mut decisionDelay: i32 = 0;
-    let mut A_Q12: *const crate::opus_types_h::opus_int16 =
-        0 as *const crate::opus_types_h::opus_int16;
-    let mut B_Q14: *const crate::opus_types_h::opus_int16 =
-        0 as *const crate::opus_types_h::opus_int16;
-    let mut AR_shp_Q13: *const crate::opus_types_h::opus_int16 =
-        0 as *const crate::opus_types_h::opus_int16;
-    let mut pxq: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut sLTP_Q15: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut sLTP: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut HarmShapeFIRPacked_Q14: crate::opus_types_h::opus_int32 = 0;
+    let mut A_Q12: *const opus_int16 =
+        0 as *const opus_int16;
+    let mut B_Q14: *const opus_int16 =
+        0 as *const opus_int16;
+    let mut AR_shp_Q13: *const opus_int16 =
+        0 as *const opus_int16;
+    let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut sLTP_Q15: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut HarmShapeFIRPacked_Q14: opus_int32 = 0;
     let mut offset_Q10: i32 = 0;
-    let mut RDmin_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut Gain_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut x_sc_Q10: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut delayedGain_Q10: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
+    let mut RDmin_Q10: opus_int32 = 0;
+    let mut Gain_Q10: opus_int32 = 0;
+    let mut x_sc_Q10: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut delayedGain_Q10: *mut opus_int32 =
+        0 as *mut opus_int32;
     let mut psDelDec: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
     let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
     /* Set unvoiced lag to the previous one, overwrite later for voiced */
@@ -650,13 +650,13 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             (*NSQ).sLPC_Q14.as_mut_ptr() as *const libc::c_void,
             (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int32,
+                opus_int32,
             >() as libc::c_ulong),
         );
         crate::stdlib::memcpy(
             (*psDD).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
             (*NSQ).sAR2_Q14.as_mut_ptr() as *const libc::c_void,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 24]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int32; 24]>() as libc::c_ulong,
         );
         k += 1
     }
@@ -685,36 +685,36 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     }
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as libc::c_ulong)
             as usize,
     );
-    sLTP_Q15 = fresh1.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    sLTP_Q15 = fresh1.as_mut_ptr() as *mut opus_int32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul(((*psEncC).ltp_mem_length + (*psEncC).frame_length) as libc::c_ulong)
             as usize,
     );
-    sLTP = fresh2.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    sLTP = fresh2.as_mut_ptr() as *mut opus_int16;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul((*psEncC).subfr_length as libc::c_ulong) as usize,
     );
-    x_sc_Q10 = fresh3.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    x_sc_Q10 = fresh3.as_mut_ptr() as *mut opus_int32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul(40 as i32 as libc::c_ulong) as usize,
     );
-    delayedGain_Q10 = fresh4.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    delayedGain_Q10 = fresh4.as_mut_ptr() as *mut opus_int32;
     /* Set up pointers to start of sub frame */
     pxq = &mut *(*NSQ)
         .xq
         .as_mut_ptr()
         .offset((*psEncC).ltp_mem_length as isize)
-        as *mut crate::opus_types_h::opus_int16;
+        as *mut opus_int16;
     (*NSQ).sLTP_shp_buf_idx = (*psEncC).ltp_mem_length;
     (*NSQ).sLTP_buf_idx = (*psEncC).ltp_mem_length;
     subfr = 0 as i32;
@@ -722,24 +722,24 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     while k < (*psEncC).nb_subfr {
         A_Q12 = &*PredCoef_Q12
             .offset(((k >> 1 as i32 | 1 as i32 - LSF_interpolation_flag) * 16 as i32) as isize)
-            as *const crate::opus_types_h::opus_int16;
+            as *const opus_int16;
         B_Q14 =
-            &*LTPCoef_Q14.offset((k * 5 as i32) as isize) as *const crate::opus_types_h::opus_int16;
+            &*LTPCoef_Q14.offset((k * 5 as i32) as isize) as *const opus_int16;
         AR_shp_Q13 =
-            &*AR_Q13.offset((k * 24 as i32) as isize) as *const crate::opus_types_h::opus_int16;
+            &*AR_Q13.offset((k * 24 as i32) as isize) as *const opus_int16;
         /* Noise shape parameters */
         HarmShapeFIRPacked_Q14 = *HarmShapeGain_Q14.offset(k as isize) >> 2 as i32;
         HarmShapeFIRPacked_Q14 |= (((*HarmShapeGain_Q14.offset(k as isize) >> 1 as i32)
-            as crate::opus_types_h::opus_uint32)
-            << 16 as i32) as crate::opus_types_h::opus_int32;
+            as opus_uint32)
+            << 16 as i32) as opus_int32;
         (*NSQ).rewhite_flag = 0 as i32;
         if (*psIndices).signalType as i32 == 2 as i32 {
             /* Voiced */
             lag = *pitchL.offset(k as isize);
             /* Re-whitening */
             if k & 3 as i32
-                - ((LSF_interpolation_flag as crate::opus_types_h::opus_uint32) << 1 as i32)
-                    as crate::opus_types_h::opus_int32
+                - ((LSF_interpolation_flag as opus_uint32) << 1 as i32)
+                    as opus_int32
                 == 0 as i32
             {
                 if k == 2 as i32 {
@@ -785,18 +785,18 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
                             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 1 as i32)
                                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                     * *Gains_Q16.offset(1 as i32 as isize) as i64
                                     >> 16 as i32)
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                                     & 1 as i32)
                         } else {
                             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 14 as i32 - 1 as i32)
                                 + 1 as i32)
                                 >> 1 as i32
@@ -807,45 +807,45 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
                             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 1 as i32)
                                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                     * *Gains_Q16.offset(1 as i32 as isize) as i64
                                     >> 16 as i32)
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                                     & 1 as i32)
                         } else {
                             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 14 as i32 - 1 as i32)
                                 + 1 as i32)
                                 >> 1 as i32
-                        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                        }) < 0x8000 as i32 as opus_int16 as i32
                         {
-                            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                            0x8000 as i32 as opus_int16 as i32
                         } else if 14 as i32 == 1 as i32 {
                             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 1 as i32)
                                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                     * *Gains_Q16.offset(1 as i32 as isize) as i64
                                     >> 16 as i32)
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                                     & 1 as i32)
                         } else {
                             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                                 * *Gains_Q16.offset(1 as i32 as isize) as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
+                                as opus_int32
                                 >> 14 as i32 - 1 as i32)
                                 + 1 as i32)
                                 >> 1 as i32
                         }
-                            as crate::opus_types_h::opus_int16;
+                            as opus_int16;
                         (*NSQ).sLTP_shp_Q14
                             [((*NSQ).sLTP_shp_buf_idx - decisionDelay + i) as usize] =
                             (*psDD).Shape_Q14[last_smple_idx as usize];
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
                     - lag
                     - (*psEncC).predictLPCOrder
                     - 5 as i32 / 2 as i32;
-                crate::src::opus_1_2_1::silk::LPC_analysis_filter::silk_LPC_analysis_filter(
+                silk_LPC_analysis_filter(
                     &mut *sLTP.offset(start_idx as isize),
                     &mut *(*NSQ)
                         .xq
@@ -879,7 +879,7 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             psDelDec,
             x16,
             x_sc_Q10,
-            sLTP as *const crate::opus_types_h::opus_int16,
+            sLTP as *const opus_int16,
             sLTP_Q15,
             k,
             (*psEncC).nStatesDelayedDecision,
@@ -895,7 +895,7 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             NSQ,
             psDelDec,
             (*psIndices).signalType as i32,
-            x_sc_Q10 as *const crate::opus_types_h::opus_int32,
+            x_sc_Q10 as *const opus_int32,
             pulses,
             pxq,
             sLTP_Q15,
@@ -956,14 +956,14 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
         } as i8;
         *pxq.offset((i - decisionDelay) as isize) = if (if 8 as i32 == 1 as i32 {
             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 1 as i32)
                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as crate::opus_types_h::opus_int32
+                    as opus_int32
                     & 1 as i32)
         } else {
             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -972,34 +972,34 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             0x7fff as i32
         } else if (if 8 as i32 == 1 as i32 {
             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 1 as i32)
                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as crate::opus_types_h::opus_int32
+                    as opus_int32
                     & 1 as i32)
         } else {
             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 8 as i32 == 1 as i32 {
             (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 1 as i32)
                 + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as crate::opus_types_h::opus_int32
+                    as opus_int32
                     & 1 as i32)
         } else {
             ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64 * Gain_Q10 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         (*NSQ).sLTP_shp_Q14[((*NSQ).sLTP_shp_buf_idx - decisionDelay + i) as usize] =
             (*psDD).Shape_Q14[last_smple_idx as usize];
         i += 1
@@ -1007,14 +1007,14 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     crate::stdlib::memcpy((*NSQ).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
            &mut *(*psDD).sLPC_Q14.as_mut_ptr().offset((*psEncC).subfr_length
                                                           as isize) as
-               *mut crate::opus_types_h::opus_int32 as *const libc::c_void,
+               *mut opus_int32 as *const libc::c_void,
            (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     crate::stdlib::memcpy(
         (*NSQ).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
         (*psDD).sAR2_Q14.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 24]>() as libc::c_ulong,
+        ::std::mem::size_of::<[opus_int32; 24]>() as libc::c_ulong,
     );
     /* Update states */
     (*NSQ).sLF_AR_shp_Q14 = (*psDD).LF_AR_Q14;
@@ -1023,17 +1023,17 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     /* Save quantized speech signal */
     crate::stdlib::memmove((*NSQ).xq.as_mut_ptr() as *mut libc::c_void,
             &mut *(*NSQ).xq.as_mut_ptr().offset((*psEncC).frame_length as
-                                                    isize) as *mut crate::opus_types_h::opus_int16
+                                                    isize) as *mut opus_int16
                 as *const libc::c_void,
             ((*psEncC).ltp_mem_length as
-                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                  as libc::c_ulong));
     crate::stdlib::memmove((*NSQ).sLTP_shp_Q14.as_mut_ptr() as *mut libc::c_void,
             &mut *(*NSQ).sLTP_shp_Q14.as_mut_ptr().offset((*psEncC).frame_length
                                                               as isize) as
-                *mut crate::opus_types_h::opus_int32 as *const libc::c_void,
+                *mut opus_int32 as *const libc::c_void,
             ((*psEncC).ltp_mem_length as
-                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                  as libc::c_ulong));
 }
 /* *****************************************/
@@ -1045,22 +1045,22 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
 #[inline]
 
 unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
-    mut NSQ: *mut crate::structs_h::silk_nsq_state,
+    mut NSQ: *mut silk_nsq_state,
     mut psDelDec: *mut NSQ_del_dec_struct,
     mut signalType: i32,
-    mut x_Q10: *const crate::opus_types_h::opus_int32,
+    mut x_Q10: *const opus_int32,
     mut pulses: *mut i8,
-    mut xq: *mut crate::opus_types_h::opus_int16,
-    mut sLTP_Q15: *mut crate::opus_types_h::opus_int32,
-    mut delayedGain_Q10: *mut crate::opus_types_h::opus_int32,
-    mut a_Q12: *const crate::opus_types_h::opus_int16,
-    mut b_Q14: *const crate::opus_types_h::opus_int16,
-    mut AR_shp_Q13: *const crate::opus_types_h::opus_int16,
+    mut xq: *mut opus_int16,
+    mut sLTP_Q15: *mut opus_int32,
+    mut delayedGain_Q10: *mut opus_int32,
+    mut a_Q12: *const opus_int16,
+    mut b_Q14: *const opus_int16,
+    mut AR_shp_Q13: *const opus_int16,
     mut lag: i32,
-    mut HarmShapeFIRPacked_Q14: crate::opus_types_h::opus_int32,
+    mut HarmShapeFIRPacked_Q14: opus_int32,
     mut Tilt_Q14: i32,
-    mut LF_shp_Q14: crate::opus_types_h::opus_int32,
-    mut Gain_Q16: crate::opus_types_h::opus_int32,
+    mut LF_shp_Q14: opus_int32,
+    mut Gain_Q16: opus_int32,
     mut Lambda_Q10: i32,
     mut offset_Q10: i32,
     mut length: i32,
@@ -1082,34 +1082,34 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
     let mut RDmin_ind: i32 = 0;
     let mut RDmax_ind: i32 = 0;
     let mut last_smple_idx: i32 = 0;
-    let mut Winner_rand_state: crate::opus_types_h::opus_int32 = 0;
-    let mut LTP_pred_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut LPC_pred_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut n_AR_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut n_LTP_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut n_LF_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut r_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut rr_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut rd1_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut rd2_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut RDmin_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut RDmax_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut q1_Q0: crate::opus_types_h::opus_int32 = 0;
-    let mut q1_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut q2_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut exc_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut LPC_exc_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut xq_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut Gain_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut tmp1: crate::opus_types_h::opus_int32 = 0;
-    let mut tmp2: crate::opus_types_h::opus_int32 = 0;
-    let mut sLF_AR_shp_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut pred_lag_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut shp_lag_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut psLPC_Q14: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
+    let mut Winner_rand_state: opus_int32 = 0;
+    let mut LTP_pred_Q14: opus_int32 = 0;
+    let mut LPC_pred_Q14: opus_int32 = 0;
+    let mut n_AR_Q14: opus_int32 = 0;
+    let mut n_LTP_Q14: opus_int32 = 0;
+    let mut n_LF_Q14: opus_int32 = 0;
+    let mut r_Q10: opus_int32 = 0;
+    let mut rr_Q10: opus_int32 = 0;
+    let mut rd1_Q10: opus_int32 = 0;
+    let mut rd2_Q10: opus_int32 = 0;
+    let mut RDmin_Q10: opus_int32 = 0;
+    let mut RDmax_Q10: opus_int32 = 0;
+    let mut q1_Q0: opus_int32 = 0;
+    let mut q1_Q10: opus_int32 = 0;
+    let mut q2_Q10: opus_int32 = 0;
+    let mut exc_Q14: opus_int32 = 0;
+    let mut LPC_exc_Q14: opus_int32 = 0;
+    let mut xq_Q14: opus_int32 = 0;
+    let mut Gain_Q10: opus_int32 = 0;
+    let mut tmp1: opus_int32 = 0;
+    let mut tmp2: opus_int32 = 0;
+    let mut sLF_AR_shp_Q14: opus_int32 = 0;
+    let mut pred_lag_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut shp_lag_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut psLPC_Q14: *mut opus_int32 =
+        0 as *mut opus_int32;
     let mut psSampleState: *mut NSQ_sample_pair = 0 as *mut NSQ_sample_pair;
     let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
     let mut psSS: *mut NSQ_sample_struct = 0 as *mut NSQ_sample_struct;
@@ -1123,9 +1123,9 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
         .sLTP_shp_Q14
         .as_mut_ptr()
         .offset(((*NSQ).sLTP_shp_buf_idx - lag + 3 as i32 / 2 as i32) as isize)
-        as *mut crate::opus_types_h::opus_int32;
+        as *mut opus_int32;
     pred_lag_ptr = &mut *sLTP_Q15.offset(((*NSQ).sLTP_buf_idx - lag + 5 as i32 / 2 as i32) as isize)
-        as *mut crate::opus_types_h::opus_int32;
+        as *mut opus_int32;
     Gain_Q10 = Gain_Q16 >> 6 as i32;
     i = 0 as i32;
     while i < length {
@@ -1138,25 +1138,25 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             LTP_pred_Q14 = (LTP_pred_Q14 as i64
                 + (*pred_lag_ptr.offset(0 as i32 as isize) as i64
                     * *b_Q14.offset(0 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q14 = (LTP_pred_Q14 as i64
                 + (*pred_lag_ptr.offset(-(1 as i32) as isize) as i64
                     * *b_Q14.offset(1 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q14 = (LTP_pred_Q14 as i64
                 + (*pred_lag_ptr.offset(-(2 as i32) as isize) as i64
                     * *b_Q14.offset(2 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q14 = (LTP_pred_Q14 as i64
                 + (*pred_lag_ptr.offset(-(3 as i32) as isize) as i64
                     * *b_Q14.offset(3 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q14 = (LTP_pred_Q14 as i64
                 + (*pred_lag_ptr.offset(-(4 as i32) as isize) as i64
                     * *b_Q14.offset(4 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
-            LTP_pred_Q14 = ((LTP_pred_Q14 as crate::opus_types_h::opus_uint32) << 1 as i32)
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
+            LTP_pred_Q14 = ((LTP_pred_Q14 as opus_uint32) << 1 as i32)
+                as opus_int32;
             pred_lag_ptr = pred_lag_ptr.offset(1)
         } else {
             LTP_pred_Q14 = 0 as i32
@@ -1166,15 +1166,15 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             /* Symmetric, packed FIR coefficients */
             n_LTP_Q14 = ((*shp_lag_ptr.offset(0 as i32 as isize)
                 + *shp_lag_ptr.offset(-(2 as i32) as isize)) as i64
-                * HarmShapeFIRPacked_Q14 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32; /* Q12 -> Q14 */
+                * HarmShapeFIRPacked_Q14 as opus_int16 as i64
+                >> 16 as i32) as opus_int32; /* Q12 -> Q14 */
             n_LTP_Q14 = (n_LTP_Q14 as i64
                 + (*shp_lag_ptr.offset(-(1 as i32) as isize) as i64
                     * (HarmShapeFIRPacked_Q14 as i64 >> 16 as i32)
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             n_LTP_Q14 = LTP_pred_Q14
-                - ((n_LTP_Q14 as crate::opus_types_h::opus_uint32) << 2 as i32)
-                    as crate::opus_types_h::opus_int32;
+                - ((n_LTP_Q14 as opus_uint32) << 2 as i32)
+                    as opus_int32;
             shp_lag_ptr = shp_lag_ptr.offset(1)
         } else {
             n_LTP_Q14 = 0 as i32
@@ -1186,37 +1186,37 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             /* Sample state */
             psSS = (*psSampleState.offset(k as isize)).as_mut_ptr();
             /* Generate dither */
-            (*psDD).Seed = (907633515 as i32 as crate::opus_types_h::opus_uint32).wrapping_add(
-                ((*psDD).Seed as crate::opus_types_h::opus_uint32)
-                    .wrapping_mul(196314165 as i32 as crate::opus_types_h::opus_uint32),
-            ) as crate::opus_types_h::opus_int32;
+            (*psDD).Seed = (907633515 as i32 as opus_uint32).wrapping_add(
+                ((*psDD).Seed as opus_uint32)
+                    .wrapping_mul(196314165 as i32 as opus_uint32),
+            ) as opus_int32;
             /* Pointer used in short term prediction and shaping */
             psLPC_Q14 = &mut *(*psDD)
                 .sLPC_Q14
                 .as_mut_ptr()
                 .offset((16 as i32 - 1 as i32 + i) as isize)
-                as *mut crate::opus_types_h::opus_int32;
+                as *mut opus_int32;
             /* Short-term prediction */
             LPC_pred_Q14 =
                 silk_noise_shape_quantizer_short_prediction_c(psLPC_Q14, a_Q12, predictLPCOrder); /* Q10 -> Q14 */
-            LPC_pred_Q14 = ((LPC_pred_Q14 as crate::opus_types_h::opus_uint32) << 4 as i32)
-                as crate::opus_types_h::opus_int32;
+            LPC_pred_Q14 = ((LPC_pred_Q14 as opus_uint32) << 4 as i32)
+                as opus_int32;
             /* Noise shape feedback */
             /* check that order is even */
             /* Output of lowpass section */
             tmp2 = ((*psDD).Diff_Q14 as i64
                 + ((*psDD).sAR2_Q14[0 as i32 as usize] as i64
-                    * warping_Q16 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    * warping_Q16 as opus_int16 as i64
+                    >> 16 as i32)) as opus_int32;
             tmp1 = ((*psDD).sAR2_Q14[0 as i32 as usize] as i64
                 + (((*psDD).sAR2_Q14[1 as i32 as usize] - tmp2) as i64
-                    * warping_Q16 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    * warping_Q16 as opus_int16 as i64
+                    >> 16 as i32)) as opus_int32;
             (*psDD).sAR2_Q14[0 as i32 as usize] = tmp2;
             n_AR_Q14 = shapingLPCOrder >> 1 as i32;
             n_AR_Q14 = (n_AR_Q14 as i64
                 + (tmp2 as i64 * *AR_shp_Q13.offset(0 as i32 as isize) as i64 >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
             j = 2 as i32;
             while j < shapingLPCOrder {
                 /* Output of allpass section */
@@ -1224,43 +1224,43 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                 /* Output of allpass section */
                 tmp2 = ((*psDD).sAR2_Q14[(j - 1 as i32) as usize] as i64
                     + (((*psDD).sAR2_Q14[(j + 0 as i32) as usize] - tmp1) as i64
-                        * warping_Q16 as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                        * warping_Q16 as opus_int16 as i64
+                        >> 16 as i32)) as opus_int32;
                 (*psDD).sAR2_Q14[(j - 1 as i32) as usize] = tmp1;
                 n_AR_Q14 = (n_AR_Q14 as i64
                     + (tmp1 as i64 * *AR_shp_Q13.offset((j - 1 as i32) as isize) as i64
                         >> 16 as i32))
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
                 /* Output of allpass section */
                 tmp1 = ((*psDD).sAR2_Q14[(j + 0 as i32) as usize] as i64
                     + (((*psDD).sAR2_Q14[(j + 1 as i32) as usize] - tmp2) as i64
-                        * warping_Q16 as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32)) as crate::opus_types_h::opus_int32; /* Q11 -> Q12 */
+                        * warping_Q16 as opus_int16 as i64
+                        >> 16 as i32)) as opus_int32; /* Q11 -> Q12 */
                 (*psDD).sAR2_Q14[(j + 0 as i32) as usize] = tmp2; /* Q12 */
                 n_AR_Q14 = (n_AR_Q14 as i64
                     + (tmp2 as i64 * *AR_shp_Q13.offset(j as isize) as i64 >> 16 as i32))
-                    as crate::opus_types_h::opus_int32; /* Q12 -> Q14 */
+                    as opus_int32; /* Q12 -> Q14 */
                 j += 2 as i32
             } /* Q12 */
             (*psDD).sAR2_Q14[(shapingLPCOrder - 1 as i32) as usize] = tmp1; /* Q12 */
             n_AR_Q14 = (n_AR_Q14 as i64
                 + (tmp1 as i64 * *AR_shp_Q13.offset((shapingLPCOrder - 1 as i32) as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32; /* Q12 -> Q14 */
-            n_AR_Q14 = ((n_AR_Q14 as crate::opus_types_h::opus_uint32) << 1 as i32)
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32; /* Q12 -> Q14 */
+            n_AR_Q14 = ((n_AR_Q14 as opus_uint32) << 1 as i32)
+                as opus_int32;
             n_AR_Q14 = (n_AR_Q14 as i64
-                + ((*psDD).LF_AR_Q14 as i64 * Tilt_Q14 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
-            n_AR_Q14 = ((n_AR_Q14 as crate::opus_types_h::opus_uint32) << 2 as i32)
-                as crate::opus_types_h::opus_int32;
+                + ((*psDD).LF_AR_Q14 as i64 * Tilt_Q14 as opus_int16 as i64
+                    >> 16 as i32)) as opus_int32;
+            n_AR_Q14 = ((n_AR_Q14 as opus_uint32) << 2 as i32)
+                as opus_int32;
             n_LF_Q14 = ((*psDD).Shape_Q14[*smpl_buf_idx as usize] as i64
-                * LF_shp_Q14 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32;
+                * LF_shp_Q14 as opus_int16 as i64
+                >> 16 as i32) as opus_int32;
             n_LF_Q14 = (n_LF_Q14 as i64
                 + ((*psDD).LF_AR_Q14 as i64 * (LF_shp_Q14 as i64 >> 16 as i32) >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
-            n_LF_Q14 = ((n_LF_Q14 as crate::opus_types_h::opus_uint32) << 2 as i32)
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
+            n_LF_Q14 = ((n_LF_Q14 as opus_uint32) << 2 as i32)
+                as opus_int32;
             tmp1 = n_AR_Q14 + n_LF_Q14;
             tmp2 = n_LTP_Q14 + LPC_pred_Q14;
             tmp1 = tmp2 - tmp1;
@@ -1313,65 +1313,65 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                 }
             }
             if q1_Q0 > 0 as i32 {
-                q1_Q10 = ((q1_Q0 as crate::opus_types_h::opus_uint32) << 10 as i32)
-                    as crate::opus_types_h::opus_int32
+                q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32)
+                    as opus_int32
                     - 80 as i32;
                 q1_Q10 = q1_Q10 + offset_Q10;
                 q2_Q10 = q1_Q10 + 1024 as i32;
-                rd1_Q10 = q1_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
-                rd2_Q10 = q2_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                rd1_Q10 = q1_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32;
+                rd2_Q10 = q2_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32
             } else if q1_Q0 == 0 as i32 {
                 q1_Q10 = offset_Q10;
                 q2_Q10 = q1_Q10 + (1024 as i32 - 80 as i32);
-                rd1_Q10 = q1_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
-                rd2_Q10 = q2_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                rd1_Q10 = q1_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32;
+                rd2_Q10 = q2_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32
             } else if q1_Q0 == -(1 as i32) {
                 q2_Q10 = offset_Q10;
                 q1_Q10 = q2_Q10 - (1024 as i32 - 80 as i32);
-                rd1_Q10 = -q1_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
-                rd2_Q10 = q2_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                rd1_Q10 = -q1_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32;
+                rd2_Q10 = q2_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32
             } else {
-                q1_Q10 = ((q1_Q0 as crate::opus_types_h::opus_uint32) << 10 as i32)
-                    as crate::opus_types_h::opus_int32
+                q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32)
+                    as opus_int32
                     + 80 as i32;
                 q1_Q10 = q1_Q10 + offset_Q10;
                 q2_Q10 = q1_Q10 + 1024 as i32;
-                rd1_Q10 = -q1_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
-                rd2_Q10 = -q2_Q10 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * Lambda_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                rd1_Q10 = -q1_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32;
+                rd2_Q10 = -q2_Q10 as opus_int16
+                    as opus_int32
+                    * Lambda_Q10 as opus_int16
+                        as opus_int32
             }
             rr_Q10 = r_Q10 - q1_Q10;
             rd1_Q10 = rd1_Q10
-                + rr_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * rr_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+                + rr_Q10 as opus_int16 as opus_int32
+                    * rr_Q10 as opus_int16 as opus_int32
                 >> 10 as i32;
             rr_Q10 = r_Q10 - q2_Q10;
             rd2_Q10 = rd2_Q10
-                + rr_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * rr_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+                + rr_Q10 as opus_int16 as opus_int32
+                    * rr_Q10 as opus_int16 as opus_int32
                 >> 10 as i32;
             if rd1_Q10 < rd2_Q10 {
                 (*psSS.offset(0 as i32 as isize)).RD_Q10 = (*psDD).RD_Q10 + rd1_Q10;
@@ -1385,32 +1385,32 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                 (*psSS.offset(1 as i32 as isize)).Q_Q10 = q1_Q10
             }
             exc_Q14 = (((*psSS.offset(0 as i32 as isize)).Q_Q10
-                as crate::opus_types_h::opus_uint32)
-                << 4 as i32) as crate::opus_types_h::opus_int32;
+                as opus_uint32)
+                << 4 as i32) as opus_int32;
             if (*psDD).Seed < 0 as i32 {
                 exc_Q14 = -exc_Q14
             }
             LPC_exc_Q14 = exc_Q14 + LTP_pred_Q14;
             xq_Q14 = LPC_exc_Q14 + LPC_pred_Q14;
             (*psSS.offset(0 as i32 as isize)).Diff_Q14 = xq_Q14
-                - ((*x_Q10.offset(i as isize) as crate::opus_types_h::opus_uint32) << 4 as i32)
-                    as crate::opus_types_h::opus_int32;
+                - ((*x_Q10.offset(i as isize) as opus_uint32) << 4 as i32)
+                    as opus_int32;
             sLF_AR_shp_Q14 = (*psSS.offset(0 as i32 as isize)).Diff_Q14 - n_AR_Q14;
             (*psSS.offset(0 as i32 as isize)).sLTP_shp_Q14 = sLF_AR_shp_Q14 - n_LF_Q14;
             (*psSS.offset(0 as i32 as isize)).LF_AR_Q14 = sLF_AR_shp_Q14;
             (*psSS.offset(0 as i32 as isize)).LPC_exc_Q14 = LPC_exc_Q14;
             (*psSS.offset(0 as i32 as isize)).xq_Q14 = xq_Q14;
             exc_Q14 = (((*psSS.offset(1 as i32 as isize)).Q_Q10
-                as crate::opus_types_h::opus_uint32)
-                << 4 as i32) as crate::opus_types_h::opus_int32;
+                as opus_uint32)
+                << 4 as i32) as opus_int32;
             if (*psDD).Seed < 0 as i32 {
                 exc_Q14 = -exc_Q14
             }
             LPC_exc_Q14 = exc_Q14 + LTP_pred_Q14;
             xq_Q14 = LPC_exc_Q14 + LPC_pred_Q14;
             (*psSS.offset(1 as i32 as isize)).Diff_Q14 = xq_Q14
-                - ((*x_Q10.offset(i as isize) as crate::opus_types_h::opus_uint32) << 4 as i32)
-                    as crate::opus_types_h::opus_int32;
+                - ((*x_Q10.offset(i as isize) as opus_uint32) << 4 as i32)
+                    as opus_int32;
             sLF_AR_shp_Q14 = (*psSS.offset(1 as i32 as isize)).Diff_Q14 - n_AR_Q14;
             (*psSS.offset(1 as i32 as isize)).sLTP_shp_Q14 = sLF_AR_shp_Q14 - n_LF_Q14;
             (*psSS.offset(1 as i32 as isize)).LF_AR_Q14 = sLF_AR_shp_Q14;
@@ -1482,14 +1482,14 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
         if RDmin_Q10 < RDmax_Q10 {
             crate::stdlib::memcpy(
                 (&mut *psDelDec.offset(RDmax_ind as isize) as *mut NSQ_del_dec_struct
-                    as *mut crate::opus_types_h::opus_int32)
+                    as *mut opus_int32)
                     .offset(i as isize) as *mut libc::c_void,
                 (&mut *psDelDec.offset(RDmin_ind as isize) as *mut NSQ_del_dec_struct
-                    as *mut crate::opus_types_h::opus_int32)
+                    as *mut opus_int32)
                     .offset(i as isize) as *const libc::c_void,
                 (::std::mem::size_of::<NSQ_del_dec_struct>() as libc::c_ulong).wrapping_sub(
                     (i as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                        .wrapping_mul(::std::mem::size_of::<opus_int32>()
                             as libc::c_ulong),
                 ),
             );
@@ -1518,16 +1518,16 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             *xq.offset((i - decisionDelay) as isize) = if (if 8 as i32 == 1 as i32 {
                 (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                         * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
@@ -1537,40 +1537,40 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             } else if (if 8 as i32 == 1 as i32 {
                 (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                         * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else if 8 as i32 == 1 as i32 {
                 (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + (((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                         * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 ((((*psDD).Xq_Q14[last_smple_idx as usize] as i64
                     * *delayedGain_Q10.offset(last_smple_idx as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
             }
-                as crate::opus_types_h::opus_int16;
+                as opus_int16;
             (*NSQ).sLTP_shp_Q14[((*NSQ).sLTP_shp_buf_idx - decisionDelay) as usize] =
                 (*psDD).Shape_Q14[last_smple_idx as usize];
             *sLTP_Q15.offset(((*NSQ).sLTP_buf_idx - decisionDelay) as isize) =
@@ -1591,16 +1591,16 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             (*psDD).Xq_Q14[*smpl_buf_idx as usize] = (*psSS).xq_Q14;
             (*psDD).Q_Q10[*smpl_buf_idx as usize] = (*psSS).Q_Q10;
             (*psDD).Pred_Q15[*smpl_buf_idx as usize] =
-                (((*psSS).LPC_exc_Q14 as crate::opus_types_h::opus_uint32) << 1 as i32)
-                    as crate::opus_types_h::opus_int32;
+                (((*psSS).LPC_exc_Q14 as opus_uint32) << 1 as i32)
+                    as opus_int32;
             (*psDD).Shape_Q14[*smpl_buf_idx as usize] = (*psSS).sLTP_shp_Q14;
-            (*psDD).Seed = ((*psDD).Seed as crate::opus_types_h::opus_uint32).wrapping_add(
+            (*psDD).Seed = ((*psDD).Seed as opus_uint32).wrapping_add(
                 (if 10 as i32 == 1 as i32 {
                     ((*psSS).Q_Q10 >> 1 as i32) + ((*psSS).Q_Q10 & 1 as i32)
                 } else {
                     (((*psSS).Q_Q10 >> 10 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-                }) as crate::opus_types_h::opus_uint32,
-            ) as crate::opus_types_h::opus_int32;
+                }) as opus_uint32,
+            ) as opus_int32;
             (*psDD).RandState[*smpl_buf_idx as usize] = (*psDD).Seed;
             (*psDD).RD_Q10 = (*psSS).RD_Q10;
             k += 1
@@ -1615,9 +1615,9 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
         crate::stdlib::memcpy(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             &mut *(*psDD).sLPC_Q14.as_mut_ptr().offset(length as isize)
-                as *mut crate::opus_types_h::opus_int32 as *const libc::c_void,
+                as *mut opus_int32 as *const libc::c_void,
             (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int32,
+                opus_int32,
             >() as libc::c_ulong),
         );
         k += 1
@@ -1627,17 +1627,17 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
 #[inline]
 
 unsafe extern "C" fn silk_nsq_del_dec_scale_states(
-    mut psEncC: *const crate::structs_h::silk_encoder_state,
-    mut NSQ: *mut crate::structs_h::silk_nsq_state,
+    mut psEncC: *const silk_encoder_state,
+    mut NSQ: *mut silk_nsq_state,
     mut psDelDec: *mut NSQ_del_dec_struct,
-    mut x16: *const crate::opus_types_h::opus_int16,
-    mut x_sc_Q10: *mut crate::opus_types_h::opus_int32,
-    mut sLTP: *const crate::opus_types_h::opus_int16,
-    mut sLTP_Q15: *mut crate::opus_types_h::opus_int32,
+    mut x16: *const opus_int16,
+    mut x_sc_Q10: *mut opus_int32,
+    mut sLTP: *const opus_int16,
+    mut sLTP_Q15: *mut opus_int32,
     mut subfr: i32,
     mut nStatesDelayedDecision: i32,
     LTP_scale_Q14: i32,
-    mut Gains_Q16: *const crate::opus_types_h::opus_int32,
+    mut Gains_Q16: *const opus_int32,
     mut pitchL: *const i32,
     signal_type: i32,
     decisionDelay: i32,
@@ -1647,9 +1647,9 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut lag: i32 = 0;
-    let mut gain_adj_Q16: crate::opus_types_h::opus_int32 = 0;
-    let mut inv_gain_Q31: crate::opus_types_h::opus_int32 = 0;
-    let mut inv_gain_Q26: crate::opus_types_h::opus_int32 = 0;
+    let mut gain_adj_Q16: opus_int32 = 0;
+    let mut inv_gain_Q31: opus_int32 = 0;
+    let mut inv_gain_Q26: opus_int32 = 0;
     let mut psDD: *mut NSQ_del_dec_struct = 0 as *mut NSQ_del_dec_struct;
     lag = *pitchL.offset(subfr as isize);
     inv_gain_Q31 = silk_INVERSE32_varQ(
@@ -1669,7 +1669,7 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
     i = 0 as i32;
     while i < (*psEncC).subfr_length {
         *x_sc_Q10.offset(i as isize) = (*x16.offset(i as isize) as i64 * inv_gain_Q26 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            >> 16 as i32) as opus_int32;
         i += 1
     }
     /* After rewhitening the LTP state is un-scaled, so scale with inv_gain_Q16 */
@@ -1677,16 +1677,16 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
         if subfr == 0 as i32 {
             /* Do LTP downscaling */
             inv_gain_Q31 = (((inv_gain_Q31 as i64
-                * LTP_scale_Q14 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
-                as crate::opus_types_h::opus_uint32)
-                << 2 as i32) as crate::opus_types_h::opus_int32
+                * LTP_scale_Q14 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
+                as opus_uint32)
+                << 2 as i32) as opus_int32
         }
         i = (*NSQ).sLTP_buf_idx - lag - 5 as i32 / 2 as i32;
         while i < (*NSQ).sLTP_buf_idx {
             *sLTP_Q15.offset(i as isize) = (inv_gain_Q31 as i64 * *sLTP.offset(i as isize) as i64
                 >> 16 as i32)
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
             i += 1
         }
     }
@@ -1702,7 +1702,7 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
         while i < (*NSQ).sLTP_shp_buf_idx {
             (*NSQ).sLTP_shp_Q14[i as usize] =
                 (gain_adj_Q16 as i64 * (*NSQ).sLTP_shp_Q14[i as usize] as i64 >> 16 as i32)
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
             i += 1
         }
         /* Scale long-term prediction state */
@@ -1711,7 +1711,7 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
             while i < (*NSQ).sLTP_buf_idx - decisionDelay {
                 *sLTP_Q15.offset(i as isize) =
                     (gain_adj_Q16 as i64 * *sLTP_Q15.offset(i as isize) as i64 >> 16 as i32)
-                        as crate::opus_types_h::opus_int32;
+                        as opus_int32;
                 i += 1
             }
         }
@@ -1720,32 +1720,32 @@ unsafe extern "C" fn silk_nsq_del_dec_scale_states(
             psDD = &mut *psDelDec.offset(k as isize) as *mut NSQ_del_dec_struct;
             /* Scale scalar states */
             (*psDD).LF_AR_Q14 = (gain_adj_Q16 as i64 * (*psDD).LF_AR_Q14 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
             (*psDD).Diff_Q14 = (gain_adj_Q16 as i64 * (*psDD).Diff_Q14 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
             /* Scale short-term prediction and shaping states */
             i = 0 as i32;
             while i < 16 as i32 {
                 (*psDD).sLPC_Q14[i as usize] =
                     (gain_adj_Q16 as i64 * (*psDD).sLPC_Q14[i as usize] as i64 >> 16 as i32)
-                        as crate::opus_types_h::opus_int32;
+                        as opus_int32;
                 i += 1
             }
             i = 0 as i32;
             while i < 24 as i32 {
                 (*psDD).sAR2_Q14[i as usize] =
                     (gain_adj_Q16 as i64 * (*psDD).sAR2_Q14[i as usize] as i64 >> 16 as i32)
-                        as crate::opus_types_h::opus_int32;
+                        as opus_int32;
                 i += 1
             }
             i = 0 as i32;
             while i < 40 as i32 {
                 (*psDD).Pred_Q15[i as usize] =
                     (gain_adj_Q16 as i64 * (*psDD).Pred_Q15[i as usize] as i64 >> 16 as i32)
-                        as crate::opus_types_h::opus_int32;
+                        as opus_int32;
                 (*psDD).Shape_Q14[i as usize] =
                     (gain_adj_Q16 as i64 * (*psDD).Shape_Q14[i as usize] as i64 >> 16 as i32)
-                        as crate::opus_types_h::opus_int32;
+                        as opus_int32;
                 i += 1
             }
             k += 1

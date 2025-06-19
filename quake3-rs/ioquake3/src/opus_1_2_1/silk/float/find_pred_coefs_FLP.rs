@@ -126,8 +126,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut psEncCtrl: *mut silk_encoder_control_FLP,
     mut res_pitch: *const f32,
     mut x: *const f32,
     mut condCoding: i32,
@@ -138,7 +138,7 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     let mut XXLTP: [f32; 100] = [0.; 100];
     let mut xXLTP: [f32; 20] = [0.; 20];
     let mut invGains: [f32; 4] = [0.; 4];
-    let mut NLSF_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut NLSF_Q15: [opus_int16; 16] = [0; 16];
     let mut x_ptr: *const f32 = 0 as *const f32;
     let mut x_pre_ptr: *mut f32 = 0 as *mut f32;
     let mut LPC_in_pre: [f32; 384] = [0.; 384];
@@ -175,8 +175,8 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
             (*psEnc).sCmn.arch,
         );
         crate::src::opus_1_2_1::silk::float::LTP_scale_ctrl_FLP::silk_LTP_scale_ctrl_FLP(
-            psEnc as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-            psEncCtrl as *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+            psEnc as *mut silk_encoder_state_FLP,
+            psEncCtrl as *mut silk_encoder_control_FLP,
             condCoding,
         );
         crate::src::opus_1_2_1::silk::float::LTP_analysis_filter_FLP::silk_LTP_analysis_filter_FLP(
@@ -234,17 +234,17 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     }
     /* LPC_in_pre contains the LTP-filtered input for voiced, and the unfiltered input for unvoiced */
     crate::src::opus_1_2_1::silk::float::find_LPC_FLP::silk_find_LPC_FLP(
-        &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
+        &mut (*psEnc).sCmn as *mut _ as *mut silk_encoder_state,
         NLSF_Q15.as_mut_ptr(),
         LPC_in_pre.as_mut_ptr() as *const f32,
         minInvGain,
     );
     /* Quantize LSFs */
     crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_process_NLSFs_FLP(
-        &mut (*psEnc).sCmn as *mut _ as *mut crate::structs_h::silk_encoder_state,
+        &mut (*psEnc).sCmn as *mut _ as *mut silk_encoder_state,
         (*psEncCtrl).PredCoef.as_mut_ptr(),
         NLSF_Q15.as_mut_ptr(),
-        (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
+        (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *const opus_int16,
     );
     /* Calculate residual energy using quantized LPC coefficients */
     crate::src::opus_1_2_1::silk::float::residual_energy_FLP::silk_residual_energy_FLP(
@@ -260,6 +260,6 @@ pub unsafe extern "C" fn silk_find_pred_coefs_FLP(
     crate::stdlib::memcpy(
         (*psEnc).sCmn.prev_NLSFq_Q15.as_mut_ptr() as *mut libc::c_void,
         NLSF_Q15.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[opus_int16; 16]>() as libc::c_ulong,
     );
 }

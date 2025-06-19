@@ -33,12 +33,12 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Approximate sigmoid function */
 /* fprintf(1, '%d, ', round(1024 * ([1 ./ (1 + exp(-(1:5))), 1] - 1 ./ (1 + exp(-(0:5)))))); */
 
-static mut sigm_LUT_slope_Q10: [crate::opus_types_h::opus_int32; 6] = [
+static mut sigm_LUT_slope_Q10: [opus_int32; 6] = [
     237 as i32, 153 as i32, 73 as i32, 30 as i32, 12 as i32, 7 as i32,
 ];
 /* fprintf(1, '%d, ', round(32767 * 1 ./ (1 + exp(-(0:5))))); */
 
-static mut sigm_LUT_pos_Q15: [crate::opus_types_h::opus_int32; 6] = [
+static mut sigm_LUT_pos_Q15: [opus_int32; 6] = [
     16384 as i32,
     23955 as i32,
     28861 as i32,
@@ -48,7 +48,7 @@ static mut sigm_LUT_pos_Q15: [crate::opus_types_h::opus_int32; 6] = [
 ];
 /* fprintf(1, '%d, ', round(32767 * 1 ./ (1 + exp((0:5))))); */
 
-static mut sigm_LUT_neg_Q15: [crate::opus_types_h::opus_int32; 6] = [
+static mut sigm_LUT_neg_Q15: [opus_int32; 6] = [
     16384 as i32,
     8812 as i32,
     3906 as i32,
@@ -182,10 +182,10 @@ pub unsafe extern "C" fn silk_sigm_Q15(mut in_Q5: i32) -> i32
             /* Linear interpolation of look up table */
             ind = in_Q5 >> 5 as i32;
             return sigm_LUT_neg_Q15[ind as usize]
-                - sigm_LUT_slope_Q10[ind as usize] as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                    * (in_Q5 & 0x1f as i32) as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
+                - sigm_LUT_slope_Q10[ind as usize] as opus_int16
+                    as opus_int32
+                    * (in_Q5 & 0x1f as i32) as opus_int16
+                        as opus_int32;
         }
     } else if in_Q5 >= 6 as i32 * 32 as i32 {
         return 32767 as i32;
@@ -195,9 +195,9 @@ pub unsafe extern "C" fn silk_sigm_Q15(mut in_Q5: i32) -> i32
         /* Linear interpolation of look up table */
         ind = in_Q5 >> 5 as i32;
         return sigm_LUT_pos_Q15[ind as usize]
-            + sigm_LUT_slope_Q10[ind as usize] as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * (in_Q5 & 0x1f as i32) as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32;
+            + sigm_LUT_slope_Q10[ind as usize] as opus_int16
+                as opus_int32
+                * (in_Q5 & 0x1f as i32) as opus_int16
+                    as opus_int32;
     };
 }

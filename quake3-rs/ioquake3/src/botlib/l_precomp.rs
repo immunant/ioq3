@@ -299,13 +299,13 @@ pub unsafe extern "C" fn PC_PopIndent(
 
 pub unsafe extern "C" fn PC_PushScript(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut script: *mut crate::src::botlib::l_script::script_t,
+    mut script: *mut script_t,
 ) {
-    let mut s: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t; //end for
+    let mut s: *mut script_t =
+        0 as *mut script_t; //end for
     s = (*source).scriptstack;
     while !s.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             (*s).filename.as_mut_ptr(),
             (*script).filename.as_mut_ptr(),
         ) == 0
@@ -358,18 +358,18 @@ pub unsafe extern "C" fn PC_InitTokenHeap() {
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_CopyToken(
-    mut token: *mut crate::src::botlib::l_script::token_t,
-) -> *mut crate::src::botlib::l_script::token_t {
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    mut token: *mut token_t,
+) -> *mut token_t {
+    let mut t: *mut token_t =
+        0 as *mut token_t;
     //	t = (token_t *) malloc(sizeof(token_t));
     t = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
-        crate::src::botlib::l_script::token_t,
-    >() as libc::c_ulong) as *mut crate::src::botlib::l_script::token_t;
+        token_t,
+    >() as libc::c_ulong) as *mut token_t;
     //	t = freetokens;
     if t.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"out of token space\x00" as *const u8 as *const libc::c_char,
         ); //end if
     }
@@ -377,9 +377,9 @@ pub unsafe extern "C" fn PC_CopyToken(
     crate::stdlib::memcpy(
         t as *mut libc::c_void,
         token as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<token_t>() as libc::c_ulong,
     );
-    (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+    (*t).next = 0 as *mut token_s;
     numtokens += 1;
     return t;
 }
@@ -392,7 +392,7 @@ pub unsafe extern "C" fn PC_CopyToken(
 //============================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn PC_FreeToken(mut token: *mut crate::src::botlib::l_script::token_t) {
+pub unsafe extern "C" fn PC_FreeToken(mut token: *mut token_t) {
     //free(token);
     crate::src::botlib::l_memory::FreeMemory(token as *mut libc::c_void);
     //	token->next = freetokens;
@@ -410,28 +410,28 @@ pub unsafe extern "C" fn PC_FreeToken(mut token: *mut crate::src::botlib::l_scri
 
 pub unsafe extern "C" fn PC_ReadSourceToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut script: *mut script_t =
+        0 as *mut script_t;
     let mut type_0: i32 = 0;
     let mut skip: i32 = 0;
     //if there's no token already available
     while (*source).tokens.is_null() {
         //end while
         //if there's a token to read from the script
-        if crate::src::botlib::l_script::PS_ReadToken(
-            (*source).scriptstack as *mut crate::src::botlib::l_script::script_s,
-            token as *mut crate::src::botlib::l_script::token_s,
+        if PS_ReadToken(
+            (*source).scriptstack as *mut script_s,
+            token as *mut token_s,
         ) != 0
         {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         //if at the end of the script
-        if crate::src::botlib::l_script::EndOfScript(
-            (*source).scriptstack as *mut crate::src::botlib::l_script::script_s,
+        if EndOfScript(
+            (*source).scriptstack as *mut script_s,
         ) != 0
         {
             //end if
@@ -449,26 +449,26 @@ pub unsafe extern "C" fn PC_ReadSourceToken(
         }
         //if this was the initial script
         if (*(*source).scriptstack).next.is_null() {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //remove the script and return to the last one
         script = (*source).scriptstack;
         (*source).scriptstack = (*(*source).scriptstack).next;
-        crate::src::botlib::l_script::FreeScript(
-            script as *mut crate::src::botlib::l_script::script_s,
+        FreeScript(
+            script as *mut script_s,
         );
     }
     //copy the already available token
     crate::stdlib::memcpy(
         token as *mut libc::c_void,
         (*source).tokens as *const libc::c_void,
-        ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+        ::std::mem::size_of::<token_t>() as libc::c_ulong,
     );
     //free the read token
     t = (*source).tokens;
     (*source).tokens = (*(*source).tokens).next;
     PC_FreeToken(t);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_ReadSourceToken
 //============================================================================
@@ -481,14 +481,14 @@ pub unsafe extern "C" fn PC_ReadSourceToken(
 
 pub unsafe extern "C" fn PC_UnreadSourceToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
     t = PC_CopyToken(token);
     (*t).next = (*source).tokens;
     (*source).tokens = t;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_UnreadSourceToken
 //============================================================================
@@ -502,10 +502,10 @@ pub unsafe extern "C" fn PC_UnreadSourceToken(
 pub unsafe extern "C" fn PC_ReadDefineParms(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
-    mut parms: *mut *mut crate::src::botlib::l_script::token_t,
+    mut parms: *mut *mut token_t,
     mut maxparms: i32,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -515,12 +515,12 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     }; //end if
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut last: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut last: *mut token_t =
+        0 as *mut token_t;
     let mut i: i32 = 0;
     let mut done: i32 = 0;
     let mut lastcomma: i32 = 0;
@@ -532,7 +532,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
             b"define %s missing parms\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*define).name,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     if (*define).numparms > maxparms {
@@ -542,17 +542,17 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                 as *mut libc::c_char,
             maxparms,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     i = 0 as i32;
     while i < (*define).numparms {
         let ref mut fresh0 = *parms.offset(i as isize);
-        *fresh0 = 0 as *mut crate::src::botlib::l_script::token_t;
+        *fresh0 = 0 as *mut token_t;
         i += 1
     }
     //if no leading "("
-    if ::libc::strcmp(
+    if libc::strcmp(
         token.string.as_mut_ptr(),
         b"(\x00" as *const u8 as *const libc::c_char,
     ) != 0
@@ -563,7 +563,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
             b"define %s missing parms\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*define).name,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //read the define parameters
     done = 0 as i32; //end for
@@ -577,7 +577,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                     as *mut libc::c_char,
                 (*define).name,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if numparms >= (*define).numparms {
             SourceWarning(
@@ -586,12 +586,12 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                     as *mut libc::c_char,
                 (*define).name,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         let ref mut fresh1 = *parms.offset(numparms as isize);
-        *fresh1 = 0 as *mut crate::src::botlib::l_script::token_t;
+        *fresh1 = 0 as *mut token_t;
         lastcomma = 1 as i32;
-        last = 0 as *mut crate::src::botlib::l_script::token_t;
+        last = 0 as *mut token_t;
         //end if
         while done == 0 {
             if PC_ReadSourceToken(source, &mut token) == 0 {
@@ -601,12 +601,12 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                         as *mut libc::c_char,
                     (*define).name,
                 ); //end while
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             //
             //end if
             //
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b",\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -624,7 +624,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                 //end if
             }
             lastcomma = 0 as i32;
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"(\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -633,7 +633,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                 //end if
                 indent += 1
             } else {
-                if ::libc::strcmp(
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b")\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -657,7 +657,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                 if numparms < (*define).numparms {
                     //
                     t = PC_CopyToken(&mut token);
-                    (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                    (*t).next = 0 as *mut token_s;
                     if !last.is_null() {
                         (*last).next = t
                     } else {
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
         }
         numparms += 1
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_ReadDefineParms
 //============================================================================
@@ -682,16 +682,16 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_StringizeTokens(
-    mut tokens: *mut crate::src::botlib::l_script::token_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut tokens: *mut token_t,
+    mut token: *mut token_t,
 ) -> i32 {
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t; //end for
+    let mut t: *mut token_t =
+        0 as *mut token_t; //end for
     (*token).type_0 = 1 as i32;
     (*token).whitespace_p = 0 as *mut libc::c_char;
     (*token).endwhitespace_p = 0 as *mut libc::c_char;
     (*token).string[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
-    ::libc::strcat(
+    libc::strcat(
         (*token).string.as_mut_ptr(),
         b"\"\x00" as *const u8 as *const libc::c_char,
     );
@@ -713,7 +713,7 @@ pub unsafe extern "C" fn PC_StringizeTokens(
             .wrapping_sub(crate::stdlib::strlen((*token).string.as_mut_ptr()))
             .wrapping_sub(1 as i32 as libc::c_ulong),
     );
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_StringizeTokens
 //============================================================================
@@ -725,13 +725,13 @@ pub unsafe extern "C" fn PC_StringizeTokens(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_MergeTokens(
-    mut t1: *mut crate::src::botlib::l_script::token_t,
-    mut t2: *mut crate::src::botlib::l_script::token_t,
+    mut t1: *mut token_t,
+    mut t2: *mut token_t,
 ) -> i32 {
     //merging of a name with a name or number
     if (*t1).type_0 == 4 as i32 && ((*t2).type_0 == 4 as i32 || (*t2).type_0 == 3 as i32) {
-        ::libc::strcat((*t1).string.as_mut_ptr(), (*t2).string.as_mut_ptr()); //end if
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        libc::strcat((*t1).string.as_mut_ptr(), (*t2).string.as_mut_ptr()); //end if
+        return qtrue as i32;
     }
     //merging of two strings
     if (*t1).type_0 == 1 as i32 && (*t2).type_0 == 1 as i32 {
@@ -740,14 +740,14 @@ pub unsafe extern "C" fn PC_MergeTokens(
         (*t1).string[crate::stdlib::strlen((*t1).string.as_mut_ptr())
             .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
         //concat without leading double quote
-        ::libc::strcat(
+        libc::strcat(
             (*t1).string.as_mut_ptr(),
             &mut *(*t2).string.as_mut_ptr().offset(1 as i32 as isize),
         );
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //FIXME: merging of two number of the same sub type
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_MergeTokens
 //============================================================================
@@ -864,7 +864,7 @@ pub unsafe extern "C" fn PC_FindHashedDefine(
     hash = PC_NameHash(name);
     d = *definehash.offset(hash as isize);
     while !d.is_null() {
-        if ::libc::strcmp((*d).name, name) == 0 {
+        if libc::strcmp((*d).name, name) == 0 {
             return d;
         }
         d = (*d).hashnext
@@ -889,7 +889,7 @@ pub unsafe extern "C" fn PC_FindDefine(
         0 as *mut crate::src::botlib::l_precomp::define_t; //end for
     d = defines;
     while !d.is_null() {
-        if ::libc::strcmp((*d).name, name) == 0 {
+        if libc::strcmp((*d).name, name) == 0 {
             return d;
         }
         d = (*d).next
@@ -910,13 +910,13 @@ pub unsafe extern "C" fn PC_FindDefineParm(
     mut define: *mut crate::src::botlib::l_precomp::define_t,
     mut name: *mut libc::c_char,
 ) -> i32 {
-    let mut p: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t; //end for
+    let mut p: *mut token_t =
+        0 as *mut token_t; //end for
     let mut i: i32 = 0;
     i = 0 as i32;
     p = (*define).parms;
     while !p.is_null() {
-        if ::libc::strcmp((*p).string.as_mut_ptr(), name) == 0 {
+        if libc::strcmp((*p).string.as_mut_ptr(), name) == 0 {
             return i;
         }
         i += 1;
@@ -934,10 +934,10 @@ pub unsafe extern "C" fn PC_FindDefineParm(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_FreeDefine(mut define: *mut crate::src::botlib::l_precomp::define_t) {
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut next: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut next: *mut token_t =
+        0 as *mut token_t;
     //free the define parameters
     t = (*define).parms; //end for
     while !t.is_null() {
@@ -1023,7 +1023,7 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
             crate::stdlib::strlen(builtin_0[i as usize].string)
                 .wrapping_add(1 as i32 as libc::c_ulong),
         ) as *mut libc::c_char;
-        ::libc::strcpy((*define).name, builtin_0[i as usize].string);
+        libc::strcpy((*define).name, builtin_0[i as usize].string);
         (*define).flags |= 0x1 as i32;
         (*define).builtin = builtin_0[i as usize].builtin;
         //DEFINEHASHING
@@ -1044,19 +1044,19 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
 
 pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut deftoken: *mut crate::src::botlib::l_script::token_t,
+    mut deftoken: *mut token_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
-    mut firsttoken: *mut *mut crate::src::botlib::l_script::token_t,
-    mut lasttoken: *mut *mut crate::src::botlib::l_script::token_t,
+    mut firsttoken: *mut *mut token_t,
+    mut lasttoken: *mut *mut token_t,
 ) -> i32 {
-    let mut token: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t; //end switch
-    let mut t: crate::stdlib::time_t = 0;
+    let mut token: *mut token_t =
+        0 as *mut token_t; //end switch
+    let mut t: time_t = 0;
     let mut curtime: *mut libc::c_char = 0 as *mut libc::c_char;
     token = PC_CopyToken(deftoken);
     match (*define).builtin {
         1 => {
-            ::libc::sprintf(
+            libc::sprintf(
                 (*token).string.as_mut_ptr(),
                 b"%d\x00" as *const u8 as *const libc::c_char,
                 (*deftoken).line,
@@ -1071,7 +1071,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         2 => {
-            ::libc::strcpy(
+            libc::strcpy(
                 (*token).string.as_mut_ptr(),
                 (*(*source).scriptstack).filename.as_mut_ptr(),
             );
@@ -1081,9 +1081,9 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         3 => {
-            t = ::libc::time(0 as *mut libc::c_long) as crate::stdlib::time_t;
+            t = libc::time(0 as *mut libc::c_long) as time_t;
             curtime = crate::stdlib::ctime(&mut t);
-            ::libc::strcpy(
+            libc::strcpy(
                 (*token).string.as_mut_ptr(),
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
@@ -1097,20 +1097,20 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
                 curtime.offset(20 as i32 as isize),
                 4 as i32 as libc::c_ulong,
             );
-            ::libc::strcat(
+            libc::strcat(
                 (*token).string.as_mut_ptr(),
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
-            ::libc::free(curtime as *mut libc::c_void);
+            libc::free(curtime as *mut libc::c_void);
             (*token).type_0 = 4 as i32;
             (*token).subtype = crate::stdlib::strlen((*token).string.as_mut_ptr()) as i32;
             *firsttoken = token;
             *lasttoken = token
         }
         4 => {
-            t = ::libc::time(0 as *mut libc::c_long) as crate::stdlib::time_t;
+            t = libc::time(0 as *mut libc::c_long) as time_t;
             curtime = crate::stdlib::ctime(&mut t);
-            ::libc::strcpy(
+            libc::strcpy(
                 (*token).string.as_mut_ptr(),
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
@@ -1119,22 +1119,22 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
                 curtime.offset(11 as i32 as isize),
                 8 as i32 as libc::c_ulong,
             );
-            ::libc::strcat(
+            libc::strcat(
                 (*token).string.as_mut_ptr(),
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
-            ::libc::free(curtime as *mut libc::c_void);
+            libc::free(curtime as *mut libc::c_void);
             (*token).type_0 = 4 as i32;
             (*token).subtype = crate::stdlib::strlen((*token).string.as_mut_ptr()) as i32;
             *firsttoken = token;
             *lasttoken = token
         }
         5 | _ => {
-            *firsttoken = 0 as *mut crate::src::botlib::l_script::token_t;
-            *lasttoken = 0 as *mut crate::src::botlib::l_script::token_t
+            *firsttoken = 0 as *mut token_t;
+            *lasttoken = 0 as *mut token_t
         }
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_ExpandBuiltinDefine
 //============================================================================
@@ -1147,158 +1147,158 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
 
 pub unsafe extern "C" fn PC_ExpandDefine(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut deftoken: *mut crate::src::botlib::l_script::token_t,
+    mut deftoken: *mut token_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
-    mut firsttoken: *mut *mut crate::src::botlib::l_script::token_t,
-    mut lasttoken: *mut *mut crate::src::botlib::l_script::token_t,
+    mut firsttoken: *mut *mut token_t,
+    mut lasttoken: *mut *mut token_t,
 ) -> i32 {
-    let mut parms: [*mut crate::src::botlib::l_script::token_t; 128] = [
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
-        0 as *mut crate::src::botlib::l_script::token_t,
+    let mut parms: [*mut token_t; 128] = [
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
+        0 as *mut token_t,
     ];
-    let mut dt: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut pt: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut t1: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut t2: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut first: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut last: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut nextpt: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut dt: *mut token_t =
+        0 as *mut token_t;
+    let mut pt: *mut token_t =
+        0 as *mut token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut t1: *mut token_t =
+        0 as *mut token_t;
+    let mut t2: *mut token_t =
+        0 as *mut token_t;
+    let mut first: *mut token_t =
+        0 as *mut token_t;
+    let mut last: *mut token_t =
+        0 as *mut token_t;
+    let mut nextpt: *mut token_t =
+        0 as *mut token_t;
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -1308,7 +1308,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut parmnum: i32 = 0;
     let mut i: i32 = 0;
@@ -1319,13 +1319,13 @@ pub unsafe extern "C" fn PC_ExpandDefine(
       //if the define has parameters
     if (*define).numparms != 0 {
         if PC_ReadDefineParms(source, define, parms.as_mut_ptr(), 128 as i32) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         } //end if
           //DEBUG_EVAL
     }
     //empty list at first
-    first = 0 as *mut crate::src::botlib::l_script::token_t;
-    last = 0 as *mut crate::src::botlib::l_script::token_t;
+    first = 0 as *mut token_t;
+    last = 0 as *mut token_t;
     let mut current_block_41: u64;
     //create a list with tokens of the expanded define
     dt = (*define).tokens; //end for
@@ -1342,7 +1342,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
             while !pt.is_null() {
                 t = PC_CopyToken(pt);
                 //add the token to the list
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !last.is_null() {
                     (*last).next = t
                 } else {
@@ -1376,7 +1376,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
                             b"can\'t stringize tokens\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                         ); //end if
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     t = PC_CopyToken(&mut token);
                     current_block_41 = 13131896068329595644;
@@ -1396,7 +1396,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
                 1917311967535052937 => {}
                 _ => {
                     //add the token to the list
-                    (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                    (*t).next = 0 as *mut token_s;
                     if !last.is_null() {
                         (*last).next = t
                     } else {
@@ -1429,7 +1429,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
                             (*t1).string.as_mut_ptr(),
                             (*t2).string.as_mut_ptr(),
                         ); //end if
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     PC_FreeToken((*t1).next);
                     (*t1).next = (*t2).next;
@@ -1460,7 +1460,7 @@ pub unsafe extern "C" fn PC_ExpandDefine(
         //end for
     }
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_ExpandDefine
 //============================================================================
@@ -1473,22 +1473,22 @@ pub unsafe extern "C" fn PC_ExpandDefine(
 
 pub unsafe extern "C" fn PC_ExpandDefineIntoSource(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut deftoken: *mut crate::src::botlib::l_script::token_t,
+    mut deftoken: *mut token_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
 ) -> i32 {
-    let mut firsttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t; //end if
-    let mut lasttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut firsttoken: *mut token_t =
+        0 as *mut token_t; //end if
+    let mut lasttoken: *mut token_t =
+        0 as *mut token_t;
     if PC_ExpandDefine(source, deftoken, define, &mut firsttoken, &mut lasttoken) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if !firsttoken.is_null() && !lasttoken.is_null() {
         (*lasttoken).next = (*source).tokens;
         (*source).tokens = firsttoken;
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_ExpandDefineIntoSource
 //============================================================================
@@ -1540,9 +1540,9 @@ pub unsafe extern "C" fn PC_ConvertPath(mut path: *mut libc::c_char) {
 pub unsafe extern "C" fn PC_Directive_include(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut script: *mut script_t =
+        0 as *mut script_t;
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -1552,12 +1552,12 @@ pub unsafe extern "C" fn PC_Directive_include(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut path: [libc::c_char; 64] = [0; 64];
     //QUAKE
     if (*source).skip > 0 as i32 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //
     if PC_ReadSourceToken(source, &mut token) == 0 {
@@ -1566,7 +1566,7 @@ pub unsafe extern "C" fn PC_Directive_include(
             b"#include without file name\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end if
     if token.linescrossed > 0 as i32 {
         SourceError(
@@ -1574,30 +1574,30 @@ pub unsafe extern "C" fn PC_Directive_include(
             b"#include without file name\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end else
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if token.type_0 == 1 as i32 {
-        crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
+        StripDoubleQuotes(token.string.as_mut_ptr());
         PC_ConvertPath(token.string.as_mut_ptr());
-        script = crate::src::botlib::l_script::LoadScriptFile(token.string.as_mut_ptr())
-            as *mut crate::src::botlib::l_script::script_s;
+        script = LoadScriptFile(token.string.as_mut_ptr())
+            as *mut script_s;
         if script.is_null() {
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 path.as_mut_ptr(),
                 (*source).includepath.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 path.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                 token.string.as_mut_ptr(),
             );
-            script = crate::src::botlib::l_script::LoadScriptFile(path.as_mut_ptr())
-                as *mut crate::src::botlib::l_script::script_s
+            script = LoadScriptFile(path.as_mut_ptr())
+                as *mut script_s
         }
     //end if
     } else if token.type_0 == 5 as i32 && *token.string.as_mut_ptr() as i32 == '<' as i32 {
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             path.as_mut_ptr(),
             (*source).includepath.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -1611,7 +1611,7 @@ pub unsafe extern "C" fn PC_Directive_include(
                 if token.type_0 == 5 as i32 && *token.string.as_mut_ptr() as i32 == '>' as i32 {
                     break; //end if
                 }
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     path.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                     token.string.as_mut_ptr(),
@@ -1631,18 +1631,18 @@ pub unsafe extern "C" fn PC_Directive_include(
                 b"#include without file name between < >\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         PC_ConvertPath(path.as_mut_ptr());
-        script = crate::src::botlib::l_script::LoadScriptFile(path.as_mut_ptr())
-            as *mut crate::src::botlib::l_script::script_s
+        script = LoadScriptFile(path.as_mut_ptr())
+            as *mut script_s
     } else {
         SourceError(
             source,
             b"#include without file name\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //QUAKE
     if script.is_null() {
@@ -1651,11 +1651,11 @@ pub unsafe extern "C" fn PC_Directive_include(
             b"file %s not found\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             path.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32; //end if
+        return qfalse as i32; //end if
                                                              //SCREWUP
     }
     PC_PushScript(source, script);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //read a token only if on the same line, lines are concatenated with a slash
 //end of the function PC_Directive_include
@@ -1671,20 +1671,20 @@ pub unsafe extern "C" fn PC_Directive_include(
 
 pub unsafe extern "C" fn PC_ReadLine(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
     let mut crossline: i32 = 0; //end if
     crossline = 0 as i32;
     loop {
         if PC_ReadSourceToken(source, token) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if (*token).linescrossed > crossline {
             PC_UnreadSourceToken(source, token);
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         crossline = 1 as i32;
-        if !(::libc::strcmp(
+        if !(libc::strcmp(
             (*token).string.as_mut_ptr(),
             b"\\\x00" as *const u8 as *const libc::c_char,
         ) == 0)
@@ -1692,7 +1692,7 @@ pub unsafe extern "C" fn PC_ReadLine(
             break;
         }
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //returns true if there was a white space in front of the token
 //end of the function PC_ReadLine
@@ -1705,7 +1705,7 @@ pub unsafe extern "C" fn PC_ReadLine(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
     return ((*token).endwhitespace_p.offset_from((*token).whitespace_p) as isize
         > 0 as i32 as isize) as i32;
@@ -1720,7 +1720,7 @@ pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_ClearTokenWhiteSpace(
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) {
     (*token).whitespace_p = 0 as *mut libc::c_char;
     (*token).endwhitespace_p = 0 as *mut libc::c_char;
@@ -1738,7 +1738,7 @@ pub unsafe extern "C" fn PC_ClearTokenWhiteSpace(
 pub unsafe extern "C" fn PC_Directive_undef(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -1748,7 +1748,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
@@ -1756,7 +1756,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
         0 as *mut crate::src::botlib::l_precomp::define_t;
     let mut hash: i32 = 0;
     if (*source).skip > 0 as i32 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //
     if PC_ReadLine(source, &mut token) == 0 {
@@ -1764,7 +1764,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
             source,
             b"undef without name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end if
     if token.type_0 != 4 as i32 {
         PC_UnreadSourceToken(source, &mut token); //end for
@@ -1773,13 +1773,13 @@ pub unsafe extern "C" fn PC_Directive_undef(
             b"expected name, found %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             token.string.as_mut_ptr(),
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end else
     hash = PC_NameHash(token.string.as_mut_ptr()); //end if
     lastdefine = 0 as *mut crate::src::botlib::l_precomp::define_t;
     define = *(*source).definehash.offset(hash as isize);
     while !define.is_null() {
-        if ::libc::strcmp((*define).name, token.string.as_mut_ptr()) == 0 {
+        if libc::strcmp((*define).name, token.string.as_mut_ptr()) == 0 {
             if (*define).flags & 0x1 as i32 != 0 {
                 SourceWarning(
                     source,
@@ -1803,7 +1803,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
     }
     //DEFINEHASHING
     //DEFINEHASHING
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_undef
 //============================================================================
@@ -1817,7 +1817,7 @@ pub unsafe extern "C" fn PC_Directive_undef(
 pub unsafe extern "C" fn PC_Directive_define(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -1827,16 +1827,16 @@ pub unsafe extern "C" fn PC_Directive_define(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut last: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut last: *mut token_t =
+        0 as *mut token_t;
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     if (*source).skip > 0 as i32 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //
     if PC_ReadLine(source, &mut token) == 0 {
@@ -1844,7 +1844,7 @@ pub unsafe extern "C" fn PC_Directive_define(
             source,
             b"#define without name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end if
     if token.type_0 != 4 as i32 {
         PC_UnreadSourceToken(source, &mut token);
@@ -1854,7 +1854,7 @@ pub unsafe extern "C" fn PC_Directive_define(
                 as *mut libc::c_char,
             token.string.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //check if the define already exists
     define = PC_FindHashedDefine((*source).definehash, token.string.as_mut_ptr());
@@ -1867,7 +1867,7 @@ pub unsafe extern "C" fn PC_Directive_define(
                 b"can\'t redefine %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         SourceWarning(
             source,
@@ -1877,7 +1877,7 @@ pub unsafe extern "C" fn PC_Directive_define(
         //unread the define name before executing the #undef directive
         PC_UnreadSourceToken(source, &mut token);
         if PC_Directive_undef(source) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     }
     //allocate define
@@ -1892,25 +1892,25 @@ pub unsafe extern "C" fn PC_Directive_define(
     (*define).name = crate::src::botlib::l_memory::GetMemory(
         crate::stdlib::strlen(token.string.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy((*define).name, token.string.as_mut_ptr());
+    libc::strcpy((*define).name, token.string.as_mut_ptr());
     //add the define to the source
     PC_AddDefineToHash(define, (*source).definehash);
     //DEFINEHASHING
     //DEFINEHASHING
     //if nothing is defined, just return
     if PC_ReadLine(source, &mut token) == 0 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //if it is a define with parameters
     if PC_WhiteSpaceBeforeToken(&mut token) == 0
-        && ::libc::strcmp(
+        && libc::strcmp(
             token.string.as_mut_ptr(),
             b"(\x00" as *const u8 as *const libc::c_char,
         ) == 0
     {
         //end if
         //read the define parameters
-        last = 0 as *mut crate::src::botlib::l_script::token_t; //end if
+        last = 0 as *mut token_t; //end if
         if PC_CheckTokenString(
             source,
             b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1923,7 +1923,7 @@ pub unsafe extern "C" fn PC_Directive_define(
                         b"expected define parameter\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 //end if
                 //if it isn't a name
@@ -1933,7 +1933,7 @@ pub unsafe extern "C" fn PC_Directive_define(
                         b"invalid define parameter\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 //
                 if PC_FindDefineParm(define, token.string.as_mut_ptr()) >= 0 as i32 {
@@ -1942,12 +1942,12 @@ pub unsafe extern "C" fn PC_Directive_define(
                         b"two the same define parameters\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 //add the define parm
                 t = PC_CopyToken(&mut token);
                 PC_ClearTokenWhiteSpace(t);
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !last.is_null() {
                     (*last).next = t
                 } else {
@@ -1962,17 +1962,17 @@ pub unsafe extern "C" fn PC_Directive_define(
                         b"define parameters not terminated\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 //
-                if ::libc::strcmp(
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b")\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     break;
                 }
-                if ::libc::strcmp(
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b",\x00" as *const u8 as *const libc::c_char,
                 ) != 0
@@ -1982,21 +1982,21 @@ pub unsafe extern "C" fn PC_Directive_define(
                         b"define not terminated\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     );
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
             }
             //then it must be a comma
             //end while
         }
         if PC_ReadLine(source, &mut token) == 0 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
     //read the defined stuff
-    last = 0 as *mut crate::src::botlib::l_script::token_t; //end if
+    last = 0 as *mut token_t; //end if
     loop {
         t = PC_CopyToken(&mut token);
-        if (*t).type_0 == 4 as i32 && ::libc::strcmp((*t).string.as_mut_ptr(), (*define).name) == 0
+        if (*t).type_0 == 4 as i32 && libc::strcmp((*t).string.as_mut_ptr(), (*define).name) == 0
         {
             SourceError(
                 source,
@@ -2005,7 +2005,7 @@ pub unsafe extern "C" fn PC_Directive_define(
             );
         } else {
             PC_ClearTokenWhiteSpace(t);
-            (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+            (*t).next = 0 as *mut token_s;
             if !last.is_null() {
                 (*last).next = t
             } else {
@@ -2021,11 +2021,11 @@ pub unsafe extern "C" fn PC_Directive_define(
     if !last.is_null() {
         //end if
         //check for merge operators at the beginning or end
-        if ::libc::strcmp(
+        if libc::strcmp(
             (*(*define).tokens).string.as_mut_ptr(),
             b"##\x00" as *const u8 as *const libc::c_char,
         ) == 0
-            || ::libc::strcmp(
+            || libc::strcmp(
                 (*last).string.as_mut_ptr(),
                 b"##\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -2035,11 +2035,11 @@ pub unsafe extern "C" fn PC_Directive_define(
                 b"define with misplaced ##\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //end if
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_define
 //============================================================================
@@ -2053,20 +2053,20 @@ pub unsafe extern "C" fn PC_Directive_define(
 pub unsafe extern "C" fn PC_DefineFromString(
     mut string: *mut libc::c_char,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+    let mut script: *mut script_t =
+        0 as *mut script_t;
     let mut src: crate::src::botlib::l_precomp::source_t =
         crate::src::botlib::l_precomp::source_t {
             filename: [0; 1024],
             includepath: [0; 1024],
-            punctuations: 0 as *mut crate::src::botlib::l_script::punctuation_t,
-            scriptstack: 0 as *mut crate::src::botlib::l_script::script_t,
-            tokens: 0 as *mut crate::src::botlib::l_script::token_t,
+            punctuations: 0 as *mut punctuation_t,
+            scriptstack: 0 as *mut script_t,
+            tokens: 0 as *mut token_t,
             defines: 0 as *mut crate::src::botlib::l_precomp::define_t,
             definehash: 0 as *mut *mut crate::src::botlib::l_precomp::define_t,
             indentstack: 0 as *mut crate::src::botlib::l_precomp::indent_t,
             skip: 0,
-            token: crate::src::botlib::l_script::token_t {
+            token: token_t {
                 string: [0; 1024],
                 type_0: 0,
                 subtype: 0,
@@ -2076,28 +2076,28 @@ pub unsafe extern "C" fn PC_DefineFromString(
                 endwhitespace_p: 0 as *mut libc::c_char,
                 line: 0,
                 linescrossed: 0,
-                next: 0 as *mut crate::src::botlib::l_script::token_s,
+                next: 0 as *mut token_s,
             },
         };
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
     let mut res: i32 = 0;
     let mut i: i32 = 0;
     let mut def: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     PC_InitTokenHeap();
-    script = crate::src::botlib::l_script::LoadScriptMemory(
+    script = LoadScriptMemory(
         string,
         crate::stdlib::strlen(string) as i32,
         b"*extern\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as *mut crate::src::botlib::l_script::script_s;
+    ) as *mut script_s;
     //create a new source
     crate::stdlib::memset(
         &mut src as *mut crate::src::botlib::l_precomp::source_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         src.filename.as_mut_ptr(),
         b"*extern\x00" as *const u8 as *const libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -2133,7 +2133,7 @@ pub unsafe extern "C" fn PC_DefineFromString(
     crate::src::botlib::l_memory::FreeMemory(src.definehash as *mut libc::c_void);
     //DEFINEHASHING
     //
-    crate::src::botlib::l_script::FreeScript(script as *mut crate::src::botlib::l_script::script_s);
+    FreeScript(script as *mut script_s);
     //if the define was created successfully
     if res > 0 as i32 {
         return def;
@@ -2163,12 +2163,12 @@ pub unsafe extern "C" fn PC_AddDefine(
         0 as *mut crate::src::botlib::l_precomp::define_t;
     define = PC_DefineFromString(string);
     if define.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     PC_AddDefineToHash(define, (*source).definehash);
     //DEFINEHASHING
     //DEFINEHASHING
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //add a globals define that will be added to all opened sources
 //end of the function PC_AddDefine
@@ -2186,11 +2186,11 @@ pub unsafe extern "C" fn PC_AddGlobalDefine(mut string: *mut libc::c_char) -> i3
         0 as *mut crate::src::botlib::l_precomp::define_t;
     define = PC_DefineFromString(string);
     if define.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     (*define).next = globaldefines;
     globaldefines = define;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //remove the given global define
 //end of the function PC_AddGlobalDefine
@@ -2209,9 +2209,9 @@ pub unsafe extern "C" fn PC_RemoveGlobalDefine(mut name: *mut libc::c_char) -> i
     define = PC_FindDefine(globaldefines, name);
     if !define.is_null() {
         PC_FreeDefine(define);
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //remove all globals defines
 //end of the function PC_RemoveGlobalDefine
@@ -2250,12 +2250,12 @@ pub unsafe extern "C" fn PC_CopyDefine(
 ) -> *mut crate::src::botlib::l_precomp::define_t {
     let mut newdefine: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
-    let mut token: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut newtoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut lasttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut token: *mut token_t =
+        0 as *mut token_t;
+    let mut newtoken: *mut token_t =
+        0 as *mut token_t;
+    let mut lasttoken: *mut token_t =
+        0 as *mut token_t;
     newdefine = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::define_t,
     >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::define_t;
@@ -2263,7 +2263,7 @@ pub unsafe extern "C" fn PC_CopyDefine(
     (*newdefine).name = crate::src::botlib::l_memory::GetMemory(
         crate::stdlib::strlen((*define).name).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy((*newdefine).name, (*define).name);
+    libc::strcpy((*newdefine).name, (*define).name);
     (*newdefine).flags = (*define).flags;
     (*newdefine).builtin = (*define).builtin;
     (*newdefine).numparms = (*define).numparms;
@@ -2271,12 +2271,12 @@ pub unsafe extern "C" fn PC_CopyDefine(
     (*newdefine).next = 0 as *mut crate::src::botlib::l_precomp::define_s;
     (*newdefine).hashnext = 0 as *mut crate::src::botlib::l_precomp::define_s;
     //copy the define tokens
-    (*newdefine).tokens = 0 as *mut crate::src::botlib::l_script::token_t; //end for
-    lasttoken = 0 as *mut crate::src::botlib::l_script::token_t;
+    (*newdefine).tokens = 0 as *mut token_t; //end for
+    lasttoken = 0 as *mut token_t;
     token = (*define).tokens;
     while !token.is_null() {
         newtoken = PC_CopyToken(token);
-        (*newtoken).next = 0 as *mut crate::src::botlib::l_script::token_s;
+        (*newtoken).next = 0 as *mut token_s;
         if !lasttoken.is_null() {
             (*lasttoken).next = newtoken
         } else {
@@ -2286,12 +2286,12 @@ pub unsafe extern "C" fn PC_CopyDefine(
         token = (*token).next
     }
     //copy the define parameters
-    (*newdefine).parms = 0 as *mut crate::src::botlib::l_script::token_t; //end for
-    lasttoken = 0 as *mut crate::src::botlib::l_script::token_t;
+    (*newdefine).parms = 0 as *mut token_t; //end for
+    lasttoken = 0 as *mut token_t;
     token = (*define).parms;
     while !token.is_null() {
         newtoken = PC_CopyToken(token);
-        (*newtoken).next = 0 as *mut crate::src::botlib::l_script::token_s;
+        (*newtoken).next = 0 as *mut token_s;
         if !lasttoken.is_null() {
             (*lasttoken).next = newtoken
         } else {
@@ -2341,7 +2341,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut type_0: i32,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -2351,7 +2351,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     }; //end if
     let mut d: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t; //end if
@@ -2361,7 +2361,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
             source,
             b"#ifdef without name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if token.type_0 != 4 as i32 {
         PC_UnreadSourceToken(source, &mut token);
@@ -2371,7 +2371,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
                 as *mut libc::c_char,
             token.string.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     d = PC_FindHashedDefine((*source).definehash, token.string.as_mut_ptr());
     //DEFINEHASHING
@@ -2379,7 +2379,7 @@ pub unsafe extern "C" fn PC_Directive_if_def(
         == (d == 0 as *mut libc::c_void as *mut crate::src::botlib::l_precomp::define_t) as i32)
         as i32;
     PC_PushIndent(source, type_0, skip);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directiveif_def
 //============================================================================
@@ -2429,17 +2429,17 @@ pub unsafe extern "C" fn PC_Directive_else(
             source,
             b"misplaced #else\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if type_0 == 0x2 as i32 {
         SourceError(
             source,
             b"#else after #else\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     PC_PushIndent(source, 0x2 as i32, (skip == 0) as i32);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_else
 //============================================================================
@@ -2461,9 +2461,9 @@ pub unsafe extern "C" fn PC_Directive_endif(
             source,
             b"misplaced #endif\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 #[no_mangle]
 
@@ -2493,14 +2493,14 @@ pub unsafe extern "C" fn PC_OperatorPriority(mut op: i32) -> i32 {
         43 => return 5 as i32,
         _ => {}
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_EvaluateTokens(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut tokens: *mut crate::src::botlib::l_script::token_t,
+    mut tokens: *mut token_t,
     mut intvalue: *mut isize,
     mut floatvalue: *mut f32,
     mut integer: i32,
@@ -2513,8 +2513,8 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
     let mut lastvalue: *mut value_t = 0 as *mut value_t;
     let mut v1: *mut value_t = 0 as *mut value_t;
     let mut v2: *mut value_t = 0 as *mut value_t;
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
     let mut brace: i32 = 0 as i32;
     let mut parentheses: i32 = 0 as i32;
     let mut error: i32 = 0 as i32;
@@ -2522,7 +2522,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
     let mut negativevalue: i32 = 0 as i32;
     let mut questmarkintvalue: i32 = 0 as i32;
     let mut questmarkfloatvalue: f32 = 0 as i32 as f32;
-    let mut gotquestmarkvalue: i32 = crate::src::qcommon::q_shared::qfalse as i32;
+    let mut gotquestmarkvalue: i32 = qfalse as i32;
     //
     let mut operator_heap: [operator_t; 64] = [operator_t {
         operator: 0,
@@ -2562,7 +2562,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                             as *mut libc::c_char,
                     );
                     error = 1 as i32
-                } else if ::libc::strcmp(
+                } else if libc::strcmp(
                     (*t).string.as_mut_ptr(),
                     b"defined\x00" as *const u8 as *const libc::c_char,
                 ) != 0
@@ -2576,12 +2576,12 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                     error = 1 as i32
                 } else {
                     t = (*t).next;
-                    if ::libc::strcmp(
+                    if libc::strcmp(
                         (*t).string.as_mut_ptr(),
                         b"(\x00" as *const u8 as *const libc::c_char,
                     ) == 0
                     {
-                        brace = crate::src::qcommon::q_shared::qtrue as i32;
+                        brace = qtrue as i32;
                         t = (*t).next
                     }
                     if t.is_null() || (*t).type_0 != 4 as i32 {
@@ -2627,7 +2627,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                         if brace != 0 {
                             t = (*t).next;
                             if t.is_null()
-                                || ::libc::strcmp(
+                                || libc::strcmp(
                                     (*t).string.as_mut_ptr(),
                                     b")\x00" as *const u8 as *const libc::c_char,
                                 ) != 0
@@ -2650,7 +2650,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                         match current_block_97 {
                             2473505634946569239 => {}
                             _ => {
-                                brace = crate::src::qcommon::q_shared::qfalse as i32;
+                                brace = qfalse as i32;
                                 // defined() creates a value
                                 lastwasvalue = 1 as i32
                             }
@@ -2885,7 +2885,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
         //end else if
     }
     //
-    gotquestmarkvalue = crate::src::qcommon::q_shared::qfalse as i32;
+    gotquestmarkvalue = qfalse as i32;
     questmarkintvalue = 0 as i32;
     questmarkfloatvalue = 0 as i32 as f32;
     //while there are operators
@@ -3029,7 +3029,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                     } else if questmarkfloatvalue == 0. {
                         (*v1).floatvalue = (*v2).floatvalue
                     }
-                    gotquestmarkvalue = crate::src::qcommon::q_shared::qfalse as i32
+                    gotquestmarkvalue = qfalse as i32
                 }
             }
             43 => {
@@ -3043,7 +3043,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                 } else {
                     questmarkintvalue = (*v1).intvalue as i32;
                     questmarkfloatvalue = (*v1).floatvalue;
-                    gotquestmarkvalue = crate::src::qcommon::q_shared::qtrue as i32
+                    gotquestmarkvalue = qtrue as i32
                 }
             }
             _ => {}
@@ -3100,7 +3100,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
         v = lastvalue
     }
     if error == 0 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
@@ -3108,7 +3108,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
     if !floatvalue.is_null() {
         *floatvalue = 0 as i32 as f32
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_EvaluateTokens
 //============================================================================
@@ -3125,7 +3125,7 @@ pub unsafe extern "C" fn PC_Evaluate(
     mut floatvalue: *mut f32,
     mut integer: i32,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3135,19 +3135,19 @@ pub unsafe extern "C" fn PC_Evaluate(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    let mut firsttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut lasttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut nexttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut firsttoken: *mut token_t =
+        0 as *mut token_t;
+    let mut lasttoken: *mut token_t =
+        0 as *mut token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut nexttoken: *mut token_t =
+        0 as *mut token_t;
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
-    let mut defined: i32 = crate::src::qcommon::q_shared::qfalse as i32;
+    let mut defined: i32 = qfalse as i32;
     if !intvalue.is_null() {
         *intvalue = 0 as i32 as isize
     }
@@ -3161,31 +3161,31 @@ pub unsafe extern "C" fn PC_Evaluate(
             b"no value after #if/#elif\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    firsttoken = 0 as *mut crate::src::botlib::l_script::token_t;
-    lasttoken = 0 as *mut crate::src::botlib::l_script::token_t;
+    firsttoken = 0 as *mut token_t;
+    lasttoken = 0 as *mut token_t;
     loop {
         //if the token is a name
         if token.type_0 == 4 as i32 {
             if defined != 0 {
-                defined = crate::src::qcommon::q_shared::qfalse as i32; //end if
+                defined = qfalse as i32; //end if
                 t = PC_CopyToken(&mut token); //end if
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
                     firsttoken = t
                 }
                 lasttoken = t
-            } else if ::libc::strcmp(
+            } else if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"defined\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                defined = crate::src::qcommon::q_shared::qtrue as i32;
+                defined = qtrue as i32;
                 t = PC_CopyToken(&mut token);
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3203,17 +3203,17 @@ pub unsafe extern "C" fn PC_Evaluate(
                             as *mut libc::c_char,
                         token.string.as_mut_ptr(),
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 if PC_ExpandDefineIntoSource(source, &mut token, define) == 0 {
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
             }
         //end else
         } else if token.type_0 == 3 as i32 || token.type_0 == 5 as i32 {
             //if the token is a number or a punctuation
             t = PC_CopyToken(&mut token); //end else
-            (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+            (*t).next = 0 as *mut token_s;
             if !lasttoken.is_null() {
                 (*lasttoken).next = t
             } else {
@@ -3227,7 +3227,7 @@ pub unsafe extern "C" fn PC_Evaluate(
                 b"can\'t evaluate %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if !(PC_ReadLine(source, &mut token) != 0) {
             break;
@@ -3236,7 +3236,7 @@ pub unsafe extern "C" fn PC_Evaluate(
     }
     //
     if PC_EvaluateTokens(source, firsttoken, intvalue, floatvalue, integer) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     //DEBUG_EVAL
@@ -3249,7 +3249,7 @@ pub unsafe extern "C" fn PC_Evaluate(
     }
     //DEBUG_EVAL
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Evaluate
 //============================================================================
@@ -3267,8 +3267,8 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
     mut integer: i32,
 ) -> i32 {
     let mut indent: i32 = 0;
-    let mut defined: i32 = crate::src::qcommon::q_shared::qfalse as i32;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut defined: i32 = qfalse as i32;
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3278,16 +3278,16 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    let mut firsttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut lasttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut t: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
-    let mut nexttoken: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut firsttoken: *mut token_t =
+        0 as *mut token_t;
+    let mut lasttoken: *mut token_t =
+        0 as *mut token_t;
+    let mut t: *mut token_t =
+        0 as *mut token_t;
+    let mut nexttoken: *mut token_t =
+        0 as *mut token_t;
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     if !intvalue.is_null() {
@@ -3303,40 +3303,40 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
             b"no leading ( after $evalint/$evalfloat\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end if
     if PC_ReadSourceToken(source, &mut token) == 0 {
         SourceError(
             source,
             b"nothing to evaluate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     indent = 1 as i32;
-    firsttoken = 0 as *mut crate::src::botlib::l_script::token_t;
-    lasttoken = 0 as *mut crate::src::botlib::l_script::token_t;
+    firsttoken = 0 as *mut token_t;
+    lasttoken = 0 as *mut token_t;
     loop
     //if the token is a name
     {
         if token.type_0 == 4 as i32 {
             if defined != 0 {
-                defined = crate::src::qcommon::q_shared::qfalse as i32; //end if
+                defined = qfalse as i32; //end if
                 t = PC_CopyToken(&mut token); //end if
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
                     firsttoken = t
                 }
                 lasttoken = t
-            } else if ::libc::strcmp(
+            } else if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"defined\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                defined = crate::src::qcommon::q_shared::qtrue as i32;
+                defined = qtrue as i32;
                 t = PC_CopyToken(&mut token);
-                (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+                (*t).next = 0 as *mut token_s;
                 if !lasttoken.is_null() {
                     (*lasttoken).next = t
                 } else {
@@ -3354,10 +3354,10 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
                             as *mut libc::c_char,
                         token.string.as_mut_ptr(),
                     ); //end if
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 if PC_ExpandDefineIntoSource(source, &mut token, define) == 0 {
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
             }
         //end else
@@ -3372,7 +3372,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
                 break;
             }
             t = PC_CopyToken(&mut token);
-            (*t).next = 0 as *mut crate::src::botlib::l_script::token_s;
+            (*t).next = 0 as *mut token_s;
             if !lasttoken.is_null() {
                 (*lasttoken).next = t
             } else {
@@ -3386,7 +3386,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
                 b"can\'t evaluate %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if !(PC_ReadSourceToken(source, &mut token) != 0) {
             break;
@@ -3395,7 +3395,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
     }
     //
     if PC_EvaluateTokens(source, firsttoken, intvalue, floatvalue, integer) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     //DEBUG_EVAL
@@ -3408,7 +3408,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
     }
     //DEBUG_EVAL
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_DollarEvaluate
 //============================================================================
@@ -3431,20 +3431,20 @@ pub unsafe extern "C" fn PC_Directive_elif(
             source,
             b"misplaced #elif\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if PC_Evaluate(
         source,
         &mut value,
         0 as *mut f32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     skip = (value == 0 as i32 as isize) as i32;
     PC_PushIndent(source, 0x4 as i32, skip);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_elif
 //============================================================================
@@ -3464,14 +3464,14 @@ pub unsafe extern "C" fn PC_Directive_if(
         source,
         &mut value,
         0 as *mut f32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     skip = (value == 0 as i32 as isize) as i32;
     PC_PushIndent(source, 0x1 as i32, skip);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive
 //============================================================================
@@ -3490,7 +3490,7 @@ pub unsafe extern "C" fn PC_Directive_line(
         b"#line directive not supported\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_Directive_line
 //============================================================================
@@ -3504,7 +3504,7 @@ pub unsafe extern "C" fn PC_Directive_line(
 pub unsafe extern "C" fn PC_Directive_error(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3514,9 +3514,9 @@ pub unsafe extern "C" fn PC_Directive_error(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    ::libc::strcpy(
+    libc::strcpy(
         token.string.as_mut_ptr(),
         b"\x00" as *const u8 as *const libc::c_char,
     );
@@ -3526,7 +3526,7 @@ pub unsafe extern "C" fn PC_Directive_error(
         b"#error directive: %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         token.string.as_mut_ptr(),
     );
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_Directive_error
 //============================================================================
@@ -3540,7 +3540,7 @@ pub unsafe extern "C" fn PC_Directive_error(
 pub unsafe extern "C" fn PC_Directive_pragma(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3550,7 +3550,7 @@ pub unsafe extern "C" fn PC_Directive_pragma(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     SourceWarning(
         source,
@@ -3558,7 +3558,7 @@ pub unsafe extern "C" fn PC_Directive_pragma(
             as *mut libc::c_char,
     );
     while PC_ReadLine(source, &mut token) != 0 {}
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_pragma
 //============================================================================
@@ -3570,7 +3570,7 @@ pub unsafe extern "C" fn PC_Directive_pragma(
 #[no_mangle]
 
 pub unsafe extern "C" fn UnreadSignToken(mut source: *mut crate::src::botlib::l_precomp::source_t) {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3580,13 +3580,13 @@ pub unsafe extern "C" fn UnreadSignToken(mut source: *mut crate::src::botlib::l_
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
     token.endwhitespace_p = (*(*source).scriptstack).script_p;
     token.linescrossed = 0 as i32;
-    ::libc::strcpy(
+    libc::strcpy(
         token.string.as_mut_ptr(),
         b"-\x00" as *const u8 as *const libc::c_char,
     );
@@ -3607,7 +3607,7 @@ pub unsafe extern "C" fn PC_Directive_eval(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
     let mut value: isize = 0;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3617,26 +3617,26 @@ pub unsafe extern "C" fn PC_Directive_eval(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_Evaluate(
         source,
         &mut value,
         0 as *mut f32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
     token.endwhitespace_p = (*(*source).scriptstack).script_p;
     token.linescrossed = 0 as i32;
-    ::libc::sprintf(
+    libc::sprintf(
         token.string.as_mut_ptr(),
         b"%ld\x00" as *const u8 as *const libc::c_char,
-        ::libc::labs(value as libc::c_long),
+        libc::labs(value as libc::c_long),
     );
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
@@ -3644,7 +3644,7 @@ pub unsafe extern "C" fn PC_Directive_eval(
     if value < 0 as i32 as isize {
         UnreadSignToken(source);
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_eval
 //============================================================================
@@ -3659,7 +3659,7 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
     let mut value: f32 = 0.;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3669,22 +3669,22 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_Evaluate(
         source,
         0 as *mut isize,
         &mut value,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        qfalse as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
     token.endwhitespace_p = (*(*source).scriptstack).script_p;
     token.linescrossed = 0 as i32;
-    ::libc::sprintf(
+    libc::sprintf(
         token.string.as_mut_ptr(),
         b"%1.2f\x00" as *const u8 as *const libc::c_char,
         crate::stdlib::fabs(value as f64),
@@ -3695,7 +3695,7 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
     if value < 0 as i32 as f32 {
         UnreadSignToken(source);
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_Directive_evalfloat
 //============================================================================
@@ -3910,7 +3910,7 @@ pub static mut directives: [directive_t; 20] = {
 pub unsafe extern "C" fn PC_ReadDirective(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3920,7 +3920,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut i: i32 = 0;
     //read the directive name
@@ -3929,7 +3929,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
             source,
             b"found # without name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //directive name must be on the same line
     if token.linescrossed > 0 as i32 {
@@ -3938,7 +3938,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
             source,
             b"found # at end of line\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if if is a name
     if token.type_0 == 4 as i32 {
@@ -3946,7 +3946,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
         //find the precompiler directive
         i = 0 as i32;
         while !directives[i as usize].name.is_null() {
-            if ::libc::strcmp(directives[i as usize].name, token.string.as_mut_ptr()) == 0 {
+            if libc::strcmp(directives[i as usize].name, token.string.as_mut_ptr()) == 0 {
                 return directives[i as usize]
                     .func
                     .expect("non-null function pointer")(source);
@@ -3962,7 +3962,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
             as *mut libc::c_char,
         token.string.as_mut_ptr(),
     );
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function PC_ReadDirective
 //============================================================================
@@ -3977,7 +3977,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
     let mut value: isize = 0;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -3987,37 +3987,37 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_DollarEvaluate(
         source,
         &mut value,
         0 as *mut f32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
     token.endwhitespace_p = (*(*source).scriptstack).script_p;
     token.linescrossed = 0 as i32;
-    ::libc::sprintf(
+    libc::sprintf(
         token.string.as_mut_ptr(),
         b"%ld\x00" as *const u8 as *const libc::c_char,
-        ::libc::labs(value as libc::c_long),
+        libc::labs(value as libc::c_long),
     );
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
-    token.intvalue = ::libc::labs(value as libc::c_long) as libc::c_ulong;
+    token.intvalue = libc::labs(value as libc::c_long) as libc::c_ulong;
     token.floatvalue = token.intvalue as f32;
     //NUMBERVALUE
     PC_UnreadSourceToken(source, &mut token);
     if value < 0 as i32 as isize {
         UnreadSignToken(source);
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_DollarDirective_evalint
 //============================================================================
@@ -4032,7 +4032,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
     let mut value: f32 = 0.;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4042,22 +4042,22 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_DollarEvaluate(
         source,
         0 as *mut isize,
         &mut value,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        qfalse as i32,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     token.line = (*(*source).scriptstack).line;
     token.whitespace_p = (*(*source).scriptstack).script_p;
     token.endwhitespace_p = (*(*source).scriptstack).script_p;
     token.linescrossed = 0 as i32;
-    ::libc::sprintf(
+    libc::sprintf(
         token.string.as_mut_ptr(),
         b"%1.2f\x00" as *const u8 as *const libc::c_char,
         crate::stdlib::fabs(value as f64),
@@ -4071,7 +4071,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
     if value < 0 as i32 as f32 {
         UnreadSignToken(source);
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_DollarDirective_evalfloat
 //============================================================================
@@ -4190,7 +4190,7 @@ pub static mut dollardirectives: [directive_t; 20] = {
 pub unsafe extern "C" fn PC_ReadDollarDirective(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4200,7 +4200,7 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut i: i32 = 0;
     //read the directive name
@@ -4209,7 +4209,7 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
             source,
             b"found $ without name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //directive name must be on the same line
     if token.linescrossed > 0 as i32 {
@@ -4218,7 +4218,7 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
             source,
             b"found $ at end of line\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if if is a name
     if token.type_0 == 4 as i32 {
@@ -4226,7 +4226,7 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
         //find the precompiler directive
         i = 0 as i32;
         while !dollardirectives[i as usize].name.is_null() {
-            if ::libc::strcmp(dollardirectives[i as usize].name, token.string.as_mut_ptr()) == 0 {
+            if libc::strcmp(dollardirectives[i as usize].name, token.string.as_mut_ptr()) == 0 {
                 return dollardirectives[i as usize]
                     .func
                     .expect("non-null function pointer")(source);
@@ -4243,7 +4243,7 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
             as *mut libc::c_char,
         token.string.as_mut_ptr(),
     );
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //read a token from the source
 //end of the function PC_ReadDirective
@@ -4258,13 +4258,13 @@ pub unsafe extern "C" fn PC_ReadDollarDirective(
 
 pub unsafe extern "C" fn PC_ReadToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     loop {
         if PC_ReadSourceToken(source, token) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //check for precompiler directives
         if (*token).type_0 == 5 as i32 && *(*token).string.as_mut_ptr() as i32 == '#' as i32 {
@@ -4272,7 +4272,7 @@ pub unsafe extern "C" fn PC_ReadToken(
             //QUAKC
             //read the precompiler directive
             if PC_ReadDirective(source) == 0 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         //end if
         } else if (*token).type_0 == 5 as i32 && *(*token).string.as_mut_ptr() as i32 == '$' as i32
@@ -4281,14 +4281,14 @@ pub unsafe extern "C" fn PC_ReadToken(
             //QUAKEC
             //read the precompiler directive
             if PC_ReadDollarDirective(source) == 0 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         //end if
         } else {
             // recursively concatenate strings that are behind each other still resolving defines
             if (*token).type_0 == 1 as i32 {
-                let mut newtoken: crate::src::botlib::l_script::token_t =
-                    crate::src::botlib::l_script::token_t {
+                let mut newtoken: token_t =
+                    token_t {
                         string: [0; 1024],
                         type_0: 0,
                         subtype: 0,
@@ -4298,7 +4298,7 @@ pub unsafe extern "C" fn PC_ReadToken(
                         endwhitespace_p: 0 as *mut libc::c_char,
                         line: 0,
                         linescrossed: 0,
-                        next: 0 as *mut crate::src::botlib::l_script::token_s,
+                        next: 0 as *mut token_s,
                     }; //end if
                 if PC_ReadToken(source, &mut newtoken) != 0 {
                     if newtoken.type_0 == 1 as i32 {
@@ -4319,9 +4319,9 @@ pub unsafe extern "C" fn PC_ReadToken(
                                     as *mut libc::c_char,
                                 1024 as i32,
                             );
-                            return crate::src::qcommon::q_shared::qfalse as i32;
+                            return qfalse as i32;
                         }
-                        ::libc::strcat(
+                        libc::strcat(
                             (*token).string.as_mut_ptr(),
                             newtoken.string.as_mut_ptr().offset(1 as i32 as isize),
                         );
@@ -4345,20 +4345,20 @@ pub unsafe extern "C" fn PC_ReadToken(
                     //if it is a define macro
                     //expand the defined macro
                     if PC_ExpandDefineIntoSource(source, token, define) == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     continue;
                 }
             }
             //copy token for unreading
             crate::stdlib::memcpy(
-                &mut (*source).token as *mut crate::src::botlib::l_script::token_t
+                &mut (*source).token as *mut token_t
                     as *mut libc::c_void,
                 token as *const libc::c_void,
-                ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+                ::std::mem::size_of::<token_t>() as libc::c_ulong,
             );
             //found a token
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
     //end while
@@ -4377,7 +4377,7 @@ pub unsafe extern "C" fn PC_ExpectTokenString(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut string: *mut libc::c_char,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4387,7 +4387,7 @@ pub unsafe extern "C" fn PC_ExpectTokenString(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     }; //end if
     if PC_ReadToken(source, &mut token) == 0 {
         SourceError(
@@ -4396,18 +4396,18 @@ pub unsafe extern "C" fn PC_ExpectTokenString(
                 as *mut libc::c_char,
             string,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    if ::libc::strcmp(token.string.as_mut_ptr(), string) != 0 {
+    if libc::strcmp(token.string.as_mut_ptr(), string) != 0 {
         SourceError(
             source,
             b"expected %s, found %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             string,
             token.string.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //expect a certain token type
 //end of the function PC_ExpectTokenString
@@ -4423,7 +4423,7 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut type_0: i32,
     mut subtype: i32,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
     let mut str: [libc::c_char; 1024] = [0; 1024]; //end if
     if PC_ReadToken(source, token) == 0 {
@@ -4432,39 +4432,39 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
             b"couldn\'t read expected token\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } //end else if
     if (*token).type_0 != type_0 {
-        ::libc::strcpy(
+        libc::strcpy(
             str.as_mut_ptr(),
             b"\x00" as *const u8 as *const libc::c_char,
         );
         if type_0 == 1 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"string\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 2 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"literal\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 3 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"number\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 4 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"name\x00" as *const u8 as *const libc::c_char,
             );
         }
         if type_0 == 5 as i32 {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"punctuation\x00" as *const u8 as *const libc::c_char,
             );
@@ -4475,58 +4475,58 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
             str.as_mut_ptr(),
             (*token).string.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*token).type_0 == 3 as i32 {
         if (*token).subtype & subtype != subtype {
-            ::libc::strcpy(
+            libc::strcpy(
                 str.as_mut_ptr(),
                 b"\x00" as *const u8 as *const libc::c_char,
             );
             if subtype & 0x8 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"decimal\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x100 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"hex\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x200 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"octal\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x400 as i32 != 0 {
-                ::libc::strcpy(
+                libc::strcpy(
                     str.as_mut_ptr(),
                     b"binary\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x2000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" long\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x4000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" unsigned\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x800 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" float\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if subtype & 0x1000 as i32 != 0 {
-                ::libc::strcat(
+                libc::strcat(
                     str.as_mut_ptr(),
                     b" integer\x00" as *const u8 as *const libc::c_char,
                 );
@@ -4538,7 +4538,7 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
                 str.as_mut_ptr(),
                 (*token).string.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     //end if
     } else if (*token).type_0 == 5 as i32 {
@@ -4548,11 +4548,11 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
                 b"found %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*token).string.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //end if
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //expect a token
 //end of the function PC_ExpectTokenType
@@ -4566,7 +4566,7 @@ pub unsafe extern "C" fn PC_ExpectTokenType(
 
 pub unsafe extern "C" fn PC_ExpectAnyToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
     if PC_ReadToken(source, token) == 0 {
         SourceError(
@@ -4574,9 +4574,9 @@ pub unsafe extern "C" fn PC_ExpectAnyToken(
             b"couldn\'t read expected token\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } else {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     };
     //end else
 }
@@ -4594,7 +4594,7 @@ pub unsafe extern "C" fn PC_CheckTokenString(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut string: *mut libc::c_char,
 ) -> i32 {
-    let mut tok: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut tok: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4604,18 +4604,18 @@ pub unsafe extern "C" fn PC_CheckTokenString(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_ReadToken(source, &mut tok) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the token is available
-    if ::libc::strcmp(tok.string.as_mut_ptr(), string) == 0 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+    if libc::strcmp(tok.string.as_mut_ptr(), string) == 0 {
+        return qtrue as i32;
     }
     //
     PC_UnreadSourceToken(source, &mut tok);
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //returns true and reads the token when a token with the given type is available
 //end of the function PC_CheckTokenString
@@ -4631,9 +4631,9 @@ pub unsafe extern "C" fn PC_CheckTokenType(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut type_0: i32,
     mut subtype: i32,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) -> i32 {
-    let mut tok: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut tok: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4643,23 +4643,23 @@ pub unsafe extern "C" fn PC_CheckTokenType(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     if PC_ReadToken(source, &mut tok) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the type matches
     if tok.type_0 == type_0 && tok.subtype & subtype == subtype {
         crate::stdlib::memcpy(
             token as *mut libc::c_void,
-            &mut tok as *mut crate::src::botlib::l_script::token_t as *const libc::c_void,
-            ::std::mem::size_of::<crate::src::botlib::l_script::token_t>() as libc::c_ulong,
+            &mut tok as *mut token_t as *const libc::c_void,
+            ::std::mem::size_of::<token_t>() as libc::c_ulong,
         ); //end if
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
     //
     PC_UnreadSourceToken(source, &mut tok);
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //skip tokens until the given token string is read
 //end of the function PC_CheckTokenType
@@ -4675,7 +4675,7 @@ pub unsafe extern "C" fn PC_SkipUntilString(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut string: *mut libc::c_char,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -4685,14 +4685,14 @@ pub unsafe extern "C" fn PC_SkipUntilString(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     }; //end while
     while PC_ReadToken(source, &mut token) != 0 {
-        if ::libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+        if libc::strcmp(token.string.as_mut_ptr(), string) == 0 {
+            return qtrue as i32;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //unread the last token read from the script
 //end of the function PC_SkipUntilString
@@ -4721,7 +4721,7 @@ pub unsafe extern "C" fn PC_UnreadLastToken(
 
 pub unsafe extern "C" fn PC_UnreadToken(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut token: *mut crate::src::botlib::l_script::token_t,
+    mut token: *mut token_t,
 ) {
     PC_UnreadSourceToken(source, token);
 }
@@ -4739,8 +4739,8 @@ pub unsafe extern "C" fn PC_SetIncludePath(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut path: *mut libc::c_char,
 ) {
-    let mut len: crate::stddef_h::size_t = 0;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    let mut len: size_t = 0;
+    Q_strncpyz(
         (*source).includepath.as_mut_ptr(),
         path,
         (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
@@ -4754,7 +4754,7 @@ pub unsafe extern "C" fn PC_SetIncludePath(
         && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize] as i32
             != '/' as i32
     {
-        ::libc::strcat(
+        libc::strcat(
             (*source).includepath.as_mut_ptr(),
             b"/\x00" as *const u8 as *const libc::c_char,
         );
@@ -4773,7 +4773,7 @@ pub unsafe extern "C" fn PC_SetIncludePath(
 
 pub unsafe extern "C" fn PC_SetPunctuations(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut p: *mut crate::src::botlib::l_script::punctuation_t,
+    mut p: *mut punctuation_t,
 ) {
     (*source).punctuations = p;
 }
@@ -4792,15 +4792,15 @@ pub unsafe extern "C" fn LoadSourceFile(
 ) -> *mut crate::src::botlib::l_precomp::source_t {
     let mut source: *mut crate::src::botlib::l_precomp::source_t =
         0 as *mut crate::src::botlib::l_precomp::source_t;
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+    let mut script: *mut script_t =
+        0 as *mut script_t;
     PC_InitTokenHeap();
-    script = crate::src::botlib::l_script::LoadScriptFile(filename)
-        as *mut crate::src::botlib::l_script::script_s;
+    script = LoadScriptFile(filename)
+        as *mut script_s;
     if script.is_null() {
         return 0 as *mut crate::src::botlib::l_precomp::source_t;
     }
-    (*script).next = 0 as *mut crate::src::botlib::l_script::script_s;
+    (*script).next = 0 as *mut script_s;
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
     >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::source_t;
@@ -4809,13 +4809,13 @@ pub unsafe extern "C" fn LoadSourceFile(
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*source).filename.as_mut_ptr(),
         filename,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     (*source).scriptstack = script;
-    (*source).tokens = 0 as *mut crate::src::botlib::l_script::token_t;
+    (*source).tokens = 0 as *mut token_t;
     (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
@@ -4844,15 +4844,15 @@ pub unsafe extern "C" fn LoadSourceMemory(
 ) -> *mut crate::src::botlib::l_precomp::source_t {
     let mut source: *mut crate::src::botlib::l_precomp::source_t =
         0 as *mut crate::src::botlib::l_precomp::source_t;
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
+    let mut script: *mut script_t =
+        0 as *mut script_t;
     PC_InitTokenHeap();
-    script = crate::src::botlib::l_script::LoadScriptMemory(ptr, length, name)
-        as *mut crate::src::botlib::l_script::script_s;
+    script = LoadScriptMemory(ptr, length, name)
+        as *mut script_s;
     if script.is_null() {
         return 0 as *mut crate::src::botlib::l_precomp::source_t;
     }
-    (*script).next = 0 as *mut crate::src::botlib::l_script::script_s;
+    (*script).next = 0 as *mut script_s;
     source = crate::src::botlib::l_memory::GetMemory(::std::mem::size_of::<
         crate::src::botlib::l_precomp::source_t,
     >() as libc::c_ulong) as *mut crate::src::botlib::l_precomp::source_t;
@@ -4861,13 +4861,13 @@ pub unsafe extern "C" fn LoadSourceMemory(
         0 as i32,
         ::std::mem::size_of::<crate::src::botlib::l_precomp::source_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*source).filename.as_mut_ptr(),
         name,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     (*source).scriptstack = script;
-    (*source).tokens = 0 as *mut crate::src::botlib::l_script::token_t;
+    (*source).tokens = 0 as *mut token_t;
     (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
@@ -4890,10 +4890,10 @@ pub unsafe extern "C" fn LoadSourceMemory(
 #[no_mangle]
 
 pub unsafe extern "C" fn FreeSource(mut source: *mut crate::src::botlib::l_precomp::source_t) {
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t;
-    let mut token: *mut crate::src::botlib::l_script::token_t =
-        0 as *mut crate::src::botlib::l_script::token_t;
+    let mut script: *mut script_t =
+        0 as *mut script_t;
+    let mut token: *mut token_t =
+        0 as *mut token_t;
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     let mut indent: *mut crate::src::botlib::l_precomp::indent_t =
@@ -4904,8 +4904,8 @@ pub unsafe extern "C" fn FreeSource(mut source: *mut crate::src::botlib::l_preco
     while !(*source).scriptstack.is_null() {
         script = (*source).scriptstack; //end for
         (*source).scriptstack = (*(*source).scriptstack).next;
-        crate::src::botlib::l_script::FreeScript(
-            script as *mut crate::src::botlib::l_script::script_s,
+        FreeScript(
+            script as *mut script_s,
         );
     }
     //free all the tokens
@@ -4964,7 +4964,7 @@ pub unsafe extern "C" fn PC_LoadSourceHandle(mut filename: *const libc::c_char) 
     if i >= 64 as i32 {
         return 0 as i32;
     }
-    crate::src::botlib::l_script::PS_SetBaseFolder(
+    PS_SetBaseFolder(
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     source = LoadSourceFile(filename);
@@ -4985,14 +4985,14 @@ pub unsafe extern "C" fn PC_LoadSourceHandle(mut filename: *const libc::c_char) 
 
 pub unsafe extern "C" fn PC_FreeSourceHandle(mut handle: i32) -> i32 {
     if handle < 1 as i32 || handle >= 64 as i32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if sourceFiles[handle as usize].is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     FreeSource(sourceFiles[handle as usize]);
     sourceFiles[handle as usize] = 0 as *mut crate::src::botlib::l_precomp::source_t;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function PC_FreeSourceHandle
 //============================================================================
@@ -5005,9 +5005,9 @@ pub unsafe extern "C" fn PC_FreeSourceHandle(mut handle: i32) -> i32 {
 
 pub unsafe extern "C" fn PC_ReadTokenHandle(
     mut handle: i32,
-    mut pc_token: *mut crate::src::qcommon::q_shared::pc_token_t,
+    mut pc_token: *mut pc_token_t,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -5017,7 +5017,7 @@ pub unsafe extern "C" fn PC_ReadTokenHandle(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut ret: i32 = 0;
     if handle < 1 as i32 || handle >= 64 as i32 {
@@ -5027,13 +5027,13 @@ pub unsafe extern "C" fn PC_ReadTokenHandle(
         return 0 as i32;
     }
     ret = PC_ReadToken(sourceFiles[handle as usize], &mut token);
-    ::libc::strcpy((*pc_token).string.as_mut_ptr(), token.string.as_mut_ptr());
+    libc::strcpy((*pc_token).string.as_mut_ptr(), token.string.as_mut_ptr());
     (*pc_token).type_0 = token.type_0;
     (*pc_token).subtype = token.subtype;
     (*pc_token).intvalue = token.intvalue as i32;
     (*pc_token).floatvalue = token.floatvalue;
     if (*pc_token).type_0 == 1 as i32 {
-        crate::src::botlib::l_script::StripDoubleQuotes((*pc_token).string.as_mut_ptr());
+        StripDoubleQuotes((*pc_token).string.as_mut_ptr());
     }
     return ret;
 }
@@ -5052,12 +5052,12 @@ pub unsafe extern "C" fn PC_SourceFileAndLine(
     mut line: *mut i32,
 ) -> i32 {
     if handle < 1 as i32 || handle >= 64 as i32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if sourceFiles[handle as usize].is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    ::libc::strcpy(
+    libc::strcpy(
         filename,
         (*sourceFiles[handle as usize]).filename.as_mut_ptr(),
     );
@@ -5066,7 +5066,7 @@ pub unsafe extern "C" fn PC_SourceFileAndLine(
     } else {
         *line = 0 as i32
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //set the base folder to load files from
 //end of the function PC_SourceFileAndLine
@@ -5079,7 +5079,7 @@ pub unsafe extern "C" fn PC_SourceFileAndLine(
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_SetBaseFolder(mut path: *mut libc::c_char) {
-    crate::src::botlib::l_script::PS_SetBaseFolder(path);
+    PS_SetBaseFolder(path);
 }
 //end of the function PC_SetBaseFolder
 //============================================================================

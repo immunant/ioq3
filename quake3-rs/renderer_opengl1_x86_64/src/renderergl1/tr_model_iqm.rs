@@ -508,7 +508,7 @@ pub use crate::tr_local_h::TMOD_TURBULENT;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union C2RustUnnamed_128 {
-    pub b: *mut crate::src::qcommon::q_shared::byte,
+    pub b: *mut byte,
     pub f: *mut f32,
 }
 /*
@@ -551,11 +551,11 @@ static mut identityMatrix: [f32; 12] = [
 ];
 
 unsafe extern "C" fn IQM_CheckRange(
-    mut header: *mut crate::iqm_h::iqmHeader_t,
+    mut header: *mut iqmHeader_t,
     mut offset: i32,
     mut count: i32,
     mut size: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     // return true if the range specified by offset, count and size
     // doesn't fit into the file
     return (count <= 0 as i32
@@ -563,7 +563,7 @@ unsafe extern "C" fn IQM_CheckRange(
         || offset as u32 > (*header).filesize
         || offset + count * size < 0 as i32
         || (offset + count * size) as u32 > (*header).filesize) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
 }
 // "multiply" 3x4 matrices, these are assumed to be the top 3 rows
 // of a 4x4 matrix with the last row = (0 0 0 1)
@@ -644,9 +644,9 @@ unsafe extern "C" fn InterpolateMatrix(
 }
 
 unsafe extern "C" fn JointToMatrix(
-    mut rot: *mut crate::src::qcommon::q_shared::vec_t,
-    mut scale: *mut crate::src::qcommon::q_shared::vec_t,
-    mut trans: *mut crate::src::qcommon::q_shared::vec_t,
+    mut rot: *mut vec_t,
+    mut scale: *mut vec_t,
+    mut trans: *mut vec_t,
     mut mat: *mut f32,
 ) {
     let mut xx: f32 = 2.0f32 * *rot.offset(0 as i32 as isize) * *rot.offset(0 as i32 as isize);
@@ -673,7 +673,7 @@ unsafe extern "C" fn JointToMatrix(
 }
 
 unsafe extern "C" fn Matrix34Invert(mut inMat: *mut f32, mut outMat: *mut f32) {
-    let mut trans: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut trans: vec3_t = [0.; 3];
     let mut invSqrLen: f32 = 0.;
     let mut v: *mut f32 = 0 as *mut f32;
     *outMat.offset(0 as i32 as isize) = *inMat.offset(0 as i32 as isize);
@@ -741,19 +741,19 @@ Load an IQM model and compute the joint matrices for every frame.
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LoadIQM(
-    mut mod_0: *mut crate::tr_local_h::model_t,
+    mut mod_0: *mut model_t,
     mut buffer: *mut libc::c_void,
     mut filesize: i32,
     mut mod_name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut header: *mut crate::iqm_h::iqmHeader_t = 0 as *mut crate::iqm_h::iqmHeader_t;
-    let mut vertexarray: *mut crate::iqm_h::iqmVertexArray_t =
-        0 as *mut crate::iqm_h::iqmVertexArray_t;
-    let mut triangle: *mut crate::iqm_h::iqmTriangle_t = 0 as *mut crate::iqm_h::iqmTriangle_t;
-    let mut mesh: *mut crate::iqm_h::iqmMesh_t = 0 as *mut crate::iqm_h::iqmMesh_t;
-    let mut joint: *mut crate::iqm_h::iqmJoint_t = 0 as *mut crate::iqm_h::iqmJoint_t;
-    let mut pose: *mut crate::iqm_h::iqmPose_t = 0 as *mut crate::iqm_h::iqmPose_t;
-    let mut bounds: *mut crate::iqm_h::iqmBounds_t = 0 as *mut crate::iqm_h::iqmBounds_t;
+) -> qboolean {
+    let mut header: *mut iqmHeader_t = 0 as *mut iqmHeader_t;
+    let mut vertexarray: *mut iqmVertexArray_t =
+        0 as *mut iqmVertexArray_t;
+    let mut triangle: *mut iqmTriangle_t = 0 as *mut iqmTriangle_t;
+    let mut mesh: *mut iqmMesh_t = 0 as *mut iqmMesh_t;
+    let mut joint: *mut iqmJoint_t = 0 as *mut iqmJoint_t;
+    let mut pose: *mut iqmPose_t = 0 as *mut iqmPose_t;
+    let mut bounds: *mut iqmBounds_t = 0 as *mut iqmBounds_t;
     let mut framedata: *mut u16 = 0 as *mut u16;
     let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
@@ -830,54 +830,54 @@ pub unsafe extern "C" fn R_LoadIQM(
     ];
     let mut mat: *mut f32 = 0 as *mut f32;
     let mut matInv: *mut f32 = 0 as *mut f32;
-    let mut size: crate::stddef_h::size_t = 0;
-    let mut joint_names: crate::stddef_h::size_t = 0;
-    let mut dataPtr: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut iqmData: *mut crate::tr_local_h::iqmData_t = 0 as *mut crate::tr_local_h::iqmData_t;
-    let mut surface: *mut crate::tr_local_h::srfIQModel_t =
-        0 as *mut crate::tr_local_h::srfIQModel_t;
+    let mut size: size_t = 0;
+    let mut joint_names: size_t = 0;
+    let mut dataPtr: *mut byte =
+        0 as *mut byte;
+    let mut iqmData: *mut iqmData_t = 0 as *mut iqmData_t;
+    let mut surface: *mut srfIQModel_t =
+        0 as *mut srfIQModel_t;
     let mut meshName: [libc::c_char; 64] = [0; 64];
     let mut vertexArrayFormat: [i32; 7] = [0; 7];
     let mut allocateInfluences: i32 = 0;
-    let mut blendIndexes: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut blendIndexes: *mut byte =
+        0 as *mut byte;
     let mut blendWeights: C2RustUnnamed_128 = C2RustUnnamed_128 {
-        b: 0 as *mut crate::src::qcommon::q_shared::byte,
+        b: 0 as *mut byte,
     };
     if (filesize as libc::c_ulong)
-        < ::std::mem::size_of::<crate::iqm_h::iqmHeader_t>() as libc::c_ulong
+        < ::std::mem::size_of::<iqmHeader_t>() as libc::c_ulong
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    header = buffer as *mut crate::iqm_h::iqmHeader_t;
-    if crate::src::qcommon::q_shared::Q_strncmp(
+    header = buffer as *mut iqmHeader_t;
+    if Q_strncmp(
         (*header).magic.as_mut_ptr(),
         b"INTERQUAKEMODEL\x00" as *const u8 as *const libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
     ) != 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     (*header).version = (*header).version;
     if (*header).version != 2 as i32 as u32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"R_LoadIQM: %s is a unsupported IQM version (%d), only version %d is supported.\n\x00"
                 as *const u8 as *const libc::c_char,
             mod_name,
             (*header).version,
             2 as i32,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     (*header).filesize = (*header).filesize;
     if (*header).filesize > filesize as u32
         || (*header).filesize > ((16 as i32) << 20 as i32) as u32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     (*header).flags = (*header).flags;
     (*header).num_text = (*header).num_text;
@@ -906,17 +906,17 @@ pub unsafe extern "C" fn R_LoadIQM(
     (*header).ofs_extensions = (*header).ofs_extensions;
     // check ioq3 joint limit
     if (*header).num_joints > 128 as i32 as u32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"R_LoadIQM: %s has more than %d joints (%d).\n\x00" as *const u8
                 as *const libc::c_char,
             mod_name,
             128 as i32,
             (*header).num_joints,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     i = 0 as i32;
     while (i as libc::c_ulong)
@@ -926,8 +926,8 @@ pub unsafe extern "C" fn R_LoadIQM(
         vertexArrayFormat[i as usize] = -(1 as i32);
         i += 1
     }
-    blendIndexes = 0 as *mut crate::src::qcommon::q_shared::byte;
-    blendWeights.b = 0 as *mut crate::src::qcommon::q_shared::byte;
+    blendIndexes = 0 as *mut byte;
+    blendWeights.b = 0 as *mut byte;
     allocateInfluences = 0 as i32;
     if (*header).num_meshes != 0 {
         // check and swap vertex arrays
@@ -935,21 +935,21 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_vertexarrays as i32,
             (*header).num_vertexarrays as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmVertexArray_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmVertexArray_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        vertexarray = (header as *mut crate::src::qcommon::q_shared::byte)
+        vertexarray = (header as *mut byte)
             .offset((*header).ofs_vertexarrays as isize)
-            as *mut crate::iqm_h::iqmVertexArray_t;
+            as *mut iqmVertexArray_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_vertexarrays {
             let mut n: i32 = 0;
             let mut intPtr: *mut i32 = 0 as *mut i32;
             if (*vertexarray).size <= 0 as i32 as u32 || (*vertexarray).size > 4 as i32 as u32 {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             // total number of values
             n = (*header).num_vertexes.wrapping_mul((*vertexarray).size) as i32;
@@ -960,12 +960,12 @@ pub unsafe extern "C" fn R_LoadIQM(
                         header,
                         (*vertexarray).offset as i32,
                         n,
-                        ::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                        ::std::mem::size_of::<byte>()
                             as libc::c_ulong as i32,
                     ) as u64
                         != 0
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                 }
                 4 | 5 | 7 => {
@@ -978,9 +978,9 @@ pub unsafe extern "C" fn R_LoadIQM(
                     ) as u64
                         != 0
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
-                    intPtr = (header as *mut crate::src::qcommon::q_shared::byte)
+                    intPtr = (header as *mut byte)
                         .offset((*vertexarray).offset as isize)
                         as *mut i32;
                     j = 0 as i32;
@@ -992,7 +992,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                 }
                 _ => {
                     // not supported
-                    return crate::src::qcommon::q_shared::qfalse;
+                    return qfalse;
                 }
             }
             if ((*vertexarray).type_0 as libc::c_ulong)
@@ -1003,57 +1003,57 @@ pub unsafe extern "C" fn R_LoadIQM(
             }
             match (*vertexarray).type_0 {
                 0 | 2 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_FLOAT as i32 as u32
+                    if (*vertexarray).format != IQM_FLOAT as i32 as u32
                         || (*vertexarray).size != 3 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                 }
                 3 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_FLOAT as i32 as u32
+                    if (*vertexarray).format != IQM_FLOAT as i32 as u32
                         || (*vertexarray).size != 4 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                 }
                 1 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_FLOAT as i32 as u32
+                    if (*vertexarray).format != IQM_FLOAT as i32 as u32
                         || (*vertexarray).size != 2 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                 }
                 4 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_INT as i32 as u32
-                        && (*vertexarray).format != crate::iqm_h::IQM_UBYTE as i32 as u32
+                    if (*vertexarray).format != IQM_INT as i32 as u32
+                        && (*vertexarray).format != IQM_UBYTE as i32 as u32
                         || (*vertexarray).size != 4 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
-                    blendIndexes = (header as *mut crate::src::qcommon::q_shared::byte)
+                    blendIndexes = (header as *mut byte)
                         .offset((*vertexarray).offset as isize)
                 }
                 5 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_FLOAT as i32 as u32
-                        && (*vertexarray).format != crate::iqm_h::IQM_UBYTE as i32 as u32
+                    if (*vertexarray).format != IQM_FLOAT as i32 as u32
+                        && (*vertexarray).format != IQM_UBYTE as i32 as u32
                         || (*vertexarray).size != 4 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
-                    if (*vertexarray).format == crate::iqm_h::IQM_FLOAT as i32 as u32 {
-                        blendWeights.f = (header as *mut crate::src::qcommon::q_shared::byte)
+                    if (*vertexarray).format == IQM_FLOAT as i32 as u32 {
+                        blendWeights.f = (header as *mut byte)
                             .offset((*vertexarray).offset as isize)
                             as *mut f32
                     } else {
-                        blendWeights.b = (header as *mut crate::src::qcommon::q_shared::byte)
+                        blendWeights.b = (header as *mut byte)
                             .offset((*vertexarray).offset as isize)
                     }
                 }
                 6 => {
-                    if (*vertexarray).format != crate::iqm_h::IQM_UBYTE as i32 as u32
+                    if (*vertexarray).format != IQM_UBYTE as i32 as u32
                         || (*vertexarray).size != 4 as i32 as u32
                     {
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                 }
                 _ => {}
@@ -1062,52 +1062,52 @@ pub unsafe extern "C" fn R_LoadIQM(
             vertexarray = vertexarray.offset(1)
         }
         // check for required vertex arrays
-        if vertexArrayFormat[crate::iqm_h::IQM_POSITION as i32 as usize] == -(1 as i32)
-            || vertexArrayFormat[crate::iqm_h::IQM_NORMAL as i32 as usize] == -(1 as i32)
-            || vertexArrayFormat[crate::iqm_h::IQM_TEXCOORD as i32 as usize] == -(1 as i32)
+        if vertexArrayFormat[IQM_POSITION as i32 as usize] == -(1 as i32)
+            || vertexArrayFormat[IQM_NORMAL as i32 as usize] == -(1 as i32)
+            || vertexArrayFormat[IQM_TEXCOORD as i32 as usize] == -(1 as i32)
         {
-            crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+            ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                               i32,
                                                           b"R_LoadIQM: %s is missing IQM_POSITION, IQM_NORMAL, and/or IQM_TEXCOORD array.\n\x00"
                                                               as *const u8 as
                                                               *const libc::c_char,
                                                           mod_name);
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         if (*header).num_joints != 0 {
-            if vertexArrayFormat[crate::iqm_h::IQM_BLENDINDEXES as i32 as usize] == -(1 as i32)
-                || vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize] == -(1 as i32)
+            if vertexArrayFormat[IQM_BLENDINDEXES as i32 as usize] == -(1 as i32)
+                || vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] == -(1 as i32)
             {
-                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+                ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
                                                               b"R_LoadIQM: %s is missing IQM_BLENDINDEXES and/or IQM_BLENDWEIGHTS array.\n\x00"
                                                                   as *const u8
                                                                   as
                                                                   *const libc::c_char,
                                                               mod_name);
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
         } else {
             // ignore blend arrays if present
-            vertexArrayFormat[crate::iqm_h::IQM_BLENDINDEXES as i32 as usize] = -(1 as i32);
-            vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize] = -(1 as i32)
+            vertexArrayFormat[IQM_BLENDINDEXES as i32 as usize] = -(1 as i32);
+            vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize] = -(1 as i32)
         }
         // opengl1 renderer doesn't use tangents
-        vertexArrayFormat[crate::iqm_h::IQM_TANGENT as i32 as usize] = -(1 as i32);
+        vertexArrayFormat[IQM_TANGENT as i32 as usize] = -(1 as i32);
         // check and swap triangles
         if IQM_CheckRange(
             header,
             (*header).ofs_triangles as i32,
             (*header).num_triangles as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmTriangle_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmTriangle_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        triangle = (header as *mut crate::src::qcommon::q_shared::byte)
+        triangle = (header as *mut byte)
             .offset((*header).ofs_triangles as isize)
-            as *mut crate::iqm_h::iqmTriangle_t;
+            as *mut iqmTriangle_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_triangles {
             (*triangle).vertex[0 as i32 as usize] = (*triangle).vertex[0 as i32 as usize];
@@ -1117,7 +1117,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                 || (*triangle).vertex[1 as i32 as usize] > (*header).num_vertexes
                 || (*triangle).vertex[2 as i32 as usize] > (*header).num_vertexes
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             i += 1;
             triangle = triangle.offset(1)
@@ -1127,14 +1127,14 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_meshes as i32,
             (*header).num_meshes as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmMesh_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmMesh_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        mesh = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_meshes as isize) as *mut crate::iqm_h::iqmMesh_t;
+        mesh = (header as *mut byte)
+            .offset((*header).ofs_meshes as isize) as *mut iqmMesh_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_meshes {
             (*mesh).name = (*mesh).name;
@@ -1144,7 +1144,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             (*mesh).first_triangle = (*mesh).first_triangle;
             (*mesh).num_triangles = (*mesh).num_triangles;
             if (*mesh).name < (*header).num_text {
-                crate::src::qcommon::q_shared::Q_strncpyz(
+                Q_strncpyz(
                     meshName.as_mut_ptr(),
                     (header as *mut libc::c_char)
                         .offset((*header).ofs_text as isize)
@@ -1156,10 +1156,10 @@ pub unsafe extern "C" fn R_LoadIQM(
             }
             // check ioq3 limits
             if (*mesh).num_vertexes >= 1000 as i32 as u32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"R_LoadIQM: %s has more than %i verts on %s (%i).\n\x00" as *const u8
                         as *const libc::c_char,
                     mod_name,
@@ -1171,15 +1171,15 @@ pub unsafe extern "C" fn R_LoadIQM(
                     },
                     (*mesh).num_vertexes,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             if (*mesh).num_triangles.wrapping_mul(3 as i32 as u32)
                 >= (6 as i32 * 1000 as i32) as u32
             {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"R_LoadIQM: %s has more than %i triangles on %s (%i).\n\x00" as *const u8
                         as *const libc::c_char,
                     mod_name,
@@ -1191,7 +1191,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     },
                     (*mesh).num_triangles,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             if (*mesh).first_vertex >= (*header).num_vertexes
                 || (*mesh).first_vertex.wrapping_add((*mesh).num_vertexes) > (*header).num_vertexes
@@ -1201,7 +1201,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                 || (*mesh).name >= (*header).num_text
                 || (*mesh).material >= (*header).num_text
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             // find number of unique blend influences per mesh
             if (*header).num_joints != 0 {
@@ -1212,14 +1212,14 @@ pub unsafe extern "C" fn R_LoadIQM(
                     while k < j {
                         let mut influence: i32 = (*mesh).first_vertex.wrapping_add(k as u32) as i32;
                         if !(*(&mut *blendIndexes.offset((4 as i32 * influence) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32)
                             != *(&mut *blendIndexes.offset((4 as i32 * vtx) as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32))
                         {
-                            if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                                == crate::iqm_h::IQM_FLOAT as i32
+                            if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                                == IQM_FLOAT as i32
                             {
                                 if *blendWeights
                                     .f
@@ -1247,10 +1247,10 @@ pub unsafe extern "C" fn R_LoadIQM(
                                     break;
                                 }
                             } else if *(&mut *blendWeights.b.offset((4 as i32 * influence) as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32)
                                 == *(&mut *blendWeights.b.offset((4 as i32 * vtx) as isize)
-                                    as *mut crate::src::qcommon::q_shared::byte
+                                    as *mut byte
                                     as *mut i32)
                             {
                                 break;
@@ -1269,33 +1269,33 @@ pub unsafe extern "C" fn R_LoadIQM(
         }
     }
     if (*header).num_poses != (*header).num_joints && (*header).num_poses != 0 as i32 as u32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"R_LoadIQM: %s has %d poses and %d joints, must have the same number or 0 poses\n\x00"
                 as *const u8 as *const libc::c_char,
             mod_name,
             (*header).num_poses,
             (*header).num_joints,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    joint_names = 0 as i32 as crate::stddef_h::size_t;
+    joint_names = 0 as i32 as size_t;
     if (*header).num_joints != 0 {
         // check and swap joints
         if IQM_CheckRange(
             header,
             (*header).ofs_joints as i32,
             (*header).num_joints as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmJoint_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmJoint_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        joint = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_joints as isize) as *mut crate::iqm_h::iqmJoint_t;
+        joint = (header as *mut byte)
+            .offset((*header).ofs_joints as isize) as *mut iqmJoint_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_joints {
             (*joint).name = (*joint).name;
@@ -1314,7 +1314,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                 || (*joint).parent >= (*header).num_joints as i32
                 || (*joint).name >= (*header).num_text as i32 as u32
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             joint_names = (joint_names as libc::c_ulong).wrapping_add(
                 crate::stdlib::strlen(
@@ -1323,7 +1323,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                         .offset((*joint).name as isize),
                 )
                 .wrapping_add(1 as i32 as libc::c_ulong),
-            ) as crate::stddef_h::size_t;
+            ) as size_t;
             i += 1;
             joint = joint.offset(1)
         }
@@ -1334,14 +1334,14 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_poses as i32,
             (*header).num_poses as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmPose_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmPose_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        pose = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_poses as isize) as *mut crate::iqm_h::iqmPose_t;
+        pose = (header as *mut byte)
+            .offset((*header).ofs_poses as isize) as *mut iqmPose_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_poses {
             (*pose).parent = (*pose).parent;
@@ -1376,15 +1376,15 @@ pub unsafe extern "C" fn R_LoadIQM(
             header,
             (*header).ofs_bounds as i32,
             (*header).num_frames as i32,
-            ::std::mem::size_of::<crate::iqm_h::iqmBounds_t>() as libc::c_ulong as i32,
+            ::std::mem::size_of::<iqmBounds_t>() as libc::c_ulong as i32,
         ) as u64
             != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        bounds = (header as *mut crate::src::qcommon::q_shared::byte)
+        bounds = (header as *mut byte)
             .offset((*header).ofs_bounds as isize)
-            as *mut crate::iqm_h::iqmBounds_t;
+            as *mut iqmBounds_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_frames {
             (*bounds).bbmin[0 as i32 as usize] = (*bounds).bbmin[0 as i32 as usize];
@@ -1398,85 +1398,85 @@ pub unsafe extern "C" fn R_LoadIQM(
         }
     }
     // allocate the model and copy the data
-    size = ::std::mem::size_of::<crate::tr_local_h::iqmData_t>() as libc::c_ulong; // surfaces
+    size = ::std::mem::size_of::<iqmData_t>() as libc::c_ulong; // surfaces
     if (*header).num_meshes != 0 {
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_meshes as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::tr_local_h::srfIQModel_t,
+                srfIQModel_t,
             >() as libc::c_ulong),
-        ) as crate::stddef_h::size_t; // triangles
+        ) as size_t; // triangles
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t; // positions
+        ) as size_t; // positions
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t; // texcoords
+        ) as size_t; // texcoords
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t; // normals
+        ) as size_t; // normals
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t;
-        if vertexArrayFormat[crate::iqm_h::IQM_TANGENT as i32 as usize] != -(1 as i32) {
+        ) as size_t;
+        if vertexArrayFormat[IQM_TANGENT as i32 as usize] != -(1 as i32) {
             size = (size as libc::c_ulong).wrapping_add(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-            ) as crate::stddef_h::size_t
+            ) as size_t
             // tangents
         }
-        if vertexArrayFormat[crate::iqm_h::IQM_COLOR as i32 as usize] != -(1 as i32) {
+        if vertexArrayFormat[IQM_COLOR as i32 as usize] != -(1 as i32) {
             size = (size as libc::c_ulong).wrapping_add(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                    .wrapping_mul(::std::mem::size_of::<byte>()
                         as libc::c_ulong),
-            ) as crate::stddef_h::size_t
+            ) as size_t
             // colors
         } // influences
         if allocateInfluences != 0 {
             size = (size as libc::c_ulong).wrapping_add(
                 ((*header).num_vertexes as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-            ) as crate::stddef_h::size_t; // influenceBlendIndexes
+            ) as size_t; // influenceBlendIndexes
             size = (size as libc::c_ulong).wrapping_add(
                 ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                    .wrapping_mul(::std::mem::size_of::<byte>()
                         as libc::c_ulong),
-            ) as crate::stddef_h::size_t;
-            if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                == crate::iqm_h::IQM_UBYTE as i32
+            ) as size_t;
+            if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                == IQM_UBYTE as i32
             {
                 size = (size as libc::c_ulong).wrapping_add(
                     ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                        .wrapping_mul(::std::mem::size_of::<byte>()
                             as libc::c_ulong),
-                ) as crate::stddef_h::size_t
+                ) as size_t
             // influenceBlendWeights
-            } else if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                == crate::iqm_h::IQM_FLOAT as i32
+            } else if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                == IQM_FLOAT as i32
             {
                 size = (size as libc::c_ulong).wrapping_add(
                     ((allocateInfluences * 4 as i32) as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-                ) as crate::stddef_h::size_t
+                ) as size_t
                 // influenceBlendWeights
             }
         }
     } // joint names
     if (*header).num_joints != 0 {
-        size = (size as libc::c_ulong).wrapping_add(joint_names) as crate::stddef_h::size_t;
+        size = (size as libc::c_ulong).wrapping_add(joint_names) as size_t;
         // joint mats
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_joints as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t; // joint parents
+        ) as size_t; // joint parents
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_joints.wrapping_mul(12 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t
+        ) as size_t
     }
     if (*header).num_poses != 0 {
         size = (size as libc::c_ulong).wrapping_add(
@@ -1485,27 +1485,27 @@ pub unsafe extern "C" fn R_LoadIQM(
                 .wrapping_mul((*header).num_frames)
                 .wrapping_mul(12 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t
+        ) as size_t
         // pose mats
     }
     if (*header).ofs_bounds != 0 {
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_frames.wrapping_mul(6 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t
+        ) as size_t
     // model bounds
     } else if (*header).num_meshes != 0 && (*header).num_frames == 0 as i32 as u32 {
         size = (size as libc::c_ulong).wrapping_add(
             (6 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t
+        ) as size_t
         // model bounds
     }
-    (*mod_0).type_0 = crate::tr_local_h::MOD_IQM;
-    iqmData = crate::src::renderergl1::tr_main::ri
+    (*mod_0).type_0 = MOD_IQM;
+    iqmData = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        size as i32, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::tr_local_h::iqmData_t;
+        size as i32, h_low
+    ) as *mut iqmData_t;
     (*mod_0).modelData = iqmData as *mut libc::c_void;
     // fill header
     (*iqmData).num_vertexes = if (*header).num_meshes > 0 as i32 as u32 {
@@ -1522,14 +1522,14 @@ pub unsafe extern "C" fn R_LoadIQM(
     (*iqmData).num_surfaces = (*header).num_meshes as i32; // normals
     (*iqmData).num_joints = (*header).num_joints as i32;
     (*iqmData).num_poses = (*header).num_poses as i32;
-    (*iqmData).blendWeightsType = vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize];
-    dataPtr = (iqmData as *mut crate::src::qcommon::q_shared::byte)
-        .offset(::std::mem::size_of::<crate::tr_local_h::iqmData_t>() as libc::c_ulong as isize);
+    (*iqmData).blendWeightsType = vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize];
+    dataPtr = (iqmData as *mut byte)
+        .offset(::std::mem::size_of::<iqmData_t>() as libc::c_ulong as isize);
     if (*header).num_meshes != 0 {
-        (*iqmData).surfaces = dataPtr as *mut crate::tr_local_h::srfIQModel_s;
+        (*iqmData).surfaces = dataPtr as *mut srfIQModel_s;
         dataPtr =
             dataPtr.offset(((*header).num_meshes as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<crate::tr_local_h::srfIQModel_t>() as libc::c_ulong,
+                ::std::mem::size_of::<srfIQModel_t>() as libc::c_ulong,
             ) as isize);
         (*iqmData).triangles = dataPtr as *mut i32;
         dataPtr = dataPtr.offset(
@@ -1551,7 +1551,7 @@ pub unsafe extern "C" fn R_LoadIQM(
             ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         );
-        if vertexArrayFormat[crate::iqm_h::IQM_TANGENT as i32 as usize] != -(1 as i32) {
+        if vertexArrayFormat[IQM_TANGENT as i32 as usize] != -(1 as i32) {
             (*iqmData).tangents = dataPtr as *mut f32;
             dataPtr = dataPtr.offset(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
@@ -1560,11 +1560,11 @@ pub unsafe extern "C" fn R_LoadIQM(
             )
             // tangents
         }
-        if vertexArrayFormat[crate::iqm_h::IQM_COLOR as i32 as usize] != -(1 as i32) {
+        if vertexArrayFormat[IQM_COLOR as i32 as usize] != -(1 as i32) {
             (*iqmData).colors = dataPtr;
             dataPtr = dataPtr.offset(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                    .wrapping_mul(::std::mem::size_of::<byte>()
                         as libc::c_ulong) as isize,
             )
             // colors
@@ -1579,21 +1579,21 @@ pub unsafe extern "C" fn R_LoadIQM(
             (*iqmData).influenceBlendIndexes = dataPtr;
             dataPtr = dataPtr.offset(
                 ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                    .wrapping_mul(::std::mem::size_of::<byte>()
                         as libc::c_ulong) as isize,
             );
-            if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                == crate::iqm_h::IQM_UBYTE as i32
+            if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                == IQM_UBYTE as i32
             {
                 (*iqmData).influenceBlendWeights.b = dataPtr;
                 dataPtr = dataPtr.offset(
                     ((allocateInfluences * 4 as i32) as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
+                        .wrapping_mul(::std::mem::size_of::<byte>()
                             as libc::c_ulong) as isize,
                 )
             // influenceBlendWeights
-            } else if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                == crate::iqm_h::IQM_FLOAT as i32
+            } else if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                == IQM_FLOAT as i32
             {
                 (*iqmData).influenceBlendWeights.f = dataPtr as *mut f32;
                 dataPtr = dataPtr.offset(
@@ -1649,26 +1649,26 @@ pub unsafe extern "C" fn R_LoadIQM(
     if (*header).num_meshes != 0 {
         // register shaders
         // overwrite the material offset with the shader index
-        mesh = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_meshes as isize) as *mut crate::iqm_h::iqmMesh_t; // lowercase the surface name so skin compares are faster
+        mesh = (header as *mut byte)
+            .offset((*header).ofs_meshes as isize) as *mut iqmMesh_t; // lowercase the surface name so skin compares are faster
         surface = (*iqmData).surfaces;
         str = (header as *mut libc::c_char).offset((*header).ofs_text as isize);
         i = 0 as i32;
         while (i as u32) < (*header).num_meshes {
-            (*surface).surfaceType = crate::tr_local_h::SF_IQM;
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            (*surface).surfaceType = SF_IQM;
+            Q_strncpyz(
                 (*surface).name.as_mut_ptr(),
                 str.offset((*mesh).name as isize),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
-            crate::src::qcommon::q_shared::Q_strlwr((*surface).name.as_mut_ptr());
-            (*surface).shader = crate::src::renderergl1::tr_shader::R_FindShader(
+            Q_strlwr((*surface).name.as_mut_ptr());
+            (*surface).shader = R_FindShader(
                 str.offset((*mesh).material as isize),
                 -(1 as i32),
-                crate::src::qcommon::q_shared::qtrue,
-            ) as *mut crate::tr_local_h::shader_s;
+                qtrue,
+            ) as *mut shader_s;
             if (*(*surface).shader).defaultShader as u64 != 0 {
-                (*surface).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+                (*surface).shader = tr.defaultShader
             }
             (*surface).data = iqmData;
             (*surface).first_vertex = (*mesh).first_vertex as i32;
@@ -1680,9 +1680,9 @@ pub unsafe extern "C" fn R_LoadIQM(
             surface = surface.offset(1)
         }
         // copy triangles
-        triangle = (header as *mut crate::src::qcommon::q_shared::byte)
+        triangle = (header as *mut byte)
             .offset((*header).ofs_triangles as isize)
-            as *mut crate::iqm_h::iqmTriangle_t;
+            as *mut iqmTriangle_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_triangles {
             *(*iqmData)
@@ -1701,9 +1701,9 @@ pub unsafe extern "C" fn R_LoadIQM(
             triangle = triangle.offset(1)
         }
         // copy vertexarrays and indexes
-        vertexarray = (header as *mut crate::src::qcommon::q_shared::byte)
+        vertexarray = (header as *mut byte)
             .offset((*header).ofs_vertexarrays as isize)
-            as *mut crate::iqm_h::iqmVertexArray_t;
+            as *mut iqmVertexArray_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_vertexarrays {
             let mut n_0: i32 = 0;
@@ -1719,7 +1719,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     0 => {
                         crate::stdlib::memcpy(
                             (*iqmData).positions as *mut libc::c_void,
-                            (header as *mut crate::src::qcommon::q_shared::byte)
+                            (header as *mut byte)
                                 .offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
                             (n_0 as libc::c_ulong)
@@ -1729,7 +1729,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     2 => {
                         crate::stdlib::memcpy(
                             (*iqmData).normals as *mut libc::c_void,
-                            (header as *mut crate::src::qcommon::q_shared::byte)
+                            (header as *mut byte)
                                 .offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
                             (n_0 as libc::c_ulong)
@@ -1739,7 +1739,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     3 => {
                         crate::stdlib::memcpy(
                             (*iqmData).tangents as *mut libc::c_void,
-                            (header as *mut crate::src::qcommon::q_shared::byte)
+                            (header as *mut byte)
                                 .offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
                             (n_0 as libc::c_ulong)
@@ -1749,7 +1749,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     1 => {
                         crate::stdlib::memcpy(
                             (*iqmData).texcoords as *mut libc::c_void,
-                            (header as *mut crate::src::qcommon::q_shared::byte)
+                            (header as *mut byte)
                                 .offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
                             (n_0 as libc::c_ulong)
@@ -1759,12 +1759,12 @@ pub unsafe extern "C" fn R_LoadIQM(
                     6 => {
                         crate::stdlib::memcpy(
                             (*iqmData).colors as *mut libc::c_void,
-                            (header as *mut crate::src::qcommon::q_shared::byte)
+                            (header as *mut byte)
                                 .offset((*vertexarray).offset as isize)
                                 as *const libc::c_void,
                             (n_0 as libc::c_ulong)
                                 .wrapping_mul(::std::mem::size_of::<
-                                    crate::src::qcommon::q_shared::byte,
+                                    byte,
                                 >() as libc::c_ulong),
                         );
                     }
@@ -1793,14 +1793,14 @@ pub unsafe extern "C" fn R_LoadIQM(
                         if !(*(&mut *(*iqmData)
                             .influenceBlendIndexes
                             .offset((4 as i32 * influence_0) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32)
                             != *(&mut *blendIndexes.offset((4 as i32 * vtx_0) as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32))
                         {
-                            if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                                == crate::iqm_h::IQM_FLOAT as i32
+                            if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                                == IQM_FLOAT as i32
                             {
                                 if *(*iqmData)
                                     .influenceBlendWeights
@@ -1837,10 +1837,10 @@ pub unsafe extern "C" fn R_LoadIQM(
                                 .influenceBlendWeights
                                 .b
                                 .offset((4 as i32 * influence_0) as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32)
                                 == *(&mut *blendWeights.b.offset((4 as i32 * vtx_0) as isize)
-                                    as *mut crate::src::qcommon::q_shared::byte
+                                    as *mut byte
                                     as *mut i32)
                             {
                                 break;
@@ -1867,8 +1867,8 @@ pub unsafe extern "C" fn R_LoadIQM(
                             .influenceBlendIndexes
                             .offset((4 as i32 * influence_0 + 3 as i32) as isize) =
                             *blendIndexes.offset((4 as i32 * vtx_0 + 3 as i32) as isize);
-                        if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
-                            == crate::iqm_h::IQM_FLOAT as i32
+                        if vertexArrayFormat[IQM_BLENDWEIGHTS as i32 as usize]
+                            == IQM_FLOAT as i32
                         {
                             *(*iqmData)
                                 .influenceBlendWeights
@@ -1941,8 +1941,8 @@ pub unsafe extern "C" fn R_LoadIQM(
     if (*header).num_joints != 0 {
         // copy joint names
         str = (*iqmData).jointNames;
-        joint = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_joints as isize) as *mut crate::iqm_h::iqmJoint_t;
+        joint = (header as *mut byte)
+            .offset((*header).ofs_joints as isize) as *mut iqmJoint_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_joints {
             let mut name: *mut libc::c_char = (header as *mut libc::c_char)
@@ -1960,8 +1960,8 @@ pub unsafe extern "C" fn R_LoadIQM(
             joint = joint.offset(1)
         }
         // copy joint parents
-        joint = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_joints as isize) as *mut crate::iqm_h::iqmJoint_t;
+        joint = (header as *mut byte)
+            .offset((*header).ofs_joints as isize) as *mut iqmJoint_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_joints {
             *(*iqmData).jointParents.offset(i as isize) = (*joint).parent;
@@ -1972,8 +1972,8 @@ pub unsafe extern "C" fn R_LoadIQM(
         // joint inverses are needed only until the pose matrices are calculated
         mat = (*iqmData).jointMats;
         matInv = jointInvMats.as_mut_ptr();
-        joint = (header as *mut crate::src::qcommon::q_shared::byte)
-            .offset((*header).ofs_joints as isize) as *mut crate::iqm_h::iqmJoint_t;
+        joint = (header as *mut byte)
+            .offset((*header).ofs_joints as isize) as *mut iqmJoint_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_joints {
             let mut baseFrame: [f32; 12] = [0.; 12];
@@ -2022,19 +2022,19 @@ pub unsafe extern "C" fn R_LoadIQM(
     }
     if (*header).num_poses != 0 {
         // calculate pose matrices
-        framedata = (header as *mut crate::src::qcommon::q_shared::byte)
+        framedata = (header as *mut byte)
             .offset((*header).ofs_frames as isize) as *mut u16;
         mat = (*iqmData).poseMats;
         i = 0 as i32;
         while (i as u32) < (*header).num_frames {
-            pose = (header as *mut crate::src::qcommon::q_shared::byte)
+            pose = (header as *mut byte)
                 .offset((*header).ofs_poses as isize)
-                as *mut crate::iqm_h::iqmPose_t;
+                as *mut iqmPose_t;
             j = 0 as i32;
             while (j as u32) < (*header).num_poses {
-                let mut translate: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                let mut rotate: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-                let mut scale: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+                let mut translate: vec3_t = [0.; 3];
+                let mut rotate: vec4_t = [0.; 4];
+                let mut scale: vec3_t = [0.; 3];
                 let mut mat1: [f32; 12] = [0.; 12];
                 let mut mat2: [f32; 12] = [0.; 12];
                 translate[0 as i32 as usize] = (*pose).channeloffset[0 as i32 as usize];
@@ -2144,9 +2144,9 @@ pub unsafe extern "C" fn R_LoadIQM(
     // copy model bounds
     if (*header).ofs_bounds != 0 {
         mat = (*iqmData).bounds;
-        bounds = (header as *mut crate::src::qcommon::q_shared::byte)
+        bounds = (header as *mut byte)
             .offset((*header).ofs_bounds as isize)
-            as *mut crate::iqm_h::iqmBounds_t;
+            as *mut iqmBounds_t;
         i = 0 as i32;
         while (i as u32) < (*header).num_frames {
             *mat.offset(0 as i32 as isize) = (*bounds).bbmin[0 as i32 as usize];
@@ -2161,22 +2161,22 @@ pub unsafe extern "C" fn R_LoadIQM(
         }
     } else if (*header).num_meshes != 0 && (*header).num_frames == 0 as i32 as u32 {
         mat = (*iqmData).bounds;
-        crate::src::qcommon::q_math::ClearBounds(
+        ClearBounds(
             &mut *(*iqmData).bounds.offset(0 as i32 as isize),
             &mut *(*iqmData).bounds.offset(3 as i32 as isize),
         );
         i = 0 as i32;
         while (i as u32) < (*header).num_vertexes {
-            crate::src::qcommon::q_math::AddPointToBounds(
+            AddPointToBounds(
                 &mut *(*iqmData).positions.offset((i * 3 as i32) as isize) as *mut f32
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                    as *const vec_t,
                 &mut *(*iqmData).bounds.offset(0 as i32 as isize),
                 &mut *(*iqmData).bounds.offset(3 as i32 as isize),
             );
             i += 1
         }
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =============
@@ -2185,17 +2185,17 @@ R_CullIQM
 */
 
 unsafe extern "C" fn R_CullIQM(
-    mut data: *mut crate::tr_local_h::iqmData_t,
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
+    mut data: *mut iqmData_t,
+    mut ent: *mut trRefEntity_t,
 ) -> i32 {
-    let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut oldBounds: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut newBounds: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
+    let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut oldBounds: *mut vec_t =
+        0 as *mut vec_t;
+    let mut newBounds: *mut vec_t =
+        0 as *mut vec_t;
     let mut i: i32 = 0;
     if (*data).bounds.is_null() {
-        crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_clip += 1;
+        tr.pc.c_box_cull_md3_clip += 1;
         return 1 as i32;
     }
     // compute bounds pointers
@@ -2221,17 +2221,17 @@ unsafe extern "C" fn R_CullIQM(
         };
         i += 1
     }
-    match crate::src::renderergl1::tr_main::R_CullLocalBox(bounds.as_mut_ptr()) {
+    match R_CullLocalBox(bounds.as_mut_ptr()) {
         0 => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_in += 1;
+            tr.pc.c_box_cull_md3_in += 1;
             return 0 as i32;
         }
         1 => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_clip += 1;
+            tr.pc.c_box_cull_md3_clip += 1;
             return 1 as i32;
         }
         2 | _ => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_out += 1;
+            tr.pc.c_box_cull_md3_out += 1;
             return 2 as i32;
         }
     };
@@ -2245,27 +2245,27 @@ R_ComputeIQMFogNum
 #[no_mangle]
 
 pub unsafe extern "C" fn R_ComputeIQMFogNum(
-    mut data: *mut crate::tr_local_h::iqmData_t,
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
+    mut data: *mut iqmData_t,
+    mut ent: *mut trRefEntity_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    let mut bounds: *const crate::src::qcommon::q_shared::vec_t =
-        0 as *const crate::src::qcommon::q_shared::vec_t;
-    let defaultBounds: [crate::src::qcommon::q_shared::vec_t; 6] = [
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut bounds: *const vec_t =
+        0 as *const vec_t;
+    let defaultBounds: [vec_t; 6] = [
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
     ];
-    let mut diag: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut center: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut localOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut radius: crate::src::qcommon::q_shared::vec_t = 0.;
-    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as i32 != 0 {
+    let mut diag: vec3_t = [0.; 3];
+    let mut center: vec3_t = [0.; 3];
+    let mut localOrigin: vec3_t = [0.; 3];
+    let mut radius: vec_t = 0.;
+    if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
     // FIXME: non-normalized axis issues
@@ -2290,12 +2290,12 @@ pub unsafe extern "C" fn R_ComputeIQMFogNum(
     localOrigin[1 as i32 as usize] = (*ent).e.origin[1 as i32 as usize] + center[1 as i32 as usize];
     localOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize] + center[2 as i32 as usize];
     radius =
-        0.5f32 * VectorLength(diag.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        0.5f32 * VectorLength(diag.as_mut_ptr() as *const vec_t);
     i = 1 as i32;
-    while i < (*crate::src::renderergl1::tr_main::tr.world).numfogs {
-        fog = &mut *(*crate::src::renderergl1::tr_main::tr.world)
+    while i < (*tr.world).numfogs {
+        fog = &mut *(*tr.world)
             .fogs
-            .offset(i as isize) as *mut crate::tr_local_h::fog_t;
+            .offset(i as isize) as *mut fog_t;
         j = 0 as i32;
         while j < 3 as i32 {
             if localOrigin[j as usize] - radius >= (*fog).bounds[1 as i32 as usize][j as usize] {
@@ -2322,25 +2322,25 @@ Add all surfaces of this model
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
-    let mut data: *mut crate::tr_local_h::iqmData_t = 0 as *mut crate::tr_local_h::iqmData_t;
-    let mut surface: *mut crate::tr_local_h::srfIQModel_t =
-        0 as *mut crate::tr_local_h::srfIQModel_t;
+pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut trRefEntity_t) {
+    let mut data: *mut iqmData_t = 0 as *mut iqmData_t;
+    let mut surface: *mut srfIQModel_t =
+        0 as *mut srfIQModel_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut personalModel: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut personalModel: qboolean =
+        qfalse;
     let mut cull: i32 = 0;
     let mut fogNum: i32 = 0;
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut skin: *mut crate::tr_local_h::skin_t = 0 as *mut crate::tr_local_h::skin_t;
-    data = (*crate::src::renderergl1::tr_main::tr.currentModel).modelData
-        as *mut crate::tr_local_h::iqmData_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut skin: *mut skin_t = 0 as *mut skin_t;
+    data = (*tr.currentModel).modelData
+        as *mut iqmData_t;
     surface = (*data).surfaces;
     // don't add third_person objects if not in a portal
     personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0
-        && crate::src::renderergl1::tr_main::tr.viewParms.isPortal as u64 == 0)
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+        && tr.viewParms.isPortal as u64 == 0)
+        as i32 as qboolean;
     if (*ent).e.renderfx & 0x200 as i32 != 0 {
         (*ent).e.frame %= (*data).num_frames;
         (*ent).e.oldframe %= (*data).num_frames
@@ -2356,15 +2356,15 @@ pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRef
         || (*ent).e.oldframe >= (*data).num_frames
         || (*ent).e.oldframe < 0 as i32
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"R_AddIQMSurfaces: no such frame %d to %d for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             (*ent).e.oldframe,
             (*ent).e.frame,
-            (*crate::src::renderergl1::tr_main::tr.currentModel)
+            (*tr.currentModel)
                 .name
                 .as_mut_ptr(),
         );
@@ -2383,12 +2383,12 @@ pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRef
     // set up lighting now that we know we aren't culled
     //
     if personalModel as u64 == 0
-        || (*crate::src::renderergl1::tr_init::r_shadows).integer > 1 as i32
+        || (*r_shadows).integer > 1 as i32
     {
-        crate::src::renderergl1::tr_light::R_SetupEntityLighting(
-            &mut crate::src::renderergl1::tr_main::tr.refdef as *mut _
-                as *const crate::tr_local_h::trRefdef_t,
-            ent as *mut crate::tr_local_h::trRefEntity_t,
+        R_SetupEntityLighting(
+            &mut tr.refdef as *mut _
+                as *const trRefdef_t,
+            ent as *mut trRefEntity_t,
         );
     }
     //
@@ -2398,17 +2398,17 @@ pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRef
     i = 0 as i32;
     while i < (*data).num_surfaces {
         if (*ent).e.customShader != 0 {
-            shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle((*ent).e.customShader)
-                as *mut crate::tr_local_h::shader_s
+            shader = R_GetShaderByHandle((*ent).e.customShader)
+                as *mut shader_s
         } else if (*ent).e.customSkin > 0 as i32
-            && (*ent).e.customSkin < crate::src::renderergl1::tr_main::tr.numSkins
+            && (*ent).e.customSkin < tr.numSkins
         {
-            skin = crate::src::renderergl1::tr_image::R_GetSkinByHandle((*ent).e.customSkin)
-                as *mut crate::tr_local_h::skin_s;
-            shader = crate::src::renderergl1::tr_main::tr.defaultShader;
+            skin = R_GetSkinByHandle((*ent).e.customSkin)
+                as *mut skin_s;
+            shader = tr.defaultShader;
             j = 0 as i32;
             while j < (*skin).numSurfaces {
-                if ::libc::strcmp(
+                if libc::strcmp(
                     (*(*skin).surfaces.offset(j as isize)).name.as_mut_ptr(),
                     (*surface).name.as_mut_ptr(),
                 ) == 0
@@ -2425,37 +2425,37 @@ pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRef
         // we will add shadows even if the main object isn't visible in the view
         // stencil shadows can't do personal models unless I polyhedron clip
         if personalModel as u64 == 0
-            && (*crate::src::renderergl1::tr_init::r_shadows).integer == 2 as i32
+            && (*r_shadows).integer == 2 as i32
             && fogNum == 0 as i32
             && (*ent).e.renderfx & (0x40 as i32 | 0x8 as i32) == 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
+            && (*shader).sort == SS_OPAQUE as i32 as f32
         {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                crate::src::renderergl1::tr_main::tr.shadowShader
-                    as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                tr.shadowShader
+                    as *mut shader_s,
                 0 as i32,
                 0 as i32,
             );
         }
         // projection shadows work fine with personal models
-        if (*crate::src::renderergl1::tr_init::r_shadows).integer == 3 as i32
+        if (*r_shadows).integer == 3 as i32
             && fogNum == 0 as i32
             && (*ent).e.renderfx & 0x100 as i32 != 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
+            && (*shader).sort == SS_OPAQUE as i32 as f32
         {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                crate::src::renderergl1::tr_main::tr.projectionShadowShader
-                    as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                tr.projectionShadowShader
+                    as *mut shader_s,
                 0 as i32,
                 0 as i32,
             );
         }
         if personalModel as u64 == 0 {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                shader as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                shader as *mut shader_s,
                 fogNum,
                 0 as i32,
             );
@@ -2466,7 +2466,7 @@ pub unsafe extern "C" fn R_AddIQMSurfaces(mut ent: *mut crate::tr_local_h::trRef
 }
 
 unsafe extern "C" fn ComputePoseMats(
-    mut data: *mut crate::tr_local_h::iqmData_t,
+    mut data: *mut iqmData_t,
     mut frame: i32,
     mut oldframe: i32,
     mut backlerp: f32,
@@ -2536,7 +2536,7 @@ unsafe extern "C" fn ComputePoseMats(
 }
 
 unsafe extern "C" fn ComputeJointMats(
-    mut data: *mut crate::tr_local_h::iqmData_t,
+    mut data: *mut iqmData_t,
     mut frame: i32,
     mut oldframe: i32,
     mut backlerp: f32,
@@ -2580,10 +2580,10 @@ Compute vertices for this model surface
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::surfaceType_t) {
-    let mut surf: *mut crate::tr_local_h::srfIQModel_t =
-        surface as *mut crate::tr_local_h::srfIQModel_t;
-    let mut data: *mut crate::tr_local_h::iqmData_t = (*surf).data;
+pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut surfaceType_t) {
+    let mut surf: *mut srfIQModel_t =
+        surface as *mut srfIQModel_t;
+    let mut data: *mut iqmData_t = (*surf).data;
     let mut poseMats: [f32; 1536] = [0.; 1536];
     let mut influenceVtxMat: [f32; 12000] = [0.; 12000];
     let mut influenceNrmMat: [f32; 9000] = [0.; 9000];
@@ -2591,17 +2591,17 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
     let mut xyz: *mut f32 = 0 as *mut f32;
     let mut normal: *mut f32 = 0 as *mut f32;
     let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut color: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut outXYZ: *mut crate::src::qcommon::q_shared::vec4_t =
-        0 as *mut crate::src::qcommon::q_shared::vec4_t;
-    let mut outNormal: *mut crate::src::qcommon::q_shared::vec4_t =
-        0 as *mut crate::src::qcommon::q_shared::vec4_t;
-    let mut outTexCoord: *mut [crate::src::qcommon::q_shared::vec2_t; 2] =
-        0 as *mut [crate::src::qcommon::q_shared::vec2_t; 2];
-    let mut outColor: *mut crate::tr_local_h::color4ub_t = 0 as *mut crate::tr_local_h::color4ub_t;
+    let mut color: *mut byte =
+        0 as *mut byte;
+    let mut outXYZ: *mut vec4_t =
+        0 as *mut vec4_t;
+    let mut outNormal: *mut vec4_t =
+        0 as *mut vec4_t;
+    let mut outTexCoord: *mut [vec2_t; 2] =
+        0 as *mut [vec2_t; 2];
+    let mut outColor: *mut color4ub_t = 0 as *mut color4ub_t;
     let mut frame: i32 = if (*data).num_frames != 0 {
-        ((*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        ((*backEnd.currentEntity)
             .e
             .frame)
             % (*data).num_frames
@@ -2609,24 +2609,24 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
         0 as i32
     };
     let mut oldframe: i32 = if (*data).num_frames != 0 {
-        ((*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        ((*backEnd.currentEntity)
             .e
             .oldframe)
             % (*data).num_frames
     } else {
         0 as i32
     };
-    let mut backlerp: f32 = (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+    let mut backlerp: f32 = (*backEnd.currentEntity)
         .e
         .backlerp;
     let mut tri: *mut i32 = 0 as *mut i32;
-    let mut ptr: *mut crate::tr_local_h::glIndex_t = 0 as *mut crate::tr_local_h::glIndex_t;
-    let mut base: crate::tr_local_h::glIndex_t = 0;
-    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surf).num_vertexes >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes + (*surf).num_triangles * 3 as i32
+    let mut ptr: *mut glIndex_t = 0 as *mut glIndex_t;
+    let mut base: glIndex_t = 0;
+    if tess.numVertexes + (*surf).num_vertexes >= 1000 as i32
+        || tess.numIndexes + (*surf).num_triangles * 3 as i32
             >= 6 as i32 * 1000 as i32
     {
-        crate::src::renderergl1::tr_surface::RB_CheckOverflow(
+        RB_CheckOverflow(
             (*surf).num_vertexes,
             (*surf).num_triangles * 3 as i32,
         );
@@ -2644,30 +2644,30 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
         color = &mut *(*data)
             .colors
             .offset(((*surf).first_vertex * 4 as i32) as isize)
-            as *mut crate::src::qcommon::q_shared::byte
+            as *mut byte
     } else {
-        color = 0 as *mut crate::src::qcommon::q_shared::byte
+        color = 0 as *mut byte
     }
-    outXYZ = &mut *crate::src::renderergl1::tr_shade::tess
+    outXYZ = &mut *tess
         .xyz
         .as_mut_ptr()
-        .offset(crate::src::renderergl1::tr_shade::tess.numVertexes as isize)
-        as *mut crate::src::qcommon::q_shared::vec4_t;
-    outNormal = &mut *crate::src::renderergl1::tr_shade::tess
+        .offset(tess.numVertexes as isize)
+        as *mut vec4_t;
+    outNormal = &mut *tess
         .normal
         .as_mut_ptr()
-        .offset(crate::src::renderergl1::tr_shade::tess.numVertexes as isize)
-        as *mut crate::src::qcommon::q_shared::vec4_t;
-    outTexCoord = &mut *crate::src::renderergl1::tr_shade::tess
+        .offset(tess.numVertexes as isize)
+        as *mut vec4_t;
+    outTexCoord = &mut *tess
         .texCoords
         .as_mut_ptr()
-        .offset(crate::src::renderergl1::tr_shade::tess.numVertexes as isize)
-        as *mut [crate::src::qcommon::q_shared::vec2_t; 2];
-    outColor = &mut *crate::src::renderergl1::tr_shade::tess
+        .offset(tess.numVertexes as isize)
+        as *mut [vec2_t; 2];
+    outColor = &mut *tess
         .vertexColors
         .as_mut_ptr()
-        .offset(crate::src::renderergl1::tr_shade::tess.numVertexes as isize)
-        as *mut crate::tr_local_h::color4ub_t;
+        .offset(tess.numVertexes as isize)
+        as *mut color4ub_t;
     if (*data).num_poses > 0 as i32 {
         // compute interpolated joint matrices
         ComputePoseMats(data, frame, oldframe, backlerp, poseMats.as_mut_ptr());
@@ -2686,7 +2686,7 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
             let mut numWeights: i32 = 0;
             numWeights = 0 as i32;
             while numWeights < 4 as i32 {
-                if (*data).blendWeightsType == crate::iqm_h::IQM_FLOAT as i32 {
+                if (*data).blendWeightsType == IQM_FLOAT as i32 {
                     blendWeights[numWeights as usize] = *(*data)
                         .influenceBlendWeights
                         .f
@@ -3007,7 +3007,7 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
             outColor as *mut libc::c_void,
             color as *const libc::c_void,
             ((*surf).num_vertexes as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::tr_local_h::color4ub_t,
+                color4ub_t,
             >() as libc::c_ulong),
         );
     } else {
@@ -3015,19 +3015,19 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
             outColor as *mut libc::c_void,
             0 as i32,
             ((*surf).num_vertexes as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::tr_local_h::color4ub_t,
+                color4ub_t,
             >() as libc::c_ulong),
         );
     }
     tri = (*data)
         .triangles
         .offset((3 as i32 * (*surf).first_triangle) as isize);
-    ptr = &mut *crate::src::renderergl1::tr_shade::tess
+    ptr = &mut *tess
         .indexes
         .as_mut_ptr()
-        .offset(crate::src::renderergl1::tr_shade::tess.numIndexes as isize)
-        as *mut crate::tr_local_h::glIndex_t;
-    base = crate::src::renderergl1::tr_shade::tess.numVertexes as crate::tr_local_h::glIndex_t;
+        .offset(tess.numIndexes as isize)
+        as *mut glIndex_t;
+    base = tess.numVertexes as glIndex_t;
     i = 0 as i32;
     while i < (*surf).num_triangles {
         let fresh10 = tri;
@@ -3047,8 +3047,8 @@ pub unsafe extern "C" fn RB_IQMSurfaceAnim(mut surface: *mut crate::tr_local_h::
         *fresh15 = base.wrapping_add((*fresh14 - (*surf).first_vertex) as u32);
         i += 1
     }
-    crate::src::renderergl1::tr_shade::tess.numIndexes += 3 as i32 * (*surf).num_triangles;
-    crate::src::renderergl1::tr_shade::tess.numVertexes += (*surf).num_vertexes;
+    tess.numIndexes += 3 as i32 * (*surf).num_triangles;
+    tess.numVertexes += (*surf).num_vertexes;
 }
 /*
 ===========================================================================
@@ -3454,8 +3454,8 @@ ANIMATED MODELS
 #[no_mangle]
 
 pub unsafe extern "C" fn R_IQMLerpTag(
-    mut tag: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut data: *mut crate::tr_local_h::iqmData_t,
+    mut tag: *mut orientation_t,
+    mut data: *mut iqmData_t,
     mut startFrame: i32,
     mut endFrame: i32,
     mut frac: f32,
@@ -3467,7 +3467,7 @@ pub unsafe extern "C" fn R_IQMLerpTag(
     // get joint number by reading the joint names
     joint = 0 as i32;
     while joint < (*data).num_joints {
-        if ::libc::strcmp(tagName, names) == 0 {
+        if libc::strcmp(tagName, names) == 0 {
             break;
         }
         names = names
@@ -3475,11 +3475,11 @@ pub unsafe extern "C" fn R_IQMLerpTag(
         joint += 1
     }
     if joint >= (*data).num_joints {
-        crate::src::qcommon::q_math::AxisClear((*tag).axis.as_mut_ptr());
-        (*tag).origin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        AxisClear((*tag).axis.as_mut_ptr());
+        (*tag).origin[2 as i32 as usize] = 0 as i32 as vec_t;
         (*tag).origin[1 as i32 as usize] = (*tag).origin[2 as i32 as usize];
         (*tag).origin[0 as i32 as usize] = (*tag).origin[1 as i32 as usize];
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     ComputeJointMats(data, startFrame, endFrame, frac, jointMats.as_mut_ptr());
     (*tag).axis[0 as i32 as usize][0 as i32 as usize] =
@@ -3503,5 +3503,5 @@ pub unsafe extern "C" fn R_IQMLerpTag(
     (*tag).axis[2 as i32 as usize][2 as i32 as usize] =
         jointMats[(12 as i32 * joint + 10 as i32) as usize];
     (*tag).origin[2 as i32 as usize] = jointMats[(12 as i32 * joint + 11 as i32) as usize];
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }

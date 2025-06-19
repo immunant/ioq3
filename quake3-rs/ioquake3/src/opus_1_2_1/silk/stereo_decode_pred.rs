@@ -42,18 +42,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_decode_pred(
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut pred_Q13: *mut crate::opus_types_h::opus_int32,
+    mut psRangeDec: *mut ec_dec,
+    mut pred_Q13: *mut opus_int32,
 )
 /* O    Predictors                                  */
 {
     let mut n: i32 = 0;
     let mut ix: [[i32; 3]; 2] = [[0; 3]; 2];
-    let mut low_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut step_Q13: crate::opus_types_h::opus_int32 = 0;
+    let mut low_Q13: opus_int32 = 0;
+    let mut step_Q13: opus_int32 = 0;
     /* Entropy decoding */
     n = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-        psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeDec as *mut ec_ctx,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_joint_iCDF.as_ptr(),
         8 as i32 as u32,
     );
@@ -63,12 +63,12 @@ pub unsafe extern "C" fn silk_stereo_decode_pred(
     n = 0 as i32;
     while n < 2 as i32 {
         ix[n as usize][0 as i32 as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            psRangeDec as *mut ec_ctx,
             crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF.as_ptr(),
             8 as i32 as u32,
         );
         ix[n as usize][1 as i32 as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            psRangeDec as *mut ec_ctx,
             crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF.as_ptr(),
             8 as i32 as u32,
         );
@@ -80,19 +80,19 @@ pub unsafe extern "C" fn silk_stereo_decode_pred(
         ix[n as usize][0 as i32 as usize] += 3 as i32 * ix[n as usize][2 as i32 as usize];
         low_Q13 = crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
             [ix[n as usize][0 as i32 as usize] as usize]
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
             [(ix[n as usize][0 as i32 as usize] + 1 as i32) as usize] as i32
             - low_Q13) as i64
             * (0.5f64 / 5 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16
+                as opus_int32 as opus_int16
                 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            >> 16 as i32) as opus_int32;
         *pred_Q13.offset(n as isize) = low_Q13
-            + step_Q13 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+            + step_Q13 as opus_int16 as opus_int32
                 * (2 as i32 * ix[n as usize][1 as i32 as usize] + 1 as i32)
-                    as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int16
+                    as opus_int32;
         n += 1
     }
     /* Subtract second from first predictor (helps when actually applying these) */
@@ -168,14 +168,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_decode_mid_only(
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut psRangeDec: *mut ec_dec,
     mut decode_only_mid: *mut i32,
 )
 /* O    Flag that only mid channel has been coded   */
 {
     /* Decode flag that only mid channel is coded */
     *decode_only_mid = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-        psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeDec as *mut ec_ctx,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_only_code_mid_iCDF.as_ptr(),
         8 as i32 as u32,
     );

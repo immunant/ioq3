@@ -76,7 +76,7 @@ POSSIBILITY OF SUCH DAMAGE.
 pub unsafe extern "C" fn silk_k2a_FLP(
     mut A: *mut f32,
     mut rc: *const f32,
-    mut order: crate::opus_types_h::opus_int32,
+    mut order: opus_int32,
 )
 /* I     prediction order                                           */
 {

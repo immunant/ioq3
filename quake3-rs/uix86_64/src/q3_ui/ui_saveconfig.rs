@@ -39,28 +39,28 @@ pub use crate::ui_local_h::mfield_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct saveConfig_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub background: crate::ui_local_h::menubitmap_s,
-    pub savename: crate::ui_local_h::menufield_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub save: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub background: menubitmap_s,
+    pub savename: menufield_s,
+    pub back: menubitmap_s,
+    pub save: menubitmap_s,
 }
 
 static mut saveConfig: saveConfig_t = saveConfig_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -70,8 +70,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -82,8 +82,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    background: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    background: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -93,8 +93,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -109,8 +109,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    savename: crate::ui_local_h::menufield_s {
-        generic: crate::ui_local_h::menucommon_s {
+    savename: menufield_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -120,15 +120,15 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
             statusbar: None,
             ownerdraw: None,
         },
-        field: crate::ui_local_h::mfield_t {
+        field: mfield_t {
             cursor: 0,
             scroll: 0,
             widthInChars: 0,
@@ -136,8 +136,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             maxchars: 0,
         },
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -147,8 +147,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -163,8 +163,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    save: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    save: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -174,8 +174,8 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -201,7 +201,7 @@ unsafe extern "C" fn UI_SaveConfigMenu_BackEvent(mut _ptr: *mut libc::c_void, mu
     if event != 3 as i32 {
         return;
     }
-    crate::src::q3_ui::ui_atoms::UI_PopMenu();
+    UI_PopMenu();
 }
 /*
 ===============
@@ -217,19 +217,19 @@ unsafe extern "C" fn UI_SaveConfigMenu_SaveEvent(mut _ptr: *mut libc::c_void, mu
     if saveConfig.savename.field.buffer[0 as i32 as usize] == 0 {
         return;
     }
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         saveConfig.savename.field.buffer.as_mut_ptr(),
         configname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-        crate::src::qcommon::q_shared::va(
+    trap_Cmd_ExecuteText(
+        EXEC_APPEND as i32,
+        va(
             b"writeconfig %s.cfg\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             configname.as_mut_ptr(),
         ),
     );
-    crate::src::q3_ui::ui_atoms::UI_PopMenu();
+    UI_PopMenu();
 }
 /*
 ===============
@@ -238,36 +238,36 @@ UI_SaveConfigMenu_SavenameDraw
 */
 
 unsafe extern "C" fn UI_SaveConfigMenu_SavenameDraw(mut self_0: *mut libc::c_void) {
-    let mut f: *mut crate::ui_local_h::menufield_s = 0 as *mut crate::ui_local_h::menufield_s;
+    let mut f: *mut menufield_s = 0 as *mut menufield_s;
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
-    f = self_0 as *mut crate::ui_local_h::menufield_s;
-    if f == crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-    ) as *mut crate::ui_local_h::menufield_s
+    f = self_0 as *mut menufield_s;
+    if f == Menu_ItemAtCursor(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+    ) as *mut menufield_s
     {
         style = 0 as i32 | 0x4000 as i32 | 0x10 as i32;
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr()
+        color = text_color_highlight.as_mut_ptr()
     } else {
         style = 0 as i32 | 0x10 as i32;
-        color = crate::src::qcommon::q_math::colorRed.as_mut_ptr()
+        color = colorRed.as_mut_ptr()
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         192 as i32,
         b"Enter filename:\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr(),
+        color_orange.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_atoms::UI_FillRect(
+    UI_FillRect(
         (*f).generic.x as f32,
         (*f).generic.y as f32,
         ((*f).field.widthInChars * 8 as i32) as f32,
         16 as i32 as f32,
-        crate::src::qcommon::q_math::colorBlack.as_mut_ptr(),
+        colorBlack.as_mut_ptr(),
     );
-    crate::src::q3_ui::ui_mfield::MField_Draw(
-        &mut (*f).field as *mut _ as *mut crate::ui_local_h::mfield_t,
+    MField_Draw(
+        &mut (*f).field as *mut _ as *mut mfield_t,
         (*f).generic.x,
         (*f).generic.y,
         style,
@@ -287,14 +287,14 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
         ::std::mem::size_of::<saveConfig_t>() as libc::c_ulong,
     );
     UI_SaveConfigMenu_Cache();
-    saveConfig.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    saveConfig.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    saveConfig.menu.wrapAround = qtrue;
+    saveConfig.menu.fullscreen = qtrue;
     saveConfig.banner.generic.type_0 = 10 as i32;
     saveConfig.banner.generic.x = 320 as i32;
     saveConfig.banner.generic.y = 16 as i32;
     saveConfig.banner.string =
         b"SAVE CONFIG\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    saveConfig.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    saveConfig.banner.color = color_white.as_mut_ptr();
     saveConfig.banner.style = 0x1 as i32;
     saveConfig.background.generic.type_0 = 6 as i32;
     saveConfig.background.generic.name =
@@ -342,25 +342,25 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
     saveConfig.save.height = 64 as i32;
     saveConfig.save.focuspic =
         b"menu/art/save_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut saveConfig.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+        &mut saveConfig.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut saveConfig.background as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+        &mut saveConfig.background as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut saveConfig.savename as *mut crate::ui_local_h::menufield_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+        &mut saveConfig.savename as *mut menufield_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut saveConfig.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+        &mut saveConfig.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut saveConfig.save as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
+        &mut saveConfig.save as *mut menubitmap_s as *mut libc::c_void,
     );
 }
 /*
@@ -371,19 +371,19 @@ UI_SaveConfigMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SaveConfigMenu_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/save_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/save_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -548,7 +548,7 @@ UI_SaveConfigMenu
 
 pub unsafe extern "C" fn UI_SaveConfigMenu() {
     UI_SaveConfigMenu_Init();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut saveConfig.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
     );
 }

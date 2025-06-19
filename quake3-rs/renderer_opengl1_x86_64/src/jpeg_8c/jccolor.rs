@@ -209,17 +209,17 @@ pub type my_cconvert_ptr = *mut my_color_converter;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_color_converter {
-    pub pub_0: crate::jpegint_h::jpeg_color_converter,
-    pub rgb_ycc_tab: *mut crate::jmorecfg_h::INT32,
+    pub pub_0: jpeg_color_converter,
+    pub rgb_ycc_tab: *mut INT32,
 }
 /*
  * Initialize for RGB->YCC colorspace conversion.
  */
 
-unsafe extern "C" fn rgb_ycc_start(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn rgb_ycc_start(mut cinfo: j_compress_ptr) {
     let mut cconvert: my_cconvert_ptr = (*cinfo).cconvert as my_cconvert_ptr;
-    let mut rgb_ycc_tab: *mut crate::jmorecfg_h::INT32 = 0 as *mut crate::jmorecfg_h::INT32;
-    let mut i: crate::jmorecfg_h::INT32 = 0;
+    let mut rgb_ycc_tab: *mut INT32 = 0 as *mut INT32;
+    let mut i: INT32 = 0;
     /* Allocate and fill in the conversion tables. */
     rgb_ycc_tab = Some(
         (*(*cinfo).mem)
@@ -227,52 +227,52 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: crate::jpeglib_h::j_compress_ptr) 
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ((8 as i32 * (255 as i32 + 1 as i32)) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::INT32>() as libc::c_ulong),
-    ) as *mut crate::jmorecfg_h::INT32;
+            .wrapping_mul(::std::mem::size_of::<INT32>() as libc::c_ulong),
+    ) as *mut INT32;
     (*cconvert).rgb_ycc_tab = rgb_ycc_tab;
-    i = 0 as i32 as crate::jmorecfg_h::INT32;
+    i = 0 as i32 as INT32;
     while i <= 255 as i32 as isize {
         *rgb_ycc_tab.offset((i + 0 as i32 as isize) as isize) =
-            (0.29900f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as crate::jmorecfg_h::INT32
+            (0.29900f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
                 * i;
         *rgb_ycc_tab.offset((i + (1 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.58700f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as crate::jmorecfg_h::INT32
+            (0.58700f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
                 * i;
         *rgb_ycc_tab.offset((i + (2 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.11400f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as crate::jmorecfg_h::INT32
+            (0.11400f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
                 * i
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32);
+                + ((1 as i32 as INT32) << 16 as i32 - 1 as i32);
         *rgb_ycc_tab.offset((i + (3 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
             -((0.16874f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32)
+                as INT32)
                 * i;
         *rgb_ycc_tab.offset((i + (4 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
             -((0.33126f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32)
+                as INT32)
                 * i;
         /* We use a rounding fudge-factor of 0.5-epsilon for Cb and Cr.
          * This ensures that the maximum output will round to MAXJSAMPLE
          * not MAXJSAMPLE+1, and thus that we don't have to range-limit.
          */
         *rgb_ycc_tab.offset((i + (5 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.50000f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as crate::jmorecfg_h::INT32
+            (0.50000f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
                 * i
-                + ((128 as i32 as crate::jmorecfg_h::INT32) << 16 as i32)
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
+                + ((128 as i32 as INT32) << 16 as i32)
+                + ((1 as i32 as INT32) << 16 as i32 - 1 as i32)
                 - 1 as i32 as isize;
         /*  B=>Cb and R=>Cr tables are the same
             rgb_ycc_tab[i+R_CR_OFF] = FIX(0.50000) * i    + CBCR_OFFSET + ONE_HALF-1;
         */
         *rgb_ycc_tab.offset((i + (6 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
             -((0.41869f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32)
+                as INT32)
                 * i;
         *rgb_ycc_tab.offset((i + (7 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
             -((0.08131f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32)
+                as INT32)
                 * i;
         i += 1
     }
@@ -290,23 +290,23 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: crate::jpeglib_h::j_compress_ptr) 
  */
 
 unsafe extern "C" fn rgb_ycc_convert(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut output_row: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPIMAGE,
+    mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
     let mut cconvert: my_cconvert_ptr = (*cinfo).cconvert as my_cconvert_ptr;
     let mut r: i32 = 0;
     let mut g: i32 = 0;
     let mut b: i32 = 0;
-    let mut ctab: *mut crate::jmorecfg_h::INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr0: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr1: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr2: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut num_cols: crate::jmorecfg_h::JDIMENSION = (*cinfo).image_width;
+    let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr0: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr1: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut col: JDIMENSION = 0;
+    let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
         num_rows -= 1;
         if !(num_rows >= 0 as i32) {
@@ -319,7 +319,7 @@ unsafe extern "C" fn rgb_ycc_convert(
         outptr1 = *(*output_buf.offset(1 as i32 as isize)).offset(output_row as isize);
         outptr2 = *(*output_buf.offset(2 as i32 as isize)).offset(output_row as isize);
         output_row = output_row.wrapping_add(1);
-        col = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        col = 0 as i32 as JDIMENSION;
         while col < num_cols {
             r = *inptr.offset(0 as i32 as isize) as i32;
             g = *inptr.offset(1 as i32 as isize) as i32;
@@ -335,19 +335,19 @@ unsafe extern "C" fn rgb_ycc_convert(
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
-                as crate::jmorecfg_h::JSAMPLE;
+                as JSAMPLE;
             /* Cb */
             *outptr1.offset(col as isize) =
                 (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                    >> 16 as i32) as JSAMPLE;
             /* Cr */
             *outptr2.offset(col as isize) =
                 (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                    >> 16 as i32) as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -361,21 +361,21 @@ unsafe extern "C" fn rgb_ycc_convert(
  */
 
 unsafe extern "C" fn rgb_gray_convert(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut output_row: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPIMAGE,
+    mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
     let mut cconvert: my_cconvert_ptr = (*cinfo).cconvert as my_cconvert_ptr;
     let mut r: i32 = 0;
     let mut g: i32 = 0;
     let mut b: i32 = 0;
-    let mut ctab: *mut crate::jmorecfg_h::INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut num_cols: crate::jmorecfg_h::JDIMENSION = (*cinfo).image_width;
+    let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut col: JDIMENSION = 0;
+    let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
         num_rows -= 1;
         if !(num_rows >= 0 as i32) {
@@ -386,7 +386,7 @@ unsafe extern "C" fn rgb_gray_convert(
         inptr = *fresh1;
         outptr = *(*output_buf.offset(0 as i32 as isize)).offset(output_row as isize);
         output_row = output_row.wrapping_add(1);
-        col = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        col = 0 as i32 as JDIMENSION;
         while col < num_cols {
             r = *inptr.offset(0 as i32 as isize) as i32;
             g = *inptr.offset(1 as i32 as isize) as i32;
@@ -397,7 +397,7 @@ unsafe extern "C" fn rgb_gray_convert(
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
-                as crate::jmorecfg_h::JSAMPLE;
+                as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -411,24 +411,24 @@ unsafe extern "C" fn rgb_gray_convert(
  */
 
 unsafe extern "C" fn cmyk_ycck_convert(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut output_row: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPIMAGE,
+    mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
     let mut cconvert: my_cconvert_ptr = (*cinfo).cconvert as my_cconvert_ptr;
     let mut r: i32 = 0;
     let mut g: i32 = 0;
     let mut b: i32 = 0;
-    let mut ctab: *mut crate::jmorecfg_h::INT32 = (*cconvert).rgb_ycc_tab;
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr0: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr1: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr2: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr3: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut num_cols: crate::jmorecfg_h::JDIMENSION = (*cinfo).image_width;
+    let mut ctab: *mut INT32 = (*cconvert).rgb_ycc_tab;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr0: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr1: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr2: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr3: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut col: JDIMENSION = 0;
+    let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
         num_rows -= 1;
         if !(num_rows >= 0 as i32) {
@@ -442,7 +442,7 @@ unsafe extern "C" fn cmyk_ycck_convert(
         outptr2 = *(*output_buf.offset(2 as i32 as isize)).offset(output_row as isize);
         outptr3 = *(*output_buf.offset(3 as i32 as isize)).offset(output_row as isize);
         output_row = output_row.wrapping_add(1);
-        col = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        col = 0 as i32 as JDIMENSION;
         while col < num_cols {
             r = 255 as i32 - *inptr.offset(0 as i32 as isize) as i32;
             g = 255 as i32 - *inptr.offset(1 as i32 as isize) as i32;
@@ -460,19 +460,19 @@ unsafe extern "C" fn cmyk_ycck_convert(
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
-                as crate::jmorecfg_h::JSAMPLE;
+                as JSAMPLE;
             /* Cb */
             *outptr1.offset(col as isize) =
                 (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                    >> 16 as i32) as JSAMPLE;
             /* Cr */
             *outptr2.offset(col as isize) =
                 (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
                     + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                    >> 16 as i32) as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -484,16 +484,16 @@ unsafe extern "C" fn cmyk_ycck_convert(
  */
 
 unsafe extern "C" fn grayscale_convert(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut output_row: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPIMAGE,
+    mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE; /* don't need GETJSAMPLE() here */
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut num_cols: crate::jmorecfg_h::JDIMENSION = (*cinfo).image_width;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE; /* don't need GETJSAMPLE() here */
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut col: JDIMENSION = 0;
+    let mut num_cols: JDIMENSION = (*cinfo).image_width;
     let mut instride: i32 = (*cinfo).input_components;
     loop {
         num_rows -= 1;
@@ -505,7 +505,7 @@ unsafe extern "C" fn grayscale_convert(
         inptr = *fresh3;
         outptr = *(*output_buf.offset(0 as i32 as isize)).offset(output_row as isize);
         output_row = output_row.wrapping_add(1);
-        col = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        col = 0 as i32 as JDIMENSION;
         while col < num_cols {
             *outptr.offset(col as isize) = *inptr.offset(0 as i32 as isize);
             inptr = inptr.offset(instride as isize);
@@ -520,18 +520,18 @@ unsafe extern "C" fn grayscale_convert(
  */
 
 unsafe extern "C" fn null_convert(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut output_row: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut output_buf: JSAMPIMAGE,
+    mut output_row: JDIMENSION,
     mut num_rows: i32,
 ) {
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut col: crate::jmorecfg_h::JDIMENSION = 0;
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut col: JDIMENSION = 0;
     let mut ci: i32 = 0;
     let mut nc: i32 = (*cinfo).num_components;
-    let mut num_cols: crate::jmorecfg_h::JDIMENSION = (*cinfo).image_width;
+    let mut num_cols: JDIMENSION = (*cinfo).image_width;
     loop {
         num_rows -= 1;
         if !(num_rows >= 0 as i32) {
@@ -542,7 +542,7 @@ unsafe extern "C" fn null_convert(
         while ci < nc {
             inptr = *input_buf;
             outptr = *(*output_buf.offset(ci as isize)).offset(output_row as isize);
-            col = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+            col = 0 as i32 as JDIMENSION;
             while col < num_cols {
                 *outptr.offset(col as isize) = *inptr.offset(ci as isize);
                 inptr = inptr.offset(nc as isize);
@@ -558,7 +558,7 @@ unsafe extern "C" fn null_convert(
  * Empty method for start_pass.
  */
 
-unsafe extern "C" fn null_method(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn null_method(mut _cinfo: j_compress_ptr) {
     /* no work needed */
 }
 /*
@@ -566,7 +566,7 @@ unsafe extern "C" fn null_method(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
     let mut cconvert: my_cconvert_ptr = 0 as *mut my_color_converter;
     cconvert = Some(
         (*(*cinfo).mem)
@@ -574,27 +574,27 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<my_color_converter>() as libc::c_ulong,
     ) as my_cconvert_ptr;
-    (*cinfo).cconvert = cconvert as *mut crate::jpegint_h::jpeg_color_converter;
+    (*cinfo).cconvert = cconvert as *mut jpeg_color_converter;
     /* set start_pass to null method until we find out differently */
     (*cconvert).pub_0.start_pass =
-        Some(null_method as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> ());
+        Some(null_method as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     /* Make sure input_components agrees with in_color_space */
     match (*cinfo).in_color_space as u32 {
         1 => {
             if (*cinfo).input_components != 1 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+                    JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
@@ -602,28 +602,28 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
             /* else share code with YCbCr */
             if (*cinfo).input_components != 3 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+                    JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
         4 | 5 => {
             if (*cinfo).input_components != 4 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+                    JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
@@ -631,14 +631,14 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
             /* JCS_UNKNOWN can be anything */
             if (*cinfo).input_components < 1 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+                    JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
@@ -648,243 +648,243 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
         1 => {
             if (*cinfo).num_components != 1 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+                    JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_GRAYSCALE as i32 as u32 {
+            if (*cinfo).in_color_space as u32 == JCS_GRAYSCALE as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     grayscale_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32 {
+            } else if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
-                        as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
+                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
                 );
                 (*cconvert).pub_0.color_convert = Some(
                     rgb_gray_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32 {
+            } else if (*cinfo).in_color_space as u32 == JCS_YCbCr as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     grayscale_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
         2 => {
             if (*cinfo).num_components != 3 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+                    JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32
+            if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32
                 && 3 as i32 == 3 as i32
             {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
         3 => {
             if (*cinfo).num_components != 3 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+                    JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32 {
+            if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
-                        as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
+                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
                 );
                 (*cconvert).pub_0.color_convert = Some(
                     rgb_ycc_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32 {
+            } else if (*cinfo).in_color_space as u32 == JCS_YCbCr as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
         4 => {
             if (*cinfo).num_components != 4 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+                    JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_CMYK as i32 as u32 {
+            if (*cinfo).in_color_space as u32 == JCS_CMYK as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
         5 => {
             if (*cinfo).num_components != 4 as i32 {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+                    JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_CMYK as i32 as u32 {
+            if (*cinfo).in_color_space as u32 == JCS_CMYK as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
-                        as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
+                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
                 );
                 (*cconvert).pub_0.color_convert = Some(
                     cmyk_ycck_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCCK as i32 as u32 {
+            } else if (*cinfo).in_color_space as u32 == JCS_YCCK as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_compress_ptr,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_compress_ptr,
+                            _: JSAMPARRAY,
+                            _: JSAMPIMAGE,
+                            _: JDIMENSION,
                             _: i32,
                         ) -> (),
                 )
             } else {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
@@ -894,23 +894,23 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                 || (*cinfo).num_components != (*cinfo).input_components
             {
                 (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CONVERSION_NOTIMPL as i32;
+                    JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             (*cconvert).pub_0.color_convert = Some(
                 null_convert
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_compress_ptr,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: crate::jpeglib_h::JSAMPIMAGE,
-                        _: crate::jmorecfg_h::JDIMENSION,
+                        _: j_compress_ptr,
+                        _: JSAMPARRAY,
+                        _: JSAMPIMAGE,
+                        _: JDIMENSION,
                         _: i32,
                     ) -> (),
             )

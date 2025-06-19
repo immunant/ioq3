@@ -92,11 +92,11 @@ pub use crate::zlib_h::z_streamp;
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut start: u32)
+pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
 /* inflate()'s starting value for strm->avail_out */
 {
-    let mut state: *mut crate::src::zlib::inflate::inflate_state =
-        0 as *mut crate::src::zlib::inflate::inflate_state; /* local strm->next_in */
+    let mut state: *mut inflate_state =
+        0 as *mut inflate_state; /* local strm->next_in */
     let mut in_0: *mut u8 = 0 as *mut u8; /* while in < last, enough input available */
     let mut last: *mut u8 = 0 as *mut u8; /* local strm->next_out */
     let mut out: *mut u8 = 0 as *mut u8; /* inflate()'s initial strm->next_out */
@@ -108,13 +108,13 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
     let mut window: *mut u8 = 0 as *mut u8; /* local strm->hold */
     let mut hold: libc::c_ulong = 0; /* local strm->bits */
     let mut bits: u32 = 0; /* local strm->lencode */
-    let mut lcode: *const crate::src::zlib::inftrees::code =
-        0 as *const crate::src::zlib::inftrees::code; /* local strm->distcode */
-    let mut dcode: *const crate::src::zlib::inftrees::code =
-        0 as *const crate::src::zlib::inftrees::code; /* mask for first level of length codes */
+    let mut lcode: *const code =
+        0 as *const code; /* local strm->distcode */
+    let mut dcode: *const code =
+        0 as *const code; /* mask for first level of length codes */
     let mut lmask: u32 = 0; /* mask for first level of distance codes */
     let mut dmask: u32 = 0; /* retrieved table entry */
-    let mut this: crate::src::zlib::inftrees::code = crate::src::zlib::inftrees::code {
+    let mut this: code = code {
         op: 0,
         bits: 0,
         val: 0,
@@ -125,7 +125,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
     let mut dist: u32 = 0; /* where to copy match from */
     let mut from: *mut u8 = 0 as *mut u8;
     /* copy state to local variables */
-    state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
+    state = (*strm).state as *mut inflate_state;
     in_0 = (*strm).next_in.offset(-(1 as i32 as isize));
     last = in_0.offset((*strm).avail_in.wrapping_sub(5 as i32 as u32) as isize);
     out = (*strm).next_out.offset(-(1 as i32 as isize));
@@ -250,7 +250,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
                         (*strm).msg = b"invalid distance code\x00" as *const u8
                             as *const libc::c_char
                             as *mut libc::c_char; /* copy direct from output */
-                        (*state).mode = crate::src::zlib::inflate::BAD;
+                        (*state).mode = BAD;
                         break 's_132;
                     }
                 }
@@ -291,7 +291,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
                             (*strm).msg = b"invalid distance too far back\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char;
-                            (*state).mode = crate::src::zlib::inflate::BAD;
+                            (*state).mode = BAD;
                             break;
                         } else {
                             from = window.offset(-(1 as i32 as isize));
@@ -396,13 +396,13 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
             4976922244085895320 => {
                 (*strm).msg = b"invalid literal/length code\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
-                (*state).mode = crate::src::zlib::inflate::BAD;
+                (*state).mode = BAD;
                 break;
             }
             5250576585193495047 =>
             /* end-of-block */
             {
-                (*state).mode = crate::src::zlib::inflate::TYPE;
+                (*state).mode = TYPE;
                 break;
             }
             _ => {}

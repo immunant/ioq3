@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -215,7 +215,7 @@ pub use ::libc::strtol;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct cvarTable_t {
-    pub vmCvar: *mut crate::src::qcommon::q_shared::vmCvar_t,
+    pub vmCvar: *mut vmCvar_t,
     pub cvarName: *mut libc::c_char,
     pub defaultString: *mut libc::c_char,
     pub cvarFlags: i32,
@@ -270,41 +270,41 @@ pub unsafe extern "C" fn vmMain(
     mut _arg9: i32,
     mut _arg10: i32,
     mut _arg11: i32,
-) -> crate::stdlib::intptr_t {
+) -> intptr_t {
     match command {
         0 => {
             CG_Init(arg0, arg1, arg2);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         1 => {
             CG_Shutdown();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         2 => {
-            return crate::src::cgame::cg_consolecmds::CG_ConsoleCommand()
-                as crate::stdlib::intptr_t
+            return CG_ConsoleCommand()
+                as intptr_t
         }
         3 => {
-            crate::src::cgame::cg_view::CG_DrawActiveFrame(
+            CG_DrawActiveFrame(
                 arg0,
-                arg1 as crate::tr_types_h::stereoFrame_t,
-                arg2 as crate::src::qcommon::q_shared::qboolean,
+                arg1 as stereoFrame_t,
+                arg2 as qboolean,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
-        4 => return CG_CrosshairPlayer() as crate::stdlib::intptr_t,
-        5 => return CG_LastAttacker() as crate::stdlib::intptr_t,
+        4 => return CG_CrosshairPlayer() as intptr_t,
+        5 => return CG_LastAttacker() as intptr_t,
         6 => {
-            CG_KeyEvent(arg0, arg1 as crate::src::qcommon::q_shared::qboolean);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            CG_KeyEvent(arg0, arg1 as qboolean);
+            return 0 as i32 as intptr_t;
         }
         7 => {
             CG_MouseEvent(arg0, arg1);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         8 => {
             CG_EventHandling(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         _ => {
             CG_Error(
@@ -316,24 +316,24 @@ pub unsafe extern "C" fn vmMain(
 }
 #[no_mangle]
 
-pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
+pub static mut cg: cg_t = cg_t {
     clientFrame: 0,
     clientNum: 0,
-    demoPlayback: crate::src::qcommon::q_shared::qfalse,
-    levelShot: crate::src::qcommon::q_shared::qfalse,
+    demoPlayback: qfalse,
+    levelShot: qfalse,
     deferredPlayerLoading: 0,
-    loading: crate::src::qcommon::q_shared::qfalse,
-    intermissionStarted: crate::src::qcommon::q_shared::qfalse,
+    loading: qfalse,
+    intermissionStarted: qfalse,
     latestSnapshotNum: 0,
     latestSnapshotTime: 0,
-    snap: 0 as *const crate::cg_public_h::snapshot_t as *mut crate::cg_public_h::snapshot_t,
-    nextSnap: 0 as *const crate::cg_public_h::snapshot_t as *mut crate::cg_public_h::snapshot_t,
-    activeSnapshots: [crate::cg_public_h::snapshot_t {
+    snap: 0 as *const snapshot_t as *mut snapshot_t,
+    nextSnap: 0 as *const snapshot_t as *mut snapshot_t,
+    activeSnapshots: [snapshot_t {
         snapFlags: 0,
         ping: 0,
         serverTime: 0,
         areamask: [0; 32],
-        ps: crate::src::qcommon::q_shared::playerState_t {
+        ps: playerState_t {
             commandTime: 0,
             pm_type: 0,
             bobCycle: 0,
@@ -381,19 +381,19 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
             entityEventSequence: 0,
         },
         numEntities: 0,
-        entities: [crate::src::qcommon::q_shared::entityState_t {
+        entities: [entityState_t {
             number: 0,
             eType: 0,
             eFlags: 0,
-            pos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            pos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
                 trDelta: [0.; 3],
             },
-            apos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            apos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
@@ -427,18 +427,18 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         serverCommandSequence: 0,
     }; 2],
     frameInterpolation: 0.,
-    thisFrameTeleport: crate::src::qcommon::q_shared::qfalse,
-    nextFrameTeleport: crate::src::qcommon::q_shared::qfalse,
+    thisFrameTeleport: qfalse,
+    nextFrameTeleport: qfalse,
     frametime: 0,
     time: 0,
     oldTime: 0,
     physicsTime: 0,
     timelimitWarnings: 0,
     fraglimitWarnings: 0,
-    mapRestart: crate::src::qcommon::q_shared::qfalse,
-    renderingThirdPerson: crate::src::qcommon::q_shared::qfalse,
-    hyperspace: crate::src::qcommon::q_shared::qfalse,
-    predictedPlayerState: crate::src::qcommon::q_shared::playerState_t {
+    mapRestart: qfalse,
+    renderingThirdPerson: qfalse,
+    hyperspace: qfalse,
+    predictedPlayerState: playerState_t {
         commandTime: 0,
         pm_type: 0,
         bobCycle: 0,
@@ -485,20 +485,20 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         jumppad_frame: 0,
         entityEventSequence: 0,
     },
-    predictedPlayerEntity: crate::cg_local_h::centity_t {
-        currentState: crate::src::qcommon::q_shared::entityState_t {
+    predictedPlayerEntity: centity_t {
+        currentState: entityState_t {
             number: 0,
             eType: 0,
             eFlags: 0,
-            pos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            pos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
                 trDelta: [0.; 3],
             },
-            apos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            apos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
@@ -528,19 +528,19 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
             torsoAnim: 0,
             generic1: 0,
         },
-        nextState: crate::src::qcommon::q_shared::entityState_t {
+        nextState: entityState_t {
             number: 0,
             eType: 0,
             eFlags: 0,
-            pos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            pos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
                 trDelta: [0.; 3],
             },
-            apos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            apos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
@@ -570,8 +570,8 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
             torsoAnim: 0,
             generic1: 0,
         },
-        interpolate: crate::src::qcommon::q_shared::qfalse,
-        currentValid: crate::src::qcommon::q_shared::qfalse,
+        interpolate: qfalse,
+        currentValid: qfalse,
         muzzleFlashTime: 0,
         previousEvent: 0,
         teleportFlag: 0,
@@ -579,50 +579,50 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         dustTrailTime: 0,
         miscTime: 0,
         snapShotTime: 0,
-        pe: crate::cg_local_h::playerEntity_t {
-            legs: crate::cg_local_h::lerpFrame_t {
+        pe: playerEntity_t {
+            legs: lerpFrame_t {
                 oldFrame: 0,
                 oldFrameTime: 0,
                 frame: 0,
                 frameTime: 0,
                 backlerp: 0.,
                 yawAngle: 0.,
-                yawing: crate::src::qcommon::q_shared::qfalse,
+                yawing: qfalse,
                 pitchAngle: 0.,
-                pitching: crate::src::qcommon::q_shared::qfalse,
+                pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const crate::bg_public_h::animation_t
-                    as *mut crate::bg_public_h::animation_t,
+                animation: 0 as *const animation_t
+                    as *mut animation_t,
                 animationTime: 0,
             },
-            torso: crate::cg_local_h::lerpFrame_t {
+            torso: lerpFrame_t {
                 oldFrame: 0,
                 oldFrameTime: 0,
                 frame: 0,
                 frameTime: 0,
                 backlerp: 0.,
                 yawAngle: 0.,
-                yawing: crate::src::qcommon::q_shared::qfalse,
+                yawing: qfalse,
                 pitchAngle: 0.,
-                pitching: crate::src::qcommon::q_shared::qfalse,
+                pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const crate::bg_public_h::animation_t
-                    as *mut crate::bg_public_h::animation_t,
+                animation: 0 as *const animation_t
+                    as *mut animation_t,
                 animationTime: 0,
             },
-            flag: crate::cg_local_h::lerpFrame_t {
+            flag: lerpFrame_t {
                 oldFrame: 0,
                 oldFrameTime: 0,
                 frame: 0,
                 frameTime: 0,
                 backlerp: 0.,
                 yawAngle: 0.,
-                yawing: crate::src::qcommon::q_shared::qfalse,
+                yawing: qfalse,
                 pitchAngle: 0.,
-                pitching: crate::src::qcommon::q_shared::qfalse,
+                pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const crate::bg_public_h::animation_t
-                    as *mut crate::bg_public_h::animation_t,
+                animation: 0 as *const animation_t
+                    as *mut animation_t,
                 animationTime: 0,
             },
             painTime: 0,
@@ -631,19 +631,19 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
             railFireTime: 0,
             barrelAngle: 0.,
             barrelTime: 0,
-            barrelSpinning: crate::src::qcommon::q_shared::qfalse,
+            barrelSpinning: qfalse,
         },
         errorTime: 0,
         errorOrigin: [0.; 3],
         errorAngles: [0.; 3],
-        extrapolated: crate::src::qcommon::q_shared::qfalse,
+        extrapolated: qfalse,
         rawOrigin: [0.; 3],
         rawAngles: [0.; 3],
         beamEnd: [0.; 3],
         lerpOrigin: [0.; 3],
         lerpAngles: [0.; 3],
     },
-    validPPS: crate::src::qcommon::q_shared::qfalse,
+    validPPS: qfalse,
     predictedErrorTime: 0,
     predictedError: [0.; 3],
     eventSequence: 0,
@@ -659,7 +659,7 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
     autoAxis: [[0.; 3]; 3],
     autoAnglesFast: [0.; 3],
     autoAxisFast: [[0.; 3]; 3],
-    refdef: crate::tr_types_h::refdef_t {
+    refdef: refdef_t {
         x: 0,
         y: 0,
         width: 0,
@@ -674,7 +674,7 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         text: [[0; 32]; 8],
     },
     refdefViewAngles: [0.; 3],
-    zoomed: crate::src::qcommon::q_shared::qfalse,
+    zoomed: qfalse,
     zoomTime: 0,
     zoomSensitivity: 0.,
     infoScreenText: [0; 1024],
@@ -682,7 +682,7 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
     numScores: 0,
     selectedScore: 0,
     teamScores: [0; 2],
-    scores: [crate::cg_local_h::score_t {
+    scores: [score_t {
         client: 0,
         score: 0,
         ping: 0,
@@ -696,11 +696,11 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         defendCount: 0,
         assistCount: 0,
         captures: 0,
-        perfect: crate::src::qcommon::q_shared::qfalse,
+        perfect: qfalse,
         team: 0,
     }; 64],
-    showScores: crate::src::qcommon::q_shared::qfalse,
-    scoreBoardShowing: crate::src::qcommon::q_shared::qfalse,
+    showScores: qfalse,
+    scoreBoardShowing: qfalse,
     scoreFadeTime: 0,
     killerName: [0; 32],
     spectatorList: [0; 1024],
@@ -758,14 +758,14 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
     bobcycle: 0,
     xyspeed: 0.,
     nextOrbitTime: 0,
-    testModelEntity: crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    testModelEntity: refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -781,17 +781,17 @@ pub static mut cg: crate::cg_local_h::cg_t = crate::cg_local_h::cg_t {
         rotation: 0.,
     },
     testModelName: [0; 64],
-    testGun: crate::src::qcommon::q_shared::qfalse,
+    testGun: qfalse,
 };
 #[no_mangle]
 
-pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
-    gameState: crate::src::qcommon::q_shared::gameState_t {
+pub static mut cgs: cgs_t = cgs_t {
+    gameState: gameState_t {
         stringOffsets: [0; 1024],
         stringData: [0; 16000],
         dataCount: 0,
     },
-    glconfig: crate::tr_types_h::glconfig_t {
+    glconfig: glconfig_t {
         renderer_string: [0; 1024],
         vendor_string: [0; 1024],
         version_string: [0; 1024],
@@ -801,26 +801,26 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
         colorBits: 0,
         depthBits: 0,
         stencilBits: 0,
-        driverType: crate::tr_types_h::GLDRV_ICD,
-        hardwareType: crate::tr_types_h::GLHW_GENERIC,
-        deviceSupportsGamma: crate::src::qcommon::q_shared::qfalse,
-        textureCompression: crate::tr_types_h::TC_NONE,
-        textureEnvAddAvailable: crate::src::qcommon::q_shared::qfalse,
+        driverType: GLDRV_ICD,
+        hardwareType: GLHW_GENERIC,
+        deviceSupportsGamma: qfalse,
+        textureCompression: TC_NONE,
+        textureEnvAddAvailable: qfalse,
         vidWidth: 0,
         vidHeight: 0,
         windowAspect: 0.,
         displayFrequency: 0,
-        isFullscreen: crate::src::qcommon::q_shared::qfalse,
-        stereoEnabled: crate::src::qcommon::q_shared::qfalse,
-        smpActive: crate::src::qcommon::q_shared::qfalse,
+        isFullscreen: qfalse,
+        stereoEnabled: qfalse,
+        smpActive: qfalse,
     },
     screenXScale: 0.,
     screenYScale: 0.,
     screenXBias: 0.,
     serverCommandSequence: 0,
     processedSnapshotNum: 0,
-    localServer: crate::src::qcommon::q_shared::qfalse,
-    gametype: crate::bg_public_h::GT_FFA,
+    localServer: qfalse,
+    gametype: GT_FFA,
     dmflags: 0,
     teamflags: 0,
     fraglimit: 0,
@@ -833,12 +833,12 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
     voteTime: 0,
     voteYes: 0,
     voteNo: 0,
-    voteModified: crate::src::qcommon::q_shared::qfalse,
+    voteModified: qfalse,
     voteString: [0; 1024],
     teamVoteTime: [0; 2],
     teamVoteYes: [0; 2],
     teamVoteNo: [0; 2],
-    teamVoteModified: [crate::src::qcommon::q_shared::qfalse; 2],
+    teamVoteModified: [qfalse; 2],
     teamVoteString: [[0; 1024]; 2],
     levelStartTime: 0,
     scores1: 0,
@@ -846,16 +846,16 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
     redflag: 0,
     blueflag: 0,
     flagStatus: 0,
-    newHud: crate::src::qcommon::q_shared::qfalse,
+    newHud: qfalse,
     gameModels: [0; 256],
     gameSounds: [0; 256],
     numInlineModels: 0,
     inlineDrawModel: [0; 256],
     inlineModelMidpoints: [[0.; 3]; 256],
-    clientinfo: [crate::cg_local_h::clientInfo_t {
-        infoValid: crate::src::qcommon::q_shared::qfalse,
+    clientinfo: [clientInfo_t {
+        infoValid: qfalse,
         name: [0; 64],
-        team: crate::bg_public_h::TEAM_FREE,
+        team: TEAM_FREE,
         botSkill: 0,
         color1: [0.; 3],
         color2: [0.; 3],
@@ -870,7 +870,7 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
         wins: 0,
         losses: 0,
         teamTask: 0,
-        teamLeader: crate::src::qcommon::q_shared::qfalse,
+        teamLeader: qfalse,
         powerups: 0,
         medkitUsageTime: 0,
         invulnerabilityStartTime: 0,
@@ -882,13 +882,13 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
         headSkinName: [0; 64],
         redTeam: [0; 32],
         blueTeam: [0; 32],
-        deferred: crate::src::qcommon::q_shared::qfalse,
-        newAnims: crate::src::qcommon::q_shared::qfalse,
-        fixedlegs: crate::src::qcommon::q_shared::qfalse,
-        fixedtorso: crate::src::qcommon::q_shared::qfalse,
+        deferred: qfalse,
+        newAnims: qfalse,
+        fixedlegs: qfalse,
+        fixedtorso: qfalse,
         headOffset: [0.; 3],
-        footsteps: crate::cg_local_h::FOOTSTEP_NORMAL,
-        gender: crate::bg_public_h::GENDER_MALE,
+        footsteps: FOOTSTEP_NORMAL,
+        gender: GENDER_MALE,
         legsModel: 0,
         legsSkin: 0,
         torsoModel: 0,
@@ -896,7 +896,7 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
         headModel: 0,
         headSkin: 0,
         modelIcon: 0,
-        animations: [crate::bg_public_h::animation_t {
+        animations: [animation_t {
             firstFrame: 0,
             numFrames: 0,
             loopFrames: 0,
@@ -913,20 +913,20 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
     teamLastChatPos: 0,
     cursorX: 0,
     cursorY: 0,
-    eventHandling: crate::src::qcommon::q_shared::qfalse,
-    mouseCaptured: crate::src::qcommon::q_shared::qfalse,
-    sizingHud: crate::src::qcommon::q_shared::qfalse,
+    eventHandling: qfalse,
+    mouseCaptured: qfalse,
+    sizingHud: qfalse,
     capturedItem: 0 as *const libc::c_void as *mut libc::c_void,
     activeCursor: 0,
     currentOrder: 0,
-    orderPending: crate::src::qcommon::q_shared::qfalse,
+    orderPending: qfalse,
     orderTime: 0,
     currentVoiceClient: 0,
     acceptOrderTime: 0,
     acceptTask: 0,
     acceptLeader: 0,
     acceptVoice: [0; 32],
-    media: crate::cg_local_h::cgMedia_t {
+    media: cgMedia_t {
         charsetShader: 0,
         charsetProp: 0,
         charsetPropGlow: 0,
@@ -1114,20 +1114,20 @@ pub static mut cgs: crate::cg_local_h::cgs_t = crate::cg_local_h::cgs_t {
 };
 #[no_mangle]
 
-pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_local_h::centity_t {
-    currentState: crate::src::qcommon::q_shared::entityState_t {
+pub static mut cg_entities: [centity_t; 1024] = [centity_t {
+    currentState: entityState_t {
         number: 0,
         eType: 0,
         eFlags: 0,
-        pos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
             trDelta: [0.; 3],
         },
-        apos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
@@ -1157,19 +1157,19 @@ pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_lo
         torsoAnim: 0,
         generic1: 0,
     },
-    nextState: crate::src::qcommon::q_shared::entityState_t {
+    nextState: entityState_t {
         number: 0,
         eType: 0,
         eFlags: 0,
-        pos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
             trDelta: [0.; 3],
         },
-        apos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
@@ -1199,8 +1199,8 @@ pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_lo
         torsoAnim: 0,
         generic1: 0,
     },
-    interpolate: crate::src::qcommon::q_shared::qfalse,
-    currentValid: crate::src::qcommon::q_shared::qfalse,
+    interpolate: qfalse,
+    currentValid: qfalse,
     muzzleFlashTime: 0,
     previousEvent: 0,
     teleportFlag: 0,
@@ -1208,50 +1208,50 @@ pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_lo
     dustTrailTime: 0,
     miscTime: 0,
     snapShotTime: 0,
-    pe: crate::cg_local_h::playerEntity_t {
-        legs: crate::cg_local_h::lerpFrame_t {
+    pe: playerEntity_t {
+        legs: lerpFrame_t {
             oldFrame: 0,
             oldFrameTime: 0,
             frame: 0,
             frameTime: 0,
             backlerp: 0.,
             yawAngle: 0.,
-            yawing: crate::src::qcommon::q_shared::qfalse,
+            yawing: qfalse,
             pitchAngle: 0.,
-            pitching: crate::src::qcommon::q_shared::qfalse,
+            pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const crate::bg_public_h::animation_t
-                as *mut crate::bg_public_h::animation_t,
+            animation: 0 as *const animation_t
+                as *mut animation_t,
             animationTime: 0,
         },
-        torso: crate::cg_local_h::lerpFrame_t {
+        torso: lerpFrame_t {
             oldFrame: 0,
             oldFrameTime: 0,
             frame: 0,
             frameTime: 0,
             backlerp: 0.,
             yawAngle: 0.,
-            yawing: crate::src::qcommon::q_shared::qfalse,
+            yawing: qfalse,
             pitchAngle: 0.,
-            pitching: crate::src::qcommon::q_shared::qfalse,
+            pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const crate::bg_public_h::animation_t
-                as *mut crate::bg_public_h::animation_t,
+            animation: 0 as *const animation_t
+                as *mut animation_t,
             animationTime: 0,
         },
-        flag: crate::cg_local_h::lerpFrame_t {
+        flag: lerpFrame_t {
             oldFrame: 0,
             oldFrameTime: 0,
             frame: 0,
             frameTime: 0,
             backlerp: 0.,
             yawAngle: 0.,
-            yawing: crate::src::qcommon::q_shared::qfalse,
+            yawing: qfalse,
             pitchAngle: 0.,
-            pitching: crate::src::qcommon::q_shared::qfalse,
+            pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const crate::bg_public_h::animation_t
-                as *mut crate::bg_public_h::animation_t,
+            animation: 0 as *const animation_t
+                as *mut animation_t,
             animationTime: 0,
         },
         painTime: 0,
@@ -1260,12 +1260,12 @@ pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_lo
         railFireTime: 0,
         barrelAngle: 0.,
         barrelTime: 0,
-        barrelSpinning: crate::src::qcommon::q_shared::qfalse,
+        barrelSpinning: qfalse,
     },
     errorTime: 0,
     errorOrigin: [0.; 3],
     errorAngles: [0.; 3],
-    extrapolated: crate::src::qcommon::q_shared::qfalse,
+    extrapolated: qfalse,
     rawOrigin: [0.; 3],
     rawAngles: [0.; 3],
     beamEnd: [0.; 3],
@@ -1274,10 +1274,10 @@ pub static mut cg_entities: [crate::cg_local_h::centity_t; 1024] = [crate::cg_lo
 }; 1024];
 #[no_mangle]
 
-pub static mut cg_weapons: [crate::cg_local_h::weaponInfo_t; 16] =
-    [crate::cg_local_h::weaponInfo_t {
-        registered: crate::src::qcommon::q_shared::qfalse,
-        item: 0 as *const crate::bg_public_h::gitem_t as *mut crate::bg_public_h::gitem_t,
+pub static mut cg_weapons: [weaponInfo_t; 16] =
+    [weaponInfo_t {
+        registered: qfalse,
+        item: 0 as *const gitem_t as *mut gitem_t,
         handsModel: 0,
         weaponModel: 0,
         barrelModel: 0,
@@ -1303,15 +1303,15 @@ pub static mut cg_weapons: [crate::cg_local_h::weaponInfo_t; 16] =
     }; 16];
 #[no_mangle]
 
-pub static mut cg_items: [crate::cg_local_h::itemInfo_t; 256] = [crate::cg_local_h::itemInfo_t {
-    registered: crate::src::qcommon::q_shared::qfalse,
+pub static mut cg_items: [itemInfo_t; 256] = [itemInfo_t {
+    registered: qfalse,
     models: [0; 4],
     icon: 0,
 }; 256];
 #[no_mangle]
 
-pub static mut cg_railTrailTime: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_railTrailTime: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1320,8 +1320,8 @@ pub static mut cg_railTrailTime: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_centertime: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_centertime: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1330,8 +1330,8 @@ pub static mut cg_centertime: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_runpitch: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_runpitch: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1340,8 +1340,8 @@ pub static mut cg_runpitch: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_runroll: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_runroll: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1350,8 +1350,8 @@ pub static mut cg_runroll: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_bobup: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_bobup: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1360,8 +1360,8 @@ pub static mut cg_bobup: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_bobpitch: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_bobpitch: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1370,8 +1370,8 @@ pub static mut cg_bobpitch: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_bobroll: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_bobroll: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1380,8 +1380,8 @@ pub static mut cg_bobroll: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_swingSpeed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_swingSpeed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1390,8 +1390,8 @@ pub static mut cg_swingSpeed: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_shadows: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_shadows: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1400,8 +1400,8 @@ pub static mut cg_shadows: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_gibs: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_gibs: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1410,8 +1410,8 @@ pub static mut cg_gibs: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawTimer: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawTimer: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1420,8 +1420,8 @@ pub static mut cg_drawTimer: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawFPS: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawFPS: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1430,8 +1430,8 @@ pub static mut cg_drawFPS: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawSnapshot: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawSnapshot: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1440,8 +1440,8 @@ pub static mut cg_drawSnapshot: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_draw3dIcons: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_draw3dIcons: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1450,8 +1450,8 @@ pub static mut cg_draw3dIcons: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawIcons: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawIcons: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1460,8 +1460,8 @@ pub static mut cg_drawIcons: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawAmmoWarning: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawAmmoWarning: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1470,8 +1470,8 @@ pub static mut cg_drawAmmoWarning: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawCrosshair: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawCrosshair: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1480,8 +1480,8 @@ pub static mut cg_drawCrosshair: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawCrosshairNames: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawCrosshairNames: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1490,8 +1490,8 @@ pub static mut cg_drawCrosshairNames: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawRewards: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawRewards: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1500,8 +1500,8 @@ pub static mut cg_drawRewards: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_crosshairSize: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_crosshairSize: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1510,8 +1510,8 @@ pub static mut cg_crosshairSize: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_crosshairX: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_crosshairX: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1520,8 +1520,8 @@ pub static mut cg_crosshairX: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_crosshairY: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_crosshairY: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1530,8 +1530,8 @@ pub static mut cg_crosshairY: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_crosshairHealth: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_crosshairHealth: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1540,8 +1540,8 @@ pub static mut cg_crosshairHealth: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_draw2D: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_draw2D: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1550,8 +1550,8 @@ pub static mut cg_draw2D: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawStatus: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawStatus: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1560,8 +1560,8 @@ pub static mut cg_drawStatus: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_animSpeed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_animSpeed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1570,8 +1570,8 @@ pub static mut cg_animSpeed: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_debugAnim: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_debugAnim: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1580,8 +1580,8 @@ pub static mut cg_debugAnim: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_debugPosition: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_debugPosition: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1590,8 +1590,8 @@ pub static mut cg_debugPosition: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_debugEvents: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_debugEvents: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1600,8 +1600,8 @@ pub static mut cg_debugEvents: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_errorDecay: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_errorDecay: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1610,8 +1610,8 @@ pub static mut cg_errorDecay: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_nopredict: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_nopredict: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1620,8 +1620,8 @@ pub static mut cg_nopredict: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_noPlayerAnims: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_noPlayerAnims: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1630,8 +1630,8 @@ pub static mut cg_noPlayerAnims: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_showmiss: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_showmiss: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1640,8 +1640,8 @@ pub static mut cg_showmiss: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_footsteps: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_footsteps: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1650,8 +1650,8 @@ pub static mut cg_footsteps: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_addMarks: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_addMarks: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1660,8 +1660,8 @@ pub static mut cg_addMarks: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_brassTime: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_brassTime: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1670,8 +1670,8 @@ pub static mut cg_brassTime: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_viewsize: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_viewsize: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1680,8 +1680,8 @@ pub static mut cg_viewsize: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawGun: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawGun: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1690,8 +1690,8 @@ pub static mut cg_drawGun: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_gun_frame: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_gun_frame: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1700,8 +1700,8 @@ pub static mut cg_gun_frame: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_gun_x: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_gun_x: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1710,8 +1710,8 @@ pub static mut cg_gun_x: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_gun_y: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_gun_y: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1720,8 +1720,8 @@ pub static mut cg_gun_y: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_gun_z: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_gun_z: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1730,8 +1730,8 @@ pub static mut cg_gun_z: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_tracerChance: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_tracerChance: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1740,8 +1740,8 @@ pub static mut cg_tracerChance: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_tracerWidth: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_tracerWidth: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1750,8 +1750,8 @@ pub static mut cg_tracerWidth: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_tracerLength: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_tracerLength: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1760,8 +1760,8 @@ pub static mut cg_tracerLength: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_autoswitch: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_autoswitch: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1770,8 +1770,8 @@ pub static mut cg_autoswitch: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_ignore: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_ignore: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1780,8 +1780,8 @@ pub static mut cg_ignore: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_simpleItems: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_simpleItems: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1790,8 +1790,8 @@ pub static mut cg_simpleItems: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_fov: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_fov: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1800,8 +1800,8 @@ pub static mut cg_fov: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_zoomFov: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_zoomFov: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1810,8 +1810,8 @@ pub static mut cg_zoomFov: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_thirdPerson: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_thirdPerson: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1820,8 +1820,8 @@ pub static mut cg_thirdPerson: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_thirdPersonRange: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_thirdPersonRange: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1830,8 +1830,8 @@ pub static mut cg_thirdPersonRange: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_thirdPersonAngle: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_thirdPersonAngle: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1840,8 +1840,8 @@ pub static mut cg_thirdPersonAngle: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_lagometer: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_lagometer: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1850,8 +1850,8 @@ pub static mut cg_lagometer: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawAttacker: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawAttacker: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1860,8 +1860,8 @@ pub static mut cg_drawAttacker: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_synchronousClients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_synchronousClients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1870,8 +1870,8 @@ pub static mut cg_synchronousClients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_teamChatTime: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_teamChatTime: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1880,8 +1880,8 @@ pub static mut cg_teamChatTime: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_teamChatHeight: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_teamChatHeight: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1890,8 +1890,8 @@ pub static mut cg_teamChatHeight: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_stats: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_stats: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1900,8 +1900,8 @@ pub static mut cg_stats: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_buildScript: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_buildScript: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1910,8 +1910,8 @@ pub static mut cg_buildScript: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_forceModel: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_forceModel: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1920,8 +1920,8 @@ pub static mut cg_forceModel: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_paused: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_paused: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1930,8 +1930,8 @@ pub static mut cg_paused: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_blood: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_blood: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1940,8 +1940,8 @@ pub static mut cg_blood: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_predictItems: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_predictItems: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1950,8 +1950,8 @@ pub static mut cg_predictItems: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_deferPlayers: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_deferPlayers: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1960,8 +1960,8 @@ pub static mut cg_deferPlayers: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawTeamOverlay: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawTeamOverlay: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1970,8 +1970,8 @@ pub static mut cg_drawTeamOverlay: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_teamOverlayUserinfo: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_teamOverlayUserinfo: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1980,8 +1980,8 @@ pub static mut cg_teamOverlayUserinfo: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_drawFriend: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_drawFriend: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1990,8 +1990,8 @@ pub static mut cg_drawFriend: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_teamChatsOnly: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_teamChatsOnly: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2000,8 +2000,8 @@ pub static mut cg_teamChatsOnly: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_hudFiles: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_hudFiles: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2010,8 +2010,8 @@ pub static mut cg_hudFiles: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_scorePlum: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_scorePlum: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2020,8 +2020,8 @@ pub static mut cg_scorePlum: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_smoothClients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_smoothClients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2030,8 +2030,8 @@ pub static mut cg_smoothClients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut pmove_fixed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut pmove_fixed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2041,8 +2041,8 @@ pub static mut pmove_fixed: crate::src::qcommon::q_shared::vmCvar_t =
 //vmCvar_t	cg_pmove_fixed;
 #[no_mangle]
 
-pub static mut pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut pmove_msec: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2051,8 +2051,8 @@ pub static mut pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_pmove_msec: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2061,8 +2061,8 @@ pub static mut cg_pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_cameraMode: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_cameraMode: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2071,8 +2071,8 @@ pub static mut cg_cameraMode: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_cameraOrbit: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_cameraOrbit: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2081,8 +2081,8 @@ pub static mut cg_cameraOrbit: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_cameraOrbitDelay: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_cameraOrbitDelay: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2091,8 +2091,8 @@ pub static mut cg_cameraOrbitDelay: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_timescaleFadeEnd: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_timescaleFadeEnd: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2101,8 +2101,8 @@ pub static mut cg_timescaleFadeEnd: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_timescaleFadeSpeed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_timescaleFadeSpeed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2111,8 +2111,8 @@ pub static mut cg_timescaleFadeSpeed: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_timescale: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_timescale: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2121,8 +2121,8 @@ pub static mut cg_timescale: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_noProjectileTrail: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_noProjectileTrail: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2131,8 +2131,8 @@ pub static mut cg_noProjectileTrail: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_oldRail: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_oldRail: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2141,8 +2141,8 @@ pub static mut cg_oldRail: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_oldRocket: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_oldRocket: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2151,8 +2151,8 @@ pub static mut cg_oldRocket: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_oldPlasma: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_oldPlasma: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2161,8 +2161,8 @@ pub static mut cg_oldPlasma: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut cg_trueLightning: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut cg_trueLightning: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -2174,8 +2174,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
     [
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_ignore as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_ignore as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_ignore\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2184,8 +2184,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_autoswitch as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_autoswitch as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_autoswitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2195,8 +2195,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawGun as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawGun as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawGun\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2206,8 +2206,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_zoomFov as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_zoomFov as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_zoomfov\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"22.5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2217,8 +2217,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_fov as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_fov as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_fov\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"90\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2227,8 +2227,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_viewsize as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_viewsize as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_viewsize\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2238,8 +2238,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_shadows as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_shadows as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_shadows\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2249,8 +2249,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gibs as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_gibs as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_gibs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2259,8 +2259,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_draw2D as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_draw2D as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_draw2D\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2269,8 +2269,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawStatus as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawStatus as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawStatus\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2280,8 +2280,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawTimer as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawTimer as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawTimer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2291,8 +2291,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawFPS as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawFPS as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawFPS\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2302,8 +2302,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawSnapshot as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawSnapshot as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawSnapshot\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2313,8 +2313,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_draw3dIcons as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_draw3dIcons as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_draw3dIcons\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2324,8 +2324,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawIcons as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawIcons as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawIcons\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2335,8 +2335,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawAmmoWarning as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawAmmoWarning as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawAmmoWarning\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2346,8 +2346,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawAttacker as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawAttacker as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawAttacker\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2357,8 +2357,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawCrosshair as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawCrosshair as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2368,8 +2368,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawCrosshairNames as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawCrosshairNames as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2379,8 +2379,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawRewards as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawRewards as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawRewards\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2390,8 +2390,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairSize as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_crosshairSize as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_crosshairSize\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"24\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2401,8 +2401,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairHealth as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_crosshairHealth as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_crosshairHealth\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2412,8 +2412,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairX as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_crosshairX as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_crosshairX\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2423,8 +2423,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairY as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_crosshairY as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_crosshairY\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2434,8 +2434,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_brassTime as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_brassTime as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_brassTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"2500\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2445,8 +2445,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_simpleItems as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_simpleItems as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_simpleItems\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2456,8 +2456,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_addMarks as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_addMarks as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_marks\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2466,8 +2466,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_lagometer as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_lagometer as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_lagometer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2477,8 +2477,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_railTrailTime as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_railTrailTime as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_railTrailTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"400\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2488,8 +2488,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_x as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_gun_x as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_gunX\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2498,8 +2498,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_y as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_gun_y as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_gunY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2508,8 +2508,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_z as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_gun_z as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_gunZ\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2518,8 +2518,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_centertime as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_centertime as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_centertime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2529,8 +2529,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_runpitch as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_runpitch as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_runpitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2541,8 +2541,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_runroll as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_runroll as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_runroll\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.005\x00" as *const u8 as *const libc::c_char
@@ -2553,8 +2553,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobup as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_bobup as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_bobup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0.005\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -2564,8 +2564,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobpitch as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_bobpitch as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_bobpitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2576,8 +2576,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobroll as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_bobroll as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_bobroll\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2588,8 +2588,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_swingSpeed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_swingSpeed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_swingSpeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2599,8 +2599,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_animSpeed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_animSpeed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_animspeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2610,8 +2610,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugAnim as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_debugAnim as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_debuganim\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2621,8 +2621,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugPosition as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_debugPosition as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_debugposition\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2632,8 +2632,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugEvents as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_debugEvents as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_debugevents\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2643,8 +2643,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_errorDecay as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_errorDecay as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_errordecay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2654,8 +2654,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_nopredict as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_nopredict as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_nopredict\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2665,8 +2665,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_noPlayerAnims as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_noPlayerAnims as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_noplayeranims\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2676,8 +2676,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_showmiss as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_showmiss as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_showmiss\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2687,8 +2687,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_footsteps as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_footsteps as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_footsteps\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2698,8 +2698,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerChance as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_tracerChance as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_tracerchance\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2709,8 +2709,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerWidth as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_tracerWidth as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_tracerwidth\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2720,8 +2720,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerLength as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_tracerLength as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_tracerlength\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2731,8 +2731,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPersonRange as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_thirdPersonRange as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_thirdPersonRange\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"40\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2742,8 +2742,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPersonAngle as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_thirdPersonAngle as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_thirdPersonAngle\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2753,8 +2753,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPerson as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_thirdPerson as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_thirdPerson\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2764,8 +2764,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatTime as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_teamChatTime as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_teamChatTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3000\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2775,8 +2775,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatHeight as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_teamChatHeight as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_teamChatHeight\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2786,8 +2786,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_forceModel as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_forceModel as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_forceModel\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2797,8 +2797,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_predictItems as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_predictItems as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_predictItems\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2808,8 +2808,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_deferPlayers as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_deferPlayers as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_deferPlayers\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2819,8 +2819,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawTeamOverlay as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawTeamOverlay as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2830,8 +2830,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamOverlayUserinfo as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_teamOverlayUserinfo as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"teamoverlay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2841,8 +2841,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_stats as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_stats as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_stats\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2851,8 +2851,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawFriend as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_drawFriend as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_drawFriend\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2862,8 +2862,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatsOnly as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_teamChatsOnly as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_teamChatsOnly\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2873,8 +2873,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_buildScript as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_buildScript as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"com_buildScript\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2884,8 +2884,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_paused as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_paused as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cl_paused\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x40 as i32,
@@ -2894,8 +2894,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_blood as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_blood as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"com_blood\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2904,8 +2904,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_synchronousClients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_synchronousClients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_synchronousClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2915,8 +2915,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraOrbit as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_cameraOrbit as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2926,8 +2926,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraOrbitDelay as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_cameraOrbitDelay as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_cameraOrbitDelay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"50\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2937,8 +2937,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescaleFadeEnd as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_timescaleFadeEnd as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_timescaleFadeEnd\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2948,8 +2948,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescaleFadeSpeed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_timescaleFadeSpeed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_timescaleFadeSpeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2959,8 +2959,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescale as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_timescale as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"timescale\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2969,8 +2969,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_scorePlum as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_scorePlum as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_scorePlums\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2980,8 +2980,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_smoothClients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_smoothClients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_smoothClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2991,8 +2991,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraMode as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_cameraMode as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"com_cameraMode\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3002,8 +3002,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_fixed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &pmove_fixed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"pmove_fixed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3013,8 +3013,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_msec as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &pmove_msec as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"pmove_msec\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3024,8 +3024,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_noProjectileTrail as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_noProjectileTrail as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_noProjectileTrail\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3035,8 +3035,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldRail as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_oldRail as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_oldRail\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3046,8 +3046,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldRocket as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_oldRocket as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_oldRocket\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3057,8 +3057,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldPlasma as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_oldPlasma as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_oldPlasma\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3068,8 +3068,8 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_trueLightning as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &cg_trueLightning as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"cg_trueLightning\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3096,8 +3096,8 @@ pub unsafe extern "C" fn CG_RegisterCvars() {
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
-        crate::src::cgame::cg_syscalls::trap_Cvar_Register(
-            (*cv).vmCvar as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Register(
+            (*cv).vmCvar as *mut vmCvar_t,
             (*cv).cvarName,
             (*cv).defaultString,
             (*cv).cvarFlags,
@@ -3106,37 +3106,37 @@ pub unsafe extern "C" fn CG_RegisterCvars() {
         cv = cv.offset(1)
     }
     // see if we are also running the server on this machine
-    crate::src::cgame::cg_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"sv_running\x00" as *const u8 as *const libc::c_char,
         var.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    cgs.localServer = atoi(var.as_mut_ptr()) as crate::src::qcommon::q_shared::qboolean;
+    cgs.localServer = atoi(var.as_mut_ptr()) as qboolean;
     forceModelModificationCount = cg_forceModel.modificationCount;
-    crate::src::cgame::cg_syscalls::trap_Cvar_Register(
-        0 as *mut crate::src::qcommon::q_shared::vmCvar_t
-            as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        0 as *mut vmCvar_t
+            as *mut vmCvar_t,
         b"model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
-    crate::src::cgame::cg_syscalls::trap_Cvar_Register(
-        0 as *mut crate::src::qcommon::q_shared::vmCvar_t
-            as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        0 as *mut vmCvar_t
+            as *mut vmCvar_t,
         b"headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
-    crate::src::cgame::cg_syscalls::trap_Cvar_Register(
-        0 as *mut crate::src::qcommon::q_shared::vmCvar_t
-            as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        0 as *mut vmCvar_t
+            as *mut vmCvar_t,
         b"team_model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
-    crate::src::cgame::cg_syscalls::trap_Cvar_Register(
-        0 as *mut crate::src::qcommon::q_shared::vmCvar_t
-            as *mut crate::src::qcommon::q_shared::vmCvar_t,
+    trap_Cvar_Register(
+        0 as *mut vmCvar_t
+            as *mut vmCvar_t,
         b"team_headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
@@ -3155,7 +3155,7 @@ unsafe extern "C" fn CG_ForceModelChange() {
         let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
         clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
         if !(*clientInfo.offset(0 as i32 as isize) == 0) {
-            crate::src::cgame::cg_players::CG_NewClientInfo(i);
+            CG_NewClientInfo(i);
         }
         i += 1
     }
@@ -3173,8 +3173,8 @@ pub unsafe extern "C" fn CG_UpdateCvars() {
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
-        crate::src::cgame::cg_syscalls::trap_Cvar_Update(
-            (*cv).vmCvar as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Update(
+            (*cv).vmCvar as *mut vmCvar_t,
         );
         i += 1;
         cv = cv.offset(1)
@@ -3182,18 +3182,18 @@ pub unsafe extern "C" fn CG_UpdateCvars() {
     // check for modications here
     // If team overlay is on, ask for updates from the server.  If it's off,
     // let the server know so we don't receive it
-    if crate::src::cgame::cg_draw::drawTeamOverlayModificationCount
+    if drawTeamOverlayModificationCount
         != cg_drawTeamOverlay.modificationCount
     {
-        crate::src::cgame::cg_draw::drawTeamOverlayModificationCount =
+        drawTeamOverlayModificationCount =
             cg_drawTeamOverlay.modificationCount;
         if cg_drawTeamOverlay.integer > 0 as i32 {
-            crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"teamoverlay\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"teamoverlay\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
@@ -3219,7 +3219,7 @@ pub unsafe extern "C" fn CG_LastAttacker() -> i32 {
     if cg.attackerTime == 0 {
         return -(1 as i32);
     }
-    return (*cg.snap).ps.persistant[crate::bg_public_h::PERS_ATTACKER as i32 as usize];
+    return (*cg.snap).ps.persistant[PERS_ATTACKER as i32 as usize];
 }
 #[no_mangle]
 
@@ -3233,7 +3233,7 @@ pub unsafe extern "C" fn CG_Printf(mut msg: *const libc::c_char, mut args: ...) 
         msg,
         argptr.as_va_list(),
     );
-    crate::src::cgame::cg_syscalls::trap_Print(text.as_mut_ptr());
+    trap_Print(text.as_mut_ptr());
 }
 #[no_mangle]
 
@@ -3247,7 +3247,7 @@ pub unsafe extern "C" fn CG_Error(mut msg: *const libc::c_char, mut args: ...) -
         msg,
         argptr.as_va_list(),
     );
-    crate::src::cgame::cg_syscalls::trap_Error(text.as_mut_ptr());
+    trap_Error(text.as_mut_ptr());
 }
 #[no_mangle]
 
@@ -3265,7 +3265,7 @@ pub unsafe extern "C" fn Com_Error(
         error,
         argptr.as_va_list(),
     );
-    crate::src::cgame::cg_syscalls::trap_Error(text.as_mut_ptr());
+    trap_Error(text.as_mut_ptr());
 }
 /*
 ===========================================================================
@@ -3430,7 +3430,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
         msg,
         argptr.as_va_list(),
     );
-    crate::src::cgame::cg_syscalls::trap_Print(text.as_mut_ptr());
+    trap_Print(text.as_mut_ptr());
 }
 /*
 ================
@@ -3441,7 +3441,7 @@ CG_Argv
 
 pub unsafe extern "C" fn CG_Argv(mut arg: i32) -> *const libc::c_char {
     static mut buffer: [libc::c_char; 1024] = [0; 1024];
-    crate::src::cgame::cg_syscalls::trap_Argv(
+    trap_Argv(
         arg,
         buffer.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -3458,18 +3458,18 @@ The server says this item is used on this level
 */
 
 unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
     let mut data: [libc::c_char; 64] = [0; 64];
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut len: i32 = 0;
-    item = &mut *crate::src::game::bg_misc::bg_itemlist
+    item = &mut *bg_itemlist
         .as_mut_ptr()
-        .offset(itemNum as isize) as *mut crate::bg_public_h::gitem_t;
+        .offset(itemNum as isize) as *mut gitem_t;
     if !(*item).pickup_sound.is_null() {
-        crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        trap_S_RegisterSound(
             (*item).pickup_sound,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
     }
     // parse the space separated precache string for other media
@@ -3498,16 +3498,16 @@ unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
         if *s != 0 {
             s = s.offset(1)
         }
-        if ::libc::strcmp(
+        if libc::strcmp(
             data.as_mut_ptr()
                 .offset(len as isize)
                 .offset(-(3 as i32 as isize)),
             b"wav\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            trap_S_RegisterSound(
                 data.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
         }
     }
@@ -3526,336 +3526,336 @@ unsafe extern "C" fn CG_RegisterSounds() {
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut soundName: *const libc::c_char = 0 as *const libc::c_char;
     // voice commands
-    cgs.media.oneMinuteSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.oneMinuteSound = trap_S_RegisterSound(
         b"sound/feedback/1_minute.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.fiveMinuteSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.fiveMinuteSound = trap_S_RegisterSound(
         b"sound/feedback/5_minute.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.suddenDeathSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.suddenDeathSound = trap_S_RegisterSound(
         b"sound/feedback/sudden_death.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.oneFragSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.oneFragSound = trap_S_RegisterSound(
         b"sound/feedback/1_frag.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.twoFragSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.twoFragSound = trap_S_RegisterSound(
         b"sound/feedback/2_frags.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.threeFragSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.threeFragSound = trap_S_RegisterSound(
         b"sound/feedback/3_frags.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.count3Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.count3Sound = trap_S_RegisterSound(
         b"sound/feedback/three.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.count2Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.count2Sound = trap_S_RegisterSound(
         b"sound/feedback/two.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.count1Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.count1Sound = trap_S_RegisterSound(
         b"sound/feedback/one.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.countFightSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.countFightSound = trap_S_RegisterSound(
         b"sound/feedback/fight.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.countPrepareSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.countPrepareSound = trap_S_RegisterSound(
         b"sound/feedback/prepare.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
         || cg_buildScript.integer != 0
     {
-        cgs.media.captureAwardSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.captureAwardSound = trap_S_RegisterSound(
             b"sound/teamplay/flagcapture_yourteam.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.redLeadsSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.redLeadsSound = trap_S_RegisterSound(
             b"sound/feedback/redleads.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.blueLeadsSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.blueLeadsSound = trap_S_RegisterSound(
             b"sound/feedback/blueleads.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.teamsTiedSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.teamsTiedSound = trap_S_RegisterSound(
             b"sound/feedback/teamstied.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.hitTeamSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.hitTeamSound = trap_S_RegisterSound(
             b"sound/feedback/hit_teammate.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.redScoredSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.redScoredSound = trap_S_RegisterSound(
             b"sound/teamplay/voc_red_scores.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.blueScoredSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.blueScoredSound = trap_S_RegisterSound(
             b"sound/teamplay/voc_blue_scores.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.captureYourTeamSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.captureYourTeamSound = trap_S_RegisterSound(
             b"sound/teamplay/flagcapture_yourteam.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.captureOpponentSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.captureOpponentSound = trap_S_RegisterSound(
             b"sound/teamplay/flagcapture_opponent.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.returnYourTeamSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.returnYourTeamSound = trap_S_RegisterSound(
             b"sound/teamplay/flagreturn_yourteam.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.returnOpponentSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.returnOpponentSound = trap_S_RegisterSound(
             b"sound/teamplay/flagreturn_opponent.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.takenYourTeamSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.takenYourTeamSound = trap_S_RegisterSound(
             b"sound/teamplay/flagtaken_yourteam.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.takenOpponentSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.takenOpponentSound = trap_S_RegisterSound(
             b"sound/teamplay/flagtaken_opponent.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
+        if cgs.gametype as u32 == GT_CTF as i32 as u32
             || cg_buildScript.integer != 0
         {
-            cgs.media.redFlagReturnedSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.redFlagReturnedSound = trap_S_RegisterSound(
                 b"sound/teamplay/voc_red_returned.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
-            cgs.media.blueFlagReturnedSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.blueFlagReturnedSound = trap_S_RegisterSound(
                 b"sound/teamplay/voc_blue_returned.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
-            cgs.media.enemyTookYourFlagSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.enemyTookYourFlagSound = trap_S_RegisterSound(
                 b"sound/teamplay/voc_enemy_flag.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
             cgs.media.yourTeamTookEnemyFlagSound =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/teamplay/voc_team_flag.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qtrue,
+                    qtrue,
                 )
         }
-        cgs.media.youHaveFlagSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.youHaveFlagSound = trap_S_RegisterSound(
             b"sound/teamplay/voc_you_flag.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        cgs.media.holyShitSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.holyShitSound = trap_S_RegisterSound(
             b"sound/feedback/voc_holyshit.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         )
     }
-    cgs.media.tracerSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.tracerSound = trap_S_RegisterSound(
         b"sound/weapons/machinegun/buletby1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.selectSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.selectSound = trap_S_RegisterSound(
         b"sound/weapons/change.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.wearOffSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.wearOffSound = trap_S_RegisterSound(
         b"sound/items/wearoff.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.useNothingSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.useNothingSound = trap_S_RegisterSound(
         b"sound/items/use_nothing.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.gibSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.gibSound = trap_S_RegisterSound(
         b"sound/player/gibsplt1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.gibBounce1Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.gibBounce1Sound = trap_S_RegisterSound(
         b"sound/player/gibimp1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.gibBounce2Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.gibBounce2Sound = trap_S_RegisterSound(
         b"sound/player/gibimp2.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.gibBounce3Sound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.gibBounce3Sound = trap_S_RegisterSound(
         b"sound/player/gibimp3.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.teleInSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.teleInSound = trap_S_RegisterSound(
         b"sound/world/telein.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.teleOutSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.teleOutSound = trap_S_RegisterSound(
         b"sound/world/teleout.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.respawnSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.respawnSound = trap_S_RegisterSound(
         b"sound/items/respawn1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.noAmmoSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.noAmmoSound = trap_S_RegisterSound(
         b"sound/weapons/noammo.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.talkSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.talkSound = trap_S_RegisterSound(
         b"sound/player/talk.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.landSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.landSound = trap_S_RegisterSound(
         b"sound/player/land1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.hitSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.hitSound = trap_S_RegisterSound(
         b"sound/feedback/hit.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.impressiveSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.impressiveSound = trap_S_RegisterSound(
         b"sound/feedback/impressive.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.excellentSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.excellentSound = trap_S_RegisterSound(
         b"sound/feedback/excellent.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.deniedSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.deniedSound = trap_S_RegisterSound(
         b"sound/feedback/denied.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.humiliationSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.humiliationSound = trap_S_RegisterSound(
         b"sound/feedback/humiliation.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.assistSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.assistSound = trap_S_RegisterSound(
         b"sound/feedback/assist.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.defendSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.defendSound = trap_S_RegisterSound(
         b"sound/feedback/defense.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.takenLeadSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.takenLeadSound = trap_S_RegisterSound(
         b"sound/feedback/takenlead.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.tiedLeadSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.tiedLeadSound = trap_S_RegisterSound(
         b"sound/feedback/tiedlead.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.lostLeadSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.lostLeadSound = trap_S_RegisterSound(
         b"sound/feedback/lostlead.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    cgs.media.watrInSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.watrInSound = trap_S_RegisterSound(
         b"sound/player/watr_in.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.watrOutSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.watrOutSound = trap_S_RegisterSound(
         b"sound/player/watr_out.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.watrUnSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.watrUnSound = trap_S_RegisterSound(
         b"sound/player/watr_un.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.jumpPadSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.jumpPadSound = trap_S_RegisterSound(
         b"sound/world/jumppad.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
     i = 0 as i32;
     while i < 4 as i32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/step%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_NORMAL as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_NORMAL as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/boot%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_BOOT as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_BOOT as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/flesh%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_FLESH as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_FLESH as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/mech%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_MECH as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_MECH as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/energy%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_ENERGY as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_ENERGY as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/splash%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/clank%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_METAL as i32 as usize][i as usize] =
-            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+        cgs.media.footsteps[FOOTSTEP_METAL as i32 as usize][i as usize] =
+            trap_S_RegisterSound(
                 name.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
         i += 1
     }
     // only register the items that the server says we need
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         items.as_mut_ptr(),
         CG_ConfigString(27 as i32),
         ::std::mem::size_of::<[libc::c_char; 257]>() as libc::c_ulong as i32,
     );
     i = 1 as i32;
-    while i < crate::src::game::bg_misc::bg_numItems {
+    while i < bg_numItems {
         //		if ( items[ i ] == '1' || cg_buildScript.integer ) {
         CG_RegisterItemSounds(i);
         i += 1
@@ -3868,67 +3868,67 @@ unsafe extern "C" fn CG_RegisterSounds() {
             break;
         }
         if !(*soundName.offset(0 as i32 as isize) as i32 == '*' as i32) {
-            cgs.gameSounds[i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.gameSounds[i as usize] = trap_S_RegisterSound(
                 soundName,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             )
         }
         i += 1
         // custom sound
     }
     // FIXME: only needed with item
-    cgs.media.flightSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.flightSound = trap_S_RegisterSound(
         b"sound/items/flight.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.medkitSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.medkitSound = trap_S_RegisterSound(
         b"sound/items/use_medkit.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.quadSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.quadSound = trap_S_RegisterSound(
         b"sound/items/damage3.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.sfx_ric1 = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.sfx_ric1 = trap_S_RegisterSound(
         b"sound/weapons/machinegun/ric1.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.sfx_ric2 = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.sfx_ric2 = trap_S_RegisterSound(
         b"sound/weapons/machinegun/ric2.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.sfx_ric3 = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.sfx_ric3 = trap_S_RegisterSound(
         b"sound/weapons/machinegun/ric3.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
     //cgs.media.sfx_railg = trap_S_RegisterSound ("sound/weapons/railgun/railgf1a.wav", qfalse);
-    cgs.media.sfx_rockexp = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.sfx_rockexp = trap_S_RegisterSound(
         b"sound/weapons/rocket/rocklx1a.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.sfx_plasmaexp = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.sfx_plasmaexp = trap_S_RegisterSound(
         b"sound/weapons/plasma/plasmx1a.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.regenSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.regenSound = trap_S_RegisterSound(
         b"sound/items/regen.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.protectSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.protectSound = trap_S_RegisterSound(
         b"sound/items/protect3.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.n_healthSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.n_healthSound = trap_S_RegisterSound(
         b"sound/items/n_health.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.hgrenb1aSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.hgrenb1aSound = trap_S_RegisterSound(
         b"sound/weapons/grenade/hgrenb1a.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
-    cgs.media.hgrenb2aSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+    cgs.media.hgrenb2aSound = trap_S_RegisterSound(
         b"sound/weapons/grenade/hgrenb2a.wav\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
 }
 //===================================================================================
@@ -3958,96 +3958,96 @@ unsafe extern "C" fn CG_RegisterGraphics() {
     ];
     // clear any references to old media
     crate::stdlib::memset(
-        &mut cg.refdef as *mut crate::tr_types_h::refdef_t as *mut libc::c_void,
+        &mut cg.refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refdef_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
     );
-    crate::src::cgame::cg_syscalls::trap_R_ClearScene();
-    crate::src::cgame::cg_info::CG_LoadingString(cgs.mapname.as_mut_ptr());
-    crate::src::cgame::cg_syscalls::trap_R_LoadWorldMap(cgs.mapname.as_mut_ptr());
+    trap_R_ClearScene();
+    CG_LoadingString(cgs.mapname.as_mut_ptr());
+    trap_R_LoadWorldMap(cgs.mapname.as_mut_ptr());
     // precache status bar pics
-    crate::src::cgame::cg_info::CG_LoadingString(
+    CG_LoadingString(
         b"game media\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < 11 as i32 {
         cgs.media.numberShaders[i as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShader(sb_nums[i as usize]);
+            trap_R_RegisterShader(sb_nums[i as usize]);
         i += 1
     }
     cgs.media.botSkillShaders[0 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        trap_R_RegisterShader(
             b"menu/art/skill1.tga\x00" as *const u8 as *const libc::c_char,
         );
     cgs.media.botSkillShaders[1 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        trap_R_RegisterShader(
             b"menu/art/skill2.tga\x00" as *const u8 as *const libc::c_char,
         );
     cgs.media.botSkillShaders[2 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        trap_R_RegisterShader(
             b"menu/art/skill3.tga\x00" as *const u8 as *const libc::c_char,
         );
     cgs.media.botSkillShaders[3 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        trap_R_RegisterShader(
             b"menu/art/skill4.tga\x00" as *const u8 as *const libc::c_char,
         );
     cgs.media.botSkillShaders[4 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        trap_R_RegisterShader(
             b"menu/art/skill5.tga\x00" as *const u8 as *const libc::c_char,
         );
-    cgs.media.viewBloodShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.viewBloodShader = trap_R_RegisterShader(
         b"viewBloodBlend\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.deferShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.deferShader = trap_R_RegisterShaderNoMip(
         b"gfx/2d/defer.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.scoreboardName = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.scoreboardName = trap_R_RegisterShaderNoMip(
         b"menu/tab/name.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.scoreboardPing = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip(
         b"menu/tab/ping.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.scoreboardScore = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip(
         b"menu/tab/score.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.scoreboardTime = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip(
         b"menu/tab/time.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.smokePuffShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.smokePuffShader = trap_R_RegisterShader(
         b"smokePuff\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.smokePuffRageProShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.smokePuffRageProShader = trap_R_RegisterShader(
         b"smokePuffRagePro\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.shotgunSmokePuffShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader(
         b"shotgunSmokePuff\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.plasmaBallShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.plasmaBallShader = trap_R_RegisterShader(
         b"sprites/plasma1\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.bloodTrailShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.bloodTrailShader = trap_R_RegisterShader(
         b"bloodTrail\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.lagometerShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.lagometerShader = trap_R_RegisterShader(
         b"lagometer\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.connectionShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.connectionShader = trap_R_RegisterShader(
         b"disconnected\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.waterBubbleShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.waterBubbleShader = trap_R_RegisterShader(
         b"waterBubble\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.tracerShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.tracerShader = trap_R_RegisterShader(
         b"gfx/misc/tracer\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.selectShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.selectShader = trap_R_RegisterShader(
         b"gfx/2d/select\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < 10 as i32 {
         cgs.media.crosshairShader[i as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
-                crate::src::qcommon::q_shared::va(
+            trap_R_RegisterShader(
+                va(
                     b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     'a' as i32 + i,
@@ -4055,228 +4055,228 @@ unsafe extern "C" fn CG_RegisterGraphics() {
             );
         i += 1
     }
-    cgs.media.backTileShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.backTileShader = trap_R_RegisterShader(
         b"gfx/2d/backtile\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.noammoShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.noammoShader = trap_R_RegisterShader(
         b"icons/noammo\x00" as *const u8 as *const libc::c_char,
     );
     // powerup shaders
-    cgs.media.quadShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.quadShader = trap_R_RegisterShader(
         b"powerups/quad\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.quadWeaponShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.quadWeaponShader = trap_R_RegisterShader(
         b"powerups/quadWeapon\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.battleSuitShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.battleSuitShader = trap_R_RegisterShader(
         b"powerups/battleSuit\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.battleWeaponShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.battleWeaponShader = trap_R_RegisterShader(
         b"powerups/battleWeapon\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.invisShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.invisShader = trap_R_RegisterShader(
         b"powerups/invisibility\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.regenShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.regenShader = trap_R_RegisterShader(
         b"powerups/regen\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.hastePuffShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.hastePuffShader = trap_R_RegisterShader(
         b"hasteSmokePuff\x00" as *const u8 as *const libc::c_char,
     );
-    if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
+    if cgs.gametype as u32 == GT_CTF as i32 as u32
         || cg_buildScript.integer != 0
     {
-        cgs.media.redFlagModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+        cgs.media.redFlagModel = trap_R_RegisterModel(
             b"models/flags/r_flag.md3\x00" as *const u8 as *const libc::c_char,
         );
-        cgs.media.blueFlagModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+        cgs.media.blueFlagModel = trap_R_RegisterModel(
             b"models/flags/b_flag.md3\x00" as *const u8 as *const libc::c_char,
         );
         cgs.media.redFlagShader[0 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_red1\x00" as *const u8 as *const libc::c_char,
             );
         cgs.media.redFlagShader[1 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_red2\x00" as *const u8 as *const libc::c_char,
             );
         cgs.media.redFlagShader[2 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_red3\x00" as *const u8 as *const libc::c_char,
             );
         cgs.media.blueFlagShader[0 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_blu1\x00" as *const u8 as *const libc::c_char,
             );
         cgs.media.blueFlagShader[1 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_blu2\x00" as *const u8 as *const libc::c_char,
             );
         cgs.media.blueFlagShader[2 as i32 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+            trap_R_RegisterShaderNoMip(
                 b"icons/iconf_blu3\x00" as *const u8 as *const libc::c_char,
             )
     }
-    if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
         || cg_buildScript.integer != 0
     {
-        cgs.media.friendShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        cgs.media.friendShader = trap_R_RegisterShader(
             b"sprites/foe\x00" as *const u8 as *const libc::c_char,
         );
-        cgs.media.redQuadShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        cgs.media.redQuadShader = trap_R_RegisterShader(
             b"powerups/blueflag\x00" as *const u8 as *const libc::c_char,
         );
-        cgs.media.teamStatusBar = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+        cgs.media.teamStatusBar = trap_R_RegisterShader(
             b"gfx/2d/colorbar.tga\x00" as *const u8 as *const libc::c_char,
         )
     }
-    cgs.media.armorModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.armorModel = trap_R_RegisterModel(
         b"models/powerups/armor/armor_yel.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.armorIcon = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.armorIcon = trap_R_RegisterShaderNoMip(
         b"icons/iconr_yellow\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.machinegunBrassModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.machinegunBrassModel = trap_R_RegisterModel(
         b"models/weapons2/shells/m_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.shotgunBrassModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.shotgunBrassModel = trap_R_RegisterModel(
         b"models/weapons2/shells/s_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibAbdomen = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibAbdomen = trap_R_RegisterModel(
         b"models/gibs/abdomen.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibArm = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibArm = trap_R_RegisterModel(
         b"models/gibs/arm.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibChest = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibChest = trap_R_RegisterModel(
         b"models/gibs/chest.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibFist = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibFist = trap_R_RegisterModel(
         b"models/gibs/fist.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibFoot = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibFoot = trap_R_RegisterModel(
         b"models/gibs/foot.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibForearm = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibForearm = trap_R_RegisterModel(
         b"models/gibs/forearm.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibIntestine = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibIntestine = trap_R_RegisterModel(
         b"models/gibs/intestine.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibLeg = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibLeg = trap_R_RegisterModel(
         b"models/gibs/leg.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibSkull = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibSkull = trap_R_RegisterModel(
         b"models/gibs/skull.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibBrain = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.gibBrain = trap_R_RegisterModel(
         b"models/gibs/brain.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.smoke2 = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.smoke2 = trap_R_RegisterModel(
         b"models/weapons2/shells/s_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.balloonShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.balloonShader = trap_R_RegisterShader(
         b"sprites/balloon3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.bloodExplosionShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.bloodExplosionShader = trap_R_RegisterShader(
         b"bloodExplosion\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.bulletFlashModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.bulletFlashModel = trap_R_RegisterModel(
         b"models/weaphits/bullet.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.ringFlashModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.ringFlashModel = trap_R_RegisterModel(
         b"models/weaphits/ring02.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.dishFlashModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.dishFlashModel = trap_R_RegisterModel(
         b"models/weaphits/boom01.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.teleportEffectModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    cgs.media.teleportEffectModel = trap_R_RegisterModel(
         b"models/misc/telep.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.teleportEffectShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.teleportEffectShader = trap_R_RegisterShader(
         b"teleportEffect\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalImpressive = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalImpressive = trap_R_RegisterShaderNoMip(
         b"medal_impressive\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalExcellent = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalExcellent = trap_R_RegisterShaderNoMip(
         b"medal_excellent\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalGauntlet = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalGauntlet = trap_R_RegisterShaderNoMip(
         b"medal_gauntlet\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalDefend = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalDefend = trap_R_RegisterShaderNoMip(
         b"medal_defend\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalAssist = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalAssist = trap_R_RegisterShaderNoMip(
         b"medal_assist\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.medalCapture = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.medalCapture = trap_R_RegisterShaderNoMip(
         b"medal_capture\x00" as *const u8 as *const libc::c_char,
     );
     crate::stdlib::memset(
         cg_items.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::itemInfo_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[itemInfo_t; 256]>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         cg_weapons.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::weaponInfo_t; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[weaponInfo_t; 16]>() as libc::c_ulong,
     );
     // only register the items that the server says we need
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         items.as_mut_ptr(),
         CG_ConfigString(27 as i32),
         ::std::mem::size_of::<[libc::c_char; 257]>() as libc::c_ulong as i32,
     );
     i = 1 as i32;
-    while i < crate::src::game::bg_misc::bg_numItems {
+    while i < bg_numItems {
         if items[i as usize] as i32 == '1' as i32 || cg_buildScript.integer != 0 {
-            crate::src::cgame::cg_info::CG_LoadingItem(i);
-            crate::src::cgame::cg_weapons::CG_RegisterItemVisuals(i);
+            CG_LoadingItem(i);
+            CG_RegisterItemVisuals(i);
         }
         i += 1
     }
     // wall marks
-    cgs.media.bulletMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.bulletMarkShader = trap_R_RegisterShader(
         b"gfx/damage/bullet_mrk\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.burnMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.burnMarkShader = trap_R_RegisterShader(
         b"gfx/damage/burn_med_mrk\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.holeMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.holeMarkShader = trap_R_RegisterShader(
         b"gfx/damage/hole_lg_mrk\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.energyMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.energyMarkShader = trap_R_RegisterShader(
         b"gfx/damage/plasma_mrk\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.shadowMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.shadowMarkShader = trap_R_RegisterShader(
         b"markShadow\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.wakeMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.wakeMarkShader = trap_R_RegisterShader(
         b"wake\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.bloodMarkShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.bloodMarkShader = trap_R_RegisterShader(
         b"bloodMark\x00" as *const u8 as *const libc::c_char,
     );
     // register the inline models
-    cgs.numInlineModels = crate::src::cgame::cg_syscalls::trap_CM_NumInlineModels();
+    cgs.numInlineModels = trap_CM_NumInlineModels();
     i = 1 as i32;
     while i < cgs.numInlineModels {
         let mut name: [libc::c_char; 10] = [0; 10];
-        let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut mins: vec3_t = [0.; 3];
+        let mut maxs: vec3_t = [0.; 3];
         let mut j: i32 = 0;
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 10]>() as libc::c_ulong as i32,
             b"*%i\x00" as *const u8 as *const libc::c_char,
             i,
         );
         cgs.inlineDrawModel[i as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterModel(name.as_mut_ptr());
-        crate::src::cgame::cg_syscalls::trap_R_ModelBounds(
+            trap_R_RegisterModel(name.as_mut_ptr());
+        trap_R_ModelBounds(
             cgs.inlineDrawModel[i as usize],
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
@@ -4285,7 +4285,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
         while j < 3 as i32 {
             cgs.inlineModelMidpoints[i as usize][j as usize] = (mins[j as usize] as f64
                 + 0.5f64 * (maxs[j as usize] - mins[j as usize]) as f64)
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             j += 1
         }
         i += 1
@@ -4299,10 +4299,10 @@ unsafe extern "C" fn CG_RegisterGraphics() {
             break;
         }
         cgs.gameModels[i as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterModel(modelName);
+            trap_R_RegisterModel(modelName);
         i += 1
     }
-    crate::src::cgame::cg_particles::CG_ClearParticles();
+    CG_ClearParticles();
     /*
         for (i=1; i<MAX_PARTICLES_AREAS; i++)
         {
@@ -4331,12 +4331,12 @@ pub unsafe extern "C" fn CG_BuildSpectatorString() {
     while i < 64 as i32 {
         if cgs.clientinfo[i as usize].infoValid as u32 != 0
             && cgs.clientinfo[i as usize].team as u32
-                == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+                == TEAM_SPECTATOR as i32 as u32
         {
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 cg.spectatorList.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"%s     \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     cgs.clientinfo[i as usize].name.as_mut_ptr(),
                 ),
@@ -4358,16 +4358,16 @@ CG_RegisterClients
 
 unsafe extern "C" fn CG_RegisterClients() {
     let mut i: i32 = 0;
-    crate::src::cgame::cg_info::CG_LoadingClient(cg.clientNum);
-    crate::src::cgame::cg_players::CG_NewClientInfo(cg.clientNum);
+    CG_LoadingClient(cg.clientNum);
+    CG_NewClientInfo(cg.clientNum);
     i = 0 as i32;
     while i < 64 as i32 {
         let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
         if !(cg.clientNum == i) {
             clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
             if !(*clientInfo.offset(0 as i32 as isize) == 0) {
-                crate::src::cgame::cg_info::CG_LoadingClient(i);
-                crate::src::cgame::cg_players::CG_NewClientInfo(i);
+                CG_LoadingClient(i);
+                CG_NewClientInfo(i);
             }
         }
         i += 1
@@ -4410,17 +4410,17 @@ pub unsafe extern "C" fn CG_StartMusic() {
     let mut parm2: [libc::c_char; 64] = [0; 64];
     // start the background music
     s = CG_ConfigString(2 as i32) as *mut libc::c_char;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         parm1.as_mut_ptr(),
-        crate::src::qcommon::q_shared::COM_Parse(&mut s),
+        COM_Parse(&mut s),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         parm2.as_mut_ptr(),
-        crate::src::qcommon::q_shared::COM_Parse(&mut s),
+        COM_Parse(&mut s),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::cgame::cg_syscalls::trap_S_StartBackgroundTrack(
+    trap_S_StartBackgroundTrack(
         parm1.as_mut_ptr(),
         parm2.as_mut_ptr(),
     );
@@ -4443,69 +4443,69 @@ pub unsafe extern "C" fn CG_Init(
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     // clear everything
     crate::stdlib::memset(
-        &mut cgs as *mut crate::cg_local_h::cgs_t as *mut libc::c_void,
+        &mut cgs as *mut cgs_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::cgs_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cgs_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut cg as *mut crate::cg_local_h::cg_t as *mut libc::c_void,
+        &mut cg as *mut cg_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::cg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<cg_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         cg_entities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::centity_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[centity_t; 1024]>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         cg_weapons.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::weaponInfo_t; 16]>() as libc::c_ulong,
+        ::std::mem::size_of::<[weaponInfo_t; 16]>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         cg_items.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::itemInfo_t; 256]>() as libc::c_ulong,
+        ::std::mem::size_of::<[itemInfo_t; 256]>() as libc::c_ulong,
     );
     cg.clientNum = clientNum;
     cgs.processedSnapshotNum = serverMessageNum;
     cgs.serverCommandSequence = serverCommandSequence;
     // load a few needed things before we do any screen updates
-    cgs.media.charsetShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.charsetShader = trap_R_RegisterShader(
         b"gfx/2d/bigchars\x00" as *const u8 as *const libc::c_char,
     ); // For compatibily, default to unset for
-    cgs.media.whiteShader = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    cgs.media.whiteShader = trap_R_RegisterShader(
         b"white\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.charsetProp = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.charsetProp = trap_R_RegisterShaderNoMip(
         b"menu/art/font1_prop.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.charsetPropGlow = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.charsetPropGlow = trap_R_RegisterShaderNoMip(
         b"menu/art/font1_prop_glo.tga\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.charsetPropB = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+    cgs.media.charsetPropB = trap_R_RegisterShaderNoMip(
         b"menu/art/font2_prop.tga\x00" as *const u8 as *const libc::c_char,
     );
     CG_RegisterCvars();
-    crate::src::cgame::cg_consolecmds::CG_InitConsoleCommands();
-    cg.weaponSelect = crate::bg_public_h::WP_MACHINEGUN as i32;
+    CG_InitConsoleCommands();
+    cg.weaponSelect = WP_MACHINEGUN as i32;
     cgs.blueflag = -(1 as i32);
     cgs.redflag = cgs.blueflag;
     cgs.flagStatus = -(1 as i32);
     // old servers
     // get the rendering configuration from the client system
-    crate::src::cgame::cg_syscalls::trap_GetGlconfig(
-        &mut cgs.glconfig as *mut _ as *mut crate::tr_types_h::glconfig_t,
+    trap_GetGlconfig(
+        &mut cgs.glconfig as *mut _ as *mut glconfig_t,
     );
     cgs.screenXScale = (cgs.glconfig.vidWidth as f64 / 640.0f64) as f32;
     cgs.screenYScale = (cgs.glconfig.vidHeight as f64 / 480.0f64) as f32;
     // get the gamestate from the client system
-    crate::src::cgame::cg_syscalls::trap_GetGameState(
-        &mut cgs.gameState as *mut _ as *mut crate::src::qcommon::q_shared::gameState_t,
+    trap_GetGameState(
+        &mut cgs.gameState as *mut _ as *mut gameState_t,
     );
     // check version
     s = CG_ConfigString(20 as i32);
-    if ::libc::strcmp(s, b"baseq3-1\x00" as *const u8 as *const libc::c_char) != 0 {
+    if libc::strcmp(s, b"baseq3-1\x00" as *const u8 as *const libc::c_char) != 0 {
         CG_Error(
             b"Client/Server game mismatch: %s/%s\x00" as *const u8 as *const libc::c_char,
             b"baseq3-1\x00" as *const u8 as *const libc::c_char,
@@ -4514,34 +4514,34 @@ pub unsafe extern "C" fn CG_Init(
     }
     s = CG_ConfigString(21 as i32);
     cgs.levelStartTime = atoi(s);
-    crate::src::cgame::cg_servercmds::CG_ParseServerinfo();
+    CG_ParseServerinfo();
     // load the new map
-    crate::src::cgame::cg_info::CG_LoadingString(
+    CG_LoadingString(
         b"collision map\x00" as *const u8 as *const libc::c_char,
     ); // force players to load instead of defer
-    crate::src::cgame::cg_syscalls::trap_CM_LoadMap(cgs.mapname.as_mut_ptr()); // if low on memory, some clients will be deferred
-    cg.loading = crate::src::qcommon::q_shared::qtrue; // future players will be deferred
-    crate::src::cgame::cg_info::CG_LoadingString(b"sounds\x00" as *const u8 as *const libc::c_char);
+    trap_CM_LoadMap(cgs.mapname.as_mut_ptr()); // if low on memory, some clients will be deferred
+    cg.loading = qtrue; // future players will be deferred
+    CG_LoadingString(b"sounds\x00" as *const u8 as *const libc::c_char);
     CG_RegisterSounds();
-    crate::src::cgame::cg_info::CG_LoadingString(
+    CG_LoadingString(
         b"graphics\x00" as *const u8 as *const libc::c_char,
     );
     CG_RegisterGraphics();
-    crate::src::cgame::cg_info::CG_LoadingString(
+    CG_LoadingString(
         b"clients\x00" as *const u8 as *const libc::c_char,
     );
     CG_RegisterClients();
-    cg.loading = crate::src::qcommon::q_shared::qfalse;
-    crate::src::cgame::cg_localents::CG_InitLocalEntities();
-    crate::src::cgame::cg_marks::CG_InitMarkPolys();
+    cg.loading = qfalse;
+    CG_InitLocalEntities();
+    CG_InitMarkPolys();
     // remove the last loading update
     cg.infoScreenText[0 as i32 as usize] = 0 as i32 as libc::c_char;
     // Make sure we have update values (scores)
-    crate::src::cgame::cg_servercmds::CG_SetConfigValues();
+    CG_SetConfigValues();
     CG_StartMusic();
-    crate::src::cgame::cg_info::CG_LoadingString(b"\x00" as *const u8 as *const libc::c_char);
-    crate::src::cgame::cg_servercmds::CG_ShaderStateChanged();
-    crate::src::cgame::cg_syscalls::trap_S_ClearLoopingSounds(crate::src::qcommon::q_shared::qtrue);
+    CG_LoadingString(b"\x00" as *const u8 as *const libc::c_char);
+    CG_ShaderStateChanged();
+    trap_S_ClearLoopingSounds(qtrue);
 }
 /*
 =================
@@ -4572,7 +4572,7 @@ pub unsafe extern "C" fn CG_EventHandling(mut _type_0: i32) {}
 
 pub unsafe extern "C" fn CG_KeyEvent(
     mut _key: i32,
-    mut _down: crate::src::qcommon::q_shared::qboolean,
+    mut _down: qboolean,
 ) {
 }
 /*

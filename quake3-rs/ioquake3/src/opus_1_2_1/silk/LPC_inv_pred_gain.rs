@@ -166,50 +166,50 @@ pub use crate::stdlib::uint32_t;
 /* test if LPC coefficients are stable (all poles within unit circle)   */
 
 unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
-    mut A_QA: *mut crate::opus_types_h::opus_int32,
+    mut A_QA: *mut opus_int32,
     order: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /* I   Prediction order                                         */ {
     let mut k: i32 = 0;
     let mut n: i32 = 0;
     let mut mult2Q: i32 = 0;
-    let mut invGain_Q30: crate::opus_types_h::opus_int32 = 0;
-    let mut rc_Q31: crate::opus_types_h::opus_int32 = 0;
-    let mut rc_mult1_Q30: crate::opus_types_h::opus_int32 = 0;
-    let mut rc_mult2: crate::opus_types_h::opus_int32 = 0;
-    let mut tmp1: crate::opus_types_h::opus_int32 = 0;
-    let mut tmp2: crate::opus_types_h::opus_int32 = 0;
+    let mut invGain_Q30: opus_int32 = 0;
+    let mut rc_Q31: opus_int32 = 0;
+    let mut rc_mult1_Q30: opus_int32 = 0;
+    let mut rc_mult2: opus_int32 = 0;
+    let mut tmp1: opus_int32 = 0;
+    let mut tmp2: opus_int32 = 0;
     invGain_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
-        as crate::opus_types_h::opus_int32;
+        as opus_int32;
     k = order - 1 as i32;
     while k > 0 as i32 {
         /* Check for stability */
         if *A_QA.offset(k as isize)
             > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
             || *A_QA.offset(k as isize)
                 < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
+                    as opus_int32)
         {
             return 0 as i32;
         }
         /* Set RC equal to negated AR coef */
-        rc_Q31 = -(((*A_QA.offset(k as isize) as crate::opus_types_h::opus_uint32)
-            << 31 as i32 - 24 as i32) as crate::opus_types_h::opus_int32);
+        rc_Q31 = -(((*A_QA.offset(k as isize) as opus_uint32)
+            << 31 as i32 - 24 as i32) as opus_int32);
         /* rc_mult1_Q30 range: [ 1 : 2^30 ] */
         rc_mult1_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32
-            - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32) as crate::opus_types_h::opus_int32;
+            as opus_int32
+            - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32) as opus_int32;
         /* reduce A_LIMIT if fails */
         /* Update inverse gain */
         /* invGain_Q30 range: [ 0 : 2^30 ] */
         invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32)
-            as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 2 as i32) as crate::opus_types_h::opus_int32;
+            as opus_int32
+            as opus_uint32)
+            << 2 as i32) as opus_int32;
         if invGain_Q30
             < ((1.0f32 / 1e4f32 * ((1 as i32 as i64) << 30 as i32) as f32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32
+                as opus_int32
         {
             return 0 as i32;
         }
@@ -226,15 +226,15 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
             tmp1 = *A_QA.offset(n as isize);
             tmp2 = *A_QA.offset((k - n - 1 as i32) as isize);
             tmp64 = if mult2Q == 1 as i32 {
-                ((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                ((if (tmp1 as opus_uint32).wrapping_sub(
                     (if 31 as i32 == 1 as i32 {
                         (tmp2 as i64 * rc_Q31 as i64 >> 1 as i32)
                             + (tmp2 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
                     } else {
                         ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_uint32,
+                    }) as opus_int32
+                        as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -246,12 +246,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                             ^ 0x80000000 as u32)
                         & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as opus_int32
                     } else {
                         (tmp1)
                             - (if 31 as i32 == 1 as i32 {
@@ -261,7 +261,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 } else {
                     (if (tmp1 as u32 ^ 0x80000000 as u32)
@@ -272,7 +272,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                         & 0x80000000 as u32
                         != 0
                     {
@@ -286,12 +286,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 }) as i64
                     * rc_mult2 as i64
                     >> 1 as i32)
-                    + ((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                    + ((if (tmp1 as opus_uint32).wrapping_sub(
                         (if 31 as i32 == 1 as i32 {
                             (tmp2 as i64 * rc_Q31 as i64 >> 1 as i32)
                                 + (tmp2 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
@@ -299,8 +299,8 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32
-                            as crate::opus_types_h::opus_uint32,
+                        }) as opus_int32
+                            as opus_uint32,
                     ) & 0x80000000 as u32
                         == 0 as i32 as u32
                     {
@@ -312,13 +312,13 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                                 as u32
                                 ^ 0x80000000 as u32)
                             & 0x80000000 as u32
                             != 0
                         {
-                            0x80000000 as u32 as crate::opus_types_h::opus_int32
+                            0x80000000 as u32 as opus_int32
                         } else {
                             (tmp1)
                                 - (if 31 as i32 == 1 as i32 {
@@ -329,7 +329,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                         + 1 as i32 as i64)
                                         >> 1 as i32
                                 })
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                         })
                     } else {
                         (if (tmp1 as u32 ^ 0x80000000 as u32)
@@ -340,7 +340,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                                 as u32
                             & 0x80000000 as u32
                             != 0
@@ -356,21 +356,21 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                         + 1 as i32 as i64)
                                         >> 1 as i32
                                 })
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                         })
                     }) as i64
                         * rc_mult2 as i64
                         & 1 as i32 as i64)
             } else {
-                (((if (tmp1 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                (((if (tmp1 as opus_uint32).wrapping_sub(
                     (if 31 as i32 == 1 as i32 {
                         (tmp2 as i64 * rc_Q31 as i64 >> 1 as i32)
                             + (tmp2 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
                     } else {
                         ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_uint32,
+                    }) as opus_int32
+                        as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -382,12 +382,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                             ^ 0x80000000 as u32)
                         & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as opus_int32
                     } else {
                         (tmp1)
                             - (if 31 as i32 == 1 as i32 {
@@ -397,7 +397,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 } else {
                     (if (tmp1 as u32 ^ 0x80000000 as u32)
@@ -408,7 +408,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                         & 0x80000000 as u32
                         != 0
                     {
@@ -422,7 +422,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 }) as i64
                     * rc_mult2 as i64
@@ -431,21 +431,21 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     >> 1 as i32
             };
             if tmp64 > 0x7fffffff as i32 as i64
-                || tmp64 < 0x80000000 as u32 as crate::opus_types_h::opus_int32 as i64
+                || tmp64 < 0x80000000 as u32 as opus_int32 as i64
             {
                 return 0 as i32;
             }
-            *A_QA.offset(n as isize) = tmp64 as crate::opus_types_h::opus_int32;
+            *A_QA.offset(n as isize) = tmp64 as opus_int32;
             tmp64 = if mult2Q == 1 as i32 {
-                ((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                ((if (tmp2 as opus_uint32).wrapping_sub(
                     (if 31 as i32 == 1 as i32 {
                         (tmp1 as i64 * rc_Q31 as i64 >> 1 as i32)
                             + (tmp1 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
                     } else {
                         ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_uint32,
+                    }) as opus_int32
+                        as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -457,12 +457,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                             ^ 0x80000000 as u32)
                         & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as opus_int32
                     } else {
                         (tmp2)
                             - (if 31 as i32 == 1 as i32 {
@@ -472,7 +472,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 } else {
                     (if (tmp2 as u32 ^ 0x80000000 as u32)
@@ -483,7 +483,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                         & 0x80000000 as u32
                         != 0
                     {
@@ -497,12 +497,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 }) as i64
                     * rc_mult2 as i64
                     >> 1 as i32)
-                    + ((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                    + ((if (tmp2 as opus_uint32).wrapping_sub(
                         (if 31 as i32 == 1 as i32 {
                             (tmp1 as i64 * rc_Q31 as i64 >> 1 as i32)
                                 + (tmp1 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
@@ -510,8 +510,8 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32
-                            as crate::opus_types_h::opus_uint32,
+                        }) as opus_int32
+                            as opus_uint32,
                     ) & 0x80000000 as u32
                         == 0 as i32 as u32
                     {
@@ -523,13 +523,13 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                                 as u32
                                 ^ 0x80000000 as u32)
                             & 0x80000000 as u32
                             != 0
                         {
-                            0x80000000 as u32 as crate::opus_types_h::opus_int32
+                            0x80000000 as u32 as opus_int32
                         } else {
                             (tmp2)
                                 - (if 31 as i32 == 1 as i32 {
@@ -540,7 +540,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                         + 1 as i32 as i64)
                                         >> 1 as i32
                                 })
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                         })
                     } else {
                         (if (tmp2 as u32 ^ 0x80000000 as u32)
@@ -551,7 +551,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                                 as u32
                             & 0x80000000 as u32
                             != 0
@@ -567,21 +567,21 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                         + 1 as i32 as i64)
                                         >> 1 as i32
                                 })
-                                    as crate::opus_types_h::opus_int32
+                                    as opus_int32
                         })
                     }) as i64
                         * rc_mult2 as i64
                         & 1 as i32 as i64)
             } else {
-                (((if (tmp2 as crate::opus_types_h::opus_uint32).wrapping_sub(
+                (((if (tmp2 as opus_uint32).wrapping_sub(
                     (if 31 as i32 == 1 as i32 {
                         (tmp1 as i64 * rc_Q31 as i64 >> 1 as i32)
                             + (tmp1 as i64 * rc_Q31 as i64 & 1 as i32 as i64)
                     } else {
                         ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_uint32,
+                    }) as opus_int32
+                        as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -593,12 +593,12 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                             ^ 0x80000000 as u32)
                         & 0x80000000 as u32
                         != 0
                     {
-                        0x80000000 as u32 as crate::opus_types_h::opus_int32
+                        0x80000000 as u32 as opus_int32
                     } else {
                         (tmp2)
                             - (if 31 as i32 == 1 as i32 {
@@ -608,7 +608,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 } else {
                     (if (tmp2 as u32 ^ 0x80000000 as u32)
@@ -619,7 +619,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as crate::opus_types_h::opus_int32 as u32
+                        }) as opus_int32 as u32
                         & 0x80000000 as u32
                         != 0
                     {
@@ -633,7 +633,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as crate::opus_types_h::opus_int32
+                            }) as opus_int32
                     })
                 }) as i64
                     * rc_mult2 as i64
@@ -642,11 +642,11 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     >> 1 as i32
             };
             if tmp64 > 0x7fffffff as i32 as i64
-                || tmp64 < 0x80000000 as u32 as crate::opus_types_h::opus_int32 as i64
+                || tmp64 < 0x80000000 as u32 as opus_int32 as i64
             {
                 return 0 as i32;
             }
-            *A_QA.offset((k - n - 1 as i32) as isize) = tmp64 as crate::opus_types_h::opus_int32;
+            *A_QA.offset((k - n - 1 as i32) as isize) = tmp64 as opus_int32;
             n += 1
         }
         k -= 1
@@ -656,28 +656,28 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
     /* Check for stability */
     if *A_QA.offset(k as isize)
         > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32
+            as opus_int32
         || *A_QA.offset(k as isize)
             < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32)
+                as opus_int32)
     {
         return 0 as i32;
     }
     /* Set RC equal to negated AR coef */
-    rc_Q31 = -(((*A_QA.offset(0 as i32 as isize) as crate::opus_types_h::opus_uint32)
-        << 31 as i32 - 24 as i32) as crate::opus_types_h::opus_int32);
+    rc_Q31 = -(((*A_QA.offset(0 as i32 as isize) as opus_uint32)
+        << 31 as i32 - 24 as i32) as opus_int32);
     /* Range: [ 1 : 2^30 ] */
     rc_mult1_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
-        as crate::opus_types_h::opus_int32
-        - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32) as crate::opus_types_h::opus_int32;
+        as opus_int32
+        - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32) as opus_int32;
     /* Update inverse gain */
     /* Range: [ 0 : 2^30 ] */
     invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32)
-        as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32)
-        << 2 as i32) as crate::opus_types_h::opus_int32;
+        as opus_int32 as opus_uint32)
+        << 2 as i32) as opus_int32;
     if invGain_Q30
         < ((1.0f32 / 1e4f32 * ((1 as i32 as i64) << 30 as i32) as f32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32
+            as opus_int32
     {
         return 0 as i32;
     }
@@ -782,21 +782,21 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_c(
-    mut A_Q12: *const crate::opus_types_h::opus_int16,
+    mut A_Q12: *const opus_int16,
     order: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /* I   Prediction order                                             */ {
     let mut k: i32 = 0;
-    let mut Atmp_QA: [crate::opus_types_h::opus_int32; 24] = [0; 24];
-    let mut DC_resp: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut Atmp_QA: [opus_int32; 24] = [0; 24];
+    let mut DC_resp: opus_int32 = 0 as i32;
     /* Increase Q domain of the AR coefficients */
     k = 0 as i32;
     while k < order {
-        DC_resp += *A_Q12.offset(k as isize) as crate::opus_types_h::opus_int32;
-        Atmp_QA[k as usize] = ((*A_Q12.offset(k as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
+        DC_resp += *A_Q12.offset(k as isize) as opus_int32;
+        Atmp_QA[k as usize] = ((*A_Q12.offset(k as isize) as opus_int32
+            as opus_uint32)
             << 24 as i32 - 12 as i32)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         k += 1
     }
     /* If the DC is unstable, we don't even need to do the full calculations */

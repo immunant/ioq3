@@ -48,8 +48,8 @@ pub use crate::jpeglib_h::JSAMPROW;
 
 pub unsafe extern "C" fn jpeg_fdct_float(
     mut data: *mut f32,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
     let mut tmp0: f32 = 0.;
     let mut tmp1: f32 = 0.;
@@ -71,7 +71,7 @@ pub unsafe extern "C" fn jpeg_fdct_float(
     let mut z11: f32 = 0.;
     let mut z13: f32 = 0.;
     let mut dataptr: *mut f32 = 0 as *mut f32;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     dataptr = data;

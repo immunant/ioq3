@@ -21,7 +21,7 @@ unsafe extern "C" fn ec_laplace_get_freq1(mut fs0: u32, mut decay: i32) -> u32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn ec_laplace_encode(
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut enc: *mut ec_enc,
     mut value: *mut i32,
     mut fs: u32,
     mut decay: i32,
@@ -73,7 +73,7 @@ pub unsafe extern "C" fn ec_laplace_encode(
         }
     }
     crate::src::opus_1_2_1::celt::entenc::ec_encode_bin(
-        enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        enc as *mut ec_ctx,
         fl,
         fl.wrapping_add(fs),
         15 as i32 as u32,
@@ -123,7 +123,7 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn ec_laplace_decode(
-    mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut dec: *mut ec_dec,
     mut fs: u32,
     mut decay: i32,
 ) -> i32 {
@@ -131,7 +131,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
     let mut fl: u32 = 0;
     let mut fm: u32 = 0;
     fm = crate::src::opus_1_2_1::celt::entdec::ec_decode_bin(
-        dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        dec as *mut ec_ctx,
         15 as i32 as u32,
     );
     fl = 0 as i32 as u32;
@@ -166,7 +166,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
         }
     }
     crate::src::opus_1_2_1::celt::entdec::ec_dec_update(
-        dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        dec as *mut ec_ctx,
         fl,
         if fl.wrapping_add(fs) < 32768 as i32 as u32 {
             fl.wrapping_add(fs)

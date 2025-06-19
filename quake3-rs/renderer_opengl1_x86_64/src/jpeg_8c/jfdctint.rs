@@ -52,21 +52,21 @@ pub use crate::jpeglib_h::JSAMPROW;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_islow(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -77,60 +77,60 @@ pub unsafe extern "C" fn jpeg_fdct_islow(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp3;
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (8 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
-        *dataptr.offset(4 as i32 as isize) = (tmp10 - tmp11 << 2 as i32) as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32;
-        *dataptr.offset(2 as i32 as isize) = (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32
+            << 2 as i32) as DCTELEM;
+        *dataptr.offset(4 as i32 as isize) = (tmp10 - tmp11 << 2 as i32) as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32;
+        *dataptr.offset(2 as i32 as isize) = (z1 + tmp12 * 6270 as i32 as INT32
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
-        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32
+            as DCTELEM;
+        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as INT32
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp0 + tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp0 + tmp2;
         tmp13 = tmp1 + tmp3;
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32;
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32;
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32;
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32;
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32);
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32;
+        tmp0 = tmp0 * 12299 as i32 as INT32;
+        tmp1 = tmp1 * 25172 as i32 as INT32;
+        tmp2 = tmp2 * 16819 as i32 as INT32;
+        tmp3 = tmp3 * 2446 as i32 as INT32;
+        tmp10 = tmp10 * -(7373 as i32 as INT32);
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + tmp10 + tmp12 >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 + tmp12 >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp1 + tmp11 + tmp13 >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + tmp11 + tmp13 >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp2 + tmp11 + tmp12 >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + tmp11 + tmp12 >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp3 + tmp10 + tmp13 >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + tmp10 + tmp13 >> 13 as i32 - 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -165,69 +165,69 @@ pub unsafe extern "C" fn jpeg_fdct_islow(
          */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         /* advance pointer to next column */
-        tmp10 = tmp0 + tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 - 1 as i32);
+        tmp10 = tmp0 + tmp3 + ((1 as i32 as INT32) << 2 as i32 - 1 as i32);
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
-            (tmp10 + tmp11 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + tmp11 >> 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) =
-            (tmp10 - tmp11 >> 2 as i32) as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+            (tmp10 - tmp11 >> 2 as i32) as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (z1 + tmp12 * 6270 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
-            (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (z1 - tmp13 * 15137 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         tmp10 = tmp0 + tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp0 + tmp2;
         tmp13 = tmp1 + tmp3;
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32;
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32;
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32;
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32);
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+        tmp0 = tmp0 * 12299 as i32 as INT32;
+        tmp1 = tmp1 * 25172 as i32 as INT32;
+        tmp2 = tmp2 * 16819 as i32 as INT32;
+        tmp3 = tmp3 * 2446 as i32 as INT32;
+        tmp10 = tmp10 * -(7373 as i32 as INT32);
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + tmp10 + tmp12 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 + tmp12 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + tmp11 + tmp13 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + tmp11 + tmp13 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + tmp11 + tmp12 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + tmp11 + tmp12 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp3 + tmp10 + tmp13 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + tmp10 + tmp13 >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -254,28 +254,28 @@ pub unsafe extern "C" fn jpeg_fdct_islow(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_7x7(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut z3: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut z3: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -288,84 +288,84 @@ pub unsafe extern "C" fn jpeg_fdct_7x7(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp3 = *elemptr.offset(3 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
+        tmp3 = *elemptr.offset(3 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(6 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(5 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(4 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2;
         *dataptr.offset(0 as i32 as isize) = ((z1 + tmp1 + tmp3 - (7 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         tmp3 += tmp3;
         z1 -= tmp3;
         z1 -= tmp3;
         z1 = z1
-            * (0.353553391f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.353553391f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z2 = (tmp0 - tmp2)
-            * (0.920609002f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.920609002f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z3 = (tmp1 - tmp2)
-            * (0.314692123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.314692123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) =
             (z1 + z2
                 + z3
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+                + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         z1 -= z2;
         z2 = (tmp0 - tmp1)
-            * (0.881747734f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.881747734f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(4 as i32 as isize) = (z2 + z3
             - (tmp1 - tmp3)
-                * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) =
-            (z1 + z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z2 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         tmp1 = (tmp10 + tmp11)
-            * (0.935414347f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.935414347f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 = (tmp10 - tmp11)
-            * (0.170262339f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.170262339f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 = tmp1 - tmp2;
         tmp1 += tmp2;
         tmp2 = (tmp11 + tmp12)
-            * -((1.378756276f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((1.378756276f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp1 += tmp2;
         tmp3 = (tmp10 + tmp12)
-            * (0.613604268f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.613604268f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 += tmp3;
         tmp2 += tmp3
             + tmp12
-                * (1.870828693f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.870828693f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -394,91 +394,91 @@ pub unsafe extern "C" fn jpeg_fdct_7x7(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp3 = *dataptr.offset((8 as i32 * 3 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp3 = *dataptr.offset((8 as i32 * 3 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((z1 + tmp1 + tmp3)
-            * (1.306122449f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.306122449f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp3 += tmp3;
         z1 -= tmp3;
         z1 -= tmp3;
         /* advance pointer to next column */
         z1 = z1
-            * (0.461784020f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c6-c4)/2 */
+            * (0.461784020f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c6-c4)/2 */
         z2 = (tmp0 - tmp2)
-            * (1.202428084f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c4-c6)/2 */
+            * (1.202428084f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c4-c6)/2 */
         z3 = (tmp1 - tmp2)
-            * (0.411026446f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (0.411026446f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
             (z1 + z2
                 + z3
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM; /* c4 */
+                + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM; /* c4 */
         z1 -= z2;
         z2 = (tmp0 - tmp1)
-            * (1.151670509f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.151670509f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (z2 + z3
             - (tmp1 - tmp3)
-                * (0.923568041f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.923568041f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
-            (z1 + z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z2 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         tmp1 = (tmp10 + tmp11)
-            * (1.221765677f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.221765677f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 = (tmp10 - tmp11)
-            * (0.222383464f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.222383464f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 = tmp1 - tmp2;
         tmp1 += tmp2;
         tmp2 = (tmp11 + tmp12)
-            * -((1.800824523f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((1.800824523f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp1 += tmp2;
         tmp3 = (tmp10 + tmp12)
-            * (0.801442310f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.801442310f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 += tmp3;
         tmp2 += tmp3
             + tmp12
-                * (2.443531355f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.443531355f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -495,24 +495,24 @@ pub unsafe extern "C" fn jpeg_fdct_7x7(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_6x6(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -525,45 +525,45 @@ pub unsafe extern "C" fn jpeg_fdct_6x6(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(4 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (6 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = (tmp12
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp11 - tmp11)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp0 + tmp2)
-            * (0.366025404f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (0.366025404f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + (tmp0 + tmp1 << 2 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp0 + tmp1 << 2 as i32)) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp1 - tmp2 << 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 - tmp2 << 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp10 + (tmp2 - tmp1 << 2 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp2 - tmp1 << 2 as i32)) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -583,66 +583,66 @@ pub unsafe extern "C" fn jpeg_fdct_6x6(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp12
-            * (2.177324216f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (2.177324216f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp11 - tmp11)
-            * (1.257078722f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.257078722f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp0 + tmp2)
-            * (0.650711829f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.650711829f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
             + (tmp0 + tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = ((tmp0 - tmp1 - tmp2)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp10
             + (tmp2 - tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -655,23 +655,23 @@ pub unsafe extern "C" fn jpeg_fdct_6x6(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_5x5(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -686,56 +686,56 @@ pub unsafe extern "C" fn jpeg_fdct_5x5(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp2 = *elemptr.offset(2 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
+        tmp2 = *elemptr.offset(2 as i32 as isize) as i32 as INT32;
         tmp10 = tmp0 + tmp1;
         tmp11 = tmp0 - tmp1;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp2 - (5 as i32 * 128 as i32) as isize)
             << 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp11 = tmp11
-            * (0.790569415f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.790569415f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 -= tmp2 << 2 as i32;
         tmp10 = tmp10
-            * (0.353553391f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.353553391f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp11
             + tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = (tmp11 - tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp0 + tmp1)
-            * (0.831253876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.831253876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(1 as i32 as isize) = (tmp10
             + tmp0
-                * (0.513743148f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (0.513743148f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(3 as i32 as isize) = (tmp10
             - tmp1
-                * (2.176250899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (2.176250899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -758,59 +758,59 @@ pub unsafe extern "C" fn jpeg_fdct_5x5(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp2 = *dataptr.offset((8 as i32 * 2 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp2 = *dataptr.offset((8 as i32 * 2 as i32) as isize) as INT32;
         tmp10 = tmp0 + tmp1;
         tmp11 = tmp0 - tmp1;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp2)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp11 = tmp11
-            * (1.011928851f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c4)/2 */
+            * (1.011928851f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c4)/2 */
         tmp10 -= tmp2 << 2 as i32; /* (c2-c4)/2 */
         tmp10 = tmp10
-            * (0.452548340f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.452548340f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp11
             + tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (tmp11 - tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp0 + tmp1)
-            * (1.064004961f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.064004961f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
             + tmp0
-                * (0.657591230f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.657591230f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp10
             - tmp1
-                * (2.785601151f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (2.785601151f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -823,22 +823,22 @@ pub unsafe extern "C" fn jpeg_fdct_5x5(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_4x4(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -852,28 +852,28 @@ pub unsafe extern "C" fn jpeg_fdct_4x4(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(2 as i32 as isize) as i32) as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(3 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(2 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (4 as i32 * 128 as i32) as isize)
             << 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) =
-            (tmp0 - tmp1 << 2 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 3 as i32;
+            (tmp0 - tmp1 << 2 as i32 + 2 as i32) as DCTELEM;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 3 as i32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -893,29 +893,29 @@ pub unsafe extern "C" fn jpeg_fdct_4x4(
         /* Add fudge factor here for final descale. */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize)) as isize
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 - 1 as i32);
+            + ((1 as i32 as INT32) << 2 as i32 - 1 as i32);
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
-            (tmp0 + tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp1 >> 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (tmp0 - tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 >> 2 as i32) as DCTELEM;
         /* advance pointer to next column */
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -929,21 +929,21 @@ pub unsafe extern "C" fn jpeg_fdct_4x4(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_3x3(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -958,27 +958,27 @@ pub unsafe extern "C" fn jpeg_fdct_3x3(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(2 as i32 as isize) as i32) as INT32;
+        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as INT32;
         tmp2 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(2 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (3 as i32 * 128 as i32) as isize)
             << 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = ((tmp0 - tmp1 - tmp1)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(1 as i32 as isize) = (tmp2
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -998,30 +998,30 @@ pub unsafe extern "C" fn jpeg_fdct_3x3(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp0 + tmp1)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = ((tmp0 - tmp1 - tmp1)
-            * (1.257078722f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.257078722f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp2
-            * (2.177324216f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (2.177324216f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -1033,20 +1033,20 @@ pub unsafe extern "C" fn jpeg_fdct_3x3(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_2x2(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -1054,15 +1054,15 @@ pub unsafe extern "C" fn jpeg_fdct_2x2(
     /* Row 0 */
     elemptr = (*sample_data.offset(0 as i32 as isize)).offset(start_col as isize);
     tmp0 = (*elemptr.offset(0 as i32 as isize) as i32 + *elemptr.offset(1 as i32 as isize) as i32)
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     tmp1 = (*elemptr.offset(0 as i32 as isize) as i32 - *elemptr.offset(1 as i32 as isize) as i32)
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     /* Row 1 */
     elemptr = (*sample_data.offset(1 as i32 as isize)).offset(start_col as isize);
     tmp2 = (*elemptr.offset(0 as i32 as isize) as i32 + *elemptr.offset(1 as i32 as isize) as i32)
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     tmp3 = (*elemptr.offset(0 as i32 as isize) as i32 - *elemptr.offset(1 as i32 as isize) as i32)
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     /* Pass 2: process columns.
      * We leave the results scaled up by an overall factor of 8.
      * We must also scale the output by (8/2)**2 = 2**4.
@@ -1070,14 +1070,14 @@ pub unsafe extern "C" fn jpeg_fdct_2x2(
     /* Column 0 */
     /* Apply unsigned->signed conversion */
     *data.offset((8 as i32 * 0 as i32) as isize) =
-        ((tmp0 + tmp2 - (4 as i32 * 128 as i32) as isize) << 4 as i32) as crate::jdct_h::DCTELEM;
+        ((tmp0 + tmp2 - (4 as i32 * 128 as i32) as isize) << 4 as i32) as DCTELEM;
     *data.offset((8 as i32 * 1 as i32) as isize) =
-        (tmp0 - tmp2 << 4 as i32) as crate::jdct_h::DCTELEM;
+        (tmp0 - tmp2 << 4 as i32) as DCTELEM;
     /* Column 1 */
     *data.offset((8 as i32 * 0 as i32 + 1 as i32) as isize) =
-        (tmp1 + tmp3 << 4 as i32) as crate::jdct_h::DCTELEM;
+        (tmp1 + tmp3 << 4 as i32) as DCTELEM;
     *data.offset((8 as i32 * 1 as i32 + 1 as i32) as isize) =
-        (tmp1 - tmp3 << 4 as i32) as crate::jdct_h::DCTELEM;
+        (tmp1 - tmp3 << 4 as i32) as DCTELEM;
 }
 /*
  * Perform the forward DCT on a 1x1 sample block.
@@ -1085,15 +1085,15 @@ pub unsafe extern "C" fn jpeg_fdct_2x2(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_1x1(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* We leave the result scaled up by an overall factor of 8. */
@@ -1109,25 +1109,25 @@ pub unsafe extern "C" fn jpeg_fdct_1x1(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_9x9(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 8] = [0; 8];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut workspace: [DCTELEM; 8] = [0; 8];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1141,93 +1141,93 @@ pub unsafe extern "C" fn jpeg_fdct_9x9(
         /* switch pointer to extended workspace */
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp4 = *elemptr.offset(4 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
+        tmp4 = *elemptr.offset(4 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(8 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(7 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(6 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(5 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2 + tmp3;
         z2 = tmp1 + tmp4;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) =
-            ((z1 + z2 - (9 as i32 * 128 as i32) as isize) << 1 as i32) as crate::jdct_h::DCTELEM; /* c2 */
+            ((z1 + z2 - (9 as i32 * 128 as i32) as isize) << 1 as i32) as DCTELEM; /* c2 */
         *dataptr.offset(6 as i32 as isize) = ((z1 - z2 - z2)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM; /* c6 */
+            as DCTELEM; /* c6 */
         z1 = (tmp0 - tmp2)
-            * (1.328926049f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.328926049f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z2 = (tmp1 - tmp4 - tmp4)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = ((tmp2 - tmp3)
-            * (1.083350441f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.083350441f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + z1
             + z2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp3 - tmp0)
-            * (0.245575608f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.245575608f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + z1
             - z2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         *dataptr.offset(3 as i32 as isize) = ((tmp10 - tmp12 - tmp13)
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM; /* c3 */
+            as DCTELEM; /* c3 */
         tmp11 = tmp11
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c5 */
         tmp0 = (tmp10 + tmp12)
-            * (0.909038955f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c7 */
+            * (0.909038955f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c7 */
         tmp1 = (tmp10 + tmp13)
-            * (0.483689525f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c1 */
+            * (0.483689525f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c1 */
         *dataptr.offset(1 as i32 as isize) = (tmp11
             + tmp0
             + tmp1
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM; /* Done. */
+            as DCTELEM; /* Done. */
         tmp2 = (tmp12 - tmp13)
-            * (1.392728481f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.392728481f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(5 as i32 as isize) = (tmp0 - tmp11 - tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp1 - tmp11
             + tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 9 as i32 {
@@ -1252,99 +1252,99 @@ pub unsafe extern "C" fn jpeg_fdct_9x9(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp4 = *dataptr.offset((8 as i32 * 4 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp4 = *dataptr.offset((8 as i32 * 4 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2 + tmp3;
         z2 = tmp1 + tmp4;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((z1 + z2)
-            * (1.580246914f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.580246914f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = ((z1 - z2 - z2)
-            * (1.117403309f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.117403309f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         z1 = (tmp0 - tmp2)
-            * (2.100031287f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c2 */
+            * (2.100031287f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c2 */
         z2 = (tmp1 - tmp4 - tmp4)
-            * (1.117403309f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (1.117403309f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = ((tmp2 - tmp3)
-            * (1.711961190f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.711961190f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + z1
             + z2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp3 - tmp0)
-            * (0.388070096f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.388070096f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + z1
             - z2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = ((tmp10 - tmp12 - tmp13)
-            * (1.935399303f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.935399303f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp11 = tmp11
-            * (1.935399303f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.935399303f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 = (tmp10 + tmp12)
-            * (1.436506004f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.436506004f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp1 = (tmp10 + tmp13)
-            * (0.764348879f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.764348879f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp11
             + tmp0
             + tmp1
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp2 = (tmp12 - tmp13)
-            * (2.200854883f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (2.200854883f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp0 - tmp11 - tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp1 - tmp11
             + tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -1362,24 +1362,24 @@ pub unsafe extern "C" fn jpeg_fdct_9x9(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_10x10(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 16] = [0; 16];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut workspace: [DCTELEM; 16] = [0; 16];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1393,103 +1393,103 @@ pub unsafe extern "C" fn jpeg_fdct_10x10(
         /* switch pointer to extended workspace */
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(7 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp4;
         tmp13 = tmp0 - tmp4;
         tmp11 = tmp1 + tmp3;
         tmp14 = tmp1 - tmp3;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12
             - (10 as i32 * 128 as i32) as isize)
-            << 1 as i32) as crate::jdct_h::DCTELEM; /* c6 */
+            << 1 as i32) as DCTELEM; /* c6 */
         tmp12 += tmp12;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp12)
-            * (1.144122806f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.144122806f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 - tmp12)
-                * (0.437016024f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (0.437016024f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp13 + tmp14)
-            * (0.831253876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.831253876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp13
-                * (0.513743148f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (0.513743148f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp14
-                * (2.176250899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (2.176250899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         tmp10 = tmp0 + tmp4; /* (c1-c9)/2 */
         tmp11 = tmp1 - tmp3; /* Done. */
         *dataptr.offset(5 as i32 as isize) =
-            (tmp10 - tmp11 - tmp2 << 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 - tmp11 - tmp2 << 1 as i32) as DCTELEM;
         tmp2 <<= 13 as i32;
         *dataptr.offset(1 as i32 as isize) = (tmp0
-            * (1.396802247f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.396802247f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (1.260073511f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.260073511f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
             + tmp3
-                * (0.642039522f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.642039522f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.221231742f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (0.221231742f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 - tmp4)
-            * (0.951056516f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.951056516f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp1 + tmp3)
-                * (0.587785252f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.587785252f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp10 + tmp11)
-            * (0.309016994f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.309016994f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 << 13 as i32 - 1 as i32)
             - tmp2;
         *dataptr.offset(3 as i32 as isize) = (tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp12 - tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 10 as i32 {
@@ -1514,121 +1514,121 @@ pub unsafe extern "C" fn jpeg_fdct_10x10(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp4;
         tmp13 = tmp0 - tmp4;
         tmp11 = tmp1 + tmp3;
         tmp14 = tmp1 - tmp3;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 += tmp12;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp12)
-            * (1.464477191f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.464477191f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 - tmp12)
-                * (0.559380511f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.559380511f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp13 + tmp14)
-            * (1.064004961f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (1.064004961f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp13
-                * (0.657591230f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.657591230f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp14
-                * (2.785601151f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (2.785601151f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp0 + tmp4;
         tmp11 = tmp1 - tmp3;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = ((tmp10 - tmp11 - tmp2)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp2 = tmp2
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32;
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp0
-            * (1.787906876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.787906876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (1.612894094f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.612894094f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
             + tmp3
-                * (0.821810588f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.821810588f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.283176630f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.283176630f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 - tmp4)
-            * (1.217352341f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.217352341f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp1 + tmp3)
-                * (0.752365123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.752365123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp10 + tmp11)
-            * (0.395541753f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.395541753f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp11
-                * (0.64f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                    as crate::jmorecfg_h::INT32
+                * (0.64f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                    as INT32
             - tmp2;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp12 - tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -1645,28 +1645,28 @@ pub unsafe extern "C" fn jpeg_fdct_10x10(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_11x11(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut z3: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 24] = [0; 24];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut z3: INT32 = 0;
+    let mut workspace: [DCTELEM; 24] = [0; 24];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -1681,35 +1681,35 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp5 = *elemptr.offset(5 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
+        tmp5 = *elemptr.offset(5 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(9 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(8 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(7 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*elemptr.offset(4 as i32 as isize) as i32
             - *elemptr.offset(6 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 + tmp2 + tmp3 + tmp4 + tmp5
             - (11 as i32 * 128 as i32) as isize)
-            << 1 as i32) as crate::jdct_h::DCTELEM; /* c10 */
+            << 1 as i32) as DCTELEM; /* c10 */
         tmp5 += tmp5; /* c6 */
         tmp0 -= tmp5; /* c4 */
         tmp1 -= tmp5;
@@ -1717,112 +1717,112 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
         tmp3 -= tmp5;
         tmp4 -= tmp5;
         z1 = (tmp0 + tmp3)
-            * (1.356927976f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.356927976f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp2 + tmp4)
-                * (0.201263574f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.201263574f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         z2 = (tmp1 - tmp3)
-            * (0.926112931f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.926112931f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z3 = (tmp0 - tmp1)
-            * (1.189712156f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.189712156f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (z1 + z2
             - tmp3
-                * (1.018300590f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.018300590f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp4
-                * (1.390975730f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (1.390975730f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = (z2
             + z3
             + tmp1
-                * (0.062335650f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.062335650f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp2
-                * (1.356927976f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.356927976f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.587485545f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (0.587485545f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (z1 + z3
             - tmp0
-                * (1.620527200f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.620527200f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp2
-                * (0.788749120f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                * (0.788749120f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         tmp1 = (tmp10 + tmp11)
-            * (1.286413905f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c3 */
+            * (1.286413905f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c3 */
         tmp2 = (tmp10 + tmp12)
-            * (1.068791298f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+            * (1.068791298f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c5 */
         tmp3 = (tmp10 + tmp13)
-            * (0.764581576f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c7 */
+            * (0.764581576f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c7 */
         tmp0 = tmp1 + tmp2 + tmp3
             - tmp10
-                * (1.719967871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.719967871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (0.398430003f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c9 */
+                * (0.398430003f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c9 */
         tmp4 = (tmp11 + tmp12)
-            * -((0.764581576f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* -c7 */
+            * -((0.764581576f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* -c7 */
         tmp5 = (tmp11 + tmp13)
-            * -((1.399818907f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* -c1 */
+            * -((1.399818907f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* -c1 */
         tmp1 += tmp4
             + tmp5
             + tmp11
-                * (1.276416582f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.276416582f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (1.068791298f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+                * (1.068791298f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c5 */
         tmp10 = (tmp12 + tmp13)
-            * (0.398430003f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c9 */
+            * (0.398430003f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c9 */
         tmp2 += tmp4 + tmp10
             - tmp12
-                * (1.989053629f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.989053629f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (1.399818907f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c1 */
+                * (1.399818907f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c1 */
         tmp3 += tmp5
             + tmp10
             + tmp13
-                * (1.305598626f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.305598626f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (1.286413905f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c3 */
+                * (1.286413905f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c3 */
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
-                >> 13 as i32 - 1 as i32) as crate::jdct_h::DCTELEM; /* Done. */
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                >> 13 as i32 - 1 as i32) as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
-                >> 13 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                >> 13 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
-                >> 13 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                >> 13 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32 - 1 as i32)
-                >> 13 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32 - 1 as i32)
+                >> 13 as i32 - 1 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 11 as i32 {
@@ -1847,41 +1847,41 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp5 = *dataptr.offset((8 as i32 * 5 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp5 = *dataptr.offset((8 as i32 * 5 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
             ((tmp0 + tmp1 + tmp2 + tmp3 + tmp4 + tmp5)
-                * (1.057851240f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+                * (1.057851240f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+                + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         tmp5 += tmp5;
         tmp0 -= tmp5;
         tmp1 -= tmp5;
@@ -1890,111 +1890,111 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
         tmp4 -= tmp5;
         /* advance pointer to next column */
         z1 = (tmp0 + tmp3)
-            * (1.435427942f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.435427942f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp2 + tmp4)
-                * (0.212906922f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c10 */
+                * (0.212906922f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c10 */
         z2 = (tmp1 - tmp3)
-            * (0.979689713f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (0.979689713f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         z3 = (tmp0 - tmp1)
-            * (1.258538479f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c4 */
+            * (1.258538479f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c4 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (z1 + z2
             - tmp3
-                * (1.077210542f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.077210542f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp4
-                * (1.471445400f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.471445400f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (z2
             + z3
             + tmp1
-                * (0.065941844f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.065941844f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp2
-                * (1.435427942f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.435427942f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.621472312f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.621472312f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (z1 + z3
             - tmp0
-                * (1.714276708f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.714276708f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp2
-                * (0.834379234f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.834379234f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp1 = (tmp10 + tmp11)
-            * (1.360834544f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.360834544f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 = (tmp10 + tmp12)
-            * (1.130622199f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.130622199f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp3 = (tmp10 + tmp13)
-            * (0.808813568f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.808813568f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 = tmp1 + tmp2 + tmp3
             - tmp10
-                * (1.819470145f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.819470145f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (0.421479672f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.421479672f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp4 = (tmp11 + tmp12)
-            * -((0.808813568f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.808813568f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp5 = (tmp11 + tmp13)
-            * -((1.480800167f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((1.480800167f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp1 += tmp4
             + tmp5
             + tmp11
-                * (1.350258864f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.350258864f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (1.130622199f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.130622199f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp10 = (tmp12 + tmp13)
-            * (0.421479672f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.421479672f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 += tmp4 + tmp10
             - tmp12
-                * (2.104122847f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.104122847f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (1.480800167f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.480800167f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp3 += tmp5
             + tmp10
             + tmp13
-                * (1.381129125f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.381129125f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (1.360834544f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.360834544f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -2018,26 +2018,26 @@ pub unsafe extern "C" fn jpeg_fdct_11x11(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_12x12(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 32] = [0; 32];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut workspace: [DCTELEM; 32] = [0; 32];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2050,18 +2050,18 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp5;
         tmp13 = tmp0 - tmp5;
         tmp11 = tmp1 + tmp4;
@@ -2070,85 +2070,85 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
         tmp15 = tmp2 - tmp3;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) =
-            (tmp10 + tmp11 + tmp12 - (12 as i32 * 128 as i32) as isize) as crate::jdct_h::DCTELEM;
-        *dataptr.offset(6 as i32 as isize) = (tmp13 - tmp14 - tmp15) as crate::jdct_h::DCTELEM;
+            (tmp10 + tmp11 + tmp12 - (12 as i32 * 128 as i32) as isize) as DCTELEM;
+        *dataptr.offset(6 as i32 as isize) = (tmp13 - tmp14 - tmp15) as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp12)
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = (tmp14 - tmp15
             + (tmp13 + tmp15)
-                * (1.366025404f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (1.366025404f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         /* Odd part */
-        tmp10 = (tmp1 + tmp4) * 4433 as i32 as crate::jmorecfg_h::INT32; /* c9 */
-        tmp14 = tmp10 + tmp1 * 6270 as i32 as crate::jmorecfg_h::INT32; /* c3-c9 */
-        tmp15 = tmp10 - tmp4 * 15137 as i32 as crate::jmorecfg_h::INT32; /* c3+c9 */
+        tmp10 = (tmp1 + tmp4) * 4433 as i32 as INT32; /* c9 */
+        tmp14 = tmp10 + tmp1 * 6270 as i32 as INT32; /* c3-c9 */
+        tmp15 = tmp10 - tmp4 * 15137 as i32 as INT32; /* c3+c9 */
         tmp12 = (tmp0 + tmp2)
-            * (1.121971054f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+            * (1.121971054f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c5 */
         tmp13 = (tmp0 + tmp3)
-            * (0.860918669f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c7 */
+            * (0.860918669f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c7 */
         tmp10 = tmp12 + tmp13 + tmp14
             - tmp0
-                * (0.580774953f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.580774953f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.184591911f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c11 */
+                * (0.184591911f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c11 */
         tmp11 = (tmp2 + tmp3)
-            * -((0.184591911f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* -c11 */
+            * -((0.184591911f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* -c11 */
         tmp12 += tmp11
             - tmp15
             - tmp2
-                * (2.339493912f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.339493912f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.860918669f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c7 */
+                * (0.860918669f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c7 */
         tmp13 += tmp11 - tmp14
             + tmp3
-                * (0.725788011f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.725788011f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (1.121971054f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+                * (1.121971054f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c5 */
         tmp11 = tmp15
             + (tmp0 - tmp3)
-                * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            - (tmp2 + tmp5) * 4433 as i32 as crate::jmorecfg_h::INT32; /* c9 */
+                * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            - (tmp2 + tmp5) * 4433 as i32 as INT32; /* c9 */
         *dataptr.offset(1 as i32 as isize) = (tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM; /* Done. */
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) = (tmp11
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) = (tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 12 as i32 {
@@ -2173,22 +2173,22 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp5;
         tmp13 = tmp0 - tmp5;
         tmp11 = tmp1 + tmp4;
@@ -2197,111 +2197,111 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
         tmp15 = tmp2 - tmp3;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = ((tmp13 - tmp14 - tmp15)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp12)
-            * (1.088662108f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+            * (1.088662108f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = ((tmp14 - tmp15)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp13 + tmp15)
-                * (1.214244803f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (1.214244803f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp1 + tmp4)
-            * (0.481063200f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.481063200f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp14 = tmp10
             + tmp1
-                * (0.680326102f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.680326102f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp15 = tmp10
             - tmp4
-                * (1.642452502f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.642452502f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (0.997307603f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.997307603f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (0.765261039f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.765261039f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 = tmp12 + tmp13 + tmp14
             - tmp0
-                * (0.516244403f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.516244403f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.164081699f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.164081699f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = (tmp2 + tmp3)
-            * -((0.164081699f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.164081699f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp12 += tmp11
             - tmp15
             - tmp2
-                * (2.079550144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.079550144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.765261039f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.765261039f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp11 - tmp14
             + tmp3
-                * (0.645144899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.645144899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (0.997307603f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.997307603f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = tmp15
             + (tmp0 - tmp3)
-                * (1.161389302f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.161389302f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp2 + tmp5)
-                * (0.481063200f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.481063200f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp10 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp11 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp11 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp12 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp12 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp13 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -2325,29 +2325,29 @@ pub unsafe extern "C" fn jpeg_fdct_12x12(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_13x13(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 40] = [0; 40];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut workspace: [DCTELEM; 40] = [0; 40];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2360,42 +2360,42 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp6 = *elemptr.offset(6 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
+        tmp6 = *elemptr.offset(6 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(9 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*elemptr.offset(4 as i32 as isize) as i32
             - *elemptr.offset(8 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp15 = (*elemptr.offset(5 as i32 as isize) as i32
             - *elemptr.offset(7 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = (tmp0 + tmp1 + tmp2 + tmp3 + tmp4 + tmp5 + tmp6
             - (13 as i32 * 128 as i32) as isize)
-            as crate::jdct_h::DCTELEM; /* (c8-c12)/2 */
+            as DCTELEM; /* (c8-c12)/2 */
         tmp6 += tmp6; /* (c8+c12)/2 */
         tmp0 -= tmp6;
         tmp1 -= tmp6;
@@ -2404,116 +2404,116 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
         tmp4 -= tmp6;
         tmp5 -= tmp6;
         *dataptr.offset(2 as i32 as isize) = (tmp0
-            * (1.373119086f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.373119086f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (1.058554052f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.058554052f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
-                * (0.501487041f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.501487041f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp3
-                * (0.170464608f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.170464608f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp4
-                * (0.803364869f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.803364869f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (1.252223920f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (1.252223920f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         z1 = (tmp0 - tmp2)
-            * (1.155388986f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.155388986f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp3 - tmp4)
-                * (0.435816023f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.435816023f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp1 - tmp5)
-                * (0.316450131f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.316450131f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         z2 = (tmp0 + tmp2)
-            * (0.096834934f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.096834934f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp3 + tmp4)
-                * (0.937303064f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.937303064f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp1 + tmp5)
-                * (0.486914739f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.486914739f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(4 as i32 as isize) =
-            (z1 + z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-                >> 13 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z2 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+                >> 13 as i32) as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (z1 - z2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         /* Odd part */
         tmp1 = (tmp10 + tmp11)
-            * (1.322312651f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c3 */
+            * (1.322312651f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c3 */
         tmp2 = (tmp10 + tmp12)
-            * (1.163874945f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+            * (1.163874945f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c5 */
         tmp3 = (tmp10 + tmp13)
-            * (0.937797057f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.937797057f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 + tmp15)
-                * (0.338443458f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c11 */
+                * (0.338443458f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c11 */
         tmp0 = tmp1 + tmp2 + tmp3
             - tmp10
-                * (2.020082300f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.020082300f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (0.318774355f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c9-c11 */
+                * (0.318774355f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c9-c11 */
         tmp4 = (tmp14 - tmp15)
-            * (0.937797057f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.937797057f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 + tmp12)
-                * (0.338443458f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c11 */
+                * (0.338443458f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c11 */
         tmp5 = (tmp11 + tmp13)
-            * -((1.163874945f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* -c5 */
+            * -((1.163874945f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* -c5 */
         tmp1 += tmp4
             + tmp5
             + tmp11
-                * (0.837223564f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.837223564f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (2.341699410f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c1+c7 */
+                * (2.341699410f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c1+c7 */
         tmp6 = (tmp12 + tmp13)
-            * -((0.657217813f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* -c9 */
+            * -((0.657217813f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* -c9 */
         tmp2 += tmp4 + tmp6
             - tmp12
-                * (1.572116027f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.572116027f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp15
-                * (2.260109708f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c3+c7 */
+                * (2.260109708f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c3+c7 */
         tmp3 += tmp5
             + tmp6
             + tmp13
-                * (2.205608352f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.205608352f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp15
-                * (1.742345811f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c1+c11 */
+                * (1.742345811f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c1+c11 */
         *dataptr.offset(1 as i32 as isize) = (tmp0
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM; /* Done. */
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) = (tmp1
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) = (tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp3
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 13 as i32 {
@@ -2538,47 +2538,47 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp6 = *dataptr.offset((8 as i32 * 6 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp6 = *dataptr.offset((8 as i32 * 6 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp15 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
             ((tmp0 + tmp1 + tmp2 + tmp3 + tmp4 + tmp5 + tmp6)
-                * (0.757396450f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+                * (0.757396450f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+                + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         tmp6 += tmp6;
         tmp0 -= tmp6;
         tmp1 -= tmp6;
@@ -2587,117 +2587,117 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
         tmp4 -= tmp6;
         tmp5 -= tmp6;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp0
-            * (1.039995521f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.039995521f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (0.801745081f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.801745081f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
-                * (0.379824504f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.379824504f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp3
-                * (0.129109289f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.129109289f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp4
-                * (0.608465700f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.608465700f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (0.948429952f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.948429952f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         z1 = (tmp0 - tmp2)
-            * (0.875087516f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.875087516f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp3 - tmp4)
-                * (0.330085509f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.330085509f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp1 - tmp5)
-                * (0.239678205f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* (c8-c12)/2 */
+                * (0.239678205f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* (c8-c12)/2 */
         z2 = (tmp0 + tmp2)
-            * (0.073342435f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.073342435f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp3 + tmp4)
-                * (0.709910013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.709910013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp1 + tmp5)
-                * (0.368787494f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* (c8+c12)/2 */
+                * (0.368787494f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* (c8+c12)/2 */
         *dataptr.offset((8 as i32 * 4 as i32) as isize) =
-            (z1 + z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z2 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
-            (z1 - z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (z1 - z2 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         tmp1 = (tmp10 + tmp11)
-            * (1.001514908f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.001514908f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 = (tmp10 + tmp12)
-            * (0.881514751f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.881514751f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp3 = (tmp10 + tmp13)
-            * (0.710284161f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.710284161f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 + tmp15)
-                * (0.256335874f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.256335874f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp0 = tmp1 + tmp2 + tmp3
             - tmp10
-                * (1.530003162f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.530003162f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp14
-                * (0.241438564f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.241438564f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp4 = (tmp14 - tmp15)
-            * (0.710284161f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.710284161f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 + tmp12)
-                * (0.256335874f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.256335874f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp5 = (tmp11 + tmp13)
-            * -((0.881514751f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.881514751f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp1 += tmp4
             + tmp5
             + tmp11
-                * (0.634110155f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.634110155f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp14
-                * (1.773594819f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.773594819f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp6 = (tmp12 + tmp13)
-            * -((0.497774438f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.497774438f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp2 += tmp4 + tmp6
             - tmp12
-                * (1.190715098f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.190715098f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp15
-                * (1.711799069f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.711799069f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp3 += tmp5
             + tmp6
             + tmp13
-                * (1.670519935f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.670519935f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp15
-                * (1.319646532f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.319646532f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                >> 13 as i32 + 1 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -2721,28 +2721,28 @@ pub unsafe extern "C" fn jpeg_fdct_13x13(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_14x14(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 48] = [0; 48];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut workspace: [DCTELEM; 48] = [0; 48];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -2755,22 +2755,22 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp6;
         tmp14 = tmp0 - tmp6;
         tmp11 = tmp1 + tmp5;
@@ -2779,108 +2779,108 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
         tmp16 = tmp2 - tmp4;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = (tmp10 + tmp11 + tmp12 + tmp13
             - (14 as i32 * 128 as i32) as isize)
-            as crate::jdct_h::DCTELEM; /* c6 */
+            as DCTELEM; /* c6 */
         tmp13 += tmp13;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp13)
-            * (1.274162392f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.274162392f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13)
-                * (0.314692123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.314692123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp12 - tmp13)
-                * (0.881747734f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (0.881747734f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         tmp10 = (tmp14 + tmp15)
-            * (1.105676686f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.105676686f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp14
-                * (0.273079590f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.273079590f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (0.613604268f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (0.613604268f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp15
-                * (1.719280954f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.719280954f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp16
-                * (1.378756276f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (1.378756276f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         /* Odd part */
         tmp10 = tmp1 + tmp2; /* -c13 */
         tmp11 = tmp5 - tmp4; /* c1 */
         *dataptr.offset(7 as i32 as isize) =
-            (tmp0 - tmp10 + tmp3 - tmp11 - tmp6) as crate::jdct_h::DCTELEM; /* c9 */
+            (tmp0 - tmp10 + tmp3 - tmp11 - tmp6) as DCTELEM; /* c9 */
         tmp3 <<= 13 as i32; /* c11 */
         tmp10 = tmp10
-            * -((0.158341681f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* Done. */
+            * -((0.158341681f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* Done. */
         tmp11 = tmp11
-            * (1.405321284f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.405321284f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 += tmp11 - tmp3;
         tmp11 = (tmp0 + tmp2)
-            * (1.197448846f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.197448846f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 + tmp6)
-                * (0.752406978f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.752406978f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(5 as i32 as isize) = (tmp10 + tmp11
             - tmp2
-                * (2.373959773f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.373959773f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (1.119999435f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (1.119999435f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         tmp12 = (tmp0 + tmp1)
-            * (1.334852607f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.334852607f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 - tmp6)
-                * (0.467085129f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.467085129f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(3 as i32 as isize) = (tmp10 + tmp12
             - tmp1
-                * (0.424103948f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.424103948f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (3.069855259f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (3.069855259f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(1 as i32 as isize) = (tmp11 + tmp12 + tmp3 + tmp6
             - (tmp0 + tmp6)
-                * (1.126980169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+                * (1.126980169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 14 as i32 {
@@ -2905,25 +2905,25 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp6;
         tmp14 = tmp0 - tmp6;
         tmp11 = tmp1 + tmp5;
@@ -2932,128 +2932,128 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
         tmp16 = tmp2 - tmp4;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12 + tmp13)
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp13 += tmp13;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp13)
-            * (0.832106052f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.832106052f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13)
-                * (0.205513223f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.205513223f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp12 - tmp13)
-                * (0.575835255f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.575835255f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp14 + tmp15)
-            * (0.722074570f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (0.722074570f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp14
-                * (0.178337691f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.178337691f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (0.400721155f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.400721155f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp15
-                * (1.122795725f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.122795725f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp16
-                * (0.900412262f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.900412262f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp1 + tmp2;
         tmp11 = tmp5 - tmp4;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = ((tmp0 - tmp10 + tmp3 - tmp11 - tmp6)
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp3 = tmp3
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 = tmp10
-            * -((0.103406812f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.103406812f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp11 = tmp11
-            * (0.917760839f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.917760839f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 += tmp11 - tmp3;
         tmp11 = (tmp0 + tmp2)
-            * (0.782007410f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.782007410f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 + tmp6)
-                * (0.491367823f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.491367823f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp10 + tmp11
             - tmp2
-                * (1.550341076f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.550341076f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.731428202f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.731428202f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 + tmp1)
-            * (0.871740478f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.871740478f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 - tmp6)
-                * (0.305035186f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.305035186f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp10 + tmp12
             - tmp1
-                * (0.276965844f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.276965844f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (2.004803435f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (2.004803435f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp11 + tmp12 + tmp3
             - tmp0
-                * (0.735987049f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.735987049f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (0.082925825f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 1 as i32 - 1 as i32)
+                * (0.082925825f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -3072,32 +3072,32 @@ pub unsafe extern "C" fn jpeg_fdct_14x14(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_15x15(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp7: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut z3: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 56] = [0; 56];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp7: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut z3: INT32 = 0;
+    let mut workspace: [DCTELEM; 56] = [0; 56];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -3110,145 +3110,145 @@ pub unsafe extern "C" fn jpeg_fdct_15x15(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp7 = *elemptr.offset(7 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
+        tmp7 = *elemptr.offset(7 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*elemptr.offset(4 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp15 = (*elemptr.offset(5 as i32 as isize) as i32
             - *elemptr.offset(9 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp16 = (*elemptr.offset(6 as i32 as isize) as i32
             - *elemptr.offset(8 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp4 + tmp5;
         z2 = tmp1 + tmp3 + tmp6;
         z3 = tmp2 + tmp7;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) =
-            (z1 + z2 + z3 - (15 as i32 * 128 as i32) as isize) as crate::jdct_h::DCTELEM; /* c4+c8 */
+            (z1 + z2 + z3 - (15 as i32 * 128 as i32) as isize) as DCTELEM; /* c4+c8 */
         z3 += z3; /* c2-c4 */
         *dataptr.offset(6 as i32 as isize) = ((z1 - z3)
-            * (1.144122806f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.144122806f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (z2 - z3)
-                * (0.437016024f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM; /* (c6+c12)/2 */
+                * (0.437016024f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM; /* (c6+c12)/2 */
         tmp2 += (tmp1 + tmp4 >> 1 as i32) - tmp7 - tmp7;
         z1 = (tmp3 - tmp2)
-            * (1.531135173f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.531135173f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp6 - tmp2)
-                * (2.238241955f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.238241955f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         z2 = (tmp5 - tmp2)
-            * (0.798468008f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.798468008f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp0 - tmp2)
-                * (0.091361227f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.091361227f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         z3 = (tmp0 - tmp3)
-            * (1.383309603f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.383309603f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (0.946293579f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.946293579f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp1 - tmp4)
-                * (0.790569415f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.790569415f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) =
-            (z1 + z3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-                >> 13 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z3 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+                >> 13 as i32) as DCTELEM;
         *dataptr.offset(4 as i32 as isize) =
-            (z2 + z3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-                >> 13 as i32) as crate::jdct_h::DCTELEM;
+            (z2 + z3 + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+                >> 13 as i32) as DCTELEM;
         /* Odd part */
         tmp2 = (tmp10 - tmp12 - tmp13 + tmp15 + tmp16)
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         /* c5 */
         tmp1 = (tmp10 - tmp14 - tmp15)
-            * (1.344997024f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.344997024f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13 - tmp16)
-                * (0.831253876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c9 */
+                * (0.831253876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c9 */
         tmp12 = tmp12
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c5 */
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c5 */
         tmp4 = (tmp10 - tmp16)
-            * (1.406466353f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.406466353f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 + tmp14)
-                * (1.344997024f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.344997024f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp13 + tmp15)
-                * (0.575212477f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c11 */
+                * (0.575212477f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c11 */
         tmp0 = tmp13
-            * (0.475753014f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.475753014f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - tmp14
-                * (0.513743148f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.513743148f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (1.700497885f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.700497885f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
             + tmp12; /* c1+c13 */
         tmp3 = tmp10
-            * -((0.355500862f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.355500862f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             - tmp11
-                * (2.176250899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.176250899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp15
-                * (0.869244010f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.869244010f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
             - tmp12; /* c11+c13 */
         *dataptr.offset(1 as i32 as isize) = (tmp0
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM; /* Done. */
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) = (tmp1
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) = (tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp3
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32)
-            >> 13 as i32) as crate::jdct_h::DCTELEM;
+            + ((1 as i32 as INT32) << 13 as i32 - 1 as i32)
+            >> 13 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 15 as i32 {
@@ -3273,150 +3273,150 @@ pub unsafe extern "C" fn jpeg_fdct_15x15(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp7 = *dataptr.offset((8 as i32 * 7 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp7 = *dataptr.offset((8 as i32 * 7 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp14 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp15 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp16 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp4 + tmp5;
         z2 = tmp1 + tmp3 + tmp6;
         z3 = tmp2 + tmp7;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((z1 + z2 + z3)
-            * (1.137777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.137777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         z3 += z3;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = ((z1 - z3)
-            * (1.301757503f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.301757503f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (z2 - z3)
-                * (0.497227121f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.497227121f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp2 += (tmp1 + tmp4 >> 1 as i32) - tmp7 - tmp7;
         /* advance pointer to next column */
         z1 = (tmp3 - tmp2)
-            * (1.742091575f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.742091575f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp6 - tmp2)
-                * (2.546621957f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c4+c8 */
+                * (2.546621957f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c4+c8 */
         z2 = (tmp5 - tmp2)
-            * (0.908479156f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.908479156f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp0 - tmp2)
-                * (0.103948774f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c2-c4 */
+                * (0.103948774f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c2-c4 */
         z3 = (tmp0 - tmp3)
-            * (1.573898926f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.573898926f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (1.076671805f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.076671805f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp1 - tmp4)
-                * (0.899492312f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* (c6+c12)/2 */
+                * (0.899492312f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* (c6+c12)/2 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (z1 + z3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z3 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) =
-            (z2 + z3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (z2 + z3 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         tmp2 = (tmp10 - tmp12 - tmp13 + tmp15 + tmp16)
-            * (1.393487498f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.393487498f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp1 = (tmp10 - tmp14 - tmp15)
-            * (1.530307725f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.530307725f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13 - tmp16)
-                * (0.945782187f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.945782187f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = tmp12
-            * (1.393487498f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.393487498f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp4 = (tmp10 - tmp16)
-            * (1.600246161f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.600246161f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 + tmp14)
-                * (1.530307725f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.530307725f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + (tmp13 + tmp15)
-                * (0.654463974f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.654463974f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp0 = tmp13
-            * (0.541301207f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.541301207f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - tmp14
-                * (0.584525538f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.584525538f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (1.934788705f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.934788705f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
             + tmp12;
         tmp3 = tmp10
-            * -((0.404480980f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.404480980f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             - tmp11
-                * (2.476089912f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.476089912f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp15
-                * (0.989006518f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.989006518f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
             - tmp12;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -3436,30 +3436,30 @@ pub unsafe extern "C" fn jpeg_fdct_15x15(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_16x16(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp7: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp17: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 64] = [0; 64];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp7: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut tmp17: INT32 = 0;
+    let mut workspace: [DCTELEM; 64] = [0; 64];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -3473,26 +3473,26 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(15 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp7 = (*elemptr.offset(7 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp7;
         tmp14 = tmp0 - tmp7;
         tmp11 = tmp1 + tmp6;
@@ -3503,142 +3503,142 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
         tmp17 = tmp3 - tmp4;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(15 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp7 = (*elemptr.offset(7 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12 + tmp13
             - (16 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM; /* c2[16] = c1[8] */
+            << 2 as i32) as DCTELEM; /* c2[16] = c1[8] */
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp13)
-            * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + (tmp11 - tmp12) * 4433 as i32 as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + (tmp11 - tmp12) * 4433 as i32 as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp17 - tmp15)
-            * (0.275899379f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.275899379f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 - tmp16)
-                * (1.387039845f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.387039845f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp15
-                * (1.451774982f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.451774982f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (2.172734804f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (2.172734804f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp14
-                * (0.211164243f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.211164243f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp17
-                * (1.061594338f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.061594338f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         tmp11 = (tmp0 + tmp1)
-            * (1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp7)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c13 */
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c13 */
         tmp12 = (tmp0 + tmp2)
-            * (1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 + tmp7)
-                * (0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c11 */
+                * (0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c11 */
         tmp13 = (tmp0 + tmp3)
-            * (1.093201867f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.093201867f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 - tmp7)
-                * (0.897167586f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c9 */
+                * (0.897167586f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c9 */
         tmp14 = (tmp1 + tmp2)
-            * (0.138617169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.138617169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (1.407403738f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c1 */
+                * (1.407403738f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c1 */
         tmp15 = (tmp1 + tmp3)
-            * -((0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp4 + tmp6)
-                * -((1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32); /* -c5 */
+                * -((1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32); /* -c5 */
         tmp16 = (tmp2 + tmp3)
-            * -((1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp5 - tmp4)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c13 */
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c13 */
         tmp10 = tmp11 + tmp12 + tmp13
             - tmp0
-                * (2.286341144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.286341144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp7
-                * (0.779653625f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c15+c13-c11+c9 */
+                * (0.779653625f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c15+c13-c11+c9 */
         tmp11 += tmp14
             + tmp15
             + tmp1
-                * (0.071888074f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.071888074f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (1.663905119f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c7+c13+c1-c5 */
+                * (1.663905119f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c7+c13+c1-c5 */
         tmp12 += tmp14 + tmp16
             - tmp2
-                * (1.125726048f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.125726048f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (1.227391138f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c9-c11+c1-c13 */
+                * (1.227391138f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c9-c11+c1-c13 */
         tmp13 += tmp15
             + tmp16
             + tmp3
-                * (1.065388962f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.065388962f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (2.167985692f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c1+c13+c5-c9 */
+                * (2.167985692f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c1+c13+c5-c9 */
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM; /* Done. */
+            (tmp10 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) =
-            (tmp11 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp11 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp12 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp12 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp13 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 8 as i32 * 2 as i32 {
@@ -3662,28 +3662,28 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp7 = (*dataptr.offset((8 as i32 * 7 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp7;
         tmp14 = tmp0 - tmp7;
         tmp11 = tmp1 + tmp6;
@@ -3694,158 +3694,158 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
         tmp17 = tmp3 - tmp4;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp7 = (*dataptr.offset((8 as i32 * 7 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = (tmp10
             + tmp11
             + tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 2 as i32 + 2 as i32 - 1 as i32)
             >> 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp13)
-            * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + (tmp11 - tmp12) * 4433 as i32 as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + (tmp11 - tmp12) * 4433 as i32 as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp17 - tmp15)
-            * (0.275899379f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.275899379f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 - tmp16)
-                * (1.387039845f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c2[16] = c1[8] */
+                * (1.387039845f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c2[16] = c1[8] */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp15
-                * (1.451774982f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.451774982f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (2.172734804f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (2.172734804f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp14
-                * (0.211164243f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.211164243f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp17
-                * (1.061594338f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (1.061594338f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp11 = (tmp0 + tmp1)
-            * (1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp7)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 + tmp7)
-                * (0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (1.093201867f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.093201867f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 - tmp7)
-                * (0.897167586f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.897167586f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp14 = (tmp1 + tmp2)
-            * (0.138617169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.138617169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (1.407403738f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.407403738f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp15 = (tmp1 + tmp3)
-            * -((0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp4 + tmp6)
-                * -((1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32);
+                * -((1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32);
         tmp16 = (tmp2 + tmp3)
-            * -((1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp5 - tmp4)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp10 = tmp11 + tmp12 + tmp13
             - tmp0
-                * (2.286341144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.286341144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp7
-                * (0.779653625f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.779653625f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 += tmp14
             + tmp15
             + tmp1
-                * (0.071888074f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.071888074f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (1.663905119f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.663905119f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 += tmp14 + tmp16
             - tmp2
-                * (1.125726048f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.125726048f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (1.227391138f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.227391138f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp15
             + tmp16
             + tmp3
-                * (1.065388962f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.065388962f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (2.167985692f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.167985692f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp11
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -3871,29 +3871,29 @@ pub unsafe extern "C" fn jpeg_fdct_16x16(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_16x8(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp7: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp17: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp7: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut tmp17: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -3907,26 +3907,26 @@ pub unsafe extern "C" fn jpeg_fdct_16x8(
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(15 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp7 = (*elemptr.offset(7 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp7;
         tmp14 = tmp0 - tmp7;
         tmp11 = tmp1 + tmp6;
@@ -3937,140 +3937,140 @@ pub unsafe extern "C" fn jpeg_fdct_16x8(
         tmp17 = tmp3 - tmp4;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(15 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(14 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp7 = (*elemptr.offset(7 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12 + tmp13
             - (16 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp13)
-            * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + (tmp11 - tmp12) * 4433 as i32 as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + (tmp11 - tmp12) * 4433 as i32 as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp17 - tmp15)
-            * (0.275899379f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.275899379f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 - tmp16)
-                * (1.387039845f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.387039845f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp15
-                * (1.451774982f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.451774982f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (2.172734804f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (2.172734804f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp14
-                * (0.211164243f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.211164243f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp17
-                * (1.061594338f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.061594338f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp11 = (tmp0 + tmp1)
-            * (1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp7)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 + tmp7)
-                * (0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (1.093201867f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.093201867f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 - tmp7)
-                * (0.897167586f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.897167586f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp14 = (tmp1 + tmp2)
-            * (0.138617169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.138617169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (1.407403738f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.407403738f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp15 = (tmp1 + tmp3)
-            * -((0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp4 + tmp6)
-                * -((1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32);
+                * -((1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32);
         tmp16 = (tmp2 + tmp3)
-            * -((1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp5 - tmp4)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp10 = tmp11 + tmp12 + tmp13
             - tmp0
-                * (2.286341144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.286341144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp7
-                * (0.779653625f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.779653625f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 += tmp14
             + tmp15
             + tmp1
-                * (0.071888074f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.071888074f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (1.663905119f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.663905119f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 += tmp14 + tmp16
             - tmp2
-                * (1.125726048f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.125726048f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (1.227391138f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.227391138f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp15
             + tmp16
             + tmp3
-                * (1.065388962f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.065388962f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (2.167985692f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.167985692f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp11 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp11 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp12 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp12 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp13 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -4101,96 +4101,96 @@ pub unsafe extern "C" fn jpeg_fdct_16x8(
          */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp3;
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = (tmp10
             + tmp11
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 + 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 2 as i32 + 1 as i32 - 1 as i32)
             >> 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (tmp10 - tmp11
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 + 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 2 as i32 + 1 as i32 - 1 as i32)
             >> 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
+            as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
+            (z1 + tmp12 * 6270 as i32 as INT32
+                + ((1 as i32 as INT32)
                     << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+                >> 13 as i32 + 2 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
-            (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
+            (z1 - tmp13 * 15137 as i32 as INT32
+                + ((1 as i32 as INT32)
                     << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+                >> 13 as i32 + 2 as i32 + 1 as i32) as DCTELEM;
         /* advance pointer to next column */
         tmp10 = tmp0 + tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp0 + tmp2;
         tmp13 = tmp1 + tmp3;
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32;
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32;
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32;
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32);
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32;
+        tmp0 = tmp0 * 12299 as i32 as INT32;
+        tmp1 = tmp1 * 25172 as i32 as INT32;
+        tmp2 = tmp2 * 16819 as i32 as INT32;
+        tmp3 = tmp3 * 2446 as i32 as INT32;
+        tmp10 = tmp10 * -(7373 as i32 as INT32);
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp0
             + tmp10
             + tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp1
             + tmp11
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp2
             + tmp11
             + tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp3
             + tmp10
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -4216,36 +4216,36 @@ pub unsafe extern "C" fn jpeg_fdct_16x8(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_14x7(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut z3: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut z3: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Zero bottom row of output coefficient block. */
     crate::stdlib::memset(
-        &mut *data.offset((8 as i32 * 7 as i32) as isize) as *mut crate::jdct_h::DCTELEM
+        &mut *data.offset((8 as i32 * 7 as i32) as isize) as *mut DCTELEM
             as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(8 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -4259,22 +4259,22 @@ pub unsafe extern "C" fn jpeg_fdct_14x7(
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*elemptr.offset(3 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp6;
         tmp14 = tmp0 - tmp6;
         tmp11 = tmp1 + tmp5;
@@ -4283,112 +4283,112 @@ pub unsafe extern "C" fn jpeg_fdct_14x7(
         tmp16 = tmp2 - tmp4;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(13 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(12 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp6 = (*elemptr.offset(6 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12 + tmp13
             - (14 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         tmp13 += tmp13;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp13)
-            * (1.274162392f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.274162392f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13)
-                * (0.314692123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.314692123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp12 - tmp13)
-                * (0.881747734f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.881747734f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp14 + tmp15)
-            * (1.105676686f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.105676686f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp14
-                * (0.273079590f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.273079590f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (0.613604268f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.613604268f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp15
-                * (1.719280954f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.719280954f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp16
-                * (1.378756276f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.378756276f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp1 + tmp2;
         tmp11 = tmp5 - tmp4;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp0 - tmp10 + tmp3 - tmp11 - tmp6 << 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp10 + tmp3 - tmp11 - tmp6 << 2 as i32) as DCTELEM;
         tmp3 <<= 13 as i32;
         tmp10 = tmp10
-            * -((0.158341681f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.158341681f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp11 = tmp11
-            * (1.405321284f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.405321284f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 += tmp11 - tmp3;
         tmp11 = (tmp0 + tmp2)
-            * (1.197448846f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.197448846f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 + tmp6)
-                * (0.752406978f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.752406978f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(5 as i32 as isize) = (tmp10 + tmp11
             - tmp2
-                * (2.373959773f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.373959773f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (1.119999435f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.119999435f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 + tmp1)
-            * (1.334852607f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.334852607f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 - tmp6)
-                * (0.467085129f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.467085129f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(3 as i32 as isize) = (tmp10 + tmp12
             - tmp1
-                * (0.424103948f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.424103948f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (3.069855259f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (3.069855259f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(1 as i32 as isize) = (tmp11 + tmp12 + tmp3 + tmp6
             - (tmp0 + tmp6)
-                * (1.126980169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.126980169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -4413,102 +4413,102 @@ pub unsafe extern "C" fn jpeg_fdct_14x7(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp3 = *dataptr.offset((8 as i32 * 3 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp3 = *dataptr.offset((8 as i32 * 3 as i32) as isize) as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((z1 + tmp1 + tmp3)
-            * (1.306122449f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.306122449f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp3 += tmp3;
         z1 -= tmp3;
         z1 -= tmp3;
         /* advance pointer to next column */
         z1 = z1
-            * (0.461784020f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c6-c4)/2 */
+            * (0.461784020f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c6-c4)/2 */
         z2 = (tmp0 - tmp2)
-            * (1.202428084f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c4-c6)/2 */
+            * (1.202428084f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c4-c6)/2 */
         z3 = (tmp1 - tmp2)
-            * (0.411026446f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (0.411026446f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
             (z1 + z2
                 + z3
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
+                + ((1 as i32 as INT32)
                     << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM; /* c4 */
+                >> 13 as i32 + 2 as i32 + 1 as i32) as DCTELEM; /* c4 */
         z1 -= z2;
         z2 = (tmp0 - tmp1)
-            * (1.151670509f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.151670509f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (z2 + z3
             - (tmp1 - tmp3)
-                * (0.923568041f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (0.923568041f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
             (z1 + z2
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
+                + ((1 as i32 as INT32)
                     << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+                >> 13 as i32 + 2 as i32 + 1 as i32) as DCTELEM;
         tmp1 = (tmp10 + tmp11)
-            * (1.221765677f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.221765677f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp2 = (tmp10 - tmp11)
-            * (0.222383464f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.222383464f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 = tmp1 - tmp2;
         tmp1 += tmp2;
         tmp2 = (tmp11 + tmp12)
-            * -((1.800824523f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((1.800824523f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp1 += tmp2;
         tmp3 = (tmp10 + tmp12)
-            * (0.801442310f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.801442310f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 += tmp3;
         tmp2 += tmp3
             + tmp12
-                * (2.443531355f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.443531355f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp0
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp1
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp2
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -4527,31 +4527,31 @@ pub unsafe extern "C" fn jpeg_fdct_14x7(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_12x6(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Zero 2 bottom rows of output coefficient block. */
     crate::stdlib::memset(
-        &mut *data.offset((8 as i32 * 6 as i32) as isize) as *mut crate::jdct_h::DCTELEM
+        &mut *data.offset((8 as i32 * 6 as i32) as isize) as *mut DCTELEM
             as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(8 as i32 as libc::c_ulong)
             .wrapping_mul(2 as i32 as libc::c_ulong),
     );
@@ -4566,18 +4566,18 @@ pub unsafe extern "C" fn jpeg_fdct_12x6(
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             + *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp5;
         tmp13 = tmp0 - tmp5;
         tmp11 = tmp1 + tmp4;
@@ -4586,87 +4586,87 @@ pub unsafe extern "C" fn jpeg_fdct_12x6(
         tmp15 = tmp2 - tmp3;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(11 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(10 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp5 = (*elemptr.offset(5 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12
             - (12 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         *dataptr.offset(6 as i32 as isize) =
-            (tmp13 - tmp14 - tmp15 << 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 - tmp14 - tmp15 << 2 as i32) as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp12)
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = (tmp14 - tmp15
             + (tmp13 + tmp15)
-                * (1.366025404f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (1.366025404f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
-        tmp10 = (tmp1 + tmp4) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp14 = tmp10 + tmp1 * 6270 as i32 as crate::jmorecfg_h::INT32;
-        tmp15 = tmp10 - tmp4 * 15137 as i32 as crate::jmorecfg_h::INT32;
+            as DCTELEM;
+        tmp10 = (tmp1 + tmp4) * 4433 as i32 as INT32;
+        tmp14 = tmp10 + tmp1 * 6270 as i32 as INT32;
+        tmp15 = tmp10 - tmp4 * 15137 as i32 as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (1.121971054f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.121971054f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (0.860918669f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.860918669f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 = tmp12 + tmp13 + tmp14
             - tmp0
-                * (0.580774953f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.580774953f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.184591911f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.184591911f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = (tmp2 + tmp3)
-            * -((0.184591911f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.184591911f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp12 += tmp11
             - tmp15
             - tmp2
-                * (2.339493912f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.339493912f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.860918669f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.860918669f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp11 - tmp14
             + tmp3
-                * (0.725788011f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.725788011f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (1.121971054f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.121971054f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = tmp15
             + (tmp0 - tmp3)
-                * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            - (tmp2 + tmp5) * 4433 as i32 as crate::jmorecfg_h::INT32;
+                * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            - (tmp2 + tmp5) * 4433 as i32 as INT32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp11 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp11 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp12 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp12 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp13 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -4696,72 +4696,72 @@ pub unsafe extern "C" fn jpeg_fdct_12x6(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp12
-            * (2.177324216f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (2.177324216f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp11 - tmp11)
-            * (1.257078722f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.257078722f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp0 + tmp2)
-            * (0.650711829f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.650711829f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
             + (tmp0 + tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = ((tmp0 - tmp1 - tmp2)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp10
             + (tmp2 - tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -4776,29 +4776,29 @@ pub unsafe extern "C" fn jpeg_fdct_12x6(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_10x5(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Zero 3 bottom rows of output coefficient block. */
     crate::stdlib::memset(
-        &mut *data.offset((8 as i32 * 5 as i32) as isize) as *mut crate::jdct_h::DCTELEM
+        &mut *data.offset((8 as i32 * 5 as i32) as isize) as *mut DCTELEM
             as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(8 as i32 as libc::c_ulong)
             .wrapping_mul(3 as i32 as libc::c_ulong),
     );
@@ -4812,101 +4812,101 @@ pub unsafe extern "C" fn jpeg_fdct_10x5(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             + *elemptr.offset(7 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp4;
         tmp13 = tmp0 - tmp4;
         tmp11 = tmp1 + tmp3;
         tmp14 = tmp1 - tmp3;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(9 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(9 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(8 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(8 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp4 = (*elemptr.offset(4 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 + tmp12
             - (10 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         tmp12 += tmp12;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp12)
-            * (1.144122806f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.144122806f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 - tmp12)
-                * (0.437016024f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.437016024f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp13 + tmp14)
-            * (0.831253876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.831253876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp10
             + tmp13
-                * (0.513743148f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.513743148f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) = (tmp10
             - tmp14
-                * (2.176250899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (2.176250899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp0 + tmp4;
         tmp11 = tmp1 - tmp3;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp10 - tmp11 - tmp2 << 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 - tmp11 - tmp2 << 2 as i32) as DCTELEM;
         tmp2 <<= 13 as i32;
         *dataptr.offset(1 as i32 as isize) = (tmp0
-            * (1.396802247f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.396802247f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (1.260073511f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.260073511f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
             + tmp3
-                * (0.642039522f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.642039522f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.221231742f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.221231742f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 - tmp4)
-            * (0.951056516f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.951056516f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp1 + tmp3)
-                * (0.587785252f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.587785252f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp10 + tmp11)
-            * (0.309016994f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.309016994f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 << 13 as i32 - 1 as i32)
             - tmp2;
         *dataptr.offset(3 as i32 as isize) = (tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp12 - tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -4928,59 +4928,59 @@ pub unsafe extern "C" fn jpeg_fdct_10x5(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp2 = *dataptr.offset((8 as i32 * 2 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp2 = *dataptr.offset((8 as i32 * 2 as i32) as isize) as INT32;
         tmp10 = tmp0 + tmp1;
         tmp11 = tmp0 - tmp1;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp2)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp11 = tmp11
-            * (1.011928851f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2+c4)/2 */
+            * (1.011928851f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2+c4)/2 */
         tmp10 -= tmp2 << 2 as i32; /* (c2-c4)/2 */
         tmp10 = tmp10
-            * (0.452548340f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.452548340f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp11
             + tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = (tmp11 - tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp0 + tmp1)
-            * (1.064004961f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (1.064004961f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
             + tmp0
-                * (0.657591230f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.657591230f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp10
             - tmp1
-                * (2.785601151f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (2.785601151f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -4995,28 +4995,28 @@ pub unsafe extern "C" fn jpeg_fdct_10x5(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_8x4(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Zero 4 bottom rows of output coefficient block. */
     crate::stdlib::memset(
-        &mut *data.offset((8 as i32 * 4 as i32) as isize) as *mut crate::jdct_h::DCTELEM
+        &mut *data.offset((8 as i32 * 4 as i32) as isize) as *mut DCTELEM
             as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(8 as i32 as libc::c_ulong)
             .wrapping_mul(4 as i32 as libc::c_ulong),
     );
@@ -5030,62 +5030,62 @@ pub unsafe extern "C" fn jpeg_fdct_8x4(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp3;
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (8 as i32 * 128 as i32) as isize)
             << 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) =
-            (tmp10 - tmp11 << 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 2 as i32;
-        *dataptr.offset(2 as i32 as isize) = (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32
+            (tmp10 - tmp11 << 2 as i32 + 1 as i32) as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 2 as i32;
+        *dataptr.offset(2 as i32 as isize) = (z1 + tmp12 * 6270 as i32 as INT32
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
-        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32
+            as DCTELEM;
+        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as INT32
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp0 + tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp0 + tmp2;
         tmp13 = tmp1 + tmp3;
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 2 as i32;
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32;
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32;
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32;
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32);
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 2 as i32;
+        tmp0 = tmp0 * 12299 as i32 as INT32;
+        tmp1 = tmp1 * 25172 as i32 as INT32;
+        tmp2 = tmp2 * 16819 as i32 as INT32;
+        tmp3 = tmp3 * 2446 as i32 as INT32;
+        tmp10 = tmp10 * -(7373 as i32 as INT32);
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + tmp10 + tmp12 >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 + tmp12 >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp1 + tmp11 + tmp13 >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + tmp11 + tmp13 >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp2 + tmp11 + tmp12 >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + tmp11 + tmp12 >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(7 as i32 as isize) =
-            (tmp3 + tmp10 + tmp13 >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + tmp10 + tmp13 >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -5120,29 +5120,29 @@ pub unsafe extern "C" fn jpeg_fdct_8x4(
         /* Add fudge factor here for final descale. */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize)) as isize
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 - 1 as i32);
+            + ((1 as i32 as INT32) << 2 as i32 - 1 as i32);
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
-            (tmp0 + tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp1 >> 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (tmp0 - tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 >> 2 as i32) as DCTELEM;
         /* advance pointer to next column */
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr -= 1
     }
@@ -5158,24 +5158,24 @@ pub unsafe extern "C" fn jpeg_fdct_8x4(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_6x3(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -5190,49 +5190,49 @@ pub unsafe extern "C" fn jpeg_fdct_6x3(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(4 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (6 as i32 * 128 as i32) as isize)
             << 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = (tmp12
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp11 - tmp11)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = (tmp0 + tmp2)
-            * (0.366025404f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (0.366025404f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + (tmp0 + tmp1 << 2 as i32 + 1 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp0 + tmp1 << 2 as i32 + 1 as i32)) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp1 - tmp2 << 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 - tmp2 << 2 as i32 + 1 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp10 + (tmp2 - tmp1 << 2 as i32 + 1 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp2 - tmp1 << 2 as i32 + 1 as i32)) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -5252,30 +5252,30 @@ pub unsafe extern "C" fn jpeg_fdct_6x3(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as crate::jmorecfg_h::INT32;
+            as INT32;
+        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp0 + tmp1)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = ((tmp0 - tmp1 - tmp1)
-            * (1.257078722f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.257078722f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp2
-            * (2.177324216f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (2.177324216f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -5289,22 +5289,22 @@ pub unsafe extern "C" fn jpeg_fdct_6x3(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_4x2(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -5319,28 +5319,28 @@ pub unsafe extern "C" fn jpeg_fdct_4x2(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(2 as i32 as isize) as i32) as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(3 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(2 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (4 as i32 * 128 as i32) as isize)
             << 2 as i32 + 3 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) =
-            (tmp0 - tmp1 << 2 as i32 + 3 as i32) as crate::jdct_h::DCTELEM;
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 4 as i32;
+            (tmp0 - tmp1 << 2 as i32 + 3 as i32) as DCTELEM;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 4 as i32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 3 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 3 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 3 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 3 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -5359,13 +5359,13 @@ pub unsafe extern "C" fn jpeg_fdct_4x2(
         /* Even part */
         /* Add fudge factor here for final descale. */
         tmp0 = *dataptr.offset((8 as i32 * 0 as i32) as isize) as isize
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 - 1 as i32);
-        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as crate::jmorecfg_h::INT32;
+            + ((1 as i32 as INT32) << 2 as i32 - 1 as i32);
+        tmp1 = *dataptr.offset((8 as i32 * 1 as i32) as isize) as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
-            (tmp0 + tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp1 >> 2 as i32) as DCTELEM;
         /* advance pointer to next column */
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 - tmp1 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 >> 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -5379,32 +5379,32 @@ pub unsafe extern "C" fn jpeg_fdct_4x2(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_2x1(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     elemptr = (*sample_data.offset(0 as i32 as isize)).offset(start_col as isize);
-    tmp0 = *elemptr.offset(0 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
-    tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+    tmp0 = *elemptr.offset(0 as i32 as isize) as i32 as INT32;
+    tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as INT32;
     /* We leave the results scaled up by an overall factor of 8.
      * We must also scale the output by (8/2)*(8/1) = 2**5.
      */
     /* Even part */
     /* Apply unsigned->signed conversion */
     *data.offset(0 as i32 as isize) =
-        ((tmp0 + tmp1 - (2 as i32 * 128 as i32) as isize) << 5 as i32) as crate::jdct_h::DCTELEM;
+        ((tmp0 + tmp1 - (2 as i32 * 128 as i32) as isize) << 5 as i32) as DCTELEM;
     /* Odd part */
-    *data.offset(1 as i32 as isize) = (tmp0 - tmp1 << 5 as i32) as crate::jdct_h::DCTELEM;
+    *data.offset(1 as i32 as isize) = (tmp0 - tmp1 << 5 as i32) as DCTELEM;
 }
 /*
  * Perform the forward DCT on an 8x16 sample block.
@@ -5414,31 +5414,31 @@ pub unsafe extern "C" fn jpeg_fdct_2x1(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_8x16(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp7: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp17: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 64] = [0; 64];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp7: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut tmp17: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut workspace: [DCTELEM; 64] = [0; 64];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -5452,38 +5452,38 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
          * rotator "sqrt(2)*c1" should be "sqrt(2)*c6".
          */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp3;
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (8 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
-        *dataptr.offset(4 as i32 as isize) = (tmp10 - tmp11 << 2 as i32) as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
+            << 2 as i32) as DCTELEM;
+        *dataptr.offset(4 as i32 as isize) = (tmp10 - tmp11 << 2 as i32) as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
         *dataptr.offset(2 as i32 as isize) =
-            (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
-        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            (z1 + tmp12 * 6270 as i32 as INT32
+                + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
+        *dataptr.offset(6 as i32 as isize) = (z1 - tmp13 * 15137 as i32 as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part per figure 8 --- note paper omits factor of sqrt(2).
          * 8-point FDCT kernel, cK represents sqrt(2) * cos(K*pi/16).
          * i0..i3 in the paper are tmp0..tmp3 here.
@@ -5492,41 +5492,41 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
         tmp11 = tmp1 + tmp2; /*  c1+c3-c5-c7 */
         tmp12 = tmp0 + tmp2; /*  c1+c3+c5-c7 */
         tmp13 = tmp1 + tmp3; /*  c1+c3-c5+c7 */
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32; /* -c1+c3+c5-c7 */
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32; /*  c7-c3 */
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32; /* -c1-c3 */
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32; /*  c5-c3 */
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32; /* -c3-c5 */
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32); /* Done. */
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32; /* -c1+c3+c5-c7 */
+        tmp0 = tmp0 * 12299 as i32 as INT32; /*  c7-c3 */
+        tmp1 = tmp1 * 25172 as i32 as INT32; /* -c1-c3 */
+        tmp2 = tmp2 * 16819 as i32 as INT32; /*  c5-c3 */
+        tmp3 = tmp3 * 2446 as i32 as INT32; /* -c3-c5 */
+        tmp10 = tmp10 * -(7373 as i32 as INT32); /* Done. */
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset(1 as i32 as isize) = (tmp0
             + tmp10
             + tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(3 as i32 as isize) = (tmp1
             + tmp11
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(5 as i32 as isize) = (tmp2
             + tmp11
             + tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(7 as i32 as isize) = (tmp3
             + tmp10
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 8 as i32 * 2 as i32 {
@@ -5551,28 +5551,28 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp7 = (*dataptr.offset((8 as i32 * 7 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp7;
         tmp14 = tmp0 - tmp7;
         tmp11 = tmp1 + tmp6;
@@ -5583,158 +5583,158 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
         tmp17 = tmp3 - tmp4;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp7 = (*dataptr.offset((8 as i32 * 7 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = (tmp10
             + tmp11
             + tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 + 1 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 2 as i32 + 1 as i32 - 1 as i32)
             >> 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp13)
-            * (1.306562965f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + (tmp11 - tmp12) * 4433 as i32 as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.306562965f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + (tmp11 - tmp12) * 4433 as i32 as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp17 - tmp15)
-            * (0.275899379f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.275899379f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp14 - tmp16)
-                * (1.387039845f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32; /* c2[16] = c1[8] */
+                * (1.387039845f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32; /* c2[16] = c1[8] */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp15
-                * (1.451774982f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.451774982f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (2.172734804f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (2.172734804f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp14
-                * (0.211164243f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.211164243f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp17
-                * (1.061594338f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+                * (1.061594338f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp11 = (tmp0 + tmp1)
-            * (1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp7)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 + tmp7)
-                * (0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (1.093201867f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.093201867f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 - tmp7)
-                * (0.897167586f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.897167586f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp14 = (tmp1 + tmp2)
-            * (0.138617169f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.138617169f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp6 - tmp5)
-                * (1.407403738f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.407403738f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp15 = (tmp1 + tmp3)
-            * -((0.666655658f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((0.666655658f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp4 + tmp6)
-                * -((1.247225013f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32);
+                * -((1.247225013f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32);
         tmp16 = (tmp2 + tmp3)
-            * -((1.353318001f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32)
+            * -((1.353318001f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32)
             + (tmp5 - tmp4)
-                * (0.410524528f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.410524528f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp10 = tmp11 + tmp12 + tmp13
             - tmp0
-                * (2.286341144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.286341144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp7
-                * (0.779653625f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.779653625f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 += tmp14
             + tmp15
             + tmp1
-                * (0.071888074f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.071888074f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (1.663905119f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.663905119f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 += tmp14 + tmp16
             - tmp2
-                * (1.125726048f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.125726048f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (1.227391138f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.227391138f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp15
             + tmp16
             + tmp3
-                * (1.065388962f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.065388962f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (2.167985692f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (2.167985692f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp11
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp12
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            + ((1 as i32 as INT32)
                 << 13 as i32 + 2 as i32 + 1 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr -= 1
@@ -5760,37 +5760,37 @@ pub unsafe extern "C" fn jpeg_fdct_8x16(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_7x14(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp6: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp16: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut z2: crate::jmorecfg_h::INT32 = 0;
-    let mut z3: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 48] = [0; 48];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp6: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut tmp16: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut z2: INT32 = 0;
+    let mut z3: INT32 = 0;
+    let mut workspace: [DCTELEM; 48] = [0; 48];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -5804,86 +5804,86 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
         /* switch pointer to extended workspace */
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp3 = *elemptr.offset(3 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
+        tmp3 = *elemptr.offset(3 as i32 as isize) as i32 as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(6 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(5 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*elemptr.offset(2 as i32 as isize) as i32
             - *elemptr.offset(4 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         z1 = tmp0 + tmp2;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((z1 + tmp1 + tmp3 - (7 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM; /* (c2+c6-c4)/2 */
+            << 2 as i32) as DCTELEM; /* (c2+c6-c4)/2 */
         tmp3 += tmp3; /* (c2+c4-c6)/2 */
         z1 -= tmp3; /* c6 */
         z1 -= tmp3; /* c4 */
         z1 = z1
-            * (0.353553391f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.353553391f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z2 = (tmp0 - tmp2)
-            * (0.920609002f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.920609002f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         z3 = (tmp1 - tmp2)
-            * (0.314692123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.314692123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) =
             (z1 + z2
                 + z3
-                + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+                + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         z1 -= z2;
         z2 = (tmp0 - tmp1)
-            * (0.881747734f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.881747734f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(4 as i32 as isize) = (z2 + z3
             - (tmp1 - tmp3)
-                * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(6 as i32 as isize) =
-            (z1 + z2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (z1 + z2 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         /* Odd part */
         tmp1 = (tmp10 + tmp11)
-            * (0.935414347f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c3+c1-c5)/2 */
+            * (0.935414347f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c3+c1-c5)/2 */
         tmp2 = (tmp10 - tmp11)
-            * (0.170262339f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c3+c5-c1)/2 */
+            * (0.170262339f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c3+c5-c1)/2 */
         tmp0 = tmp1 - tmp2; /* -c1 */
         tmp1 += tmp2; /* c5 */
         tmp2 = (tmp11 + tmp12)
-            * -((1.378756276f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32); /* c3+c1-c5 */
+            * -((1.378756276f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32); /* c3+c1-c5 */
         tmp1 += tmp2; /* Done. */
         tmp3 = (tmp10 + tmp12)
-            * (0.613604268f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.613604268f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp0 += tmp3;
         tmp2 += tmp3
             + tmp12
-                * (1.870828693f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.870828693f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp1 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp2 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
-                >> 13 as i32 - 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                >> 13 as i32 - 2 as i32) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 14 as i32 {
@@ -5909,25 +5909,25 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp13 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp6;
         tmp14 = tmp0 - tmp6;
         tmp11 = tmp1 + tmp5;
@@ -5936,128 +5936,128 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
         tmp16 = tmp2 - tmp4;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp6 = (*dataptr.offset((8 as i32 * 6 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12 + tmp13)
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp13 += tmp13;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp13)
-            * (0.832106052f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.832106052f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp11 - tmp13)
-                * (0.205513223f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.205513223f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp12 - tmp13)
-                * (0.575835255f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.575835255f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp14 + tmp15)
-            * (0.722074570f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (0.722074570f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp14
-                * (0.178337691f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.178337691f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp16
-                * (0.400721155f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.400721155f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp15
-                * (1.122795725f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.122795725f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp16
-                * (0.900412262f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.900412262f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp1 + tmp2;
         tmp11 = tmp5 - tmp4;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = ((tmp0 - tmp10 + tmp3 - tmp11 - tmp6)
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp3 = tmp3
-            * (0.653061224f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.653061224f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 = tmp10
-            * -((0.103406812f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.103406812f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp11 = tmp11
-            * (0.917760839f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.917760839f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 += tmp11 - tmp3;
         tmp11 = (tmp0 + tmp2)
-            * (0.782007410f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.782007410f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp4 + tmp6)
-                * (0.491367823f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.491367823f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp10 + tmp11
             - tmp2
-                * (1.550341076f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.550341076f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.731428202f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.731428202f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 + tmp1)
-            * (0.871740478f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.871740478f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp5 - tmp6)
-                * (0.305035186f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.305035186f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp10 + tmp12
             - tmp1
-                * (0.276965844f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.276965844f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (2.004803435f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (2.004803435f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp11 + tmp12 + tmp3
             - tmp0
-                * (0.735987049f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.735987049f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp6
-                * (0.082925825f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.082925825f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr += 1
@@ -6078,32 +6078,32 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_6x12(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp5: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp15: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 32] = [0; 32];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp5: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut tmp15: INT32 = 0;
+    let mut workspace: [DCTELEM; 32] = [0; 32];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -6117,47 +6117,47 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
         /* switch pointer to extended workspace */
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             + *elemptr.offset(4 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp11 - (6 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM;
+            << 2 as i32) as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = (tmp12
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = ((tmp10 - tmp11 - tmp11)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         tmp10 = (tmp0 + tmp2)
-            * (0.366025404f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            * (0.366025404f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32; /* Done. */
         *dataptr.offset(1 as i32 as isize) =
-            (tmp10 + (tmp0 + tmp1 << 2 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp0 + tmp1 << 2 as i32)) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp1 - tmp2 << 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp1 - tmp2 << 2 as i32) as DCTELEM;
         *dataptr.offset(5 as i32 as isize) =
-            (tmp10 + (tmp2 - tmp1 << 2 as i32)) as crate::jdct_h::DCTELEM;
+            (tmp10 + (tmp2 - tmp1 << 2 as i32)) as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 12 as i32 {
@@ -6183,22 +6183,22 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp5;
         tmp13 = tmp0 - tmp5;
         tmp11 = tmp1 + tmp4;
@@ -6207,111 +6207,111 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
         tmp15 = tmp2 - tmp3;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp5 = (*dataptr.offset((8 as i32 * 5 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = ((tmp13 - tmp14 - tmp15)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp12)
-            * (1.088662108f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.088662108f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = ((tmp14 - tmp15)
-            * (0.888888889f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.888888889f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + (tmp13 + tmp15)
-                * (1.214244803f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.214244803f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp1 + tmp4)
-            * (0.481063200f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.481063200f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp14 = tmp10
             + tmp1
-                * (0.680326102f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.680326102f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp15 = tmp10
             - tmp4
-                * (1.642452502f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (1.642452502f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp12 = (tmp0 + tmp2)
-            * (0.997307603f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.997307603f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp13 = (tmp0 + tmp3)
-            * (0.765261039f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.765261039f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         tmp10 = tmp12 + tmp13 + tmp14
             - tmp0
-                * (0.516244403f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.516244403f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.164081699f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.164081699f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = (tmp2 + tmp3)
-            * -((0.164081699f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32);
+            * -((0.164081699f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32);
         tmp12 += tmp11
             - tmp15
             - tmp2
-                * (2.079550144f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (2.079550144f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp5
-                * (0.765261039f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.765261039f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 += tmp11 - tmp14
             + tmp3
-                * (0.645144899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.645144899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - tmp5
-                * (0.997307603f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.997307603f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp11 = tmp15
             + (tmp0 - tmp3)
-                * (1.161389302f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.161389302f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             - (tmp2 + tmp5)
-                * (0.481063200f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.481063200f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp10 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp11 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp11 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp12 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp12 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp13 + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
-                >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp13 + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr += 1
@@ -6337,30 +6337,30 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_5x10(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp4: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp14: crate::jmorecfg_h::INT32 = 0;
-    let mut workspace: [crate::jdct_h::DCTELEM; 16] = [0; 16];
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut wsptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp4: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut tmp14: INT32 = 0;
+    let mut workspace: [DCTELEM; 16] = [0; 16];
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut wsptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -6374,53 +6374,53 @@ pub unsafe extern "C" fn jpeg_fdct_5x10(
         /* switch pointer to extended workspace */
         /* Even part */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp2 = *elemptr.offset(2 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
+        tmp2 = *elemptr.offset(2 as i32 as isize) as i32 as INT32;
         tmp10 = tmp0 + tmp1;
         tmp11 = tmp0 - tmp1;
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         /* Apply unsigned->signed conversion */
         *dataptr.offset(0 as i32 as isize) = ((tmp10 + tmp2 - (5 as i32 * 128 as i32) as isize)
-            << 2 as i32) as crate::jdct_h::DCTELEM; /* (c2+c4)/2 */
+            << 2 as i32) as DCTELEM; /* (c2+c4)/2 */
         tmp11 = tmp11
-            * (0.790569415f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* (c2-c4)/2 */
+            * (0.790569415f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* (c2-c4)/2 */
         tmp10 -= tmp2 << 2 as i32;
         tmp10 = tmp10
-            * (0.353553391f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.353553391f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset(2 as i32 as isize) = (tmp11
             + tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(4 as i32 as isize) = (tmp11 - tmp10
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* Odd part */
         tmp10 = (tmp0 + tmp1)
-            * (0.831253876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c3 */
+            * (0.831253876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c3 */
         *dataptr.offset(1 as i32 as isize) = (tmp10
             + tmp0
-                * (0.513743148f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (0.513743148f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM; /* Done. */
+            as DCTELEM; /* Done. */
         *dataptr.offset(3 as i32 as isize) = (tmp10
             - tmp1
-                * (2.176250899f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 1 as i32)
+                * (2.176250899f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 - 2 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         ctr += 1;
         if ctr != 8 as i32 {
             if ctr == 10 as i32 {
@@ -6446,121 +6446,121 @@ pub unsafe extern "C" fn jpeg_fdct_5x10(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp12 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp4;
         tmp13 = tmp0 - tmp4;
         tmp11 = tmp1 + tmp3;
         tmp14 = tmp1 - tmp3;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *wsptr.offset((8 as i32 * 1 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *wsptr.offset((8 as i32 * 0 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp4 = (*dataptr.offset((8 as i32 * 4 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11 + tmp12)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 += tmp12;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp12)
-            * (1.464477191f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.464477191f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp11 - tmp12)
-                * (0.559380511f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.559380511f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp13 + tmp14)
-            * (1.064004961f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32; /* c6 */
+            * (1.064004961f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32; /* c6 */
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp10
             + tmp13
-                * (0.657591230f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.657591230f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = (tmp10
             - tmp14
-                * (2.785601151f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (2.785601151f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp10 = tmp0 + tmp4;
         tmp11 = tmp1 - tmp3;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = ((tmp10 - tmp11 - tmp2)
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp2 = tmp2
-            * (1.28f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                as crate::jmorecfg_h::INT32;
+            * (1.28f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp0
-            * (1.787906876f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.787906876f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp1
-                * (1.612894094f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (1.612894094f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp2
             + tmp3
-                * (0.821810588f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
+                * (0.821810588f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
             + tmp4
-                * (0.283176630f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (0.283176630f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         tmp12 = (tmp0 - tmp4)
-            * (1.217352341f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (1.217352341f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             - (tmp1 + tmp3)
-                * (0.752365123f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32;
+                * (0.752365123f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32;
         tmp13 = (tmp10 + tmp11)
-            * (0.395541753f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
+            * (0.395541753f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
             + tmp11
-                * (0.64f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64 + 0.5f64)
-                    as crate::jmorecfg_h::INT32
+                * (0.64f64 * ((1 as i32 as INT32) << 13 as i32) as f64 + 0.5f64)
+                    as INT32
             - tmp2;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = (tmp12
             + tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) = (tmp12 - tmp13
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         wsptr = wsptr.offset(1);
         ctr += 1
@@ -6579,27 +6579,27 @@ pub unsafe extern "C" fn jpeg_fdct_5x10(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_4x8(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp3: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp13: crate::jmorecfg_h::INT32 = 0;
-    let mut z1: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp3: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut tmp13: INT32 = 0;
+    let mut z1: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -6613,28 +6613,28 @@ pub unsafe extern "C" fn jpeg_fdct_4x8(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(3 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(3 as i32 as isize) as i32) as INT32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(2 as i32 as isize) as i32) as INT32;
         tmp10 = (*elemptr.offset(0 as i32 as isize) as i32
             - *elemptr.offset(3 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*elemptr.offset(1 as i32 as isize) as i32
             - *elemptr.offset(2 as i32 as isize) as i32)
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (4 as i32 * 128 as i32) as isize)
             << 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) =
-            (tmp0 - tmp1 << 2 as i32 + 1 as i32) as crate::jdct_h::DCTELEM;
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 2 as i32 - 2 as i32;
+            (tmp0 - tmp1 << 2 as i32 + 1 as i32) as DCTELEM;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 - 2 as i32 - 2 as i32;
         *dataptr.offset(1 as i32 as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         *dataptr.offset(3 as i32 as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32
-                >> 13 as i32 - 2 as i32 - 1 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32
+                >> 13 as i32 - 2 as i32 - 1 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -6655,69 +6655,69 @@ pub unsafe extern "C" fn jpeg_fdct_4x8(
          */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         /* advance pointer to next column */
-        tmp10 = tmp0 + tmp3 + ((1 as i32 as crate::jmorecfg_h::INT32) << 2 as i32 - 1 as i32);
+        tmp10 = tmp0 + tmp3 + ((1 as i32 as INT32) << 2 as i32 - 1 as i32);
         tmp12 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp13 = tmp1 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 7 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 6 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp3 = (*dataptr.offset((8 as i32 * 3 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) =
-            (tmp10 + tmp11 >> 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp10 + tmp11 >> 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) =
-            (tmp10 - tmp11 >> 2 as i32) as crate::jdct_h::DCTELEM;
-        z1 = (tmp12 + tmp13) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+            (tmp10 - tmp11 >> 2 as i32) as DCTELEM;
+        z1 = (tmp12 + tmp13) * 4433 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) =
-            (z1 + tmp12 * 6270 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (z1 + tmp12 * 6270 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) =
-            (z1 - tmp13 * 15137 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32 + 2 as i32)
-                as crate::jdct_h::DCTELEM;
+            (z1 - tmp13 * 15137 as i32 as INT32 >> 13 as i32 + 2 as i32)
+                as DCTELEM;
         tmp10 = tmp0 + tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp0 + tmp2;
         tmp13 = tmp1 + tmp3;
-        z1 = (tmp12 + tmp13) * 9633 as i32 as crate::jmorecfg_h::INT32;
-        z1 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32;
-        tmp0 = tmp0 * 12299 as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = tmp1 * 25172 as i32 as crate::jmorecfg_h::INT32;
-        tmp2 = tmp2 * 16819 as i32 as crate::jmorecfg_h::INT32;
-        tmp3 = tmp3 * 2446 as i32 as crate::jmorecfg_h::INT32;
-        tmp10 = tmp10 * -(7373 as i32 as crate::jmorecfg_h::INT32);
-        tmp11 = tmp11 * -(20995 as i32 as crate::jmorecfg_h::INT32);
-        tmp12 = tmp12 * -(3196 as i32 as crate::jmorecfg_h::INT32);
-        tmp13 = tmp13 * -(16069 as i32 as crate::jmorecfg_h::INT32);
+        z1 = (tmp12 + tmp13) * 9633 as i32 as INT32;
+        z1 += (1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32;
+        tmp0 = tmp0 * 12299 as i32 as INT32;
+        tmp1 = tmp1 * 25172 as i32 as INT32;
+        tmp2 = tmp2 * 16819 as i32 as INT32;
+        tmp3 = tmp3 * 2446 as i32 as INT32;
+        tmp10 = tmp10 * -(7373 as i32 as INT32);
+        tmp11 = tmp11 * -(20995 as i32 as INT32);
+        tmp12 = tmp12 * -(3196 as i32 as INT32);
+        tmp13 = tmp13 * -(16069 as i32 as INT32);
         tmp12 += z1;
         tmp13 += z1;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + tmp10 + tmp12 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 + tmp12 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp1 + tmp11 + tmp13 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp1 + tmp11 + tmp13 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) =
-            (tmp2 + tmp11 + tmp12 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp2 + tmp11 + tmp12 >> 13 as i32 + 2 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 7 as i32) as isize) =
-            (tmp3 + tmp10 + tmp13 >> 13 as i32 + 2 as i32) as crate::jdct_h::DCTELEM;
+            (tmp3 + tmp10 + tmp13 >> 13 as i32 + 2 as i32) as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -6746,24 +6746,24 @@ pub unsafe extern "C" fn jpeg_fdct_4x8(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_3x6(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp2: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp12: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp2: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut tmp12: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -6778,27 +6778,27 @@ pub unsafe extern "C" fn jpeg_fdct_3x6(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
-        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+            + *elemptr.offset(2 as i32 as isize) as i32) as INT32;
+        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as INT32;
         tmp2 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(2 as i32 as isize) as i32) as crate::jmorecfg_h::INT32;
+            - *elemptr.offset(2 as i32 as isize) as i32) as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (3 as i32 * 128 as i32) as isize)
             << 2 as i32 + 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = ((tmp0 - tmp1 - tmp1)
-            * (0.707106781f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (0.707106781f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset(1 as i32 as isize) = (tmp2
-            * (1.224744871f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
+            * (1.224744871f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32)
                 << 13 as i32 - 2 as i32 - 1 as i32 - 1 as i32)
             >> 13 as i32 - 2 as i32 - 1 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -6818,66 +6818,66 @@ pub unsafe extern "C" fn jpeg_fdct_3x6(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = tmp0 + tmp2;
         tmp12 = tmp0 - tmp2;
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 5 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 4 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp2 = (*dataptr.offset((8 as i32 * 2 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = ((tmp10 + tmp11)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp12
-            * (2.177324216f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (2.177324216f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = ((tmp10 - tmp11 - tmp11)
-            * (1.257078722f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.257078722f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         /* advance pointer to next column */
         tmp10 = (tmp0 + tmp2)
-            * (0.650711829f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32;
+            * (0.650711829f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) = (tmp10
             + (tmp0 + tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) = ((tmp0 - tmp1 - tmp2)
-            * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+            * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = (tmp10
             + (tmp2 - tmp1)
-                * (1.777777778f64 * ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32) as f64
-                    + 0.5f64) as crate::jmorecfg_h::INT32
-            + ((1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 + 2 as i32 - 1 as i32)
+                * (1.777777778f64 * ((1 as i32 as INT32) << 13 as i32) as f64
+                    + 0.5f64) as INT32
+            + ((1 as i32 as INT32) << 13 as i32 + 2 as i32 - 1 as i32)
             >> 13 as i32 + 2 as i32)
-            as crate::jdct_h::DCTELEM;
+            as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -6892,22 +6892,22 @@ pub unsafe extern "C" fn jpeg_fdct_3x6(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_2x4(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp10: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp11: crate::jmorecfg_h::INT32 = 0;
-    let mut dataptr: *mut crate::jdct_h::DCTELEM = 0 as *mut crate::jdct_h::DCTELEM;
-    let mut elemptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
+    let mut tmp10: INT32 = 0;
+    let mut tmp11: INT32 = 0;
+    let mut dataptr: *mut DCTELEM = 0 as *mut DCTELEM;
+    let mut elemptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ctr: i32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     /* Pass 1: process rows. */
@@ -6918,11 +6918,11 @@ pub unsafe extern "C" fn jpeg_fdct_2x4(
     while ctr < 4 as i32 {
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
-        tmp0 = *elemptr.offset(0 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
-        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as crate::jmorecfg_h::INT32;
+        tmp0 = *elemptr.offset(0 as i32 as isize) as i32 as INT32;
+        tmp1 = *elemptr.offset(1 as i32 as isize) as i32 as INT32;
         *dataptr.offset(0 as i32 as isize) = ((tmp0 + tmp1 - (2 as i32 * 128 as i32) as isize)
-            << 3 as i32) as crate::jdct_h::DCTELEM;
-        *dataptr.offset(1 as i32 as isize) = (tmp0 - tmp1 << 3 as i32) as crate::jdct_h::DCTELEM;
+            << 3 as i32) as DCTELEM;
+        *dataptr.offset(1 as i32 as isize) = (tmp0 - tmp1 << 3 as i32) as DCTELEM;
         dataptr = dataptr.offset(8 as i32 as isize);
         ctr += 1
     }
@@ -6940,27 +6940,27 @@ pub unsafe extern "C" fn jpeg_fdct_2x4(
         /* Even part */
         tmp0 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             + *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp1 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             + *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp10 = (*dataptr.offset((8 as i32 * 0 as i32) as isize)
             - *dataptr.offset((8 as i32 * 3 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
+            as INT32;
         tmp11 = (*dataptr.offset((8 as i32 * 1 as i32) as isize)
             - *dataptr.offset((8 as i32 * 2 as i32) as isize))
-            as crate::jmorecfg_h::INT32;
-        *dataptr.offset((8 as i32 * 0 as i32) as isize) = (tmp0 + tmp1) as crate::jdct_h::DCTELEM;
-        *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp0 - tmp1) as crate::jdct_h::DCTELEM;
+            as INT32;
+        *dataptr.offset((8 as i32 * 0 as i32) as isize) = (tmp0 + tmp1) as DCTELEM;
+        *dataptr.offset((8 as i32 * 2 as i32) as isize) = (tmp0 - tmp1) as DCTELEM;
         /* advance pointer to next column */
-        tmp0 = (tmp10 + tmp11) * 4433 as i32 as crate::jmorecfg_h::INT32;
-        tmp0 += (1 as i32 as crate::jmorecfg_h::INT32) << 13 as i32 - 1 as i32;
+        tmp0 = (tmp10 + tmp11) * 4433 as i32 as INT32;
+        tmp0 += (1 as i32 as INT32) << 13 as i32 - 1 as i32;
         *dataptr.offset((8 as i32 * 1 as i32) as isize) =
-            (tmp0 + tmp10 * 6270 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 + tmp10 * 6270 as i32 as INT32 >> 13 as i32)
+                as DCTELEM;
         *dataptr.offset((8 as i32 * 3 as i32) as isize) =
-            (tmp0 - tmp11 * 15137 as i32 as crate::jmorecfg_h::INT32 >> 13 as i32)
-                as crate::jdct_h::DCTELEM;
+            (tmp0 - tmp11 * 15137 as i32 as INT32 >> 13 as i32)
+                as DCTELEM;
         dataptr = dataptr.offset(1);
         ctr += 1
     }
@@ -6976,33 +6976,33 @@ pub unsafe extern "C" fn jpeg_fdct_2x4(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_fdct_1x2(
-    mut data: *mut crate::jdct_h::DCTELEM,
-    mut sample_data: crate::jpeglib_h::JSAMPARRAY,
-    mut start_col: crate::jmorecfg_h::JDIMENSION,
+    mut data: *mut DCTELEM,
+    mut sample_data: JSAMPARRAY,
+    mut start_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jmorecfg_h::INT32 = 0;
-    let mut tmp1: crate::jmorecfg_h::INT32 = 0;
+    let mut tmp0: INT32 = 0;
+    let mut tmp1: INT32 = 0;
     /* Pre-zero output coefficient block. */
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong)
+        (::std::mem::size_of::<DCTELEM>() as libc::c_ulong)
             .wrapping_mul(64 as i32 as libc::c_ulong),
     );
     tmp0 = *(*sample_data.offset(0 as i32 as isize)).offset(start_col as isize) as i32
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     tmp1 = *(*sample_data.offset(1 as i32 as isize)).offset(start_col as isize) as i32
-        as crate::jmorecfg_h::INT32;
+        as INT32;
     /* We leave the results scaled up by an overall factor of 8.
      * We must also scale the output by (8/1)*(8/2) = 2**5.
      */
     /* Even part */
     /* Apply unsigned->signed conversion */
     *data.offset((8 as i32 * 0 as i32) as isize) =
-        ((tmp0 + tmp1 - (2 as i32 * 128 as i32) as isize) << 5 as i32) as crate::jdct_h::DCTELEM;
+        ((tmp0 + tmp1 - (2 as i32 * 128 as i32) as isize) << 5 as i32) as DCTELEM;
     /* Odd part */
     *data.offset((8 as i32 * 1 as i32) as isize) =
-        (tmp0 - tmp1 << 5 as i32) as crate::jdct_h::DCTELEM;
+        (tmp0 - tmp1 << 5 as i32) as DCTELEM;
 }
 /* DCT_ISLOW_SUPPORTED */
 /* DCT_SCALING_SUPPORTED */

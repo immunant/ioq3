@@ -192,9 +192,9 @@ pub static mut botlibglobals: crate::src::botlib::be_interface::botlib_globals_t
     };
 #[no_mangle]
 
-pub static mut be_botlib_export: crate::botlib_h::botlib_export_t =
-    crate::botlib_h::botlib_export_t {
-        aas: crate::botlib_h::aas_export_t {
+pub static mut be_botlib_export: botlib_export_t =
+    botlib_export_t {
+        aas: aas_export_t {
             AAS_EntityInfo: None,
             AAS_Initialized: None,
             AAS_PresenceTypeBoundingBox: None,
@@ -218,7 +218,7 @@ pub static mut be_botlib_export: crate::botlib_h::botlib_export_t =
             AAS_Swimming: None,
             AAS_PredictClientMovement: None,
         },
-        ea: crate::botlib_h::ea_export_t {
+        ea: ea_export_t {
             EA_Command: None,
             EA_Say: None,
             EA_SayTeam: None,
@@ -244,7 +244,7 @@ pub static mut be_botlib_export: crate::botlib_h::botlib_export_t =
             EA_GetInput: None,
             EA_ResetInput: None,
         },
-        ai: crate::botlib_h::ai_export_t {
+        ai: ai_export_t {
             BotLoadCharacter: None,
             BotFreeCharacter: None,
             Characteristic_Float: None,
@@ -337,7 +337,7 @@ pub static mut be_botlib_export: crate::botlib_h::botlib_export_t =
     };
 #[no_mangle]
 
-pub static mut botimport: crate::botlib_h::botlib_import_t = crate::botlib_h::botlib_import_t {
+pub static mut botimport: botlib_import_t = botlib_import_t {
     Print: None,
     Trace: None,
     EntityTrace: None,
@@ -368,7 +368,7 @@ pub static mut botDeveloper: i32 = 0;
 //qtrue if the library is setup
 #[no_mangle]
 
-pub static mut botlibsetup: i32 = crate::src::qcommon::q_shared::qfalse as i32;
+pub static mut botlibsetup: i32 = qfalse as i32;
 //true if developer is on
 //
 //===========================================================================
@@ -386,7 +386,7 @@ pub static mut botlibsetup: i32 = crate::src::qcommon::q_shared::qfalse as i32;
 
 pub unsafe extern "C" fn Sys_MilliSeconds() -> i32 {
     return (crate::stdlib::clock() * 1000 as i32 as isize
-        / 1000000 as i32 as crate::stdlib::__clock_t) as i32;
+        / 1000000 as i32 as __clock_t) as i32;
 }
 //end of the function Sys_MilliSeconds
 //===========================================================================
@@ -400,7 +400,7 @@ pub unsafe extern "C" fn Sys_MilliSeconds() -> i32 {
 pub unsafe extern "C" fn ValidClientNumber(
     mut num: i32,
     mut str: *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if num < 0 as i32 || num > botlibglobals.maxclients {
         //end if
         //weird: the disabled stuff results in a crash
@@ -412,9 +412,9 @@ pub unsafe extern "C" fn ValidClientNumber(
             num,
             botlibglobals.maxclients,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function BotValidateClientNumber
 //===========================================================================
@@ -428,7 +428,7 @@ pub unsafe extern "C" fn ValidClientNumber(
 pub unsafe extern "C" fn ValidEntityNumber(
     mut num: i32,
     mut str: *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if num < 0 as i32 || num > botlibglobals.maxentities {
         botimport.Print.expect("non-null function pointer")(
             3 as i32,
@@ -438,9 +438,9 @@ pub unsafe extern "C" fn ValidEntityNumber(
             num,
             botlibglobals.maxentities,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function BotValidateClientNumber
 //===========================================================================
@@ -453,7 +453,7 @@ pub unsafe extern "C" fn ValidEntityNumber(
 
 pub unsafe extern "C" fn BotLibSetup(
     mut str: *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if botlibglobals.botlibsetup == 0 {
         botimport.Print.expect("non-null function pointer")(
             3 as i32,
@@ -461,9 +461,9 @@ pub unsafe extern "C" fn BotLibSetup(
                 as *mut libc::c_char,
             str,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function BotLibSetup
 //===========================================================================
@@ -514,24 +514,24 @@ pub unsafe extern "C" fn Export_BotLibSetup() -> i32 {
     if errnum != 0 as i32 {
         return errnum;
     }
-    errnum = crate::src::botlib::be_ai_weap::BotSetupWeaponAI();
+    errnum = BotSetupWeaponAI();
     if errnum != 0 as i32 {
         return errnum;
     }
-    errnum = crate::src::botlib::be_ai_goal::BotSetupGoalAI();
+    errnum = BotSetupGoalAI();
     if errnum != 0 as i32 {
         return errnum;
     }
-    errnum = crate::src::botlib::be_ai_chat::BotSetupChatAI();
+    errnum = BotSetupChatAI();
     if errnum != 0 as i32 {
         return errnum;
     }
-    errnum = crate::src::botlib::be_ai_move::BotSetupMoveAI();
+    errnum = BotSetupMoveAI();
     if errnum != 0 as i32 {
         return errnum;
     }
-    botlibsetup = crate::src::qcommon::q_shared::qtrue as i32;
-    botlibglobals.botlibsetup = crate::src::qcommon::q_shared::qtrue as i32;
+    botlibsetup = qtrue as i32;
+    botlibglobals.botlibsetup = qtrue as i32;
     return 0 as i32;
 }
 //end of the function Export_BotLibSetup
@@ -553,10 +553,10 @@ pub unsafe extern "C" fn Export_BotLibShutdown() -> i32 {
     //DumpFileCRCs();
     //DEMO
     //
-    crate::src::botlib::be_ai_chat::BotShutdownChatAI(); //be_ai_chat.c
-    crate::src::botlib::be_ai_move::BotShutdownMoveAI(); //be_ai_move.c
-    crate::src::botlib::be_ai_goal::BotShutdownGoalAI(); //be_ai_goal.c
-    crate::src::botlib::be_ai_weap::BotShutdownWeaponAI(); //be_ai_weap.c
+    BotShutdownChatAI(); //be_ai_chat.c
+    BotShutdownMoveAI(); //be_ai_move.c
+    BotShutdownGoalAI(); //be_ai_goal.c
+    BotShutdownWeaponAI(); //be_ai_weap.c
     crate::src::botlib::be_ai_weight::BotShutdownWeights(); //be_ai_weight.c
     crate::src::botlib::be_ai_char::BotShutdownCharacters(); //be_ai_char.c
                                                              //shud down aas
@@ -572,8 +572,8 @@ pub unsafe extern "C" fn Export_BotLibShutdown() -> i32 {
     //shut down library log file
     crate::src::botlib::l_log::Log_Shutdown();
     //
-    botlibsetup = crate::src::qcommon::q_shared::qfalse as i32;
-    botlibglobals.botlibsetup = crate::src::qcommon::q_shared::qfalse as i32;
+    botlibsetup = qfalse as i32;
+    botlibglobals.botlibsetup = qfalse as i32;
     // print any files still open
     crate::src::botlib::l_precomp::PC_CheckOpenSourceHandles();
     //
@@ -662,8 +662,8 @@ pub unsafe extern "C" fn Export_BotLibLoadMap(mut mapname: *const libc::c_char) 
         return errnum;
     }
     //initialize the items in the level
-    crate::src::botlib::be_ai_goal::BotInitLevelItems(); //be_ai_goal.h
-    crate::src::botlib::be_ai_move::BotSetBrushModelTypes(); //be_ai_move.h
+    BotInitLevelItems(); //be_ai_goal.h
+    BotSetBrushModelTypes(); //be_ai_move.h
                                                              //
     botimport.Print.expect("non-null function pointer")(
         1 as i32,
@@ -684,7 +684,7 @@ pub unsafe extern "C" fn Export_BotLibLoadMap(mut mapname: *const libc::c_char) 
 
 pub unsafe extern "C" fn Export_BotLibUpdateEntity(
     mut ent: i32,
-    mut state: *mut crate::botlib_h::bot_entitystate_t,
+    mut state: *mut bot_entitystate_t,
 ) -> i32 {
     if BotLibSetup(b"BotUpdateEntity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char)
         as u64
@@ -702,7 +702,7 @@ pub unsafe extern "C" fn Export_BotLibUpdateEntity(
     }
     return crate::src::botlib::be_aas_entity::AAS_UpdateEntity(
         ent,
-        state as *mut crate::botlib_h::bot_entitystate_s,
+        state as *mut bot_entitystate_s,
     );
 }
 #[no_mangle]
@@ -710,8 +710,8 @@ pub unsafe extern "C" fn Export_BotLibUpdateEntity(
 pub unsafe extern "C" fn BotExportTest(
     mut _parm0: i32,
     mut _parm1: *mut libc::c_char,
-    mut _parm2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _parm3: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _parm2: *mut vec_t,
+    mut _parm3: *mut vec_t,
 ) -> i32 {
     //	return AAS_PointLight(parm2, NULL, NULL, NULL);
     return 0 as i32;
@@ -723,13 +723,13 @@ Init_AAS_Export
 ============
 */
 
-unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t) {
+unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
     //--------------------------------------------
     // be_aas_entity.c
     //--------------------------------------------
     (*aas).AAS_EntityInfo = Some(
         crate::src::botlib::be_aas_entity::AAS_EntityInfo
-            as unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_entityinfo_t) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut aas_entityinfo_t) -> (),
     );
     //--------------------------------------------
     // be_aas_main.c
@@ -740,8 +740,8 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
         crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
             ) -> (),
     );
     (*aas).AAS_Time =
@@ -751,41 +751,41 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     //--------------------------------------------
     (*aas).AAS_PointAreaNum = Some(
         crate::src::botlib::be_aas_sample::AAS_PointAreaNum
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
+            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
     );
     (*aas).AAS_PointReachabilityAreaIndex = Some(
         crate::src::botlib::be_aas_sample::AAS_PointReachabilityAreaIndex
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
+            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
     );
     (*aas).AAS_TraceAreas = Some(
         crate::src::botlib::be_aas_sample::AAS_TraceAreas
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
                 _: *mut i32,
-                _: *mut crate::src::qcommon::q_shared::vec3_t,
+                _: *mut vec3_t,
                 _: i32,
             ) -> i32,
     );
     (*aas).AAS_BBoxAreas = Some(
         crate::src::botlib::be_aas_sample::AAS_BBoxAreas
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
                 _: *mut i32,
                 _: i32,
             ) -> i32,
     );
     (*aas).AAS_AreaInfo = Some(
         crate::src::botlib::be_aas_sample::AAS_AreaInfo
-            as unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_areainfo_t) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut aas_areainfo_t) -> i32,
     );
     //--------------------------------------------
     // be_aas_bspq3.c
     //--------------------------------------------
     (*aas).AAS_PointContents = Some(
         crate::src::botlib::be_aas_bspq3::AAS_PointContents
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
+            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
     );
     (*aas).AAS_NextBSPEntity = Some(
         crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity as unsafe extern "C" fn(_: i32) -> i32,
@@ -804,7 +804,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
             as unsafe extern "C" fn(
                 _: i32,
                 _: *mut libc::c_char,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
             ) -> i32,
     );
     (*aas).AAS_FloatForBSPEpairKey = Some(
@@ -829,7 +829,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
         crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
             ) -> i32,
@@ -841,9 +841,9 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     (*aas).AAS_PredictRoute = Some(
         crate::src::botlib::be_aas_route::AAS_PredictRoute
             as unsafe extern "C" fn(
-                _: *mut crate::be_aas_h::aas_predictroute_s,
+                _: *mut aas_predictroute_s,
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
                 _: i32,
@@ -860,12 +860,12 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     (*aas).AAS_AlternativeRouteGoals = Some(
         crate::src::botlib::be_aas_routealt::AAS_AlternativeRouteGoals
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
-                _: *mut crate::be_aas_h::aas_altroutegoal_t,
+                _: *mut aas_altroutegoal_t,
                 _: i32,
                 _: i32,
             ) -> i32,
@@ -875,18 +875,18 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     //--------------------------------------------
     (*aas).AAS_Swimming = Some(
         crate::src::botlib::be_aas_move::AAS_Swimming
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
+            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
     );
     (*aas).AAS_PredictClientMovement = Some(
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement
             as unsafe extern "C" fn(
-                _: *mut crate::be_aas_h::aas_clientmove_s,
+                _: *mut aas_clientmove_s,
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
                 _: f32,
@@ -902,7 +902,7 @@ Init_EA_Export
 ============
 */
 
-unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
+unsafe extern "C" fn Init_EA_Export(mut ea: *mut ea_export_t) {
     //ClientCommand elementary actions
     (*ea).EA_Command = Some(
         crate::src::botlib::be_ea::EA_Command
@@ -950,17 +950,17 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
         crate::src::botlib::be_ea::EA_Move
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: f32,
             ) -> (),
     );
     (*ea).EA_View = Some(
         crate::src::botlib::be_ea::EA_View
-            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::vec_t) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut vec_t) -> (),
     );
     (*ea).EA_GetInput = Some(
         crate::src::botlib::be_ea::EA_GetInput
-            as unsafe extern "C" fn(_: i32, _: f32, _: *mut crate::botlib_h::bot_input_t) -> (),
+            as unsafe extern "C" fn(_: i32, _: f32, _: *mut bot_input_t) -> (),
     );
     (*ea).EA_EndRegular = Some(
         crate::src::botlib::be_ea::EA_EndRegular as unsafe extern "C" fn(_: i32, _: f32) -> (),
@@ -974,7 +974,7 @@ Init_AI_Export
 ============
 */
 
-unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
+unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     //-----------------------------------
     // be_ai_char.h
     //-----------------------------------
@@ -1009,31 +1009,31 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     // be_ai_chat.h
     //-----------------------------------
     (*ai).BotAllocChatState =
-        Some(crate::src::botlib::be_ai_chat::BotAllocChatState as unsafe extern "C" fn() -> i32);
+        Some(BotAllocChatState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeChatState = Some(
-        crate::src::botlib::be_ai_chat::BotFreeChatState as unsafe extern "C" fn(_: i32) -> (),
+        BotFreeChatState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotQueueConsoleMessage = Some(
-        crate::src::botlib::be_ai_chat::BotQueueConsoleMessage
+        BotQueueConsoleMessage
             as unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> (),
     );
     (*ai).BotRemoveConsoleMessage = Some(
-        crate::src::botlib::be_ai_chat::BotRemoveConsoleMessage
+        BotRemoveConsoleMessage
             as unsafe extern "C" fn(_: i32, _: i32) -> (),
     );
     (*ai).BotNextConsoleMessage = Some(
-        crate::src::botlib::be_ai_chat::BotNextConsoleMessage
+        BotNextConsoleMessage
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t,
+                _: *mut bot_consolemessage_t,
             ) -> i32,
     );
     (*ai).BotNumConsoleMessages = Some(
-        crate::src::botlib::be_ai_chat::BotNumConsoleMessages
+        BotNumConsoleMessages
             as unsafe extern "C" fn(_: i32) -> i32,
     );
     (*ai).BotInitialChat = Some(
-        crate::src::botlib::be_ai_chat::BotInitialChat
+        BotInitialChat
             as unsafe extern "C" fn(
                 _: i32,
                 _: *mut libc::c_char,
@@ -1049,11 +1049,11 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             ) -> (),
     );
     (*ai).BotNumInitialChats = Some(
-        crate::src::botlib::be_ai_chat::BotNumInitialChats
+        BotNumInitialChats
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotReplyChat = Some(
-        crate::src::botlib::be_ai_chat::BotReplyChat
+        BotReplyChat
             as unsafe extern "C" fn(
                 _: i32,
                 _: *mut libc::c_char,
@@ -1070,272 +1070,272 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             ) -> i32,
     );
     (*ai).BotChatLength =
-        Some(crate::src::botlib::be_ai_chat::BotChatLength as unsafe extern "C" fn(_: i32) -> i32);
+        Some(BotChatLength as unsafe extern "C" fn(_: i32) -> i32);
     (*ai).BotEnterChat = Some(
-        crate::src::botlib::be_ai_chat::BotEnterChat
+        BotEnterChat
             as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> (),
     );
     (*ai).BotGetChatMessage = Some(
-        crate::src::botlib::be_ai_chat::BotGetChatMessage
+        BotGetChatMessage
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
     );
     (*ai).StringContains = Some(
-        crate::src::botlib::be_ai_chat::StringContains
+        StringContains
             as unsafe extern "C" fn(_: *mut libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
     );
     (*ai).BotFindMatch = Some(
-        crate::src::botlib::be_ai_chat::BotFindMatch
+        BotFindMatch
             as unsafe extern "C" fn(
                 _: *mut libc::c_char,
-                _: *mut crate::src::botlib::be_ai_chat::bot_match_t,
+                _: *mut bot_match_t,
                 _: libc::c_ulong,
             ) -> i32,
     );
     (*ai).BotMatchVariable = Some(
-        crate::src::botlib::be_ai_chat::BotMatchVariable
+        BotMatchVariable
             as unsafe extern "C" fn(
-                _: *mut crate::src::botlib::be_ai_chat::bot_match_t,
+                _: *mut bot_match_t,
                 _: i32,
                 _: *mut libc::c_char,
                 _: i32,
             ) -> (),
     );
     (*ai).UnifyWhiteSpaces = Some(
-        crate::src::botlib::be_ai_chat::UnifyWhiteSpaces
+        UnifyWhiteSpaces
             as unsafe extern "C" fn(_: *mut libc::c_char) -> (),
     );
     (*ai).BotReplaceSynonyms = Some(
-        crate::src::botlib::be_ai_chat::BotReplaceSynonyms
+        BotReplaceSynonyms
             as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> (),
     );
     (*ai).BotLoadChatFile = Some(
-        crate::src::botlib::be_ai_chat::BotLoadChatFile
+        BotLoadChatFile
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotSetChatGender = Some(
-        crate::src::botlib::be_ai_chat::BotSetChatGender
+        BotSetChatGender
             as unsafe extern "C" fn(_: i32, _: i32) -> (),
     );
     (*ai).BotSetChatName = Some(
-        crate::src::botlib::be_ai_chat::BotSetChatName
+        BotSetChatName
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
     );
     //-----------------------------------
     // be_ai_goal.h
     //-----------------------------------
     (*ai).BotResetGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotResetGoalState as unsafe extern "C" fn(_: i32) -> (),
+        BotResetGoalState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetAvoidGoals = Some(
-        crate::src::botlib::be_ai_goal::BotResetAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
+        BotResetAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotRemoveFromAvoidGoals = Some(
-        crate::src::botlib::be_ai_goal::BotRemoveFromAvoidGoals
+        BotRemoveFromAvoidGoals
             as unsafe extern "C" fn(_: i32, _: i32) -> (),
     );
     (*ai).BotPushGoal = Some(
-        crate::src::botlib::be_ai_goal::BotPushGoal
+        BotPushGoal
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> (),
     );
     (*ai).BotPopGoal =
-        Some(crate::src::botlib::be_ai_goal::BotPopGoal as unsafe extern "C" fn(_: i32) -> ());
+        Some(BotPopGoal as unsafe extern "C" fn(_: i32) -> ());
     (*ai).BotEmptyGoalStack = Some(
-        crate::src::botlib::be_ai_goal::BotEmptyGoalStack as unsafe extern "C" fn(_: i32) -> (),
+        BotEmptyGoalStack as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotDumpAvoidGoals = Some(
-        crate::src::botlib::be_ai_goal::BotDumpAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
+        BotDumpAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotDumpGoalStack = Some(
-        crate::src::botlib::be_ai_goal::BotDumpGoalStack as unsafe extern "C" fn(_: i32) -> (),
+        BotDumpGoalStack as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotGoalName = Some(
-        crate::src::botlib::be_ai_goal::BotGoalName
+        BotGoalName
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
     );
     (*ai).BotGetTopGoal = Some(
-        crate::src::botlib::be_ai_goal::BotGetTopGoal
+        BotGetTopGoal
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotGetSecondGoal = Some(
-        crate::src::botlib::be_ai_goal::BotGetSecondGoal
+        BotGetSecondGoal
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotChooseLTGItem = Some(
-        crate::src::botlib::be_ai_goal::BotChooseLTGItem
+        BotChooseLTGItem
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: *mut i32,
                 _: i32,
             ) -> i32,
     );
     (*ai).BotChooseNBGItem = Some(
-        crate::src::botlib::be_ai_goal::BotChooseNBGItem
+        BotChooseNBGItem
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: *mut i32,
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
                 _: f32,
             ) -> i32,
     );
     (*ai).BotTouchingGoal = Some(
-        crate::src::botlib::be_ai_goal::BotTouchingGoal
+        BotTouchingGoal
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut vec_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotItemGoalInVisButNotVisible = Some(
-        crate::src::botlib::be_ai_goal::BotItemGoalInVisButNotVisible
+        BotItemGoalInVisButNotVisible
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotGetLevelItemGoal = Some(
-        crate::src::botlib::be_ai_goal::BotGetLevelItemGoal
+        BotGetLevelItemGoal
             as unsafe extern "C" fn(
                 _: i32,
                 _: *mut libc::c_char,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotGetNextCampSpotGoal = Some(
-        crate::src::botlib::be_ai_goal::BotGetNextCampSpotGoal
+        BotGetNextCampSpotGoal
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotGetMapLocationGoal = Some(
-        crate::src::botlib::be_ai_goal::BotGetMapLocationGoal
+        BotGetMapLocationGoal
             as unsafe extern "C" fn(
                 _: *mut libc::c_char,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
             ) -> i32,
     );
     (*ai).BotAvoidGoalTime = Some(
-        crate::src::botlib::be_ai_goal::BotAvoidGoalTime
+        BotAvoidGoalTime
             as unsafe extern "C" fn(_: i32, _: i32) -> f32,
     );
     (*ai).BotSetAvoidGoalTime = Some(
-        crate::src::botlib::be_ai_goal::BotSetAvoidGoalTime
+        BotSetAvoidGoalTime
             as unsafe extern "C" fn(_: i32, _: i32, _: f32) -> (),
     );
     (*ai).BotInitLevelItems =
-        Some(crate::src::botlib::be_ai_goal::BotInitLevelItems as unsafe extern "C" fn() -> ());
+        Some(BotInitLevelItems as unsafe extern "C" fn() -> ());
     (*ai).BotUpdateEntityItems =
-        Some(crate::src::botlib::be_ai_goal::BotUpdateEntityItems as unsafe extern "C" fn() -> ());
+        Some(BotUpdateEntityItems as unsafe extern "C" fn() -> ());
     (*ai).BotLoadItemWeights = Some(
-        crate::src::botlib::be_ai_goal::BotLoadItemWeights
+        BotLoadItemWeights
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotFreeItemWeights = Some(
-        crate::src::botlib::be_ai_goal::BotFreeItemWeights as unsafe extern "C" fn(_: i32) -> (),
+        BotFreeItemWeights as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotInterbreedGoalFuzzyLogic = Some(
-        crate::src::botlib::be_ai_goal::BotInterbreedGoalFuzzyLogic
+        BotInterbreedGoalFuzzyLogic
             as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> (),
     );
     (*ai).BotSaveGoalFuzzyLogic = Some(
-        crate::src::botlib::be_ai_goal::BotSaveGoalFuzzyLogic
+        BotSaveGoalFuzzyLogic
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> (),
     );
     (*ai).BotMutateGoalFuzzyLogic = Some(
-        crate::src::botlib::be_ai_goal::BotMutateGoalFuzzyLogic
+        BotMutateGoalFuzzyLogic
             as unsafe extern "C" fn(_: i32, _: f32) -> (),
     );
     (*ai).BotAllocGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotAllocGoalState as unsafe extern "C" fn(_: i32) -> i32,
+        BotAllocGoalState as unsafe extern "C" fn(_: i32) -> i32,
     );
     (*ai).BotFreeGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotFreeGoalState as unsafe extern "C" fn(_: i32) -> (),
+        BotFreeGoalState as unsafe extern "C" fn(_: i32) -> (),
     );
     //-----------------------------------
     // be_ai_move.h
     //-----------------------------------
     (*ai).BotResetMoveState = Some(
-        crate::src::botlib::be_ai_move::BotResetMoveState as unsafe extern "C" fn(_: i32) -> (),
+        BotResetMoveState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotMoveToGoal = Some(
-        crate::src::botlib::be_ai_move::BotMoveToGoal
+        BotMoveToGoal
             as unsafe extern "C" fn(
-                _: *mut crate::src::botlib::be_ai_move::bot_moveresult_t,
+                _: *mut bot_moveresult_t,
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
                 _: i32,
             ) -> (),
     );
     (*ai).BotMoveInDirection = Some(
-        crate::src::botlib::be_ai_move::BotMoveInDirection
+        BotMoveInDirection
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: f32,
                 _: i32,
             ) -> i32,
     );
     (*ai).BotResetAvoidReach = Some(
-        crate::src::botlib::be_ai_move::BotResetAvoidReach as unsafe extern "C" fn(_: i32) -> (),
+        BotResetAvoidReach as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetLastAvoidReach = Some(
-        crate::src::botlib::be_ai_move::BotResetLastAvoidReach
+        BotResetLastAvoidReach
             as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotReachabilityArea = Some(
-        crate::src::botlib::be_ai_move::BotReachabilityArea
-            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t, _: i32) -> i32,
+        BotReachabilityArea
+            as unsafe extern "C" fn(_: *mut vec_t, _: i32) -> i32,
     );
     (*ai).BotMovementViewTarget = Some(
-        crate::src::botlib::be_ai_move::BotMovementViewTarget
+        BotMovementViewTarget
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
                 _: i32,
                 _: f32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
             ) -> i32,
     );
     (*ai).BotPredictVisiblePosition = Some(
-        crate::src::botlib::be_ai_move::BotPredictVisiblePosition
+        BotPredictVisiblePosition
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+                _: *mut bot_goal_t,
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
             ) -> i32,
     );
     (*ai).BotAllocMoveState =
-        Some(crate::src::botlib::be_ai_move::BotAllocMoveState as unsafe extern "C" fn() -> i32);
+        Some(BotAllocMoveState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeMoveState = Some(
-        crate::src::botlib::be_ai_move::BotFreeMoveState as unsafe extern "C" fn(_: i32) -> (),
+        BotFreeMoveState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotInitMoveState = Some(
-        crate::src::botlib::be_ai_move::BotInitMoveState
+        BotInitMoveState
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_move::bot_initmove_t,
+                _: *mut bot_initmove_t,
             ) -> (),
     );
     (*ai).BotAddAvoidSpot = Some(
-        crate::src::botlib::be_ai_move::BotAddAvoidSpot
+        BotAddAvoidSpot
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: f32,
                 _: i32,
             ) -> (),
@@ -1344,28 +1344,28 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     // be_ai_weap.h
     //-----------------------------------
     (*ai).BotChooseBestFightWeapon = Some(
-        crate::src::botlib::be_ai_weap::BotChooseBestFightWeapon
+        BotChooseBestFightWeapon
             as unsafe extern "C" fn(_: i32, _: *mut i32) -> i32,
     );
     (*ai).BotGetWeaponInfo = Some(
-        crate::src::botlib::be_ai_weap::BotGetWeaponInfo
+        BotGetWeaponInfo
             as unsafe extern "C" fn(
                 _: i32,
                 _: i32,
-                _: *mut crate::src::botlib::be_ai_weap::weaponinfo_t,
+                _: *mut weaponinfo_t,
             ) -> (),
     );
     (*ai).BotLoadWeaponWeights = Some(
-        crate::src::botlib::be_ai_weap::BotLoadWeaponWeights
+        BotLoadWeaponWeights
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotAllocWeaponState =
-        Some(crate::src::botlib::be_ai_weap::BotAllocWeaponState as unsafe extern "C" fn() -> i32);
+        Some(BotAllocWeaponState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeWeaponState = Some(
-        crate::src::botlib::be_ai_weap::BotFreeWeaponState as unsafe extern "C" fn(_: i32) -> (),
+        BotFreeWeaponState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetWeaponState = Some(
-        crate::src::botlib::be_ai_weap::BotResetWeaponState as unsafe extern "C" fn(_: i32) -> (),
+        BotResetWeaponState as unsafe extern "C" fn(_: i32) -> (),
     );
     //-----------------------------------
     // be_ai_gen.h
@@ -1391,13 +1391,13 @@ GetBotLibAPI
 
 pub unsafe extern "C" fn GetBotLibAPI(
     mut apiVersion: i32,
-    mut import: *mut crate::botlib_h::botlib_import_t,
-) -> *mut crate::botlib_h::botlib_export_t {
+    mut import: *mut botlib_import_t,
+) -> *mut botlib_export_t {
     botimport = *import;
     crate::stdlib::memset(
-        &mut be_botlib_export as *mut crate::botlib_h::botlib_export_t as *mut libc::c_void,
+        &mut be_botlib_export as *mut botlib_export_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::botlib_h::botlib_export_t>() as libc::c_ulong,
+        ::std::mem::size_of::<botlib_export_t>() as libc::c_ulong,
     );
     if apiVersion != 2 as i32 {
         botimport.Print.expect("non-null function pointer")(
@@ -1407,7 +1407,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
             2 as i32,
             apiVersion,
         );
-        return 0 as *mut crate::botlib_h::botlib_export_t;
+        return 0 as *mut botlib_export_t;
     }
     Init_AAS_Export(&mut be_botlib_export.aas);
     Init_EA_Export(&mut be_botlib_export.ea);
@@ -1437,7 +1437,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
         crate::src::botlib::l_precomp::PC_ReadTokenHandle
             as unsafe extern "C" fn(
                 _: i32,
-                _: *mut crate::src::qcommon::q_shared::pc_token_t,
+                _: *mut pc_token_t,
             ) -> i32,
     );
     be_botlib_export.PC_SourceFileAndLine = Some(
@@ -1450,15 +1450,15 @@ pub unsafe extern "C" fn GetBotLibAPI(
         Some(Export_BotLibLoadMap as unsafe extern "C" fn(_: *const libc::c_char) -> i32);
     be_botlib_export.BotLibUpdateEntity = Some(
         Export_BotLibUpdateEntity
-            as unsafe extern "C" fn(_: i32, _: *mut crate::botlib_h::bot_entitystate_t) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut bot_entitystate_t) -> i32,
     );
     be_botlib_export.Test = Some(
         BotExportTest
             as unsafe extern "C" fn(
                 _: i32,
                 _: *mut libc::c_char,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
+                _: *mut vec_t,
             ) -> i32,
     );
     return &mut be_botlib_export;

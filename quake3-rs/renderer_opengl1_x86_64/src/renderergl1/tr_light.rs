@@ -382,11 +382,11 @@ extern "C" {
     =============================================================================
     */
     #[no_mangle]
-    pub static mut r_ambientScale: *mut crate::src::qcommon::q_shared::cvar_t;
+    pub static mut r_ambientScale: *mut cvar_t;
     #[no_mangle]
-    pub static mut r_directedScale: *mut crate::src::qcommon::q_shared::cvar_t;
+    pub static mut r_directedScale: *mut cvar_t;
     #[no_mangle]
-    pub static mut r_debugLight: *mut crate::src::qcommon::q_shared::cvar_t;
+    pub static mut r_debugLight: *mut cvar_t;
 }
 // never calculate a range less than this to prevent huge light numbers
 /*
@@ -402,11 +402,11 @@ the back end (before doing the lighting calculation)
 
 pub unsafe extern "C" fn R_TransformDlights(
     mut count: i32,
-    mut dl: *mut crate::tr_local_h::dlight_t,
-    mut or: *mut crate::tr_local_h::orientationr_t,
+    mut dl: *mut dlight_t,
+    mut or: *mut orientationr_t,
 ) {
     let mut i: i32 = 0;
-    let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut temp: vec3_t = [0.; 3];
     i = 0 as i32;
     while i < count {
         temp[0 as i32 as usize] = (*dl).origin[0 as i32 as usize] - (*or).origin[0 as i32 as usize];
@@ -437,25 +437,25 @@ Determine which dynamic lights may effect this bmodel
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut crate::tr_local_h::bmodel_t) {
+pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut bmodel_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut dl: *mut crate::tr_local_h::dlight_t = 0 as *mut crate::tr_local_h::dlight_t;
+    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
     let mut mask: i32 = 0;
-    let mut surf: *mut crate::tr_local_h::msurface_t = 0 as *mut crate::tr_local_h::msurface_t;
+    let mut surf: *mut msurface_t = 0 as *mut msurface_t;
     // transform all the lights
     R_TransformDlights(
-        crate::src::renderergl1::tr_main::tr.refdef.num_dlights,
-        crate::src::renderergl1::tr_main::tr.refdef.dlights,
-        &mut crate::src::renderergl1::tr_main::tr.or,
+        tr.refdef.num_dlights,
+        tr.refdef.dlights,
+        &mut tr.or,
     );
     mask = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_main::tr.refdef.num_dlights {
-        dl = &mut *crate::src::renderergl1::tr_main::tr
+    while i < tr.refdef.num_dlights {
+        dl = &mut *tr
             .refdef
             .dlights
-            .offset(i as isize) as *mut crate::tr_local_h::dlight_s;
+            .offset(i as isize) as *mut dlight_s;
         // see if the point is close enough to the bounds to matter
         j = 0 as i32;
         while j < 3 as i32 {
@@ -477,18 +477,18 @@ pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut crate::tr_local_h::bmod
         }
         i += 1
     }
-    (*crate::src::renderergl1::tr_main::tr.currentEntity).needDlights =
-        (mask != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
+    (*tr.currentEntity).needDlights =
+        (mask != 0 as i32) as i32 as qboolean;
     // set the dlight bits in all the surfaces
     i = 0 as i32;
     while i < (*bmodel).numSurfaces {
         surf = (*bmodel).firstSurface.offset(i as isize);
-        if *(*surf).data as u32 == crate::tr_local_h::SF_FACE as i32 as u32 {
-            (*((*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t)).dlightBits = mask
-        } else if *(*surf).data as u32 == crate::tr_local_h::SF_GRID as i32 as u32 {
-            (*((*surf).data as *mut crate::tr_local_h::srfGridMesh_t)).dlightBits = mask
-        } else if *(*surf).data as u32 == crate::tr_local_h::SF_TRIANGLES as i32 as u32 {
-            (*((*surf).data as *mut crate::tr_local_h::srfTriangles_t)).dlightBits = mask
+        if *(*surf).data as u32 == SF_FACE as i32 as u32 {
+            (*((*surf).data as *mut srfSurfaceFace_t)).dlightBits = mask
+        } else if *(*surf).data as u32 == SF_GRID as i32 as u32 {
+            (*((*surf).data as *mut srfGridMesh_t)).dlightBits = mask
+        } else if *(*surf).data as u32 == SF_TRIANGLES as i32 as u32 {
+            (*((*surf).data as *mut srfTriangles_t)).dlightBits = mask
         }
         i += 1
     }
@@ -500,16 +500,16 @@ R_SetupEntityLightingGrid
 =================
 */
 
-unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
-    let mut lightOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
+    let mut lightOrigin: vec3_t = [0.; 3];
     let mut pos: [i32; 3] = [0; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut gridData: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut gridData: *mut byte =
+        0 as *mut byte;
     let mut frac: [f32; 3] = [0.; 3];
     let mut gridStep: [i32; 3] = [0; 3];
-    let mut direction: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut direction: vec3_t = [0.; 3];
     let mut totalFactor: f32 = 0.;
     if (*ent).e.renderfx & 0x80 as i32 != 0 {
         // separate lightOrigins are needed so an object that is
@@ -524,46 +524,46 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut crate::tr_local_h::
         lightOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize]
     }
     lightOrigin[0 as i32 as usize] = lightOrigin[0 as i32 as usize]
-        - (*crate::src::renderergl1::tr_main::tr.world).lightGridOrigin[0 as i32 as usize];
+        - (*tr.world).lightGridOrigin[0 as i32 as usize];
     lightOrigin[1 as i32 as usize] = lightOrigin[1 as i32 as usize]
-        - (*crate::src::renderergl1::tr_main::tr.world).lightGridOrigin[1 as i32 as usize];
+        - (*tr.world).lightGridOrigin[1 as i32 as usize];
     lightOrigin[2 as i32 as usize] = lightOrigin[2 as i32 as usize]
-        - (*crate::src::renderergl1::tr_main::tr.world).lightGridOrigin[2 as i32 as usize];
+        - (*tr.world).lightGridOrigin[2 as i32 as usize];
     i = 0 as i32;
     while i < 3 as i32 {
         let mut v: f32 = 0.;
         v = lightOrigin[i as usize]
-            * (*crate::src::renderergl1::tr_main::tr.world).lightGridInverseSize[i as usize];
+            * (*tr.world).lightGridInverseSize[i as usize];
         pos[i as usize] = crate::stdlib::floor(v as f64) as i32;
         frac[i as usize] = v - pos[i as usize] as f32;
         if pos[i as usize] < 0 as i32 {
             pos[i as usize] = 0 as i32
         } else if pos[i as usize]
-            > (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[i as usize] - 1 as i32
+            > (*tr.world).lightGridBounds[i as usize] - 1 as i32
         {
             pos[i as usize] =
-                (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[i as usize] - 1 as i32
+                (*tr.world).lightGridBounds[i as usize] - 1 as i32
         }
         i += 1
     }
-    (*ent).ambientLight[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).ambientLight[2 as i32 as usize] = 0 as i32 as vec_t;
     (*ent).ambientLight[1 as i32 as usize] = (*ent).ambientLight[2 as i32 as usize];
     (*ent).ambientLight[0 as i32 as usize] = (*ent).ambientLight[1 as i32 as usize];
-    (*ent).directedLight[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).directedLight[2 as i32 as usize] = 0 as i32 as vec_t;
     (*ent).directedLight[1 as i32 as usize] = (*ent).directedLight[2 as i32 as usize];
     (*ent).directedLight[0 as i32 as usize] = (*ent).directedLight[1 as i32 as usize];
-    direction[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    direction[2 as i32 as usize] = 0 as i32 as vec_t;
     direction[1 as i32 as usize] = direction[2 as i32 as usize];
     direction[0 as i32 as usize] = direction[1 as i32 as usize];
     // NULL with -nolight maps
     // trilerp the light value
     gridStep[0 as i32 as usize] = 8 as i32;
     gridStep[1 as i32 as usize] =
-        8 as i32 * (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[0 as i32 as usize];
+        8 as i32 * (*tr.world).lightGridBounds[0 as i32 as usize];
     gridStep[2 as i32 as usize] = 8 as i32
-        * (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[0 as i32 as usize]
-        * (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[1 as i32 as usize];
-    gridData = (*crate::src::renderergl1::tr_main::tr.world)
+        * (*tr.world).lightGridBounds[0 as i32 as usize]
+        * (*tr.world).lightGridBounds[1 as i32 as usize];
+    gridData = (*tr.world)
         .lightGridData
         .offset((pos[0 as i32 as usize] * gridStep[0 as i32 as usize]) as isize)
         .offset((pos[1 as i32 as usize] * gridStep[1 as i32 as usize]) as isize)
@@ -572,18 +572,18 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut crate::tr_local_h::
     i = 0 as i32;
     while i < 8 as i32 {
         let mut factor: f32 = 0.;
-        let mut data: *mut crate::src::qcommon::q_shared::byte =
-            0 as *mut crate::src::qcommon::q_shared::byte;
+        let mut data: *mut byte =
+            0 as *mut byte;
         let mut lat: i32 = 0;
         let mut lng: i32 = 0;
-        let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut normal: vec3_t = [0.; 3];
         factor = 1.0f64 as f32;
         data = gridData;
         j = 0 as i32;
         while j < 3 as i32 {
             if i & (1 as i32) << j != 0 {
                 if pos[j as usize] + 1 as i32
-                    > (*crate::src::renderergl1::tr_main::tr.world).lightGridBounds[j as usize]
+                    > (*tr.world).lightGridBounds[j as usize]
                         - 1 as i32
                 {
                     break;
@@ -621,13 +621,13 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut crate::tr_local_h::
                 // decode X as cos( lat ) * sin( long )
                 // decode Y as sin( lat ) * sin( long )
                 // decode Z as cos( long )
-                normal[0 as i32 as usize] = crate::src::renderergl1::tr_main::tr.sinTable
+                normal[0 as i32 as usize] = tr.sinTable
                     [(lat + 1024 as i32 / 4 as i32 & 1024 as i32 - 1 as i32) as usize]
-                    * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
-                normal[1 as i32 as usize] = crate::src::renderergl1::tr_main::tr.sinTable
+                    * tr.sinTable[lng as usize];
+                normal[1 as i32 as usize] = tr.sinTable
                     [lat as usize]
-                    * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
-                normal[2 as i32 as usize] = crate::src::renderergl1::tr_main::tr.sinTable
+                    * tr.sinTable[lng as usize];
+                normal[2 as i32 as usize] = tr.sinTable
                     [(lng + 1024 as i32 / 4 as i32 & 1024 as i32 - 1 as i32) as usize];
                 direction[0 as i32 as usize] =
                     direction[0 as i32 as usize] + normal[0 as i32 as usize] * factor;
@@ -667,8 +667,8 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut crate::tr_local_h::
         (*ent).directedLight[1 as i32 as usize] * (*r_directedScale).value;
     (*ent).directedLight[2 as i32 as usize] =
         (*ent).directedLight[2 as i32 as usize] * (*r_directedScale).value;
-    crate::src::qcommon::q_math::VectorNormalize2(
-        direction.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    VectorNormalize2(
+        direction.as_mut_ptr() as *const vec_t,
         (*ent).lightDir.as_mut_ptr(),
     );
 }
@@ -678,7 +678,7 @@ LogLight
 ===============
 */
 
-unsafe extern "C" fn LogLight(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
+unsafe extern "C" fn LogLight(mut ent: *mut trRefEntity_t) {
     let mut max1: i32 = 0;
     let mut max2: i32 = 0;
     if (*ent).e.renderfx & 0x4 as i32 == 0 {
@@ -696,10 +696,10 @@ unsafe extern "C" fn LogLight(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
     } else if (*ent).directedLight[2 as i32 as usize] > max2 as f32 {
         max2 = (*ent).directedLight[2 as i32 as usize] as i32
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"amb:%i  dir:%i\n\x00" as *const u8 as *const libc::c_char,
         max1,
         max2,
@@ -716,21 +716,21 @@ by the Calc_* functions
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SetupEntityLighting(
-    mut refdef: *const crate::tr_local_h::trRefdef_t,
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
+    mut refdef: *const trRefdef_t,
+    mut ent: *mut trRefEntity_t,
 ) {
     let mut i: i32 = 0;
-    let mut dl: *mut crate::tr_local_h::dlight_t = 0 as *mut crate::tr_local_h::dlight_t;
+    let mut dl: *mut dlight_t = 0 as *mut dlight_t;
     let mut power: f32 = 0.;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
-    let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lightOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut lightDir: vec3_t = [0.; 3];
+    let mut lightOrigin: vec3_t = [0.; 3];
     // lighting calculations
     if (*ent).lightingCalculated as u64 != 0 {
         return;
     }
-    (*ent).lightingCalculated = crate::src::qcommon::q_shared::qtrue;
+    (*ent).lightingCalculated = qtrue;
     //
     // trace a sample point down to find ambient light
     //
@@ -748,52 +748,52 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
     }
     // if NOWORLDMODEL, only use dynamic lights (menu system, etc)
     if (*refdef).rdflags & 0x1 as i32 == 0
-        && !(*crate::src::renderergl1::tr_main::tr.world)
+        && !(*tr.world)
             .lightGridData
             .is_null()
     {
         R_SetupEntityLightingGrid(ent);
     } else {
         (*ent).ambientLight[2 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.identityLight * 150 as i32 as f32;
+            tr.identityLight * 150 as i32 as f32;
         (*ent).ambientLight[1 as i32 as usize] = (*ent).ambientLight[2 as i32 as usize];
         (*ent).ambientLight[0 as i32 as usize] = (*ent).ambientLight[1 as i32 as usize];
         (*ent).directedLight[2 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.identityLight * 150 as i32 as f32;
+            tr.identityLight * 150 as i32 as f32;
         (*ent).directedLight[1 as i32 as usize] = (*ent).directedLight[2 as i32 as usize];
         (*ent).directedLight[0 as i32 as usize] = (*ent).directedLight[1 as i32 as usize];
         (*ent).lightDir[0 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize];
+            tr.sunDirection[0 as i32 as usize];
         (*ent).lightDir[1 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize];
+            tr.sunDirection[1 as i32 as usize];
         (*ent).lightDir[2 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize]
+            tr.sunDirection[2 as i32 as usize]
     }
     // bonus items and view weapons have a fixed minimum add
     /* ent->e.renderfx & RF_MINLIGHT */
     // give everything a minimum light add
     (*ent).ambientLight[0 as i32 as usize] +=
-        crate::src::renderergl1::tr_main::tr.identityLight * 32 as i32 as f32;
+        tr.identityLight * 32 as i32 as f32;
     (*ent).ambientLight[1 as i32 as usize] +=
-        crate::src::renderergl1::tr_main::tr.identityLight * 32 as i32 as f32;
+        tr.identityLight * 32 as i32 as f32;
     (*ent).ambientLight[2 as i32 as usize] +=
-        crate::src::renderergl1::tr_main::tr.identityLight * 32 as i32 as f32;
+        tr.identityLight * 32 as i32 as f32;
     //
     // modify the light by dynamic lights
     //
     d = VectorLength(
-        (*ent).directedLight.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+        (*ent).directedLight.as_mut_ptr() as *const vec_t
     );
     lightDir[0 as i32 as usize] = (*ent).lightDir[0 as i32 as usize] * d;
     lightDir[1 as i32 as usize] = (*ent).lightDir[1 as i32 as usize] * d;
     lightDir[2 as i32 as usize] = (*ent).lightDir[2 as i32 as usize] * d;
     i = 0 as i32;
     while i < (*refdef).num_dlights {
-        dl = &mut *(*refdef).dlights.offset(i as isize) as *mut crate::tr_local_h::dlight_s;
+        dl = &mut *(*refdef).dlights.offset(i as isize) as *mut dlight_s;
         dir[0 as i32 as usize] = (*dl).origin[0 as i32 as usize] - lightOrigin[0 as i32 as usize];
         dir[1 as i32 as usize] = (*dl).origin[1 as i32 as usize] - lightOrigin[1 as i32 as usize];
         dir[2 as i32 as usize] = (*dl).origin[2 as i32 as usize] - lightOrigin[2 as i32 as usize];
-        d = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+        d = VectorNormalize(dir.as_mut_ptr());
         power = 16 as i32 as f32 * ((*dl).radius * (*dl).radius);
         if d < 16 as i32 as f32 {
             d = 16 as i32 as f32
@@ -814,10 +814,10 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
     i = 0 as i32;
     while i < 3 as i32 {
         if (*ent).ambientLight[i as usize]
-            > crate::src::renderergl1::tr_main::tr.identityLightByte as f32
+            > tr.identityLightByte as f32
         {
-            (*ent).ambientLight[i as usize] = crate::src::renderergl1::tr_main::tr.identityLightByte
-                as crate::src::qcommon::q_shared::vec_t
+            (*ent).ambientLight[i as usize] = tr.identityLightByte
+                as vec_t
         }
         i += 1
     }
@@ -825,28 +825,28 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
         LogLight(ent);
     }
     // save out the byte packet version
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(0 as i32 as isize) = crate::src::renderergl1::tr_main::ri
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
+        .offset(0 as i32 as isize) = ri
         .ftol
         .expect("non-null function pointer")(
         (*ent).ambientLight[0 as i32 as usize]
-    ) as crate::src::qcommon::q_shared::byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(1 as i32 as isize) = crate::src::renderergl1::tr_main::ri
+    ) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
+        .offset(1 as i32 as isize) = ri
         .ftol
         .expect("non-null function pointer")(
         (*ent).ambientLight[1 as i32 as usize]
-    ) as crate::src::qcommon::q_shared::byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(2 as i32 as isize) = crate::src::renderergl1::tr_main::ri
+    ) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
+        .offset(2 as i32 as isize) = ri
         .ftol
         .expect("non-null function pointer")(
         (*ent).ambientLight[2 as i32 as usize]
-    ) as crate::src::qcommon::q_shared::byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(3 as i32 as isize) = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    ) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
+        .offset(3 as i32 as isize) = 0xff as i32 as byte;
     // transform the direction to local space
-    crate::src::qcommon::q_math::VectorNormalize(lightDir.as_mut_ptr());
+    VectorNormalize(lightDir.as_mut_ptr());
     (*ent).lightDir[0 as i32 as usize] = lightDir[0 as i32 as usize]
         * (*ent).e.axis[0 as i32 as usize][0 as i32 as usize]
         + lightDir[1 as i32 as usize] * (*ent).e.axis[0 as i32 as usize][1 as i32 as usize]
@@ -1220,20 +1220,20 @@ R_LightForPoint
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LightForPoint(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-    mut ambientLight: *mut crate::src::qcommon::q_shared::vec_t,
-    mut directedLight: *mut crate::src::qcommon::q_shared::vec_t,
-    mut lightDir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
+    mut ambientLight: *mut vec_t,
+    mut directedLight: *mut vec_t,
+    mut lightDir: *mut vec_t,
 ) -> i32 {
-    let mut ent: crate::tr_local_h::trRefEntity_t = crate::tr_local_h::trRefEntity_t {
-        e: crate::tr_types_h::refEntity_t {
-            reType: crate::tr_types_h::RT_MODEL,
+    let mut ent: trRefEntity_t = trRefEntity_t {
+        e: refEntity_t {
+            reType: RT_MODEL,
             renderfx: 0,
             hModel: 0,
             lightingOrigin: [0.; 3],
             shadowPlane: 0.,
             axis: [[0.; 3]; 3],
-            nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+            nonNormalizedAxes: qfalse,
             origin: [0.; 3],
             frame: 0,
             oldorigin: [0.; 3],
@@ -1249,23 +1249,23 @@ pub unsafe extern "C" fn R_LightForPoint(
             rotation: 0.,
         },
         axisLength: 0.,
-        needDlights: crate::src::qcommon::q_shared::qfalse,
-        lightingCalculated: crate::src::qcommon::q_shared::qfalse,
+        needDlights: qfalse,
+        lightingCalculated: qfalse,
         lightDir: [0.; 3],
         ambientLight: [0.; 3],
         ambientLightInt: 0,
         directedLight: [0.; 3],
     };
-    if (*crate::src::renderergl1::tr_main::tr.world)
+    if (*tr.world)
         .lightGridData
         .is_null()
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::stdlib::memset(
-        &mut ent as *mut crate::tr_local_h::trRefEntity_t as *mut libc::c_void,
+        &mut ent as *mut trRefEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_local_h::trRefEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<trRefEntity_t>() as libc::c_ulong,
     );
     ent.e.origin[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     ent.e.origin[1 as i32 as usize] = *point.offset(1 as i32 as isize);
@@ -1280,5 +1280,5 @@ pub unsafe extern "C" fn R_LightForPoint(
     *lightDir.offset(0 as i32 as isize) = ent.lightDir[0 as i32 as usize];
     *lightDir.offset(1 as i32 as isize) = ent.lightDir[1 as i32 as usize];
     *lightDir.offset(2 as i32 as isize) = ent.lightDir[2 as i32 as usize];
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }

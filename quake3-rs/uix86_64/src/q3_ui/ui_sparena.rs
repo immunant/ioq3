@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -186,22 +186,22 @@ pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
             8 as i32 as f32,
         );
     }
-    level = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    level = atoi(Info_ValueForKey(
         arenaInfo,
         b"num\x00" as *const u8 as *const libc::c_char,
     ));
-    txt = crate::src::qcommon::q_shared::Info_ValueForKey(
+    txt = Info_ValueForKey(
         arenaInfo,
         b"special\x00" as *const u8 as *const libc::c_char,
     );
     if *txt.offset(0 as i32 as isize) != 0 {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             txt,
             b"training\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
             level = -(4 as i32)
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             txt,
             b"final\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
@@ -213,13 +213,13 @@ pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
         level as f32,
     );
-    map = crate::src::qcommon::q_shared::Info_ValueForKey(
+    map = Info_ValueForKey(
         arenaInfo,
         b"map\x00" as *const u8 as *const libc::c_char,
     );
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-        crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-        crate::src::qcommon::q_shared::va(
+        EXEC_APPEND as i32,
+        va(
             b"spmap %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             map,
         ),

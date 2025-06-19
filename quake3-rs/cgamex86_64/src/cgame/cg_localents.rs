@@ -180,25 +180,25 @@ pub use crate::src::cgame::cg_syscalls::trap_S_StartSound;
 
 #[no_mangle]
 
-pub static mut cg_localEntities: [crate::cg_local_h::localEntity_t; 512] =
-    [crate::cg_local_h::localEntity_t {
-        prev: 0 as *const crate::cg_local_h::localEntity_s as *mut crate::cg_local_h::localEntity_s,
-        next: 0 as *const crate::cg_local_h::localEntity_s as *mut crate::cg_local_h::localEntity_s,
-        leType: crate::cg_local_h::LE_MARK,
+pub static mut cg_localEntities: [localEntity_t; 512] =
+    [localEntity_t {
+        prev: 0 as *const localEntity_s as *mut localEntity_s,
+        next: 0 as *const localEntity_s as *mut localEntity_s,
+        leType: LE_MARK,
         leFlags: 0,
         startTime: 0,
         endTime: 0,
         fadeInTime: 0,
         lifeRate: 0.,
-        pos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
             trDelta: [0.; 3],
         },
-        angles: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        angles: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
@@ -209,16 +209,16 @@ pub static mut cg_localEntities: [crate::cg_local_h::localEntity_t; 512] =
         radius: 0.,
         light: 0.,
         lightColor: [0.; 3],
-        leMarkType: crate::cg_local_h::LEMT_NONE,
-        leBounceSoundType: crate::cg_local_h::LEBS_NONE,
-        refEntity: crate::tr_types_h::refEntity_t {
-            reType: crate::tr_types_h::RT_MODEL,
+        leMarkType: LEMT_NONE,
+        leBounceSoundType: LEBS_NONE,
+        refEntity: refEntity_t {
+            reType: RT_MODEL,
             renderfx: 0,
             hModel: 0,
             lightingOrigin: [0.; 3],
             shadowPlane: 0.,
             axis: [[0.; 3]; 3],
-            nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+            nonNormalizedAxes: qfalse,
             origin: [0.; 3],
             frame: 0,
             oldorigin: [0.; 3],
@@ -236,25 +236,25 @@ pub static mut cg_localEntities: [crate::cg_local_h::localEntity_t; 512] =
     }; 512];
 #[no_mangle]
 
-pub static mut cg_activeLocalEntities: crate::cg_local_h::localEntity_t =
-    crate::cg_local_h::localEntity_t {
-        prev: 0 as *const crate::cg_local_h::localEntity_s as *mut crate::cg_local_h::localEntity_s,
-        next: 0 as *const crate::cg_local_h::localEntity_s as *mut crate::cg_local_h::localEntity_s,
-        leType: crate::cg_local_h::LE_MARK,
+pub static mut cg_activeLocalEntities: localEntity_t =
+    localEntity_t {
+        prev: 0 as *const localEntity_s as *mut localEntity_s,
+        next: 0 as *const localEntity_s as *mut localEntity_s,
+        leType: LE_MARK,
         leFlags: 0,
         startTime: 0,
         endTime: 0,
         fadeInTime: 0,
         lifeRate: 0.,
-        pos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
             trDelta: [0.; 3],
         },
-        angles: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        angles: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
@@ -265,16 +265,16 @@ pub static mut cg_activeLocalEntities: crate::cg_local_h::localEntity_t =
         radius: 0.,
         light: 0.,
         lightColor: [0.; 3],
-        leMarkType: crate::cg_local_h::LEMT_NONE,
-        leBounceSoundType: crate::cg_local_h::LEBS_NONE,
-        refEntity: crate::tr_types_h::refEntity_t {
-            reType: crate::tr_types_h::RT_MODEL,
+        leMarkType: LEMT_NONE,
+        leBounceSoundType: LEBS_NONE,
+        refEntity: refEntity_t {
+            reType: RT_MODEL,
             renderfx: 0,
             hModel: 0,
             lightingOrigin: [0.; 3],
             shadowPlane: 0.,
             axis: [[0.; 3]; 3],
-            nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+            nonNormalizedAxes: qfalse,
             origin: [0.; 3],
             frame: 0,
             oldorigin: [0.; 3],
@@ -293,8 +293,8 @@ pub static mut cg_activeLocalEntities: crate::cg_local_h::localEntity_t =
 // double linked list
 #[no_mangle]
 
-pub static mut cg_freeLocalEntities: *mut crate::cg_local_h::localEntity_t =
-    0 as *const crate::cg_local_h::localEntity_t as *mut crate::cg_local_h::localEntity_t;
+pub static mut cg_freeLocalEntities: *mut localEntity_t =
+    0 as *const localEntity_t as *mut localEntity_t;
 // single linked list
 /*
 ===================
@@ -310,7 +310,7 @@ pub unsafe extern "C" fn CG_InitLocalEntities() {
     crate::stdlib::memset(
         cg_localEntities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::cg_local_h::localEntity_t; 512]>() as libc::c_ulong,
+        ::std::mem::size_of::<[localEntity_t; 512]>() as libc::c_ulong,
     );
     cg_activeLocalEntities.next = &mut cg_activeLocalEntities;
     cg_activeLocalEntities.prev = &mut cg_activeLocalEntities;
@@ -320,7 +320,7 @@ pub unsafe extern "C" fn CG_InitLocalEntities() {
         cg_localEntities[i as usize].next = &mut *cg_localEntities
             .as_mut_ptr()
             .offset((i + 1 as i32) as isize)
-            as *mut crate::cg_local_h::localEntity_t;
+            as *mut localEntity_t;
         i += 1
     }
 }
@@ -331,9 +331,9 @@ CG_FreeLocalEntity
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_FreeLocalEntity(mut le: *mut crate::cg_local_h::localEntity_t) {
+pub unsafe extern "C" fn CG_FreeLocalEntity(mut le: *mut localEntity_t) {
     if (*le).prev.is_null() {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -353,8 +353,8 @@ Will always succeed, even if it requires freeing an old active entity
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AllocLocalEntity() -> *mut crate::cg_local_h::localEntity_t {
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
+pub unsafe extern "C" fn CG_AllocLocalEntity() -> *mut localEntity_t {
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     if cg_freeLocalEntities.is_null() {
         // no free entities, so free the one at the end of the chain
         // remove the oldest active entity
@@ -365,7 +365,7 @@ pub unsafe extern "C" fn CG_AllocLocalEntity() -> *mut crate::cg_local_h::localE
     crate::stdlib::memset(
         le as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::localEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<localEntity_t>() as libc::c_ulong,
     );
     // link into the active list
     (*le).next = cg_activeLocalEntities.next;
@@ -393,28 +393,28 @@ Leave expanding blood puffs behind gibs
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut crate::cg_local_h::localEntity_t) {
+pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut localEntity_t) {
     let mut t: i32 = 0;
     let mut t2: i32 = 0;
     let mut step: i32 = 0;
-    let mut newOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut blood: *mut crate::cg_local_h::localEntity_t =
-        0 as *mut crate::cg_local_h::localEntity_t;
+    let mut newOrigin: vec3_t = [0.; 3];
+    let mut blood: *mut localEntity_t =
+        0 as *mut localEntity_t;
     step = 150 as i32;
     t = step
-        * ((crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.frametime + step)
+        * ((cg.time - cg.frametime + step)
             / step);
-    t2 = step * (crate::src::cgame::cg_main::cg.time / step);
+    t2 = step * (cg.time / step);
     while t <= t2 {
-        crate::src::game::bg_misc::BG_EvaluateTrajectory(
-            &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
+        BG_EvaluateTrajectory(
+            &mut (*le).pos as *mut _ as *const trajectory_t,
             t,
             newOrigin.as_mut_ptr(),
         );
-        blood = crate::src::cgame::cg_effects::CG_SmokePuff(
-            newOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+        blood = CG_SmokePuff(
+            newOrigin.as_mut_ptr() as *const vec_t,
+            vec3_origin.as_mut_ptr()
+                as *const vec_t,
             20 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -424,12 +424,12 @@ pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut crate::cg_local_h::localEnti
             t,
             0 as i32,
             0 as i32,
-            crate::src::cgame::cg_main::cgs.media.bloodTrailShader,
-        ) as *mut crate::cg_local_h::localEntity_s;
+            cgs.media.bloodTrailShader,
+        ) as *mut localEntity_s;
         // use the optimized version
-        (*blood).leType = crate::cg_local_h::LE_FALL_SCALE_FADE;
+        (*blood).leType = LE_FALL_SCALE_FADE;
         // drop a total of 40 units over its lifetime
-        (*blood).pos.trDelta[2 as i32 as usize] = 40 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*blood).pos.trDelta[2 as i32 as usize] = 40 as i32 as vec_t;
         t += step
     }
 }
@@ -441,44 +441,44 @@ CG_FragmentBounceMark
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_FragmentBounceMark(
-    mut le: *mut crate::cg_local_h::localEntity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut le: *mut localEntity_t,
+    mut trace: *mut trace_t,
 ) {
     let mut radius: i32 = 0;
-    if (*le).leMarkType as u32 == crate::cg_local_h::LEMT_BLOOD as i32 as u32 {
-        radius = 16 as i32 + (::libc::rand() & 31 as i32);
-        crate::src::cgame::cg_marks::CG_ImpactMark(
-            crate::src::cgame::cg_main::cgs.media.bloodMarkShader,
-            (*trace).endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*trace).plane.normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
+    if (*le).leMarkType as u32 == LEMT_BLOOD as i32 as u32 {
+        radius = 16 as i32 + (libc::rand() & 31 as i32);
+        CG_ImpactMark(
+            cgs.media.bloodMarkShader,
+            (*trace).endpos.as_mut_ptr() as *const vec_t,
+            (*trace).plane.normal.as_mut_ptr() as *const vec_t,
+            (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
             radius as f32,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
-    } else if (*le).leMarkType as u32 == crate::cg_local_h::LEMT_BURN as i32 as u32 {
-        radius = 8 as i32 + (::libc::rand() & 15 as i32);
-        crate::src::cgame::cg_marks::CG_ImpactMark(
-            crate::src::cgame::cg_main::cgs.media.burnMarkShader,
-            (*trace).endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*trace).plane.normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
+    } else if (*le).leMarkType as u32 == LEMT_BURN as i32 as u32 {
+        radius = 8 as i32 + (libc::rand() & 15 as i32);
+        CG_ImpactMark(
+            cgs.media.burnMarkShader,
+            (*trace).endpos.as_mut_ptr() as *const vec_t,
+            (*trace).plane.normal.as_mut_ptr() as *const vec_t,
+            (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
             radius as f32,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
     }
     // don't allow a fragment to make multiple marks, or they
     // pile up while settling
-    (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
+    (*le).leMarkType = LEMT_NONE;
 }
 /*
 ================
@@ -488,25 +488,25 @@ CG_FragmentBounceSound
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_FragmentBounceSound(
-    mut le: *mut crate::cg_local_h::localEntity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut le: *mut localEntity_t,
+    mut trace: *mut trace_t,
 ) {
-    if (*le).leBounceSoundType as u32 == crate::cg_local_h::LEBS_BLOOD as i32 as u32 {
+    if (*le).leBounceSoundType as u32 == LEBS_BLOOD as i32 as u32 {
         // half the gibs will make splat sounds
-        if ::libc::rand() & 1 as i32 != 0 {
-            let mut r: i32 = ::libc::rand() & 3 as i32;
-            let mut s: crate::src::qcommon::q_shared::sfxHandle_t = 0;
+        if libc::rand() & 1 as i32 != 0 {
+            let mut r: i32 = libc::rand() & 3 as i32;
+            let mut s: sfxHandle_t = 0;
             if r == 0 as i32 {
-                s = crate::src::cgame::cg_main::cgs.media.gibBounce1Sound
+                s = cgs.media.gibBounce1Sound
             } else if r == 1 as i32 {
-                s = crate::src::cgame::cg_main::cgs.media.gibBounce2Sound
+                s = cgs.media.gibBounce2Sound
             } else {
-                s = crate::src::cgame::cg_main::cgs.media.gibBounce3Sound
+                s = cgs.media.gibBounce3Sound
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
+            trap_S_StartSound(
                 (*trace).endpos.as_mut_ptr(),
                 ((1 as i32) << 10 as i32) - 2 as i32,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
+                CHAN_AUTO as i32,
                 s,
             );
         }
@@ -515,7 +515,7 @@ pub unsafe extern "C" fn CG_FragmentBounceSound(
     }
     // don't allow a fragment to make multiple bounce sounds,
     // or it gets too noisy as they settle
-    (*le).leBounceSoundType = crate::cg_local_h::LEBS_NONE;
+    (*le).leBounceSoundType = LEBS_NONE;
 }
 /*
 ================
@@ -525,18 +525,18 @@ CG_ReflectVelocity
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ReflectVelocity(
-    mut le: *mut crate::cg_local_h::localEntity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut le: *mut localEntity_t,
+    mut trace: *mut trace_t,
 ) {
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
     let mut dot: f32 = 0.;
     let mut hitTime: i32 = 0;
     // reflect the velocity on the trace plane
-    hitTime = ((crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.frametime)
+    hitTime = ((cg.time - cg.frametime)
         as f32
-        + crate::src::cgame::cg_main::cg.frametime as f32 * (*trace).fraction) as i32;
-    crate::src::game::bg_misc::BG_EvaluateTrajectoryDelta(
-        &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
+        + cg.frametime as f32 * (*trace).fraction) as i32;
+    BG_EvaluateTrajectoryDelta(
+        &mut (*le).pos as *mut _ as *const trajectory_t,
         hitTime,
         velocity.as_mut_ptr(),
     );
@@ -558,16 +558,16 @@ pub unsafe extern "C" fn CG_ReflectVelocity(
     (*le).pos.trBase[0 as i32 as usize] = (*trace).endpos[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*trace).endpos[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*trace).endpos[2 as i32 as usize];
-    (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
+    (*le).pos.trTime = cg.time;
     // check for stop, making sure that even on low FPS systems it doesn't bobble
     if (*trace).allsolid as u32 != 0
         || (*trace).plane.normal[2 as i32 as usize] > 0 as i32 as f32
             && ((*le).pos.trDelta[2 as i32 as usize] < 40 as i32 as f32
                 || (*le).pos.trDelta[2 as i32 as usize]
-                    < -crate::src::cgame::cg_main::cg.frametime as f32
+                    < -cg.frametime as f32
                         * (*le).pos.trDelta[2 as i32 as usize])
     {
-        (*le).pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY
+        (*le).pos.trType = TR_STATIONARY
     };
 }
 /*
@@ -577,15 +577,15 @@ CG_AddFragment
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut newOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
+    let mut newOrigin: vec3_t = [0.; 3];
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -596,11 +596,11 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
             contents: 0,
             entityNum: 0,
         };
-    if (*le).pos.trType as u32 == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
+    if (*le).pos.trType as u32 == TR_STATIONARY as i32 as u32 {
         // sink into the ground if near the removal time
         let mut t: i32 = 0;
         let mut oldZ: f32 = 0.;
-        t = (*le).endTime - crate::src::cgame::cg_main::cg.time;
+        t = (*le).endTime - cg.time;
         if t < 1000 as i32 {
             // we must use an explicit lighting origin, otherwise the
             // lighting would be lost as soon as the origin went
@@ -617,30 +617,30 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
                 as f64
                 - 16 as i32 as f64 * (1.0f64 - (t as f32 / 1000 as i32 as f32) as f64))
                 as f32;
-            crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-                &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
+            trap_R_AddRefEntityToScene(
+                &mut (*le).refEntity as *mut _ as *const refEntity_t,
             );
             (*le).refEntity.origin[2 as i32 as usize] = oldZ
         } else {
-            crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-                &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
+            trap_R_AddRefEntityToScene(
+                &mut (*le).refEntity as *mut _ as *const refEntity_t,
             );
         }
         return;
     }
     // calculate new position
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::cgame::cg_main::cg.time,
+    BG_EvaluateTrajectory(
+        &mut (*le).pos as *mut _ as *const trajectory_t,
+        cg.time,
         newOrigin.as_mut_ptr(),
     );
     // trace a line from previous position to new position
-    crate::src::cgame::cg_predict::CG_Trace(
-        &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-        (*le).refEntity.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        newOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    CG_Trace(
+        &mut trace as *mut _ as *mut trace_t,
+        (*le).refEntity.origin.as_mut_ptr() as *const vec_t,
+        0 as *const vec_t,
+        0 as *const vec_t,
+        newOrigin.as_mut_ptr() as *const vec_t,
         -(1 as i32),
         1 as i32,
     );
@@ -649,23 +649,23 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
         (*le).refEntity.origin[0 as i32 as usize] = newOrigin[0 as i32 as usize];
         (*le).refEntity.origin[1 as i32 as usize] = newOrigin[1 as i32 as usize];
         (*le).refEntity.origin[2 as i32 as usize] = newOrigin[2 as i32 as usize];
-        if (*le).leFlags & crate::cg_local_h::LEF_TUMBLE as i32 != 0 {
-            let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-            crate::src::game::bg_misc::BG_EvaluateTrajectory(
-                &mut (*le).angles as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-                crate::src::cgame::cg_main::cg.time,
+        if (*le).leFlags & LEF_TUMBLE as i32 != 0 {
+            let mut angles: vec3_t = [0.; 3];
+            BG_EvaluateTrajectory(
+                &mut (*le).angles as *mut _ as *const trajectory_t,
+                cg.time,
                 angles.as_mut_ptr(),
             );
-            crate::src::qcommon::q_math::AnglesToAxis(
-                angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            AnglesToAxis(
+                angles.as_mut_ptr() as *const vec_t,
                 (*le).refEntity.axis.as_mut_ptr(),
             );
         }
-        crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-            &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
+        trap_R_AddRefEntityToScene(
+            &mut (*le).refEntity as *mut _ as *const refEntity_t,
         );
         // add a blood trail
-        if (*le).leBounceSoundType as u32 == crate::cg_local_h::LEBS_BLOOD as i32 as u32 {
+        if (*le).leBounceSoundType as u32 == LEBS_BLOOD as i32 as u32 {
             CG_BloodTrail(le);
         }
         return;
@@ -673,8 +673,8 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
     // if it is in a nodrop zone, remove it
     // this keeps gibs from waiting at the bottom of pits of death
     // and floating levels
-    if crate::src::cgame::cg_predict::CG_PointContents(
-        trace.endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    if CG_PointContents(
+        trace.endpos.as_mut_ptr() as *const vec_t,
         0 as i32,
     ) as u32
         & 0x80000000 as u32
@@ -689,8 +689,8 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
     CG_FragmentBounceSound(le, &mut trace);
     // reflect the velocity on the trace plane
     CG_ReflectVelocity(le, &mut trace);
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        &mut (*le).refEntity as *mut _ as *const refEntity_t,
     );
 }
 /*
@@ -708,22 +708,22 @@ CG_AddFadeRGB
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddFadeRGB(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+pub unsafe extern "C" fn CG_AddFadeRGB(mut le: *mut localEntity_t) {
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let mut c: f32 = 0.;
     re = &mut (*le).refEntity;
-    c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
+    c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
     c *= 0xff as i32 as f32;
     (*re).shaderRGBA[0 as i32 as usize] =
-        ((*le).color[0 as i32 as usize] * c) as crate::src::qcommon::q_shared::byte;
+        ((*le).color[0 as i32 as usize] * c) as byte;
     (*re).shaderRGBA[1 as i32 as usize] =
-        ((*le).color[1 as i32 as usize] * c) as crate::src::qcommon::q_shared::byte;
+        ((*le).color[1 as i32 as usize] * c) as byte;
     (*re).shaderRGBA[2 as i32 as usize] =
-        ((*le).color[2 as i32 as usize] * c) as crate::src::qcommon::q_shared::byte;
+        ((*le).color[2 as i32 as usize] * c) as byte;
     (*re).shaderRGBA[3 as i32 as usize] =
-        ((*le).color[3 as i32 as usize] * c) as crate::src::qcommon::q_shared::byte;
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        re as *const crate::tr_types_h::refEntity_t,
+        ((*le).color[3 as i32 as usize] * c) as byte;
+    trap_R_AddRefEntityToScene(
+        re as *const refEntity_t,
     );
 }
 /*
@@ -732,47 +732,47 @@ CG_AddMoveScaleFade
 ==================
 */
 
-unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut localEntity_t) {
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let mut c: f32 = 0.;
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     re = &mut (*le).refEntity;
-    if (*le).fadeInTime > (*le).startTime && crate::src::cgame::cg_main::cg.time < (*le).fadeInTime
+    if (*le).fadeInTime > (*le).startTime && cg.time < (*le).fadeInTime
     {
         // fade / grow time
         c = (1.0f64
-            - (((*le).fadeInTime - crate::src::cgame::cg_main::cg.time) as f32
+            - (((*le).fadeInTime - cg.time) as f32
                 / ((*le).fadeInTime - (*le).startTime) as f32) as f64) as f32
     } else {
         // fade / grow time
-        c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate
+        c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate
     }
     (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as crate::src::qcommon::q_shared::byte;
-    if (*le).leFlags & crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32 == 0 {
+        as byte;
+    if (*le).leFlags & LEF_PUFF_DONT_SCALE as i32 == 0 {
         (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32
     }
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::cgame::cg_main::cg.time,
+    BG_EvaluateTrajectory(
+        &mut (*le).pos as *mut _ as *const trajectory_t,
+        cg.time,
         (*re).origin.as_mut_ptr(),
     );
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+        - cg.refdef.vieworg[0 as i32 as usize];
     delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+        - cg.refdef.vieworg[1 as i32 as usize];
     delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
-    len = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        - cg.refdef.vieworg[2 as i32 as usize];
+    len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        re as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        re as *const refEntity_t,
     );
 }
 /*
@@ -785,32 +785,32 @@ There are often many of these, so it needs to be simple.
 ===================
 */
 
-unsafe extern "C" fn CG_AddScaleFade(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+unsafe extern "C" fn CG_AddScaleFade(mut le: *mut localEntity_t) {
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let mut c: f32 = 0.;
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     re = &mut (*le).refEntity;
     // fade / grow time
-    c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
+    c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
     (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+        - cg.refdef.vieworg[0 as i32 as usize];
     delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+        - cg.refdef.vieworg[1 as i32 as usize];
     delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
-    len = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        - cg.refdef.vieworg[2 as i32 as usize];
+    len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        re as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        re as *const refEntity_t,
     );
 }
 /*
@@ -824,16 +824,16 @@ There are often 100+ of these, so it needs to be simple.
 =================
 */
 
-unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut localEntity_t) {
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let mut c: f32 = 0.;
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     re = &mut (*le).refEntity;
     // fade time
-    c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
+    c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
     (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).origin[2 as i32 as usize] = ((*le).pos.trBase[2 as i32 as usize] as f64
         - (1.0f64 - c as f64) * (*le).pos.trDelta[2 as i32 as usize] as f64)
         as f32;
@@ -841,18 +841,18 @@ unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut crate::cg_local_h::localEn
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+        - cg.refdef.vieworg[0 as i32 as usize];
     delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+        - cg.refdef.vieworg[1 as i32 as usize];
     delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
-    len = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        - cg.refdef.vieworg[2 as i32 as usize];
+    len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        re as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        re as *const refEntity_t,
     );
 }
 /*
@@ -861,17 +861,17 @@ CG_AddExplosion
 ================
 */
 
-unsafe extern "C" fn CG_AddExplosion(mut ex: *mut crate::cg_local_h::localEntity_t) {
-    let mut ent: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+unsafe extern "C" fn CG_AddExplosion(mut ex: *mut localEntity_t) {
+    let mut ent: *mut refEntity_t = 0 as *mut refEntity_t;
     ent = &mut (*ex).refEntity;
     // add the entity
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        ent as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        ent as *const refEntity_t,
     );
     // add the dlight
     if (*ex).light != 0. {
         let mut light: f32 = 0.;
-        light = (crate::src::cgame::cg_main::cg.time - (*ex).startTime) as f32
+        light = (cg.time - (*ex).startTime) as f32
             / ((*ex).endTime - (*ex).startTime) as f32;
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
@@ -879,8 +879,8 @@ unsafe extern "C" fn CG_AddExplosion(mut ex: *mut crate::cg_local_h::localEntity
             light = (1.0f64 - (light as f64 - 0.5f64) * 2 as i32 as f64) as f32
         }
         light = (*ex).light * light;
-        crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
-            (*ent).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        trap_R_AddLightToScene(
+            (*ent).origin.as_mut_ptr() as *const vec_t,
             light,
             (*ex).lightColor[0 as i32 as usize],
             (*ex).lightColor[1 as i32 as usize],
@@ -894,15 +894,15 @@ CG_AddSpriteExplosion
 ================
 */
 
-unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut localEntity_t) {
+    let mut re: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -919,26 +919,26 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::local
     };
     let mut c: f32 = 0.;
     re = (*le).refEntity;
-    c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32
+    c = ((*le).endTime - cg.time) as f32
         / ((*le).endTime - (*le).startTime) as f32;
     if c > 1 as i32 as f32 {
         c = 1.0f64 as f32
         // can happen during connection problems
     }
-    re.shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    re.shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    re.shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    re.shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
+    re.shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
+    re.shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
     re.shaderRGBA[3 as i32 as usize] =
-        ((0xff as i32 as f32 * c) as f64 * 0.33f64) as crate::src::qcommon::q_shared::byte;
-    re.reType = crate::tr_types_h::RT_SPRITE;
+        ((0xff as i32 as f32 * c) as f64 * 0.33f64) as byte;
+    re.reType = RT_SPRITE;
     re.radius = (42 as i32 as f64 * (1.0f64 - c as f64) + 30 as i32 as f64) as f32;
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        &mut re as *mut _ as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        &mut re as *mut _ as *const refEntity_t,
     );
     // add the dlight
     if (*le).light != 0. {
         let mut light: f32 = 0.;
-        light = (crate::src::cgame::cg_main::cg.time - (*le).startTime) as f32
+        light = (cg.time - (*le).startTime) as f32
             / ((*le).endTime - (*le).startTime) as f32;
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
@@ -946,8 +946,8 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::local
             light = (1.0f64 - (light as f64 - 0.5f64) * 2 as i32 as f64) as f32
         }
         light = (*le).light * light;
-        crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
-            re.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        trap_R_AddLightToScene(
+            re.origin.as_mut_ptr() as *const vec_t,
             light,
             (*le).lightColor[0 as i32 as usize],
             (*le).lightColor[1 as i32 as usize],
@@ -957,16 +957,16 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::local
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEntity_t) {
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut origin: vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut vec: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
     let mut c: f32 = 0.;
     let mut len: f32 = 0.;
@@ -976,85 +976,85 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEn
     let mut numdigits: i32 = 0;
     let mut negative: i32 = 0;
     re = &mut (*le).refEntity;
-    c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
+    c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
     score = (*le).radius as i32;
     if score < 0 as i32 {
-        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[1 as i32 as usize] = 0x11 as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[2 as i32 as usize] = 0x11 as i32 as crate::src::qcommon::q_shared::byte
+        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
+        (*re).shaderRGBA[1 as i32 as usize] = 0x11 as i32 as byte;
+        (*re).shaderRGBA[2 as i32 as usize] = 0x11 as i32 as byte
     } else {
-        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
+        (*re).shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
+        (*re).shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
         if score >= 50 as i32 {
-            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte
+            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as byte
         } else if score >= 20 as i32 {
-            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as byte;
             (*re).shaderRGBA[0 as i32 as usize] = (*re).shaderRGBA[1 as i32 as usize]
         } else if score >= 10 as i32 {
-            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte
+            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as byte
         } else if score >= 2 as i32 {
-            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as byte;
             (*re).shaderRGBA[0 as i32 as usize] = (*re).shaderRGBA[2 as i32 as usize]
         }
     }
     if (c as f64) < 0.25f64 {
         (*re).shaderRGBA[3 as i32 as usize] =
-            ((0xff as i32 * 4 as i32) as f32 * c) as crate::src::qcommon::q_shared::byte
+            ((0xff as i32 * 4 as i32) as f32 * c) as byte
     } else {
-        (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte
+        (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte
     }
     (*re).radius = (8 as i32 / 2 as i32) as f32;
     origin[0 as i32 as usize] = (*le).pos.trBase[0 as i32 as usize];
     origin[1 as i32 as usize] = (*le).pos.trBase[1 as i32 as usize];
     origin[2 as i32 as usize] = (*le).pos.trBase[2 as i32 as usize];
     origin[2 as i32 as usize] += 110 as i32 as f32 - c * 100 as i32 as f32;
-    dir[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize]
+    dir[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
         - origin[0 as i32 as usize];
-    dir[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize]
+    dir[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
         - origin[1 as i32 as usize];
-    dir[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize]
+    dir[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize]
         - origin[2 as i32 as usize];
     CrossProduct(
-        dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        dir.as_mut_ptr() as *const vec_t,
+        up.as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
     );
-    crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr());
+    VectorNormalize(vec.as_mut_ptr());
     origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
         + vec[0 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
                     * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
         + vec[1 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
                     * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
         + vec[2 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
                     * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = origin[0 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+        - cg.refdef.vieworg[0 as i32 as usize];
     delta[1 as i32 as usize] = origin[1 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+        - cg.refdef.vieworg[1 as i32 as usize];
     delta[2 as i32 as usize] = origin[2 as i32 as usize]
-        - crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
-    len = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        - cg.refdef.vieworg[2 as i32 as usize];
+    len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < 20 as i32 as f32 {
         CG_FreeLocalEntity(le);
         return;
     }
-    negative = crate::src::qcommon::q_shared::qfalse as i32;
+    negative = qfalse as i32;
     if score < 0 as i32 {
-        negative = crate::src::qcommon::q_shared::qtrue as i32;
+        negative = qtrue as i32;
         score = -score
     }
     numdigits = 0 as i32;
@@ -1078,10 +1078,10 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEn
         (*re).origin[2 as i32 as usize] = origin[2 as i32 as usize]
             + vec[2 as i32 as usize]
                 * ((numdigits as f32 / 2 as i32 as f32 - i as f32) * 8 as i32 as f32);
-        (*re).customShader = crate::src::cgame::cg_main::cgs.media.numberShaders
+        (*re).customShader = cgs.media.numberShaders
             [digits[(numdigits - 1 as i32 - i) as usize] as usize];
-        crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-            re as *const crate::tr_types_h::refEntity_t,
+        trap_R_AddRefEntityToScene(
+            re as *const refEntity_t,
         );
         i += 1
     }
@@ -1329,17 +1329,17 @@ CG_AddLocalEntities
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddLocalEntities() {
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
-    let mut next: *mut crate::cg_local_h::localEntity_t =
-        0 as *mut crate::cg_local_h::localEntity_t;
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut next: *mut localEntity_t =
+        0 as *mut localEntity_t;
     // walk the list backwards, so any new local entities generated
     // (trails, marks, etc) will be present this frame
     le = cg_activeLocalEntities.prev;
-    while le != &mut cg_activeLocalEntities as *mut crate::cg_local_h::localEntity_t {
+    while le != &mut cg_activeLocalEntities as *mut localEntity_t {
         // grab next now, so if the local entity is freed we
         // still have it
         next = (*le).prev;
-        if crate::src::cgame::cg_main::cg.time >= (*le).endTime {
+        if cg.time >= (*le).endTime {
             CG_FreeLocalEntity(le);
         } else {
             match (*le).leType as u32 {
@@ -1374,7 +1374,7 @@ pub unsafe extern "C" fn CG_AddLocalEntities() {
                     CG_AddScorePlum(le);
                 }
                 _ => {
-                    crate::src::cgame::cg_main::CG_Error(
+                    CG_Error(
                         b"Bad leType: %i\x00" as *const u8 as *const libc::c_char,
                         (*le).leType as u32,
                     );

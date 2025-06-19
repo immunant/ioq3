@@ -256,30 +256,30 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_process_NLSFs(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut PredCoef_Q12: *mut [crate::opus_types_h::opus_int16; 16],
-    mut pNLSF_Q15: *mut crate::opus_types_h::opus_int16,
-    mut prev_NLSFq_Q15: *const crate::opus_types_h::opus_int16,
+    mut psEncC: *mut silk_encoder_state,
+    mut PredCoef_Q12: *mut [opus_int16; 16],
+    mut pNLSF_Q15: *mut opus_int16,
+    mut prev_NLSFq_Q15: *const opus_int16,
 )
 /* I    Previous Normalized LSFs (0 - (2^15-1))     */
 {
     let mut i: i32 = 0;
     let mut doInterpolate: i32 = 0;
     let mut NLSF_mu_Q20: i32 = 0;
-    let mut i_sqr_Q15: crate::opus_types_h::opus_int16 = 0;
-    let mut pNLSF0_temp_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pNLSFW_QW: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pNLSFW0_temp_QW: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut i_sqr_Q15: opus_int16 = 0;
+    let mut pNLSF0_temp_Q15: [opus_int16; 16] = [0; 16];
+    let mut pNLSFW_QW: [opus_int16; 16] = [0; 16];
+    let mut pNLSFW0_temp_QW: [opus_int16; 16] = [0; 16];
     /* **********************/
     /* Calculate mu values */
     /* **********************/
     /* NLSF_mu  = 0.003 - 0.0015 * psEnc->speech_activity; */
     NLSF_mu_Q20 = ((0.003f64 * ((1 as i32 as i64) << 20 as i32) as f64 + 0.5f64)
-        as crate::opus_types_h::opus_int32 as i64
+        as opus_int32 as i64
         + ((-0.001f64 * ((1 as i32 as i64) << 28 as i32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32 as i64
-            * (*psEncC).speech_activity_Q8 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32)) as crate::opus_types_h::opus_int32;
+            as opus_int32 as i64
+            * (*psEncC).speech_activity_Q8 as opus_int16 as i64
+            >> 16 as i32)) as opus_int32;
     if (*psEncC).nb_subfr == 2 as i32 {
         /* Multiply by 1.5 for 10 ms packets */
         NLSF_mu_Q20 = NLSF_mu_Q20 + (NLSF_mu_Q20 >> 1 as i32)
@@ -287,7 +287,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
     /* Calculate NLSF weights */
     crate::src::opus_1_2_1::silk::NLSF_VQ_weights_laroia::silk_NLSF_VQ_weights_laroia(
         pNLSFW_QW.as_mut_ptr(),
-        pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
+        pNLSF_Q15 as *const opus_int16,
         (*psEncC).predictLPCOrder,
     );
     /* Update NLSF weights for interpolated NLSFs */
@@ -298,7 +298,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
         crate::src::opus_1_2_1::silk::interpolate::silk_interpolate(
             pNLSF0_temp_Q15.as_mut_ptr(),
             prev_NLSFq_Q15,
-            pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
+            pNLSF_Q15 as *const opus_int16,
             (*psEncC).indices.NLSFInterpCoef_Q2 as i32,
             (*psEncC).predictLPCOrder,
         );
@@ -309,27 +309,27 @@ pub unsafe extern "C" fn silk_process_NLSFs(
             (*psEncC).predictLPCOrder,
         );
         /* Update NLSF weights with contribution from first half */
-        i_sqr_Q15 = ((((*psEncC).indices.NLSFInterpCoef_Q2 as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * (*psEncC).indices.NLSFInterpCoef_Q2 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32)
-            << 11 as i32) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_int16;
+        i_sqr_Q15 = ((((*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16
+            as opus_int32
+            * (*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16
+                as opus_int32)
+            as opus_uint32)
+            << 11 as i32) as opus_int32
+            as opus_int16;
         i = 0 as i32;
         while i < (*psEncC).predictLPCOrder {
             pNLSFW_QW[i as usize] = ((pNLSFW_QW[i as usize] as i32 >> 1 as i32)
-                + (pNLSFW0_temp_QW[i as usize] as crate::opus_types_h::opus_int32
-                    * i_sqr_Q15 as crate::opus_types_h::opus_int32
+                + (pNLSFW0_temp_QW[i as usize] as opus_int32
+                    * i_sqr_Q15 as opus_int32
                     >> 16 as i32))
-                as crate::opus_types_h::opus_int16;
+                as opus_int16;
             i += 1
         }
     }
     crate::src::opus_1_2_1::silk::NLSF_encode::silk_NLSF_encode(
         (*psEncC).indices.NLSFIndices.as_mut_ptr(),
         pNLSF_Q15,
-        (*psEncC).psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
+        (*psEncC).psNLSF_CB as *const silk_NLSF_CB_struct,
         pNLSFW_QW.as_mut_ptr(),
         NLSF_mu_Q20,
         (*psEncC).NLSF_MSVQ_Survivors,
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
     /* Convert quantized NLSFs back to LPC coefficients */
     crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A(
         (*PredCoef_Q12.offset(1 as i32 as isize)).as_mut_ptr(),
-        pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
+        pNLSF_Q15 as *const opus_int16,
         (*psEncC).predictLPCOrder,
         (*psEncC).arch,
     );
@@ -347,7 +347,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
         crate::src::opus_1_2_1::silk::interpolate::silk_interpolate(
             pNLSF0_temp_Q15.as_mut_ptr(),
             prev_NLSFq_Q15,
-            pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
+            pNLSF_Q15 as *const opus_int16,
             (*psEncC).indices.NLSFInterpCoef_Q2 as i32,
             (*psEncC).predictLPCOrder,
         );
@@ -365,7 +365,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
             (*PredCoef_Q12.offset(1 as i32 as isize)).as_mut_ptr() as *const libc::c_void,
             ((*psEncC).predictLPCOrder as libc::c_ulong)
                 .wrapping_mul(
-                    ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                    ::std::mem::size_of::<opus_int16>() as libc::c_ulong
                 ),
         );
     };

@@ -46,7 +46,7 @@ Written by Jean-Marc Valin and Gregory Maxwell */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn resampling_factor(mut rate: crate::opus_types_h::opus_int32) -> i32 {
+pub unsafe extern "C" fn resampling_factor(mut rate: opus_int32) -> i32 {
     let mut ret: i32 = 0;
     match rate {
         48000 => ret = 1 as i32,
@@ -61,19 +61,19 @@ pub unsafe extern "C" fn resampling_factor(mut rate: crate::opus_types_h::opus_i
 /* This version should be faster on ARM */
 
 unsafe extern "C" fn comb_filter_const_c(
-    mut y: *mut crate::arch_h::opus_val32,
-    mut x: *mut crate::arch_h::opus_val32,
+    mut y: *mut opus_val32,
+    mut x: *mut opus_val32,
     mut T: i32,
     mut N: i32,
-    mut g10: crate::arch_h::opus_val16,
-    mut g11: crate::arch_h::opus_val16,
-    mut g12: crate::arch_h::opus_val16,
+    mut g10: opus_val16,
+    mut g11: opus_val16,
+    mut g12: opus_val16,
 ) {
-    let mut x0: crate::arch_h::opus_val32 = 0.;
-    let mut x1: crate::arch_h::opus_val32 = 0.;
-    let mut x2: crate::arch_h::opus_val32 = 0.;
-    let mut x3: crate::arch_h::opus_val32 = 0.;
-    let mut x4: crate::arch_h::opus_val32 = 0.;
+    let mut x0: opus_val32 = 0.;
+    let mut x1: opus_val32 = 0.;
+    let mut x2: opus_val32 = 0.;
+    let mut x3: opus_val32 = 0.;
+    let mut x4: opus_val32 = 0.;
     let mut i: i32 = 0;
     x4 = *x.offset((-T - 2 as i32) as isize);
     x3 = *x.offset((-T - 1 as i32) as isize);
@@ -95,33 +95,33 @@ unsafe extern "C" fn comb_filter_const_c(
 #[no_mangle]
 
 pub unsafe extern "C" fn comb_filter(
-    mut y: *mut crate::arch_h::opus_val32,
-    mut x: *mut crate::arch_h::opus_val32,
+    mut y: *mut opus_val32,
+    mut x: *mut opus_val32,
     mut T0: i32,
     mut T1: i32,
     mut N: i32,
-    mut g0: crate::arch_h::opus_val16,
-    mut g1: crate::arch_h::opus_val16,
+    mut g0: opus_val16,
+    mut g1: opus_val16,
     mut tapset0: i32,
     mut tapset1: i32,
-    mut window: *const crate::arch_h::opus_val16,
+    mut window: *const opus_val16,
     mut overlap: i32,
     mut _arch: i32,
 ) {
     let mut i: i32 = 0;
     /* printf ("%d %d %f %f\n", T0, T1, g0, g1); */
-    let mut g00: crate::arch_h::opus_val16 = 0.;
-    let mut g01: crate::arch_h::opus_val16 = 0.;
-    let mut g02: crate::arch_h::opus_val16 = 0.;
-    let mut g10: crate::arch_h::opus_val16 = 0.;
-    let mut g11: crate::arch_h::opus_val16 = 0.;
-    let mut g12: crate::arch_h::opus_val16 = 0.;
-    let mut x0: crate::arch_h::opus_val32 = 0.;
-    let mut x1: crate::arch_h::opus_val32 = 0.;
-    let mut x2: crate::arch_h::opus_val32 = 0.;
-    let mut x3: crate::arch_h::opus_val32 = 0.;
-    let mut x4: crate::arch_h::opus_val32 = 0.;
-    static mut gains: [[crate::arch_h::opus_val16; 3]; 3] = [
+    let mut g00: opus_val16 = 0.;
+    let mut g01: opus_val16 = 0.;
+    let mut g02: opus_val16 = 0.;
+    let mut g10: opus_val16 = 0.;
+    let mut g11: opus_val16 = 0.;
+    let mut g12: opus_val16 = 0.;
+    let mut x0: opus_val32 = 0.;
+    let mut x1: opus_val32 = 0.;
+    let mut x2: opus_val32 = 0.;
+    let mut x3: opus_val32 = 0.;
+    let mut x4: opus_val32 = 0.;
+    static mut gains: [[opus_val16; 3]; 3] = [
         [0.3066406250f32, 0.2170410156f32, 0.1296386719f32],
         [0.4638671875f32, 0.2680664062f32, 0.0f32],
         [0.7998046875f32, 0.1000976562f32, 0.0f32],
@@ -134,7 +134,7 @@ pub unsafe extern "C" fn comb_filter(
                 x as *const libc::c_void,
                 (N as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
                     )
                     .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as libc::c_ulong),
             );
@@ -161,7 +161,7 @@ pub unsafe extern "C" fn comb_filter(
     }
     i = 0 as i32;
     while i < overlap {
-        let mut f: crate::arch_h::opus_val16 = 0.;
+        let mut f: opus_val16 = 0.;
         x0 = *x.offset((i - T1 + 2 as i32) as isize);
         f = *window.offset(i as isize) * *window.offset(i as isize);
         *y.offset(i as isize) = *x.offset(i as isize)
@@ -192,7 +192,7 @@ pub unsafe extern "C" fn comb_filter(
                 x.offset(overlap as isize) as *const libc::c_void,
                 ((N - overlap) as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
                     )
                     .wrapping_add(
                         (0 as i32 as isize
@@ -267,7 +267,7 @@ pub static mut tf_select_table: [[i8; 8]; 4] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn init_caps(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut cap: *mut i32,
     mut LM: i32,
     mut C: i32,

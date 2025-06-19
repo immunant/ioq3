@@ -104,7 +104,7 @@ pub unsafe extern "C" fn FindField(
     let mut i: i32 = 0; //end for
     i = 0 as i32;
     while !(*defs.offset(i as isize)).name.is_null() {
-        if ::libc::strcmp((*defs.offset(i as isize)).name, name) == 0 {
+        if libc::strcmp((*defs.offset(i as isize)).name, name) == 0 {
             return &mut *defs.offset(i as isize) as *mut crate::src::botlib::l_struct::fielddef_t;
         }
         i += 1
@@ -121,11 +121,11 @@ pub unsafe extern "C" fn FindField(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadNumber(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut fd: *mut crate::src::botlib::l_struct::fielddef_t,
     mut p: *mut libc::c_void,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+) -> qboolean {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -135,75 +135,75 @@ pub unsafe extern "C" fn ReadNumber(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    let mut negative: i32 = crate::src::qcommon::q_shared::qfalse as i32;
+    let mut negative: i32 = qfalse as i32;
     let mut intval: isize = 0;
     let mut intmin: isize = 0 as i32 as isize;
     let mut intmax: isize = 0 as i32 as isize;
     let mut floatval: f64 = 0.;
-    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    if PC_ExpectAnyToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     //check for minus sign
     if token.type_0 == 5 as i32 {
         //end if
         if (*fd).type_0 & 0x400 as i32 != 0 {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"expected unsigned value, found %s\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         //if not a minus sign
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"-\x00" as *const u8 as *const libc::c_char,
         ) != 0
         {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"unexpected punctuation %s\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        negative = crate::src::qcommon::q_shared::qtrue as i32;
+        negative = qtrue as i32;
         //read the number
-        if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-            source as *mut crate::src::botlib::l_precomp::source_s,
-            &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        if PC_ExpectAnyToken(
+            source as *mut source_s,
+            &mut token as *mut _ as *mut token_s,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     //check if it is a number
     if token.type_0 != 3 as i32 {
-        crate::src::botlib::l_precomp::SourceError(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        SourceError(
+            source as *mut source_s,
             b"expected number, found %s\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             token.string.as_mut_ptr(),
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     //check for a float value
     if token.subtype & 0x800 as i32 != 0 {
         //end if
         if (*fd).type_0 & 0xff as i32 != 3 as i32 {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"unexpected float\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         } //end if
         floatval = token.floatvalue as f64;
         if negative != 0 {
@@ -211,19 +211,19 @@ pub unsafe extern "C" fn ReadNumber(
         }
         if (*fd).type_0 & 0x200 as i32 != 0 {
             if floatval < (*fd).floatmin as f64 || floatval > (*fd).floatmax as f64 {
-                crate::src::botlib::l_precomp::SourceError(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceError(
+                    source as *mut source_s,
                     b"float out of range [%f, %f]\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     (*fd).floatmin as f64,
                     (*fd).floatmax as f64,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             //end if
         }
         *(p as *mut f32) = floatval as f32;
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     //
     intval = token.intvalue as isize;
@@ -263,29 +263,29 @@ pub unsafe extern "C" fn ReadNumber(
             } as isize
         }
         if intval < intmin || intval > intmax {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"value %ld out of range [%ld, %ld]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 intval,
                 intmin,
                 intmax,
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     //end if
     } else if (*fd).type_0 & 0xff as i32 == 3 as i32 {
         if (*fd).type_0 & 0x200 as i32 != 0 {
             if (intval as f32) < (*fd).floatmin || intval as f32 > (*fd).floatmax {
-                crate::src::botlib::l_precomp::SourceError(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceError(
+                    source as *mut source_s,
                     b"value %ld out of range [%f, %f]\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     intval,
                     (*fd).floatmin as f64,
                     (*fd).floatmax as f64,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             //end if
         }
@@ -309,7 +309,7 @@ pub unsafe extern "C" fn ReadNumber(
     } else if (*fd).type_0 & 0xff as i32 == 3 as i32 {
         *(p as *mut f32) = intval as f32
     } //end else
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function ReadNumber
 //===========================================================================
@@ -321,11 +321,11 @@ pub unsafe extern "C" fn ReadNumber(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadChar(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut fd: *mut crate::src::botlib::l_struct::fielddef_t,
     mut p: *mut libc::c_void,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+) -> qboolean {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -335,29 +335,29 @@ pub unsafe extern "C" fn ReadChar(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    if PC_ExpectAnyToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     //take literals into account
     if token.type_0 == 2 as i32 {
         //end if
-        crate::src::botlib::l_script::StripSingleQuotes(token.string.as_mut_ptr()); //end if
+        StripSingleQuotes(token.string.as_mut_ptr()); //end if
         *(p as *mut libc::c_char) = token.string[0 as i32 as usize]
     } else {
-        crate::src::botlib::l_precomp::PC_UnreadLastToken(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        PC_UnreadLastToken(
+            source as *mut source_s,
         );
         if ReadNumber(source, fd, p) as u64 == 0 {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function ReadChar
 //===========================================================================
@@ -369,11 +369,11 @@ pub unsafe extern "C" fn ReadChar(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadString(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut _fd: *mut crate::src::botlib::l_struct::fielddef_t,
     mut p: *mut libc::c_void,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -383,19 +383,19 @@ pub unsafe extern "C" fn ReadString(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenType(
+        source as *mut source_s,
         1 as i32,
         0 as i32,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
         return 0 as i32;
     }
     //remove the double quotes
-    crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
+    StripDoubleQuotes(token.string.as_mut_ptr());
     //copy the string
     crate::stdlib::strncpy(
         p as *mut libc::c_char,
@@ -419,11 +419,11 @@ pub unsafe extern "C" fn ReadString(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadStructure(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut def: *mut crate::src::botlib::l_struct::structdef_t,
     mut structure: *mut libc::c_char,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -433,29 +433,29 @@ pub unsafe extern "C" fn ReadStructure(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     }; //end while
     let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
         0 as *mut crate::src::botlib::l_struct::fielddef_t;
     let mut p: *mut libc::c_void = 0 as *mut libc::c_void;
     let mut num: i32 = 0;
-    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenString(
+        source as *mut source_s,
         b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
         return 0 as i32;
     }
     loop {
-        if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-            source as *mut crate::src::botlib::l_precomp::source_s,
-            &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        if PC_ExpectAnyToken(
+            source as *mut source_s,
+            &mut token as *mut _ as *mut token_s,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //if end of structure
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"}\x00" as *const u8 as *const libc::c_char,
         ) == 0
@@ -465,22 +465,22 @@ pub unsafe extern "C" fn ReadStructure(
         //find the field with the name
         fd = FindField((*def).fields, token.string.as_mut_ptr()); //end if
         if fd.is_null() {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"unknown structure field %s\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end else
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         } //end if
         if (*fd).type_0 & 0x100 as i32 != 0 {
             num = (*fd).maxarray; //end if
-            if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            if PC_ExpectTokenString(
+                source as *mut source_s,
                 b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         } else {
             num = 1 as i32
@@ -493,8 +493,8 @@ pub unsafe extern "C" fn ReadStructure(
                 break;
             }
             if (*fd).type_0 & 0x100 as i32 != 0 {
-                if crate::src::botlib::l_precomp::PC_CheckTokenString(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                if PC_CheckTokenString(
+                    source as *mut source_s,
                     b"}\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 ) != 0
                 {
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn ReadStructure(
             match (*fd).type_0 & 0xff as i32 {
                 1 => {
                     if ReadChar(source, fd, p) as u64 == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<libc::c_char>() as libc::c_ulong as isize)
@@ -513,7 +513,7 @@ pub unsafe extern "C" fn ReadStructure(
                 }
                 2 => {
                     if ReadNumber(source, fd, p) as u64 == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<i32>() as libc::c_ulong as isize)
@@ -521,7 +521,7 @@ pub unsafe extern "C" fn ReadStructure(
                 }
                 3 => {
                     if ReadNumber(source, fd, p) as u64 == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<f32>() as libc::c_ulong as isize)
@@ -529,18 +529,18 @@ pub unsafe extern "C" fn ReadStructure(
                 }
                 4 => {
                     if ReadString(source, fd, p) == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char).offset(80 as i32 as isize) as *mut libc::c_void
                 }
                 6 => {
                     if (*fd).substruct.is_null() {
-                        crate::src::botlib::l_precomp::SourceError(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        SourceError(
+                            source as *mut source_s,
                             b"BUG: no sub structure defined\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                         ); //end if
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     ReadStructure(source, (*fd).substruct, p as *mut libc::c_char);
                     p = (p as *mut libc::c_char).offset((*(*fd).substruct).size as isize)
@@ -551,38 +551,38 @@ pub unsafe extern "C" fn ReadStructure(
             if !((*fd).type_0 & 0x100 as i32 != 0) {
                 continue;
             }
-            if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                source as *mut crate::src::botlib::l_precomp::source_s,
-                &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+            if PC_ExpectAnyToken(
+                source as *mut source_s,
+                &mut token as *mut _ as *mut token_s,
             ) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"}\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 break;
             }
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b",\x00" as *const u8 as *const libc::c_char,
             ) != 0
             {
-                crate::src::botlib::l_precomp::SourceError(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceError(
+                    source as *mut source_s,
                     b"expected a comma, found %s\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     token.string.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             //end if
             //end if
         }
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //writes indents
 //end of the function ReadStructure
@@ -594,7 +594,7 @@ pub unsafe extern "C" fn ReadStructure(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn WriteIndent(mut fp: *mut crate::stdlib::FILE, mut indent: i32) -> i32 {
+pub unsafe extern "C" fn WriteIndent(mut fp: *mut FILE, mut indent: i32) -> i32 {
     loop {
         let fresh1 = indent; //end while
         indent = indent - 1;
@@ -602,10 +602,10 @@ pub unsafe extern "C" fn WriteIndent(mut fp: *mut crate::stdlib::FILE, mut inden
             break;
         }
         if crate::stdlib::fprintf(fp, b"\t\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //writes a float without traling zeros
 //end of the function WriteIndent
@@ -617,10 +617,10 @@ pub unsafe extern "C" fn WriteIndent(mut fp: *mut crate::stdlib::FILE, mut inden
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn WriteFloat(mut fp: *mut crate::stdlib::FILE, mut value: f32) -> i32 {
+pub unsafe extern "C" fn WriteFloat(mut fp: *mut FILE, mut value: f32) -> i32 {
     let mut buf: [libc::c_char; 128] = [0; 128];
     let mut l: i32 = 0;
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         buf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
         b"%f\x00" as *const u8 as *const libc::c_char,
@@ -666,7 +666,7 @@ pub unsafe extern "C" fn WriteFloat(mut fp: *mut crate::stdlib::FILE, mut value:
 #[no_mangle]
 
 pub unsafe extern "C" fn WriteStructWithIndent(
-    mut fp: *mut crate::stdlib::FILE,
+    mut fp: *mut FILE,
     mut def: *mut crate::src::botlib::l_struct::structdef_t,
     mut structure: *mut libc::c_char,
     mut indent: i32,
@@ -677,10 +677,10 @@ pub unsafe extern "C" fn WriteStructWithIndent(
     let mut fd: *mut crate::src::botlib::l_struct::fielddef_t =
         0 as *mut crate::src::botlib::l_struct::fielddef_t;
     if WriteIndent(fp, indent) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if crate::stdlib::fprintf(fp, b"{\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     indent += 1;
     i = 0 as i32;
@@ -688,7 +688,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
         fd =
             &mut *(*def).fields.offset(i as isize) as *mut crate::src::botlib::l_struct::fielddef_t;
         if WriteIndent(fp, indent) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if crate::stdlib::fprintf(
             fp,
@@ -696,13 +696,13 @@ pub unsafe extern "C" fn WriteStructWithIndent(
             (*fd).name,
         ) < 0 as i32
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         p = structure.offset((*fd).offset as isize) as *mut libc::c_void;
         if (*fd).type_0 & 0x100 as i32 != 0 {
             num = (*fd).maxarray;
             if crate::stdlib::fprintf(fp, b"{\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         } else {
             num = 1 as i32
@@ -723,7 +723,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         *(p as *mut libc::c_char) as i32,
                     ) < 0 as i32
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<libc::c_char>() as libc::c_ulong as isize)
@@ -737,7 +737,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         *(p as *mut i32),
                     ) < 0 as i32
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<i32>() as libc::c_ulong as isize)
@@ -745,7 +745,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                 }
                 3 => {
                     if WriteFloat(fp, *(p as *mut f32)) == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char)
                         .offset(::std::mem::size_of::<f32>() as libc::c_ulong as isize)
@@ -758,13 +758,13 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                         p as *mut libc::c_char,
                     ) < 0 as i32
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end case
                     p = (p as *mut libc::c_char).offset(80 as i32 as isize) as *mut libc::c_void
                 }
                 6 => {
                     if WriteStructWithIndent(fp, (*fd).substruct, structure, indent) == 0 {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     } //end if
                     p = (p as *mut libc::c_char).offset((*(*fd).substruct).size as isize)
                         as *mut libc::c_void
@@ -776,29 +776,29 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                     if crate::stdlib::fprintf(fp, b",\x00" as *const u8 as *const libc::c_char)
                         < 0 as i32
                     {
-                        return crate::src::qcommon::q_shared::qfalse as i32;
+                        return qfalse as i32;
                     }
                 } else if crate::stdlib::fprintf(fp, b"}\x00" as *const u8 as *const libc::c_char)
                     < 0 as i32
                 {
-                    return crate::src::qcommon::q_shared::qfalse as i32;
+                    return qfalse as i32;
                 }
                 //end else
             }
         }
         if crate::stdlib::fprintf(fp, b"\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
     indent -= 1;
     if WriteIndent(fp, indent) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if crate::stdlib::fprintf(fp, b"}\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //write a structure to a file
 //end of the function WriteStructWithIndent
@@ -811,7 +811,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
 #[no_mangle]
 
 pub unsafe extern "C" fn WriteStructure(
-    mut fp: *mut crate::stdlib::FILE,
+    mut fp: *mut FILE,
     mut def: *mut crate::src::botlib::l_struct::structdef_t,
     mut structure: *mut libc::c_char,
 ) -> i32 {

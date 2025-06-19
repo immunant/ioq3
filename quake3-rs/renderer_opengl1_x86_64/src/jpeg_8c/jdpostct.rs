@@ -203,20 +203,20 @@ pub type my_post_ptr = *mut my_post_controller;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_post_controller {
-    pub pub_0: crate::jpegint_h::jpeg_d_post_controller,
-    pub whole_image: crate::jpeglib_h::jvirt_sarray_ptr,
-    pub buffer: crate::jpeglib_h::JSAMPARRAY,
-    pub strip_height: crate::jmorecfg_h::JDIMENSION,
-    pub starting_row: crate::jmorecfg_h::JDIMENSION,
-    pub next_row: crate::jmorecfg_h::JDIMENSION,
+    pub pub_0: jpeg_d_post_controller,
+    pub whole_image: jvirt_sarray_ptr,
+    pub buffer: JSAMPARRAY,
+    pub strip_height: JDIMENSION,
+    pub starting_row: JDIMENSION,
+    pub next_row: JDIMENSION,
 }
 /*
  * Initialize for a processing pass.
  */
 
 unsafe extern "C" fn start_pass_dpost(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut pass_mode: crate::jpegint_h::J_BUF_MODE,
+    mut cinfo: j_decompress_ptr,
+    mut pass_mode: J_BUF_MODE,
 ) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
     match pass_mode as u32 {
@@ -226,13 +226,13 @@ unsafe extern "C" fn start_pass_dpost(
                 (*post).pub_0.post_process_data = Some(
                     post_process_1pass
                         as unsafe extern "C" fn(
-                            _: crate::jpeglib_h::j_decompress_ptr,
-                            _: crate::jpeglib_h::JSAMPIMAGE,
-                            _: *mut crate::jmorecfg_h::JDIMENSION,
-                            _: crate::jmorecfg_h::JDIMENSION,
-                            _: crate::jpeglib_h::JSAMPARRAY,
-                            _: *mut crate::jmorecfg_h::JDIMENSION,
-                            _: crate::jmorecfg_h::JDIMENSION,
+                            _: j_decompress_ptr,
+                            _: JSAMPIMAGE,
+                            _: *mut JDIMENSION,
+                            _: JDIMENSION,
+                            _: JSAMPARRAY,
+                            _: *mut JDIMENSION,
+                            _: JDIMENSION,
                         ) -> (),
                 );
                 /* We could be doing buffered-image output before starting a 2-pass
@@ -246,9 +246,9 @@ unsafe extern "C" fn start_pass_dpost(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        cinfo as j_common_ptr,
                         (*post).whole_image,
-                        0 as i32 as crate::jmorecfg_h::JDIMENSION,
+                        0 as i32 as JDIMENSION,
                         (*post).strip_height,
                         1 as i32,
                     )
@@ -263,69 +263,69 @@ unsafe extern "C" fn start_pass_dpost(
         3 => {
             /* First pass of 2-pass quantization */
             if (*post).whole_image.is_null() {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             (*post).pub_0.post_process_data = Some(
                 post_process_prepass
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_decompress_ptr,
-                        _: crate::jpeglib_h::JSAMPIMAGE,
-                        _: *mut crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: *mut crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jmorecfg_h::JDIMENSION,
+                        _: j_decompress_ptr,
+                        _: JSAMPIMAGE,
+                        _: *mut JDIMENSION,
+                        _: JDIMENSION,
+                        _: JSAMPARRAY,
+                        _: *mut JDIMENSION,
+                        _: JDIMENSION,
                     ) -> (),
             )
         }
         2 => {
             /* Second pass of 2-pass quantization */
             if (*post).whole_image.is_null() {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             (*post).pub_0.post_process_data = Some(
                 post_process_2pass
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_decompress_ptr,
-                        _: crate::jpeglib_h::JSAMPIMAGE,
-                        _: *mut crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: *mut crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jmorecfg_h::JDIMENSION,
+                        _: j_decompress_ptr,
+                        _: JSAMPIMAGE,
+                        _: *mut JDIMENSION,
+                        _: JDIMENSION,
+                        _: JSAMPARRAY,
+                        _: *mut JDIMENSION,
+                        _: JDIMENSION,
                     ) -> (),
             )
         }
         _ => {
             /* QUANT_2PASS_SUPPORTED */
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
     }
-    (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    (*post).next_row = 0 as i32 as JDIMENSION;
     (*post).starting_row = (*post).next_row;
 }
 /* Forward declarations */
@@ -335,24 +335,24 @@ unsafe extern "C" fn start_pass_dpost(
  */
 
 unsafe extern "C" fn post_process_1pass(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_decompress_ptr,
+    mut input_buf: JSAMPIMAGE,
+    mut in_row_group_ctr: *mut JDIMENSION,
+    mut in_row_groups_avail: JDIMENSION,
+    mut output_buf: JSAMPARRAY,
+    mut out_row_ctr: *mut JDIMENSION,
+    mut out_rows_avail: JDIMENSION,
 ) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
-    let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut max_rows: crate::jmorecfg_h::JDIMENSION = 0;
+    let mut num_rows: JDIMENSION = 0;
+    let mut max_rows: JDIMENSION = 0;
     /* Fill the buffer, but not more than what we can dump out in one go. */
     /* Note we rely on the upsampler to detect bottom of image. */
     max_rows = out_rows_avail.wrapping_sub(*out_row_ctr);
     if max_rows > (*post).strip_height {
         max_rows = (*post).strip_height
     }
-    num_rows = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    num_rows = 0 as i32 as JDIMENSION;
     Some(
         (*(*cinfo).upsample)
             .upsample
@@ -379,24 +379,24 @@ unsafe extern "C" fn post_process_1pass(
         output_buf.offset(*out_row_ctr as isize),
         num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION;
 }
 /*
  * Process some data in the first pass of 2-pass quantization.
  */
 
 unsafe extern "C" fn post_process_prepass(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
-    mut _output_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut _out_rows_avail: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_decompress_ptr,
+    mut input_buf: JSAMPIMAGE,
+    mut in_row_group_ctr: *mut JDIMENSION,
+    mut in_row_groups_avail: JDIMENSION,
+    mut _output_buf: JSAMPARRAY,
+    mut out_row_ctr: *mut JDIMENSION,
+    mut _out_rows_avail: JDIMENSION,
 ) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
-    let mut old_next_row: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
+    let mut old_next_row: JDIMENSION = 0;
+    let mut num_rows: JDIMENSION = 0;
     /* Reposition virtual buffer if at start of strip. */
     if (*post).next_row == 0 as i32 as u32 {
         (*post).buffer = Some(
@@ -405,7 +405,7 @@ unsafe extern "C" fn post_process_prepass(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             (*post).whole_image,
             (*post).starting_row,
             (*post).strip_height,
@@ -440,16 +440,16 @@ unsafe extern "C" fn post_process_prepass(
         .expect("non-null function pointer")(
             cinfo,
             (*post).buffer.offset(old_next_row as isize),
-            0 as *mut libc::c_void as crate::jpeglib_h::JSAMPARRAY,
+            0 as *mut libc::c_void as JSAMPARRAY,
             num_rows as i32,
         );
-        *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
+        *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION
     }
     /* Advance if we filled the strip. */
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as crate::jmorecfg_h::JDIMENSION;
-        (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
+            as JDIMENSION;
+        (*post).next_row = 0 as i32 as JDIMENSION
     };
 }
 /*
@@ -457,17 +457,17 @@ unsafe extern "C" fn post_process_prepass(
  */
 
 unsafe extern "C" fn post_process_2pass(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut _input_buf: crate::jpeglib_h::JSAMPIMAGE,
-    mut _in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut _in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_decompress_ptr,
+    mut _input_buf: JSAMPIMAGE,
+    mut _in_row_group_ctr: *mut JDIMENSION,
+    mut _in_row_groups_avail: JDIMENSION,
+    mut output_buf: JSAMPARRAY,
+    mut out_row_ctr: *mut JDIMENSION,
+    mut out_rows_avail: JDIMENSION,
 ) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
-    let mut num_rows: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut max_rows: crate::jmorecfg_h::JDIMENSION = 0;
+    let mut num_rows: JDIMENSION = 0;
+    let mut max_rows: JDIMENSION = 0;
     /* Reposition virtual buffer if at start of strip. */
     if (*post).next_row == 0 as i32 as u32 {
         (*post).buffer = Some(
@@ -476,7 +476,7 @@ unsafe extern "C" fn post_process_2pass(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             (*post).whole_image,
             (*post).starting_row,
             (*post).strip_height,
@@ -506,14 +506,14 @@ unsafe extern "C" fn post_process_2pass(
         output_buf.offset(*out_row_ctr as isize),
         num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION;
     /* Advance if we filled the strip. */
     (*post).next_row =
-        ((*post).next_row as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
+        ((*post).next_row as u32).wrapping_add(num_rows) as JDIMENSION;
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as crate::jmorecfg_h::JDIMENSION;
-        (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
+            as JDIMENSION;
+        (*post).next_row = 0 as i32 as JDIMENSION
     };
 }
 /* It is useful to allow each component to have a separate IDCT method. */
@@ -542,8 +542,8 @@ unsafe extern "C" fn post_process_2pass(
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_d_post_controller(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut need_full_buffer: crate::jmorecfg_h::boolean,
+    mut cinfo: j_decompress_ptr,
+    mut need_full_buffer: boolean,
 ) {
     let mut post: my_post_ptr = 0 as *mut my_post_controller; /* flag for no virtual arrays */
     post = Some(
@@ -552,27 +552,27 @@ pub unsafe extern "C" fn jinit_d_post_controller(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<my_post_controller>() as libc::c_ulong,
     ) as my_post_ptr; /* flag for no strip buffer */
-    (*cinfo).post = post as *mut crate::jpegint_h::jpeg_d_post_controller;
+    (*cinfo).post = post as *mut jpeg_d_post_controller;
     (*post).pub_0.start_pass = Some(
         start_pass_dpost
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_decompress_ptr,
-                _: crate::jpegint_h::J_BUF_MODE,
+                _: j_decompress_ptr,
+                _: J_BUF_MODE,
             ) -> (),
     );
-    (*post).whole_image = 0 as crate::jpeglib_h::jvirt_sarray_ptr;
-    (*post).buffer = 0 as crate::jpeglib_h::JSAMPARRAY;
+    (*post).whole_image = 0 as jvirt_sarray_ptr;
+    (*post).buffer = 0 as JSAMPARRAY;
     /* Create the quantization buffer, if needed */
     if (*cinfo).quantize_colors != 0 {
         /* The buffer strip height is max_v_samp_factor, which is typically
          * an efficient number of rows for upsampling to return.
          * (In the presence of output rescaling, we might want to be smarter?)
          */
-        (*post).strip_height = (*cinfo).max_v_samp_factor as crate::jmorecfg_h::JDIMENSION;
+        (*post).strip_height = (*cinfo).max_v_samp_factor as JDIMENSION;
         if need_full_buffer != 0 {
             /* Two-pass color quantization: need full-image storage. */
             /* We round up the number of rows to a multiple of the strip height. */
@@ -582,16 +582,16 @@ pub unsafe extern "C" fn jinit_d_post_controller(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr,
+                cinfo as j_common_ptr,
                 1 as i32,
                 0 as i32,
                 (*cinfo)
                     .output_width
                     .wrapping_mul((*cinfo).out_color_components as u32),
-                crate::src::jpeg_8c::jutils::jround_up(
+                jround_up(
                     (*cinfo).output_height as isize,
                     (*post).strip_height as isize,
-                ) as crate::jmorecfg_h::JDIMENSION,
+                ) as JDIMENSION,
                 (*post).strip_height,
             )
         /* QUANT_2PASS_SUPPORTED */
@@ -603,7 +603,7 @@ pub unsafe extern "C" fn jinit_d_post_controller(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr,
+                cinfo as j_common_ptr,
                 1 as i32,
                 (*cinfo)
                     .output_width

@@ -322,8 +322,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_decode_parameters(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut psDecCtrl: *mut crate::structs_h::silk_decoder_control,
+    mut psDec: *mut silk_decoder_state,
+    mut psDecCtrl: *mut silk_decoder_control,
     mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
@@ -331,8 +331,8 @@ pub unsafe extern "C" fn silk_decode_parameters(
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut Ix: i32 = 0;
-    let mut pNLSF_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut pNLSF0_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut pNLSF_Q15: [opus_int16; 16] = [0; 16];
+    let mut pNLSF0_Q15: [opus_int16; 16] = [0; 16];
     let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
     /* Dequant Gains */
     crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant(
@@ -348,7 +348,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
     crate::src::opus_1_2_1::silk::NLSF_decode::silk_NLSF_decode(
         pNLSF_Q15.as_mut_ptr(),
         (*psDec).indices.NLSFIndices.as_mut_ptr(),
-        (*psDec).psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
+        (*psDec).psNLSF_CB as *const silk_NLSF_CB_struct,
     );
     /* Convert NLSF parameters to AR prediction filter coefficients */
     crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A(
@@ -371,7 +371,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
                 + ((*psDec).indices.NLSFInterpCoef_Q2 as i32
                     * (pNLSF_Q15[i as usize] as i32 - (*psDec).prevNLSF_Q15[i as usize] as i32)
                     >> 2 as i32))
-                as crate::opus_types_h::opus_int16;
+                as opus_int16;
             i += 1
         }
         /* Convert NLSF parameters to AR prediction filter coefficients */
@@ -387,14 +387,14 @@ pub unsafe extern "C" fn silk_decode_parameters(
             (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
             (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
             ((*psDec).LPC_order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int16,
+                opus_int16,
             >() as libc::c_ulong),
         );
     }
     crate::stdlib::memcpy((*psDec).prevNLSF_Q15.as_mut_ptr() as *mut libc::c_void,
            pNLSF_Q15.as_mut_ptr() as *const libc::c_void,
            ((*psDec).LPC_order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
     /* After a packet loss do BWE of LPC coefs */
     if (*psDec).lossCnt != 0 {
@@ -431,9 +431,9 @@ pub unsafe extern "C" fn silk_decode_parameters(
             while i < 5 as i32 {
                 (*psDecCtrl).LTPCoef_Q14[(k * 5 as i32 + i) as usize] =
                     ((*cbk_ptr_Q7.offset((Ix * 5 as i32 + i) as isize)
-                        as crate::opus_types_h::opus_uint32)
-                        << 7 as i32) as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_int16;
+                        as opus_uint32)
+                        << 7 as i32) as opus_int32
+                        as opus_int16;
                 i += 1
             }
             k += 1
@@ -456,7 +456,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
             0 as i32,
             ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong)
                 .wrapping_mul(
-                    ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                    ::std::mem::size_of::<opus_int16>() as libc::c_ulong
                 ),
         );
         (*psDec).indices.PERIndex = 0 as i32 as i8;

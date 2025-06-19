@@ -135,26 +135,26 @@ pub use crate::src::qcommon::q_shared::C2RustUnnamed_0;
 #[no_mangle]
 
 pub unsafe extern "C" fn PM_SlideMove(
-    mut gravity: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut gravity: qboolean,
+) -> qboolean {
     let mut bumpcount: i32 = 0;
     let mut numbumps: i32 = 0;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
     let mut numplanes: i32 = 0;
-    let mut planes: [crate::src::qcommon::q_shared::vec3_t; 5] = [[0.; 3]; 5];
-    let mut primal_velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut clipVelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut planes: [vec3_t; 5] = [[0.; 3]; 5];
+    let mut primal_velocity: vec3_t = [0.; 3];
+    let mut clipVelocity: vec3_t = [0.; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -165,125 +165,125 @@ pub unsafe extern "C" fn PM_SlideMove(
             contents: 0,
             entityNum: 0,
         };
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
     let mut time_left: f32 = 0.;
     let mut into: f32 = 0.;
-    let mut endVelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut endClipVelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut endVelocity: vec3_t = [0.; 3];
+    let mut endClipVelocity: vec3_t = [0.; 3];
     numbumps = 4 as i32;
     primal_velocity[0 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize];
+        (*(*pm).ps).velocity[0 as i32 as usize];
     primal_velocity[1 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize];
+        (*(*pm).ps).velocity[1 as i32 as usize];
     primal_velocity[2 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize];
+        (*(*pm).ps).velocity[2 as i32 as usize];
     if gravity as u64 != 0 {
         endVelocity[0 as i32 as usize] =
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize];
+            (*(*pm).ps).velocity[0 as i32 as usize];
         endVelocity[1 as i32 as usize] =
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize];
+            (*(*pm).ps).velocity[1 as i32 as usize];
         endVelocity[2 as i32 as usize] =
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize];
-        endVelocity[2 as i32 as usize] -= (*(*crate::src::game::bg_pmove::pm).ps).gravity as f32
-            * crate::src::game::bg_pmove::pml.frametime;
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
-            (((*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize]
+            (*(*pm).ps).velocity[2 as i32 as usize];
+        endVelocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32
+            * pml.frametime;
+        (*(*pm).ps).velocity[2 as i32 as usize] =
+            (((*(*pm).ps).velocity[2 as i32 as usize]
                 + endVelocity[2 as i32 as usize]) as f64
-                * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+                * 0.5f64) as vec_t;
         primal_velocity[2 as i32 as usize] = endVelocity[2 as i32 as usize];
-        if crate::src::game::bg_pmove::pml.groundPlane as u64 != 0 {
+        if pml.groundPlane as u64 != 0 {
             // slide along the ground plane
-            crate::src::game::bg_pmove::PM_ClipVelocity(
-                (*(*crate::src::game::bg_pmove::pm).ps)
+            PM_ClipVelocity(
+                (*(*pm).ps)
                     .velocity
                     .as_mut_ptr(),
-                crate::src::game::bg_pmove::pml
+                pml
                     .groundTrace
                     .plane
                     .normal
                     .as_mut_ptr(),
-                (*(*crate::src::game::bg_pmove::pm).ps)
+                (*(*pm).ps)
                     .velocity
                     .as_mut_ptr(),
                 1.001f32,
             );
         }
     }
-    time_left = crate::src::game::bg_pmove::pml.frametime;
+    time_left = pml.frametime;
     // never turn against the ground plane
-    if crate::src::game::bg_pmove::pml.groundPlane as u64 != 0 {
+    if pml.groundPlane as u64 != 0 {
         numplanes = 1 as i32;
         planes[0 as i32 as usize][0 as i32 as usize] =
-            crate::src::game::bg_pmove::pml.groundTrace.plane.normal[0 as i32 as usize];
+            pml.groundTrace.plane.normal[0 as i32 as usize];
         planes[0 as i32 as usize][1 as i32 as usize] =
-            crate::src::game::bg_pmove::pml.groundTrace.plane.normal[1 as i32 as usize];
+            pml.groundTrace.plane.normal[1 as i32 as usize];
         planes[0 as i32 as usize][2 as i32 as usize] =
-            crate::src::game::bg_pmove::pml.groundTrace.plane.normal[2 as i32 as usize]
+            pml.groundTrace.plane.normal[2 as i32 as usize]
     } else {
         numplanes = 0 as i32
     }
     // never turn against original velocity
-    crate::src::qcommon::q_math::VectorNormalize2(
-        (*(*crate::src::game::bg_pmove::pm).ps)
+    VectorNormalize2(
+        (*(*pm).ps)
             .velocity
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
         planes[numplanes as usize].as_mut_ptr(),
     );
     numplanes += 1;
     bumpcount = 0 as i32;
     while bumpcount < numbumps {
         // calculate position we are trying to move to
-        end[0 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize]
-            + (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] * time_left;
-        end[1 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize]
-            + (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] * time_left;
-        end[2 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize]
-            + (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] * time_left;
+        end[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize]
+            + (*(*pm).ps).velocity[0 as i32 as usize] * time_left;
+        end[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize]
+            + (*(*pm).ps).velocity[1 as i32 as usize] * time_left;
+        end[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
+            + (*(*pm).ps).velocity[2 as i32 as usize] * time_left;
         // see if we can make it there
-        (*crate::src::game::bg_pmove::pm)
+        (*pm)
             .trace
             .expect("non-null function pointer")(
             &mut trace,
-            (*(*crate::src::game::bg_pmove::pm).ps).origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            (*crate::src::game::bg_pmove::pm).mins.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            (*crate::src::game::bg_pmove::pm).maxs.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            end.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*(*crate::src::game::bg_pmove::pm).ps).clientNum,
-            (*crate::src::game::bg_pmove::pm).tracemask,
+            (*(*pm).ps).origin.as_mut_ptr()
+                as *const vec_t,
+            (*pm).mins.as_mut_ptr()
+                as *const vec_t,
+            (*pm).maxs.as_mut_ptr()
+                as *const vec_t,
+            end.as_mut_ptr() as *const vec_t,
+            (*(*pm).ps).clientNum,
+            (*pm).tracemask,
         );
         if trace.allsolid as u64 != 0 {
             // entity is completely trapped in another solid
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t; // don't build up falling damage, but allow sideways acceleration
-            return crate::src::qcommon::q_shared::qtrue;
+            (*(*pm).ps).velocity[2 as i32 as usize] =
+                0 as i32 as vec_t; // don't build up falling damage, but allow sideways acceleration
+            return qtrue;
         }
         if trace.fraction > 0 as i32 as f32 {
             // actually covered some distance
-            (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize] =
+            (*(*pm).ps).origin[0 as i32 as usize] =
                 trace.endpos[0 as i32 as usize];
-            (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize] =
+            (*(*pm).ps).origin[1 as i32 as usize] =
                 trace.endpos[1 as i32 as usize];
-            (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize] =
+            (*(*pm).ps).origin[2 as i32 as usize] =
                 trace.endpos[2 as i32 as usize]
         }
         if trace.fraction == 1 as i32 as f32 {
             break;
         }
         // save entity for contact
-        crate::src::game::bg_pmove::PM_AddTouchEnt(trace.entityNum);
+        PM_AddTouchEnt(trace.entityNum);
         time_left -= time_left * trace.fraction;
         if numplanes >= 5 as i32 {
             // this shouldn't really happen
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
-                (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize];
-            (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
-                (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize];
-            return crate::src::qcommon::q_shared::qtrue;
+            (*(*pm).ps).velocity[2 as i32 as usize] =
+                0 as i32 as vec_t;
+            (*(*pm).ps).velocity[1 as i32 as usize] =
+                (*(*pm).ps).velocity[2 as i32 as usize];
+            (*(*pm).ps).velocity[0 as i32 as usize] =
+                (*(*pm).ps).velocity[1 as i32 as usize];
+            return qtrue;
         }
         //
         // if this is the same plane we hit before, nudge velocity
@@ -298,15 +298,15 @@ pub unsafe extern "C" fn PM_SlideMove(
                 as f64
                 > 0.99f64
             {
-                (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
+                (*(*pm).ps).velocity[0 as i32 as usize] =
                     trace.plane.normal[0 as i32 as usize]
-                        + (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize];
-                (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
+                        + (*(*pm).ps).velocity[0 as i32 as usize];
+                (*(*pm).ps).velocity[1 as i32 as usize] =
                     trace.plane.normal[1 as i32 as usize]
-                        + (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize];
-                (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
+                        + (*(*pm).ps).velocity[1 as i32 as usize];
+                (*(*pm).ps).velocity[2 as i32 as usize] =
                     trace.plane.normal[2 as i32 as usize]
-                        + (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize];
+                        + (*(*pm).ps).velocity[2 as i32 as usize];
                 break;
             } else {
                 i += 1
@@ -323,23 +323,23 @@ pub unsafe extern "C" fn PM_SlideMove(
             // find a plane that it enters
             i = 0 as i32;
             while i < numplanes {
-                into = (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize]
+                into = (*(*pm).ps).velocity[0 as i32 as usize]
                     * planes[i as usize][0 as i32 as usize]
-                    + (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize]
+                    + (*(*pm).ps).velocity[1 as i32 as usize]
                         * planes[i as usize][1 as i32 as usize]
-                    + (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize]
+                    + (*(*pm).ps).velocity[2 as i32 as usize]
                         * planes[i as usize][2 as i32 as usize];
                 if into as f64 >= 0.1f64 {
                     i += 1
                 // move doesn't interact with the plane
                 } else {
                     // see how hard we are hitting things
-                    if -into > crate::src::game::bg_pmove::pml.impactSpeed {
-                        crate::src::game::bg_pmove::pml.impactSpeed = -into
+                    if -into > pml.impactSpeed {
+                        pml.impactSpeed = -into
                     }
                     // slide along the plane
-                    crate::src::game::bg_pmove::PM_ClipVelocity(
-                        (*(*crate::src::game::bg_pmove::pm).ps)
+                    PM_ClipVelocity(
+                        (*(*pm).ps)
                             .velocity
                             .as_mut_ptr(),
                         planes[i as usize].as_mut_ptr(),
@@ -348,7 +348,7 @@ pub unsafe extern "C" fn PM_SlideMove(
                     );
                     if gravity as u64 != 0 {
                         // slide along the plane
-                        crate::src::game::bg_pmove::PM_ClipVelocity(
+                        PM_ClipVelocity(
                             endVelocity.as_mut_ptr(),
                             planes[i as usize].as_mut_ptr(),
                             endClipVelocity.as_mut_ptr(),
@@ -369,14 +369,14 @@ pub unsafe extern "C" fn PM_SlideMove(
                                 >= 0.1f64)
                             {
                                 // try clipping the move to the plane
-                                crate::src::game::bg_pmove::PM_ClipVelocity(
+                                PM_ClipVelocity(
                                     clipVelocity.as_mut_ptr(),
                                     planes[j as usize].as_mut_ptr(),
                                     clipVelocity.as_mut_ptr(),
                                     1.001f32,
                                 );
                                 if gravity as u64 != 0 {
-                                    crate::src::game::bg_pmove::PM_ClipVelocity(
+                                    PM_ClipVelocity(
                                         endClipVelocity.as_mut_ptr(),
                                         planes[j as usize].as_mut_ptr(),
                                         endClipVelocity.as_mut_ptr(),
@@ -395,20 +395,20 @@ pub unsafe extern "C" fn PM_SlideMove(
                                     // slide the original velocity along the crease
                                     CrossProduct(
                                         planes[i as usize].as_mut_ptr()
-                                            as *const crate::src::qcommon::q_shared::vec_t,
+                                            as *const vec_t,
                                         planes[j as usize].as_mut_ptr()
-                                            as *const crate::src::qcommon::q_shared::vec_t,
+                                            as *const vec_t,
                                         dir.as_mut_ptr(),
                                     );
-                                    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+                                    VectorNormalize(dir.as_mut_ptr());
                                     d = dir[0 as i32 as usize]
-                                        * (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                        * (*(*pm).ps).velocity
                                             [0 as i32 as usize]
                                         + dir[1 as i32 as usize]
-                                            * (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                            * (*(*pm).ps).velocity
                                                 [1 as i32 as usize]
                                         + dir[2 as i32 as usize]
-                                            * (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                            * (*(*pm).ps).velocity
                                                 [2 as i32 as usize];
                                     clipVelocity[0 as i32 as usize] = dir[0 as i32 as usize] * d;
                                     clipVelocity[1 as i32 as usize] = dir[1 as i32 as usize] * d;
@@ -416,12 +416,12 @@ pub unsafe extern "C" fn PM_SlideMove(
                                     if gravity as u64 != 0 {
                                         CrossProduct(
                                             planes[i as usize].as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t,
+                                                as *const vec_t,
                                             planes[j as usize].as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t,
+                                                as *const vec_t,
                                             dir.as_mut_ptr(),
                                         );
-                                        crate::src::qcommon::q_math::VectorNormalize(
+                                        VectorNormalize(
                                             dir.as_mut_ptr(),
                                         );
                                         d = dir[0 as i32 as usize] * endVelocity[0 as i32 as usize]
@@ -450,20 +450,20 @@ pub unsafe extern "C" fn PM_SlideMove(
                                                 >= 0.1f64)
                                             {
                                                 // stop dead at a tripple plane interaction
-                                                (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                                (*(*pm).ps).velocity
                                                     [2 as i32 as usize] = 0 as i32
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                                    as vec_t;
+                                                (*(*pm).ps).velocity
                                                     [1 as i32 as usize] =
-                                                    (*(*crate::src::game::bg_pmove::pm).ps)
+                                                    (*(*pm).ps)
                                                         .velocity
                                                         [2 as i32 as usize];
-                                                (*(*crate::src::game::bg_pmove::pm).ps).velocity
+                                                (*(*pm).ps).velocity
                                                     [0 as i32 as usize] =
-                                                    (*(*crate::src::game::bg_pmove::pm).ps)
+                                                    (*(*pm).ps)
                                                         .velocity
                                                         [1 as i32 as usize];
-                                                return crate::src::qcommon::q_shared::qtrue;
+                                                return qtrue;
                                             }
                                         }
                                         k += 1
@@ -476,11 +476,11 @@ pub unsafe extern "C" fn PM_SlideMove(
                         // move doesn't interact with the plane
                     }
                     // if we have fixed all interactions, try another move
-                    (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
+                    (*(*pm).ps).velocity[0 as i32 as usize] =
                         clipVelocity[0 as i32 as usize];
-                    (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
+                    (*(*pm).ps).velocity[1 as i32 as usize] =
                         clipVelocity[1 as i32 as usize];
-                    (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
+                    (*(*pm).ps).velocity[2 as i32 as usize] =
                         clipVelocity[2 as i32 as usize];
                     if gravity as u64 != 0 {
                         endVelocity[0 as i32 as usize] = endClipVelocity[0 as i32 as usize];
@@ -494,23 +494,23 @@ pub unsafe extern "C" fn PM_SlideMove(
         bumpcount += 1
     }
     if gravity as u64 != 0 {
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
+        (*(*pm).ps).velocity[0 as i32 as usize] =
             endVelocity[0 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
+        (*(*pm).ps).velocity[1 as i32 as usize] =
             endVelocity[1 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
+        (*(*pm).ps).velocity[2 as i32 as usize] =
             endVelocity[2 as i32 as usize]
     }
     // don't change velocity if in a timer (FIXME: is this correct?)
-    if (*(*crate::src::game::bg_pmove::pm).ps).pm_time != 0 {
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
+    if (*(*pm).ps).pm_time != 0 {
+        (*(*pm).ps).velocity[0 as i32 as usize] =
             primal_velocity[0 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
+        (*(*pm).ps).velocity[1 as i32 as usize] =
             primal_velocity[1 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
+        (*(*pm).ps).velocity[2 as i32 as usize] =
             primal_velocity[2 as i32 as usize]
     }
-    return (bumpcount != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
+    return (bumpcount != 0 as i32) as i32 as qboolean;
 }
 /*
 ==================
@@ -520,17 +520,17 @@ PM_StepSlideMove
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_shared::qboolean) {
-    let mut start_o: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start_v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
+    let mut start_o: vec3_t = [0.; 3];
+    let mut start_v: vec3_t = [0.; 3];
     //	vec3_t		down_o, down_v;
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -543,18 +543,18 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_sh
         };
     //	float		down_dist, up_dist;
     //	vec3_t		delta, delta2;
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut down: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
+    let mut down: vec3_t = [0.; 3];
     let mut stepSize: f32 = 0.;
-    start_o[0 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize];
-    start_o[1 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize];
-    start_o[2 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize];
+    start_o[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
+    start_o[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
+    start_o[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize];
     start_v[0 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize];
+        (*(*pm).ps).velocity[0 as i32 as usize];
     start_v[1 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize];
+        (*(*pm).ps).velocity[1 as i32 as usize];
     start_v[2 as i32 as usize] =
-        (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize];
+        (*(*pm).ps).velocity[2 as i32 as usize];
     if PM_SlideMove(gravity) as u32 == 0 as i32 as u32 {
         return;
         // we got exactly where we wanted to go first try
@@ -563,24 +563,24 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_sh
     down[1 as i32 as usize] = start_o[1 as i32 as usize];
     down[2 as i32 as usize] = start_o[2 as i32 as usize];
     down[2 as i32 as usize] -= 18 as i32 as f32;
-    (*crate::src::game::bg_pmove::pm)
+    (*pm)
         .trace
         .expect("non-null function pointer")(
         &mut trace,
-        start_o.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).mins.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).maxs.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        down.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*(*crate::src::game::bg_pmove::pm).ps).clientNum,
-        (*crate::src::game::bg_pmove::pm).tracemask,
+        start_o.as_mut_ptr() as *const vec_t,
+        (*pm).mins.as_mut_ptr()
+            as *const vec_t,
+        (*pm).maxs.as_mut_ptr()
+            as *const vec_t,
+        down.as_mut_ptr() as *const vec_t,
+        (*(*pm).ps).clientNum,
+        (*pm).tracemask,
     );
-    up[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    up[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    up[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    up[0 as i32 as usize] = 0 as i32 as vec_t;
+    up[1 as i32 as usize] = 0 as i32 as vec_t;
+    up[2 as i32 as usize] = 1 as i32 as vec_t;
     // never step up when you still have up velocity
-    if (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] > 0 as i32 as f32
+    if (*(*pm).ps).velocity[2 as i32 as usize] > 0 as i32 as f32
         && (trace.fraction as f64 == 1.0f64
             || ((trace.plane.normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + trace.plane.normal[1 as i32 as usize] * up[1 as i32 as usize]
@@ -597,24 +597,24 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_sh
     up[2 as i32 as usize] = start_o[2 as i32 as usize];
     up[2 as i32 as usize] += 18 as i32 as f32;
     // test the player position if they were a stepheight higher
-    (*crate::src::game::bg_pmove::pm)
+    (*pm)
         .trace
         .expect("non-null function pointer")(
         &mut trace,
-        start_o.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).mins.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).maxs.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*(*crate::src::game::bg_pmove::pm).ps).clientNum,
-        (*crate::src::game::bg_pmove::pm).tracemask,
+        start_o.as_mut_ptr() as *const vec_t,
+        (*pm).mins.as_mut_ptr()
+            as *const vec_t,
+        (*pm).maxs.as_mut_ptr()
+            as *const vec_t,
+        up.as_mut_ptr() as *const vec_t,
+        (*(*pm).ps).clientNum,
+        (*pm).tracemask,
     );
     if trace.allsolid as u64 != 0 {
-        if (*crate::src::game::bg_pmove::pm).debugLevel != 0 {
-            crate::src::cgame::cg_main::Com_Printf(
+        if (*pm).debugLevel != 0 {
+            Com_Printf(
                 b"%i:bend can\'t step\n\x00" as *const u8 as *const libc::c_char,
-                crate::src::game::bg_pmove::c_pmove,
+                c_pmove,
             );
         }
         return;
@@ -622,53 +622,53 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_sh
     }
     stepSize = trace.endpos[2 as i32 as usize] - start_o[2 as i32 as usize];
     // try slidemove from this position
-    (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize] =
+    (*(*pm).ps).origin[0 as i32 as usize] =
         trace.endpos[0 as i32 as usize];
-    (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize] =
+    (*(*pm).ps).origin[1 as i32 as usize] =
         trace.endpos[1 as i32 as usize];
-    (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize] =
+    (*(*pm).ps).origin[2 as i32 as usize] =
         trace.endpos[2 as i32 as usize];
-    (*(*crate::src::game::bg_pmove::pm).ps).velocity[0 as i32 as usize] =
+    (*(*pm).ps).velocity[0 as i32 as usize] =
         start_v[0 as i32 as usize];
-    (*(*crate::src::game::bg_pmove::pm).ps).velocity[1 as i32 as usize] =
+    (*(*pm).ps).velocity[1 as i32 as usize] =
         start_v[1 as i32 as usize];
-    (*(*crate::src::game::bg_pmove::pm).ps).velocity[2 as i32 as usize] =
+    (*(*pm).ps).velocity[2 as i32 as usize] =
         start_v[2 as i32 as usize];
     PM_SlideMove(gravity);
     // push down the final amount
-    down[0 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize];
-    down[1 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize];
-    down[2 as i32 as usize] = (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize];
+    down[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
+    down[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
+    down[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize];
     down[2 as i32 as usize] -= stepSize;
-    (*crate::src::game::bg_pmove::pm)
+    (*pm)
         .trace
         .expect("non-null function pointer")(
         &mut trace,
-        (*(*crate::src::game::bg_pmove::pm).ps).origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).mins.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*crate::src::game::bg_pmove::pm).maxs.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        down.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        (*(*crate::src::game::bg_pmove::pm).ps).clientNum,
-        (*crate::src::game::bg_pmove::pm).tracemask,
+        (*(*pm).ps).origin.as_mut_ptr()
+            as *const vec_t,
+        (*pm).mins.as_mut_ptr()
+            as *const vec_t,
+        (*pm).maxs.as_mut_ptr()
+            as *const vec_t,
+        down.as_mut_ptr() as *const vec_t,
+        (*(*pm).ps).clientNum,
+        (*pm).tracemask,
     );
     if trace.allsolid as u64 == 0 {
-        (*(*crate::src::game::bg_pmove::pm).ps).origin[0 as i32 as usize] =
+        (*(*pm).ps).origin[0 as i32 as usize] =
             trace.endpos[0 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).origin[1 as i32 as usize] =
+        (*(*pm).ps).origin[1 as i32 as usize] =
             trace.endpos[1 as i32 as usize];
-        (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize] =
+        (*(*pm).ps).origin[2 as i32 as usize] =
             trace.endpos[2 as i32 as usize]
     }
     if (trace.fraction as f64) < 1.0f64 {
-        crate::src::game::bg_pmove::PM_ClipVelocity(
-            (*(*crate::src::game::bg_pmove::pm).ps)
+        PM_ClipVelocity(
+            (*(*pm).ps)
                 .velocity
                 .as_mut_ptr(),
             trace.plane.normal.as_mut_ptr(),
-            (*(*crate::src::game::bg_pmove::pm).ps)
+            (*(*pm).ps)
                 .velocity
                 .as_mut_ptr(),
             1.001f32,
@@ -676,23 +676,23 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: crate::src::qcommon::q_sh
     }
     // use the step move
     let mut delta: f32 = 0.;
-    delta = (*(*crate::src::game::bg_pmove::pm).ps).origin[2 as i32 as usize]
+    delta = (*(*pm).ps).origin[2 as i32 as usize]
         - start_o[2 as i32 as usize];
     if delta > 2 as i32 as f32 {
         if delta < 7 as i32 as f32 {
-            crate::src::game::bg_pmove::PM_AddEvent(crate::bg_public_h::EV_STEP_4 as i32);
+            PM_AddEvent(EV_STEP_4 as i32);
         } else if delta < 11 as i32 as f32 {
-            crate::src::game::bg_pmove::PM_AddEvent(crate::bg_public_h::EV_STEP_8 as i32);
+            PM_AddEvent(EV_STEP_8 as i32);
         } else if delta < 15 as i32 as f32 {
-            crate::src::game::bg_pmove::PM_AddEvent(crate::bg_public_h::EV_STEP_12 as i32);
+            PM_AddEvent(EV_STEP_12 as i32);
         } else {
-            crate::src::game::bg_pmove::PM_AddEvent(crate::bg_public_h::EV_STEP_16 as i32);
+            PM_AddEvent(EV_STEP_16 as i32);
         }
     }
-    if (*crate::src::game::bg_pmove::pm).debugLevel != 0 {
-        crate::src::cgame::cg_main::Com_Printf(
+    if (*pm).debugLevel != 0 {
+        Com_Printf(
             b"%i:stepped\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::bg_pmove::c_pmove,
+            c_pmove,
         );
     };
 }

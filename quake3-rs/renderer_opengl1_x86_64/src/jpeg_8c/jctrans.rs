@@ -225,13 +225,13 @@ pub type my_coef_ptr = *mut my_coef_controller;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_coef_controller {
-    pub pub_0: crate::jpegint_h::jpeg_c_coef_controller,
-    pub iMCU_row_num: crate::jmorecfg_h::JDIMENSION,
-    pub mcu_ctr: crate::jmorecfg_h::JDIMENSION,
+    pub pub_0: jpeg_c_coef_controller,
+    pub iMCU_row_num: JDIMENSION,
+    pub mcu_ctr: JDIMENSION,
     pub MCU_vert_offset: i32,
     pub MCU_rows_per_iMCU_row: i32,
-    pub whole_image: *mut crate::jpeglib_h::jvirt_barray_ptr,
-    pub dummy_buffer: [crate::jpeglib_h::JBLOCKROW; 10],
+    pub whole_image: *mut jvirt_barray_ptr,
+    pub dummy_buffer: [JBLOCKROW; 10],
 }
 /*
  * Compression initialization for writing raw-coefficient data.
@@ -247,22 +247,22 @@ pub struct my_coef_controller {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_write_coefficients(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut coef_arrays: *mut crate::jpeglib_h::jvirt_barray_ptr,
+    mut cinfo: j_compress_ptr,
+    mut coef_arrays: *mut jvirt_barray_ptr,
 ) {
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Mark all tables to be written */
-    crate::src::jpeg_8c::jcapimin::jpeg_suppress_tables(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jpeg_suppress_tables(
+        cinfo as *mut jpeg_compress_struct,
         0 as i32,
     );
     /* (Re)initialize error mgr and destination modules */
@@ -271,7 +271,7 @@ pub unsafe extern "C" fn jpeg_write_coefficients(
             .reset_error_mgr
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     Some(
         (*(*cinfo).dest)
             .init_destination
@@ -281,7 +281,7 @@ pub unsafe extern "C" fn jpeg_write_coefficients(
     /* Perform master selection of active modules */
     transencode_master_selection(cinfo, coef_arrays);
     /* Wait for jpeg_finish_compress() call */
-    (*cinfo).next_scanline = 0 as i32 as crate::jmorecfg_h::JDIMENSION; /* so jpeg_write_marker works */
+    (*cinfo).next_scanline = 0 as i32 as JDIMENSION; /* so jpeg_write_marker works */
     (*cinfo).global_state = 103 as i32;
 }
 /*
@@ -293,30 +293,30 @@ pub unsafe extern "C" fn jpeg_write_coefficients(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_copy_critical_parameters(
-    mut srcinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut dstinfo: crate::jpeglib_h::j_compress_ptr,
+    mut srcinfo: j_decompress_ptr,
+    mut dstinfo: j_compress_ptr,
 ) {
-    let mut qtblptr: *mut *mut crate::jpeglib_h::JQUANT_TBL =
-        0 as *mut *mut crate::jpeglib_h::JQUANT_TBL;
-    let mut incomp: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut outcomp: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut c_quant: *mut crate::jpeglib_h::JQUANT_TBL = 0 as *mut crate::jpeglib_h::JQUANT_TBL;
-    let mut slot_quant: *mut crate::jpeglib_h::JQUANT_TBL = 0 as *mut crate::jpeglib_h::JQUANT_TBL;
+    let mut qtblptr: *mut *mut JQUANT_TBL =
+        0 as *mut *mut JQUANT_TBL;
+    let mut incomp: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
+    let mut outcomp: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
+    let mut c_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
+    let mut slot_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut tblno: i32 = 0;
     let mut ci: i32 = 0;
     let mut coefi: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*dstinfo).global_state != 100 as i32 {
-        (*(*dstinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*dstinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = (*dstinfo).global_state;
         Some(
             (*(*dstinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(dstinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(dstinfo as j_common_ptr);
     }
     /* Copy fundamental image dimensions */
     (*dstinfo).image_width = (*srcinfo).image_width;
@@ -328,14 +328,14 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
     (*dstinfo).min_DCT_h_scaled_size = (*srcinfo).min_DCT_h_scaled_size;
     (*dstinfo).min_DCT_v_scaled_size = (*srcinfo).min_DCT_v_scaled_size;
     /* Initialize all parameters to default values */
-    crate::src::jpeg_8c::jcparam::jpeg_set_defaults(
-        dstinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jpeg_set_defaults(
+        dstinfo as *mut jpeg_compress_struct,
     );
     /* jpeg_set_defaults may choose wrong colorspace, eg YCbCr if input is RGB.
      * Fix it to get the right header markers for the image colorspace.
      */
-    crate::src::jpeg_8c::jcparam::jpeg_set_colorspace(
-        dstinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jpeg_set_colorspace(
+        dstinfo as *mut jpeg_compress_struct,
         (*srcinfo).jpeg_color_space,
     );
     (*dstinfo).data_precision = (*srcinfo).data_precision;
@@ -348,19 +348,19 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                 .quant_tbl_ptrs
                 .as_mut_ptr()
                 .offset(tblno as isize)
-                as *mut *mut crate::jpeglib_h::JQUANT_TBL;
+                as *mut *mut JQUANT_TBL;
             if (*qtblptr).is_null() {
-                *qtblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_quant_table(
-                    dstinfo as crate::jpeglib_h::j_common_ptr
-                        as *mut crate::jpeglib_h::jpeg_common_struct,
-                ) as *mut crate::jpeglib_h::JQUANT_TBL
+                *qtblptr = jpeg_alloc_quant_table(
+                    dstinfo as j_common_ptr
+                        as *mut jpeg_common_struct,
+                ) as *mut JQUANT_TBL
             }
             crate::stdlib::memcpy(
                 (**qtblptr).quantval.as_mut_ptr() as *mut libc::c_void,
                 (*(*srcinfo).quant_tbl_ptrs[tblno as usize])
                     .quantval
                     .as_mut_ptr() as *const libc::c_void,
-                ::std::mem::size_of::<[crate::jmorecfg_h::UINT16; 64]>() as libc::c_ulong,
+                ::std::mem::size_of::<[UINT16; 64]>() as libc::c_ulong,
             );
             (**qtblptr).sent_table = 0 as i32
         }
@@ -371,7 +371,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
      */
     (*dstinfo).num_components = (*srcinfo).num_components;
     if (*dstinfo).num_components < 1 as i32 || (*dstinfo).num_components > 10 as i32 {
-        (*(*dstinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+        (*(*dstinfo).err).msg_code = JERR_COMPONENT_COUNT as i32;
         (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = (*dstinfo).num_components;
         (*(*dstinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
         Some(
@@ -379,7 +379,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(dstinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(dstinfo as j_common_ptr);
     }
     ci = 0 as i32;
     incomp = (*srcinfo).comp_info;
@@ -397,7 +397,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
             || tblno >= 4 as i32
             || (*srcinfo).quant_tbl_ptrs[tblno as usize].is_null()
         {
-            (*(*dstinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
+            (*(*dstinfo).err).msg_code = JERR_NO_QUANT_TABLE as i32;
             (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
             Some(
                 (*(*dstinfo).err)
@@ -405,7 +405,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                dstinfo as crate::jpeglib_h::j_common_ptr
+                dstinfo as j_common_ptr
             );
         }
         slot_quant = (*srcinfo).quant_tbl_ptrs[tblno as usize];
@@ -417,7 +417,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                     != (*slot_quant).quantval[coefi as usize] as i32
                 {
                     (*(*dstinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JERR_MISMATCHED_QUANT_TABLE as i32;
+                        JERR_MISMATCHED_QUANT_TABLE as i32;
                     (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
                     Some(
                         (*(*dstinfo).err)
@@ -425,7 +425,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        dstinfo as crate::jpeglib_h::j_common_ptr
+                        dstinfo as j_common_ptr
                     );
                 }
                 coefi += 1
@@ -476,28 +476,28 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
  */
 
 unsafe extern "C" fn transencode_master_selection(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut coef_arrays: *mut crate::jpeglib_h::jvirt_barray_ptr,
+    mut cinfo: j_compress_ptr,
+    mut coef_arrays: *mut jvirt_barray_ptr,
 ) {
     /* Initialize master control (includes parameter checking/processing) */
-    crate::src::jpeg_8c::jcmaster::jinit_c_master_control(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_c_master_control(
+        cinfo as *mut jpeg_compress_struct,
         1 as i32,
     );
     /* Entropy encoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        crate::src::jpeg_8c::jcarith::jinit_arith_encoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_arith_encoder(
+            cinfo as *mut jpeg_compress_struct,
         );
     } else {
-        crate::src::jpeg_8c::jchuff::jinit_huff_encoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_huff_encoder(
+            cinfo as *mut jpeg_compress_struct,
         );
     }
     /* We need a special coefficient buffer controller. */
     transencode_coef_controller(cinfo, coef_arrays);
-    crate::src::jpeg_8c::jcmarker::jinit_marker_writer(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_marker_writer(
+        cinfo as *mut jpeg_compress_struct,
     );
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
@@ -505,7 +505,7 @@ unsafe extern "C" fn transencode_master_selection(
             .realize_virt_arrays
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     /* Write the datastream header (SOI, JFIF) immediately.
      * Frame and scan headers are postponed till later.
      * This lets application insert special markers after the SOI.
@@ -518,7 +518,7 @@ unsafe extern "C" fn transencode_master_selection(
     .expect("non-null function pointer")(cinfo);
 }
 
-unsafe extern "C" fn start_iMCU_row(mut cinfo: crate::jpeglib_h::j_compress_ptr)
+unsafe extern "C" fn start_iMCU_row(mut cinfo: j_compress_ptr)
 /* Reset within-iMCU-row counters for a new row */
 {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
@@ -533,7 +533,7 @@ unsafe extern "C" fn start_iMCU_row(mut cinfo: crate::jpeglib_h::j_compress_ptr)
     } else {
         (*coef).MCU_rows_per_iMCU_row = (*(*cinfo).cur_comp_info[0 as i32 as usize]).last_row_height
     }
-    (*coef).mcu_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    (*coef).mcu_ctr = 0 as i32 as JDIMENSION;
     (*coef).MCU_vert_offset = 0 as i32;
 }
 /*
@@ -541,20 +541,20 @@ unsafe extern "C" fn start_iMCU_row(mut cinfo: crate::jpeglib_h::j_compress_ptr)
  */
 
 unsafe extern "C" fn start_pass_coef(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut pass_mode: crate::jpegint_h::J_BUF_MODE,
+    mut cinfo: j_compress_ptr,
+    mut pass_mode: J_BUF_MODE,
 ) {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
-    if pass_mode as u32 != crate::jpegint_h::JBUF_CRANK_DEST as i32 as u32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+    if pass_mode as u32 != JBUF_CRANK_DEST as i32 as u32 {
+        (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    (*coef).iMCU_row_num = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    (*coef).iMCU_row_num = 0 as i32 as JDIMENSION;
     start_iMCU_row(cinfo);
 }
 /*
@@ -568,14 +568,14 @@ unsafe extern "C" fn start_pass_coef(
  */
 
 unsafe extern "C" fn compress_output(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut _input_buf: crate::jpeglib_h::JSAMPIMAGE,
-) -> crate::jmorecfg_h::boolean {
+    mut cinfo: j_compress_ptr,
+    mut _input_buf: JSAMPIMAGE,
+) -> boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr; /* index of current MCU within row */
-    let mut MCU_col_num: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut last_MCU_col: crate::jmorecfg_h::JDIMENSION =
+    let mut MCU_col_num: JDIMENSION = 0;
+    let mut last_MCU_col: JDIMENSION =
         (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
-    let mut last_iMCU_row: crate::jmorecfg_h::JDIMENSION =
+    let mut last_iMCU_row: JDIMENSION =
         (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
@@ -583,13 +583,13 @@ unsafe extern "C" fn compress_output(
     let mut yindex: i32 = 0;
     let mut yoffset: i32 = 0;
     let mut blockcnt: i32 = 0;
-    let mut start_col: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut buffer: [crate::jpeglib_h::JBLOCKARRAY; 4] = [0 as *mut crate::jpeglib_h::JBLOCKROW; 4];
-    let mut MCU_buffer: [crate::jpeglib_h::JBLOCKROW; 10] =
-        [0 as *mut crate::jpeglib_h::JBLOCK; 10];
-    let mut buffer_ptr: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut start_col: JDIMENSION = 0;
+    let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
+    let mut MCU_buffer: [JBLOCKROW; 10] =
+        [0 as *mut JBLOCK; 10];
+    let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     /* Align the virtual buffers for the components used in this scan. */
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -600,14 +600,14 @@ unsafe extern "C" fn compress_output(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             *(*coef)
                 .whole_image
                 .offset((*compptr).component_index as isize),
             (*coef)
                 .iMCU_row_num
                 .wrapping_mul((*compptr).v_samp_factor as u32),
-            (*compptr).v_samp_factor as crate::jmorecfg_h::JDIMENSION,
+            (*compptr).v_samp_factor as JDIMENSION,
             0 as i32,
         );
         ci += 1
@@ -684,7 +684,7 @@ unsafe extern "C" fn compress_output(
             MCU_col_num = MCU_col_num.wrapping_add(1)
         }
         /* Completed an MCU row, but perhaps not an iMCU row */
-        (*coef).mcu_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        (*coef).mcu_ctr = 0 as i32 as JDIMENSION;
         yoffset += 1
     }
     /* Completed the iMCU row, advance counters for next one */
@@ -701,11 +701,11 @@ unsafe extern "C" fn compress_output(
  */
 
 unsafe extern "C" fn transencode_coef_controller(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut coef_arrays: *mut crate::jpeglib_h::jvirt_barray_ptr,
+    mut cinfo: j_compress_ptr,
+    mut coef_arrays: *mut jvirt_barray_ptr,
 ) {
     let mut coef: my_coef_ptr = 0 as *mut my_coef_controller;
-    let mut buffer: crate::jpeglib_h::JBLOCKROW = 0 as *mut crate::jpeglib_h::JBLOCK;
+    let mut buffer: JBLOCKROW = 0 as *mut JBLOCK;
     let mut i: i32 = 0;
     coef = Some(
         (*(*cinfo).mem)
@@ -713,24 +713,24 @@ unsafe extern "C" fn transencode_coef_controller(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
     ) as my_coef_ptr;
-    (*cinfo).coef = coef as *mut crate::jpegint_h::jpeg_c_coef_controller;
+    (*cinfo).coef = coef as *mut jpeg_c_coef_controller;
     (*coef).pub_0.start_pass = Some(
         start_pass_coef
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_compress_ptr,
-                _: crate::jpegint_h::J_BUF_MODE,
+                _: j_compress_ptr,
+                _: J_BUF_MODE,
             ) -> (),
     );
     (*coef).pub_0.compress_data = Some(
         compress_output
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_compress_ptr,
-                _: crate::jpeglib_h::JSAMPIMAGE,
-            ) -> crate::jmorecfg_h::boolean,
+                _: j_compress_ptr,
+                _: JSAMPIMAGE,
+            ) -> boolean,
     );
     /* Save pointer to virtual arrays */
     (*coef).whole_image = coef_arrays;
@@ -741,15 +741,15 @@ unsafe extern "C" fn transencode_coef_controller(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         (10 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong),
-    ) as crate::jpeglib_h::JBLOCKROW;
-    crate::src::jpeg_8c::jutils::jzero_far(
+            .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+    ) as JBLOCKROW;
+    jzero_far(
         buffer as *mut libc::c_void,
         (10 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
     );
     i = 0 as i32;
     while i < 10 as i32 {

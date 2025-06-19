@@ -208,11 +208,11 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_add_quant_table(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
+    mut cinfo: j_compress_ptr,
     mut which_tbl: i32,
     mut basic_table: *const u32,
     mut scale_factor: i32,
-    mut force_baseline: crate::jmorecfg_h::boolean,
+    mut force_baseline: boolean,
 )
 /* Define a quantization table equal to the basic_table times
  * a scale factor (given as a percentage).
@@ -220,39 +220,39 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
  * are limited to 1..255 for JPEG baseline compatibility.
  */
 {
-    let mut qtblptr: *mut *mut crate::jpeglib_h::JQUANT_TBL =
-        0 as *mut *mut crate::jpeglib_h::JQUANT_TBL;
+    let mut qtblptr: *mut *mut JQUANT_TBL =
+        0 as *mut *mut JQUANT_TBL;
     let mut i: i32 = 0;
     let mut temp: isize = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     if which_tbl < 0 as i32 || which_tbl >= 4 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_DQT_INDEX as i32;
+        (*(*cinfo).err).msg_code = JERR_DQT_INDEX as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = which_tbl;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     qtblptr = &mut *(*cinfo)
         .quant_tbl_ptrs
         .as_mut_ptr()
-        .offset(which_tbl as isize) as *mut *mut crate::jpeglib_h::JQUANT_TBL;
+        .offset(which_tbl as isize) as *mut *mut JQUANT_TBL;
     if (*qtblptr).is_null() {
-        *qtblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_quant_table(
-            cinfo as crate::jpeglib_h::j_common_ptr as *mut crate::jpeglib_h::jpeg_common_struct,
-        ) as *mut crate::jpeglib_h::JQUANT_TBL
+        *qtblptr = jpeg_alloc_quant_table(
+            cinfo as j_common_ptr as *mut jpeg_common_struct,
+        ) as *mut JQUANT_TBL
     }
     i = 0 as i32;
     while i < 64 as i32 {
@@ -268,7 +268,7 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
         if force_baseline != 0 && temp > 255 as isize {
             temp = 255 as isize
         }
-        (**qtblptr).quantval[i as usize] = temp as crate::jmorecfg_h::UINT16;
+        (**qtblptr).quantval[i as usize] = temp as UINT16;
         i += 1
     }
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
@@ -415,8 +415,8 @@ static mut std_chrominance_quant_tbl: [u32; 64] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_default_qtables(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut force_baseline: crate::jmorecfg_h::boolean,
+    mut cinfo: j_compress_ptr,
+    mut force_baseline: boolean,
 )
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and straight percentage-scaling quality scales.
@@ -442,9 +442,9 @@ pub unsafe extern "C" fn jpeg_default_qtables(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_set_linear_quality(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
+    mut cinfo: j_compress_ptr,
     mut scale_factor: i32,
-    mut force_baseline: crate::jmorecfg_h::boolean,
+    mut force_baseline: boolean,
 )
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and a straight percentage-scaling quality scale.  In most cases it's better
@@ -498,9 +498,9 @@ pub unsafe extern "C" fn jpeg_quality_scaling(mut quality: i32) -> i32
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_set_quality(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
+    mut cinfo: j_compress_ptr,
     mut quality: i32,
-    mut force_baseline: crate::jmorecfg_h::boolean,
+    mut force_baseline: boolean,
 )
 /* Set or change the 'quality' (quantization) setting, using default tables.
  * This is the standard quality-adjusting entry point for typical user
@@ -518,25 +518,25 @@ pub unsafe extern "C" fn jpeg_set_quality(
  */
 
 unsafe extern "C" fn add_huff_table(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut htblptr: *mut *mut crate::jpeglib_h::JHUFF_TBL,
-    mut bits: *const crate::jmorecfg_h::UINT8,
-    mut val: *const crate::jmorecfg_h::UINT8,
+    mut cinfo: j_compress_ptr,
+    mut htblptr: *mut *mut JHUFF_TBL,
+    mut bits: *const UINT8,
+    mut val: *const UINT8,
 )
 /* Define a Huffman table */
 {
     let mut nsymbols: i32 = 0;
     let mut len: i32 = 0;
     if (*htblptr).is_null() {
-        *htblptr = crate::src::jpeg_8c::jcomapi::jpeg_alloc_huff_table(
-            cinfo as crate::jpeglib_h::j_common_ptr as *mut crate::jpeglib_h::jpeg_common_struct,
-        ) as *mut crate::jpeglib_h::JHUFF_TBL
+        *htblptr = jpeg_alloc_huff_table(
+            cinfo as j_common_ptr as *mut jpeg_common_struct,
+        ) as *mut JHUFF_TBL
     }
     /* Copy the number-of-symbols-of-each-code-length counts */
     crate::stdlib::memcpy(
         (**htblptr).bits.as_mut_ptr() as *mut libc::c_void,
         bits as *const libc::c_void,
-        ::std::mem::size_of::<[crate::jmorecfg_h::UINT8; 17]>() as libc::c_ulong,
+        ::std::mem::size_of::<[UINT8; 17]>() as libc::c_ulong,
     );
     /* Validate the counts.  We do this here mainly so we can copy the right
      * number of symbols from the val[] array, without risking marching off
@@ -549,459 +549,459 @@ unsafe extern "C" fn add_huff_table(
         len += 1
     }
     if nsymbols < 1 as i32 || nsymbols > 256 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_HUFF_TABLE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     crate::stdlib::memcpy(
         (**htblptr).huffval.as_mut_ptr() as *mut libc::c_void,
         val as *const libc::c_void,
         (nsymbols as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::UINT8>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<UINT8>() as libc::c_ulong),
     );
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
     (**htblptr).sent_table = 0 as i32;
 }
 
-unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr)
+unsafe extern "C" fn std_huff_tables(mut cinfo: j_compress_ptr)
 /* Set up the standard Huffman tables (cf. JPEG standard section K.3) */
 /* IMPORTANT: these are only valid for 8-bit data precision! */
 {
-    static mut bits_dc_luminance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
+    static mut bits_dc_luminance: [UINT8; 17] = [
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        1 as i32 as UINT8,
+        5 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
     ];
-    static mut val_dc_luminance: [crate::jmorecfg_h::UINT8; 12] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        6 as i32 as crate::jmorecfg_h::UINT8,
-        7 as i32 as crate::jmorecfg_h::UINT8,
-        8 as i32 as crate::jmorecfg_h::UINT8,
-        9 as i32 as crate::jmorecfg_h::UINT8,
-        10 as i32 as crate::jmorecfg_h::UINT8,
-        11 as i32 as crate::jmorecfg_h::UINT8,
+    static mut val_dc_luminance: [UINT8; 12] = [
+        0 as i32 as UINT8,
+        1 as i32 as UINT8,
+        2 as i32 as UINT8,
+        3 as i32 as UINT8,
+        4 as i32 as UINT8,
+        5 as i32 as UINT8,
+        6 as i32 as UINT8,
+        7 as i32 as UINT8,
+        8 as i32 as UINT8,
+        9 as i32 as UINT8,
+        10 as i32 as UINT8,
+        11 as i32 as UINT8,
     ];
-    static mut bits_dc_chrominance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
+    static mut bits_dc_chrominance: [UINT8; 17] = [
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        3 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        1 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
     ];
-    static mut val_dc_chrominance: [crate::jmorecfg_h::UINT8; 12] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        6 as i32 as crate::jmorecfg_h::UINT8,
-        7 as i32 as crate::jmorecfg_h::UINT8,
-        8 as i32 as crate::jmorecfg_h::UINT8,
-        9 as i32 as crate::jmorecfg_h::UINT8,
-        10 as i32 as crate::jmorecfg_h::UINT8,
-        11 as i32 as crate::jmorecfg_h::UINT8,
+    static mut val_dc_chrominance: [UINT8; 12] = [
+        0 as i32 as UINT8,
+        1 as i32 as UINT8,
+        2 as i32 as UINT8,
+        3 as i32 as UINT8,
+        4 as i32 as UINT8,
+        5 as i32 as UINT8,
+        6 as i32 as UINT8,
+        7 as i32 as UINT8,
+        8 as i32 as UINT8,
+        9 as i32 as UINT8,
+        10 as i32 as UINT8,
+        11 as i32 as UINT8,
     ];
-    static mut bits_ac_luminance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        0x7d as i32 as crate::jmorecfg_h::UINT8,
+    static mut bits_ac_luminance: [UINT8; 17] = [
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        2 as i32 as UINT8,
+        1 as i32 as UINT8,
+        3 as i32 as UINT8,
+        3 as i32 as UINT8,
+        2 as i32 as UINT8,
+        4 as i32 as UINT8,
+        3 as i32 as UINT8,
+        5 as i32 as UINT8,
+        5 as i32 as UINT8,
+        4 as i32 as UINT8,
+        4 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        1 as i32 as UINT8,
+        0x7d as i32 as UINT8,
     ];
-    static mut val_ac_luminance: [crate::jmorecfg_h::UINT8; 162] = [
-        0x1 as i32 as crate::jmorecfg_h::UINT8,
-        0x2 as i32 as crate::jmorecfg_h::UINT8,
-        0x3 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0x4 as i32 as crate::jmorecfg_h::UINT8,
-        0x11 as i32 as crate::jmorecfg_h::UINT8,
-        0x5 as i32 as crate::jmorecfg_h::UINT8,
-        0x12 as i32 as crate::jmorecfg_h::UINT8,
-        0x21 as i32 as crate::jmorecfg_h::UINT8,
-        0x31 as i32 as crate::jmorecfg_h::UINT8,
-        0x41 as i32 as crate::jmorecfg_h::UINT8,
-        0x6 as i32 as crate::jmorecfg_h::UINT8,
-        0x13 as i32 as crate::jmorecfg_h::UINT8,
-        0x51 as i32 as crate::jmorecfg_h::UINT8,
-        0x61 as i32 as crate::jmorecfg_h::UINT8,
-        0x7 as i32 as crate::jmorecfg_h::UINT8,
-        0x22 as i32 as crate::jmorecfg_h::UINT8,
-        0x71 as i32 as crate::jmorecfg_h::UINT8,
-        0x14 as i32 as crate::jmorecfg_h::UINT8,
-        0x32 as i32 as crate::jmorecfg_h::UINT8,
-        0x81 as i32 as crate::jmorecfg_h::UINT8,
-        0x91 as i32 as crate::jmorecfg_h::UINT8,
-        0xa1 as i32 as crate::jmorecfg_h::UINT8,
-        0x8 as i32 as crate::jmorecfg_h::UINT8,
-        0x23 as i32 as crate::jmorecfg_h::UINT8,
-        0x42 as i32 as crate::jmorecfg_h::UINT8,
-        0xb1 as i32 as crate::jmorecfg_h::UINT8,
-        0xc1 as i32 as crate::jmorecfg_h::UINT8,
-        0x15 as i32 as crate::jmorecfg_h::UINT8,
-        0x52 as i32 as crate::jmorecfg_h::UINT8,
-        0xd1 as i32 as crate::jmorecfg_h::UINT8,
-        0xf0 as i32 as crate::jmorecfg_h::UINT8,
-        0x24 as i32 as crate::jmorecfg_h::UINT8,
-        0x33 as i32 as crate::jmorecfg_h::UINT8,
-        0x62 as i32 as crate::jmorecfg_h::UINT8,
-        0x72 as i32 as crate::jmorecfg_h::UINT8,
-        0x82 as i32 as crate::jmorecfg_h::UINT8,
-        0x9 as i32 as crate::jmorecfg_h::UINT8,
-        0xa as i32 as crate::jmorecfg_h::UINT8,
-        0x16 as i32 as crate::jmorecfg_h::UINT8,
-        0x17 as i32 as crate::jmorecfg_h::UINT8,
-        0x18 as i32 as crate::jmorecfg_h::UINT8,
-        0x19 as i32 as crate::jmorecfg_h::UINT8,
-        0x1a as i32 as crate::jmorecfg_h::UINT8,
-        0x25 as i32 as crate::jmorecfg_h::UINT8,
-        0x26 as i32 as crate::jmorecfg_h::UINT8,
-        0x27 as i32 as crate::jmorecfg_h::UINT8,
-        0x28 as i32 as crate::jmorecfg_h::UINT8,
-        0x29 as i32 as crate::jmorecfg_h::UINT8,
-        0x2a as i32 as crate::jmorecfg_h::UINT8,
-        0x34 as i32 as crate::jmorecfg_h::UINT8,
-        0x35 as i32 as crate::jmorecfg_h::UINT8,
-        0x36 as i32 as crate::jmorecfg_h::UINT8,
-        0x37 as i32 as crate::jmorecfg_h::UINT8,
-        0x38 as i32 as crate::jmorecfg_h::UINT8,
-        0x39 as i32 as crate::jmorecfg_h::UINT8,
-        0x3a as i32 as crate::jmorecfg_h::UINT8,
-        0x43 as i32 as crate::jmorecfg_h::UINT8,
-        0x44 as i32 as crate::jmorecfg_h::UINT8,
-        0x45 as i32 as crate::jmorecfg_h::UINT8,
-        0x46 as i32 as crate::jmorecfg_h::UINT8,
-        0x47 as i32 as crate::jmorecfg_h::UINT8,
-        0x48 as i32 as crate::jmorecfg_h::UINT8,
-        0x49 as i32 as crate::jmorecfg_h::UINT8,
-        0x4a as i32 as crate::jmorecfg_h::UINT8,
-        0x53 as i32 as crate::jmorecfg_h::UINT8,
-        0x54 as i32 as crate::jmorecfg_h::UINT8,
-        0x55 as i32 as crate::jmorecfg_h::UINT8,
-        0x56 as i32 as crate::jmorecfg_h::UINT8,
-        0x57 as i32 as crate::jmorecfg_h::UINT8,
-        0x58 as i32 as crate::jmorecfg_h::UINT8,
-        0x59 as i32 as crate::jmorecfg_h::UINT8,
-        0x5a as i32 as crate::jmorecfg_h::UINT8,
-        0x63 as i32 as crate::jmorecfg_h::UINT8,
-        0x64 as i32 as crate::jmorecfg_h::UINT8,
-        0x65 as i32 as crate::jmorecfg_h::UINT8,
-        0x66 as i32 as crate::jmorecfg_h::UINT8,
-        0x67 as i32 as crate::jmorecfg_h::UINT8,
-        0x68 as i32 as crate::jmorecfg_h::UINT8,
-        0x69 as i32 as crate::jmorecfg_h::UINT8,
-        0x6a as i32 as crate::jmorecfg_h::UINT8,
-        0x73 as i32 as crate::jmorecfg_h::UINT8,
-        0x74 as i32 as crate::jmorecfg_h::UINT8,
-        0x75 as i32 as crate::jmorecfg_h::UINT8,
-        0x76 as i32 as crate::jmorecfg_h::UINT8,
-        0x77 as i32 as crate::jmorecfg_h::UINT8,
-        0x78 as i32 as crate::jmorecfg_h::UINT8,
-        0x79 as i32 as crate::jmorecfg_h::UINT8,
-        0x7a as i32 as crate::jmorecfg_h::UINT8,
-        0x83 as i32 as crate::jmorecfg_h::UINT8,
-        0x84 as i32 as crate::jmorecfg_h::UINT8,
-        0x85 as i32 as crate::jmorecfg_h::UINT8,
-        0x86 as i32 as crate::jmorecfg_h::UINT8,
-        0x87 as i32 as crate::jmorecfg_h::UINT8,
-        0x88 as i32 as crate::jmorecfg_h::UINT8,
-        0x89 as i32 as crate::jmorecfg_h::UINT8,
-        0x8a as i32 as crate::jmorecfg_h::UINT8,
-        0x92 as i32 as crate::jmorecfg_h::UINT8,
-        0x93 as i32 as crate::jmorecfg_h::UINT8,
-        0x94 as i32 as crate::jmorecfg_h::UINT8,
-        0x95 as i32 as crate::jmorecfg_h::UINT8,
-        0x96 as i32 as crate::jmorecfg_h::UINT8,
-        0x97 as i32 as crate::jmorecfg_h::UINT8,
-        0x98 as i32 as crate::jmorecfg_h::UINT8,
-        0x99 as i32 as crate::jmorecfg_h::UINT8,
-        0x9a as i32 as crate::jmorecfg_h::UINT8,
-        0xa2 as i32 as crate::jmorecfg_h::UINT8,
-        0xa3 as i32 as crate::jmorecfg_h::UINT8,
-        0xa4 as i32 as crate::jmorecfg_h::UINT8,
-        0xa5 as i32 as crate::jmorecfg_h::UINT8,
-        0xa6 as i32 as crate::jmorecfg_h::UINT8,
-        0xa7 as i32 as crate::jmorecfg_h::UINT8,
-        0xa8 as i32 as crate::jmorecfg_h::UINT8,
-        0xa9 as i32 as crate::jmorecfg_h::UINT8,
-        0xaa as i32 as crate::jmorecfg_h::UINT8,
-        0xb2 as i32 as crate::jmorecfg_h::UINT8,
-        0xb3 as i32 as crate::jmorecfg_h::UINT8,
-        0xb4 as i32 as crate::jmorecfg_h::UINT8,
-        0xb5 as i32 as crate::jmorecfg_h::UINT8,
-        0xb6 as i32 as crate::jmorecfg_h::UINT8,
-        0xb7 as i32 as crate::jmorecfg_h::UINT8,
-        0xb8 as i32 as crate::jmorecfg_h::UINT8,
-        0xb9 as i32 as crate::jmorecfg_h::UINT8,
-        0xba as i32 as crate::jmorecfg_h::UINT8,
-        0xc2 as i32 as crate::jmorecfg_h::UINT8,
-        0xc3 as i32 as crate::jmorecfg_h::UINT8,
-        0xc4 as i32 as crate::jmorecfg_h::UINT8,
-        0xc5 as i32 as crate::jmorecfg_h::UINT8,
-        0xc6 as i32 as crate::jmorecfg_h::UINT8,
-        0xc7 as i32 as crate::jmorecfg_h::UINT8,
-        0xc8 as i32 as crate::jmorecfg_h::UINT8,
-        0xc9 as i32 as crate::jmorecfg_h::UINT8,
-        0xca as i32 as crate::jmorecfg_h::UINT8,
-        0xd2 as i32 as crate::jmorecfg_h::UINT8,
-        0xd3 as i32 as crate::jmorecfg_h::UINT8,
-        0xd4 as i32 as crate::jmorecfg_h::UINT8,
-        0xd5 as i32 as crate::jmorecfg_h::UINT8,
-        0xd6 as i32 as crate::jmorecfg_h::UINT8,
-        0xd7 as i32 as crate::jmorecfg_h::UINT8,
-        0xd8 as i32 as crate::jmorecfg_h::UINT8,
-        0xd9 as i32 as crate::jmorecfg_h::UINT8,
-        0xda as i32 as crate::jmorecfg_h::UINT8,
-        0xe1 as i32 as crate::jmorecfg_h::UINT8,
-        0xe2 as i32 as crate::jmorecfg_h::UINT8,
-        0xe3 as i32 as crate::jmorecfg_h::UINT8,
-        0xe4 as i32 as crate::jmorecfg_h::UINT8,
-        0xe5 as i32 as crate::jmorecfg_h::UINT8,
-        0xe6 as i32 as crate::jmorecfg_h::UINT8,
-        0xe7 as i32 as crate::jmorecfg_h::UINT8,
-        0xe8 as i32 as crate::jmorecfg_h::UINT8,
-        0xe9 as i32 as crate::jmorecfg_h::UINT8,
-        0xea as i32 as crate::jmorecfg_h::UINT8,
-        0xf1 as i32 as crate::jmorecfg_h::UINT8,
-        0xf2 as i32 as crate::jmorecfg_h::UINT8,
-        0xf3 as i32 as crate::jmorecfg_h::UINT8,
-        0xf4 as i32 as crate::jmorecfg_h::UINT8,
-        0xf5 as i32 as crate::jmorecfg_h::UINT8,
-        0xf6 as i32 as crate::jmorecfg_h::UINT8,
-        0xf7 as i32 as crate::jmorecfg_h::UINT8,
-        0xf8 as i32 as crate::jmorecfg_h::UINT8,
-        0xf9 as i32 as crate::jmorecfg_h::UINT8,
-        0xfa as i32 as crate::jmorecfg_h::UINT8,
+    static mut val_ac_luminance: [UINT8; 162] = [
+        0x1 as i32 as UINT8,
+        0x2 as i32 as UINT8,
+        0x3 as i32 as UINT8,
+        0 as i32 as UINT8,
+        0x4 as i32 as UINT8,
+        0x11 as i32 as UINT8,
+        0x5 as i32 as UINT8,
+        0x12 as i32 as UINT8,
+        0x21 as i32 as UINT8,
+        0x31 as i32 as UINT8,
+        0x41 as i32 as UINT8,
+        0x6 as i32 as UINT8,
+        0x13 as i32 as UINT8,
+        0x51 as i32 as UINT8,
+        0x61 as i32 as UINT8,
+        0x7 as i32 as UINT8,
+        0x22 as i32 as UINT8,
+        0x71 as i32 as UINT8,
+        0x14 as i32 as UINT8,
+        0x32 as i32 as UINT8,
+        0x81 as i32 as UINT8,
+        0x91 as i32 as UINT8,
+        0xa1 as i32 as UINT8,
+        0x8 as i32 as UINT8,
+        0x23 as i32 as UINT8,
+        0x42 as i32 as UINT8,
+        0xb1 as i32 as UINT8,
+        0xc1 as i32 as UINT8,
+        0x15 as i32 as UINT8,
+        0x52 as i32 as UINT8,
+        0xd1 as i32 as UINT8,
+        0xf0 as i32 as UINT8,
+        0x24 as i32 as UINT8,
+        0x33 as i32 as UINT8,
+        0x62 as i32 as UINT8,
+        0x72 as i32 as UINT8,
+        0x82 as i32 as UINT8,
+        0x9 as i32 as UINT8,
+        0xa as i32 as UINT8,
+        0x16 as i32 as UINT8,
+        0x17 as i32 as UINT8,
+        0x18 as i32 as UINT8,
+        0x19 as i32 as UINT8,
+        0x1a as i32 as UINT8,
+        0x25 as i32 as UINT8,
+        0x26 as i32 as UINT8,
+        0x27 as i32 as UINT8,
+        0x28 as i32 as UINT8,
+        0x29 as i32 as UINT8,
+        0x2a as i32 as UINT8,
+        0x34 as i32 as UINT8,
+        0x35 as i32 as UINT8,
+        0x36 as i32 as UINT8,
+        0x37 as i32 as UINT8,
+        0x38 as i32 as UINT8,
+        0x39 as i32 as UINT8,
+        0x3a as i32 as UINT8,
+        0x43 as i32 as UINT8,
+        0x44 as i32 as UINT8,
+        0x45 as i32 as UINT8,
+        0x46 as i32 as UINT8,
+        0x47 as i32 as UINT8,
+        0x48 as i32 as UINT8,
+        0x49 as i32 as UINT8,
+        0x4a as i32 as UINT8,
+        0x53 as i32 as UINT8,
+        0x54 as i32 as UINT8,
+        0x55 as i32 as UINT8,
+        0x56 as i32 as UINT8,
+        0x57 as i32 as UINT8,
+        0x58 as i32 as UINT8,
+        0x59 as i32 as UINT8,
+        0x5a as i32 as UINT8,
+        0x63 as i32 as UINT8,
+        0x64 as i32 as UINT8,
+        0x65 as i32 as UINT8,
+        0x66 as i32 as UINT8,
+        0x67 as i32 as UINT8,
+        0x68 as i32 as UINT8,
+        0x69 as i32 as UINT8,
+        0x6a as i32 as UINT8,
+        0x73 as i32 as UINT8,
+        0x74 as i32 as UINT8,
+        0x75 as i32 as UINT8,
+        0x76 as i32 as UINT8,
+        0x77 as i32 as UINT8,
+        0x78 as i32 as UINT8,
+        0x79 as i32 as UINT8,
+        0x7a as i32 as UINT8,
+        0x83 as i32 as UINT8,
+        0x84 as i32 as UINT8,
+        0x85 as i32 as UINT8,
+        0x86 as i32 as UINT8,
+        0x87 as i32 as UINT8,
+        0x88 as i32 as UINT8,
+        0x89 as i32 as UINT8,
+        0x8a as i32 as UINT8,
+        0x92 as i32 as UINT8,
+        0x93 as i32 as UINT8,
+        0x94 as i32 as UINT8,
+        0x95 as i32 as UINT8,
+        0x96 as i32 as UINT8,
+        0x97 as i32 as UINT8,
+        0x98 as i32 as UINT8,
+        0x99 as i32 as UINT8,
+        0x9a as i32 as UINT8,
+        0xa2 as i32 as UINT8,
+        0xa3 as i32 as UINT8,
+        0xa4 as i32 as UINT8,
+        0xa5 as i32 as UINT8,
+        0xa6 as i32 as UINT8,
+        0xa7 as i32 as UINT8,
+        0xa8 as i32 as UINT8,
+        0xa9 as i32 as UINT8,
+        0xaa as i32 as UINT8,
+        0xb2 as i32 as UINT8,
+        0xb3 as i32 as UINT8,
+        0xb4 as i32 as UINT8,
+        0xb5 as i32 as UINT8,
+        0xb6 as i32 as UINT8,
+        0xb7 as i32 as UINT8,
+        0xb8 as i32 as UINT8,
+        0xb9 as i32 as UINT8,
+        0xba as i32 as UINT8,
+        0xc2 as i32 as UINT8,
+        0xc3 as i32 as UINT8,
+        0xc4 as i32 as UINT8,
+        0xc5 as i32 as UINT8,
+        0xc6 as i32 as UINT8,
+        0xc7 as i32 as UINT8,
+        0xc8 as i32 as UINT8,
+        0xc9 as i32 as UINT8,
+        0xca as i32 as UINT8,
+        0xd2 as i32 as UINT8,
+        0xd3 as i32 as UINT8,
+        0xd4 as i32 as UINT8,
+        0xd5 as i32 as UINT8,
+        0xd6 as i32 as UINT8,
+        0xd7 as i32 as UINT8,
+        0xd8 as i32 as UINT8,
+        0xd9 as i32 as UINT8,
+        0xda as i32 as UINT8,
+        0xe1 as i32 as UINT8,
+        0xe2 as i32 as UINT8,
+        0xe3 as i32 as UINT8,
+        0xe4 as i32 as UINT8,
+        0xe5 as i32 as UINT8,
+        0xe6 as i32 as UINT8,
+        0xe7 as i32 as UINT8,
+        0xe8 as i32 as UINT8,
+        0xe9 as i32 as UINT8,
+        0xea as i32 as UINT8,
+        0xf1 as i32 as UINT8,
+        0xf2 as i32 as UINT8,
+        0xf3 as i32 as UINT8,
+        0xf4 as i32 as UINT8,
+        0xf5 as i32 as UINT8,
+        0xf6 as i32 as UINT8,
+        0xf7 as i32 as UINT8,
+        0xf8 as i32 as UINT8,
+        0xf9 as i32 as UINT8,
+        0xfa as i32 as UINT8,
     ];
-    static mut bits_ac_chrominance: [crate::jmorecfg_h::UINT8; 17] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        3 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        7 as i32 as crate::jmorecfg_h::UINT8,
-        5 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        4 as i32 as crate::jmorecfg_h::UINT8,
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        1 as i32 as crate::jmorecfg_h::UINT8,
-        2 as i32 as crate::jmorecfg_h::UINT8,
-        0x77 as i32 as crate::jmorecfg_h::UINT8,
+    static mut bits_ac_chrominance: [UINT8; 17] = [
+        0 as i32 as UINT8,
+        0 as i32 as UINT8,
+        2 as i32 as UINT8,
+        1 as i32 as UINT8,
+        2 as i32 as UINT8,
+        4 as i32 as UINT8,
+        4 as i32 as UINT8,
+        3 as i32 as UINT8,
+        4 as i32 as UINT8,
+        7 as i32 as UINT8,
+        5 as i32 as UINT8,
+        4 as i32 as UINT8,
+        4 as i32 as UINT8,
+        0 as i32 as UINT8,
+        1 as i32 as UINT8,
+        2 as i32 as UINT8,
+        0x77 as i32 as UINT8,
     ];
-    static mut val_ac_chrominance: [crate::jmorecfg_h::UINT8; 162] = [
-        0 as i32 as crate::jmorecfg_h::UINT8,
-        0x1 as i32 as crate::jmorecfg_h::UINT8,
-        0x2 as i32 as crate::jmorecfg_h::UINT8,
-        0x3 as i32 as crate::jmorecfg_h::UINT8,
-        0x11 as i32 as crate::jmorecfg_h::UINT8,
-        0x4 as i32 as crate::jmorecfg_h::UINT8,
-        0x5 as i32 as crate::jmorecfg_h::UINT8,
-        0x21 as i32 as crate::jmorecfg_h::UINT8,
-        0x31 as i32 as crate::jmorecfg_h::UINT8,
-        0x6 as i32 as crate::jmorecfg_h::UINT8,
-        0x12 as i32 as crate::jmorecfg_h::UINT8,
-        0x41 as i32 as crate::jmorecfg_h::UINT8,
-        0x51 as i32 as crate::jmorecfg_h::UINT8,
-        0x7 as i32 as crate::jmorecfg_h::UINT8,
-        0x61 as i32 as crate::jmorecfg_h::UINT8,
-        0x71 as i32 as crate::jmorecfg_h::UINT8,
-        0x13 as i32 as crate::jmorecfg_h::UINT8,
-        0x22 as i32 as crate::jmorecfg_h::UINT8,
-        0x32 as i32 as crate::jmorecfg_h::UINT8,
-        0x81 as i32 as crate::jmorecfg_h::UINT8,
-        0x8 as i32 as crate::jmorecfg_h::UINT8,
-        0x14 as i32 as crate::jmorecfg_h::UINT8,
-        0x42 as i32 as crate::jmorecfg_h::UINT8,
-        0x91 as i32 as crate::jmorecfg_h::UINT8,
-        0xa1 as i32 as crate::jmorecfg_h::UINT8,
-        0xb1 as i32 as crate::jmorecfg_h::UINT8,
-        0xc1 as i32 as crate::jmorecfg_h::UINT8,
-        0x9 as i32 as crate::jmorecfg_h::UINT8,
-        0x23 as i32 as crate::jmorecfg_h::UINT8,
-        0x33 as i32 as crate::jmorecfg_h::UINT8,
-        0x52 as i32 as crate::jmorecfg_h::UINT8,
-        0xf0 as i32 as crate::jmorecfg_h::UINT8,
-        0x15 as i32 as crate::jmorecfg_h::UINT8,
-        0x62 as i32 as crate::jmorecfg_h::UINT8,
-        0x72 as i32 as crate::jmorecfg_h::UINT8,
-        0xd1 as i32 as crate::jmorecfg_h::UINT8,
-        0xa as i32 as crate::jmorecfg_h::UINT8,
-        0x16 as i32 as crate::jmorecfg_h::UINT8,
-        0x24 as i32 as crate::jmorecfg_h::UINT8,
-        0x34 as i32 as crate::jmorecfg_h::UINT8,
-        0xe1 as i32 as crate::jmorecfg_h::UINT8,
-        0x25 as i32 as crate::jmorecfg_h::UINT8,
-        0xf1 as i32 as crate::jmorecfg_h::UINT8,
-        0x17 as i32 as crate::jmorecfg_h::UINT8,
-        0x18 as i32 as crate::jmorecfg_h::UINT8,
-        0x19 as i32 as crate::jmorecfg_h::UINT8,
-        0x1a as i32 as crate::jmorecfg_h::UINT8,
-        0x26 as i32 as crate::jmorecfg_h::UINT8,
-        0x27 as i32 as crate::jmorecfg_h::UINT8,
-        0x28 as i32 as crate::jmorecfg_h::UINT8,
-        0x29 as i32 as crate::jmorecfg_h::UINT8,
-        0x2a as i32 as crate::jmorecfg_h::UINT8,
-        0x35 as i32 as crate::jmorecfg_h::UINT8,
-        0x36 as i32 as crate::jmorecfg_h::UINT8,
-        0x37 as i32 as crate::jmorecfg_h::UINT8,
-        0x38 as i32 as crate::jmorecfg_h::UINT8,
-        0x39 as i32 as crate::jmorecfg_h::UINT8,
-        0x3a as i32 as crate::jmorecfg_h::UINT8,
-        0x43 as i32 as crate::jmorecfg_h::UINT8,
-        0x44 as i32 as crate::jmorecfg_h::UINT8,
-        0x45 as i32 as crate::jmorecfg_h::UINT8,
-        0x46 as i32 as crate::jmorecfg_h::UINT8,
-        0x47 as i32 as crate::jmorecfg_h::UINT8,
-        0x48 as i32 as crate::jmorecfg_h::UINT8,
-        0x49 as i32 as crate::jmorecfg_h::UINT8,
-        0x4a as i32 as crate::jmorecfg_h::UINT8,
-        0x53 as i32 as crate::jmorecfg_h::UINT8,
-        0x54 as i32 as crate::jmorecfg_h::UINT8,
-        0x55 as i32 as crate::jmorecfg_h::UINT8,
-        0x56 as i32 as crate::jmorecfg_h::UINT8,
-        0x57 as i32 as crate::jmorecfg_h::UINT8,
-        0x58 as i32 as crate::jmorecfg_h::UINT8,
-        0x59 as i32 as crate::jmorecfg_h::UINT8,
-        0x5a as i32 as crate::jmorecfg_h::UINT8,
-        0x63 as i32 as crate::jmorecfg_h::UINT8,
-        0x64 as i32 as crate::jmorecfg_h::UINT8,
-        0x65 as i32 as crate::jmorecfg_h::UINT8,
-        0x66 as i32 as crate::jmorecfg_h::UINT8,
-        0x67 as i32 as crate::jmorecfg_h::UINT8,
-        0x68 as i32 as crate::jmorecfg_h::UINT8,
-        0x69 as i32 as crate::jmorecfg_h::UINT8,
-        0x6a as i32 as crate::jmorecfg_h::UINT8,
-        0x73 as i32 as crate::jmorecfg_h::UINT8,
-        0x74 as i32 as crate::jmorecfg_h::UINT8,
-        0x75 as i32 as crate::jmorecfg_h::UINT8,
-        0x76 as i32 as crate::jmorecfg_h::UINT8,
-        0x77 as i32 as crate::jmorecfg_h::UINT8,
-        0x78 as i32 as crate::jmorecfg_h::UINT8,
-        0x79 as i32 as crate::jmorecfg_h::UINT8,
-        0x7a as i32 as crate::jmorecfg_h::UINT8,
-        0x82 as i32 as crate::jmorecfg_h::UINT8,
-        0x83 as i32 as crate::jmorecfg_h::UINT8,
-        0x84 as i32 as crate::jmorecfg_h::UINT8,
-        0x85 as i32 as crate::jmorecfg_h::UINT8,
-        0x86 as i32 as crate::jmorecfg_h::UINT8,
-        0x87 as i32 as crate::jmorecfg_h::UINT8,
-        0x88 as i32 as crate::jmorecfg_h::UINT8,
-        0x89 as i32 as crate::jmorecfg_h::UINT8,
-        0x8a as i32 as crate::jmorecfg_h::UINT8,
-        0x92 as i32 as crate::jmorecfg_h::UINT8,
-        0x93 as i32 as crate::jmorecfg_h::UINT8,
-        0x94 as i32 as crate::jmorecfg_h::UINT8,
-        0x95 as i32 as crate::jmorecfg_h::UINT8,
-        0x96 as i32 as crate::jmorecfg_h::UINT8,
-        0x97 as i32 as crate::jmorecfg_h::UINT8,
-        0x98 as i32 as crate::jmorecfg_h::UINT8,
-        0x99 as i32 as crate::jmorecfg_h::UINT8,
-        0x9a as i32 as crate::jmorecfg_h::UINT8,
-        0xa2 as i32 as crate::jmorecfg_h::UINT8,
-        0xa3 as i32 as crate::jmorecfg_h::UINT8,
-        0xa4 as i32 as crate::jmorecfg_h::UINT8,
-        0xa5 as i32 as crate::jmorecfg_h::UINT8,
-        0xa6 as i32 as crate::jmorecfg_h::UINT8,
-        0xa7 as i32 as crate::jmorecfg_h::UINT8,
-        0xa8 as i32 as crate::jmorecfg_h::UINT8,
-        0xa9 as i32 as crate::jmorecfg_h::UINT8,
-        0xaa as i32 as crate::jmorecfg_h::UINT8,
-        0xb2 as i32 as crate::jmorecfg_h::UINT8,
-        0xb3 as i32 as crate::jmorecfg_h::UINT8,
-        0xb4 as i32 as crate::jmorecfg_h::UINT8,
-        0xb5 as i32 as crate::jmorecfg_h::UINT8,
-        0xb6 as i32 as crate::jmorecfg_h::UINT8,
-        0xb7 as i32 as crate::jmorecfg_h::UINT8,
-        0xb8 as i32 as crate::jmorecfg_h::UINT8,
-        0xb9 as i32 as crate::jmorecfg_h::UINT8,
-        0xba as i32 as crate::jmorecfg_h::UINT8,
-        0xc2 as i32 as crate::jmorecfg_h::UINT8,
-        0xc3 as i32 as crate::jmorecfg_h::UINT8,
-        0xc4 as i32 as crate::jmorecfg_h::UINT8,
-        0xc5 as i32 as crate::jmorecfg_h::UINT8,
-        0xc6 as i32 as crate::jmorecfg_h::UINT8,
-        0xc7 as i32 as crate::jmorecfg_h::UINT8,
-        0xc8 as i32 as crate::jmorecfg_h::UINT8,
-        0xc9 as i32 as crate::jmorecfg_h::UINT8,
-        0xca as i32 as crate::jmorecfg_h::UINT8,
-        0xd2 as i32 as crate::jmorecfg_h::UINT8,
-        0xd3 as i32 as crate::jmorecfg_h::UINT8,
-        0xd4 as i32 as crate::jmorecfg_h::UINT8,
-        0xd5 as i32 as crate::jmorecfg_h::UINT8,
-        0xd6 as i32 as crate::jmorecfg_h::UINT8,
-        0xd7 as i32 as crate::jmorecfg_h::UINT8,
-        0xd8 as i32 as crate::jmorecfg_h::UINT8,
-        0xd9 as i32 as crate::jmorecfg_h::UINT8,
-        0xda as i32 as crate::jmorecfg_h::UINT8,
-        0xe2 as i32 as crate::jmorecfg_h::UINT8,
-        0xe3 as i32 as crate::jmorecfg_h::UINT8,
-        0xe4 as i32 as crate::jmorecfg_h::UINT8,
-        0xe5 as i32 as crate::jmorecfg_h::UINT8,
-        0xe6 as i32 as crate::jmorecfg_h::UINT8,
-        0xe7 as i32 as crate::jmorecfg_h::UINT8,
-        0xe8 as i32 as crate::jmorecfg_h::UINT8,
-        0xe9 as i32 as crate::jmorecfg_h::UINT8,
-        0xea as i32 as crate::jmorecfg_h::UINT8,
-        0xf2 as i32 as crate::jmorecfg_h::UINT8,
-        0xf3 as i32 as crate::jmorecfg_h::UINT8,
-        0xf4 as i32 as crate::jmorecfg_h::UINT8,
-        0xf5 as i32 as crate::jmorecfg_h::UINT8,
-        0xf6 as i32 as crate::jmorecfg_h::UINT8,
-        0xf7 as i32 as crate::jmorecfg_h::UINT8,
-        0xf8 as i32 as crate::jmorecfg_h::UINT8,
-        0xf9 as i32 as crate::jmorecfg_h::UINT8,
-        0xfa as i32 as crate::jmorecfg_h::UINT8,
+    static mut val_ac_chrominance: [UINT8; 162] = [
+        0 as i32 as UINT8,
+        0x1 as i32 as UINT8,
+        0x2 as i32 as UINT8,
+        0x3 as i32 as UINT8,
+        0x11 as i32 as UINT8,
+        0x4 as i32 as UINT8,
+        0x5 as i32 as UINT8,
+        0x21 as i32 as UINT8,
+        0x31 as i32 as UINT8,
+        0x6 as i32 as UINT8,
+        0x12 as i32 as UINT8,
+        0x41 as i32 as UINT8,
+        0x51 as i32 as UINT8,
+        0x7 as i32 as UINT8,
+        0x61 as i32 as UINT8,
+        0x71 as i32 as UINT8,
+        0x13 as i32 as UINT8,
+        0x22 as i32 as UINT8,
+        0x32 as i32 as UINT8,
+        0x81 as i32 as UINT8,
+        0x8 as i32 as UINT8,
+        0x14 as i32 as UINT8,
+        0x42 as i32 as UINT8,
+        0x91 as i32 as UINT8,
+        0xa1 as i32 as UINT8,
+        0xb1 as i32 as UINT8,
+        0xc1 as i32 as UINT8,
+        0x9 as i32 as UINT8,
+        0x23 as i32 as UINT8,
+        0x33 as i32 as UINT8,
+        0x52 as i32 as UINT8,
+        0xf0 as i32 as UINT8,
+        0x15 as i32 as UINT8,
+        0x62 as i32 as UINT8,
+        0x72 as i32 as UINT8,
+        0xd1 as i32 as UINT8,
+        0xa as i32 as UINT8,
+        0x16 as i32 as UINT8,
+        0x24 as i32 as UINT8,
+        0x34 as i32 as UINT8,
+        0xe1 as i32 as UINT8,
+        0x25 as i32 as UINT8,
+        0xf1 as i32 as UINT8,
+        0x17 as i32 as UINT8,
+        0x18 as i32 as UINT8,
+        0x19 as i32 as UINT8,
+        0x1a as i32 as UINT8,
+        0x26 as i32 as UINT8,
+        0x27 as i32 as UINT8,
+        0x28 as i32 as UINT8,
+        0x29 as i32 as UINT8,
+        0x2a as i32 as UINT8,
+        0x35 as i32 as UINT8,
+        0x36 as i32 as UINT8,
+        0x37 as i32 as UINT8,
+        0x38 as i32 as UINT8,
+        0x39 as i32 as UINT8,
+        0x3a as i32 as UINT8,
+        0x43 as i32 as UINT8,
+        0x44 as i32 as UINT8,
+        0x45 as i32 as UINT8,
+        0x46 as i32 as UINT8,
+        0x47 as i32 as UINT8,
+        0x48 as i32 as UINT8,
+        0x49 as i32 as UINT8,
+        0x4a as i32 as UINT8,
+        0x53 as i32 as UINT8,
+        0x54 as i32 as UINT8,
+        0x55 as i32 as UINT8,
+        0x56 as i32 as UINT8,
+        0x57 as i32 as UINT8,
+        0x58 as i32 as UINT8,
+        0x59 as i32 as UINT8,
+        0x5a as i32 as UINT8,
+        0x63 as i32 as UINT8,
+        0x64 as i32 as UINT8,
+        0x65 as i32 as UINT8,
+        0x66 as i32 as UINT8,
+        0x67 as i32 as UINT8,
+        0x68 as i32 as UINT8,
+        0x69 as i32 as UINT8,
+        0x6a as i32 as UINT8,
+        0x73 as i32 as UINT8,
+        0x74 as i32 as UINT8,
+        0x75 as i32 as UINT8,
+        0x76 as i32 as UINT8,
+        0x77 as i32 as UINT8,
+        0x78 as i32 as UINT8,
+        0x79 as i32 as UINT8,
+        0x7a as i32 as UINT8,
+        0x82 as i32 as UINT8,
+        0x83 as i32 as UINT8,
+        0x84 as i32 as UINT8,
+        0x85 as i32 as UINT8,
+        0x86 as i32 as UINT8,
+        0x87 as i32 as UINT8,
+        0x88 as i32 as UINT8,
+        0x89 as i32 as UINT8,
+        0x8a as i32 as UINT8,
+        0x92 as i32 as UINT8,
+        0x93 as i32 as UINT8,
+        0x94 as i32 as UINT8,
+        0x95 as i32 as UINT8,
+        0x96 as i32 as UINT8,
+        0x97 as i32 as UINT8,
+        0x98 as i32 as UINT8,
+        0x99 as i32 as UINT8,
+        0x9a as i32 as UINT8,
+        0xa2 as i32 as UINT8,
+        0xa3 as i32 as UINT8,
+        0xa4 as i32 as UINT8,
+        0xa5 as i32 as UINT8,
+        0xa6 as i32 as UINT8,
+        0xa7 as i32 as UINT8,
+        0xa8 as i32 as UINT8,
+        0xa9 as i32 as UINT8,
+        0xaa as i32 as UINT8,
+        0xb2 as i32 as UINT8,
+        0xb3 as i32 as UINT8,
+        0xb4 as i32 as UINT8,
+        0xb5 as i32 as UINT8,
+        0xb6 as i32 as UINT8,
+        0xb7 as i32 as UINT8,
+        0xb8 as i32 as UINT8,
+        0xb9 as i32 as UINT8,
+        0xba as i32 as UINT8,
+        0xc2 as i32 as UINT8,
+        0xc3 as i32 as UINT8,
+        0xc4 as i32 as UINT8,
+        0xc5 as i32 as UINT8,
+        0xc6 as i32 as UINT8,
+        0xc7 as i32 as UINT8,
+        0xc8 as i32 as UINT8,
+        0xc9 as i32 as UINT8,
+        0xca as i32 as UINT8,
+        0xd2 as i32 as UINT8,
+        0xd3 as i32 as UINT8,
+        0xd4 as i32 as UINT8,
+        0xd5 as i32 as UINT8,
+        0xd6 as i32 as UINT8,
+        0xd7 as i32 as UINT8,
+        0xd8 as i32 as UINT8,
+        0xd9 as i32 as UINT8,
+        0xda as i32 as UINT8,
+        0xe2 as i32 as UINT8,
+        0xe3 as i32 as UINT8,
+        0xe4 as i32 as UINT8,
+        0xe5 as i32 as UINT8,
+        0xe6 as i32 as UINT8,
+        0xe7 as i32 as UINT8,
+        0xe8 as i32 as UINT8,
+        0xe9 as i32 as UINT8,
+        0xea as i32 as UINT8,
+        0xf2 as i32 as UINT8,
+        0xf3 as i32 as UINT8,
+        0xf4 as i32 as UINT8,
+        0xf5 as i32 as UINT8,
+        0xf6 as i32 as UINT8,
+        0xf7 as i32 as UINT8,
+        0xf8 as i32 as UINT8,
+        0xf9 as i32 as UINT8,
+        0xfa as i32 as UINT8,
     ];
     add_huff_table(
         cinfo,
@@ -1051,18 +1051,18 @@ unsafe extern "C" fn std_huff_tables(mut cinfo: crate::jpeglib_h::j_compress_ptr
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: j_compress_ptr) {
     let mut i: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Allocate comp_info array large enough for maximum component count.
      * Array is made permanent in case application wants to compress
@@ -1075,12 +1075,12 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             0 as i32,
             (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::jpeglib_h::jpeg_component_info,
+                jpeg_component_info,
             >() as libc::c_ulong),
-        ) as *mut crate::jpeglib_h::jpeg_component_info
+        ) as *mut jpeg_component_info
     }
     /* Initialize everything not dependent on the color space */
     (*cinfo).scale_num = 1 as i32 as u32; /* 1:1 scaling */
@@ -1093,13 +1093,13 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
     /* Initialize default arithmetic coding conditioning */
     i = 0 as i32;
     while i < 16 as i32 {
-        (*cinfo).arith_dc_L[i as usize] = 0 as i32 as crate::jmorecfg_h::UINT8;
-        (*cinfo).arith_dc_U[i as usize] = 1 as i32 as crate::jmorecfg_h::UINT8;
-        (*cinfo).arith_ac_K[i as usize] = 5 as i32 as crate::jmorecfg_h::UINT8;
+        (*cinfo).arith_dc_L[i as usize] = 0 as i32 as UINT8;
+        (*cinfo).arith_dc_U[i as usize] = 1 as i32 as UINT8;
+        (*cinfo).arith_ac_K[i as usize] = 5 as i32 as UINT8;
         i += 1
     }
     /* Default is no multiple-scan output */
-    (*cinfo).scan_info = 0 as *const crate::jpeglib_h::jpeg_scan_info;
+    (*cinfo).scan_info = 0 as *const jpeg_scan_info;
     (*cinfo).num_scans = 0 as i32;
     /* Expect normal source image, not raw downsampled data */
     (*cinfo).raw_data_in = 0 as i32;
@@ -1122,7 +1122,7 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
     /* No input smoothing */
     (*cinfo).smoothing_factor = 0 as i32;
     /* DCT algorithm preference */
-    (*cinfo).dct_method = crate::jpeglib_h::JDCT_ISLOW;
+    (*cinfo).dct_method = JDCT_ISLOW;
     /* No restart markers */
     (*cinfo).restart_interval = 0 as i32 as u32;
     (*cinfo).restart_in_rows = 0 as i32;
@@ -1135,11 +1135,11 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
      * to 1.02, but there may still be some decoders in use that will complain
      * about that; saying 1.01 should minimize compatibility problems.
      */
-    (*cinfo).JFIF_major_version = 1 as i32 as crate::jmorecfg_h::UINT8; /* Default JFIF version = 1.01 */
-    (*cinfo).JFIF_minor_version = 1 as i32 as crate::jmorecfg_h::UINT8; /* Pixel size is unknown by default */
-    (*cinfo).density_unit = 0 as i32 as crate::jmorecfg_h::UINT8; /* Pixel aspect ratio is square by default */
-    (*cinfo).X_density = 1 as i32 as crate::jmorecfg_h::UINT16;
-    (*cinfo).Y_density = 1 as i32 as crate::jmorecfg_h::UINT16;
+    (*cinfo).JFIF_major_version = 1 as i32 as UINT8; /* Default JFIF version = 1.01 */
+    (*cinfo).JFIF_minor_version = 1 as i32 as UINT8; /* Pixel size is unknown by default */
+    (*cinfo).density_unit = 0 as i32 as UINT8; /* Pixel aspect ratio is square by default */
+    (*cinfo).X_density = 1 as i32 as UINT16;
+    (*cinfo).Y_density = 1 as i32 as UINT16;
     /* Choose JPEG colorspace based on input space, set defaults accordingly */
     jpeg_default_colorspace(cinfo);
 }
@@ -1148,35 +1148,35 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: crate::jpeglib_h::j_compre
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: j_compress_ptr) {
     match (*cinfo).in_color_space as u32 {
         1 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_GRAYSCALE); /* By default, no translation */
+            jpeg_set_colorspace(cinfo, JCS_GRAYSCALE); /* By default, no translation */
         }
         2 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_YCbCr);
+            jpeg_set_colorspace(cinfo, JCS_YCbCr);
         }
         3 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_YCbCr);
+            jpeg_set_colorspace(cinfo, JCS_YCbCr);
         }
         4 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_CMYK);
+            jpeg_set_colorspace(cinfo, JCS_CMYK);
         }
         5 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_YCCK);
+            jpeg_set_colorspace(cinfo, JCS_YCCK);
         }
         0 => {
-            jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_UNKNOWN);
+            jpeg_set_colorspace(cinfo, JCS_UNKNOWN);
         }
         _ => {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_IN_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
     };
@@ -1187,22 +1187,22 @@ pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: crate::jpeglib_h::j_
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_set_colorspace(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut colorspace: crate::jpeglib_h::J_COLOR_SPACE,
+    mut cinfo: j_compress_ptr,
+    mut colorspace: J_COLOR_SPACE,
 ) {
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     let mut ci: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* For all colorspaces, we use Q and Huff tables 0 for luminance components,
      * tables 1 for chrominance components.
@@ -1216,7 +1216,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).num_components = 1 as i32;
             /* JFIF specifies component ID 1 */
             compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info; /* write Adobe marker to flag RGB */
+                as *mut jpeg_component_info; /* write Adobe marker to flag RGB */
             (*compptr).component_id = 1 as i32; /* Write a JFIF marker */
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1228,7 +1228,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 3 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x52 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1236,7 +1236,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x47 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1244,7 +1244,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x42 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1258,7 +1258,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             /* JFIF specifies component IDs 1,2,3 */
             /* We default to 2x2 subsamples of chrominance */
             compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info; /* write Adobe marker to flag CMYK */
+                as *mut jpeg_component_info; /* write Adobe marker to flag CMYK */
             (*compptr).component_id = 1 as i32; /* write Adobe marker to flag YCCK */
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
@@ -1266,7 +1266,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 2 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1274,7 +1274,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 3 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1286,7 +1286,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 4 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x43 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1294,7 +1294,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x4d as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1302,7 +1302,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x59 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1310,7 +1310,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 0x4b as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1322,7 +1322,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 4 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 1 as i32;
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
@@ -1330,7 +1330,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 2 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1338,7 +1338,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 3 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1346,7 +1346,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
             compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
-                as *mut crate::jpeglib_h::jpeg_component_info;
+                as *mut jpeg_component_info;
             (*compptr).component_id = 4 as i32;
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
@@ -1357,7 +1357,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
         0 => {
             (*cinfo).num_components = (*cinfo).input_components;
             if (*cinfo).num_components < 1 as i32 || (*cinfo).num_components > 10 as i32 {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+                (*(*cinfo).err).msg_code = JERR_COMPONENT_COUNT as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).num_components;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
                 Some(
@@ -1366,13 +1366,13 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             ci = 0 as i32;
             while ci < (*cinfo).num_components {
                 compptr = &mut *(*cinfo).comp_info.offset(ci as isize)
-                    as *mut crate::jpeglib_h::jpeg_component_info;
+                    as *mut jpeg_component_info;
                 (*compptr).component_id = ci;
                 (*compptr).h_samp_factor = 1 as i32;
                 (*compptr).v_samp_factor = 1 as i32;
@@ -1383,27 +1383,27 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             }
         }
         _ => {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
     };
 }
 
 unsafe extern "C" fn fill_a_scan(
-    mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
+    mut scanptr: *mut jpeg_scan_info,
     mut ci: i32,
     mut Ss: i32,
     mut Se: i32,
     mut Ah: i32,
     mut Al: i32,
-) -> *mut crate::jpeglib_h::jpeg_scan_info
+) -> *mut jpeg_scan_info
 /* Support routine: generate one scan for specified component */ {
     (*scanptr).comps_in_scan = 1 as i32;
     (*scanptr).component_index[0 as i32 as usize] = ci;
@@ -1416,13 +1416,13 @@ unsafe extern "C" fn fill_a_scan(
 }
 
 unsafe extern "C" fn fill_scans(
-    mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
+    mut scanptr: *mut jpeg_scan_info,
     mut ncomps: i32,
     mut Ss: i32,
     mut Se: i32,
     mut Ah: i32,
     mut Al: i32,
-) -> *mut crate::jpeglib_h::jpeg_scan_info
+) -> *mut jpeg_scan_info
 /* Support routine: generate one scan for each component */ {
     let mut ci: i32 = 0;
     ci = 0 as i32;
@@ -1440,11 +1440,11 @@ unsafe extern "C" fn fill_scans(
 }
 
 unsafe extern "C" fn fill_dc_scans(
-    mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info,
+    mut scanptr: *mut jpeg_scan_info,
     mut ncomps: i32,
     mut Ah: i32,
     mut Al: i32,
-) -> *mut crate::jpeglib_h::jpeg_scan_info
+) -> *mut jpeg_scan_info
 /* Support routine: generate interleaved DC scan if possible, else N scans */ {
     let mut ci: i32 = 0;
     if ncomps <= 4 as i32 {
@@ -1472,25 +1472,25 @@ unsafe extern "C" fn fill_dc_scans(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
     let mut ncomps: i32 = (*cinfo).num_components;
     let mut nscans: i32 = 0;
-    let mut scanptr: *mut crate::jpeglib_h::jpeg_scan_info =
-        0 as *mut crate::jpeglib_h::jpeg_scan_info;
+    let mut scanptr: *mut jpeg_scan_info =
+        0 as *mut jpeg_scan_info;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Figure space needed for script.  Calculation must match code below! */
     if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32
+        && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
         nscans = 10 as i32
@@ -1520,19 +1520,19 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
+            cinfo as j_common_ptr,
             0 as i32,
             ((*cinfo).script_space_size as libc::c_ulong)
                 .wrapping_mul(
-                    ::std::mem::size_of::<crate::jpeglib_h::jpeg_scan_info>() as libc::c_ulong
+                    ::std::mem::size_of::<jpeg_scan_info>() as libc::c_ulong
                 ),
-        ) as *mut crate::jpeglib_h::jpeg_scan_info
+        ) as *mut jpeg_scan_info
     }
     scanptr = (*cinfo).script_space;
     (*cinfo).scan_info = scanptr;
     (*cinfo).num_scans = nscans;
     if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32
+        && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
         /* Initial DC scan */

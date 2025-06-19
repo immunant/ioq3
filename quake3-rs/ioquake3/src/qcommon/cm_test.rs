@@ -68,15 +68,15 @@ CM_PointLeafnum_r
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_PointLeafnum_r(
-    mut p: *const crate::src::qcommon::q_shared::vec_t,
+    mut p: *const vec_t,
     mut num: i32,
 ) -> i32 {
     let mut d: f32 = 0.; // optimize counter
-    let mut node: *mut crate::cm_local_h::cNode_t = 0 as *mut crate::cm_local_h::cNode_t;
-    let mut plane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    let mut node: *mut cNode_t = 0 as *mut cNode_t;
+    let mut plane: *mut cplane_t =
+        0 as *mut cplane_t;
     while num >= 0 as i32 {
-        node = crate::src::qcommon::cm_load::cm.nodes.offset(num as isize);
+        node = cm.nodes.offset(num as isize);
         plane = (*node).plane;
         if ((*plane).type_0 as i32) < 3 as i32 {
             d = *p.offset((*plane).type_0 as isize) - (*plane).dist
@@ -92,15 +92,15 @@ pub unsafe extern "C" fn CM_PointLeafnum_r(
             num = (*node).children[0 as i32 as usize]
         }
     }
-    crate::src::qcommon::cm_load::c_pointcontents += 1;
+    c_pointcontents += 1;
     return -(1 as i32) - num;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_PointLeafnum(
-    mut p: *const crate::src::qcommon::q_shared::vec_t,
+    mut p: *const vec_t,
 ) -> i32 {
-    if crate::src::qcommon::cm_load::cm.numNodes == 0 {
+    if cm.numNodes == 0 {
         // map not loaded
         return 0 as i32;
     }
@@ -116,13 +116,13 @@ LEAF LISTING
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_StoreLeafs(
-    mut ll: *mut crate::cm_local_h::leafList_t,
+    mut ll: *mut leafList_t,
     mut nodenum: i32,
 ) {
     let mut leafNum: i32 = 0;
     leafNum = -(1 as i32) - nodenum;
     // store the lastLeaf even if the list is overflowed
-    if (*crate::src::qcommon::cm_load::cm
+    if (*cm
         .leafs
         .offset(leafNum as isize))
     .cluster
@@ -131,7 +131,7 @@ pub unsafe extern "C" fn CM_StoreLeafs(
         (*ll).lastLeaf = leafNum
     }
     if (*ll).count >= (*ll).maxcount {
-        (*ll).overflowed = crate::src::qcommon::q_shared::qtrue;
+        (*ll).overflowed = qtrue;
         return;
     }
     let fresh0 = (*ll).count;
@@ -141,29 +141,29 @@ pub unsafe extern "C" fn CM_StoreLeafs(
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_StoreBrushes(
-    mut ll: *mut crate::cm_local_h::leafList_t,
+    mut ll: *mut leafList_t,
     mut nodenum: i32,
 ) {
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut leafnum: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut leaf: *mut crate::cm_local_h::cLeaf_t = 0 as *mut crate::cm_local_h::cLeaf_t;
-    let mut b: *mut crate::cm_local_h::cbrush_t = 0 as *mut crate::cm_local_h::cbrush_t;
+    let mut leaf: *mut cLeaf_t = 0 as *mut cLeaf_t;
+    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
     leafnum = -(1 as i32) - nodenum;
-    leaf = &mut *crate::src::qcommon::cm_load::cm
+    leaf = &mut *cm
         .leafs
-        .offset(leafnum as isize) as *mut crate::cm_local_h::cLeaf_t;
+        .offset(leafnum as isize) as *mut cLeaf_t;
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *crate::src::qcommon::cm_load::cm
+        brushnum = *cm
             .leafbrushes
             .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *crate::src::qcommon::cm_load::cm
+        b = &mut *cm
             .brushes
-            .offset(brushnum as isize) as *mut crate::cm_local_h::cbrush_t;
-        if !((*b).checkcount == crate::src::qcommon::cm_load::cm.checkcount) {
-            (*b).checkcount = crate::src::qcommon::cm_load::cm.checkcount;
+            .offset(brushnum as isize) as *mut cbrush_t;
+        if !((*b).checkcount == cm.checkcount) {
+            (*b).checkcount = cm.checkcount;
             i = 0 as i32;
             while i < 3 as i32 {
                 if (*b).bounds[0 as i32 as usize][i as usize]
@@ -177,13 +177,13 @@ pub unsafe extern "C" fn CM_StoreBrushes(
             }
             if !(i != 3 as i32) {
                 if (*ll).count >= (*ll).maxcount {
-                    (*ll).overflowed = crate::src::qcommon::q_shared::qtrue;
+                    (*ll).overflowed = qtrue;
                     return;
                 }
                 let fresh1 = (*ll).count;
                 (*ll).count = (*ll).count + 1;
                 let ref mut fresh2 =
-                    *((*ll).list as *mut *mut crate::cm_local_h::cbrush_t).offset(fresh1 as isize);
+                    *((*ll).list as *mut *mut cbrush_t).offset(fresh1 as isize);
                 *fresh2 = b
             }
         }
@@ -201,26 +201,26 @@ Fills in a list of all the leafs touched
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoxLeafnums_r(
-    mut ll: *mut crate::cm_local_h::leafList_t,
+    mut ll: *mut leafList_t,
     mut nodenum: i32,
 ) {
-    let mut plane: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
-    let mut node: *mut crate::cm_local_h::cNode_t = 0 as *mut crate::cm_local_h::cNode_t;
+    let mut plane: *mut cplane_t =
+        0 as *mut cplane_t;
+    let mut node: *mut cNode_t = 0 as *mut cNode_t;
     let mut s: i32 = 0;
     loop {
         if nodenum < 0 as i32 {
             (*ll).storeLeafs.expect("non-null function pointer")(ll, nodenum);
             return;
         }
-        node = &mut *crate::src::qcommon::cm_load::cm
+        node = &mut *cm
             .nodes
-            .offset(nodenum as isize) as *mut crate::cm_local_h::cNode_t;
+            .offset(nodenum as isize) as *mut cNode_t;
         plane = (*node).plane;
-        s = crate::src::qcommon::q_math::BoxOnPlaneSide(
+        s = BoxOnPlaneSide(
             (*ll).bounds[0 as i32 as usize].as_mut_ptr(),
             (*ll).bounds[1 as i32 as usize].as_mut_ptr(),
-            plane as *mut crate::src::qcommon::q_shared::cplane_s,
+            plane as *mut cplane_s,
         );
         if s == 1 as i32 {
             nodenum = (*node).children[0 as i32 as usize]
@@ -241,22 +241,22 @@ CM_BoxLeafnums
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoxLeafnums(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
     mut list: *mut i32,
     mut listsize: i32,
     mut lastLeaf: *mut i32,
 ) -> i32 {
-    let mut ll: crate::cm_local_h::leafList_t = crate::cm_local_h::leafList_t {
+    let mut ll: leafList_t = leafList_t {
         count: 0,
         maxcount: 0,
-        overflowed: crate::src::qcommon::q_shared::qfalse,
+        overflowed: qfalse,
         list: 0 as *mut i32,
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
         storeLeafs: None,
     };
-    crate::src::qcommon::cm_load::cm.checkcount += 1;
+    cm.checkcount += 1;
     ll.bounds[0 as i32 as usize][0 as i32 as usize] = *mins.offset(0 as i32 as isize);
     ll.bounds[0 as i32 as usize][1 as i32 as usize] = *mins.offset(1 as i32 as isize);
     ll.bounds[0 as i32 as usize][2 as i32 as usize] = *mins.offset(2 as i32 as isize);
@@ -267,10 +267,10 @@ pub unsafe extern "C" fn CM_BoxLeafnums(
     ll.maxcount = listsize;
     ll.list = list;
     ll.storeLeafs = Some(
-        CM_StoreLeafs as unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_t, _: i32) -> (),
+        CM_StoreLeafs as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
     );
     ll.lastLeaf = 0 as i32;
-    ll.overflowed = crate::src::qcommon::q_shared::qfalse;
+    ll.overflowed = qfalse;
     CM_BoxLeafnums_r(&mut ll, 0 as i32);
     *lastLeaf = ll.lastLeaf;
     return ll.count;
@@ -283,21 +283,21 @@ CM_BoxBrushes
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoxBrushes(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut list: *mut *mut crate::cm_local_h::cbrush_t,
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut list: *mut *mut cbrush_t,
     mut listsize: i32,
 ) -> i32 {
-    let mut ll: crate::cm_local_h::leafList_t = crate::cm_local_h::leafList_t {
+    let mut ll: leafList_t = leafList_t {
         count: 0,
         maxcount: 0,
-        overflowed: crate::src::qcommon::q_shared::qfalse,
+        overflowed: qfalse,
         list: 0 as *mut i32,
         bounds: [[0.; 3]; 2],
         lastLeaf: 0,
         storeLeafs: None,
     };
-    crate::src::qcommon::cm_load::cm.checkcount += 1;
+    cm.checkcount += 1;
     ll.bounds[0 as i32 as usize][0 as i32 as usize] = *mins.offset(0 as i32 as isize);
     ll.bounds[0 as i32 as usize][1 as i32 as usize] = *mins.offset(1 as i32 as isize);
     ll.bounds[0 as i32 as usize][2 as i32 as usize] = *mins.offset(2 as i32 as isize);
@@ -309,10 +309,10 @@ pub unsafe extern "C" fn CM_BoxBrushes(
     ll.list = list as *mut libc::c_void as *mut i32;
     ll.storeLeafs = Some(
         CM_StoreBrushes
-            as unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_t, _: i32) -> (),
+            as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
     );
     ll.lastLeaf = 0 as i32;
-    ll.overflowed = crate::src::qcommon::q_shared::qfalse;
+    ll.overflowed = qfalse;
     CM_BoxLeafnums_r(&mut ll, 0 as i32);
     return ll.count;
 }
@@ -326,46 +326,46 @@ CM_PointContents
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_PointContents(
-    mut p: *const crate::src::qcommon::q_shared::vec_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
+    mut p: *const vec_t,
+    mut model: clipHandle_t,
 ) -> i32 {
     let mut leafnum: i32 = 0;
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
-    let mut leaf: *mut crate::cm_local_h::cLeaf_t = 0 as *mut crate::cm_local_h::cLeaf_t;
-    let mut b: *mut crate::cm_local_h::cbrush_t = 0 as *mut crate::cm_local_h::cbrush_t;
+    let mut leaf: *mut cLeaf_t = 0 as *mut cLeaf_t;
+    let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
     let mut contents: i32 = 0;
     let mut d: f32 = 0.;
-    let mut clipm: *mut crate::cm_local_h::cmodel_t = 0 as *mut crate::cm_local_h::cmodel_t;
-    if crate::src::qcommon::cm_load::cm.numNodes == 0 {
+    let mut clipm: *mut cmodel_t = 0 as *mut cmodel_t;
+    if cm.numNodes == 0 {
         // map not loaded
         return 0 as i32;
     }
     if model != 0 {
-        clipm = crate::src::qcommon::cm_load::CM_ClipHandleToModel(model)
-            as *mut crate::cm_local_h::cmodel_s;
+        clipm = CM_ClipHandleToModel(model)
+            as *mut cmodel_s;
         leaf = &mut (*clipm).leaf
     } else {
         leafnum = CM_PointLeafnum_r(p, 0 as i32);
-        leaf = &mut *crate::src::qcommon::cm_load::cm
+        leaf = &mut *cm
             .leafs
-            .offset(leafnum as isize) as *mut crate::cm_local_h::cLeaf_t
+            .offset(leafnum as isize) as *mut cLeaf_t
     }
     contents = 0 as i32;
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *crate::src::qcommon::cm_load::cm
+        brushnum = *cm
             .leafbrushes
             .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *crate::src::qcommon::cm_load::cm
+        b = &mut *cm
             .brushes
-            .offset(brushnum as isize) as *mut crate::cm_local_h::cbrush_t;
+            .offset(brushnum as isize) as *mut cbrush_t;
         if !(CM_BoundsIntersectPoint(
             (*b).bounds[0 as i32 as usize].as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
             (*b).bounds[1 as i32 as usize].as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
             p,
         ) as u64
             == 0)
@@ -405,16 +405,16 @@ rotating entities
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_TransformedPointContents(
-    mut p: *const crate::src::qcommon::q_shared::vec_t,
-    mut model: crate::src::qcommon::q_shared::clipHandle_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut angles: *const crate::src::qcommon::q_shared::vec_t,
+    mut p: *const vec_t,
+    mut model: clipHandle_t,
+    mut origin: *const vec_t,
+    mut angles: *const vec_t,
 ) -> i32 {
-    let mut p_l: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut p_l: vec3_t = [0.; 3];
+    let mut temp: vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
     // subtract origin offset
     p_l[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
     p_l[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
@@ -425,7 +425,7 @@ pub unsafe extern "C" fn CM_TransformedPointContents(
             || *angles.offset(1 as i32 as isize) != 0.
             || *angles.offset(2 as i32 as isize) != 0.)
     {
-        crate::src::qcommon::q_math::AngleVectors(
+        AngleVectors(
             angles,
             forward.as_mut_ptr(),
             right.as_mut_ptr(),
@@ -445,7 +445,7 @@ pub unsafe extern "C" fn CM_TransformedPointContents(
             + temp[2 as i32 as usize] * up[2 as i32 as usize]
     }
     return CM_PointContents(
-        p_l.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        p_l.as_mut_ptr() as *const vec_t,
         model,
     );
 }
@@ -460,16 +460,16 @@ PVS
 
 pub unsafe extern "C" fn CM_ClusterPVS(
     mut cluster: i32,
-) -> *mut crate::src::qcommon::q_shared::byte {
+) -> *mut byte {
     if cluster < 0 as i32
-        || cluster >= crate::src::qcommon::cm_load::cm.numClusters
-        || crate::src::qcommon::cm_load::cm.vised as u64 == 0
+        || cluster >= cm.numClusters
+        || cm.vised as u64 == 0
     {
-        return crate::src::qcommon::cm_load::cm.visibility;
+        return cm.visibility;
     }
-    return crate::src::qcommon::cm_load::cm
+    return cm
         .visibility
-        .offset((cluster * crate::src::qcommon::cm_load::cm.clusterBytes) as isize);
+        .offset((cluster * cm.clusterBytes) as isize);
 }
 /*
 ===============================================================================
@@ -482,27 +482,27 @@ AREAPORTALS
 
 pub unsafe extern "C" fn CM_FloodArea_r(mut areaNum: i32, mut floodnum: i32) {
     let mut i: i32 = 0;
-    let mut area: *mut crate::cm_local_h::cArea_t = 0 as *mut crate::cm_local_h::cArea_t;
+    let mut area: *mut cArea_t = 0 as *mut cArea_t;
     let mut con: *mut i32 = 0 as *mut i32;
-    area = &mut *crate::src::qcommon::cm_load::cm
+    area = &mut *cm
         .areas
-        .offset(areaNum as isize) as *mut crate::cm_local_h::cArea_t;
-    if (*area).floodvalid == crate::src::qcommon::cm_load::cm.floodvalid {
+        .offset(areaNum as isize) as *mut cArea_t;
+    if (*area).floodvalid == cm.floodvalid {
         if (*area).floodnum == floodnum {
             return;
         }
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"FloodArea_r: reflooded\x00" as *const u8 as *const libc::c_char,
         );
     }
     (*area).floodnum = floodnum;
-    (*area).floodvalid = crate::src::qcommon::cm_load::cm.floodvalid;
-    con = crate::src::qcommon::cm_load::cm
+    (*area).floodvalid = cm.floodvalid;
+    con = cm
         .areaPortals
-        .offset((areaNum * crate::src::qcommon::cm_load::cm.numAreas) as isize);
+        .offset((areaNum * cm.numAreas) as isize);
     i = 0 as i32;
-    while i < crate::src::qcommon::cm_load::cm.numAreas {
+    while i < cm.numAreas {
         if *con.offset(i as isize) > 0 as i32 {
             CM_FloodArea_r(i, floodnum);
         }
@@ -519,16 +519,16 @@ CM_FloodAreaConnections
 
 pub unsafe extern "C" fn CM_FloodAreaConnections() {
     let mut i: i32 = 0;
-    let mut area: *mut crate::cm_local_h::cArea_t = 0 as *mut crate::cm_local_h::cArea_t;
+    let mut area: *mut cArea_t = 0 as *mut cArea_t;
     let mut floodnum: i32 = 0;
     // all current floods are now invalid
-    crate::src::qcommon::cm_load::cm.floodvalid += 1;
+    cm.floodvalid += 1;
     floodnum = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::qcommon::cm_load::cm.numAreas {
-        area = &mut *crate::src::qcommon::cm_load::cm.areas.offset(i as isize)
-            as *mut crate::cm_local_h::cArea_t;
-        if !((*area).floodvalid == crate::src::qcommon::cm_load::cm.floodvalid) {
+    while i < cm.numAreas {
+        area = &mut *cm.areas.offset(i as isize)
+            as *mut cArea_t;
+        if !((*area).floodvalid == cm.floodvalid) {
             floodnum += 1;
             CM_FloodArea_r(i, floodnum);
         }
@@ -547,44 +547,44 @@ CM_AdjustAreaPortalState
 pub unsafe extern "C" fn CM_AdjustAreaPortalState(
     mut area1: i32,
     mut area2: i32,
-    mut open: crate::src::qcommon::q_shared::qboolean,
+    mut open: qboolean,
 ) {
     if area1 < 0 as i32 || area2 < 0 as i32 {
         return;
     }
-    if area1 >= crate::src::qcommon::cm_load::cm.numAreas
-        || area2 >= crate::src::qcommon::cm_load::cm.numAreas
+    if area1 >= cm.numAreas
+        || area2 >= cm.numAreas
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"CM_ChangeAreaPortalState: bad area number\x00" as *const u8 as *const libc::c_char,
         );
     }
     if open as u64 != 0 {
-        let ref mut fresh3 = *crate::src::qcommon::cm_load::cm
+        let ref mut fresh3 = *cm
             .areaPortals
-            .offset((area1 * crate::src::qcommon::cm_load::cm.numAreas + area2) as isize);
+            .offset((area1 * cm.numAreas + area2) as isize);
         *fresh3 += 1;
-        let ref mut fresh4 = *crate::src::qcommon::cm_load::cm
+        let ref mut fresh4 = *cm
             .areaPortals
-            .offset((area2 * crate::src::qcommon::cm_load::cm.numAreas + area1) as isize);
+            .offset((area2 * cm.numAreas + area1) as isize);
         *fresh4 += 1
     } else {
-        let ref mut fresh5 = *crate::src::qcommon::cm_load::cm
+        let ref mut fresh5 = *cm
             .areaPortals
-            .offset((area1 * crate::src::qcommon::cm_load::cm.numAreas + area2) as isize);
+            .offset((area1 * cm.numAreas + area2) as isize);
         *fresh5 -= 1;
-        let ref mut fresh6 = *crate::src::qcommon::cm_load::cm
+        let ref mut fresh6 = *cm
             .areaPortals
-            .offset((area2 * crate::src::qcommon::cm_load::cm.numAreas + area1) as isize);
+            .offset((area2 * cm.numAreas + area1) as isize);
         *fresh6 -= 1;
-        if *crate::src::qcommon::cm_load::cm
+        if *cm
             .areaPortals
-            .offset((area2 * crate::src::qcommon::cm_load::cm.numAreas + area1) as isize)
+            .offset((area2 * cm.numAreas + area1) as isize)
             < 0 as i32
         {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"CM_AdjustAreaPortalState: negative reference count\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -603,33 +603,33 @@ CM_AreasConnected
 pub unsafe extern "C" fn CM_AreasConnected(
     mut area1: i32,
     mut area2: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    if (*crate::src::qcommon::cm_load::cm_noAreas).integer != 0 {
-        return crate::src::qcommon::q_shared::qtrue;
+) -> qboolean {
+    if (*cm_noAreas).integer != 0 {
+        return qtrue;
     }
     if area1 < 0 as i32 || area2 < 0 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if area1 >= crate::src::qcommon::cm_load::cm.numAreas
-        || area2 >= crate::src::qcommon::cm_load::cm.numAreas
+    if area1 >= cm.numAreas
+        || area2 >= cm.numAreas
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"area >= cm.numAreas\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*crate::src::qcommon::cm_load::cm
+    if (*cm
         .areas
         .offset(area1 as isize))
     .floodnum
-        == (*crate::src::qcommon::cm_load::cm
+        == (*cm
             .areas
             .offset(area2 as isize))
         .floodnum
     {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ===========================================================================
@@ -673,14 +673,14 @@ This is used to cull non-visible entities from snapshots
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_WriteAreaBits(
-    mut buffer: *mut crate::src::qcommon::q_shared::byte,
+    mut buffer: *mut byte,
     mut area: i32,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut floodnum: i32 = 0;
     let mut bytes: i32 = 0;
-    bytes = crate::src::qcommon::cm_load::cm.numAreas + 7 as i32 >> 3 as i32;
-    if (*crate::src::qcommon::cm_load::cm_noAreas).integer != 0 || area == -(1 as i32) {
+    bytes = cm.numAreas + 7 as i32 >> 3 as i32;
+    if (*cm_noAreas).integer != 0 || area == -(1 as i32) {
         // for debugging, send everything
         crate::stdlib::memset(
             buffer as *mut libc::c_void,
@@ -688,15 +688,15 @@ pub unsafe extern "C" fn CM_WriteAreaBits(
             bytes as libc::c_ulong,
         );
     } else {
-        floodnum = (*crate::src::qcommon::cm_load::cm.areas.offset(area as isize)).floodnum;
+        floodnum = (*cm.areas.offset(area as isize)).floodnum;
         i = 0 as i32;
-        while i < crate::src::qcommon::cm_load::cm.numAreas {
-            if (*crate::src::qcommon::cm_load::cm.areas.offset(i as isize)).floodnum == floodnum
+        while i < cm.numAreas {
+            if (*cm.areas.offset(i as isize)).floodnum == floodnum
                 || area == -(1 as i32)
             {
                 let ref mut fresh7 = *buffer.offset((i >> 3 as i32) as isize);
                 *fresh7 = (*fresh7 as i32 | (1 as i32) << (i & 7 as i32))
-                    as crate::src::qcommon::q_shared::byte
+                    as byte
             }
             i += 1
         }
@@ -711,11 +711,11 @@ CM_BoundsIntersect
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoundsIntersect(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins2: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs2: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut mins2: *const vec_t,
+    mut maxs2: *const vec_t,
+) -> qboolean {
     if (*maxs.offset(0 as i32 as isize) as f64) < *mins2.offset(0 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(1 as i32 as isize) as f64)
             < *mins2.offset(1 as i32 as isize) as f64 - 0.125f64
@@ -728,9 +728,9 @@ pub unsafe extern "C" fn CM_BoundsIntersect(
         || *mins.offset(2 as i32 as isize) as f64
             > *maxs2.offset(2 as i32 as isize) as f64 + 0.125f64
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===========================================================================
@@ -785,10 +785,10 @@ CM_BoundsIntersectPoint
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_BoundsIntersectPoint(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut point: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut point: *const vec_t,
+) -> qboolean {
     if (*maxs.offset(0 as i32 as isize) as f64) < *point.offset(0 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(1 as i32 as isize) as f64)
             < *point.offset(1 as i32 as isize) as f64 - 0.125f64
@@ -801,7 +801,7 @@ pub unsafe extern "C" fn CM_BoundsIntersectPoint(
         || *mins.offset(2 as i32 as isize) as f64
             > *point.offset(2 as i32 as isize) as f64 + 0.125f64
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }

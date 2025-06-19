@@ -109,7 +109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *****************************************************************************/
 #[no_mangle]
 
-pub static mut aasworld: crate::be_aas_def_h::aas_t = crate::be_aas_def_h::aas_t {
+pub static mut aasworld: aas_t = aas_t {
     loaded: 0,
     initialized: 0,
     savefile: 0,
@@ -119,77 +119,77 @@ pub static mut aasworld: crate::be_aas_def_h::aas_t = crate::be_aas_def_h::aas_t
     filename: [0; 64],
     mapname: [0; 64],
     numbboxes: 0,
-    bboxes: 0 as *const crate::aasfile_h::aas_bbox_t as *mut crate::aasfile_h::aas_bbox_t,
+    bboxes: 0 as *const aas_bbox_t as *mut aas_bbox_t,
     numvertexes: 0,
-    vertexes: 0 as *const crate::aasfile_h::aas_vertex_t as *mut crate::aasfile_h::aas_vertex_t,
+    vertexes: 0 as *const aas_vertex_t as *mut aas_vertex_t,
     numplanes: 0,
-    planes: 0 as *const crate::aasfile_h::aas_plane_t as *mut crate::aasfile_h::aas_plane_t,
+    planes: 0 as *const aas_plane_t as *mut aas_plane_t,
     numedges: 0,
-    edges: 0 as *const crate::aasfile_h::aas_edge_t as *mut crate::aasfile_h::aas_edge_t,
+    edges: 0 as *const aas_edge_t as *mut aas_edge_t,
     edgeindexsize: 0,
-    edgeindex: 0 as *const crate::aasfile_h::aas_edgeindex_t
-        as *mut crate::aasfile_h::aas_edgeindex_t,
+    edgeindex: 0 as *const aas_edgeindex_t
+        as *mut aas_edgeindex_t,
     numfaces: 0,
-    faces: 0 as *const crate::aasfile_h::aas_face_t as *mut crate::aasfile_h::aas_face_t,
+    faces: 0 as *const aas_face_t as *mut aas_face_t,
     faceindexsize: 0,
-    faceindex: 0 as *const crate::aasfile_h::aas_faceindex_t
-        as *mut crate::aasfile_h::aas_faceindex_t,
+    faceindex: 0 as *const aas_faceindex_t
+        as *mut aas_faceindex_t,
     numareas: 0,
-    areas: 0 as *const crate::aasfile_h::aas_area_t as *mut crate::aasfile_h::aas_area_t,
+    areas: 0 as *const aas_area_t as *mut aas_area_t,
     numareasettings: 0,
-    areasettings: 0 as *const crate::aasfile_h::aas_areasettings_t
-        as *mut crate::aasfile_h::aas_areasettings_t,
+    areasettings: 0 as *const aas_areasettings_t
+        as *mut aas_areasettings_t,
     reachabilitysize: 0,
-    reachability: 0 as *const crate::aasfile_h::aas_reachability_t
-        as *mut crate::aasfile_h::aas_reachability_t,
+    reachability: 0 as *const aas_reachability_t
+        as *mut aas_reachability_t,
     numnodes: 0,
-    nodes: 0 as *const crate::aasfile_h::aas_node_t as *mut crate::aasfile_h::aas_node_t,
+    nodes: 0 as *const aas_node_t as *mut aas_node_t,
     numportals: 0,
-    portals: 0 as *const crate::aasfile_h::aas_portal_t as *mut crate::aasfile_h::aas_portal_t,
+    portals: 0 as *const aas_portal_t as *mut aas_portal_t,
     portalindexsize: 0,
-    portalindex: 0 as *const crate::aasfile_h::aas_portalindex_t
-        as *mut crate::aasfile_h::aas_portalindex_t,
+    portalindex: 0 as *const aas_portalindex_t
+        as *mut aas_portalindex_t,
     numclusters: 0,
-    clusters: 0 as *const crate::aasfile_h::aas_cluster_t as *mut crate::aasfile_h::aas_cluster_t,
+    clusters: 0 as *const aas_cluster_t as *mut aas_cluster_t,
     numreachabilityareas: 0,
     reachabilitytime: 0.,
-    linkheap: 0 as *const crate::be_aas_def_h::aas_link_t as *mut crate::be_aas_def_h::aas_link_t,
+    linkheap: 0 as *const aas_link_t as *mut aas_link_t,
     linkheapsize: 0,
-    freelinks: 0 as *const crate::be_aas_def_h::aas_link_t as *mut crate::be_aas_def_h::aas_link_t,
-    arealinkedentities: 0 as *const *mut crate::be_aas_def_h::aas_link_t
-        as *mut *mut crate::be_aas_def_h::aas_link_t,
+    freelinks: 0 as *const aas_link_t as *mut aas_link_t,
+    arealinkedentities: 0 as *const *mut aas_link_t
+        as *mut *mut aas_link_t,
     maxentities: 0,
     maxclients: 0,
-    entities: 0 as *const crate::be_aas_def_h::aas_entity_t
-        as *mut crate::be_aas_def_h::aas_entity_t,
+    entities: 0 as *const aas_entity_t
+        as *mut aas_entity_t,
     travelflagfortype: [0; 32],
     areacontentstravelflags: 0 as *const i32 as *mut i32,
-    areaupdate: 0 as *const crate::be_aas_def_h::aas_routingupdate_t
-        as *mut crate::be_aas_def_h::aas_routingupdate_t,
-    portalupdate: 0 as *const crate::be_aas_def_h::aas_routingupdate_t
-        as *mut crate::be_aas_def_h::aas_routingupdate_t,
+    areaupdate: 0 as *const aas_routingupdate_t
+        as *mut aas_routingupdate_t,
+    portalupdate: 0 as *const aas_routingupdate_t
+        as *mut aas_routingupdate_t,
     frameroutingupdates: 0,
-    reversedreachability: 0 as *const crate::be_aas_def_h::aas_reversedreachability_t
-        as *mut crate::be_aas_def_h::aas_reversedreachability_t,
+    reversedreachability: 0 as *const aas_reversedreachability_t
+        as *mut aas_reversedreachability_t,
     areatraveltimes: 0 as *const *mut *mut u16 as *mut *mut *mut u16,
-    clusterareacache: 0 as *const *mut *mut crate::be_aas_def_h::aas_routingcache_t
-        as *mut *mut *mut crate::be_aas_def_h::aas_routingcache_t,
-    portalcache: 0 as *const *mut crate::be_aas_def_h::aas_routingcache_t
-        as *mut *mut crate::be_aas_def_h::aas_routingcache_t,
-    oldestcache: 0 as *const crate::be_aas_def_h::aas_routingcache_t
-        as *mut crate::be_aas_def_h::aas_routingcache_t,
-    newestcache: 0 as *const crate::be_aas_def_h::aas_routingcache_t
-        as *mut crate::be_aas_def_h::aas_routingcache_t,
+    clusterareacache: 0 as *const *mut *mut aas_routingcache_t
+        as *mut *mut *mut aas_routingcache_t,
+    portalcache: 0 as *const *mut aas_routingcache_t
+        as *mut *mut aas_routingcache_t,
+    oldestcache: 0 as *const aas_routingcache_t
+        as *mut aas_routingcache_t,
+    newestcache: 0 as *const aas_routingcache_t
+        as *mut aas_routingcache_t,
     portalmaxtraveltimes: 0 as *const i32 as *mut i32,
     reachabilityareaindex: 0 as *const i32 as *mut i32,
-    reachabilityareas: 0 as *const crate::be_aas_def_h::aas_reachabilityareas_t
-        as *mut crate::be_aas_def_h::aas_reachabilityareas_t,
+    reachabilityareas: 0 as *const aas_reachabilityareas_t
+        as *mut aas_reachabilityareas_t,
 };
 #[no_mangle]
 
-pub static mut saveroutingcache: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut saveroutingcache: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 //===========================================================================
 //
 // Parameter:				-
@@ -250,7 +250,7 @@ pub unsafe extern "C" fn AAS_Initialized() -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_SetInitialized() {
-    aasworld.initialized = crate::src::qcommon::q_shared::qtrue as i32;
+    aasworld.initialized = qtrue as i32;
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
@@ -285,14 +285,14 @@ pub unsafe extern "C" fn AAS_ContinueInit(mut time: f32) {
     //if reachability has been calculated and an AAS file should be written
     //or there is a forced data optimization
     if aasworld.savefile != 0
-        || crate::src::botlib::l_libvar::LibVarGetValue(
+        || LibVarGetValue(
             b"forcewrite\x00" as *const u8 as *const libc::c_char,
         ) as i32
             != 0
     {
         //end if
         //optimize the AAS data
-        if crate::src::botlib::l_libvar::LibVarValue(
+        if LibVarValue(
             b"aasoptimize\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         ) as i32
@@ -352,33 +352,33 @@ pub unsafe extern "C" fn AAS_StartFrame(mut time: f32) -> i32 {
     //
     if crate::src::botlib::be_interface::botDeveloper != 0 {
         //end if
-        if crate::src::botlib::l_libvar::LibVarGetValue(
+        if LibVarGetValue(
             b"showcacheupdates\x00" as *const u8 as *const libc::c_char,
         ) != 0.
         {
             crate::src::botlib::be_aas_route::AAS_RoutingInfo(); //end if
-            crate::src::botlib::l_libvar::LibVarSet(
+            LibVarSet(
                 b"showcacheupdates\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
         //end if
-        if crate::src::botlib::l_libvar::LibVarGetValue(
+        if LibVarGetValue(
             b"showmemoryusage\x00" as *const u8 as *const libc::c_char,
         ) != 0.
         {
             crate::src::botlib::l_memory::PrintUsedMemorySize(); //end if
-            crate::src::botlib::l_libvar::LibVarSet(
+            LibVarSet(
                 b"showmemoryusage\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
-        if crate::src::botlib::l_libvar::LibVarGetValue(
+        if LibVarGetValue(
             b"memorydump\x00" as *const u8 as *const libc::c_char,
         ) != 0.
         {
             crate::src::botlib::l_memory::PrintMemoryLabels();
-            crate::src::botlib::l_libvar::LibVarSet(
+            LibVarSet(
                 b"memorydump\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
@@ -387,7 +387,7 @@ pub unsafe extern "C" fn AAS_StartFrame(mut time: f32) -> i32 {
     //
     if (*saveroutingcache).value != 0. {
         crate::src::botlib::be_aas_route::AAS_WriteRouteCache(); //end if
-        crate::src::botlib::l_libvar::LibVarSet(
+        LibVarSet(
             b"saveroutingcache\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
@@ -429,20 +429,20 @@ pub unsafe extern "C" fn AAS_Time() -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ProjectPointOntoVector(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vStart: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vEnd: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vProj: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
+    mut vStart: *mut vec_t,
+    mut vEnd: *mut vec_t,
+    mut vProj: *mut vec_t,
 ) {
-    let mut pVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut pVec: vec3_t = [0.; 3];
+    let mut vec: vec3_t = [0.; 3];
     pVec[0 as i32 as usize] = *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
     pVec[1 as i32 as usize] = *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
     pVec[2 as i32 as usize] = *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
     vec[0 as i32 as usize] = *vEnd.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
     vec[1 as i32 as usize] = *vEnd.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
     vec[2 as i32 as usize] = *vEnd.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
-    crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr());
+    VectorNormalize(vec.as_mut_ptr());
     // project onto the directional vector for this segment
     *vProj.offset(0 as i32 as isize) = *vStart.offset(0 as i32 as isize)
         + vec[0 as i32 as usize]
@@ -472,7 +472,7 @@ pub unsafe extern "C" fn AAS_ProjectPointOntoVector(
 pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 {
     let mut errnum: i32 = 0;
     let mut aasfile: [libc::c_char; 64] = [0; 64];
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         aasworld.mapname.as_mut_ptr(),
         mapname,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -484,7 +484,7 @@ pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 
     // load bsp info
     crate::src::botlib::be_aas_bspq3::AAS_LoadBSPFile();
     //load the aas file
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         aasfile.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"maps/%s.aas\x00" as *const u8 as *const libc::c_char,
@@ -501,7 +501,7 @@ pub unsafe extern "C" fn AAS_LoadFiles(mut mapname: *const libc::c_char) -> i32 
         b"loaded %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         aasfile.as_mut_ptr(),
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         aasworld.filename.as_mut_ptr(),
         aasfile.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -526,7 +526,7 @@ pub unsafe extern "C" fn AAS_LoadMap(mut mapname: *const libc::c_char) -> i32 {
         return 0 as i32;
     } //end if
       //
-    aasworld.initialized = crate::src::qcommon::q_shared::qfalse as i32;
+    aasworld.initialized = qfalse as i32;
     //NOTE: free the routing caches before loading a new map because
     // to free the caches the old number of areas, number of clusters
     // and number of areas in a clusters must be available
@@ -534,7 +534,7 @@ pub unsafe extern "C" fn AAS_LoadMap(mut mapname: *const libc::c_char) -> i32 {
     //load the map
     errnum = AAS_LoadFiles(mapname); //end if
     if errnum != 0 as i32 {
-        aasworld.loaded = crate::src::qcommon::q_shared::qfalse as i32;
+        aasworld.loaded = qfalse as i32;
         return errnum;
     }
     //
@@ -561,28 +561,28 @@ pub unsafe extern "C" fn AAS_LoadMap(mut mapname: *const libc::c_char) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_Setup() -> i32 {
-    aasworld.maxclients = crate::src::botlib::l_libvar::LibVarValue(
+    aasworld.maxclients = LibVarValue(
         b"maxclients\x00" as *const u8 as *const libc::c_char,
         b"128\x00" as *const u8 as *const libc::c_char,
     ) as i32;
-    aasworld.maxentities = crate::src::botlib::l_libvar::LibVarValue(
+    aasworld.maxentities = LibVarValue(
         b"maxentities\x00" as *const u8 as *const libc::c_char,
         b"1024\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     // as soon as it's set to 1 the routing cache will be saved
-    saveroutingcache = crate::src::botlib::l_libvar::LibVar(
+    saveroutingcache = LibVar(
         b"saveroutingcache\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
+    ) as *mut libvar_s;
     //allocate memory for the entities
     if !aasworld.entities.is_null() {
         crate::src::botlib::l_memory::FreeMemory(aasworld.entities as *mut libc::c_void);
     }
     aasworld.entities = crate::src::botlib::l_memory::GetClearedHunkMemory(
         (aasworld.maxentities as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            crate::be_aas_def_h::aas_entity_t,
+            aas_entity_t,
         >() as libc::c_ulong),
-    ) as *mut crate::be_aas_def_h::aas_entity_t;
+    ) as *mut aas_entity_t;
     //invalidate all the entities
     crate::src::botlib::be_aas_entity::AAS_InvalidateEntities();
     //force some recalculations
@@ -680,12 +680,12 @@ pub unsafe extern "C" fn AAS_Shutdown() {
     }
     //clear the aasworld structure
     crate::stdlib::memset(
-        &mut aasworld as *mut crate::be_aas_def_h::aas_t as *mut libc::c_void,
+        &mut aasworld as *mut aas_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::be_aas_def_h::aas_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_t>() as libc::c_ulong,
     );
     //aas has not been initialized
-    aasworld.initialized = crate::src::qcommon::q_shared::qfalse as i32;
+    aasworld.initialized = qfalse as i32;
     //NOTE: as soon as a new .bsp file is loaded the .bsp file memory is
     // freed and reallocated, so there's no need to free that memory here
     //print shutdown

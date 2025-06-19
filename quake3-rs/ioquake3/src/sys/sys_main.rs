@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -8353,7 +8353,7 @@ Sys_SetBinaryPath
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_SetBinaryPath(mut path: *const libc::c_char) {
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         binaryPath.as_mut_ptr(),
         path,
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
@@ -8377,7 +8377,7 @@ Sys_SetDefaultInstallPath
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_SetDefaultInstallPath(mut path: *const libc::c_char) {
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         installPath.as_mut_ptr(),
         path,
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
@@ -8394,7 +8394,7 @@ pub unsafe extern "C" fn Sys_DefaultInstallPath() -> *mut libc::c_char {
     if *installPath.as_mut_ptr() != 0 {
         return installPath.as_mut_ptr();
     } else {
-        return crate::src::sys::sys_unix::Sys_Cwd();
+        return Sys_Cwd();
     };
 }
 /*
@@ -8418,13 +8418,13 @@ Restart the input subsystem
 
 pub unsafe extern "C" fn Sys_In_Restart_f() {
     if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"in_restart: Cannot restart input while video is shutdown\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return;
     }
-    crate::src::sdl::sdl_input::IN_Restart();
+    IN_Restart();
 }
 /*
 =================
@@ -8451,14 +8451,14 @@ pub unsafe extern "C" fn Sys_GetClipboardData() -> *mut libc::c_char {
     cliptext = crate::stdlib::SDL_GetClipboardText();
     if !cliptext.is_null() {
         if *cliptext.offset(0 as i32 as isize) as i32 != '\u{0}' as i32 {
-            let mut bufsize: crate::stddef_h::size_t =
+            let mut bufsize: size_t =
                 crate::stdlib::strlen(cliptext).wrapping_add(1 as i32 as libc::c_ulong);
-            data = crate::src::qcommon::common::Z_Malloc(bufsize as i32) as *mut libc::c_char;
-            crate::src::qcommon::q_shared::Q_strncpyz(data, cliptext, bufsize as i32);
+            data = Z_Malloc(bufsize as i32) as *mut libc::c_char;
+            Q_strncpyz(data, cliptext, bufsize as i32);
             // find first listed char and set to '\0'
-            ::libc::strtok(data, b"\n\r\x08\x00" as *const u8 as *const libc::c_char);
+            libc::strtok(data, b"\n\r\x08\x00" as *const u8 as *const libc::c_char);
         }
-        crate::stdlib::SDL_free(cliptext as *mut libc::c_void);
+        SDL_free(cliptext as *mut libc::c_void);
     }
     return data;
 }
@@ -8469,11 +8469,11 @@ Sys_PIDFileName
 */
 
 unsafe extern "C" fn Sys_PIDFileName(mut gamedir: *const libc::c_char) -> *mut libc::c_char {
-    let mut homePath: *const libc::c_char = crate::src::qcommon::cvar::Cvar_VariableString(
+    let mut homePath: *const libc::c_char = Cvar_VariableString(
         b"fs_homepath\x00" as *const u8 as *const libc::c_char,
     );
     if *homePath as i32 != '\u{0}' as i32 {
-        return crate::src::qcommon::q_shared::va(
+        return va(
             b"%s/%s/%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             homePath,
             gamedir,
@@ -8492,7 +8492,7 @@ Sys_RemovePIDFile
 pub unsafe extern "C" fn Sys_RemovePIDFile(mut gamedir: *const libc::c_char) {
     let mut pidFile: *mut libc::c_char = Sys_PIDFileName(gamedir);
     if !pidFile.is_null() {
-        ::libc::remove(pidFile);
+        libc::remove(pidFile);
     };
 }
 /*
@@ -8505,12 +8505,12 @@ Return qtrue if there is an existing stale PID file
 
 unsafe extern "C" fn Sys_WritePIDFile(
     mut gamedir: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut pidFile: *mut libc::c_char = Sys_PIDFileName(gamedir);
-    let mut f: *mut crate::stdlib::FILE = 0 as *mut crate::stdlib::FILE;
-    let mut stale: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut f: *mut FILE = 0 as *mut FILE;
+    let mut stale: qboolean = qfalse;
     if pidFile.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // First, check if the pid file is already there
     f = crate::stdlib::fopen(pidFile, b"r\x00" as *const u8 as *const libc::c_char);
@@ -8593,14 +8593,14 @@ unsafe extern "C" fn Sys_WritePIDFile(
         if pid > 0 as i32 {
             pid = atoi(pidBuffer.as_mut_ptr());
             if crate::src::sys::sys_unix::Sys_PIDIsRunning(pid) as u64 == 0 {
-                stale = crate::src::qcommon::q_shared::qtrue
+                stale = qtrue
             }
         } else {
-            stale = crate::src::qcommon::q_shared::qtrue
+            stale = qtrue
         }
     }
-    if crate::src::qcommon::files::FS_CreatePath(pidFile) as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+    if FS_CreatePath(pidFile) as u64 != 0 {
+        return qfalse;
     }
     f = crate::stdlib::fopen(pidFile, b"w\x00" as *const u8 as *const libc::c_char);
     if !f.is_null() {
@@ -8611,7 +8611,7 @@ unsafe extern "C" fn Sys_WritePIDFile(
         );
         crate::stdlib::fclose(f);
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3Couldn\'t write %s.\n\x00" as *const u8 as *const libc::c_char,
             pidFile,
         );
@@ -8629,26 +8629,26 @@ pub unsafe extern "C" fn Sys_InitPIDFile(mut gamedir: *const libc::c_char) {
     if Sys_WritePIDFile(gamedir) as u64 != 0 {
         let mut message: [libc::c_char; 1024] = [0; 1024];
         let mut modName: [libc::c_char; 4096] = [0; 4096];
-        crate::src::qcommon::files::FS_GetModDescription(
+        FS_GetModDescription(
             gamedir,
             modName.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
         );
-        crate::src::qcommon::q_shared::Q_CleanStr(modName.as_mut_ptr());
-        crate::src::qcommon::q_shared::Com_sprintf(message.as_mut_ptr(),
+        Q_CleanStr(modName.as_mut_ptr());
+        Com_sprintf(message.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 1024]>() as
                         libc::c_ulong as i32,
                     b"The last time %s ran, it didn\'t exit properly. This may be due to inappropriate video settings. Would you like to start with \"safe\" video settings?\x00"
                         as *const u8 as *const libc::c_char,
                     modName.as_mut_ptr());
-        if crate::src::sys::sys_unix::Sys_Dialog(
-            crate::qcommon_h::DT_YES_NO,
+        if Sys_Dialog(
+            DT_YES_NO,
             message.as_mut_ptr(),
             b"Abnormal Exit\x00" as *const u8 as *const libc::c_char,
         ) as u32
-            == crate::qcommon_h::DR_YES as i32 as u32
+            == DR_YES as i32 as u32
         {
-            crate::src::qcommon::cvar::Cvar_Set(
+            Cvar_Set(
                 b"com_abnormalExit\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
@@ -8666,13 +8666,13 @@ Single exit point (regular exit or in case of error)
 unsafe extern "C" fn Sys_Exit(mut exitCode: i32) -> ! {
     crate::src::sys::con_tty::CON_Shutdown();
     crate::stdlib::SDL_Quit();
-    if exitCode < 2 as i32 && crate::src::qcommon::common::com_fullyInitialized as u32 != 0 {
+    if exitCode < 2 as i32 && com_fullyInitialized as u32 != 0 {
         // Normal exit
-        Sys_RemovePIDFile(crate::src::qcommon::files::FS_GetCurrentGameDir());
+        Sys_RemovePIDFile(FS_GetCurrentGameDir());
     }
-    crate::src::qcommon::net_ip::NET_Shutdown();
+    NET_Shutdown();
     crate::src::sys::sys_unix::Sys_PlatformExit();
-    ::libc::exit(exitCode);
+    exit(exitCode);
 }
 /*
 =================
@@ -8691,36 +8691,36 @@ Sys_GetProcessorFeatures
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_GetProcessorFeatures() -> crate::qcommon_h::cpuFeatures_t {
-    let mut features: crate::qcommon_h::cpuFeatures_t = 0 as crate::qcommon_h::cpuFeatures_t;
+pub unsafe extern "C" fn Sys_GetProcessorFeatures() -> cpuFeatures_t {
+    let mut features: cpuFeatures_t = 0 as cpuFeatures_t;
     if crate::stdlib::SDL_HasRDTSC() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_RDTSC as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_RDTSC as i32 as u32,
         )
     }
     if crate::stdlib::SDL_Has3DNow() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_3DNOW as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_3DNOW as i32 as u32,
         )
     }
     if crate::stdlib::SDL_HasMMX() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_MMX as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_MMX as i32 as u32,
         )
     }
     if crate::stdlib::SDL_HasSSE() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_SSE as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_SSE as i32 as u32,
         )
     }
     if crate::stdlib::SDL_HasSSE2() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_SSE2 as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_SSE2 as i32 as u32,
         )
     }
     if crate::stdlib::SDL_HasAltiVec() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, crate::qcommon_h::cpuFeatures_t>(
-            features as u32 | crate::qcommon_h::CF_ALTIVEC as i32 as u32,
+        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
+            features as u32 | CF_ALTIVEC as i32 as u32,
         )
     }
     return features;
@@ -8733,17 +8733,17 @@ Sys_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_Init() {
-    crate::src::qcommon::cmd::Cmd_AddCommand(
+    Cmd_AddCommand(
         b"in_restart\x00" as *const u8 as *const libc::c_char,
         Some(Sys_In_Restart_f as unsafe extern "C" fn() -> ()),
     );
-    crate::src::qcommon::cvar::Cvar_Set(
+    Cvar_Set(
         b"arch\x00" as *const u8 as *const libc::c_char,
         b"linux x86_64\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::cvar::Cvar_Set(
+    Cvar_Set(
         b"username\x00" as *const u8 as *const libc::c_char,
-        crate::src::sys::sys_unix::Sys_GetCurrentUser(),
+        Sys_GetCurrentUser(),
     );
 }
 /*
@@ -8762,7 +8762,7 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
         30 as i32, 31 as i32, 32 as i32, 33 as i32, 34 as i32, 36 as i32, 35 as i32, 0 as i32,
     ];
     while *msg != 0 {
-        if crate::src::qcommon::q_shared::Q_IsColorString(msg) as u32 != 0
+        if Q_IsColorString(msg) as u32 != 0
             || *msg as i32 == '\n' as i32
         {
             // First empty the buffer
@@ -8780,7 +8780,7 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
                 msg = msg.offset(1)
             } else {
                 // Print the color code
-                crate::src::qcommon::q_shared::Com_sprintf(
+                Com_sprintf(
                     buffer.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                     b"\x1b[%dm\x00" as *const u8 as *const libc::c_char,
@@ -8846,7 +8846,7 @@ returns -1 if not present
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_FileTime(mut path: *mut libc::c_char) -> i32 {
-    let mut buf: crate::stdlib::stat = crate::stdlib::stat {
+    let mut buf: stat = stat {
         st_dev: 0,
         st_ino: 0,
         st_nlink: 0,
@@ -8858,15 +8858,15 @@ pub unsafe extern "C" fn Sys_FileTime(mut path: *mut libc::c_char) -> i32 {
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: ::libc::timespec {
+        st_atim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_mtim: ::libc::timespec {
+        st_mtim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_ctim: ::libc::timespec {
+        st_ctim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
@@ -8886,7 +8886,7 @@ Sys_UnloadDll
 
 pub unsafe extern "C" fn Sys_UnloadDll(mut dllHandle: *mut libc::c_void) {
     if dllHandle.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Sys_UnloadDll(NULL)\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -8926,11 +8926,11 @@ from executable path, then fs_basepath.
 
 pub unsafe extern "C" fn Sys_LoadDll(
     mut name: *const libc::c_char,
-    mut useSystemLib: crate::src::qcommon::q_shared::qboolean,
+    mut useSystemLib: qboolean,
 ) -> *mut libc::c_void {
     let mut dllhandle: *mut libc::c_void = 0 as *mut libc::c_void;
-    if crate::src::sys::sys_unix::Sys_DllExtension(name) as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+    if Sys_DllExtension(name) as u64 == 0 {
+        Com_Printf(
             b"Refusing to attempt to load library \"%s\": Extension not allowed.\n\x00" as *const u8
                 as *const libc::c_char,
             name,
@@ -8938,7 +8938,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
         return 0 as *mut libc::c_void;
     }
     if useSystemLib as u64 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Trying to load \"%s\"...\n\x00" as *const u8 as *const libc::c_char,
             name,
         );
@@ -8952,7 +8952,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
         if *topDir == 0 {
             topDir = b".\x00" as *const u8 as *const libc::c_char
         }
-        len = crate::src::qcommon::q_shared::Com_sprintf(
+        len = Com_sprintf(
             libPath.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s%c%s\x00" as *const u8 as *const libc::c_char,
@@ -8961,14 +8961,14 @@ pub unsafe extern "C" fn Sys_LoadDll(
             name,
         );
         if (len as libc::c_ulong) < ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Trying to load \"%s\" from \"%s\"...\n\x00" as *const u8 as *const libc::c_char,
                 name,
                 topDir,
             );
             dllhandle = crate::stdlib::SDL_LoadObject(libPath.as_mut_ptr())
         } else {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Skipping trying to load \"%s\" from \"%s\", file name is too long.\n\x00"
                     as *const u8 as *const libc::c_char,
                 name,
@@ -8976,14 +8976,14 @@ pub unsafe extern "C" fn Sys_LoadDll(
             );
         }
         if dllhandle.is_null() {
-            let mut basePath: *const libc::c_char = crate::src::qcommon::cvar::Cvar_VariableString(
+            let mut basePath: *const libc::c_char = Cvar_VariableString(
                 b"fs_basepath\x00" as *const u8 as *const libc::c_char,
             );
             if basePath.is_null() || *basePath == 0 {
                 basePath = b".\x00" as *const u8 as *const libc::c_char
             }
-            if crate::src::qcommon::files::FS_FilenameCompare(topDir, basePath) as u64 != 0 {
-                len = crate::src::qcommon::q_shared::Com_sprintf(
+            if FS_FilenameCompare(topDir, basePath) as u64 != 0 {
+                len = Com_sprintf(
                     libPath.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                     b"%s%c%s\x00" as *const u8 as *const libc::c_char,
@@ -8994,7 +8994,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
                 if (len as libc::c_ulong)
                     < ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong
                 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"Trying to load \"%s\" from \"%s\"...\n\x00" as *const u8
                             as *const libc::c_char,
                         name,
@@ -9002,7 +9002,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
                     );
                     dllhandle = crate::stdlib::SDL_LoadObject(libPath.as_mut_ptr())
                 } else {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"Skipping trying to load \"%s\" from \"%s\", file name is too long.\n\x00"
                             as *const u8 as *const libc::c_char,
                         name,
@@ -9011,7 +9011,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
                 }
             }
             if dllhandle.is_null() {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"Loading \"%s\" failed\n\x00" as *const u8 as *const libc::c_char,
                     name,
                 );
@@ -9031,34 +9031,34 @@ Used to load a development dll instead of a virtual machine
 
 pub unsafe extern "C" fn Sys_LoadGameDll(
     mut name: *const libc::c_char,
-    mut entryPoint: *mut Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
+    mut entryPoint: *mut Option<unsafe extern "C" fn(_: i32, _: ...) -> intptr_t>,
     mut systemcalls: Option<
-        unsafe extern "C" fn(_: crate::stdlib::intptr_t, _: ...) -> crate::stdlib::intptr_t,
+        unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
     >,
 ) -> *mut libc::c_void {
     let mut libHandle: *mut libc::c_void = 0 as *mut libc::c_void;
     let mut dllEntry: Option<
         unsafe extern "C" fn(
             _: Option<
-                unsafe extern "C" fn(_: crate::stdlib::intptr_t, _: ...) -> crate::stdlib::intptr_t,
+                unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
             >,
         ) -> (),
     > = None;
-    if crate::src::sys::sys_unix::Sys_DllExtension(name) as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+    if Sys_DllExtension(name) as u64 == 0 {
+        Com_Printf(
             b"Refusing to attempt to load library \"%s\": Extension not allowed.\n\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
         return 0 as *mut libc::c_void;
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Loading DLL file: %s\n\x00" as *const u8 as *const libc::c_char,
         name,
     );
     libHandle = crate::stdlib::SDL_LoadObject(name);
     if libHandle.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Sys_LoadGameDll(%s) failed:\n\"%s\"\n\x00" as *const u8 as *const libc::c_char,
             name,
             crate::stdlib::SDL_GetError(),
@@ -9071,9 +9071,9 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
             unsafe extern "C" fn(
                 _: Option<
                     unsafe extern "C" fn(
-                        _: crate::stdlib::intptr_t,
+                        _: intptr_t,
                         _: ...
-                    ) -> crate::stdlib::intptr_t,
+                    ) -> intptr_t,
                 >,
             ) -> (),
         >,
@@ -9083,13 +9083,13 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
     ));
     *entryPoint = ::std::mem::transmute::<
         *mut libc::c_void,
-        Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
+        Option<unsafe extern "C" fn(_: i32, _: ...) -> intptr_t>,
     >(crate::stdlib::SDL_LoadFunction(
         libHandle,
         b"vmMain\x00" as *const u8 as *const libc::c_char,
     ));
     if (*entryPoint).is_none() || dllEntry.is_none() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Sys_LoadGameDll(%s) failed to find vmMain function:\n\"%s\" !\n\x00" as *const u8
                 as *const libc::c_char,
             name,
@@ -9098,7 +9098,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
         crate::stdlib::SDL_UnloadObject(libHandle);
         return 0 as *mut libc::c_void;
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Sys_LoadGameDll(%s) found vmMain function at %p\n\x00" as *const u8
             as *const libc::c_char,
         name,
@@ -9116,11 +9116,11 @@ Sys_ParseArgs
 
 pub unsafe extern "C" fn Sys_ParseArgs(mut argc: i32, mut argv: *mut *mut libc::c_char) {
     if argc == 2 as i32 {
-        if ::libc::strcmp(
+        if libc::strcmp(
             *argv.offset(1 as i32 as isize),
             b"--version\x00" as *const u8 as *const libc::c_char,
         ) == 0
-            || ::libc::strcmp(
+            || libc::strcmp(
                 *argv.offset(1 as i32 as isize),
                 b"-v\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -9168,8 +9168,8 @@ Sys_SigHandler
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_SigHandler(mut signal_0: i32) -> ! {
-    static mut signalcaught: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    static mut signalcaught: qboolean =
+        qfalse;
     if signalcaught as u64 != 0 {
         crate::stdlib::fprintf(
             crate::stdlib::stderr,
@@ -9178,21 +9178,21 @@ pub unsafe extern "C" fn Sys_SigHandler(mut signal_0: i32) -> ! {
             signal_0,
         );
     } else {
-        signalcaught = crate::src::qcommon::q_shared::qtrue;
-        crate::src::qcommon::vm::VM_Forced_Unload_Start();
-        crate::src::client::cl_main::CL_Shutdown(
-            crate::src::qcommon::q_shared::va(
+        signalcaught = qtrue;
+        VM_Forced_Unload_Start();
+        CL_Shutdown(
+            va(
                 b"Received signal %d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 signal_0,
             ),
-            crate::src::qcommon::q_shared::qtrue,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
+            qtrue,
         );
-        crate::src::server::sv_init::SV_Shutdown(crate::src::qcommon::q_shared::va(
+        SV_Shutdown(va(
             b"Received signal %d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             signal_0,
         ));
-        crate::src::qcommon::vm::VM_Forced_Unload_Done();
+        VM_Forced_Unload_Done();
     }
     if signal_0 == 15 as i32 || signal_0 == 2 as i32 {
         Sys_Exit(1 as i32);
@@ -10242,17 +10242,17 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
     // SDL version check
     // Compile time
     // Run time
-    let mut ver: crate::stdlib::SDL_version = crate::stdlib::SDL_version {
+    let mut ver: SDL_version = SDL_version {
         major: 0,
         minor: 0,
         patch: 0,
     };
-    crate::stdlib::SDL_GetVersion(&mut ver);
+    SDL_GetVersion(&mut ver);
     if (ver.major as i32 * 1000 as i32 + ver.minor as i32 * 100 as i32 + ver.patch as i32)
         < 2 as i32 * 1000 as i32 + 0 as i32 * 100 as i32 + 5 as i32
     {
-        crate::src::sys::sys_unix::Sys_Dialog(crate::qcommon_h::DT_ERROR,
-                   crate::src::qcommon::q_shared::va(b"SDL version 2.0.5 or greater is required, but only version %d.%d.%d was found. You may be able to obtain a more recent copy from http://www.libsdl.org/.\x00"
+        Sys_Dialog(DT_ERROR,
+                   va(b"SDL version 2.0.5 or greater is required, but only version %d.%d.%d was found. You may be able to obtain a more recent copy from http://www.libsdl.org/.\x00"
                           as *const u8 as *const libc::c_char as
                           *mut libc::c_char, ver.major as i32,
                       ver.minor as i32, ver.patch as i32),
@@ -10262,39 +10262,39 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
     }
     crate::src::sys::sys_unix::Sys_PlatformInit();
     // Set the initial time base
-    crate::src::sys::sys_unix::Sys_Milliseconds();
+    Sys_Milliseconds();
     Sys_ParseArgs(argc, argv);
-    Sys_SetBinaryPath(crate::src::sys::sys_unix::Sys_Dirname(
+    Sys_SetBinaryPath(Sys_Dirname(
         *argv.offset(0 as i32 as isize),
     ));
     Sys_SetDefaultInstallPath(Sys_BinaryPath());
     // Concatenate the command line for passing to Com_Init
     i = 1 as i32;
     while i < argc {
-        let containsSpaces: crate::src::qcommon::q_shared::qboolean =
-            (::libc::strchr(*argv.offset(i as isize), ' ' as i32)
+        let containsSpaces: qboolean =
+            (libc::strchr(*argv.offset(i as isize), ' ' as i32)
                 != 0 as *mut libc::c_void as *mut libc::c_char) as i32
-                as crate::src::qcommon::q_shared::qboolean;
+                as qboolean;
         if containsSpaces as u64 != 0 {
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 commandLine.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::qcommon::q_shared::Q_strcat(
+        Q_strcat(
             commandLine.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             *argv.offset(i as isize),
         );
         if containsSpaces as u64 != 0 {
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 commandLine.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 b"\"\x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::qcommon::q_shared::Q_strcat(
+        Q_strcat(
             commandLine.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             b" \x00" as *const u8 as *const libc::c_char,
@@ -10302,44 +10302,44 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
         i += 1
     }
     crate::src::sys::con_tty::CON_Init();
-    crate::src::qcommon::common::Com_Init(commandLine.as_mut_ptr());
-    crate::src::qcommon::net_ip::NET_Init();
-    crate::stdlib::signal(
+    Com_Init(commandLine.as_mut_ptr());
+    NET_Init();
+    signal(
         4 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
-    crate::stdlib::signal(
+    signal(
         8 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
-    crate::stdlib::signal(
+    signal(
         11 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
-    crate::stdlib::signal(
+    signal(
         15 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
-    crate::stdlib::signal(
+    signal(
         2 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     loop {
-        crate::src::qcommon::common::Com_Frame();
+        Com_Frame();
     }
 }

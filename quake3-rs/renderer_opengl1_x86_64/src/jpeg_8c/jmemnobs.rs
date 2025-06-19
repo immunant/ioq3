@@ -217,19 +217,19 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_get_small(
-    mut _cinfo: crate::jpeglib_h::j_common_ptr,
-    mut sizeofobject: crate::stddef_h::size_t,
+    mut _cinfo: j_common_ptr,
+    mut sizeofobject: size_t,
 ) -> *mut libc::c_void {
     return crate::stdlib::malloc(sizeofobject);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_free_small(
-    mut _cinfo: crate::jpeglib_h::j_common_ptr,
+    mut _cinfo: j_common_ptr,
     mut object: *mut libc::c_void,
-    mut _sizeofobject: crate::stddef_h::size_t,
+    mut _sizeofobject: size_t,
 ) {
-    ::libc::free(object);
+    libc::free(object);
 }
 /*
  * These two functions are used to allocate and release large chunks of
@@ -248,19 +248,19 @@ pub unsafe extern "C" fn jpeg_free_small(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_get_large(
-    mut _cinfo: crate::jpeglib_h::j_common_ptr,
-    mut sizeofobject: crate::stddef_h::size_t,
+    mut _cinfo: j_common_ptr,
+    mut sizeofobject: size_t,
 ) -> *mut libc::c_void {
     return crate::stdlib::malloc(sizeofobject);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_free_large(
-    mut _cinfo: crate::jpeglib_h::j_common_ptr,
+    mut _cinfo: j_common_ptr,
     mut object: *mut libc::c_void,
-    mut _sizeofobject: crate::stddef_h::size_t,
+    mut _sizeofobject: size_t,
 ) {
-    ::libc::free(object);
+    libc::free(object);
 }
 /*
  * The macro MAX_ALLOC_CHUNK designates the maximum number of bytes that may
@@ -302,7 +302,7 @@ pub unsafe extern "C" fn jpeg_free_large(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_mem_available(
-    mut _cinfo: crate::jpeglib_h::j_common_ptr,
+    mut _cinfo: j_common_ptr,
     mut _min_bytes_needed: isize,
     mut max_bytes_needed: isize,
     mut _already_allocated: isize,
@@ -324,11 +324,11 @@ pub unsafe extern "C" fn jpeg_mem_available(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_open_backing_store(
-    mut cinfo: crate::jpeglib_h::j_common_ptr,
-    mut _info: crate::jmemsys_h::backing_store_ptr,
+    mut cinfo: j_common_ptr,
+    mut _info: backing_store_ptr,
     mut _total_bytes_needed: isize,
 ) {
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_BACKING_STORE as i32;
+    (*(*cinfo).err).msg_code = JERR_NO_BACKING_STORE as i32;
     Some(
         (*(*cinfo).err)
             .error_exit
@@ -353,12 +353,12 @@ pub unsafe extern "C" fn jpeg_open_backing_store(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_mem_init(mut _cinfo: crate::jpeglib_h::j_common_ptr) -> isize {
+pub unsafe extern "C" fn jpeg_mem_init(mut _cinfo: j_common_ptr) -> isize {
     return 0 as i32 as isize;
     /* just set max_memory_to_use to 0 */
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_mem_term(mut _cinfo: crate::jpeglib_h::j_common_ptr) {
+pub unsafe extern "C" fn jpeg_mem_term(mut _cinfo: j_common_ptr) {
     /* no work */
 }

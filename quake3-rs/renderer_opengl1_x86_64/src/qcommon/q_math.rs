@@ -75,173 +75,173 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // one file. That's what this is about.
 #[no_mangle]
 
-pub static mut vec3_origin: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
+pub static mut vec3_origin: vec3_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
 ];
 #[no_mangle]
 
-pub static mut axisDefault: [crate::src::qcommon::q_shared::vec3_t; 3] = [
+pub static mut axisDefault: [vec3_t; 3] = [
     [
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        1 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ],
     [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
+        0 as i32 as vec_t,
     ],
     [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    ],
-];
-#[no_mangle]
-
-pub static mut colorBlack: crate::src::qcommon::q_shared::vec4_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorRed: crate::src::qcommon::q_shared::vec4_t = [
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorGreen: crate::src::qcommon::q_shared::vec4_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorBlue: crate::src::qcommon::q_shared::vec4_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorYellow: crate::src::qcommon::q_shared::vec4_t = [
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorMagenta: crate::src::qcommon::q_shared::vec4_t = [
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorCyan: crate::src::qcommon::q_shared::vec4_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorWhite: crate::src::qcommon::q_shared::vec4_t = [
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorLtGrey: crate::src::qcommon::q_shared::vec4_t = [
-    0.75f64 as crate::src::qcommon::q_shared::vec_t,
-    0.75f64 as crate::src::qcommon::q_shared::vec_t,
-    0.75f64 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorMdGrey: crate::src::qcommon::q_shared::vec4_t = [
-    0.5f64 as crate::src::qcommon::q_shared::vec_t,
-    0.5f64 as crate::src::qcommon::q_shared::vec_t,
-    0.5f64 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut colorDkGrey: crate::src::qcommon::q_shared::vec4_t = [
-    0.25f64 as crate::src::qcommon::q_shared::vec_t,
-    0.25f64 as crate::src::qcommon::q_shared::vec_t,
-    0.25f64 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
-];
-#[no_mangle]
-
-pub static mut g_color_table: [crate::src::qcommon::q_shared::vec4_t; 8] = [
-    [
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        0.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-    ],
-    [
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
-        1.0f64 as crate::src::qcommon::q_shared::vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ],
 ];
 #[no_mangle]
 
-pub static mut bytedirs: [crate::src::qcommon::q_shared::vec3_t; 162] = [
+pub static mut colorBlack: vec4_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorRed: vec4_t = [
+    1 as i32 as vec_t,
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorGreen: vec4_t = [
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorBlue: vec4_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorYellow: vec4_t = [
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorMagenta: vec4_t = [
+    1 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorCyan: vec4_t = [
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorWhite: vec4_t = [
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorLtGrey: vec4_t = [
+    0.75f64 as vec_t,
+    0.75f64 as vec_t,
+    0.75f64 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorMdGrey: vec4_t = [
+    0.5f64 as vec_t,
+    0.5f64 as vec_t,
+    0.5f64 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut colorDkGrey: vec4_t = [
+    0.25f64 as vec_t,
+    0.25f64 as vec_t,
+    0.25f64 as vec_t,
+    1 as i32 as vec_t,
+];
+#[no_mangle]
+
+pub static mut g_color_table: [vec4_t; 8] = [
+    [
+        0.0f64 as vec_t,
+        0.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        1.0f64 as vec_t,
+        0.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        0.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        1.0f64 as vec_t,
+        0.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+    [
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+        1.0f64 as vec_t,
+    ],
+];
+#[no_mangle]
+
+pub static mut bytedirs: [vec3_t; 162] = [
     [-0.525731f32, 0.000000f32, 0.850651f32],
     [-0.442863f32, 0.238856f32, 0.864188f32],
     [-0.295242f32, 0.000000f32, 0.955423f32],
@@ -450,7 +450,7 @@ pub unsafe extern "C" fn ClampShort(mut i: i32) -> i16 {
 // this isn't a real cheap function to call!
 #[no_mangle]
 
-pub unsafe extern "C" fn DirToByte(mut dir: *mut crate::src::qcommon::q_shared::vec_t) -> i32 {
+pub unsafe extern "C" fn DirToByte(mut dir: *mut vec_t) -> i32 {
     let mut i: i32 = 0;
     let mut best: i32 = 0;
     let mut d: f32 = 0.;
@@ -475,7 +475,7 @@ pub unsafe extern "C" fn DirToByte(mut dir: *mut crate::src::qcommon::q_shared::
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ByteToDir(mut b: i32, mut dir: *mut crate::src::qcommon::q_shared::vec_t) {
+pub unsafe extern "C" fn ByteToDir(mut b: i32, mut dir: *mut vec_t) {
     if b < 0 as i32 || b >= 162 as i32 {
         *dir.offset(0 as i32 as isize) = vec3_origin[0 as i32 as usize];
         *dir.offset(1 as i32 as isize) = vec3_origin[1 as i32 as usize];
@@ -490,33 +490,33 @@ pub unsafe extern "C" fn ByteToDir(mut b: i32, mut dir: *mut crate::src::qcommon
 
 pub unsafe extern "C" fn ColorBytes3(mut r: f32, mut g: f32, mut b: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(0 as i32 as isize) =
-        (r * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(1 as i32 as isize) =
-        (g * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(2 as i32 as isize) =
-        (b * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) =
+        (r * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) =
+        (g * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) =
+        (b * 255 as i32 as f32) as byte;
     return i;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ColorBytes4(mut r: f32, mut g: f32, mut b: f32, mut a: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(0 as i32 as isize) =
-        (r * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(1 as i32 as isize) =
-        (g * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(2 as i32 as isize) =
-        (b * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(3 as i32 as isize) =
-        (a * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) =
+        (r * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) =
+        (g * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) =
+        (b * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(3 as i32 as isize) =
+        (a * 255 as i32 as f32) as byte;
     return i;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn NormalizeColor(
-    mut in_0: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *const vec_t,
+    mut out: *mut vec_t,
 ) -> f32 {
     let mut max: f32 = 0.;
     max = *in_0.offset(0 as i32 as isize);
@@ -528,7 +528,7 @@ pub unsafe extern "C" fn NormalizeColor(
     }
     if max == 0. {
         let ref mut fresh0 = *out.offset(2 as i32 as isize);
-        *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *fresh0 = 0 as i32 as vec_t;
         let ref mut fresh1 = *out.offset(1 as i32 as isize);
         *fresh1 = *fresh0;
         *out.offset(0 as i32 as isize) = *fresh1
@@ -550,13 +550,13 @@ The normal will point out of the clock for clockwise ordered points
 #[no_mangle]
 
 pub unsafe extern "C" fn PlaneFromPoints(
-    mut plane: *mut crate::src::qcommon::q_shared::vec_t,
-    mut a: *const crate::src::qcommon::q_shared::vec_t,
-    mut b: *const crate::src::qcommon::q_shared::vec_t,
-    mut c: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut d1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut d2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    mut plane: *mut vec_t,
+    mut a: *const vec_t,
+    mut b: *const vec_t,
+    mut c: *const vec_t,
+) -> qboolean {
+    let mut d1: vec3_t = [0.; 3];
+    let mut d2: vec3_t = [0.; 3];
     d1[0 as i32 as usize] = *b.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
     d1[1 as i32 as usize] = *b.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
     d1[2 as i32 as usize] = *b.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
@@ -564,18 +564,18 @@ pub unsafe extern "C" fn PlaneFromPoints(
     d2[1 as i32 as usize] = *c.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
     d2[2 as i32 as usize] = *c.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
     CrossProduct(
-        d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        d2.as_mut_ptr() as *const vec_t,
+        d1.as_mut_ptr() as *const vec_t,
         plane,
     );
     if VectorNormalize(plane) == 0 as i32 as f32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     *plane.offset(3 as i32 as isize) = *a.offset(0 as i32 as isize)
         * *plane.offset(0 as i32 as isize)
         + *a.offset(1 as i32 as isize) * *plane.offset(1 as i32 as isize)
         + *a.offset(2 as i32 as isize) * *plane.offset(2 as i32 as isize);
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -587,9 +587,9 @@ This is not implemented very well...
 #[no_mangle]
 
 pub unsafe extern "C" fn RotatePointAroundVector(
-    mut dst: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *const crate::src::qcommon::q_shared::vec_t,
-    mut point: *const crate::src::qcommon::q_shared::vec_t,
+    mut dst: *mut vec_t,
+    mut dir: *const vec_t,
+    mut point: *const vec_t,
     mut degrees: f32,
 ) {
     let mut m: [[f32; 3]; 3] = [[0.; 3]; 3];
@@ -598,17 +598,17 @@ pub unsafe extern "C" fn RotatePointAroundVector(
     let mut tmpmat: [[f32; 3]; 3] = [[0.; 3]; 3];
     let mut rot: [[f32; 3]; 3] = [[0.; 3]; 3];
     let mut i: i32 = 0;
-    let mut vr: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vup: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vf: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut vr: vec3_t = [0.; 3];
+    let mut vup: vec3_t = [0.; 3];
+    let mut vf: vec3_t = [0.; 3];
     let mut rad: f32 = 0.;
     vf[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
     vf[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
     vf[2 as i32 as usize] = *dir.offset(2 as i32 as isize);
     PerpendicularVector(vr.as_mut_ptr(), dir);
     CrossProduct(
-        vr.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        vf.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vr.as_mut_ptr() as *const vec_t,
+        vf.as_mut_ptr() as *const vec_t,
         vup.as_mut_ptr(),
     );
     m[0 as i32 as usize][0 as i32 as usize] = vr[0 as i32 as usize];
@@ -663,43 +663,43 @@ RotateAroundDirection
 #[no_mangle]
 
 pub unsafe extern "C" fn RotateAroundDirection(
-    mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut axis: *mut vec3_t,
     mut yaw: f32,
 ) {
     // create an arbitrary axis[1]
     PerpendicularVector(
         (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
         (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
     );
     // rotate it around axis[0] by yaw
     if yaw != 0. {
-        let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut temp: vec3_t = [0.; 3];
         temp[0 as i32 as usize] = (*axis.offset(1 as i32 as isize))[0 as i32 as usize];
         temp[1 as i32 as usize] = (*axis.offset(1 as i32 as isize))[1 as i32 as usize];
         temp[2 as i32 as usize] = (*axis.offset(1 as i32 as isize))[2 as i32 as usize];
         RotatePointAroundVector(
             (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
             (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
+            temp.as_mut_ptr() as *const vec_t,
             yaw,
         );
     }
     // cross to get axis[2]
     CrossProduct(
         (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
         (*axis.offset(1 as i32 as isize)).as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
         (*axis.offset(2 as i32 as isize)).as_mut_ptr(),
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vectoangles(
-    mut value1: *const crate::src::qcommon::q_shared::vec_t,
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
+    mut value1: *const vec_t,
+    mut angles: *mut vec_t,
 ) {
     let mut forward: f32 = 0.;
     let mut yaw: f32 = 0.;
@@ -742,7 +742,7 @@ pub unsafe extern "C" fn vectoangles(
     }
     *angles.offset(0 as i32 as isize) = -pitch;
     *angles.offset(1 as i32 as isize) = yaw;
-    *angles.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *angles.offset(2 as i32 as isize) = 0 as i32 as vec_t;
 }
 /*
 =================
@@ -752,10 +752,10 @@ AnglesToAxis
 #[no_mangle]
 
 pub unsafe extern "C" fn AnglesToAxis(
-    mut angles: *const crate::src::qcommon::q_shared::vec_t,
-    mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut angles: *const vec_t,
+    mut axis: *mut vec3_t,
 ) {
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
     // angle vectors returns "right" instead of "y axis"
     AngleVectors(
         angles,
@@ -772,31 +772,31 @@ pub unsafe extern "C" fn AnglesToAxis(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn AxisClear(mut axis: *mut crate::src::qcommon::q_shared::vec3_t) {
+pub unsafe extern "C" fn AxisClear(mut axis: *mut vec3_t) {
     (*axis.offset(0 as i32 as isize))[0 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
     (*axis.offset(0 as i32 as isize))[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(0 as i32 as isize))[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(1 as i32 as isize))[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(1 as i32 as isize))[1 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
     (*axis.offset(1 as i32 as isize))[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(2 as i32 as isize))[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(2 as i32 as isize))[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     (*axis.offset(2 as i32 as isize))[2 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn AxisCopy(
-    mut in_0: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut in_0: *mut vec3_t,
+    mut out: *mut vec3_t,
 ) {
     (*out.offset(0 as i32 as isize))[0 as i32 as usize] =
         (*in_0.offset(0 as i32 as isize))[0 as i32 as usize];
@@ -820,12 +820,12 @@ pub unsafe extern "C" fn AxisCopy(
 #[no_mangle]
 
 pub unsafe extern "C" fn ProjectPointOnPlane(
-    mut dst: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p: *const crate::src::qcommon::q_shared::vec_t,
-    mut normal: *const crate::src::qcommon::q_shared::vec_t,
+    mut dst: *mut vec_t,
+    mut p: *const vec_t,
+    mut normal: *const vec_t,
 ) {
     let mut d: f32 = 0.;
-    let mut n: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut n: vec3_t = [0.; 3];
     let mut inv_denom: f32 = 0.;
     inv_denom = *normal.offset(0 as i32 as isize) * *normal.offset(0 as i32 as isize)
         + *normal.offset(1 as i32 as isize) * *normal.offset(1 as i32 as isize)
@@ -854,9 +854,9 @@ other perpendicular vectors
 #[no_mangle]
 
 pub unsafe extern "C" fn MakeNormalVectors(
-    mut forward: *const crate::src::qcommon::q_shared::vec_t,
-    mut right: *mut crate::src::qcommon::q_shared::vec_t,
-    mut up: *mut crate::src::qcommon::q_shared::vec_t,
+    mut forward: *const vec_t,
+    mut right: *mut vec_t,
+    mut up: *mut vec_t,
 ) {
     let mut d: f32 = 0.;
     // this rotate and negate guarantees a vector
@@ -875,7 +875,7 @@ pub unsafe extern "C" fn MakeNormalVectors(
         *right.offset(2 as i32 as isize) + *forward.offset(2 as i32 as isize) * -d;
     VectorNormalize(right);
     CrossProduct(
-        right as *const crate::src::qcommon::q_shared::vec_t,
+        right as *const vec_t,
         forward,
         up,
     );
@@ -883,9 +883,9 @@ pub unsafe extern "C" fn MakeNormalVectors(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorRotate(
-    mut in_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *mut vec_t,
+    mut matrix: *mut vec3_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize)
         * (*matrix.offset(0 as i32 as isize))[0 as i32 as usize]
@@ -907,8 +907,8 @@ pub unsafe extern "C" fn VectorRotate(
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_rsqrt(mut number: f32) -> f32 {
-    let mut t: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. }; // what the fuck?
+    let mut t: floatint_t =
+        floatint_t { f: 0. }; // what the fuck?
     let mut x2: f32 = 0.; // 1st iteration
     let mut y: f32 = 0.;
     let threehalfs: f32 = 1.5f32;
@@ -923,8 +923,8 @@ pub unsafe extern "C" fn Q_rsqrt(mut number: f32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_fabs(mut f: f32) -> f32 {
-    let mut fi: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut fi: floatint_t =
+        floatint_t { f: 0. };
     fi.f = f;
     fi.i &= 0x7fffffff as i32;
     return fi.f;
@@ -972,9 +972,9 @@ pub unsafe extern "C" fn AngleSubtract(mut a1: f32, mut a2: f32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AnglesSubtract(
-    mut v1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut v3: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v1: *mut vec_t,
+    mut v2: *mut vec_t,
+    mut v3: *mut vec_t,
 ) {
     *v3.offset(0 as i32 as isize) =
         AngleSubtract(*v1.offset(0 as i32 as isize), *v2.offset(0 as i32 as isize));
@@ -1041,7 +1041,7 @@ SetPlaneSignbits
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SetPlaneSignbits(mut out: *mut crate::src::qcommon::q_shared::cplane_t) {
+pub unsafe extern "C" fn SetPlaneSignbits(mut out: *mut cplane_t) {
     let mut bits: i32 = 0;
     let mut j: i32 = 0;
     // for fast box on planeside test
@@ -1053,7 +1053,7 @@ pub unsafe extern "C" fn SetPlaneSignbits(mut out: *mut crate::src::qcommon::q_s
         }
         j += 1
     }
-    (*out).signbits = bits as crate::src::qcommon::q_shared::byte;
+    (*out).signbits = bits as byte;
 }
 /*
 ==================
@@ -1065,9 +1065,9 @@ Returns 1, 2, or 1 + 2
 #[no_mangle]
 
 pub unsafe extern "C" fn BoxOnPlaneSide(
-    mut emins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut emaxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p: *mut crate::src::qcommon::q_shared::cplane_s,
+    mut emins: *mut vec_t,
+    mut emaxs: *mut vec_t,
+    mut p: *mut cplane_s,
 ) -> i32 {
     let mut dist: [f32; 2] = [0.; 2];
     let mut sides: i32 = 0;
@@ -1113,11 +1113,11 @@ RadiusFromBounds
 #[no_mangle]
 
 pub unsafe extern "C" fn RadiusFromBounds(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
 ) -> f32 {
     let mut i: i32 = 0;
-    let mut corner: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut corner: vec3_t = [0.; 3];
     let mut a: f32 = 0.;
     let mut b: f32 = 0.;
     i = 0 as i32;
@@ -1127,21 +1127,21 @@ pub unsafe extern "C" fn RadiusFromBounds(
         corner[i as usize] = if a > b { a } else { b };
         i += 1
     }
-    return VectorLength(corner.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLength(corner.as_mut_ptr() as *const vec_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ClearBounds(
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) {
     let ref mut fresh2 = *mins.offset(2 as i32 as isize);
-    *fresh2 = 99999 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *fresh2 = 99999 as i32 as vec_t;
     let ref mut fresh3 = *mins.offset(1 as i32 as isize);
     *fresh3 = *fresh2;
     *mins.offset(0 as i32 as isize) = *fresh3;
     let ref mut fresh4 = *maxs.offset(2 as i32 as isize);
-    *fresh4 = -(99999 as i32) as crate::src::qcommon::q_shared::vec_t;
+    *fresh4 = -(99999 as i32) as vec_t;
     let ref mut fresh5 = *maxs.offset(1 as i32 as isize);
     *fresh5 = *fresh4;
     *maxs.offset(0 as i32 as isize) = *fresh5;
@@ -1149,9 +1149,9 @@ pub unsafe extern "C" fn ClearBounds(
 #[no_mangle]
 
 pub unsafe extern "C" fn AddPointToBounds(
-    mut v: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v: *const vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) {
     if *v.offset(0 as i32 as isize) < *mins.offset(0 as i32 as isize) {
         *mins.offset(0 as i32 as isize) = *v.offset(0 as i32 as isize)
@@ -1175,11 +1175,11 @@ pub unsafe extern "C" fn AddPointToBounds(
 #[no_mangle]
 
 pub unsafe extern "C" fn BoundsIntersect(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut mins2: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs2: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut mins2: *const vec_t,
+    mut maxs2: *const vec_t,
+) -> qboolean {
     if *maxs.offset(0 as i32 as isize) < *mins2.offset(0 as i32 as isize)
         || *maxs.offset(1 as i32 as isize) < *mins2.offset(1 as i32 as isize)
         || *maxs.offset(2 as i32 as isize) < *mins2.offset(2 as i32 as isize)
@@ -1187,18 +1187,18 @@ pub unsafe extern "C" fn BoundsIntersect(
         || *mins.offset(1 as i32 as isize) > *maxs2.offset(1 as i32 as isize)
         || *mins.offset(2 as i32 as isize) > *maxs2.offset(2 as i32 as isize)
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn BoundsIntersectSphere(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut radius: crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut origin: *const vec_t,
+    mut radius: vec_t,
+) -> qboolean {
     if *origin.offset(0 as i32 as isize) - radius > *maxs.offset(0 as i32 as isize)
         || *origin.offset(0 as i32 as isize) + radius < *mins.offset(0 as i32 as isize)
         || *origin.offset(1 as i32 as isize) - radius > *maxs.offset(1 as i32 as isize)
@@ -1206,17 +1206,17 @@ pub unsafe extern "C" fn BoundsIntersectSphere(
         || *origin.offset(2 as i32 as isize) - radius > *maxs.offset(2 as i32 as isize)
         || *origin.offset(2 as i32 as isize) + radius < *mins.offset(2 as i32 as isize)
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn BoundsIntersectPoint(
-    mut mins: *const crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *const crate::src::qcommon::q_shared::vec_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut mins: *const vec_t,
+    mut maxs: *const vec_t,
+    mut origin: *const vec_t,
+) -> qboolean {
     if *origin.offset(0 as i32 as isize) > *maxs.offset(0 as i32 as isize)
         || *origin.offset(0 as i32 as isize) < *mins.offset(0 as i32 as isize)
         || *origin.offset(1 as i32 as isize) > *maxs.offset(1 as i32 as isize)
@@ -1224,15 +1224,15 @@ pub unsafe extern "C" fn BoundsIntersectPoint(
         || *origin.offset(2 as i32 as isize) > *maxs.offset(2 as i32 as isize)
         || *origin.offset(2 as i32 as isize) < *mins.offset(2 as i32 as isize)
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorNormalize(
-    mut v: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::vec_t {
+    mut v: *mut vec_t,
+) -> vec_t {
     // NOTE: TTimo - Apple G4 altivec source uses double?
     let mut length: f32 = 0.;
     let mut ilength: f32 = 0.;
@@ -1256,9 +1256,9 @@ pub unsafe extern "C" fn VectorNormalize(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorNormalize2(
-    mut v: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::vec_t {
+    mut v: *const vec_t,
+    mut out: *mut vec_t,
+) -> vec_t {
     let mut length: f32 = 0.;
     let mut ilength: f32 = 0.;
     length = *v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
@@ -1274,7 +1274,7 @@ pub unsafe extern "C" fn VectorNormalize2(
         *out.offset(2 as i32 as isize) = *v.offset(2 as i32 as isize) * ilength
     } else {
         let ref mut fresh9 = *out.offset(2 as i32 as isize);
-        *fresh9 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *fresh9 = 0 as i32 as vec_t;
         let ref mut fresh10 = *out.offset(1 as i32 as isize);
         *fresh10 = *fresh9;
         *out.offset(0 as i32 as isize) = *fresh10
@@ -1284,10 +1284,10 @@ pub unsafe extern "C" fn VectorNormalize2(
 #[no_mangle]
 
 pub unsafe extern "C" fn _VectorMA(
-    mut veca: *const crate::src::qcommon::q_shared::vec_t,
+    mut veca: *const vec_t,
     mut scale: f32,
-    mut vecb: *const crate::src::qcommon::q_shared::vec_t,
-    mut vecc: *mut crate::src::qcommon::q_shared::vec_t,
+    mut vecb: *const vec_t,
+    mut vecc: *mut vec_t,
 ) {
     *vecc.offset(0 as i32 as isize) =
         *veca.offset(0 as i32 as isize) + scale * *vecb.offset(0 as i32 as isize);
@@ -1299,9 +1299,9 @@ pub unsafe extern "C" fn _VectorMA(
 #[no_mangle]
 
 pub unsafe extern "C" fn _DotProduct(
-    mut v1: *const crate::src::qcommon::q_shared::vec_t,
-    mut v2: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::vec_t {
+    mut v1: *const vec_t,
+    mut v2: *const vec_t,
+) -> vec_t {
     return *v1.offset(0 as i32 as isize) * *v2.offset(0 as i32 as isize)
         + *v1.offset(1 as i32 as isize) * *v2.offset(1 as i32 as isize)
         + *v1.offset(2 as i32 as isize) * *v2.offset(2 as i32 as isize);
@@ -1309,9 +1309,9 @@ pub unsafe extern "C" fn _DotProduct(
 #[no_mangle]
 
 pub unsafe extern "C" fn _VectorSubtract(
-    mut veca: *const crate::src::qcommon::q_shared::vec_t,
-    mut vecb: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut veca: *const vec_t,
+    mut vecb: *const vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) =
         *veca.offset(0 as i32 as isize) - *vecb.offset(0 as i32 as isize);
@@ -1323,9 +1323,9 @@ pub unsafe extern "C" fn _VectorSubtract(
 #[no_mangle]
 
 pub unsafe extern "C" fn _VectorAdd(
-    mut veca: *const crate::src::qcommon::q_shared::vec_t,
-    mut vecb: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut veca: *const vec_t,
+    mut vecb: *const vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) =
         *veca.offset(0 as i32 as isize) + *vecb.offset(0 as i32 as isize);
@@ -1337,8 +1337,8 @@ pub unsafe extern "C" fn _VectorAdd(
 #[no_mangle]
 
 pub unsafe extern "C" fn _VectorCopy(
-    mut in_0: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *const vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize);
     *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize);
@@ -1347,9 +1347,9 @@ pub unsafe extern "C" fn _VectorCopy(
 #[no_mangle]
 
 pub unsafe extern "C" fn _VectorScale(
-    mut in_0: *const crate::src::qcommon::q_shared::vec_t,
-    mut scale: crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *const vec_t,
+    mut scale: vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize) * scale;
     *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize) * scale;
@@ -1358,9 +1358,9 @@ pub unsafe extern "C" fn _VectorScale(
 #[no_mangle]
 
 pub unsafe extern "C" fn Vector4Scale(
-    mut in_0: *const crate::src::qcommon::q_shared::vec_t,
-    mut scale: crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *const vec_t,
+    mut scale: vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize) * scale;
     *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize) * scale;
@@ -1477,10 +1477,10 @@ pub unsafe extern "C" fn MatrixMultiply(
 #[no_mangle]
 
 pub unsafe extern "C" fn AngleVectors(
-    mut angles: *const crate::src::qcommon::q_shared::vec_t,
-    mut forward: *mut crate::src::qcommon::q_shared::vec_t,
-    mut right: *mut crate::src::qcommon::q_shared::vec_t,
-    mut up: *mut crate::src::qcommon::q_shared::vec_t,
+    mut angles: *const vec_t,
+    mut forward: *mut vec_t,
+    mut right: *mut vec_t,
+    mut up: *mut vec_t,
 ) {
     let mut angle: f32 = 0.;
     static mut sr: f32 = 0.;
@@ -1528,13 +1528,13 @@ pub unsafe extern "C" fn AngleVectors(
 #[no_mangle]
 
 pub unsafe extern "C" fn PerpendicularVector(
-    mut dst: *mut crate::src::qcommon::q_shared::vec_t,
-    mut src: *const crate::src::qcommon::q_shared::vec_t,
+    mut dst: *mut vec_t,
+    mut src: *const vec_t,
 ) {
     let mut pos: i32 = 0;
     let mut i: i32 = 0;
     let mut minelem: f32 = 1.0f32;
-    let mut tempvec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut tempvec: vec3_t = [0.; 3];
     /*
     	** find the smallest magnitude axially aligned vector
     	*/
@@ -1556,7 +1556,7 @@ pub unsafe extern "C" fn PerpendicularVector(
     	*/
     ProjectPointOnPlane(
         dst,
-        tempvec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        tempvec.as_mut_ptr() as *const vec_t,
         src,
     );
     /*
@@ -1574,8 +1574,8 @@ Don't pass doubles to this
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_isnan(mut x: f32) -> i32 {
-    let mut fi: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut fi: floatint_t =
+        floatint_t { f: 0. };
     fi.f = x;
     fi.ui &= 0x7fffffff as i32 as u32;
     fi.ui = (0x7f800000 as i32 as u32).wrapping_sub(fi.ui);

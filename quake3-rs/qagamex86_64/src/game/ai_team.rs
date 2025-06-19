@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -176,15 +176,15 @@ BotValidTeamLeader
 #[no_mangle]
 
 pub unsafe extern "C" fn BotValidTeamLeader(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) -> i32 {
     if crate::stdlib::strlen((*bs).teamleader.as_mut_ptr()) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if crate::src::game::ai_dmq3::ClientFromName((*bs).teamleader.as_mut_ptr()) == -(1 as i32) {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 /*
 ==================
@@ -194,35 +194,35 @@ BotNumTeamMates
 #[no_mangle]
 
 pub unsafe extern "C" fn BotNumTeamMates(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut numplayers: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     numplayers = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        crate::src::game::g_syscalls::trap_GetConfigstring(
+    while i < level.maxclients {
+        trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
-            || crate::stdlib::strlen(crate::src::qcommon::q_shared::Info_ValueForKey(
+            || crate::stdlib::strlen(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"n\x00" as *const u8 as *const libc::c_char,
             )) == 0)
         {
             //skip spectators
-            if !(atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+            if !(atoi(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"t\x00" as *const u8 as *const libc::c_char,
-            )) == crate::bg_public_h::TEAM_SPECTATOR as i32)
+            )) == TEAM_SPECTATOR as i32)
             {
                 //
                 if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                    bs as *mut bot_state_s,
                     i,
                 ) != 0
                 {
@@ -243,10 +243,10 @@ BotClientTravelTimeToGoal
 
 pub unsafe extern "C" fn BotClientTravelTimeToGoal(
     mut client: i32,
-    mut goal: *mut crate::be_ai_goal_h::bot_goal_t,
+    mut goal: *mut bot_goal_t,
 ) -> i32 {
-    let mut ps: crate::src::qcommon::q_shared::playerState_t =
-        crate::src::qcommon::q_shared::playerState_t {
+    let mut ps: playerState_t =
+        playerState_t {
             commandTime: 0,
             pm_type: 0,
             bobCycle: 0,
@@ -294,9 +294,9 @@ pub unsafe extern "C" fn BotClientTravelTimeToGoal(
             entityEventSequence: 0,
         };
     let mut areanum: i32 = 0;
-    if crate::src::game::ai_main::BotAI_GetClientState(
+    if BotAI_GetClientState(
         client,
-        &mut ps as *mut _ as *mut crate::src::qcommon::q_shared::playerState_s,
+        &mut ps as *mut _ as *mut playerState_s,
     ) != 0
     {
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(ps.origin.as_mut_ptr())
@@ -306,7 +306,7 @@ pub unsafe extern "C" fn BotClientTravelTimeToGoal(
     if areanum == 0 {
         return 1 as i32;
     }
-    return crate::src::game::g_syscalls::trap_AAS_AreaTravelTimeToGoalArea(
+    return trap_AAS_AreaTravelTimeToGoalArea(
         areanum,
         ps.origin.as_mut_ptr(),
         (*goal).areanum,
@@ -334,7 +334,7 @@ BotSortTeamMatesByBaseTravelTime
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
     mut teammates: *mut i32,
     mut maxteammates: i32,
 ) -> i32 {
@@ -345,10 +345,10 @@ pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
     let mut traveltime: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     let mut traveltimes: [i32; 64] = [0; 64];
-    let mut goal: *mut crate::be_ai_goal_h::bot_goal_t = 0 as *mut crate::be_ai_goal_h::bot_goal_t;
-    if crate::src::game::ai_dmq3::gametype == crate::bg_public_h::GT_CTF as i32 {
-        if crate::src::game::ai_dmq3::BotTeam(bs as *mut crate::src::game::ai_main::bot_state_s)
-            == crate::bg_public_h::TEAM_RED as i32
+    let mut goal: *mut bot_goal_t = 0 as *mut bot_goal_t;
+    if crate::src::game::ai_dmq3::gametype == GT_CTF as i32 {
+        if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s)
+            == TEAM_RED as i32
         {
             goal = &mut crate::src::game::ai_dmq3::ctf_redflag
         } else {
@@ -357,28 +357,28 @@ pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
     }
     numteammates = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        crate::src::game::g_syscalls::trap_GetConfigstring(
+    while i < level.maxclients {
+        trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
-            || crate::stdlib::strlen(crate::src::qcommon::q_shared::Info_ValueForKey(
+            || crate::stdlib::strlen(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"n\x00" as *const u8 as *const libc::c_char,
             )) == 0)
         {
             //skip spectators
-            if !(atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+            if !(atoi(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"t\x00" as *const u8 as *const libc::c_char,
-            )) == crate::bg_public_h::TEAM_SPECTATOR as i32)
+            )) == TEAM_SPECTATOR as i32)
             {
                 //
                 if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                    bs as *mut bot_state_s,
                     i,
                 ) != 0
                     && !goal.is_null()
@@ -422,7 +422,7 @@ BotSetTeamMateTaskPreference
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSetTeamMateTaskPreference(
-    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut bot_state_t,
     mut teammate: i32,
     mut preference: i32,
 ) {
@@ -433,7 +433,7 @@ pub unsafe extern "C" fn BotSetTeamMateTaskPreference(
         teammatename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         ctftaskpreferences[teammate as usize].name.as_mut_ptr(),
         teammatename.as_mut_ptr(),
     );
@@ -446,7 +446,7 @@ BotGetTeamMateTaskPreference
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGetTeamMateTaskPreference(
-    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut bot_state_t,
     mut teammate: i32,
 ) -> i32 {
     let mut teammatename: [libc::c_char; 36] = [0; 36];
@@ -458,7 +458,7 @@ pub unsafe extern "C" fn BotGetTeamMateTaskPreference(
         teammatename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         teammatename.as_mut_ptr(),
         ctftaskpreferences[teammate as usize].name.as_mut_ptr(),
     ) != 0
@@ -475,7 +475,7 @@ BotSortTeamMatesByTaskPreference
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSortTeamMatesByTaskPreference(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
     mut teammates: *mut i32,
     mut numteammates: i32,
 ) -> i32 {
@@ -540,7 +540,7 @@ BotSayTeamOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSayTeamOrderAlways(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
     mut toclient: i32,
 ) {
     let mut teamchat: [libc::c_char; 256] = [0; 256];
@@ -549,7 +549,7 @@ pub unsafe extern "C" fn BotSayTeamOrderAlways(
     //if the bot is talking to itself
     if (*bs).client == toclient {
         //don't show the message just put it in the console message queue
-        crate::src::game::g_syscalls::trap_BotGetChatMessage(
+        trap_BotGetChatMessage(
             (*bs).cs,
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
@@ -559,20 +559,20 @@ pub unsafe extern "C" fn BotSayTeamOrderAlways(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
         );
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             teamchat.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
             b"\x19(%s\x19)\x19: %s\x00" as *const u8 as *const libc::c_char,
             name.as_mut_ptr(),
             buf.as_mut_ptr(),
         );
-        crate::src::game::g_syscalls::trap_BotQueueConsoleMessage(
+        trap_BotQueueConsoleMessage(
             (*bs).cs,
             1 as i32,
             teamchat.as_mut_ptr(),
         );
     } else {
-        crate::src::game::g_syscalls::trap_BotEnterChat((*bs).cs, toclient, 2 as i32);
+        trap_BotEnterChat((*bs).cs, toclient, 2 as i32);
     };
 }
 /*
@@ -583,7 +583,7 @@ BotSayTeamOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSayTeamOrder(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
     mut toclient: i32,
 ) {
     BotSayTeamOrderAlways(bs, toclient);
@@ -596,7 +596,7 @@ BotVoiceChat
 #[no_mangle]
 
 pub unsafe extern "C" fn BotVoiceChat(
-    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut bot_state_t,
     mut _toclient: i32,
     mut _voicechat: *mut libc::c_char,
 ) {
@@ -609,7 +609,7 @@ BotVoiceChatOnly
 #[no_mangle]
 
 pub unsafe extern "C" fn BotVoiceChatOnly(
-    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut bot_state_t,
     mut _toclient: i32,
     mut _voicechat: *mut libc::c_char,
 ) {
@@ -622,7 +622,7 @@ BotSayVoiceTeamOrder
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSayVoiceTeamOrder(
-    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut bot_state_t,
     mut _toclient: i32,
     mut _voicechat: *mut libc::c_char,
 ) {
@@ -635,7 +635,7 @@ BotCTFOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
@@ -670,8 +670,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                 name.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
             );
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
@@ -702,8 +702,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
                 if (*bs).flagcarrier == (*bs).client {
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_accompanyme\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -715,8 +715,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                         b"followme\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     );
                 } else {
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_accompany\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -732,8 +732,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                 }
             } else {
                 //
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -756,8 +756,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                 name.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
             );
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
@@ -795,8 +795,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         if (*bs).flagcarrier == (*bs).client {
-                            crate::src::game::ai_main::BotAI_BotInitialChat(
-                                bs as *mut crate::src::game::ai_main::bot_state_s,
+                            BotAI_BotInitialChat(
+                                bs as *mut bot_state_s,
                                 b"cmd_accompanyme\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
                                 name.as_mut_ptr(),
@@ -809,8 +809,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                                     as *mut libc::c_char,
                             );
                         } else {
-                            crate::src::game::ai_main::BotAI_BotInitialChat(
-                                bs as *mut crate::src::game::ai_main::bot_state_s,
+                            BotAI_BotInitialChat(
+                                bs as *mut bot_state_s,
                                 b"cmd_accompany\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
                                 name.as_mut_ptr(),
@@ -839,8 +839,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                             name.as_mut_ptr(),
                             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
-                        crate::src::game::ai_main::BotAI_BotInitialChat(
-                            bs as *mut crate::src::game::ai_main::bot_state_s,
+                        BotAI_BotInitialChat(
+                            bs as *mut bot_state_s,
                             b"cmd_getflag\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                             name.as_mut_ptr(),
@@ -866,8 +866,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
@@ -892,7 +892,7 @@ BotCTFOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
@@ -918,8 +918,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -936,8 +936,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -956,8 +956,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -974,8 +974,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -992,8 +992,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1023,8 +1023,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_defendbase\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -1046,8 +1046,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
@@ -1073,8 +1073,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1091,8 +1091,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1111,8 +1111,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1129,8 +1129,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1147,8 +1147,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1178,8 +1178,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_defendbase\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -1201,8 +1201,8 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
@@ -1227,7 +1227,7 @@ BotCTFOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
@@ -1258,8 +1258,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                 name.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
             );
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
@@ -1283,8 +1283,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                 name.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
             );
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
@@ -1306,8 +1306,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                 name.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
             );
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
@@ -1339,8 +1339,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_defendbase\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -1373,8 +1373,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         if (*bs).flagcarrier == (*bs).client {
-                            crate::src::game::ai_main::BotAI_BotInitialChat(
-                                bs as *mut crate::src::game::ai_main::bot_state_s,
+                            BotAI_BotInitialChat(
+                                bs as *mut bot_state_s,
                                 b"cmd_accompanyme\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
                                 name.as_mut_ptr(),
@@ -1387,8 +1387,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                                     as *mut libc::c_char,
                             );
                         } else {
-                            crate::src::game::ai_main::BotAI_BotInitialChat(
-                                bs as *mut crate::src::game::ai_main::bot_state_s,
+                            BotAI_BotInitialChat(
+                                bs as *mut bot_state_s,
                                 b"cmd_accompany\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
                                 name.as_mut_ptr(),
@@ -1417,8 +1417,8 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                             name.as_mut_ptr(),
                             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
-                        crate::src::game::ai_main::BotAI_BotInitialChat(
-                            bs as *mut crate::src::game::ai_main::bot_state_s,
+                        BotAI_BotInitialChat(
+                            bs as *mut bot_state_s,
                             b"cmd_getflag\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
                             name.as_mut_ptr(),
@@ -1445,7 +1445,7 @@ BotCTFOrders
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
@@ -1477,8 +1477,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1495,8 +1495,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1515,8 +1515,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1533,8 +1533,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1551,8 +1551,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1581,8 +1581,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_defendbase\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -1604,8 +1604,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
@@ -1631,8 +1631,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1649,8 +1649,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1669,8 +1669,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_defendbase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1687,8 +1687,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1705,8 +1705,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                     name.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                 );
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     name.as_mut_ptr(),
                     0 as *mut libc::c_void,
@@ -1735,8 +1735,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_defendbase\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         name.as_mut_ptr(),
@@ -1758,8 +1758,8 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                     );
-                    crate::src::game::ai_main::BotAI_BotInitialChat(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                    BotAI_BotInitialChat(
+                        bs as *mut bot_state_s,
                         b"cmd_getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
@@ -1783,11 +1783,11 @@ BotCTFOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCTFOrders(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
+pub unsafe extern "C" fn BotCTFOrders(mut bs: *mut bot_state_t) {
     let mut flagstatus: i32 = 0;
     //
-    if crate::src::game::ai_dmq3::BotTeam(bs as *mut crate::src::game::ai_main::bot_state_s)
-        == crate::bg_public_h::TEAM_RED as i32
+    if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s)
+        == TEAM_RED as i32
     {
         flagstatus = (*bs).redflagstatus * 2 as i32 + (*bs).blueflagstatus
     } else {
@@ -1818,7 +1818,7 @@ BotCreateGroup
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCreateGroup(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
     mut teammates: *mut i32,
     mut groupsize: i32,
 ) {
@@ -1839,15 +1839,15 @@ pub unsafe extern "C" fn BotCreateGroup(
             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
         );
         if *teammates.offset(0 as i32 as isize) == (*bs).client {
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_accompanyme\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
         } else {
-            crate::src::game::ai_main::BotAI_BotInitialChat(
-                bs as *mut crate::src::game::ai_main::bot_state_s,
+            BotAI_BotInitialChat(
+                bs as *mut bot_state_s,
                 b"cmd_accompany\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 name.as_mut_ptr(),
                 leadername.as_mut_ptr(),
@@ -1867,35 +1867,35 @@ BotTeamOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotTeamOrders(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
+pub unsafe extern "C" fn BotTeamOrders(mut bs: *mut bot_state_t) {
     let mut teammates: [i32; 64] = [0; 64];
     let mut numteammates: i32 = 0;
     let mut i: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     numteammates = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        crate::src::game::g_syscalls::trap_GetConfigstring(
+    while i < level.maxclients {
+        trap_GetConfigstring(
             32 as i32 + 256 as i32 + 256 as i32 + i,
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         //if no config string or no name
         if !(crate::stdlib::strlen(buf.as_mut_ptr()) == 0
-            || crate::stdlib::strlen(crate::src::qcommon::q_shared::Info_ValueForKey(
+            || crate::stdlib::strlen(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"n\x00" as *const u8 as *const libc::c_char,
             )) == 0)
         {
             //skip spectators
-            if !(atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+            if !(atoi(Info_ValueForKey(
                 buf.as_mut_ptr(),
                 b"t\x00" as *const u8 as *const libc::c_char,
-            )) == crate::bg_public_h::TEAM_SPECTATOR as i32)
+            )) == TEAM_SPECTATOR as i32)
             {
                 //
                 if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                    bs as *mut bot_state_s,
                     i,
                 ) != 0
                 {
@@ -1953,19 +1953,19 @@ FindHumanTeamLeader
 #[no_mangle]
 
 pub unsafe extern "C" fn FindHumanTeamLeader(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut bs: *mut bot_state_t,
 ) -> i32 {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 64 as i32 {
-        if crate::src::game::g_main::g_entities[i as usize].inuse as u64 != 0 {
+        if g_entities[i as usize].inuse as u64 != 0 {
             // if this player is not a bot
-            if crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
+            if g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
                 // if this player is ok with being the leader
                 if crate::src::game::ai_cmd::notleader[i as usize] == 0 {
                     // if this player is on the same team
                     if crate::src::game::ai_dmq3::BotSameTeam(
-                        bs as *mut crate::src::game::ai_main::bot_state_s,
+                        bs as *mut bot_state_s,
                         i,
                     ) != 0
                     {
@@ -1976,24 +1976,24 @@ pub unsafe extern "C" fn FindHumanTeamLeader(
                         );
                         // if not yet ordered to do anything
                         if crate::src::game::ai_dmq3::BotSetLastOrderedTask(
-                            bs as *mut crate::src::game::ai_main::bot_state_s,
+                            bs as *mut bot_state_s,
                         ) == 0
                         {
                             // go on defense by default
                             crate::src::game::ai_vcmd::BotVoiceChat_Defend(
-                                bs as *mut crate::src::game::ai_main::bot_state_s,
+                                bs as *mut bot_state_s,
                                 i,
                                 2 as i32,
                             );
                         }
-                        return crate::src::qcommon::q_shared::qtrue as i32;
+                        return qtrue as i32;
                     }
                 }
             }
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 /*
 ===========================================================================
@@ -2032,11 +2032,11 @@ BotTeamAI
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_state_t) {
+pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
     let mut numteammates: i32 = 0;
     let mut netname: [libc::c_char; 36] = [0; 36];
     //
-    if crate::src::game::ai_dmq3::gametype < crate::bg_public_h::GT_TEAM as i32 {
+    if crate::src::game::ai_dmq3::gametype < GT_TEAM as i32 {
         return;
     }
     // make sure we've got a valid team leader
@@ -2045,43 +2045,43 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
         if FindHumanTeamLeader(bs) == 0 {
             //
             if (*bs).askteamleader_time == 0. && (*bs).becometeamleader_time == 0. {
-                if (*bs).entergame_time + 10 as i32 as f32 > crate::src::game::ai_main::floattime {
-                    (*bs).askteamleader_time = crate::src::game::ai_main::floattime
+                if (*bs).entergame_time + 10 as i32 as f32 > floattime {
+                    (*bs).askteamleader_time = floattime
                         + 5 as i32 as f32
-                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * 10 as i32 as f32
                 } else {
-                    (*bs).becometeamleader_time = crate::src::game::ai_main::floattime
+                    (*bs).becometeamleader_time = floattime
                         + 5 as i32 as f32
-                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * 10 as i32 as f32
                 }
             }
             if (*bs).askteamleader_time != 0.
-                && (*bs).askteamleader_time < crate::src::game::ai_main::floattime
+                && (*bs).askteamleader_time < floattime
             {
                 // if asked for a team leader and no response
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"whoisteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     0 as *mut libc::c_void,
                 );
-                crate::src::game::g_syscalls::trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
+                trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
                 (*bs).askteamleader_time = 0 as i32 as f32;
-                (*bs).becometeamleader_time = crate::src::game::ai_main::floattime
+                (*bs).becometeamleader_time = floattime
                     + 8 as i32 as f32
-                    + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                    + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                         * 10 as i32 as f32
             }
             if (*bs).becometeamleader_time != 0.
-                && (*bs).becometeamleader_time < crate::src::game::ai_main::floattime
+                && (*bs).becometeamleader_time < floattime
             {
-                crate::src::game::ai_main::BotAI_BotInitialChat(
-                    bs as *mut crate::src::game::ai_main::bot_state_s,
+                BotAI_BotInitialChat(
+                    bs as *mut bot_state_s,
                     b"iamteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     0 as *mut libc::c_void,
                 );
-                crate::src::game::g_syscalls::trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
+                trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
                 BotSayVoiceTeamOrder(
                     bs,
                     -(1 as i32),
@@ -2113,7 +2113,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
         netname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
+    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
         != 0 as i32
     {
         return;
@@ -2124,18 +2124,18 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
     match crate::src::game::ai_dmq3::gametype {
         3 => {
             if (*bs).numteammates != numteammates || (*bs).forceorders != 0 {
-                (*bs).teamgiveorders_time = crate::src::game::ai_main::floattime;
+                (*bs).teamgiveorders_time = floattime;
                 (*bs).numteammates = numteammates;
-                (*bs).forceorders = crate::src::qcommon::q_shared::qfalse as i32
+                (*bs).forceorders = qfalse as i32
             }
             //if it's time to give orders
             if (*bs).teamgiveorders_time != 0.
                 && (*bs).teamgiveorders_time
-                    < crate::src::game::ai_main::floattime - 5 as i32 as f32
+                    < floattime - 5 as i32 as f32
             {
                 BotTeamOrders(bs);
                 //give orders again after 120 seconds
-                (*bs).teamgiveorders_time = crate::src::game::ai_main::floattime + 120 as i32 as f32
+                (*bs).teamgiveorders_time = floattime + 120 as i32 as f32
             }
         }
         4 => {
@@ -2145,27 +2145,27 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
                 || (*bs).flagstatuschanged != 0
                 || (*bs).forceorders != 0
             {
-                (*bs).teamgiveorders_time = crate::src::game::ai_main::floattime;
+                (*bs).teamgiveorders_time = floattime;
                 (*bs).numteammates = numteammates;
-                (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qfalse as i32;
-                (*bs).forceorders = crate::src::qcommon::q_shared::qfalse as i32
+                (*bs).flagstatuschanged = qfalse as i32;
+                (*bs).forceorders = qfalse as i32
             }
             //if there were no flag captures the last 3 minutes
-            if (*bs).lastflagcapture_time < crate::src::game::ai_main::floattime - 240 as i32 as f32
+            if (*bs).lastflagcapture_time < floattime - 240 as i32 as f32
             {
-                (*bs).lastflagcapture_time = crate::src::game::ai_main::floattime;
+                (*bs).lastflagcapture_time = floattime;
                 //randomly change the CTF strategy
-                if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
+                if (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
                     < 0.4f64
                 {
                     (*bs).ctfstrategy ^= 1 as i32;
-                    (*bs).teamgiveorders_time = crate::src::game::ai_main::floattime
+                    (*bs).teamgiveorders_time = floattime
                 }
             }
             //if it's time to give orders
             if (*bs).teamgiveorders_time != 0.
                 && (*bs).teamgiveorders_time
-                    < crate::src::game::ai_main::floattime - 3 as i32 as f32
+                    < floattime - 3 as i32 as f32
             {
                 BotCTFOrders(bs);
                 //

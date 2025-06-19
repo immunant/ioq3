@@ -33,7 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Piece-wise linear mapping from bitrate in kbps to coding quality in dB SNR */
 #[no_mangle]
 
-pub static mut silk_TargetRate_table_NB: [crate::opus_types_h::opus_int32; 8] = [
+pub static mut silk_TargetRate_table_NB: [opus_int32; 8] = [
     0 as i32,
     8000 as i32,
     9400 as i32,
@@ -45,7 +45,7 @@ pub static mut silk_TargetRate_table_NB: [crate::opus_types_h::opus_int32; 8] = 
 ];
 #[no_mangle]
 
-pub static mut silk_TargetRate_table_MB: [crate::opus_types_h::opus_int32; 8] = [
+pub static mut silk_TargetRate_table_MB: [opus_int32; 8] = [
     0 as i32,
     9000 as i32,
     12000 as i32,
@@ -57,7 +57,7 @@ pub static mut silk_TargetRate_table_MB: [crate::opus_types_h::opus_int32; 8] = 
 ];
 #[no_mangle]
 
-pub static mut silk_TargetRate_table_WB: [crate::opus_types_h::opus_int32; 8] = [
+pub static mut silk_TargetRate_table_WB: [opus_int32; 8] = [
     0 as i32,
     10500 as i32,
     14000 as i32,
@@ -69,36 +69,36 @@ pub static mut silk_TargetRate_table_WB: [crate::opus_types_h::opus_int32; 8] = 
 ];
 #[no_mangle]
 
-pub static mut silk_SNR_table_Q1: [crate::opus_types_h::opus_int16; 8] = [
-    18 as i32 as crate::opus_types_h::opus_int16,
-    29 as i32 as crate::opus_types_h::opus_int16,
-    38 as i32 as crate::opus_types_h::opus_int16,
-    40 as i32 as crate::opus_types_h::opus_int16,
-    46 as i32 as crate::opus_types_h::opus_int16,
-    52 as i32 as crate::opus_types_h::opus_int16,
-    62 as i32 as crate::opus_types_h::opus_int16,
-    84 as i32 as crate::opus_types_h::opus_int16,
+pub static mut silk_SNR_table_Q1: [opus_int16; 8] = [
+    18 as i32 as opus_int16,
+    29 as i32 as opus_int16,
+    38 as i32 as opus_int16,
+    40 as i32 as opus_int16,
+    46 as i32 as opus_int16,
+    52 as i32 as opus_int16,
+    62 as i32 as opus_int16,
+    84 as i32 as opus_int16,
 ];
 /* Tables for stereo predictor coding */
 #[no_mangle]
 
-pub static mut silk_stereo_pred_quant_Q13: [crate::opus_types_h::opus_int16; 16] = [
-    -(13732 as i32) as crate::opus_types_h::opus_int16,
-    -(10050 as i32) as crate::opus_types_h::opus_int16,
-    -(8266 as i32) as crate::opus_types_h::opus_int16,
-    -(7526 as i32) as crate::opus_types_h::opus_int16,
-    -(6500 as i32) as crate::opus_types_h::opus_int16,
-    -(5000 as i32) as crate::opus_types_h::opus_int16,
-    -(2950 as i32) as crate::opus_types_h::opus_int16,
-    -(820 as i32) as crate::opus_types_h::opus_int16,
-    820 as i32 as crate::opus_types_h::opus_int16,
-    2950 as i32 as crate::opus_types_h::opus_int16,
-    5000 as i32 as crate::opus_types_h::opus_int16,
-    6500 as i32 as crate::opus_types_h::opus_int16,
-    7526 as i32 as crate::opus_types_h::opus_int16,
-    8266 as i32 as crate::opus_types_h::opus_int16,
-    10050 as i32 as crate::opus_types_h::opus_int16,
-    13732 as i32 as crate::opus_types_h::opus_int16,
+pub static mut silk_stereo_pred_quant_Q13: [opus_int16; 16] = [
+    -(13732 as i32) as opus_int16,
+    -(10050 as i32) as opus_int16,
+    -(8266 as i32) as opus_int16,
+    -(7526 as i32) as opus_int16,
+    -(6500 as i32) as opus_int16,
+    -(5000 as i32) as opus_int16,
+    -(2950 as i32) as opus_int16,
+    -(820 as i32) as opus_int16,
+    820 as i32 as opus_int16,
+    2950 as i32 as opus_int16,
+    5000 as i32 as opus_int16,
+    6500 as i32 as opus_int16,
+    7526 as i32 as opus_int16,
+    8266 as i32 as opus_int16,
+    10050 as i32 as opus_int16,
+    13732 as i32 as opus_int16,
 ];
 #[no_mangle]
 
@@ -186,23 +186,23 @@ pub static mut silk_NLSF_interpolation_factor_iCDF: [u8; 5] = [
 /* Quantization offsets */
 #[no_mangle]
 
-pub static mut silk_Quantization_Offsets_Q10: [[crate::opus_types_h::opus_int16; 2]; 2] = [
+pub static mut silk_Quantization_Offsets_Q10: [[opus_int16; 2]; 2] = [
     [
-        100 as i32 as crate::opus_types_h::opus_int16,
-        240 as i32 as crate::opus_types_h::opus_int16,
+        100 as i32 as opus_int16,
+        240 as i32 as opus_int16,
     ],
     [
-        32 as i32 as crate::opus_types_h::opus_int16,
-        100 as i32 as crate::opus_types_h::opus_int16,
+        32 as i32 as opus_int16,
+        100 as i32 as opus_int16,
     ],
 ];
 /* Table for LTPScale */
 #[no_mangle]
 
-pub static mut silk_LTPScales_table_Q14: [crate::opus_types_h::opus_int16; 3] = [
-    15565 as i32 as crate::opus_types_h::opus_int16,
-    12288 as i32 as crate::opus_types_h::opus_int16,
-    8192 as i32 as crate::opus_types_h::opus_int16,
+pub static mut silk_LTPScales_table_Q14: [opus_int16; 3] = [
+    15565 as i32 as opus_int16,
+    12288 as i32 as opus_int16,
+    8192 as i32 as opus_int16,
 ];
 /* Uniform entropy tables */
 #[no_mangle]
@@ -264,7 +264,7 @@ pub static mut silk_NLSF_EXT_iCDF: [u8; 7] = [
 /* Interpolation points for filter coefficients used in the bandwidth transition smoother */
 #[no_mangle]
 
-pub static mut silk_Transition_LP_B_Q28: [[crate::opus_types_h::opus_int32; 3]; 5] = [
+pub static mut silk_Transition_LP_B_Q28: [[opus_int32; 3]; 5] = [
     [250767114 as i32, 501534038 as i32, 250767114 as i32],
     [209867381 as i32, 419732057 as i32, 209867381 as i32],
     [170987846 as i32, 341967853 as i32, 170987846 as i32],
@@ -274,7 +274,7 @@ pub static mut silk_Transition_LP_B_Q28: [[crate::opus_types_h::opus_int32; 3]; 
 /* Interpolation points for filter coefficients used in the bandwidth transition smoother */
 #[no_mangle]
 
-pub static mut silk_Transition_LP_A_Q28: [[crate::opus_types_h::opus_int32; 2]; 5] = [
+pub static mut silk_Transition_LP_A_Q28: [[opus_int32; 2]; 5] = [
     [506393414 as i32, 239854379 as i32],
     [411067935 as i32, 169683996 as i32],
     [306733530 as i32, 116694253 as i32],

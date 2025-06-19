@@ -243,8 +243,8 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_read_coefficients(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-) -> *mut crate::jpeglib_h::jvirt_barray_ptr {
+    mut cinfo: j_decompress_ptr,
+) -> *mut jvirt_barray_ptr {
     if (*cinfo).global_state == 202 as i32 {
         /* First call: initialize active modules */
         transdecode_master_selection(cinfo);
@@ -263,7 +263,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             /* Absorb some more input */
@@ -274,7 +274,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
             )
             .expect("non-null function pointer")(cinfo);
             if retcode == 0 as i32 {
-                return 0 as *mut crate::jpeglib_h::jvirt_barray_ptr;
+                return 0 as *mut jvirt_barray_ptr;
             }
             if retcode == 2 as i32 {
                 break;
@@ -301,15 +301,15 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
         return (*(*cinfo).coef).coef_arrays;
     }
     /* Oops, improper usage */
-    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
+    (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).global_state;
     Some(
         (*(*cinfo).err)
             .error_exit
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
-    return 0 as *mut crate::jpeglib_h::jvirt_barray_ptr;
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
+    return 0 as *mut jvirt_barray_ptr;
     /* keep compiler happy */
 }
 /*
@@ -330,26 +330,26 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
  * This substitutes for jdmaster.c's initialization of the full decompressor.
  */
 
-unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn transdecode_master_selection(mut cinfo: j_decompress_ptr) {
     /* This is effectively a buffered-image operation. */
     (*cinfo).buffered_image = 1 as i32;
     /* Compute output image dimensions and related values. */
-    crate::src::jpeg_8c::jdinput::jpeg_core_output_dimensions(
-        cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
+    jpeg_core_output_dimensions(
+        cinfo as *mut jpeg_decompress_struct,
     );
     /* Entropy decoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        crate::src::jpeg_8c::jdarith::jinit_arith_decoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
+        jinit_arith_decoder(
+            cinfo as *mut jpeg_decompress_struct,
         );
     } else {
-        crate::src::jpeg_8c::jdhuff::jinit_huff_decoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
+        jinit_huff_decoder(
+            cinfo as *mut jpeg_decompress_struct,
         );
     }
     /* Always get a full-image coefficient buffer. */
-    crate::src::jpeg_8c::jdcoefct::jinit_d_coef_controller(
-        cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
+    jinit_d_coef_controller(
+        cinfo as *mut jpeg_decompress_struct,
         1 as i32,
     );
     /* We can now tell the memory manager to allocate virtual arrays. */
@@ -358,7 +358,7 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j
             .realize_virt_arrays
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     /* Initialize input side of decompressor to consume first scan. */
     Some(
         (*(*cinfo).inputctl)

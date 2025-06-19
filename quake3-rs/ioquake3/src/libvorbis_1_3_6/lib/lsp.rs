@@ -358,15 +358,15 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
     } /* if it fails, it leaves g1r alone */
     Newton_Raphson(g1, g1_order, g1r); /* if it fails, it leaves g2r alone */
     Newton_Raphson(g2, g2_order, g2r);
-    crate::stdlib::qsort(
+    qsort(
         g1r as *mut libc::c_void,
-        g1_order as crate::stddef_h::size_t,
+        g1_order as size_t,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
         Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
-    crate::stdlib::qsort(
+    qsort(
         g2r as *mut libc::c_void,
-        g2_order as crate::stddef_h::size_t,
+        g2_order as size_t,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
         Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );

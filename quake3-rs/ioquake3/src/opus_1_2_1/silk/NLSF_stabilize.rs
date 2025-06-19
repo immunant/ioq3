@@ -330,8 +330,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_NLSF_stabilize(
-    mut NLSF_Q15: *mut crate::opus_types_h::opus_int16,
-    mut NDeltaMin_Q15: *const crate::opus_types_h::opus_int16,
+    mut NLSF_Q15: *mut opus_int16,
+    mut NDeltaMin_Q15: *const opus_int16,
     L: i32,
 )
 /* I     Number of NLSF parameters in the input vector              */
@@ -340,11 +340,11 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
     let mut I: i32 = 0 as i32;
     let mut k: i32 = 0;
     let mut loops: i32 = 0;
-    let mut center_freq_Q15: crate::opus_types_h::opus_int16 = 0;
-    let mut diff_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut min_diff_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut min_center_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut max_center_Q15: crate::opus_types_h::opus_int32 = 0;
+    let mut center_freq_Q15: opus_int16 = 0;
+    let mut diff_Q15: opus_int32 = 0;
+    let mut min_diff_Q15: opus_int32 = 0;
+    let mut min_center_Q15: opus_int32 = 0;
+    let mut max_center_Q15: opus_int32 = 0;
     /* This is necessary to ensure an output within range of a opus_int16 */
     loops = 0 as i32;
     while loops < 20 as i32 {
@@ -388,7 +388,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             /* Move away from higher limit */
             *NLSF_Q15.offset((L - 1 as i32) as isize) = (((1 as i32) << 15 as i32)
                 - *NDeltaMin_Q15.offset(L as isize) as i32)
-                as crate::opus_types_h::opus_int16
+                as opus_int16
         } else {
             /* Find the lower extreme for the location of the current center frequency */
             min_center_Q15 = 0 as i32;
@@ -409,16 +409,16 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             /* Move apart, sorted by value, keeping the same center frequency */
             center_freq_Q15 = if min_center_Q15 > max_center_Q15 {
                 if (if 1 as i32 == 1 as i32 {
-                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
                         + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as crate::opus_types_h::opus_int32
-                            + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                            as opus_int32
+                            + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
@@ -426,16 +426,16 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                 {
                     min_center_Q15
                 } else if (if 1 as i32 == 1 as i32 {
-                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
                         + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as crate::opus_types_h::opus_int32
-                            + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                            as opus_int32
+                            + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
@@ -443,30 +443,30 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                 {
                     max_center_Q15
                 } else if 1 as i32 == 1 as i32 {
-                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
                         + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as crate::opus_types_h::opus_int32
-                            + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                            as opus_int32
+                            + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
-                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
                 }
             } else if (if 1 as i32 == 1 as i32 {
-                (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32)
-                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
@@ -474,15 +474,15 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             {
                 max_center_Q15
             } else if (if 1 as i32 == 1 as i32 {
-                (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32)
-                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
@@ -490,25 +490,25 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             {
                 min_center_Q15
             } else if 1 as i32 == 1 as i32 {
-                (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32)
-                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                        + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                    + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                        + *NLSF_Q15.offset(I as isize) as opus_int32
                         & 1 as i32)
             } else {
-                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    + *NLSF_Q15.offset(I as isize) as crate::opus_types_h::opus_int32
+                ((*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
+                    + *NLSF_Q15.offset(I as isize) as opus_int32
                     >> 1 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             *NLSF_Q15.offset((I - 1 as i32) as isize) = (center_freq_Q15 as i32
                 - (*NDeltaMin_Q15.offset(I as isize) as i32 >> 1 as i32))
-                as crate::opus_types_h::opus_int16;
+                as opus_int16;
             *NLSF_Q15.offset(I as isize) = (*NLSF_Q15.offset((I - 1 as i32) as isize) as i32
                 + *NDeltaMin_Q15.offset(I as isize) as i32)
-                as crate::opus_types_h::opus_int16
+                as opus_int16
         }
         loops += 1
     }
@@ -517,7 +517,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
         /* Insertion sort (fast for already almost sorted arrays):   */
         /* Best case:  O(n)   for an already sorted array            */
         /* Worst case: O(n^2) for an inversely sorted array          */
-        crate::src::opus_1_2_1::silk::sort::silk_insertion_sort_increasing_all_values_int16(
+        silk_insertion_sort_increasing_all_values_int16(
             &mut *NLSF_Q15.offset(0 as i32 as isize),
             L,
         );
@@ -525,35 +525,35 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
         *NLSF_Q15.offset(0 as i32 as isize) = silk_max_int(
             *NLSF_Q15.offset(0 as i32 as isize) as i32,
             *NDeltaMin_Q15.offset(0 as i32 as isize) as i32,
-        ) as crate::opus_types_h::opus_int16;
+        ) as opus_int16;
         /* Keep delta_min distance between the NLSFs */
         i = 1 as i32;
         while i < L {
             *NLSF_Q15.offset(i as isize) = silk_max_int(
                 *NLSF_Q15.offset(i as isize) as i32,
-                if *NLSF_Q15.offset((i - 1 as i32) as isize) as crate::opus_types_h::opus_int32
+                if *NLSF_Q15.offset((i - 1 as i32) as isize) as opus_int32
                     + *NDeltaMin_Q15.offset(i as isize) as i32
                     > 0x7fff as i32
                 {
                     0x7fff as i32
                 } else if (*NLSF_Q15.offset((i - 1 as i32) as isize)
-                    as crate::opus_types_h::opus_int32
+                    as opus_int32
                     + *NDeltaMin_Q15.offset(i as isize) as i32)
-                    < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                    < 0x8000 as i32 as opus_int16 as i32
                 {
-                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                    0x8000 as i32 as opus_int16 as i32
                 } else {
-                    (*NLSF_Q15.offset((i - 1 as i32) as isize) as crate::opus_types_h::opus_int32)
+                    (*NLSF_Q15.offset((i - 1 as i32) as isize) as opus_int32)
                         + *NDeltaMin_Q15.offset(i as isize) as i32
-                } as crate::opus_types_h::opus_int16 as i32,
-            ) as crate::opus_types_h::opus_int16;
+                } as opus_int16 as i32,
+            ) as opus_int16;
             i += 1
         }
         /* Last NLSF should be no higher than 1 - NDeltaMin[L] */
         *NLSF_Q15.offset((L - 1 as i32) as isize) = silk_min_int(
             *NLSF_Q15.offset((L - 1 as i32) as isize) as i32,
             ((1 as i32) << 15 as i32) - *NDeltaMin_Q15.offset(L as isize) as i32,
-        ) as crate::opus_types_h::opus_int16;
+        ) as opus_int16;
         /* Keep NDeltaMin distance between the NLSFs */
         i = L - 2 as i32;
         while i >= 0 as i32 {
@@ -561,7 +561,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                 *NLSF_Q15.offset(i as isize) as i32,
                 *NLSF_Q15.offset((i + 1 as i32) as isize) as i32
                     - *NDeltaMin_Q15.offset((i + 1 as i32) as isize) as i32,
-            ) as crate::opus_types_h::opus_int16;
+            ) as opus_int16;
             i -= 1
         }
     };

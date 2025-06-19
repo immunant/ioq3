@@ -38,30 +38,30 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_resampler_private_AR2(
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut out_Q8: *mut crate::opus_types_h::opus_int32,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut A_Q14: *const crate::opus_types_h::opus_int16,
-    mut len: crate::opus_types_h::opus_int32,
+    mut S: *mut opus_int32,
+    mut out_Q8: *mut opus_int32,
+    mut in_0: *const opus_int16,
+    mut A_Q14: *const opus_int16,
+    mut len: opus_int32,
 )
 /* I    Signal length               */
 {
-    let mut k: crate::opus_types_h::opus_int32 = 0;
-    let mut out32: crate::opus_types_h::opus_int32 = 0;
+    let mut k: opus_int32 = 0;
+    let mut out32: opus_int32 = 0;
     k = 0 as i32;
     while k < len {
         out32 = *S.offset(0 as i32 as isize)
-            + ((*in_0.offset(k as isize) as crate::opus_types_h::opus_int32
-                as crate::opus_types_h::opus_uint32)
-                << 8 as i32) as crate::opus_types_h::opus_int32;
+            + ((*in_0.offset(k as isize) as opus_int32
+                as opus_uint32)
+                << 8 as i32) as opus_int32;
         *out_Q8.offset(k as isize) = out32;
-        out32 = ((out32 as crate::opus_types_h::opus_uint32) << 2 as i32)
-            as crate::opus_types_h::opus_int32;
+        out32 = ((out32 as opus_uint32) << 2 as i32)
+            as opus_int32;
         *S.offset(0 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
             + (out32 as i64 * *A_Q14.offset(0 as i32 as isize) as i64 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(1 as i32 as isize) = (out32 as i64 * *A_Q14.offset(1 as i32 as isize) as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            >> 16 as i32) as opus_int32;
         k += 1
     }
 }

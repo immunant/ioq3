@@ -50,7 +50,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -421,49 +421,49 @@ CG_MachineGunEjectBrass
 ==========================
 */
 
-unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::centity_t) {
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xvelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xoffset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut centity_t) {
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut velocity: vec3_t = [0.; 3];
+    let mut xvelocity: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut xoffset: vec3_t = [0.; 3];
     let mut waterScale: f32 = 1.0f32;
-    let mut v: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
-    if crate::src::cgame::cg_main::cg_brassTime.integer <= 0 as i32 {
+    let mut v: [vec3_t; 3] = [[0.; 3]; 3];
+    if cg_brassTime.integer <= 0 as i32 {
         return;
     }
-    le = crate::src::cgame::cg_localents::CG_AllocLocalEntity()
-        as *mut crate::cg_local_h::localEntity_s;
+    le = CG_AllocLocalEntity()
+        as *mut localEntity_s;
     re = &mut (*le).refEntity;
-    velocity[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    velocity[0 as i32 as usize] = 0 as i32 as vec_t;
     velocity[1 as i32 as usize] = (-(50 as i32) as f64
         + 40 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         + 50 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
-        as crate::src::qcommon::q_shared::vec_t;
-    (*le).leType = crate::cg_local_h::LE_FRAGMENT;
-    (*le).startTime = crate::src::cgame::cg_main::cg.time;
-    (*le).endTime = (((*le).startTime + crate::src::cgame::cg_main::cg_brassTime.integer) as f32
-        + (crate::src::cgame::cg_main::cg_brassTime.integer / 4 as i32) as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
+        as vec_t;
+    (*le).leType = LE_FRAGMENT;
+    (*le).startTime = cg.time;
+    (*le).endTime = (((*le).startTime + cg_brassTime.integer) as f32
+        + (cg_brassTime.integer / 4 as i32) as f32
+            * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
         as i32;
-    (*le).pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
-    (*le).pos.trTime = crate::src::cgame::cg_main::cg.time - (::libc::rand() & 15 as i32);
-    crate::src::qcommon::q_math::AnglesToAxis(
-        (*cent).lerpAngles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    (*le).pos.trType = TR_GRAVITY;
+    (*le).pos.trTime = cg.time - (rand() & 15 as i32);
+    AnglesToAxis(
+        (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
         v.as_mut_ptr(),
     );
-    offset[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
-    offset[1 as i32 as usize] = -(4 as i32) as crate::src::qcommon::q_shared::vec_t;
-    offset[2 as i32 as usize] = 24 as i32 as crate::src::qcommon::q_shared::vec_t;
+    offset[0 as i32 as usize] = 8 as i32 as vec_t;
+    offset[1 as i32 as usize] = -(4 as i32) as vec_t;
+    offset[2 as i32 as usize] = 24 as i32 as vec_t;
     xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
         + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
@@ -485,8 +485,8 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
     (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-    if crate::src::cgame::cg_predict::CG_PointContents(
-        (*re).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    if CG_PointContents(
+        (*re).origin.as_mut_ptr() as *const vec_t,
         -(1 as i32),
     ) & 32 as i32
         != 0
@@ -508,26 +508,26 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
     (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
     (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
     (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-    crate::src::qcommon::q_math::AxisCopy(
-        crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
+    AxisCopy(
+        axisDefault.as_mut_ptr(),
         (*re).axis.as_mut_ptr(),
     );
-    (*re).hModel = crate::src::cgame::cg_main::cgs.media.machinegunBrassModel;
+    (*re).hModel = cgs.media.machinegunBrassModel;
     (*le).bounceFactor = (0.4f64 * waterScale as f64) as f32;
-    (*le).angles.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*le).angles.trTime = crate::src::cgame::cg_main::cg.time;
+    (*le).angles.trType = TR_LINEAR;
+    (*le).angles.trTime = cg.time;
     (*le).angles.trBase[0 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (rand() & 31 as i32) as vec_t;
     (*le).angles.trBase[1 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (rand() & 31 as i32) as vec_t;
     (*le).angles.trBase[2 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[0 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).leFlags = crate::cg_local_h::LEF_TUMBLE as i32;
-    (*le).leBounceSoundType = crate::cg_local_h::LEBS_BRASS;
-    (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
+        (rand() & 31 as i32) as vec_t;
+    (*le).angles.trDelta[0 as i32 as usize] = 2 as i32 as vec_t;
+    (*le).angles.trDelta[1 as i32 as usize] = 1 as i32 as vec_t;
+    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
+    (*le).leFlags = LEF_TUMBLE as i32;
+    (*le).leBounceSoundType = LEBS_BRASS;
+    (*le).leMarkType = LEMT_NONE;
 }
 /*
 ==========================
@@ -535,69 +535,69 @@ CG_ShotgunEjectBrass
 ==========================
 */
 
-unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::centity_t) {
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xvelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xoffset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
+unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut centity_t) {
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut velocity: vec3_t = [0.; 3];
+    let mut xvelocity: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut xoffset: vec3_t = [0.; 3];
+    let mut v: [vec3_t; 3] = [[0.; 3]; 3];
     let mut i: i32 = 0;
-    if crate::src::cgame::cg_main::cg_brassTime.integer <= 0 as i32 {
+    if cg_brassTime.integer <= 0 as i32 {
         return;
     }
     i = 0 as i32;
     while i < 2 as i32 {
         let mut waterScale: f32 = 1.0f32;
-        le = crate::src::cgame::cg_localents::CG_AllocLocalEntity()
-            as *mut crate::cg_local_h::localEntity_s;
+        le = CG_AllocLocalEntity()
+            as *mut localEntity_s;
         re = &mut (*le).refEntity;
         velocity[0 as i32 as usize] = (60 as i32 as f64
             + 60 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         if i == 0 as i32 {
             velocity[1 as i32 as usize] = (40 as i32 as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
-                as crate::src::qcommon::q_shared::vec_t
+                as vec_t
         } else {
             velocity[1 as i32 as usize] = (-(40 as i32) as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
-                as crate::src::qcommon::q_shared::vec_t
+                as vec_t
         }
         velocity[2 as i32 as usize] = (100 as i32 as f64
             + 50 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
-            as crate::src::qcommon::q_shared::vec_t;
-        (*le).leType = crate::cg_local_h::LE_FRAGMENT;
-        (*le).startTime = crate::src::cgame::cg_main::cg.time;
+            as vec_t;
+        (*le).leType = LE_FRAGMENT;
+        (*le).startTime = cg.time;
         (*le).endTime =
-            (((*le).startTime + crate::src::cgame::cg_main::cg_brassTime.integer * 3 as i32) as f32
-                + crate::src::cgame::cg_main::cg_brassTime.integer as f32
-                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
+            (((*le).startTime + cg_brassTime.integer * 3 as i32) as f32
+                + cg_brassTime.integer as f32
+                    * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
                 as i32;
-        (*le).pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
-        (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
-        crate::src::qcommon::q_math::AnglesToAxis(
-            (*cent).lerpAngles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        (*le).pos.trType = TR_GRAVITY;
+        (*le).pos.trTime = cg.time;
+        AnglesToAxis(
+            (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
             v.as_mut_ptr(),
         );
-        offset[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        offset[2 as i32 as usize] = 24 as i32 as crate::src::qcommon::q_shared::vec_t;
+        offset[0 as i32 as usize] = 8 as i32 as vec_t;
+        offset[1 as i32 as usize] = 0 as i32 as vec_t;
+        offset[2 as i32 as usize] = 24 as i32 as vec_t;
         xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
             * v[0 as i32 as usize][0 as i32 as usize]
             + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
@@ -619,8 +619,8 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
         (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
         (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
         (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-        if crate::src::cgame::cg_predict::CG_PointContents(
-            (*re).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        if CG_PointContents(
+            (*re).origin.as_mut_ptr() as *const vec_t,
             -(1 as i32),
         ) & 32 as i32
             != 0
@@ -642,26 +642,26 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
         (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
         (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
         (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-        crate::src::qcommon::q_math::AxisCopy(
-            crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
+        AxisCopy(
+            axisDefault.as_mut_ptr(),
             (*re).axis.as_mut_ptr(),
         );
-        (*re).hModel = crate::src::cgame::cg_main::cgs.media.shotgunBrassModel;
+        (*re).hModel = cgs.media.shotgunBrassModel;
         (*le).bounceFactor = 0.3f32;
-        (*le).angles.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-        (*le).angles.trTime = crate::src::cgame::cg_main::cg.time;
+        (*le).angles.trType = TR_LINEAR;
+        (*le).angles.trTime = cg.time;
         (*le).angles.trBase[0 as i32 as usize] =
-            (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (rand() & 31 as i32) as vec_t;
         (*le).angles.trBase[1 as i32 as usize] =
-            (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (rand() & 31 as i32) as vec_t;
         (*le).angles.trBase[2 as i32 as usize] =
-            (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*le).leFlags = crate::cg_local_h::LEF_TUMBLE as i32;
-        (*le).leBounceSoundType = crate::cg_local_h::LEBS_BRASS;
-        (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
+            (rand() & 31 as i32) as vec_t;
+        (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as vec_t;
+        (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as vec_t;
+        (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
+        (*le).leFlags = LEF_TUMBLE as i32;
+        (*le).leBounceSoundType = LEBS_BRASS;
+        (*le).leMarkType = LEMT_NONE;
         i += 1
     }
 }
@@ -673,34 +673,34 @@ CG_RailTrail
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RailTrail(
-    mut ci: *mut crate::cg_local_h::clientInfo_t,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut ci: *mut clientInfo_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
 ) {
-    let mut axis: [crate::src::qcommon::q_shared::vec3_t; 36] = [[0.; 3]; 36];
-    let mut move_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut axis: [vec3_t; 36] = [[0.; 3]; 36];
+    let mut move_0: vec3_t = [0.; 3];
+    let mut move2: vec3_t = [0.; 3];
+    let mut vec: vec3_t = [0.; 3];
+    let mut temp: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut skip: i32 = 0;
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let ref mut fresh0 = *start.offset(2 as i32 as isize);
     *fresh0 -= 4 as i32 as f32;
-    le = crate::src::cgame::cg_localents::CG_AllocLocalEntity()
-        as *mut crate::cg_local_h::localEntity_s;
+    le = CG_AllocLocalEntity()
+        as *mut localEntity_s;
     re = &mut (*le).refEntity;
-    (*le).leType = crate::cg_local_h::LE_FADE_RGB;
-    (*le).startTime = crate::src::cgame::cg_main::cg.time;
-    (*le).endTime = (crate::src::cgame::cg_main::cg.time as f32
-        + crate::src::cgame::cg_main::cg_railTrailTime.value) as i32;
+    (*le).leType = LE_FADE_RGB;
+    (*le).startTime = cg.time;
+    (*le).endTime = (cg.time as f32
+        + cg_railTrailTime.value) as i32;
     (*le).lifeRate = (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
-    (*re).shaderTime = crate::src::cgame::cg_main::cg.time as f32 / 1000.0f32;
-    (*re).reType = crate::tr_types_h::RT_RAIL_CORE;
-    (*re).customShader = crate::src::cgame::cg_main::cgs.media.railCoreShader;
+    (*re).shaderTime = cg.time as f32 / 1000.0f32;
+    (*re).reType = RT_RAIL_CORE;
+    (*re).customShader = cgs.media.railCoreShader;
     (*re).origin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*re).origin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*re).origin[2 as i32 as usize] = *start.offset(2 as i32 as isize);
@@ -708,18 +708,18 @@ pub unsafe extern "C" fn CG_RailTrail(
     (*re).oldorigin[1 as i32 as usize] = *end.offset(1 as i32 as isize);
     (*re).oldorigin[2 as i32 as usize] = *end.offset(2 as i32 as isize);
     (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] * 255 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] * 255 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize] * 255 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+        as byte;
+    (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
     (*le).color[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] as f64 * 0.75f64) as f32;
     (*le).color[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] as f64 * 0.75f64) as f32;
     (*le).color[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize] as f64 * 0.75f64) as f32;
     (*le).color[3 as i32 as usize] = 1.0f32;
-    crate::src::qcommon::q_math::AxisClear((*re).axis.as_mut_ptr());
-    if crate::src::cgame::cg_main::cg_oldRail.integer != 0 {
+    AxisClear((*re).axis.as_mut_ptr());
+    if cg_oldRail.integer != 0 {
         // nudge down a bit so it isn't exactly in center
         (*re).origin[2 as i32 as usize] -= 8 as i32 as f32;
         (*re).oldorigin[2 as i32 as usize] -= 8 as i32 as f32;
@@ -731,17 +731,17 @@ pub unsafe extern "C" fn CG_RailTrail(
     vec[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     vec[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     vec[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-    len = crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr());
-    crate::src::qcommon::q_math::PerpendicularVector(
+    len = VectorNormalize(vec.as_mut_ptr());
+    PerpendicularVector(
         temp.as_mut_ptr(),
-        vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vec.as_mut_ptr() as *const vec_t,
     );
     i = 0 as i32;
     while i < 36 as i32 {
-        crate::src::qcommon::q_math::RotatePointAroundVector(
+        RotatePointAroundVector(
             axis[i as usize].as_mut_ptr(),
-            vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            vec.as_mut_ptr() as *const vec_t,
+            temp.as_mut_ptr() as *const vec_t,
             (i * 10 as i32) as f32,
         );
         i += 1
@@ -762,28 +762,28 @@ pub unsafe extern "C" fn CG_RailTrail(
     while (i as f32) < len {
         if i != skip {
             skip = i + 5 as i32;
-            le = crate::src::cgame::cg_localents::CG_AllocLocalEntity()
-                as *mut crate::cg_local_h::localEntity_s;
+            le = CG_AllocLocalEntity()
+                as *mut localEntity_s;
             re = &mut (*le).refEntity;
-            (*le).leFlags = crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32;
-            (*le).leType = crate::cg_local_h::LE_MOVE_SCALE_FADE;
-            (*le).startTime = crate::src::cgame::cg_main::cg.time;
-            (*le).endTime = crate::src::cgame::cg_main::cg.time + (i >> 1 as i32) + 600 as i32;
+            (*le).leFlags = LEF_PUFF_DONT_SCALE as i32;
+            (*le).leType = LE_MOVE_SCALE_FADE;
+            (*le).startTime = cg.time;
+            (*le).endTime = cg.time + (i >> 1 as i32) + 600 as i32;
             (*le).lifeRate = (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
-            (*re).shaderTime = crate::src::cgame::cg_main::cg.time as f32 / 1000.0f32;
-            (*re).reType = crate::tr_types_h::RT_SPRITE;
+            (*re).shaderTime = cg.time as f32 / 1000.0f32;
+            (*re).reType = RT_SPRITE;
             (*re).radius = 1.1f32;
-            (*re).customShader = crate::src::cgame::cg_main::cgs.media.railRingsShader;
+            (*re).customShader = cgs.media.railRingsShader;
             (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color2[0 as i32 as usize]
                 * 255 as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color2[1 as i32 as usize]
                 * 255 as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color2[2 as i32 as usize]
                 * 255 as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
-            (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+                as byte;
+            (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
             (*le).color[0 as i32 as usize] =
                 ((*ci).color2[0 as i32 as usize] as f64 * 0.75f64) as f32;
             (*le).color[1 as i32 as usize] =
@@ -791,8 +791,8 @@ pub unsafe extern "C" fn CG_RailTrail(
             (*le).color[2 as i32 as usize] =
                 ((*ci).color2[2 as i32 as usize] as f64 * 0.75f64) as f32;
             (*le).color[3 as i32 as usize] = 1.0f32;
-            (*le).pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-            (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
+            (*le).pos.trType = TR_LINEAR;
+            (*le).pos.trTime = cg.time;
             move2[0 as i32 as usize] = move_0[0 as i32 as usize];
             move2[1 as i32 as usize] = move_0[1 as i32 as usize];
             move2[2 as i32 as usize] = move_0[2 as i32 as usize];
@@ -826,58 +826,58 @@ CG_RocketTrail
 */
 
 unsafe extern "C" fn CG_RocketTrail(
-    mut ent: *mut crate::cg_local_h::centity_t,
-    mut wi: *const crate::cg_local_h::weaponInfo_t,
+    mut ent: *mut centity_t,
+    mut wi: *const weaponInfo_t,
 ) {
     let mut step: i32 = 0;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lastPos: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut lastPos: vec3_t = [0.; 3];
     let mut t: i32 = 0;
     let mut startTime: i32 = 0;
     let mut contents: i32 = 0;
     let mut lastContents: i32 = 0;
-    let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut smoke: *mut crate::cg_local_h::localEntity_t =
-        0 as *mut crate::cg_local_h::localEntity_t;
-    if crate::src::cgame::cg_main::cg_noProjectileTrail.integer != 0 {
+    let mut es: *mut entityState_t =
+        0 as *mut entityState_t;
+    let mut up: vec3_t = [0.; 3];
+    let mut smoke: *mut localEntity_t =
+        0 as *mut localEntity_t;
+    if cg_noProjectileTrail.integer != 0 {
         return;
     }
-    up[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    up[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    up[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    up[0 as i32 as usize] = 0 as i32 as vec_t;
+    up[1 as i32 as usize] = 0 as i32 as vec_t;
+    up[2 as i32 as usize] = 0 as i32 as vec_t;
     step = 50 as i32;
     es = &mut (*ent).currentState;
     startTime = (*ent).trailTime;
     t = step * ((startTime + step) / step);
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*es).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::cgame::cg_main::cg.time,
+    BG_EvaluateTrajectory(
+        &mut (*es).pos as *mut _ as *const trajectory_t,
+        cg.time,
         origin.as_mut_ptr(),
     );
-    contents = crate::src::cgame::cg_predict::CG_PointContents(
-        origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    contents = CG_PointContents(
+        origin.as_mut_ptr() as *const vec_t,
         -(1 as i32),
     );
     // if object (e.g. grenade) is stationary, don't toss up smoke
-    if (*es).pos.trType as u32 == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
-        (*ent).trailTime = crate::src::cgame::cg_main::cg.time;
+    if (*es).pos.trType as u32 == TR_STATIONARY as i32 as u32 {
+        (*ent).trailTime = cg.time;
         return;
     }
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*es).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
+    BG_EvaluateTrajectory(
+        &mut (*es).pos as *mut _ as *const trajectory_t,
         (*ent).trailTime,
         lastPos.as_mut_ptr(),
     );
-    lastContents = crate::src::cgame::cg_predict::CG_PointContents(
-        lastPos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    lastContents = CG_PointContents(
+        lastPos.as_mut_ptr() as *const vec_t,
         -(1 as i32),
     );
-    (*ent).trailTime = crate::src::cgame::cg_main::cg.time;
+    (*ent).trailTime = cg.time;
     if contents & (32 as i32 | 16 as i32 | 8 as i32) != 0 {
         if contents & lastContents & 32 as i32 != 0 {
-            crate::src::cgame::cg_effects::CG_BubbleTrail(
+            CG_BubbleTrail(
                 lastPos.as_mut_ptr(),
                 origin.as_mut_ptr(),
                 8 as i32 as f32,
@@ -886,14 +886,14 @@ unsafe extern "C" fn CG_RocketTrail(
         return;
     }
     while t <= (*ent).trailTime {
-        crate::src::game::bg_misc::BG_EvaluateTrajectory(
-            &mut (*es).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
+        BG_EvaluateTrajectory(
+            &mut (*es).pos as *mut _ as *const trajectory_t,
             t,
             lastPos.as_mut_ptr(),
         );
-        smoke = crate::src::cgame::cg_effects::CG_SmokePuff(
-            lastPos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        smoke = CG_SmokePuff(
+            lastPos.as_mut_ptr() as *const vec_t,
+            up.as_mut_ptr() as *const vec_t,
             (*wi).trailRadius,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -903,10 +903,10 @@ unsafe extern "C" fn CG_RocketTrail(
             t,
             0 as i32,
             0 as i32,
-            crate::src::cgame::cg_main::cgs.media.smokePuffShader,
-        ) as *mut crate::cg_local_h::localEntity_s;
+            cgs.media.smokePuffShader,
+        ) as *mut localEntity_s;
         // use the optimized local entity add
-        (*smoke).leType = crate::cg_local_h::LE_SCALE_FADE;
+        (*smoke).leType = LE_SCALE_FADE;
         t += step
     }
 }
@@ -917,67 +917,67 @@ CG_PlasmaTrail
 */
 
 unsafe extern "C" fn CG_PlasmaTrail(
-    mut cent: *mut crate::cg_local_h::centity_t,
-    mut wi: *const crate::cg_local_h::weaponInfo_t,
+    mut cent: *mut centity_t,
+    mut wi: *const weaponInfo_t,
 ) {
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
-    let mut re: *mut crate::tr_types_h::refEntity_t = 0 as *mut crate::tr_types_h::refEntity_t;
-    let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xvelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut xoffset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
+    let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
+    let mut es: *mut entityState_t =
+        0 as *mut entityState_t;
+    let mut velocity: vec3_t = [0.; 3];
+    let mut xvelocity: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
+    let mut xoffset: vec3_t = [0.; 3];
+    let mut v: [vec3_t; 3] = [[0.; 3]; 3];
     let mut waterScale: f32 = 1.0f32;
-    if crate::src::cgame::cg_main::cg_noProjectileTrail.integer != 0
-        || crate::src::cgame::cg_main::cg_oldPlasma.integer != 0
+    if cg_noProjectileTrail.integer != 0
+        || cg_oldPlasma.integer != 0
     {
         return;
     }
     es = &mut (*cent).currentState;
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*es).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::cgame::cg_main::cg.time,
+    BG_EvaluateTrajectory(
+        &mut (*es).pos as *mut _ as *const trajectory_t,
+        cg.time,
         origin.as_mut_ptr(),
     );
-    le = crate::src::cgame::cg_localents::CG_AllocLocalEntity()
-        as *mut crate::cg_local_h::localEntity_s;
+    le = CG_AllocLocalEntity()
+        as *mut localEntity_s;
     re = &mut (*le).refEntity;
     velocity[0 as i32 as usize] = (60 as i32 as f64
         - 120 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     velocity[1 as i32 as usize] = (40 as i32 as f64
         - 80 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         - 200 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
-        as crate::src::qcommon::q_shared::vec_t;
-    (*le).leType = crate::cg_local_h::LE_MOVE_SCALE_FADE;
-    (*le).leFlags = crate::cg_local_h::LEF_TUMBLE as i32;
-    (*le).leBounceSoundType = crate::cg_local_h::LEBS_NONE;
-    (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
-    (*le).startTime = crate::src::cgame::cg_main::cg.time;
+        as vec_t;
+    (*le).leType = LE_MOVE_SCALE_FADE;
+    (*le).leFlags = LEF_TUMBLE as i32;
+    (*le).leBounceSoundType = LEBS_NONE;
+    (*le).leMarkType = LEMT_NONE;
+    (*le).startTime = cg.time;
     (*le).endTime = (*le).startTime + 600 as i32;
-    (*le).pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
-    (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
-    crate::src::qcommon::q_math::AnglesToAxis(
-        (*cent).lerpAngles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    (*le).pos.trType = TR_GRAVITY;
+    (*le).pos.trTime = cg.time;
+    AnglesToAxis(
+        (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
         v.as_mut_ptr(),
     );
-    offset[0 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
-    offset[1 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
-    offset[2 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
+    offset[0 as i32 as usize] = 2 as i32 as vec_t;
+    offset[1 as i32 as usize] = 2 as i32 as vec_t;
+    offset[2 as i32 as usize] = 2 as i32 as vec_t;
     xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
         + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
@@ -996,8 +996,8 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-    if crate::src::cgame::cg_predict::CG_PointContents(
-        (*re).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    if CG_PointContents(
+        (*re).origin.as_mut_ptr() as *const vec_t,
         -(1 as i32),
     ) & 32 as i32
         != 0
@@ -1019,25 +1019,25 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
     (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
     (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-    crate::src::qcommon::q_math::AxisCopy(
-        crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
+    AxisCopy(
+        axisDefault.as_mut_ptr(),
         (*re).axis.as_mut_ptr(),
     );
-    (*re).shaderTime = crate::src::cgame::cg_main::cg.time as f32 / 1000.0f32;
-    (*re).reType = crate::tr_types_h::RT_SPRITE;
+    (*re).shaderTime = cg.time as f32 / 1000.0f32;
+    (*re).reType = RT_SPRITE;
     (*re).radius = 0.25f32;
-    (*re).customShader = crate::src::cgame::cg_main::cgs.media.railRingsShader;
+    (*re).customShader = cgs.media.railRingsShader;
     (*le).bounceFactor = 0.3f32;
     (*re).shaderRGBA[0 as i32 as usize] = ((*wi).flashDlightColor[0 as i32 as usize]
         * 63 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).shaderRGBA[1 as i32 as usize] = ((*wi).flashDlightColor[1 as i32 as usize]
         * 63 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     (*re).shaderRGBA[2 as i32 as usize] = ((*wi).flashDlightColor[2 as i32 as usize]
         * 63 as i32 as f32)
-        as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[3 as i32 as usize] = 63 as i32 as crate::src::qcommon::q_shared::byte;
+        as byte;
+    (*re).shaderRGBA[3 as i32 as usize] = 63 as i32 as byte;
     (*le).color[0 as i32 as usize] =
         ((*wi).flashDlightColor[0 as i32 as usize] as f64 * 0.2f64) as f32;
     (*le).color[1 as i32 as usize] =
@@ -1045,17 +1045,17 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).color[2 as i32 as usize] =
         ((*wi).flashDlightColor[2 as i32 as usize] as f64 * 0.2f64) as f32;
     (*le).color[3 as i32 as usize] = 0.25f32;
-    (*le).angles.trType = crate::src::qcommon::q_shared::TR_LINEAR;
-    (*le).angles.trTime = crate::src::cgame::cg_main::cg.time;
+    (*le).angles.trType = TR_LINEAR;
+    (*le).angles.trTime = cg.time;
     (*le).angles.trBase[0 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (rand() & 31 as i32) as vec_t;
     (*le).angles.trBase[1 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (rand() & 31 as i32) as vec_t;
     (*le).angles.trBase[2 as i32 as usize] =
-        (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (rand() & 31 as i32) as vec_t;
+    (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as vec_t;
+    (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as vec_t;
+    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
 }
 /*
 ==========================
@@ -1065,22 +1065,22 @@ CG_GrappleTrail
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_GrappleTrail(
-    mut ent: *mut crate::cg_local_h::centity_t,
-    mut _wi: *const crate::cg_local_h::weaponInfo_t,
+    mut ent: *mut centity_t,
+    mut _wi: *const weaponInfo_t,
 ) {
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut beam: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut origin: vec3_t = [0.; 3];
+    let mut es: *mut entityState_t =
+        0 as *mut entityState_t;
+    let mut forward: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
+    let mut beam: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -1096,34 +1096,34 @@ pub unsafe extern "C" fn CG_GrappleTrail(
         rotation: 0.,
     };
     es = &mut (*ent).currentState;
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*es).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::cgame::cg_main::cg.time,
+    BG_EvaluateTrajectory(
+        &mut (*es).pos as *mut _ as *const trajectory_t,
+        cg.time,
         origin.as_mut_ptr(),
     );
-    (*ent).trailTime = crate::src::cgame::cg_main::cg.time;
+    (*ent).trailTime = cg.time;
     crate::stdlib::memset(
-        &mut beam as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+        &mut beam as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     //FIXME adjust for muzzle position
-    beam.origin[0 as i32 as usize] = crate::src::cgame::cg_main::cg_entities
+    beam.origin[0 as i32 as usize] = cg_entities
         [(*ent).currentState.otherEntityNum as usize]
         .lerpOrigin[0 as i32 as usize]; // Don't draw if close
-    beam.origin[1 as i32 as usize] = crate::src::cgame::cg_main::cg_entities
+    beam.origin[1 as i32 as usize] = cg_entities
         [(*ent).currentState.otherEntityNum as usize]
         .lerpOrigin[1 as i32 as usize];
-    beam.origin[2 as i32 as usize] = crate::src::cgame::cg_main::cg_entities
+    beam.origin[2 as i32 as usize] = cg_entities
         [(*ent).currentState.otherEntityNum as usize]
         .lerpOrigin[2 as i32 as usize];
     beam.origin[2 as i32 as usize] += 26 as i32 as f32;
-    crate::src::qcommon::q_math::AngleVectors(
-        crate::src::cgame::cg_main::cg_entities[(*ent).currentState.otherEntityNum as usize]
+    AngleVectors(
+        cg_entities[(*ent).currentState.otherEntityNum as usize]
             .lerpAngles
-            .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            .as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
         up.as_mut_ptr(),
     );
     beam.origin[0 as i32 as usize] =
@@ -1136,21 +1136,21 @@ pub unsafe extern "C" fn CG_GrappleTrail(
     beam.oldorigin[1 as i32 as usize] = origin[1 as i32 as usize];
     beam.oldorigin[2 as i32 as usize] = origin[2 as i32 as usize];
     if Distance(
-        beam.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        beam.oldorigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        beam.origin.as_mut_ptr() as *const vec_t,
+        beam.oldorigin.as_mut_ptr() as *const vec_t,
     ) < 64 as i32 as f32
     {
         return;
     }
-    beam.reType = crate::tr_types_h::RT_LIGHTNING;
-    beam.customShader = crate::src::cgame::cg_main::cgs.media.lightningShader;
-    crate::src::qcommon::q_math::AxisClear(beam.axis.as_mut_ptr());
-    beam.shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[3 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        &mut beam as *mut _ as *const crate::tr_types_h::refEntity_t,
+    beam.reType = RT_LIGHTNING;
+    beam.customShader = cgs.media.lightningShader;
+    AxisClear(beam.axis.as_mut_ptr());
+    beam.shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
+    beam.shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
+    beam.shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
+    beam.shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte;
+    trap_R_AddRefEntityToScene(
+        &mut beam as *mut _ as *const refEntity_t,
     );
 }
 /*
@@ -1160,8 +1160,8 @@ CG_GrenadeTrail
 */
 
 unsafe extern "C" fn CG_GrenadeTrail(
-    mut ent: *mut crate::cg_local_h::centity_t,
-    mut wi: *const crate::cg_local_h::weaponInfo_t,
+    mut ent: *mut centity_t,
+    mut wi: *const weaponInfo_t,
 ) {
     CG_RocketTrail(ent, wi);
 }
@@ -1175,17 +1175,17 @@ The server says this item is used on this level
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
-    let mut weaponInfo: *mut crate::cg_local_h::weaponInfo_t =
-        0 as *mut crate::cg_local_h::weaponInfo_t;
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    let mut ammo: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+    let mut weaponInfo: *mut weaponInfo_t =
+        0 as *mut weaponInfo_t;
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut ammo: *mut gitem_t = 0 as *mut gitem_t;
     let mut path: [libc::c_char; 64] = [0; 64];
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     let mut i: i32 = 0;
-    weaponInfo = &mut *crate::src::cgame::cg_main::cg_weapons
+    weaponInfo = &mut *cg_weapons
         .as_mut_ptr()
-        .offset(weaponNum as isize) as *mut crate::cg_local_h::weaponInfo_t;
+        .offset(weaponNum as isize) as *mut weaponInfo_t;
     if weaponNum == 0 as i32 {
         return;
     }
@@ -1195,14 +1195,14 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
     crate::stdlib::memset(
         weaponInfo as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::weaponInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<weaponInfo_t>() as libc::c_ulong,
     );
-    (*weaponInfo).registered = crate::src::qcommon::q_shared::qtrue;
-    item = crate::src::game::bg_misc::bg_itemlist
+    (*weaponInfo).registered = qtrue;
+    item = bg_itemlist
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
+        if (*item).giType as u32 == IT_WEAPON as i32 as u32
             && (*item).giTag == weaponNum
         {
             (*weaponInfo).item = item;
@@ -1212,20 +1212,20 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         }
     }
     if (*item).classname.is_null() {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"Couldn\'t find weapon %i\x00" as *const u8 as *const libc::c_char,
             weaponNum,
         );
     }
     CG_RegisterItemVisuals(
-        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as isize as i32,
+        item.offset_from(bg_itemlist.as_mut_ptr()) as isize as i32,
     );
     // load cmodel before model so filecache works
-    (*weaponInfo).weaponModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    (*weaponInfo).weaponModel = trap_R_RegisterModel(
         (*item).world_model[0 as i32 as usize],
     );
     // calc midpoint for rotation
-    crate::src::cgame::cg_syscalls::trap_R_ModelBounds(
+    trap_R_ModelBounds(
         (*weaponInfo).weaponModel,
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
@@ -1234,16 +1234,16 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
     while i < 3 as i32 {
         (*weaponInfo).weaponMidpoint[i as usize] = (mins[i as usize] as f64
             + 0.5f64 * (maxs[i as usize] - mins[i as usize]) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         i += 1
     }
-    (*weaponInfo).weaponIcon = crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon);
-    (*weaponInfo).ammoIcon = crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon);
-    ammo = crate::src::game::bg_misc::bg_itemlist
+    (*weaponInfo).weaponIcon = trap_R_RegisterShader((*item).icon);
+    (*weaponInfo).ammoIcon = trap_R_RegisterShader((*item).icon);
+    ammo = bg_itemlist
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*ammo).classname.is_null() {
-        if (*ammo).giType as u32 == crate::bg_public_h::IT_AMMO as i32 as u32
+        if (*ammo).giType as u32 == IT_AMMO as i32 as u32
             && (*ammo).giTag == weaponNum
         {
             break;
@@ -1251,48 +1251,48 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         ammo = ammo.offset(1)
     }
     if !(*ammo).classname.is_null() && !(*ammo).world_model[0 as i32 as usize].is_null() {
-        (*weaponInfo).ammoModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+        (*weaponInfo).ammoModel = trap_R_RegisterModel(
             (*ammo).world_model[0 as i32 as usize],
         )
     }
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strcat(
+    Q_strcat(
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_flash.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).flashModel =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterModel(path.as_mut_ptr());
-    crate::src::qcommon::q_shared::COM_StripExtension(
+        trap_R_RegisterModel(path.as_mut_ptr());
+    COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strcat(
+    Q_strcat(
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_barrel.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).barrelModel =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterModel(path.as_mut_ptr());
-    crate::src::qcommon::q_shared::COM_StripExtension(
+        trap_R_RegisterModel(path.as_mut_ptr());
+    COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strcat(
+    Q_strcat(
         path.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_hand.md3\x00" as *const u8 as *const libc::c_char,
     );
     (*weaponInfo).handsModel =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterModel(path.as_mut_ptr());
+        trap_R_RegisterModel(path.as_mut_ptr());
     if (*weaponInfo).handsModel == 0 {
-        (*weaponInfo).handsModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+        (*weaponInfo).handsModel = trap_R_RegisterModel(
             b"models/weapons2/shotgun/shotgun_hand.md3\x00" as *const u8 as *const libc::c_char,
         )
     }
@@ -1301,211 +1301,211 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1.0f32;
-            (*weaponInfo).firingSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).firingSound = trap_S_RegisterSound(
                 b"sound/weapons/melee/fstrun.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/melee/fstatck.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 )
         }
         6 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1.0f32;
-            (*weaponInfo).readySound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/melee/fsthum.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            (*weaponInfo).firingSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).firingSound = trap_S_RegisterSound(
                 b"sound/weapons/lightning/lg_hum.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/lightning/lg_fire.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.lightningShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.lightningShader =
+                trap_R_RegisterShader(
                     b"lightningBoltNew\x00" as *const u8 as *const libc::c_char,
                 );
-            crate::src::cgame::cg_main::cgs
+            cgs
                 .media
-                .lightningExplosionModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+                .lightningExplosionModel = trap_R_RegisterModel(
                 b"models/weaphits/crackle.md3\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::cgame::cg_main::cgs.media.sfx_lghit1 =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.sfx_lghit1 =
+                trap_S_RegisterSound(
                     b"sound/weapons/lightning/lg_hit.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.sfx_lghit2 =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.sfx_lghit2 =
+                trap_S_RegisterSound(
                     b"sound/weapons/lightning/lg_hit2.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.sfx_lghit3 =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            cgs.media.sfx_lghit3 =
+                trap_S_RegisterSound(
                     b"sound/weapons/lightning/lg_hit3.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 )
         }
         10 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1.0f32;
-            (*weaponInfo).missileModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+            (*weaponInfo).missileModel = trap_R_RegisterModel(
                 b"models/ammo/rocket/rocket.md3\x00" as *const u8 as *const libc::c_char,
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_GrappleTrail
                     as unsafe extern "C" fn(
-                        _: *mut crate::cg_local_h::centity_t,
-                        _: *const crate::cg_local_h::weaponInfo_t,
+                        _: *mut centity_t,
+                        _: *const weaponInfo_t,
                     ) -> (),
             );
             (*weaponInfo).missileDlight = 200 as i32 as f32;
             (*weaponInfo).missileDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).missileDlightColor[1 as i32 as usize] = 0.75f32;
             (*weaponInfo).missileDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*weaponInfo).readySound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                0 as i32 as vec_t;
+            (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/melee/fsthum.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            (*weaponInfo).firingSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).firingSound = trap_S_RegisterSound(
                 b"sound/weapons/melee/fstrun.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            crate::src::cgame::cg_main::cgs.media.lightningShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.lightningShader =
+                trap_R_RegisterShader(
                     b"lightningBoltNew\x00" as *const u8 as *const libc::c_char,
                 )
         }
         2 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/machinegun/machgf1b.wav\x00" as *const u8
                         as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
             (*weaponInfo).flashSound[1 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/machinegun/machgf2b.wav\x00" as *const u8
                         as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
             (*weaponInfo).flashSound[2 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/machinegun/machgf3b.wav\x00" as *const u8
                         as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
             (*weaponInfo).flashSound[3 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/machinegun/machgf4b.wav\x00" as *const u8
                         as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
             (*weaponInfo).ejectBrassFunc = Some(
                 CG_MachineGunEjectBrass
-                    as unsafe extern "C" fn(_: *mut crate::cg_local_h::centity_t) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t) -> (),
             );
-            crate::src::cgame::cg_main::cgs.media.bulletExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.bulletExplosionShader =
+                trap_R_RegisterShader(
                     b"bulletExplosion\x00" as *const u8 as *const libc::c_char,
                 )
         }
         3 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/shotgun/sshotf1b.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
             (*weaponInfo).ejectBrassFunc = Some(
                 CG_ShotgunEjectBrass
-                    as unsafe extern "C" fn(_: *mut crate::cg_local_h::centity_t) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t) -> (),
             )
         }
         5 => {
-            (*weaponInfo).missileModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+            (*weaponInfo).missileModel = trap_R_RegisterModel(
                 b"models/ammo/rocket/rocket.md3\x00" as *const u8 as *const libc::c_char,
             );
-            (*weaponInfo).missileSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).missileSound = trap_S_RegisterSound(
                 b"sound/weapons/rocket/rockfly.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_RocketTrail
                     as unsafe extern "C" fn(
-                        _: *mut crate::cg_local_h::centity_t,
-                        _: *const crate::cg_local_h::weaponInfo_t,
+                        _: *mut centity_t,
+                        _: *const weaponInfo_t,
                     ) -> (),
             );
             (*weaponInfo).missileDlight = 200 as i32 as f32;
             (*weaponInfo).wiTrailTime = 2000 as i32 as f32;
             (*weaponInfo).trailRadius = 64 as i32 as f32;
             (*weaponInfo).missileDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).missileDlightColor[1 as i32 as usize] = 0.75f32;
             (*weaponInfo).missileDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.75f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.rocketExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.rocketExplosionShader =
+                trap_R_RegisterShader(
                     b"rocketExplosion\x00" as *const u8 as *const libc::c_char,
                 )
         }
         4 => {
-            (*weaponInfo).missileModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+            (*weaponInfo).missileModel = trap_R_RegisterModel(
                 b"models/ammo/grenade1.md3\x00" as *const u8 as *const libc::c_char,
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_GrenadeTrail
                     as unsafe extern "C" fn(
-                        _: *mut crate::cg_local_h::centity_t,
-                        _: *const crate::cg_local_h::weaponInfo_t,
+                        _: *mut centity_t,
+                        _: *const weaponInfo_t,
                     ) -> (),
             );
             (*weaponInfo).wiTrailTime = 700 as i32 as f32;
             (*weaponInfo).trailRadius = 32 as i32 as f32;
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.70f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/grenade/grenlf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.grenadeExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.grenadeExplosionShader =
+                trap_R_RegisterShader(
                     b"grenadeExplosion\x00" as *const u8 as *const libc::c_char,
                 )
         }
@@ -1514,97 +1514,97 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             (*weaponInfo).missileTrailFunc = Some(
                 CG_PlasmaTrail
                     as unsafe extern "C" fn(
-                        _: *mut crate::cg_local_h::centity_t,
-                        _: *const crate::cg_local_h::weaponInfo_t,
+                        _: *mut centity_t,
+                        _: *const weaponInfo_t,
                     ) -> (),
             );
-            (*weaponInfo).missileSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).missileSound = trap_S_RegisterSound(
                 b"sound/weapons/plasma/lasfly.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1.0f32;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/plasma/hyprbf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.plasmaExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.plasmaExplosionShader =
+                trap_R_RegisterShader(
                     b"plasmaExplosion\x00" as *const u8 as *const libc::c_char,
                 );
-            crate::src::cgame::cg_main::cgs.media.railRingsShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.railRingsShader =
+                trap_R_RegisterShader(
                     b"railDisc\x00" as *const u8 as *const libc::c_char,
                 )
         }
         7 => {
-            (*weaponInfo).readySound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/railgun/rg_hum.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.5f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                0 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/railgun/railgf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.railExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.railExplosionShader =
+                trap_R_RegisterShader(
                     b"railExplosion\x00" as *const u8 as *const libc::c_char,
                 );
-            crate::src::cgame::cg_main::cgs.media.railRingsShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.railRingsShader =
+                trap_R_RegisterShader(
                     b"railDisc\x00" as *const u8 as *const libc::c_char,
                 );
-            crate::src::cgame::cg_main::cgs.media.railCoreShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.railCoreShader =
+                trap_R_RegisterShader(
                     b"railCore\x00" as *const u8 as *const libc::c_char,
                 )
         }
         9 => {
-            (*weaponInfo).readySound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/bfg/bfg_hum.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.7f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/bfg/bfg_fire.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
-            crate::src::cgame::cg_main::cgs.media.bfgExplosionShader =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+            cgs.media.bfgExplosionShader =
+                trap_R_RegisterShader(
                     b"bfgExplosion\x00" as *const u8 as *const libc::c_char,
                 );
-            (*weaponInfo).missileModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+            (*weaponInfo).missileModel = trap_R_RegisterModel(
                 b"models/weaphits/bfg.md3\x00" as *const u8 as *const libc::c_char,
             );
-            (*weaponInfo).missileSound = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+            (*weaponInfo).missileSound = trap_S_RegisterSound(
                 b"sound/weapons/rocket/rockfly.wav\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             )
         }
         _ => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+                1 as i32 as vec_t;
             (*weaponInfo).flashSound[0 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                trap_S_RegisterSound(
                     b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 )
         }
     };
@@ -1619,49 +1619,49 @@ The server says this item is used on this level
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
-    let mut itemInfo: *mut crate::cg_local_h::itemInfo_t = 0 as *mut crate::cg_local_h::itemInfo_t;
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    if itemNum < 0 as i32 || itemNum >= crate::src::game::bg_misc::bg_numItems {
-        crate::src::cgame::cg_main::CG_Error(
+    let mut itemInfo: *mut itemInfo_t = 0 as *mut itemInfo_t;
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    if itemNum < 0 as i32 || itemNum >= bg_numItems {
+        CG_Error(
             b"CG_RegisterItemVisuals: itemNum %d out of range [0-%d]\x00" as *const u8
                 as *const libc::c_char,
             itemNum,
-            crate::src::game::bg_misc::bg_numItems - 1 as i32,
+            bg_numItems - 1 as i32,
         );
     }
-    itemInfo = &mut *crate::src::cgame::cg_main::cg_items
+    itemInfo = &mut *cg_items
         .as_mut_ptr()
-        .offset(itemNum as isize) as *mut crate::cg_local_h::itemInfo_t;
+        .offset(itemNum as isize) as *mut itemInfo_t;
     if (*itemInfo).registered as u64 != 0 {
         return;
     }
-    item = &mut *crate::src::game::bg_misc::bg_itemlist
+    item = &mut *bg_itemlist
         .as_mut_ptr()
-        .offset(itemNum as isize) as *mut crate::bg_public_h::gitem_t;
+        .offset(itemNum as isize) as *mut gitem_t;
     crate::stdlib::memset(
         itemInfo as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::cg_local_h::itemInfo_t>() as libc::c_ulong,
+        ::std::mem::size_of::<itemInfo_t>() as libc::c_ulong,
     );
-    (*itemInfo).registered = crate::src::qcommon::q_shared::qtrue;
-    (*itemInfo).models[0 as i32 as usize] = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+    (*itemInfo).registered = qtrue;
+    (*itemInfo).models[0 as i32 as usize] = trap_R_RegisterModel(
         (*item).world_model[0 as i32 as usize],
     );
-    (*itemInfo).icon = crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon);
-    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32 {
+    (*itemInfo).icon = trap_R_RegisterShader((*item).icon);
+    if (*item).giType as u32 == IT_WEAPON as i32 as u32 {
         CG_RegisterWeapon((*item).giTag);
     }
     //
     // powerups have an accompanying ring or sphere
     //
-    if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
-        || (*item).giType as u32 == crate::bg_public_h::IT_HEALTH as i32 as u32
-        || (*item).giType as u32 == crate::bg_public_h::IT_ARMOR as i32 as u32
-        || (*item).giType as u32 == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+    if (*item).giType as u32 == IT_POWERUP as i32 as u32
+        || (*item).giType as u32 == IT_HEALTH as i32 as u32
+        || (*item).giType as u32 == IT_ARMOR as i32 as u32
+        || (*item).giType as u32 == IT_HOLDABLE as i32 as u32
     {
         if !(*item).world_model[1 as i32 as usize].is_null() {
             (*itemInfo).models[1 as i32 as usize] =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+                trap_R_RegisterModel(
                     (*item).world_model[1 as i32 as usize],
                 )
         }
@@ -1682,34 +1682,34 @@ CG_MapTorsoToWeaponFrame
 */
 
 unsafe extern "C" fn CG_MapTorsoToWeaponFrame(
-    mut ci: *mut crate::cg_local_h::clientInfo_t,
+    mut ci: *mut clientInfo_t,
     mut frame: i32,
 ) -> i32 {
     // change weapon
-    if frame >= (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
+    if frame >= (*ci).animations[TORSO_DROP as i32 as usize].firstFrame
         && frame
-            < (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame + 9 as i32
+            < (*ci).animations[TORSO_DROP as i32 as usize].firstFrame + 9 as i32
     {
-        return frame - (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
+        return frame - (*ci).animations[TORSO_DROP as i32 as usize].firstFrame
             + 6 as i32;
     }
     // stand attack
-    if frame >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame
+    if frame >= (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame
         && frame
-            < (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame
+            < (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame
                 + 6 as i32
     {
         return 1 as i32 + frame
-            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame;
+            - (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame;
     }
     // stand attack 2
-    if frame >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame
+    if frame >= (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame
         && frame
-            < (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame
+            < (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame
                 + 6 as i32
     {
         return 1 as i32 + frame
-            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame;
+            - (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame;
     }
     return 0 as i32;
 }
@@ -1720,71 +1720,71 @@ CG_CalculateWeaponPosition
 */
 
 unsafe extern "C" fn CG_CalculateWeaponPosition(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut angles: *mut vec_t,
 ) {
     let mut scale: f32 = 0.;
     let mut delta: i32 = 0;
     let mut fracsin: f32 = 0.;
     *origin.offset(0 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+        cg.refdef.vieworg[0 as i32 as usize];
     *origin.offset(1 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+        cg.refdef.vieworg[1 as i32 as usize];
     *origin.offset(2 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
+        cg.refdef.vieworg[2 as i32 as usize];
     *angles.offset(0 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize];
+        cg.refdefViewAngles[0 as i32 as usize];
     *angles.offset(1 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdefViewAngles[1 as i32 as usize];
+        cg.refdefViewAngles[1 as i32 as usize];
     *angles.offset(2 as i32 as isize) =
-        crate::src::cgame::cg_main::cg.refdefViewAngles[2 as i32 as usize];
+        cg.refdefViewAngles[2 as i32 as usize];
     // on odd legs, invert some angles
-    if crate::src::cgame::cg_main::cg.bobcycle & 1 as i32 != 0 {
-        scale = -crate::src::cgame::cg_main::cg.xyspeed
+    if cg.bobcycle & 1 as i32 != 0 {
+        scale = -cg.xyspeed
     } else {
-        scale = crate::src::cgame::cg_main::cg.xyspeed
+        scale = cg.xyspeed
     }
     // gun angles from bobbing
     let ref mut fresh1 = *angles.offset(2 as i32 as isize);
     *fresh1 = (*fresh1 as f64
-        + (scale * crate::src::cgame::cg_main::cg.bobfracsin) as f64 * 0.005f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        + (scale * cg.bobfracsin) as f64 * 0.005f64)
+        as vec_t;
     let ref mut fresh2 = *angles.offset(1 as i32 as isize);
     *fresh2 = (*fresh2 as f64
-        + (scale * crate::src::cgame::cg_main::cg.bobfracsin) as f64 * 0.01f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        + (scale * cg.bobfracsin) as f64 * 0.01f64)
+        as vec_t;
     let ref mut fresh3 = *angles.offset(0 as i32 as isize);
     *fresh3 = (*fresh3 as f64
-        + (crate::src::cgame::cg_main::cg.xyspeed * crate::src::cgame::cg_main::cg.bobfracsin)
+        + (cg.xyspeed * cg.bobfracsin)
             as f64
-            * 0.005f64) as crate::src::qcommon::q_shared::vec_t;
+            * 0.005f64) as vec_t;
     // drop the weapon when landing
-    delta = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.landTime;
+    delta = cg.time - cg.landTime;
     if delta < 150 as i32 {
         let ref mut fresh4 = *origin.offset(2 as i32 as isize);
         *fresh4 = (*fresh4 as f64
-            + crate::src::cgame::cg_main::cg.landChange as f64 * 0.25f64 * delta as f64
-                / 150 as i32 as f64) as crate::src::qcommon::q_shared::vec_t
+            + cg.landChange as f64 * 0.25f64 * delta as f64
+                / 150 as i32 as f64) as vec_t
     } else if delta < 150 as i32 + 300 as i32 {
         let ref mut fresh5 = *origin.offset(2 as i32 as isize);
         *fresh5 = (*fresh5 as f64
-            + crate::src::cgame::cg_main::cg.landChange as f64
+            + cg.landChange as f64
                 * 0.25f64
                 * (150 as i32 + 300 as i32 - delta) as f64
-                / 300 as i32 as f64) as crate::src::qcommon::q_shared::vec_t
+                / 300 as i32 as f64) as vec_t
     }
     // idle drift
-    scale = crate::src::cgame::cg_main::cg.xyspeed + 40 as i32 as f32;
-    fracsin = crate::stdlib::sin(crate::src::cgame::cg_main::cg.time as f64 * 0.001f64) as f32;
+    scale = cg.xyspeed + 40 as i32 as f32;
+    fracsin = crate::stdlib::sin(cg.time as f64 * 0.001f64) as f32;
     let ref mut fresh6 = *angles.offset(2 as i32 as isize);
     *fresh6 = (*fresh6 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     let ref mut fresh7 = *angles.offset(1 as i32 as isize);
     *fresh7 = (*fresh7 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     let ref mut fresh8 = *angles.offset(0 as i32 as isize);
     *fresh8 = (*fresh8 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
 }
 /*
 ===============
@@ -1799,16 +1799,16 @@ angle)
 */
 
 unsafe extern "C" fn CG_LightningBolt(
-    mut cent: *mut crate::cg_local_h::centity_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut cent: *mut centity_t,
+    mut origin: *mut vec_t,
 ) {
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -1819,14 +1819,14 @@ unsafe extern "C" fn CG_LightningBolt(
             contents: 0,
             entityNum: 0,
         };
-    let mut beam: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut beam: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -1841,40 +1841,40 @@ unsafe extern "C" fn CG_LightningBolt(
         radius: 0.,
         rotation: 0.,
     };
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut muzzlePoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut endPoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut muzzlePoint: vec3_t = [0.; 3];
+    let mut endPoint: vec3_t = [0.; 3];
     let mut anim: i32 = 0;
-    if (*cent).currentState.weapon != crate::bg_public_h::WP_LIGHTNING as i32 {
+    if (*cent).currentState.weapon != WP_LIGHTNING as i32 {
         return;
     }
     crate::stdlib::memset(
-        &mut beam as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+        &mut beam as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     // CPMA  "true" lightning
     if (*cent).currentState.number
-        == crate::src::cgame::cg_main::cg
+        == cg
             .predictedPlayerState
             .clientNum
-        && crate::src::cgame::cg_main::cg_trueLightning.value != 0 as i32 as f32
+        && cg_trueLightning.value != 0 as i32 as f32
     {
-        let mut angle: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut angle: vec3_t = [0.; 3];
         let mut i: i32 = 0;
         i = 0 as i32;
         while i < 3 as i32 {
             let mut a: f32 = (*cent).lerpAngles[i as usize]
-                - crate::src::cgame::cg_main::cg.refdefViewAngles[i as usize];
+                - cg.refdefViewAngles[i as usize];
             if a > 180 as i32 as f32 {
                 a -= 360 as i32 as f32
             }
             if a < -(180 as i32) as f32 {
                 a += 360 as i32 as f32
             }
-            angle[i as usize] = (crate::src::cgame::cg_main::cg.refdefViewAngles[i as usize] as f64
-                + a as f64 * (1.0f64 - crate::src::cgame::cg_main::cg_trueLightning.value as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+            angle[i as usize] = (cg.refdefViewAngles[i as usize] as f64
+                + a as f64 * (1.0f64 - cg_trueLightning.value as f64))
+                as vec_t;
             if angle[i as usize] < 0 as i32 as f32 {
                 angle[i as usize] += 360 as i32 as f32
             }
@@ -1883,11 +1883,11 @@ unsafe extern "C" fn CG_LightningBolt(
             }
             i += 1
         }
-        crate::src::qcommon::q_math::AngleVectors(
-            angle.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AngleVectors(
+            angle.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
         );
         muzzlePoint[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
         muzzlePoint[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
@@ -1895,19 +1895,19 @@ unsafe extern "C" fn CG_LightningBolt(
     //		VectorCopy(cg.refdef.vieworg, muzzlePoint );
     } else {
         // !CPMA
-        crate::src::qcommon::q_math::AngleVectors(
-            (*cent).lerpAngles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AngleVectors(
+            (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
         );
         muzzlePoint[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
         muzzlePoint[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
         muzzlePoint[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
     }
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == crate::bg_public_h::LEGS_WALKCR as i32
-        || anim == crate::bg_public_h::LEGS_IDLECR as i32
+    if anim == LEGS_WALKCR as i32
+        || anim == LEGS_IDLECR as i32
     {
         muzzlePoint[2 as i32 as usize] += 12 as i32 as f32
     } else {
@@ -1927,14 +1927,14 @@ unsafe extern "C" fn CG_LightningBolt(
     endPoint[2 as i32 as usize] =
         muzzlePoint[2 as i32 as usize] + forward[2 as i32 as usize] * 768 as i32 as f32;
     // see if it hit a wall
-    crate::src::cgame::cg_predict::CG_Trace(
-        &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-        muzzlePoint.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        endPoint.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    CG_Trace(
+        &mut trace as *mut _ as *mut trace_t,
+        muzzlePoint.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
+        endPoint.as_mut_ptr() as *const vec_t,
         (*cent).currentState.number,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
     );
@@ -1947,25 +1947,25 @@ unsafe extern "C" fn CG_LightningBolt(
     beam.origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     beam.origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     beam.origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    beam.reType = crate::tr_types_h::RT_LIGHTNING;
-    beam.customShader = crate::src::cgame::cg_main::cgs.media.lightningShader;
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        &mut beam as *mut _ as *const crate::tr_types_h::refEntity_t,
+    beam.reType = RT_LIGHTNING;
+    beam.customShader = cgs.media.lightningShader;
+    trap_R_AddRefEntityToScene(
+        &mut beam as *mut _ as *const refEntity_t,
     );
     // add the impact flare if it hit something
     if (trace.fraction as f64) < 1.0f64 {
-        let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut angles: vec3_t = [0.; 3];
+        let mut dir: vec3_t = [0.; 3];
         dir[0 as i32 as usize] = beam.oldorigin[0 as i32 as usize] - beam.origin[0 as i32 as usize];
         dir[1 as i32 as usize] = beam.oldorigin[1 as i32 as usize] - beam.origin[1 as i32 as usize];
         dir[2 as i32 as usize] = beam.oldorigin[2 as i32 as usize] - beam.origin[2 as i32 as usize];
-        crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+        VectorNormalize(dir.as_mut_ptr());
         crate::stdlib::memset(
-            &mut beam as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+            &mut beam as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
         );
-        beam.hModel = crate::src::cgame::cg_main::cgs
+        beam.hModel = cgs
             .media
             .lightningExplosionModel;
         beam.origin[0 as i32 as usize] =
@@ -1976,26 +1976,26 @@ unsafe extern "C" fn CG_LightningBolt(
             trace.endpos[2 as i32 as usize] + dir[2 as i32 as usize] * -(16 as i32) as f32;
         // make a random orientation
         angles[0 as i32 as usize] =
-            (::libc::rand() % 360 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (rand() % 360 as i32) as vec_t;
         angles[1 as i32 as usize] =
-            (::libc::rand() % 360 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (rand() % 360 as i32) as vec_t;
         angles[2 as i32 as usize] =
-            (::libc::rand() % 360 as i32) as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::AnglesToAxis(
-            angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            (rand() % 360 as i32) as vec_t;
+        AnglesToAxis(
+            angles.as_mut_ptr() as *const vec_t,
             beam.axis.as_mut_ptr(),
         );
-        crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-            &mut beam as *mut _ as *const crate::tr_types_h::refEntity_t,
+        trap_R_AddRefEntityToScene(
+            &mut beam as *mut _ as *const refEntity_t,
         );
     };
 }
 
-unsafe extern "C" fn CG_MachinegunSpinAngle(mut cent: *mut crate::cg_local_h::centity_t) -> f32 {
+unsafe extern "C" fn CG_MachinegunSpinAngle(mut cent: *mut centity_t) -> f32 {
     let mut delta: i32 = 0;
     let mut angle: f32 = 0.;
     let mut speed: f32 = 0.;
-    delta = crate::src::cgame::cg_main::cg.time - (*cent).pe.barrelTime;
+    delta = cg.time - (*cent).pe.barrelTime;
     if (*cent).pe.barrelSpinning as u64 != 0 {
         angle = ((*cent).pe.barrelAngle as f64 + delta as f64 * 0.9f64) as f32
     } else {
@@ -2009,10 +2009,10 @@ unsafe extern "C" fn CG_MachinegunSpinAngle(mut cent: *mut crate::cg_local_h::ce
     if (*cent).pe.barrelSpinning as u32
         == ((*cent).currentState.eFlags & 0x100 as i32 == 0) as i32 as u32
     {
-        (*cent).pe.barrelTime = crate::src::cgame::cg_main::cg.time;
-        (*cent).pe.barrelAngle = crate::src::qcommon::q_math::AngleMod(angle);
+        (*cent).pe.barrelTime = cg.time;
+        (*cent).pe.barrelAngle = AngleMod(angle);
         (*cent).pe.barrelSpinning = ((*cent).currentState.eFlags & 0x100 as i32 != 0) as i32
-            as crate::src::qcommon::q_shared::qboolean
+            as qboolean
     }
     return angle;
 }
@@ -2023,29 +2023,29 @@ CG_AddWeaponWithPowerups
 */
 
 unsafe extern "C" fn CG_AddWeaponWithPowerups(
-    mut gun: *mut crate::tr_types_h::refEntity_t,
+    mut gun: *mut refEntity_t,
     mut powerups: i32,
 ) {
     // add powerup effects
-    if powerups & (1 as i32) << crate::bg_public_h::PW_INVIS as i32 != 0 {
-        (*gun).customShader = crate::src::cgame::cg_main::cgs.media.invisShader;
-        crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-            gun as *const crate::tr_types_h::refEntity_t,
+    if powerups & (1 as i32) << PW_INVIS as i32 != 0 {
+        (*gun).customShader = cgs.media.invisShader;
+        trap_R_AddRefEntityToScene(
+            gun as *const refEntity_t,
         );
     } else {
-        crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-            gun as *const crate::tr_types_h::refEntity_t,
+        trap_R_AddRefEntityToScene(
+            gun as *const refEntity_t,
         );
-        if powerups & (1 as i32) << crate::bg_public_h::PW_BATTLESUIT as i32 != 0 {
-            (*gun).customShader = crate::src::cgame::cg_main::cgs.media.battleWeaponShader;
-            crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-                gun as *const crate::tr_types_h::refEntity_t,
+        if powerups & (1 as i32) << PW_BATTLESUIT as i32 != 0 {
+            (*gun).customShader = cgs.media.battleWeaponShader;
+            trap_R_AddRefEntityToScene(
+                gun as *const refEntity_t,
             );
         }
-        if powerups & (1 as i32) << crate::bg_public_h::PW_QUAD as i32 != 0 {
-            (*gun).customShader = crate::src::cgame::cg_main::cgs.media.quadWeaponShader;
-            crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-                gun as *const crate::tr_types_h::refEntity_t,
+        if powerups & (1 as i32) << PW_QUAD as i32 != 0 {
+            (*gun).customShader = cgs.media.quadWeaponShader;
+            trap_R_AddRefEntityToScene(
+                gun as *const refEntity_t,
             );
         }
     };
@@ -2062,19 +2062,19 @@ sound should only be done on the world model case.
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddPlayerWeapon(
-    mut parent: *mut crate::tr_types_h::refEntity_t,
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut parent: *mut refEntity_t,
+    mut ps: *mut playerState_t,
+    mut cent: *mut centity_t,
     mut _team: i32,
 ) {
-    let mut gun: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut gun: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -2089,14 +2089,14 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         radius: 0.,
         rotation: 0.,
     };
-    let mut barrel: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut barrel: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -2111,14 +2111,14 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         radius: 0.,
         rotation: 0.,
     };
-    let mut flash: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut flash: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -2133,27 +2133,27 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         radius: 0.,
         rotation: 0.,
     };
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut weaponNum: crate::bg_public_h::weapon_t = crate::bg_public_h::WP_NONE;
-    let mut weapon: *mut crate::cg_local_h::weaponInfo_t =
-        0 as *mut crate::cg_local_h::weaponInfo_t;
-    let mut nonPredictedCent: *mut crate::cg_local_h::centity_t =
-        0 as *mut crate::cg_local_h::centity_t;
-    let mut lerped: crate::src::qcommon::q_shared::orientation_t =
-        crate::src::qcommon::q_shared::orientation_t {
+    let mut angles: vec3_t = [0.; 3];
+    let mut weaponNum: weapon_t = WP_NONE;
+    let mut weapon: *mut weaponInfo_t =
+        0 as *mut weaponInfo_t;
+    let mut nonPredictedCent: *mut centity_t =
+        0 as *mut centity_t;
+    let mut lerped: orientation_t =
+        orientation_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
         };
-    weaponNum = (*cent).currentState.weapon as crate::bg_public_h::weapon_t;
+    weaponNum = (*cent).currentState.weapon as weapon_t;
     CG_RegisterWeapon(weaponNum as i32);
-    weapon = &mut *crate::src::cgame::cg_main::cg_weapons
+    weapon = &mut *cg_weapons
         .as_mut_ptr()
-        .offset(weaponNum as isize) as *mut crate::cg_local_h::weaponInfo_t;
+        .offset(weaponNum as isize) as *mut weaponInfo_t;
     // add the weapon
     crate::stdlib::memset(
-        &mut gun as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+        &mut gun as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     gun.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
     gun.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -2161,26 +2161,26 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     gun.shadowPlane = (*parent).shadowPlane;
     gun.renderfx = (*parent).renderfx;
     // set custom shading for railgun refire rate
-    if weaponNum as u32 == crate::bg_public_h::WP_RAILGUN as i32 as u32 {
-        let mut ci: *mut crate::cg_local_h::clientInfo_t = &mut *crate::src::cgame::cg_main::cgs
+    if weaponNum as u32 == WP_RAILGUN as i32 as u32 {
+        let mut ci: *mut clientInfo_t = &mut *cgs
             .clientinfo
             .as_mut_ptr()
             .offset((*cent).currentState.clientNum as isize)
-            as *mut crate::cg_local_h::clientInfo_t;
-        if (*cent).pe.railFireTime + 1500 as i32 > crate::src::cgame::cg_main::cg.time {
+            as *mut clientInfo_t;
+        if (*cent).pe.railFireTime + 1500 as i32 > cg.time {
             let mut scale: i32 = 255 as i32
-                * (crate::src::cgame::cg_main::cg.time - (*cent).pe.railFireTime)
+                * (cg.time - (*cent).pe.railFireTime)
                 / 1500 as i32;
             gun.shaderRGBA[0 as i32 as usize] = ((*ci).c1RGBA[0 as i32 as usize] as i32 * scale
                 >> 8 as i32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             gun.shaderRGBA[1 as i32 as usize] = ((*ci).c1RGBA[1 as i32 as usize] as i32 * scale
                 >> 8 as i32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             gun.shaderRGBA[2 as i32 as usize] = ((*ci).c1RGBA[2 as i32 as usize] as i32 * scale
                 >> 8 as i32)
-                as crate::src::qcommon::q_shared::byte;
-            gun.shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte
+                as byte;
+            gun.shaderRGBA[3 as i32 as usize] = 255 as i32 as byte
         } else {
             gun.shaderRGBA[0 as i32 as usize] = (*ci).c1RGBA[0 as i32 as usize];
             gun.shaderRGBA[1 as i32 as usize] = (*ci).c1RGBA[1 as i32 as usize];
@@ -2194,29 +2194,29 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     }
     if ps.is_null() {
         // add weapon ready sound
-        (*cent).pe.lightningFiring = crate::src::qcommon::q_shared::qfalse as i32;
+        (*cent).pe.lightningFiring = qfalse as i32;
         if (*cent).currentState.eFlags & 0x100 as i32 != 0 && (*weapon).firingSound != 0 {
             // lightning gun and guantlet make a different sound when fire is held down
-            crate::src::cgame::cg_syscalls::trap_S_AddLoopingSound(
+            trap_S_AddLoopingSound(
                 (*cent).currentState.number,
-                (*cent).lerpOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
+                vec3_origin.as_mut_ptr()
+                    as *const vec_t,
                 (*weapon).firingSound,
             );
-            (*cent).pe.lightningFiring = crate::src::qcommon::q_shared::qtrue as i32
+            (*cent).pe.lightningFiring = qtrue as i32
         } else if (*weapon).readySound != 0 {
-            crate::src::cgame::cg_syscalls::trap_S_AddLoopingSound(
+            trap_S_AddLoopingSound(
                 (*cent).currentState.number,
-                (*cent).lerpOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
+                vec3_origin.as_mut_ptr()
+                    as *const vec_t,
                 (*weapon).readySound,
             );
         }
     }
-    crate::src::cgame::cg_syscalls::trap_R_LerpTag(
-        &mut lerped as *mut _ as *mut crate::src::qcommon::q_shared::orientation_t,
+    trap_R_LerpTag(
+        &mut lerped as *mut _ as *mut orientation_t,
         (*parent).hModel,
         (*parent).oldframe,
         (*parent).frame,
@@ -2233,7 +2233,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     gun.origin[2 as i32 as usize] = gun.origin[2 as i32 as usize]
         + (*parent).axis[0 as i32 as usize][2 as i32 as usize] * lerped.origin[0 as i32 as usize];
     // Make weapon appear left-handed for 2 and centered for 3
-    if !ps.is_null() && crate::src::cgame::cg_main::cg_drawGun.integer == 2 as i32 {
+    if !ps.is_null() && cg_drawGun.integer == 2 as i32 {
         gun.origin[0 as i32 as usize] = gun.origin[0 as i32 as usize]
             + (*parent).axis[1 as i32 as usize][0 as i32 as usize]
                 * -lerped.origin[1 as i32 as usize];
@@ -2243,7 +2243,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         gun.origin[2 as i32 as usize] = gun.origin[2 as i32 as usize]
             + (*parent).axis[1 as i32 as usize][2 as i32 as usize]
                 * -lerped.origin[1 as i32 as usize]
-    } else if ps.is_null() || crate::src::cgame::cg_main::cg_drawGun.integer != 3 as i32 {
+    } else if ps.is_null() || cg_drawGun.integer != 3 as i32 {
         gun.origin[0 as i32 as usize] = gun.origin[0 as i32 as usize]
             + (*parent).axis[1 as i32 as usize][0 as i32 as usize]
                 * lerped.origin[1 as i32 as usize];
@@ -2260,7 +2260,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         + (*parent).axis[2 as i32 as usize][1 as i32 as usize] * lerped.origin[2 as i32 as usize];
     gun.origin[2 as i32 as usize] = gun.origin[2 as i32 as usize]
         + (*parent).axis[2 as i32 as usize][2 as i32 as usize] * lerped.origin[2 as i32 as usize];
-    crate::src::qcommon::q_math::MatrixMultiply(
+    MatrixMultiply(
         lerped.axis.as_mut_ptr(),
         (*parent).axis.as_mut_ptr(),
         gun.axis.as_mut_ptr(),
@@ -2270,9 +2270,9 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     // add the spinning barrel
     if (*weapon).barrelModel != 0 {
         crate::stdlib::memset(
-            &mut barrel as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+            &mut barrel as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+            ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
         );
         barrel.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
         barrel.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -2280,49 +2280,49 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         barrel.shadowPlane = (*parent).shadowPlane;
         barrel.renderfx = (*parent).renderfx;
         barrel.hModel = (*weapon).barrelModel;
-        angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as i32 as usize] = 0 as i32 as vec_t;
+        angles[0 as i32 as usize] = 0 as i32 as vec_t;
         angles[2 as i32 as usize] = CG_MachinegunSpinAngle(cent);
-        crate::src::qcommon::q_math::AnglesToAxis(
-            angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AnglesToAxis(
+            angles.as_mut_ptr() as *const vec_t,
             barrel.axis.as_mut_ptr(),
         );
-        crate::src::cgame::cg_ents::CG_PositionRotatedEntityOnTag(
-            &mut barrel as *mut _ as *mut crate::tr_types_h::refEntity_t,
-            &mut gun as *mut _ as *const crate::tr_types_h::refEntity_t,
+        CG_PositionRotatedEntityOnTag(
+            &mut barrel as *mut _ as *mut refEntity_t,
+            &mut gun as *mut _ as *const refEntity_t,
             (*weapon).weaponModel,
             b"tag_barrel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         CG_AddWeaponWithPowerups(&mut barrel, (*cent).currentState.powerups);
     }
     // make sure we aren't looking at cg.predictedPlayerEntity for LG
-    nonPredictedCent = &mut *crate::src::cgame::cg_main::cg_entities
+    nonPredictedCent = &mut *cg_entities
         .as_mut_ptr()
         .offset((*cent).currentState.clientNum as isize)
-        as *mut crate::cg_local_h::centity_t;
+        as *mut centity_t;
     // if the index of the nonPredictedCent is not the same as the clientNum
     // then this is a fake player (like on the single player podiums), so
     // go ahead and use the cent
-    if nonPredictedCent.offset_from(crate::src::cgame::cg_main::cg_entities.as_mut_ptr()) as isize
+    if nonPredictedCent.offset_from(cg_entities.as_mut_ptr()) as isize
         != (*cent).currentState.clientNum as isize
     {
         nonPredictedCent = cent
     }
     // add the flash
-    if !((weaponNum as u32 == crate::bg_public_h::WP_LIGHTNING as i32 as u32
-        || weaponNum as u32 == crate::bg_public_h::WP_GAUNTLET as i32 as u32
-        || weaponNum as u32 == crate::bg_public_h::WP_GRAPPLING_HOOK as i32 as u32)
+    if !((weaponNum as u32 == WP_LIGHTNING as i32 as u32
+        || weaponNum as u32 == WP_GAUNTLET as i32 as u32
+        || weaponNum as u32 == WP_GRAPPLING_HOOK as i32 as u32)
         && (*nonPredictedCent).currentState.eFlags & 0x100 as i32 != 0)
     {
         // impulse flash
-        if crate::src::cgame::cg_main::cg.time - (*cent).muzzleFlashTime > 20 as i32 {
+        if cg.time - (*cent).muzzleFlashTime > 20 as i32 {
             return;
         }
     }
     crate::stdlib::memset(
-        &mut flash as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+        &mut flash as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     flash.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
     flash.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
@@ -2333,47 +2333,47 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     if flash.hModel == 0 {
         return;
     }
-    angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    angles[1 as i32 as usize] = 0 as i32 as vec_t;
+    angles[0 as i32 as usize] = 0 as i32 as vec_t;
     angles[2 as i32 as usize] = (2.0f64
-        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 10 as i32 as f64) as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::AnglesToAxis(
-        angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+        * 10 as i32 as f64) as vec_t;
+    AnglesToAxis(
+        angles.as_mut_ptr() as *const vec_t,
         flash.axis.as_mut_ptr(),
     );
     // colorize the railgun blast
-    if weaponNum as u32 == crate::bg_public_h::WP_RAILGUN as i32 as u32 {
-        let mut ci_0: *mut crate::cg_local_h::clientInfo_t =
-            0 as *mut crate::cg_local_h::clientInfo_t;
-        ci_0 = &mut *crate::src::cgame::cg_main::cgs
+    if weaponNum as u32 == WP_RAILGUN as i32 as u32 {
+        let mut ci_0: *mut clientInfo_t =
+            0 as *mut clientInfo_t;
+        ci_0 = &mut *cgs
             .clientinfo
             .as_mut_ptr()
             .offset((*cent).currentState.clientNum as isize)
-            as *mut crate::cg_local_h::clientInfo_t;
+            as *mut clientInfo_t;
         flash.shaderRGBA[0 as i32 as usize] = (255 as i32 as f32
             * (*ci_0).color1[0 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte;
+            as byte;
         flash.shaderRGBA[1 as i32 as usize] = (255 as i32 as f32
             * (*ci_0).color1[1 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte;
+            as byte;
         flash.shaderRGBA[2 as i32 as usize] = (255 as i32 as f32
             * (*ci_0).color1[2 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte
+            as byte
     }
-    crate::src::cgame::cg_ents::CG_PositionRotatedEntityOnTag(
-        &mut flash as *mut _ as *mut crate::tr_types_h::refEntity_t,
-        &mut gun as *mut _ as *const crate::tr_types_h::refEntity_t,
+    CG_PositionRotatedEntityOnTag(
+        &mut flash as *mut _ as *mut refEntity_t,
+        &mut gun as *mut _ as *const refEntity_t,
         (*weapon).weaponModel,
         b"tag_flash\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
-        &mut flash as *mut _ as *const crate::tr_types_h::refEntity_t,
+    trap_R_AddRefEntityToScene(
+        &mut flash as *mut _ as *const refEntity_t,
     );
     if !ps.is_null()
-        || crate::src::cgame::cg_main::cg.renderingThirdPerson as u32 != 0
+        || cg.renderingThirdPerson as u32 != 0
         || (*cent).currentState.number
-            != crate::src::cgame::cg_main::cg
+            != cg
                 .predictedPlayerState
                 .clientNum
     {
@@ -2383,9 +2383,9 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             || (*weapon).flashDlightColor[1 as i32 as usize] != 0.
             || (*weapon).flashDlightColor[2 as i32 as usize] != 0.
         {
-            crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
-                flash.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (300 as i32 + (::libc::rand() & 31 as i32)) as f32,
+            trap_R_AddLightToScene(
+                flash.origin.as_mut_ptr() as *const vec_t,
+                (300 as i32 + (rand() & 31 as i32)) as f32,
                 (*weapon).flashDlightColor[0 as i32 as usize],
                 (*weapon).flashDlightColor[1 as i32 as usize],
                 (*weapon).flashDlightColor[2 as i32 as usize],
@@ -2403,16 +2403,16 @@ Add the weapon, and flash for the player's view
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_AddViewWeapon(
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
+    mut ps: *mut playerState_t,
 ) {
-    let mut hand: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
-        reType: crate::tr_types_h::RT_MODEL,
+    let mut hand: refEntity_t = refEntity_t {
+        reType: RT_MODEL,
         renderfx: 0,
         hModel: 0,
         lightingOrigin: [0.; 3],
         shadowPlane: 0.,
         axis: [[0.; 3]; 3],
-        nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+        nonNormalizedAxes: qfalse,
         origin: [0.; 3],
         frame: 0,
         oldorigin: [0.; 3],
@@ -2427,50 +2427,50 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
         radius: 0.,
         rotation: 0.,
     };
-    let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut cent: *mut centity_t = 0 as *mut centity_t;
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut fovOffset: f32 = 0.;
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut weapon: *mut crate::cg_local_h::weaponInfo_t =
-        0 as *mut crate::cg_local_h::weaponInfo_t;
-    if (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
-        == crate::bg_public_h::TEAM_SPECTATOR as i32
+    let mut angles: vec3_t = [0.; 3];
+    let mut weapon: *mut weaponInfo_t =
+        0 as *mut weaponInfo_t;
+    if (*ps).persistant[PERS_TEAM as i32 as usize]
+        == TEAM_SPECTATOR as i32
     {
         return;
     }
-    if (*ps).pm_type == crate::bg_public_h::PM_INTERMISSION as i32 {
+    if (*ps).pm_type == PM_INTERMISSION as i32 {
         return;
     }
     // no gun if in third person view or a camera is active
     //if ( cg.renderingThirdPerson || cg.cameraMode) {
-    if crate::src::cgame::cg_main::cg.renderingThirdPerson as u64 != 0 {
+    if cg.renderingThirdPerson as u64 != 0 {
         return;
     }
     // allow the gun to be completely removed
-    if crate::src::cgame::cg_main::cg_drawGun.integer == 0 {
-        let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        if crate::src::cgame::cg_main::cg.predictedPlayerState.eFlags & 0x100 as i32 != 0 {
+    if cg_drawGun.integer == 0 {
+        let mut origin: vec3_t = [0.; 3];
+        if cg.predictedPlayerState.eFlags & 0x100 as i32 != 0 {
             // special hack for lightning gun...
             origin[0 as i32 as usize] =
-                crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+                cg.refdef.vieworg[0 as i32 as usize];
             origin[1 as i32 as usize] =
-                crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+                cg.refdef.vieworg[1 as i32 as usize];
             origin[2 as i32 as usize] =
-                crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
+                cg.refdef.vieworg[2 as i32 as usize];
             origin[0 as i32 as usize] = origin[0 as i32 as usize]
-                + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                + cg.refdef.viewaxis[2 as i32 as usize]
                     [0 as i32 as usize]
                     * -(8 as i32) as f32;
             origin[1 as i32 as usize] = origin[1 as i32 as usize]
-                + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                + cg.refdef.viewaxis[2 as i32 as usize]
                     [1 as i32 as usize]
                     * -(8 as i32) as f32;
             origin[2 as i32 as usize] = origin[2 as i32 as usize]
-                + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
+                + cg.refdef.viewaxis[2 as i32 as usize]
                     [2 as i32 as usize]
                     * -(8 as i32) as f32;
             CG_LightningBolt(
-                &mut *crate::src::cgame::cg_main::cg_entities
+                &mut *cg_entities
                     .as_mut_ptr()
                     .offset((*ps).clientNum as isize),
                 origin.as_mut_ptr(),
@@ -2479,72 +2479,72 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
         return;
     }
     // don't draw if testing a gun model
-    if crate::src::cgame::cg_main::cg.testGun as u64 != 0 {
+    if cg.testGun as u64 != 0 {
         return;
     }
     // drop gun lower at higher fov
-    if crate::src::cgame::cg_main::cg_fov.integer > 90 as i32 {
+    if cg_fov.integer > 90 as i32 {
         fovOffset =
-            (-0.2f64 * (crate::src::cgame::cg_main::cg_fov.integer - 90 as i32) as f64) as f32
+            (-0.2f64 * (cg_fov.integer - 90 as i32) as f64) as f32
     } else {
         fovOffset = 0 as i32 as f32
     } // &cg_entities[cg.snap->ps.clientNum];
-    cent = &mut crate::src::cgame::cg_main::cg.predictedPlayerEntity;
+    cent = &mut cg.predictedPlayerEntity;
     CG_RegisterWeapon((*ps).weapon);
-    weapon = &mut *crate::src::cgame::cg_main::cg_weapons
+    weapon = &mut *cg_weapons
         .as_mut_ptr()
-        .offset((*ps).weapon as isize) as *mut crate::cg_local_h::weaponInfo_t;
+        .offset((*ps).weapon as isize) as *mut weaponInfo_t;
     crate::stdlib::memset(
-        &mut hand as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
+        &mut hand as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     // set up gun position
     CG_CalculateWeaponPosition(hand.origin.as_mut_ptr(), angles.as_mut_ptr());
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
+            * cg_gun_x.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
+            * cg_gun_x.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
+            * cg_gun_x.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
+            * cg_gun_y.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
+            * cg_gun_y.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
+            * cg_gun_y.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-            * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
+        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
+            * (cg_gun_z.value + fovOffset);
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
-            * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
+        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
+            * (cg_gun_z.value + fovOffset);
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
-            * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
-    crate::src::qcommon::q_math::AnglesToAxis(
-        angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
+            * (cg_gun_z.value + fovOffset);
+    AnglesToAxis(
+        angles.as_mut_ptr() as *const vec_t,
         hand.axis.as_mut_ptr(),
     );
     // map torso animations to weapon animations
-    if crate::src::cgame::cg_main::cg_gun_frame.integer != 0 {
+    if cg_gun_frame.integer != 0 {
         // development tool
-        hand.oldframe = crate::src::cgame::cg_main::cg_gun_frame.integer;
+        hand.oldframe = cg_gun_frame.integer;
         hand.frame = hand.oldframe;
         hand.backlerp = 0 as i32 as f32
     } else {
         // get clientinfo for animation map
-        ci = &mut *crate::src::cgame::cg_main::cgs
+        ci = &mut *cgs
             .clientinfo
             .as_mut_ptr()
             .offset((*cent).currentState.clientNum as isize)
-            as *mut crate::cg_local_h::clientInfo_t;
+            as *mut clientInfo_t;
         hand.frame = CG_MapTorsoToWeaponFrame(ci, (*cent).pe.torso.frame);
         hand.oldframe = CG_MapTorsoToWeaponFrame(ci, (*cent).pe.torso.oldFrame);
         hand.backlerp = (*cent).pe.torso.backlerp
@@ -2555,8 +2555,8 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     CG_AddPlayerWeapon(
         &mut hand,
         ps,
-        &mut crate::src::cgame::cg_main::cg.predictedPlayerEntity,
-        (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize],
+        &mut cg.predictedPlayerEntity,
+        (*ps).persistant[PERS_TEAM as i32 as usize],
     );
 }
 /*
@@ -2583,25 +2583,25 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
     let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut color: *mut f32 = 0 as *mut f32;
     // don't display if dead
-    if crate::src::cgame::cg_main::cg.predictedPlayerState.stats
-        [crate::bg_public_h::STAT_HEALTH as i32 as usize]
+    if cg.predictedPlayerState.stats
+        [STAT_HEALTH as i32 as usize]
         <= 0 as i32
     {
         return;
     }
-    color = crate::src::cgame::cg_drawtools::CG_FadeColor(
-        crate::src::cgame::cg_main::cg.weaponSelectTime,
+    color = CG_FadeColor(
+        cg.weaponSelectTime,
         1400 as i32,
     );
     if color.is_null() {
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(color);
+    trap_R_SetColor(color);
     // showing weapon select clears pickup item display, but not the blend blob
-    crate::src::cgame::cg_main::cg.itemPickupTime = 0 as i32;
+    cg.itemPickupTime = 0 as i32;
     // count the number of weapons owned
-    bits = (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_WEAPONS as i32 as usize];
+    bits = (*cg.snap).ps.stats
+        [STAT_WEAPONS as i32 as usize];
     count = 0 as i32;
     i = 1 as i32;
     while i < 16 as i32 {
@@ -2617,31 +2617,31 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
         if !(bits & (1 as i32) << i == 0) {
             CG_RegisterWeapon(i);
             // draw weapon icon
-            crate::src::cgame::cg_drawtools::CG_DrawPic(
+            CG_DrawPic(
                 x as f32,
                 y as f32,
                 32 as i32 as f32,
                 32 as i32 as f32,
-                crate::src::cgame::cg_main::cg_weapons[i as usize].weaponIcon,
+                cg_weapons[i as usize].weaponIcon,
             );
             // draw selection marker
-            if i == crate::src::cgame::cg_main::cg.weaponSelect {
-                crate::src::cgame::cg_drawtools::CG_DrawPic(
+            if i == cg.weaponSelect {
+                CG_DrawPic(
                     (x - 4 as i32) as f32,
                     (y - 4 as i32) as f32,
                     40 as i32 as f32,
                     40 as i32 as f32,
-                    crate::src::cgame::cg_main::cgs.media.selectShader,
+                    cgs.media.selectShader,
                 );
             }
             // no ammo cross on top
-            if (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] == 0 {
-                crate::src::cgame::cg_drawtools::CG_DrawPic(
+            if (*cg.snap).ps.ammo[i as usize] == 0 {
+                CG_DrawPic(
                     x as f32,
                     y as f32,
                     32 as i32 as f32,
                     32 as i32 as f32,
-                    crate::src::cgame::cg_main::cgs.media.noammoShader,
+                    cgs.media.noammoShader,
                 );
             }
             x += 40 as i32
@@ -2649,21 +2649,21 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
         i += 1
     }
     // draw the selected name
-    if !crate::src::cgame::cg_main::cg_weapons[crate::src::cgame::cg_main::cg.weaponSelect as usize]
+    if !cg_weapons[cg.weaponSelect as usize]
         .item
         .is_null()
     {
-        name = (*crate::src::cgame::cg_main::cg_weapons
-            [crate::src::cgame::cg_main::cg.weaponSelect as usize]
+        name = (*cg_weapons
+            [cg.weaponSelect as usize]
             .item)
             .pickup_name;
         if !name.is_null() {
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(name) * 16 as i32;
+            w = CG_DrawStrlen(name) * 16 as i32;
             x = (640 as i32 - w) / 2 as i32;
-            crate::src::cgame::cg_drawtools::CG_DrawBigStringColor(x, y - 22 as i32, name, color);
+            CG_DrawBigStringColor(x, y - 22 as i32, name, color);
         }
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
+    trap_R_SetColor(0 as *const f32);
 }
 /*
 ===============
@@ -2671,18 +2671,18 @@ CG_WeaponSelectable
 ===============
 */
 
-unsafe extern "C" fn CG_WeaponSelectable(mut i: i32) -> crate::src::qcommon::q_shared::qboolean {
-    if (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+unsafe extern "C" fn CG_WeaponSelectable(mut i: i32) -> qboolean {
+    if (*cg.snap).ps.ammo[i as usize] == 0 {
+        return qfalse;
     }
-    if (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_WEAPONS as i32 as usize]
+    if (*cg.snap).ps.stats
+        [STAT_WEAPONS as i32 as usize]
         & (1 as i32) << i
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -2694,23 +2694,23 @@ CG_NextWeapon_f
 pub unsafe extern "C" fn CG_NextWeapon_f() {
     let mut i: i32 = 0;
     let mut original: i32 = 0;
-    if crate::src::cgame::cg_main::cg.snap.is_null() {
+    if cg.snap.is_null() {
         return;
     }
-    if (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0 {
+    if (*cg.snap).ps.pm_flags & 4096 as i32 != 0 {
         return;
     }
-    crate::src::cgame::cg_main::cg.weaponSelectTime = crate::src::cgame::cg_main::cg.time;
-    original = crate::src::cgame::cg_main::cg.weaponSelect;
+    cg.weaponSelectTime = cg.time;
+    original = cg.weaponSelect;
     i = 0 as i32;
     while i < 16 as i32 {
-        crate::src::cgame::cg_main::cg.weaponSelect += 1;
-        if crate::src::cgame::cg_main::cg.weaponSelect == 16 as i32 {
-            crate::src::cgame::cg_main::cg.weaponSelect = 0 as i32
+        cg.weaponSelect += 1;
+        if cg.weaponSelect == 16 as i32 {
+            cg.weaponSelect = 0 as i32
         }
-        if !(crate::src::cgame::cg_main::cg.weaponSelect == crate::bg_public_h::WP_GAUNTLET as i32)
+        if !(cg.weaponSelect == WP_GAUNTLET as i32)
         {
-            if CG_WeaponSelectable(crate::src::cgame::cg_main::cg.weaponSelect) as u64 != 0 {
+            if CG_WeaponSelectable(cg.weaponSelect) as u64 != 0 {
                 break;
             }
         }
@@ -2718,7 +2718,7 @@ pub unsafe extern "C" fn CG_NextWeapon_f() {
         // never cycle to gauntlet
     }
     if i == 16 as i32 {
-        crate::src::cgame::cg_main::cg.weaponSelect = original
+        cg.weaponSelect = original
     };
 }
 /*
@@ -2731,23 +2731,23 @@ CG_PrevWeapon_f
 pub unsafe extern "C" fn CG_PrevWeapon_f() {
     let mut i: i32 = 0;
     let mut original: i32 = 0;
-    if crate::src::cgame::cg_main::cg.snap.is_null() {
+    if cg.snap.is_null() {
         return;
     }
-    if (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0 {
+    if (*cg.snap).ps.pm_flags & 4096 as i32 != 0 {
         return;
     }
-    crate::src::cgame::cg_main::cg.weaponSelectTime = crate::src::cgame::cg_main::cg.time;
-    original = crate::src::cgame::cg_main::cg.weaponSelect;
+    cg.weaponSelectTime = cg.time;
+    original = cg.weaponSelect;
     i = 0 as i32;
     while i < 16 as i32 {
-        crate::src::cgame::cg_main::cg.weaponSelect -= 1;
-        if crate::src::cgame::cg_main::cg.weaponSelect == -(1 as i32) {
-            crate::src::cgame::cg_main::cg.weaponSelect = 16 as i32 - 1 as i32
+        cg.weaponSelect -= 1;
+        if cg.weaponSelect == -(1 as i32) {
+            cg.weaponSelect = 16 as i32 - 1 as i32
         }
-        if !(crate::src::cgame::cg_main::cg.weaponSelect == crate::bg_public_h::WP_GAUNTLET as i32)
+        if !(cg.weaponSelect == WP_GAUNTLET as i32)
         {
-            if CG_WeaponSelectable(crate::src::cgame::cg_main::cg.weaponSelect) as u64 != 0 {
+            if CG_WeaponSelectable(cg.weaponSelect) as u64 != 0 {
                 break;
             }
         }
@@ -2755,7 +2755,7 @@ pub unsafe extern "C" fn CG_PrevWeapon_f() {
         // never cycle to gauntlet
     }
     if i == 16 as i32 {
-        crate::src::cgame::cg_main::cg.weaponSelect = original
+        cg.weaponSelect = original
     };
 }
 /*
@@ -2767,26 +2767,26 @@ CG_Weapon_f
 
 pub unsafe extern "C" fn CG_Weapon_f() {
     let mut num: i32 = 0;
-    if crate::src::cgame::cg_main::cg.snap.is_null() {
+    if cg.snap.is_null() {
         return;
     }
-    if (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0 {
+    if (*cg.snap).ps.pm_flags & 4096 as i32 != 0 {
         return;
     }
-    num = atoi(crate::src::cgame::cg_main::CG_Argv(1 as i32));
+    num = atoi(CG_Argv(1 as i32));
     if num < 1 as i32 || num > 16 as i32 - 1 as i32 {
         return;
     }
-    crate::src::cgame::cg_main::cg.weaponSelectTime = crate::src::cgame::cg_main::cg.time;
-    if (*crate::src::cgame::cg_main::cg.snap).ps.stats
-        [crate::bg_public_h::STAT_WEAPONS as i32 as usize]
+    cg.weaponSelectTime = cg.time;
+    if (*cg.snap).ps.stats
+        [STAT_WEAPONS as i32 as usize]
         & (1 as i32) << num
         == 0
     {
         return;
         // don't have the weapon
     }
-    crate::src::cgame::cg_main::cg.weaponSelect = num;
+    cg.weaponSelect = num;
 }
 /*
 ===================
@@ -2799,11 +2799,11 @@ The current weapon has just run out of ammo
 
 pub unsafe extern "C" fn CG_OutOfAmmoChange() {
     let mut i: i32 = 0;
-    crate::src::cgame::cg_main::cg.weaponSelectTime = crate::src::cgame::cg_main::cg.time;
+    cg.weaponSelectTime = cg.time;
     i = 16 as i32 - 1 as i32;
     while i > 0 as i32 {
         if CG_WeaponSelectable(i) as u64 != 0 {
-            crate::src::cgame::cg_main::cg.weaponSelect = i;
+            cg.weaponSelect = i;
             break;
         } else {
             i -= 1
@@ -2826,42 +2826,42 @@ Caused by an EV_FIRE_WEAPON event
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut crate::cg_local_h::centity_t) {
-    let mut ent: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
+pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
+    let mut ent: *mut entityState_t =
+        0 as *mut entityState_t;
     let mut c: i32 = 0;
-    let mut weap: *mut crate::cg_local_h::weaponInfo_t = 0 as *mut crate::cg_local_h::weaponInfo_t;
+    let mut weap: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
     ent = &mut (*cent).currentState;
-    if (*ent).weapon == crate::bg_public_h::WP_NONE as i32 {
+    if (*ent).weapon == WP_NONE as i32 {
         return;
     }
-    if (*ent).weapon >= crate::bg_public_h::WP_NUM_WEAPONS as i32 {
-        crate::src::cgame::cg_main::CG_Error(
+    if (*ent).weapon >= WP_NUM_WEAPONS as i32 {
+        CG_Error(
             b"CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS\x00" as *const u8 as *const libc::c_char,
         );
     }
-    weap = &mut *crate::src::cgame::cg_main::cg_weapons
+    weap = &mut *cg_weapons
         .as_mut_ptr()
-        .offset((*ent).weapon as isize) as *mut crate::cg_local_h::weaponInfo_t;
+        .offset((*ent).weapon as isize) as *mut weaponInfo_t;
     // mark the entity as muzzle flashing, so when it is added it will
     // append the flash to the weapon model
-    (*cent).muzzleFlashTime = crate::src::cgame::cg_main::cg.time;
+    (*cent).muzzleFlashTime = cg.time;
     // lightning gun only does this this on initial press
-    if (*ent).weapon == crate::bg_public_h::WP_LIGHTNING as i32 {
+    if (*ent).weapon == WP_LIGHTNING as i32 {
         if (*cent).pe.lightningFiring != 0 {
             return;
         }
     }
-    if (*ent).weapon == crate::bg_public_h::WP_RAILGUN as i32 {
-        (*cent).pe.railFireTime = crate::src::cgame::cg_main::cg.time
+    if (*ent).weapon == WP_RAILGUN as i32 {
+        (*cent).pe.railFireTime = cg.time
     }
     // play quad sound if needed
-    if (*cent).currentState.powerups & (1 as i32) << crate::bg_public_h::PW_QUAD as i32 != 0 {
-        crate::src::cgame::cg_syscalls::trap_S_StartSound(
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+    if (*cent).currentState.powerups & (1 as i32) << PW_QUAD as i32 != 0 {
+        trap_S_StartSound(
+            0 as *mut vec_t,
             (*cent).currentState.number,
-            crate::src::qcommon::q_shared::CHAN_ITEM as i32,
-            crate::src::cgame::cg_main::cgs.media.quadSound,
+            CHAN_ITEM as i32,
+            cgs.media.quadSound,
         );
     }
     // play a sound
@@ -2873,19 +2873,19 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut crate::cg_local_h::centity
         c += 1
     }
     if c > 0 as i32 {
-        c = ::libc::rand() % c;
+        c = rand() % c;
         if (*weap).flashSound[c as usize] != 0 {
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*ent).number,
-                crate::src::qcommon::q_shared::CHAN_WEAPON as i32,
+                CHAN_WEAPON as i32,
                 (*weap).flashSound[c as usize],
             );
         }
     }
     // do brass ejection
     if (*weap).ejectBrassFunc.is_some()
-        && crate::src::cgame::cg_main::cg_brassTime.integer > 0 as i32
+        && cg_brassTime.integer > 0 as i32
     {
         (*weap).ejectBrassFunc.expect("non-null function pointer")(cent);
     };
@@ -2902,58 +2902,58 @@ Caused by an EV_MISSILE_MISS event, or directly by local bullet tracing
 pub unsafe extern "C" fn CG_MissileHitWall(
     mut weapon: i32,
     mut clientNum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _soundType: crate::cg_local_h::impactSound_t,
+    mut origin: *mut vec_t,
+    mut dir: *mut vec_t,
+    mut _soundType: impactSound_t,
 ) {
-    let mut mod_0: crate::src::qcommon::q_shared::qhandle_t = 0;
-    let mut mark: crate::src::qcommon::q_shared::qhandle_t = 0;
-    let mut shader: crate::src::qcommon::q_shared::qhandle_t = 0;
-    let mut sfx: crate::src::qcommon::q_shared::sfxHandle_t = 0;
+    let mut mod_0: qhandle_t = 0;
+    let mut mark: qhandle_t = 0;
+    let mut shader: qhandle_t = 0;
+    let mut sfx: sfxHandle_t = 0;
     let mut radius: f32 = 0.;
     let mut light: f32 = 0.;
-    let mut lightColor: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut le: *mut crate::cg_local_h::localEntity_t = 0 as *mut crate::cg_local_h::localEntity_t;
+    let mut lightColor: vec3_t = [0.; 3];
+    let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut r: i32 = 0;
-    let mut alphaFade: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut isSprite: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut alphaFade: qboolean =
+        qfalse;
+    let mut isSprite: qboolean =
+        qfalse;
     let mut duration: i32 = 0;
-    let mut sprOrg: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sprVel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut sprOrg: vec3_t = [0.; 3];
+    let mut sprVel: vec3_t = [0.; 3];
     mod_0 = 0 as i32;
     shader = 0 as i32;
     light = 0 as i32 as f32;
-    lightColor[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    lightColor[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    lightColor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    lightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+    lightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+    lightColor[2 as i32 as usize] = 0 as i32 as vec_t;
     // set defaults
-    isSprite = crate::src::qcommon::q_shared::qfalse;
+    isSprite = qfalse;
     duration = 600 as i32;
     match weapon {
         4 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.dishFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.grenadeExplosionShader;
-            sfx = crate::src::cgame::cg_main::cgs.media.sfx_rockexp;
-            mark = crate::src::cgame::cg_main::cgs.media.burnMarkShader;
+            mod_0 = cgs.media.dishFlashModel;
+            shader = cgs.media.grenadeExplosionShader;
+            sfx = cgs.media.sfx_rockexp;
+            mark = cgs.media.burnMarkShader;
             radius = 64 as i32 as f32;
             light = 300 as i32 as f32;
-            isSprite = crate::src::qcommon::q_shared::qtrue
+            isSprite = qtrue
         }
         5 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.dishFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.rocketExplosionShader;
-            sfx = crate::src::cgame::cg_main::cgs.media.sfx_rockexp;
-            mark = crate::src::cgame::cg_main::cgs.media.burnMarkShader;
+            mod_0 = cgs.media.dishFlashModel;
+            shader = cgs.media.rocketExplosionShader;
+            sfx = cgs.media.sfx_rockexp;
+            mark = cgs.media.burnMarkShader;
             radius = 64 as i32 as f32;
             light = 300 as i32 as f32;
-            isSprite = crate::src::qcommon::q_shared::qtrue;
+            isSprite = qtrue;
             duration = 1000 as i32;
-            lightColor[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-            lightColor[1 as i32 as usize] = 0.75f64 as crate::src::qcommon::q_shared::vec_t;
-            lightColor[2 as i32 as usize] = 0.0f64 as crate::src::qcommon::q_shared::vec_t;
-            if crate::src::cgame::cg_main::cg_oldRocket.integer == 0 as i32 {
+            lightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            lightColor[1 as i32 as usize] = 0.75f64 as vec_t;
+            lightColor[2 as i32 as usize] = 0.0f64 as vec_t;
+            if cg_oldRocket.integer == 0 as i32 {
                 // explosion sprite animation
                 sprOrg[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
                     + *dir.offset(0 as i32 as isize) * 24 as i32 as f32;
@@ -2964,7 +2964,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
                 sprVel[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 64 as i32 as f32;
                 sprVel[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 64 as i32 as f32;
                 sprVel[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 64 as i32 as f32;
-                crate::src::cgame::cg_particles::CG_ParticleExplosion(
+                CG_ParticleExplosion(
                     b"explode1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     sprOrg.as_mut_ptr(),
                     sprVel.as_mut_ptr(),
@@ -2975,68 +2975,68 @@ pub unsafe extern "C" fn CG_MissileHitWall(
             }
         }
         7 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.ringFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.railExplosionShader;
+            mod_0 = cgs.media.ringFlashModel;
+            shader = cgs.media.railExplosionShader;
             //sfx = cgs.media.sfx_railg;
-            sfx = crate::src::cgame::cg_main::cgs.media.sfx_plasmaexp;
-            mark = crate::src::cgame::cg_main::cgs.media.energyMarkShader;
+            sfx = cgs.media.sfx_plasmaexp;
+            mark = cgs.media.energyMarkShader;
             radius = 24 as i32 as f32
         }
         8 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.ringFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.plasmaExplosionShader;
-            sfx = crate::src::cgame::cg_main::cgs.media.sfx_plasmaexp;
-            mark = crate::src::cgame::cg_main::cgs.media.energyMarkShader;
+            mod_0 = cgs.media.ringFlashModel;
+            shader = cgs.media.plasmaExplosionShader;
+            sfx = cgs.media.sfx_plasmaexp;
+            mark = cgs.media.energyMarkShader;
             radius = 16 as i32 as f32
         }
         9 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.dishFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.bfgExplosionShader;
-            sfx = crate::src::cgame::cg_main::cgs.media.sfx_rockexp;
-            mark = crate::src::cgame::cg_main::cgs.media.burnMarkShader;
+            mod_0 = cgs.media.dishFlashModel;
+            shader = cgs.media.bfgExplosionShader;
+            sfx = cgs.media.sfx_rockexp;
+            mark = cgs.media.burnMarkShader;
             radius = 32 as i32 as f32;
-            isSprite = crate::src::qcommon::q_shared::qtrue
+            isSprite = qtrue
         }
         3 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.bulletFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.bulletExplosionShader;
-            mark = crate::src::cgame::cg_main::cgs.media.bulletMarkShader;
+            mod_0 = cgs.media.bulletFlashModel;
+            shader = cgs.media.bulletExplosionShader;
+            mark = cgs.media.bulletMarkShader;
             sfx = 0 as i32;
             radius = 4 as i32 as f32
         }
         2 => {
-            mod_0 = crate::src::cgame::cg_main::cgs.media.bulletFlashModel;
-            shader = crate::src::cgame::cg_main::cgs.media.bulletExplosionShader;
-            mark = crate::src::cgame::cg_main::cgs.media.bulletMarkShader;
-            r = ::libc::rand() & 3 as i32;
+            mod_0 = cgs.media.bulletFlashModel;
+            shader = cgs.media.bulletExplosionShader;
+            mark = cgs.media.bulletMarkShader;
+            r = rand() & 3 as i32;
             if r == 0 as i32 {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_ric1
+                sfx = cgs.media.sfx_ric1
             } else if r == 1 as i32 {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_ric2
+                sfx = cgs.media.sfx_ric2
             } else {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_ric3
+                sfx = cgs.media.sfx_ric3
             }
             radius = 8 as i32 as f32
         }
         6 | _ => {
             // no explosion at LG impact, it is added with the beam
-            r = ::libc::rand() & 3 as i32;
+            r = rand() & 3 as i32;
             if r < 2 as i32 {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_lghit2
+                sfx = cgs.media.sfx_lghit2
             } else if r == 2 as i32 {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_lghit1
+                sfx = cgs.media.sfx_lghit1
             } else {
-                sfx = crate::src::cgame::cg_main::cgs.media.sfx_lghit3
+                sfx = cgs.media.sfx_lghit3
             }
-            mark = crate::src::cgame::cg_main::cgs.media.holeMarkShader;
+            mark = cgs.media.holeMarkShader;
             radius = 12 as i32 as f32
         }
     }
     if sfx != 0 {
-        crate::src::cgame::cg_syscalls::trap_S_StartSound(
+        trap_S_StartSound(
             origin,
             ((1 as i32) << 10 as i32) - 2 as i32,
-            crate::src::qcommon::q_shared::CHAN_AUTO as i32,
+            CHAN_AUTO as i32,
             sfx,
         );
     }
@@ -3044,74 +3044,74 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     // create the explosion
     //
     if mod_0 != 0 {
-        le = crate::src::cgame::cg_effects::CG_MakeExplosion(
+        le = CG_MakeExplosion(
             origin, dir, mod_0, shader, duration, isSprite,
-        ) as *mut crate::cg_local_h::localEntity_s;
+        ) as *mut localEntity_s;
         (*le).light = light;
         (*le).lightColor[0 as i32 as usize] = lightColor[0 as i32 as usize];
         (*le).lightColor[1 as i32 as usize] = lightColor[1 as i32 as usize];
         (*le).lightColor[2 as i32 as usize] = lightColor[2 as i32 as usize];
-        if weapon == crate::bg_public_h::WP_RAILGUN as i32 {
+        if weapon == WP_RAILGUN as i32 {
             // colorize with client color
-            (*le).color[0 as i32 as usize] = crate::src::cgame::cg_main::cgs.clientinfo
+            (*le).color[0 as i32 as usize] = cgs.clientinfo
                 [clientNum as usize]
                 .color1[0 as i32 as usize];
-            (*le).color[1 as i32 as usize] = crate::src::cgame::cg_main::cgs.clientinfo
+            (*le).color[1 as i32 as usize] = cgs.clientinfo
                 [clientNum as usize]
                 .color1[1 as i32 as usize];
-            (*le).color[2 as i32 as usize] = crate::src::cgame::cg_main::cgs.clientinfo
+            (*le).color[2 as i32 as usize] = cgs.clientinfo
                 [clientNum as usize]
                 .color1[2 as i32 as usize];
             (*le).refEntity.shaderRGBA[0 as i32 as usize] = ((*le).color[0 as i32 as usize]
                 * 0xff as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             (*le).refEntity.shaderRGBA[1 as i32 as usize] = ((*le).color[1 as i32 as usize]
                 * 0xff as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             (*le).refEntity.shaderRGBA[2 as i32 as usize] = ((*le).color[2 as i32 as usize]
                 * 0xff as i32 as f32)
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             (*le).refEntity.shaderRGBA[3 as i32 as usize] =
-                0xff as i32 as crate::src::qcommon::q_shared::byte
+                0xff as i32 as byte
         }
     }
     //
     // impact mark
     //
-    alphaFade = (mark == crate::src::cgame::cg_main::cgs.media.energyMarkShader) as i32
-        as crate::src::qcommon::q_shared::qboolean; // plasma fades alpha, all others fade color
-    if weapon == crate::bg_public_h::WP_RAILGUN as i32 {
+    alphaFade = (mark == cgs.media.energyMarkShader) as i32
+        as qboolean; // plasma fades alpha, all others fade color
+    if weapon == WP_RAILGUN as i32 {
         let mut color: *mut f32 = 0 as *mut f32;
         // colorize with client color
-        color = crate::src::cgame::cg_main::cgs.clientinfo[clientNum as usize]
+        color = cgs.clientinfo[clientNum as usize]
             .color1
             .as_mut_ptr();
-        crate::src::cgame::cg_marks::CG_ImpactMark(
+        CG_ImpactMark(
             mark,
-            origin as *const crate::src::qcommon::q_shared::vec_t,
-            dir as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
+            origin as *const vec_t,
+            dir as *const vec_t,
+            (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             *color.offset(0 as i32 as isize),
             *color.offset(1 as i32 as isize),
             *color.offset(2 as i32 as isize),
             1 as i32 as f32,
             alphaFade,
             radius,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
     } else {
-        crate::src::cgame::cg_marks::CG_ImpactMark(
+        CG_ImpactMark(
             mark,
-            origin as *const crate::src::qcommon::q_shared::vec_t,
-            dir as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
+            origin as *const vec_t,
+            dir as *const vec_t,
+            (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             alphaFade,
             radius,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
     };
 }
@@ -3124,11 +3124,11 @@ CG_MissileHitPlayer
 
 pub unsafe extern "C" fn CG_MissileHitPlayer(
     mut weapon: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut dir: *mut vec_t,
     mut entityNum: i32,
 ) {
-    crate::src::cgame::cg_effects::CG_Bleed(origin, entityNum);
+    CG_Bleed(origin, entityNum);
     // some weapons will make an explosion with the blood, while
     // others will just make the blood
     match weapon {
@@ -3138,7 +3138,7 @@ pub unsafe extern "C" fn CG_MissileHitPlayer(
                 0 as i32,
                 origin,
                 dir,
-                crate::cg_local_h::IMPACTSOUND_FLESH,
+                IMPACTSOUND_FLESH,
             );
         }
         _ => {}
@@ -3158,16 +3158,16 @@ CG_ShotgunPellet
 */
 
 unsafe extern "C" fn CG_ShotgunPellet(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut skipNum: i32,
 ) {
-    let mut tr: crate::src::qcommon::q_shared::trace_t = crate::src::qcommon::q_shared::trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut tr: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -3180,40 +3180,40 @@ unsafe extern "C" fn CG_ShotgunPellet(
     };
     let mut sourceContentType: i32 = 0;
     let mut destContentType: i32 = 0;
-    crate::src::cgame::cg_predict::CG_Trace(
-        &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-        start as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        end as *const crate::src::qcommon::q_shared::vec_t,
+    CG_Trace(
+        &mut tr as *mut _ as *mut trace_t,
+        start as *const vec_t,
+        0 as *const vec_t,
+        0 as *const vec_t,
+        end as *const vec_t,
         skipNum,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
     );
-    sourceContentType = crate::src::cgame::cg_predict::CG_PointContents(
-        start as *const crate::src::qcommon::q_shared::vec_t,
+    sourceContentType = CG_PointContents(
+        start as *const vec_t,
         0 as i32,
     );
-    destContentType = crate::src::cgame::cg_predict::CG_PointContents(
-        tr.endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    destContentType = CG_PointContents(
+        tr.endpos.as_mut_ptr() as *const vec_t,
         0 as i32,
     );
     // FIXME: should probably move this cruft into CG_BubbleTrail
     if sourceContentType == destContentType {
         if sourceContentType & 32 as i32 != 0 {
-            crate::src::cgame::cg_effects::CG_BubbleTrail(
+            CG_BubbleTrail(
                 start,
                 tr.endpos.as_mut_ptr(),
                 32 as i32 as f32,
             );
         }
     } else if sourceContentType & 32 as i32 != 0 {
-        let mut trace: crate::src::qcommon::q_shared::trace_t =
-            crate::src::qcommon::q_shared::trace_t {
-                allsolid: crate::src::qcommon::q_shared::qfalse,
-                startsolid: crate::src::qcommon::q_shared::qfalse,
+        let mut trace: trace_t =
+            trace_t {
+                allsolid: qfalse,
+                startsolid: qfalse,
                 fraction: 0.,
                 endpos: [0.; 3],
-                plane: crate::src::qcommon::q_shared::cplane_t {
+                plane: cplane_t {
                     normal: [0.; 3],
                     dist: 0.,
                     type_0: 0,
@@ -3224,28 +3224,28 @@ unsafe extern "C" fn CG_ShotgunPellet(
                 contents: 0,
                 entityNum: 0,
             };
-        crate::src::cgame::cg_syscalls::trap_CM_BoxTrace(
-            &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-            end as *const crate::src::qcommon::q_shared::vec_t,
-            start as *const crate::src::qcommon::q_shared::vec_t,
-            0 as *const crate::src::qcommon::q_shared::vec_t,
-            0 as *const crate::src::qcommon::q_shared::vec_t,
+        trap_CM_BoxTrace(
+            &mut trace as *mut _ as *mut trace_t,
+            end as *const vec_t,
+            start as *const vec_t,
+            0 as *const vec_t,
+            0 as *const vec_t,
             0 as i32,
             32 as i32,
         );
-        crate::src::cgame::cg_effects::CG_BubbleTrail(
+        CG_BubbleTrail(
             start,
             trace.endpos.as_mut_ptr(),
             32 as i32 as f32,
         );
     } else if destContentType & 32 as i32 != 0 {
-        let mut trace_0: crate::src::qcommon::q_shared::trace_t =
-            crate::src::qcommon::q_shared::trace_t {
-                allsolid: crate::src::qcommon::q_shared::qfalse,
-                startsolid: crate::src::qcommon::q_shared::qfalse,
+        let mut trace_0: trace_t =
+            trace_t {
+                allsolid: qfalse,
+                startsolid: qfalse,
                 fraction: 0.,
                 endpos: [0.; 3],
-                plane: crate::src::qcommon::q_shared::cplane_t {
+                plane: cplane_t {
                     normal: [0.; 3],
                     dist: 0.,
                     type_0: 0,
@@ -3256,16 +3256,16 @@ unsafe extern "C" fn CG_ShotgunPellet(
                 contents: 0,
                 entityNum: 0,
             };
-        crate::src::cgame::cg_syscalls::trap_CM_BoxTrace(
-            &mut trace_0 as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-            start as *const crate::src::qcommon::q_shared::vec_t,
-            end as *const crate::src::qcommon::q_shared::vec_t,
-            0 as *const crate::src::qcommon::q_shared::vec_t,
-            0 as *const crate::src::qcommon::q_shared::vec_t,
+        trap_CM_BoxTrace(
+            &mut trace_0 as *mut _ as *mut trace_t,
+            start as *const vec_t,
+            end as *const vec_t,
+            0 as *const vec_t,
+            0 as *const vec_t,
             0 as i32,
             32 as i32,
         );
-        crate::src::cgame::cg_effects::CG_BubbleTrail(
+        CG_BubbleTrail(
             tr.endpos.as_mut_ptr(),
             trace_0.endpos.as_mut_ptr(),
             32 as i32 as f32,
@@ -3274,13 +3274,13 @@ unsafe extern "C" fn CG_ShotgunPellet(
     if tr.surfaceFlags & 0x10 as i32 != 0 {
         return;
     }
-    if crate::src::cgame::cg_main::cg_entities[tr.entityNum as usize]
+    if cg_entities[tr.entityNum as usize]
         .currentState
         .eType
-        == crate::bg_public_h::ET_PLAYER as i32
+        == ET_PLAYER as i32
     {
         CG_MissileHitPlayer(
-            crate::bg_public_h::WP_SHOTGUN as i32,
+            WP_SHOTGUN as i32,
             tr.endpos.as_mut_ptr(),
             tr.plane.normal.as_mut_ptr(),
             tr.entityNum,
@@ -3292,19 +3292,19 @@ unsafe extern "C" fn CG_ShotgunPellet(
         }
         if tr.surfaceFlags & 0x1000 as i32 != 0 {
             CG_MissileHitWall(
-                crate::bg_public_h::WP_SHOTGUN as i32,
+                WP_SHOTGUN as i32,
                 0 as i32,
                 tr.endpos.as_mut_ptr(),
                 tr.plane.normal.as_mut_ptr(),
-                crate::cg_local_h::IMPACTSOUND_METAL,
+                IMPACTSOUND_METAL,
             );
         } else {
             CG_MissileHitWall(
-                crate::bg_public_h::WP_SHOTGUN as i32,
+                WP_SHOTGUN as i32,
                 0 as i32,
                 tr.endpos.as_mut_ptr(),
                 tr.plane.normal.as_mut_ptr(),
-                crate::cg_local_h::IMPACTSOUND_DEFAULT,
+                IMPACTSOUND_DEFAULT,
             );
         }
     };
@@ -3319,40 +3319,40 @@ hit splashes
 */
 
 unsafe extern "C" fn CG_ShotgunPattern(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut origin2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut origin2: *mut vec_t,
     mut seed: i32,
     mut otherEntNum: i32,
 ) {
     let mut i: i32 = 0;
     let mut r: f32 = 0.;
     let mut u: f32 = 0.;
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
     // derive the right and up vectors from the forward vector, because
     // the client won't have any other information
-    crate::src::qcommon::q_math::VectorNormalize2(
-        origin2 as *const crate::src::qcommon::q_shared::vec_t,
+    VectorNormalize2(
+        origin2 as *const vec_t,
         forward.as_mut_ptr(),
     );
-    crate::src::qcommon::q_math::PerpendicularVector(
+    PerpendicularVector(
         right.as_mut_ptr(),
-        forward.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        forward.as_mut_ptr() as *const vec_t,
     );
     CrossProduct(
-        forward.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        right.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        forward.as_mut_ptr() as *const vec_t,
+        right.as_mut_ptr() as *const vec_t,
         up.as_mut_ptr(),
     );
     // generate the "random" spread pattern
     i = 0 as i32;
     while i < 11 as i32 {
-        r = crate::src::qcommon::q_math::Q_crandom(&mut seed)
+        r = Q_crandom(&mut seed)
             * 700 as i32 as f32
             * 16 as i32 as f32;
-        u = crate::src::qcommon::q_math::Q_crandom(&mut seed)
+        u = Q_crandom(&mut seed)
             * 700 as i32 as f32
             * 16 as i32 as f32;
         end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
@@ -3378,47 +3378,47 @@ CG_ShotgunFire
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ShotgunFire(mut es: *mut crate::src::qcommon::q_shared::entityState_t) {
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn CG_ShotgunFire(mut es: *mut entityState_t) {
+    let mut v: vec3_t = [0.; 3];
     let mut contents: i32 = 0;
     v[0 as i32 as usize] = (*es).origin2[0 as i32 as usize] - (*es).pos.trBase[0 as i32 as usize];
     v[1 as i32 as usize] = (*es).origin2[1 as i32 as usize] - (*es).pos.trBase[1 as i32 as usize];
     v[2 as i32 as usize] = (*es).origin2[2 as i32 as usize] - (*es).pos.trBase[2 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
+    VectorNormalize(v.as_mut_ptr());
     v[0 as i32 as usize] = v[0 as i32 as usize] * 32 as i32 as f32;
     v[1 as i32 as usize] = v[1 as i32 as usize] * 32 as i32 as f32;
     v[2 as i32 as usize] = v[2 as i32 as usize] * 32 as i32 as f32;
     v[0 as i32 as usize] = (*es).pos.trBase[0 as i32 as usize] + v[0 as i32 as usize];
     v[1 as i32 as usize] = (*es).pos.trBase[1 as i32 as usize] + v[1 as i32 as usize];
     v[2 as i32 as usize] = (*es).pos.trBase[2 as i32 as usize] + v[2 as i32 as usize];
-    if crate::src::cgame::cg_main::cgs.glconfig.hardwareType as u32
-        != crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
+    if cgs.glconfig.hardwareType as u32
+        != GLHW_RAGEPRO as i32 as u32
     {
         // ragepro can't alpha fade, so don't even bother with smoke
-        let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        contents = crate::src::cgame::cg_predict::CG_PointContents(
-            (*es).pos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        let mut up: vec3_t = [0.; 3];
+        contents = CG_PointContents(
+            (*es).pos.trBase.as_mut_ptr() as *const vec_t,
             0 as i32,
         );
         if contents & 32 as i32 == 0 {
-            up[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            up[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            up[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+            up[0 as i32 as usize] = 0 as i32 as vec_t;
+            up[1 as i32 as usize] = 0 as i32 as vec_t;
+            up[2 as i32 as usize] = 8 as i32 as vec_t;
 
-            crate::src::cgame::cg_effects::CG_SmokePuff(
-                v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            CG_SmokePuff(
+                v.as_mut_ptr() as *const vec_t,
+                up.as_mut_ptr() as *const vec_t,
                 32 as i32 as f32,
                 1 as i32 as f32,
                 1 as i32 as f32,
                 1 as i32 as f32,
                 0.33f32,
                 900 as i32 as f32,
-                crate::src::cgame::cg_main::cg.time,
+                cg.time,
                 0 as i32,
-                crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32,
-                crate::src::cgame::cg_main::cgs.media.shotgunSmokePuffShader,
-            ) as *mut crate::cg_local_h::localEntity_s;
+                LEF_PUFF_DONT_SCALE as i32,
+                cgs.media.shotgunSmokePuffShader,
+            ) as *mut localEntity_s;
         }
     }
     CG_ShotgunPattern(
@@ -3443,23 +3443,23 @@ CG_Tracer
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Tracer(
-    mut source: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dest: *mut crate::src::qcommon::q_shared::vec_t,
+    mut source: *mut vec_t,
+    mut dest: *mut vec_t,
 ) {
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut verts: [crate::tr_types_h::polyVert_t; 4] = [crate::tr_types_h::polyVert_t {
+    let mut forward: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut verts: [polyVert_t; 4] = [polyVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         modulate: [0; 4],
     }; 4];
-    let mut line: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut line: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     let mut begin: f32 = 0.;
     let mut end: f32 = 0.;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut finish: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut midpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut finish: vec3_t = [0.; 3];
+    let mut midpoint: vec3_t = [0.; 3];
     // tracer
     forward[0 as i32 as usize] =
         *dest.offset(0 as i32 as isize) - *source.offset(0 as i32 as isize);
@@ -3467,14 +3467,14 @@ pub unsafe extern "C" fn CG_Tracer(
         *dest.offset(1 as i32 as isize) - *source.offset(1 as i32 as isize);
     forward[2 as i32 as usize] =
         *dest.offset(2 as i32 as isize) - *source.offset(2 as i32 as isize);
-    len = crate::src::qcommon::q_math::VectorNormalize(forward.as_mut_ptr());
+    len = VectorNormalize(forward.as_mut_ptr());
     // start at least a little ways from the muzzle
     if len < 100 as i32 as f32 {
         return;
     }
     begin = 50 as i32 as f32
-        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * (len - 60 as i32 as f32);
-    end = begin + crate::src::cgame::cg_main::cg_tracerLength.value;
+        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * (len - 60 as i32 as f32);
+    end = begin + cg_tracerLength.value;
     if end > len {
         end = len
     }
@@ -3491,117 +3491,117 @@ pub unsafe extern "C" fn CG_Tracer(
     finish[2 as i32 as usize] =
         *source.offset(2 as i32 as isize) + forward[2 as i32 as usize] * end;
     line[0 as i32 as usize] = forward[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
+        * cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
         + forward[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
+            * cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
         + forward[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+            * cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
     line[1 as i32 as usize] = forward[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
+        * cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
         + forward[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
+            * cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
         + forward[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
-    right[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+            * cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
+    right[0 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
         [0 as i32 as usize]
         * line[1 as i32 as usize];
-    right[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+    right[1 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
         [1 as i32 as usize]
         * line[1 as i32 as usize];
-    right[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+    right[2 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
         [2 as i32 as usize]
         * line[1 as i32 as usize];
     right[0 as i32 as usize] = right[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
+        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
             * -line[0 as i32 as usize];
     right[1 as i32 as usize] = right[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
+        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
             * -line[0 as i32 as usize];
     right[2 as i32 as usize] = right[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
+        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
             * -line[0 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(right.as_mut_ptr());
+    VectorNormalize(right.as_mut_ptr());
     verts[0 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
-        + right[0 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[0 as i32 as usize] * cg_tracerWidth.value;
     verts[0 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
-        + right[1 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[1 as i32 as usize] * cg_tracerWidth.value;
     verts[0 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
-        + right[2 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[2 as i32 as usize] * cg_tracerWidth.value;
     verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[0 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
     verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[1 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
-        + right[0 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[0 as i32 as usize] * -cg_tracerWidth.value;
     verts[1 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
-        + right[1 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[1 as i32 as usize] * -cg_tracerWidth.value;
     verts[1 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
-        + right[2 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[2 as i32 as usize] * -cg_tracerWidth.value;
     verts[1 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[1 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
     verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[2 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
-        + right[0 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[0 as i32 as usize] * -cg_tracerWidth.value;
     verts[2 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
-        + right[1 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[1 as i32 as usize] * -cg_tracerWidth.value;
     verts[2 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
-        + right[2 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[2 as i32 as usize] * -cg_tracerWidth.value;
     verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
     verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[3 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
-        + right[0 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[0 as i32 as usize] * cg_tracerWidth.value;
     verts[3 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
-        + right[1 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[1 as i32 as usize] * cg_tracerWidth.value;
     verts[3 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
-        + right[2 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
+        + right[2 as i32 as usize] * cg_tracerWidth.value;
     verts[3 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
     verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+        255 as i32 as byte;
     verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
-    crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene(
-        crate::src::cgame::cg_main::cgs.media.tracerShader,
+        255 as i32 as byte;
+    trap_R_AddPolyToScene(
+        cgs.media.tracerShader,
         4 as i32,
-        verts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
+        verts.as_mut_ptr() as *const polyVert_t,
     );
     midpoint[0 as i32 as usize] = ((start[0 as i32 as usize] + finish[0 as i32 as usize]) as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        * 0.5f64) as vec_t;
     midpoint[1 as i32 as usize] = ((start[1 as i32 as usize] + finish[1 as i32 as usize]) as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        * 0.5f64) as vec_t;
     midpoint[2 as i32 as usize] = ((start[2 as i32 as usize] + finish[2 as i32 as usize]) as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        * 0.5f64) as vec_t;
     // add the tracer sound
-    crate::src::cgame::cg_syscalls::trap_S_StartSound(
+    trap_S_StartSound(
         midpoint.as_mut_ptr(),
         ((1 as i32) << 10 as i32) - 2 as i32,
-        crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-        crate::src::cgame::cg_main::cgs.media.tracerSound,
+        CHAN_AUTO as i32,
+        cgs.media.tracerSound,
     );
 }
 /*
@@ -3612,28 +3612,28 @@ CG_CalcMuzzlePoint
 
 unsafe extern "C" fn CG_CalcMuzzlePoint(
     mut entityNum: i32,
-    mut muzzle: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cent: *mut crate::cg_local_h::centity_t = 0 as *mut crate::cg_local_h::centity_t;
+    mut muzzle: *mut vec_t,
+) -> qboolean {
+    let mut forward: vec3_t = [0.; 3];
+    let mut cent: *mut centity_t = 0 as *mut centity_t;
     let mut anim: i32 = 0;
-    if entityNum == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+    if entityNum == (*cg.snap).ps.clientNum {
         *muzzle.offset(0 as i32 as isize) =
-            (*crate::src::cgame::cg_main::cg.snap).ps.origin[0 as i32 as usize];
+            (*cg.snap).ps.origin[0 as i32 as usize];
         *muzzle.offset(1 as i32 as isize) =
-            (*crate::src::cgame::cg_main::cg.snap).ps.origin[1 as i32 as usize];
+            (*cg.snap).ps.origin[1 as i32 as usize];
         *muzzle.offset(2 as i32 as isize) =
-            (*crate::src::cgame::cg_main::cg.snap).ps.origin[2 as i32 as usize];
+            (*cg.snap).ps.origin[2 as i32 as usize];
         let ref mut fresh9 = *muzzle.offset(2 as i32 as isize);
-        *fresh9 += (*crate::src::cgame::cg_main::cg.snap).ps.viewheight as f32;
-        crate::src::qcommon::q_math::AngleVectors(
-            (*crate::src::cgame::cg_main::cg.snap)
+        *fresh9 += (*cg.snap).ps.viewheight as f32;
+        AngleVectors(
+            (*cg.snap)
                 .ps
                 .viewangles
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
         );
         *muzzle.offset(0 as i32 as isize) =
             *muzzle.offset(0 as i32 as isize) + forward[0 as i32 as usize] * 14 as i32 as f32;
@@ -3641,27 +3641,27 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
             *muzzle.offset(1 as i32 as isize) + forward[1 as i32 as usize] * 14 as i32 as f32;
         *muzzle.offset(2 as i32 as isize) =
             *muzzle.offset(2 as i32 as isize) + forward[2 as i32 as usize] * 14 as i32 as f32;
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    cent = &mut *crate::src::cgame::cg_main::cg_entities
+    cent = &mut *cg_entities
         .as_mut_ptr()
-        .offset(entityNum as isize) as *mut crate::cg_local_h::centity_t;
+        .offset(entityNum as isize) as *mut centity_t;
     if (*cent).currentValid as u64 == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     *muzzle.offset(0 as i32 as isize) = (*cent).currentState.pos.trBase[0 as i32 as usize];
     *muzzle.offset(1 as i32 as isize) = (*cent).currentState.pos.trBase[1 as i32 as usize];
     *muzzle.offset(2 as i32 as isize) = (*cent).currentState.pos.trBase[2 as i32 as usize];
-    crate::src::qcommon::q_math::AngleVectors(
+    AngleVectors(
         (*cent).currentState.apos.trBase.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
     );
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == crate::bg_public_h::LEGS_WALKCR as i32
-        || anim == crate::bg_public_h::LEGS_IDLECR as i32
+    if anim == LEGS_WALKCR as i32
+        || anim == LEGS_IDLECR as i32
     {
         let ref mut fresh10 = *muzzle.offset(2 as i32 as isize);
         *fresh10 += 12 as i32 as f32
@@ -3675,7 +3675,7 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
         *muzzle.offset(1 as i32 as isize) + forward[1 as i32 as usize] * 14 as i32 as f32;
     *muzzle.offset(2 as i32 as isize) =
         *muzzle.offset(2 as i32 as isize) + forward[2 as i32 as usize] * 14 as i32 as f32;
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //
 // cg_draw.c, cg_newDraw.c
@@ -3705,19 +3705,19 @@ Renders bullet effects.
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Bullet(
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut end: *mut vec_t,
     mut sourceEntityNum: i32,
-    mut normal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut flesh: crate::src::qcommon::q_shared::qboolean,
+    mut normal: *mut vec_t,
+    mut flesh: qboolean,
     mut fleshEntityNum: i32,
 ) {
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -3730,54 +3730,54 @@ pub unsafe extern "C" fn CG_Bullet(
         };
     let mut sourceContentType: i32 = 0;
     let mut destContentType: i32 = 0;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
     // if the shooter is currently valid, calc a source point and possibly
     // do trail effects
     if sourceEntityNum >= 0 as i32
-        && crate::src::cgame::cg_main::cg_tracerChance.value > 0 as i32 as f32
+        && cg_tracerChance.value > 0 as i32 as f32
     {
         if CG_CalcMuzzlePoint(sourceEntityNum, start.as_mut_ptr()) as u64 != 0 {
-            sourceContentType = crate::src::cgame::cg_predict::CG_PointContents(
-                start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            sourceContentType = CG_PointContents(
+                start.as_mut_ptr() as *const vec_t,
                 0 as i32,
             );
-            destContentType = crate::src::cgame::cg_predict::CG_PointContents(
-                end as *const crate::src::qcommon::q_shared::vec_t,
+            destContentType = CG_PointContents(
+                end as *const vec_t,
                 0 as i32,
             );
             // do a complete bubble trail if necessary
             if sourceContentType == destContentType && sourceContentType & 32 as i32 != 0 {
-                crate::src::cgame::cg_effects::CG_BubbleTrail(
+                CG_BubbleTrail(
                     start.as_mut_ptr(),
                     end,
                     32 as i32 as f32,
                 );
             } else if sourceContentType & 32 as i32 != 0 {
-                crate::src::cgame::cg_syscalls::trap_CM_BoxTrace(
-                    &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-                    end as *const crate::src::qcommon::q_shared::vec_t,
-                    start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                    0 as *const crate::src::qcommon::q_shared::vec_t,
-                    0 as *const crate::src::qcommon::q_shared::vec_t,
+                trap_CM_BoxTrace(
+                    &mut trace as *mut _ as *mut trace_t,
+                    end as *const vec_t,
+                    start.as_mut_ptr() as *const vec_t,
+                    0 as *const vec_t,
+                    0 as *const vec_t,
                     0 as i32,
                     32 as i32,
                 );
-                crate::src::cgame::cg_effects::CG_BubbleTrail(
+                CG_BubbleTrail(
                     start.as_mut_ptr(),
                     trace.endpos.as_mut_ptr(),
                     32 as i32 as f32,
                 );
             } else if destContentType & 32 as i32 != 0 {
-                crate::src::cgame::cg_syscalls::trap_CM_BoxTrace(
-                    &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-                    start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                    end as *const crate::src::qcommon::q_shared::vec_t,
-                    0 as *const crate::src::qcommon::q_shared::vec_t,
-                    0 as *const crate::src::qcommon::q_shared::vec_t,
+                trap_CM_BoxTrace(
+                    &mut trace as *mut _ as *mut trace_t,
+                    start.as_mut_ptr() as *const vec_t,
+                    end as *const vec_t,
+                    0 as *const vec_t,
+                    0 as *const vec_t,
                     0 as i32,
                     32 as i32,
                 );
-                crate::src::cgame::cg_effects::CG_BubbleTrail(
+                CG_BubbleTrail(
                     trace.endpos.as_mut_ptr(),
                     end,
                     32 as i32 as f32,
@@ -3786,8 +3786,8 @@ pub unsafe extern "C" fn CG_Bullet(
             // bubble trail from water into air
             // bubble trail from air into water
             // draw a tracer
-            if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                < crate::src::cgame::cg_main::cg_tracerChance.value
+            if ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                < cg_tracerChance.value
             {
                 CG_Tracer(start.as_mut_ptr(), end);
             }
@@ -3795,14 +3795,14 @@ pub unsafe extern "C" fn CG_Bullet(
     }
     // impact splash and mark
     if flesh as u64 != 0 {
-        crate::src::cgame::cg_effects::CG_Bleed(end, fleshEntityNum);
+        CG_Bleed(end, fleshEntityNum);
     } else {
         CG_MissileHitWall(
-            crate::bg_public_h::WP_MACHINEGUN as i32,
+            WP_MACHINEGUN as i32,
             0 as i32,
             end,
             normal,
-            crate::cg_local_h::IMPACTSOUND_DEFAULT,
+            IMPACTSOUND_DEFAULT,
         );
     };
 }

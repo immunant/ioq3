@@ -83,11 +83,11 @@ pub use crate::zconf_h::voidpf;
 #[no_mangle]
 
 pub unsafe extern "C" fn fopen_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
     mut filename: *const libc::c_char,
     mut mode: i32,
-) -> crate::zconf_h::voidpf {
-    let mut file: *mut crate::stdlib::FILE = 0 as *mut crate::stdlib::FILE;
+) -> voidpf {
+    let mut file: *mut FILE = 0 as *mut FILE;
     let mut mode_fopen: *const libc::c_char = 0 as *const libc::c_char;
     if mode & 3 as i32 == 1 as i32 {
         mode_fopen = b"rb\x00" as *const u8 as *const libc::c_char
@@ -99,58 +99,58 @@ pub unsafe extern "C" fn fopen_file_func(
     if !filename.is_null() && !mode_fopen.is_null() {
         file = crate::stdlib::fopen(filename, mode_fopen)
     }
-    return file as crate::zconf_h::voidpf;
+    return file as voidpf;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn fread_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
     mut buf: *mut libc::c_void,
-    mut size: crate::zconf_h::uLong,
-) -> crate::zconf_h::uLong {
-    let mut ret: crate::zconf_h::uLong = 0;
+    mut size: uLong,
+) -> uLong {
+    let mut ret: uLong = 0;
     ret = crate::stdlib::fread(
         buf,
         1 as i32 as libc::c_ulong,
         size,
-        stream as *mut crate::stdlib::FILE,
+        stream as *mut FILE,
     );
     return ret;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn fwrite_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
     mut buf: *const libc::c_void,
-    mut size: crate::zconf_h::uLong,
-) -> crate::zconf_h::uLong {
-    let mut ret: crate::zconf_h::uLong = 0;
+    mut size: uLong,
+) -> uLong {
+    let mut ret: uLong = 0;
     ret = crate::stdlib::fwrite(
         buf,
         1 as i32 as libc::c_ulong,
         size,
-        stream as *mut crate::stdlib::FILE,
+        stream as *mut FILE,
     );
     return ret;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ftell_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
 ) -> isize {
     let mut ret: isize = 0;
-    ret = crate::stdlib::ftell(stream as *mut crate::stdlib::FILE);
+    ret = crate::stdlib::ftell(stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn fseek_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
-    mut offset: crate::zconf_h::uLong,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
+    mut offset: uLong,
     mut origin: i32,
 ) -> isize {
     let mut fseek_origin: i32 = 0 as i32;
@@ -163,7 +163,7 @@ pub unsafe extern "C" fn fseek_file_func(
     }
     ret = 0 as i32 as isize;
     crate::stdlib::fseek(
-        stream as *mut crate::stdlib::FILE,
+        stream as *mut FILE,
         offset as isize,
         fseek_origin,
     );
@@ -172,21 +172,21 @@ pub unsafe extern "C" fn fseek_file_func(
 #[no_mangle]
 
 pub unsafe extern "C" fn fclose_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
 ) -> i32 {
     let mut ret: i32 = 0;
-    ret = crate::stdlib::fclose(stream as *mut crate::stdlib::FILE);
+    ret = crate::stdlib::fclose(stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ferror_file_func(
-    mut _opaque: crate::zconf_h::voidpf,
-    mut stream: crate::zconf_h::voidpf,
+    mut _opaque: voidpf,
+    mut stream: voidpf,
 ) -> i32 {
     let mut ret: i32 = 0;
-    ret = crate::stdlib::ferror(stream as *mut crate::stdlib::FILE);
+    ret = crate::stdlib::ferror(stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
@@ -195,45 +195,45 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
     mut pzlib_filefunc_def: *mut crate::src::qcommon::ioapi::zlib_filefunc_def,
 ) {
     (*pzlib_filefunc_def).zopen_file = ::std::mem::transmute::<
-        Option<unsafe extern "C" fn() -> crate::zconf_h::voidpf>,
+        Option<unsafe extern "C" fn() -> voidpf>,
         crate::src::qcommon::ioapi::open_file_func,
     >(Some(::std::mem::transmute::<
         unsafe extern "C" fn(
-            _: crate::zconf_h::voidpf,
+            _: voidpf,
             _: *const libc::c_char,
             _: i32,
-        ) -> crate::zconf_h::voidpf,
-        unsafe extern "C" fn() -> crate::zconf_h::voidpf,
+        ) -> voidpf,
+        unsafe extern "C" fn() -> voidpf,
     >(fopen_file_func)));
     (*pzlib_filefunc_def).zread_file = ::std::mem::transmute::<
-        Option<unsafe extern "C" fn() -> crate::zconf_h::uLong>,
+        Option<unsafe extern "C" fn() -> uLong>,
         crate::src::qcommon::ioapi::read_file_func,
     >(Some(::std::mem::transmute::<
         unsafe extern "C" fn(
-            _: crate::zconf_h::voidpf,
-            _: crate::zconf_h::voidpf,
+            _: voidpf,
+            _: voidpf,
             _: *mut libc::c_void,
-            _: crate::zconf_h::uLong,
-        ) -> crate::zconf_h::uLong,
-        unsafe extern "C" fn() -> crate::zconf_h::uLong,
+            _: uLong,
+        ) -> uLong,
+        unsafe extern "C" fn() -> uLong,
     >(fread_file_func)));
     (*pzlib_filefunc_def).zwrite_file = ::std::mem::transmute::<
-        Option<unsafe extern "C" fn() -> crate::zconf_h::uLong>,
+        Option<unsafe extern "C" fn() -> uLong>,
         crate::src::qcommon::ioapi::write_file_func,
     >(Some(::std::mem::transmute::<
         unsafe extern "C" fn(
-            _: crate::zconf_h::voidpf,
-            _: crate::zconf_h::voidpf,
+            _: voidpf,
+            _: voidpf,
             _: *const libc::c_void,
-            _: crate::zconf_h::uLong,
-        ) -> crate::zconf_h::uLong,
-        unsafe extern "C" fn() -> crate::zconf_h::uLong,
+            _: uLong,
+        ) -> uLong,
+        unsafe extern "C" fn() -> uLong,
     >(fwrite_file_func)));
     (*pzlib_filefunc_def).ztell_file = ::std::mem::transmute::<
         Option<unsafe extern "C" fn() -> isize>,
         crate::src::qcommon::ioapi::tell_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> isize,
+        unsafe extern "C" fn(_: voidpf, _: voidpf) -> isize,
         unsafe extern "C" fn() -> isize,
     >(ftell_file_func)));
     (*pzlib_filefunc_def).zseek_file = ::std::mem::transmute::<
@@ -241,9 +241,9 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
         crate::src::qcommon::ioapi::seek_file_func,
     >(Some(::std::mem::transmute::<
         unsafe extern "C" fn(
-            _: crate::zconf_h::voidpf,
-            _: crate::zconf_h::voidpf,
-            _: crate::zconf_h::uLong,
+            _: voidpf,
+            _: voidpf,
+            _: uLong,
             _: i32,
         ) -> isize,
         unsafe extern "C" fn() -> isize,
@@ -252,14 +252,14 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
         Option<unsafe extern "C" fn() -> i32>,
         crate::src::qcommon::ioapi::close_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32,
+        unsafe extern "C" fn(_: voidpf, _: voidpf) -> i32,
         unsafe extern "C" fn() -> i32,
     >(fclose_file_func)));
     (*pzlib_filefunc_def).zerror_file = ::std::mem::transmute::<
         Option<unsafe extern "C" fn() -> i32>,
         crate::src::qcommon::ioapi::testerror_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32,
+        unsafe extern "C" fn(_: voidpf, _: voidpf) -> i32,
         unsafe extern "C" fn() -> i32,
     >(ferror_file_func)));
     (*pzlib_filefunc_def).opaque = 0 as *mut libc::c_void;

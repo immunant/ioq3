@@ -269,19 +269,19 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_inner_prod_aligned_scale(
-    inVec1: *const crate::opus_types_h::opus_int16,
-    inVec2: *const crate::opus_types_h::opus_int16,
+    inVec1: *const opus_int16,
+    inVec2: *const opus_int16,
     scale: i32,
     len: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /*    I vector lengths                                              */ {
     let mut i: i32 = 0;
-    let mut sum: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut sum: opus_int32 = 0 as i32;
     i = 0 as i32;
     while i < len {
         sum = sum
-            + (*inVec1.offset(i as isize) as crate::opus_types_h::opus_int32
-                * *inVec2.offset(i as isize) as crate::opus_types_h::opus_int32
+            + (*inVec1.offset(i as isize) as opus_int32
+                * *inVec2.offset(i as isize) as opus_int32
                 >> scale);
         i += 1
     }

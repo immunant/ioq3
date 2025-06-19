@@ -60,35 +60,35 @@ function: single-block PCM synthesis
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis(
-    mut vb: *mut crate::codec_h::vorbis_block,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vb: *mut vorbis_block,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut vd: *mut crate::codec_h::vorbis_dsp_state = if !vb.is_null() {
+    let mut vd: *mut vorbis_dsp_state = if !vb.is_null() {
         (*vb).vd
     } else {
-        0 as *mut crate::codec_h::vorbis_dsp_state
+        0 as *mut vorbis_dsp_state
     };
-    let mut b: *mut crate::codec_internal_h::private_state = if !vd.is_null() {
+    let mut b: *mut private_state = if !vd.is_null() {
         (*vd).backend_state
     } else {
         0 as *mut libc::c_void
     }
-        as *mut crate::codec_internal_h::private_state;
-    let mut vi: *mut crate::codec_h::vorbis_info = if !vd.is_null() {
+        as *mut private_state;
+    let mut vi: *mut vorbis_info = if !vd.is_null() {
         (*vd).vi
     } else {
-        0 as *mut crate::codec_h::vorbis_info
+        0 as *mut vorbis_info
     };
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info = if !vi.is_null() {
+    let mut ci: *mut codec_setup_info = if !vi.is_null() {
         (*vi).codec_setup
     } else {
         0 as *mut libc::c_void
     }
-        as *mut crate::codec_internal_h::codec_setup_info;
-    let mut opb: *mut crate::ogg_h::oggpack_buffer = if !vb.is_null() {
+        as *mut codec_setup_info;
+    let mut opb: *mut oggpack_buffer = if !vb.is_null() {
         &mut (*vb).opb
     } else {
-        0 as *mut crate::ogg_h::oggpack_buffer
+        0 as *mut oggpack_buffer
     };
     let mut type_0: i32 = 0;
     let mut mode: i32 = 0;
@@ -98,16 +98,16 @@ pub unsafe extern "C" fn vorbis_synthesis(
     }
     /* first things first.  Make sure decode is ready */
     crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_ripcord(
-        vb as *mut crate::codec_h::vorbis_block,
+        vb as *mut vorbis_block,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_readinit(
+        opb as *mut oggpack_buffer,
         (*op).packet,
         (*op).bytes as i32,
     );
     /* Check the packet type */
-    if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    if oggpack_read(
+        opb as *mut oggpack_buffer,
         1 as i32,
     ) != 0 as i32 as isize
     {
@@ -115,8 +115,8 @@ pub unsafe extern "C" fn vorbis_synthesis(
         return -(135 as i32);
     }
     /* read our mode and pre/post windowsize */
-    mode = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    mode = oggpack_read(
+        opb as *mut oggpack_buffer,
         (*b).modebits,
     ) as i32;
     if mode == -(1 as i32) {
@@ -130,12 +130,12 @@ pub unsafe extern "C" fn vorbis_synthesis(
     if (*vb).W != 0 {
         /* this doesn;t get mapped through mode selection as it's used
         only for window selection */
-        (*vb).lW = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*vb).lW = oggpack_read(
+            opb as *mut oggpack_buffer,
             1 as i32,
         );
-        (*vb).nW = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*vb).nW = oggpack_read(
+            opb as *mut oggpack_buffer,
             1 as i32,
         );
         if (*vb).nW == -(1 as i32) as isize {
@@ -152,7 +152,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
     /* alloc pcm passback storage */
     (*vb).pcmend = (*ci).blocksizes[(*vb).W as usize] as i32;
     (*vb).pcm = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-        vb as *mut crate::codec_h::vorbis_block,
+        vb as *mut vorbis_block,
         (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             .wrapping_mul((*vi).channels as libc::c_ulong) as isize,
     ) as *mut *mut f32;
@@ -160,7 +160,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
     while i < (*vi).channels {
         let ref mut fresh0 = *(*vb).pcm.offset(i as isize);
         *fresh0 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
+            vb as *mut vorbis_block,
             ((*vb).pcmend as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         ) as *mut f32;
@@ -182,29 +182,29 @@ Useful for sequential 'fast forward' */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_trackonly(
-    mut vb: *mut crate::codec_h::vorbis_block,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vb: *mut vorbis_block,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut vd: *mut crate::codec_h::vorbis_dsp_state = (*vb).vd;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*vd).backend_state as *mut crate::codec_internal_h::private_state;
-    let mut vi: *mut crate::codec_h::vorbis_info = (*vd).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut opb: *mut crate::ogg_h::oggpack_buffer = &mut (*vb).opb;
+    let mut vd: *mut vorbis_dsp_state = (*vb).vd;
+    let mut b: *mut private_state =
+        (*vd).backend_state as *mut private_state;
+    let mut vi: *mut vorbis_info = (*vd).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut opb: *mut oggpack_buffer = &mut (*vb).opb;
     let mut mode: i32 = 0;
     /* first things first.  Make sure decode is ready */
     crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_ripcord(
-        vb as *mut crate::codec_h::vorbis_block,
+        vb as *mut vorbis_block,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_readinit(
+        opb as *mut oggpack_buffer,
         (*op).packet,
         (*op).bytes as i32,
     );
     /* Check the packet type */
-    if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    if oggpack_read(
+        opb as *mut oggpack_buffer,
         1 as i32,
     ) != 0 as i32 as isize
     {
@@ -212,8 +212,8 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
         return -(135 as i32);
     }
     /* read our mode and pre/post windowsize */
-    mode = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    mode = oggpack_read(
+        opb as *mut oggpack_buffer,
         (*b).modebits,
     ) as i32;
     if mode == -(1 as i32) {
@@ -225,12 +225,12 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
     }
     (*vb).W = (*(*ci).mode_param[mode as usize]).blockflag as isize;
     if (*vb).W != 0 {
-        (*vb).lW = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*vb).lW = oggpack_read(
+            opb as *mut oggpack_buffer,
             1 as i32,
         );
-        (*vb).nW = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*vb).nW = oggpack_read(
+            opb as *mut oggpack_buffer,
             1 as i32,
         );
         if (*vb).nW == -(1 as i32) as isize {
@@ -252,12 +252,12 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_packet_blocksize(
-    mut vi: *mut crate::codec_h::vorbis_info,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vi: *mut vorbis_info,
+    mut op: *mut ogg_packet,
 ) -> isize {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
         buffer: 0 as *mut u8,
@@ -269,14 +269,14 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
         /* codec setup not properly intialized */
         return -(129 as i32) as isize;
     }
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_readinit(
+        &mut opb as *mut _ as *mut oggpack_buffer,
         (*op).packet,
         (*op).bytes as i32,
     );
     /* Check the packet type */
-    if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    if oggpack_read(
+        &mut opb as *mut _ as *mut oggpack_buffer,
         1 as i32,
     ) != 0 as i32 as isize
     {
@@ -284,10 +284,10 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
         return -(135 as i32) as isize;
     }
     /* read our mode and pre/post windowsize */
-    mode = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    mode = oggpack_read(
+        &mut opb as *mut _ as *mut oggpack_buffer,
         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-            ((*ci).modes - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+            ((*ci).modes - 1 as i32) as ogg_uint32_t,
         ),
     ) as i32;
     if mode == -(1 as i32) || (*ci).mode_param[mode as usize].is_null() {
@@ -298,12 +298,12 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_halfrate(
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut vi: *mut vorbis_info,
     mut flag: i32,
 ) -> i32 {
     /* set / clear half-sample-rate mode */
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     /* right now, our MDCT can't handle < 64 sample windows. */
     if (*ci).blocksizes[0 as i32 as usize] <= 64 as i32 as isize && flag != 0 {
         return -(1 as i32);
@@ -314,9 +314,9 @@ pub unsafe extern "C" fn vorbis_synthesis_halfrate(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_halfrate_p(
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut vi: *mut vorbis_info,
 ) -> i32 {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     return (*ci).halfrate_flag;
 }

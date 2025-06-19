@@ -123,7 +123,7 @@ pub use ::libc::mkfifo;
 
 pub type dialogCommandBuilder_t = Option<
     unsafe extern "C" fn(
-        _: crate::qcommon_h::dialogType_t,
+        _: dialogType_t,
         _: *const libc::c_char,
         _: *const libc::c_char,
     ) -> (),
@@ -163,8 +163,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut stdinIsATTY: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+pub static mut stdinIsATTY: qboolean =
+    qfalse;
 // Used to determine where to store user-specific files
 
 static mut homePath: [libc::c_char; 4096] = [
@@ -12474,28 +12474,28 @@ Sys_DefaultHomePath
 
 pub unsafe extern "C" fn Sys_DefaultHomePath() -> *mut libc::c_char {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    if *homePath.as_mut_ptr() == 0 && !crate::src::qcommon::common::com_homepath.is_null() {
-        p = ::libc::getenv(b"HOME\x00" as *const u8 as *const libc::c_char);
+    if *homePath.as_mut_ptr() == 0 && !com_homepath.is_null() {
+        p = libc::getenv(b"HOME\x00" as *const u8 as *const libc::c_char);
         if !p.is_null() {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 homePath.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                 b"%s%c\x00" as *const u8 as *const libc::c_char,
                 p,
                 '/' as i32,
             );
-            if *(*crate::src::qcommon::common::com_homepath)
+            if *(*com_homepath)
                 .string
                 .offset(0 as i32 as isize)
                 != 0
             {
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     homePath.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
-                    (*crate::src::qcommon::common::com_homepath).string,
+                    (*com_homepath).string,
                 );
             } else {
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     homePath.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                     b".q3a\x00" as *const u8 as *const libc::c_char,
@@ -12550,11 +12550,11 @@ pub static mut curtime: i32 = 0;
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
-    let mut tp: ::libc::timeval = ::libc::timeval {
+    let mut tp: timeval = timeval {
         tv_sec: 0,
         tv_usec: 0,
     };
-    crate::stdlib::gettimeofday(&mut tp, 0 as *mut crate::stdlib::timezone);
+    gettimeofday(&mut tp, 0 as *mut timezone);
     if sys_timeBase == 0 {
         sys_timeBase = tp.tv_sec as libc::c_ulong;
         return (tp.tv_usec as isize / 1000) as i32;
@@ -12573,35 +12573,35 @@ Sys_RandomBytes
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_RandomBytes(
-    mut string: *mut crate::src::qcommon::q_shared::byte,
+    mut string: *mut byte,
     mut len: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut fp: *mut crate::stdlib::FILE = 0 as *mut crate::stdlib::FILE; // don't buffer reads from /dev/urandom
-    fp = crate::stdlib::fopen(
+) -> qboolean {
+    let mut fp: *mut FILE = 0 as *mut FILE; // don't buffer reads from /dev/urandom
+    fp = fopen(
         b"/dev/urandom\x00" as *const u8 as *const libc::c_char,
         b"r\x00" as *const u8 as *const libc::c_char,
     );
     if fp.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    crate::stdlib::setvbuf(
+    setvbuf(
         fp,
         0 as *mut libc::c_char,
         2 as i32,
-        0 as i32 as crate::stddef_h::size_t,
+        0 as i32 as size_t,
     );
-    if crate::stdlib::fread(
+    if fread(
         string as *mut libc::c_void,
-        ::std::mem::size_of::<crate::src::qcommon::q_shared::byte>() as libc::c_ulong,
+        ::std::mem::size_of::<byte>() as libc::c_ulong,
         len as libc::c_ulong,
         fp,
     ) != len as libc::c_ulong
     {
-        crate::stdlib::fclose(fp);
-        return crate::src::qcommon::q_shared::qfalse;
+        fclose(fp);
+        return qfalse;
     }
-    crate::stdlib::fclose(fp);
-    return crate::src::qcommon::q_shared::qtrue;
+    fclose(fp);
+    return qtrue;
 }
 /*
 ==================
@@ -12611,8 +12611,8 @@ Sys_GetCurrentUser
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_GetCurrentUser() -> *mut libc::c_char {
-    let mut p: *mut ::libc::passwd = 0 as *mut ::libc::passwd;
-    p = ::libc::getpwuid(::libc::getuid()) as *mut ::libc::passwd;
+    let mut p: *mut passwd = 0 as *mut passwd;
+    p = getpwuid(libc::getuid()) as *mut passwd;
     if p.is_null() {
         return b"player\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     }
@@ -12627,8 +12627,8 @@ TODO
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_LowPhysicalMemory() -> crate::src::qcommon::q_shared::qboolean {
-    return crate::src::qcommon::q_shared::qfalse;
+pub unsafe extern "C" fn Sys_LowPhysicalMemory() -> qboolean {
+    return qfalse;
 }
 /*
 ==================
@@ -12660,8 +12660,8 @@ Sys_FOpen
 pub unsafe extern "C" fn Sys_FOpen(
     mut ospath: *const libc::c_char,
     mut mode: *const libc::c_char,
-) -> *mut crate::stdlib::FILE {
-    let mut buf: crate::stdlib::stat = crate::stdlib::stat {
+) -> *mut FILE {
+    let mut buf: stat = stat {
         st_dev: 0,
         st_ino: 0,
         st_nlink: 0,
@@ -12673,15 +12673,15 @@ pub unsafe extern "C" fn Sys_FOpen(
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: ::libc::timespec {
+        st_atim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_mtim: ::libc::timespec {
+        st_mtim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_ctim: ::libc::timespec {
+        st_ctim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
@@ -12690,9 +12690,9 @@ pub unsafe extern "C" fn Sys_FOpen(
     // check if path exists and is a directory
     if stat(ospath, &mut buf) == 0 && buf.st_mode & 0o170000 as i32 as u32 == 0o40000 as i32 as u32
     {
-        return 0 as *mut crate::stdlib::FILE;
+        return 0 as *mut FILE;
     }
-    return crate::stdlib::fopen(ospath, mode);
+    return fopen(ospath, mode);
 }
 /*
 ==================
@@ -12703,13 +12703,13 @@ Sys_Mkdir
 
 pub unsafe extern "C" fn Sys_Mkdir(
     mut path: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut result: i32 = ::libc::mkdir(path, 0o750 as i32 as crate::stdlib::__mode_t);
+) -> qboolean {
+    let mut result: i32 = mkdir(path, 0o750 as i32 as __mode_t);
     if result != 0 as i32 {
-        return (*::libc::__errno_location() == 17 as i32) as i32
-            as crate::src::qcommon::q_shared::qboolean;
+        return (*libc::__errno_location() == 17 as i32) as i32
+            as qboolean;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ==================
@@ -12718,11 +12718,11 @@ Sys_Mkfifo
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut crate::stdlib::FILE {
-    let mut fifo: *mut crate::stdlib::FILE = 0 as *mut crate::stdlib::FILE;
+pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut FILE {
+    let mut fifo: *mut FILE = 0 as *mut FILE;
     let mut result: i32 = 0;
     let mut fn_0: i32 = 0;
-    let mut buf: crate::stdlib::stat = crate::stdlib::stat {
+    let mut buf: stat = stat {
         st_dev: 0,
         st_ino: 0,
         st_nlink: 0,
@@ -12734,15 +12734,15 @@ pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut cra
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: ::libc::timespec {
+        st_atim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_mtim: ::libc::timespec {
+        st_mtim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_ctim: ::libc::timespec {
+        st_ctim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
@@ -12751,16 +12751,16 @@ pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut cra
     // if file already exists AND is a pipefile, remove it
     if stat(ospath, &mut buf) == 0 && buf.st_mode & 0o170000 as i32 as u32 == 0o10000 as i32 as u32
     {
-        crate::src::qcommon::files::FS_Remove(ospath);
+        FS_Remove(ospath);
     }
-    result = ::libc::mkfifo(ospath, 0o600 as i32 as crate::stdlib::__mode_t);
+    result = mkfifo(ospath, 0o600 as i32 as __mode_t);
     if result != 0 as i32 {
-        return 0 as *mut crate::stdlib::FILE;
+        return 0 as *mut FILE;
     }
-    fifo = crate::stdlib::fopen(ospath, b"w+\x00" as *const u8 as *const libc::c_char);
+    fifo = fopen(ospath, b"w+\x00" as *const u8 as *const libc::c_char);
     if !fifo.is_null() {
-        fn_0 = crate::stdlib::fileno(fifo);
-        ::libc::fcntl(fn_0, 4 as i32, 0o4000 as i32);
+        fn_0 = fileno(fifo);
+        libc::fcntl(fn_0, 4 as i32, 0o4000 as i32);
     }
     return fifo;
 }
@@ -12801,9 +12801,9 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut newsubdirs: [libc::c_char; 4096] = [0; 4096];
     let mut filename: [libc::c_char; 4096] = [0; 4096];
-    let mut fdir: *mut crate::stdlib::DIR = 0 as *mut crate::stdlib::DIR;
-    let mut d: *mut ::libc::dirent = 0 as *mut ::libc::dirent;
-    let mut st: crate::stdlib::stat = crate::stdlib::stat {
+    let mut fdir: *mut DIR = 0 as *mut DIR;
+    let mut d: *mut dirent = 0 as *mut dirent;
+    let mut st: stat = stat {
         st_dev: 0,
         st_ino: 0,
         st_nlink: 0,
@@ -12815,15 +12815,15 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: ::libc::timespec {
+        st_atim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_mtim: ::libc::timespec {
+        st_mtim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_ctim: ::libc::timespec {
+        st_ctim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
@@ -12833,7 +12833,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
         return;
     }
     if crate::stdlib::strlen(subdirs) != 0 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             search.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
@@ -12841,23 +12841,23 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
             subdirs,
         );
     } else {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             search.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             basedir,
         );
     }
-    fdir = crate::stdlib::opendir(search.as_mut_ptr());
+    fdir = opendir(search.as_mut_ptr());
     if fdir.is_null() {
         return;
     }
     loop {
-        d = crate::stdlib::readdir(fdir);
+        d = readdir(fdir);
         if d.is_null() {
             break;
         }
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             filename.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
@@ -12868,17 +12868,17 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
             continue;
         }
         if st.st_mode & 0o40000 as i32 as u32 != 0 {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 (*d).d_name.as_mut_ptr(),
                 b".\x00" as *const u8 as *const libc::c_char,
             ) != 0
-                && crate::src::qcommon::q_shared::Q_stricmp(
+                && Q_stricmp(
                     (*d).d_name.as_mut_ptr(),
                     b"..\x00" as *const u8 as *const libc::c_char,
                 ) != 0
             {
                 if crate::stdlib::strlen(subdirs) != 0 {
-                    crate::src::qcommon::q_shared::Com_sprintf(
+                    Com_sprintf(
                         newsubdirs.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                         b"%s/%s\x00" as *const u8 as *const libc::c_char,
@@ -12886,7 +12886,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
                         (*d).d_name.as_mut_ptr(),
                     );
                 } else {
-                    crate::src::qcommon::q_shared::Com_sprintf(
+                    Com_sprintf(
                         newsubdirs.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                         b"%s\x00" as *const u8 as *const libc::c_char,
@@ -12899,26 +12899,26 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
         if *numfiles >= 0x1000 as i32 - 1 as i32 {
             break;
         }
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             filename.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
             subdirs,
             (*d).d_name.as_mut_ptr(),
         );
-        if crate::src::qcommon::common::Com_FilterPath(
+        if Com_FilterPath(
             filter,
             filename.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse as i32,
+            qfalse as i32,
         ) == 0
         {
             continue;
         }
         let ref mut fresh0 = *list.offset(*numfiles as isize);
-        *fresh0 = crate::src::qcommon::common::CopyString(filename.as_mut_ptr());
+        *fresh0 = CopyString(filename.as_mut_ptr());
         *numfiles += 1
     }
-    crate::stdlib::closedir(fdir);
+    closedir(fdir);
 }
 /*
 ==================
@@ -12932,17 +12932,17 @@ pub unsafe extern "C" fn Sys_ListFiles(
     mut extension: *const libc::c_char,
     mut filter: *mut libc::c_char,
     mut numfiles: *mut i32,
-    mut wantsubs: crate::src::qcommon::q_shared::qboolean,
+    mut wantsubs: qboolean,
 ) -> *mut *mut libc::c_char {
-    let mut d: *mut ::libc::dirent = 0 as *mut ::libc::dirent;
-    let mut fdir: *mut crate::stdlib::DIR = 0 as *mut crate::stdlib::DIR;
-    let mut dironly: crate::src::qcommon::q_shared::qboolean = wantsubs;
+    let mut d: *mut dirent = 0 as *mut dirent;
+    let mut fdir: *mut DIR = 0 as *mut DIR;
+    let mut dironly: qboolean = wantsubs;
     let mut search: [libc::c_char; 4096] = [0; 4096];
     let mut nfiles: i32 = 0;
     let mut listCopy: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut list: [*mut libc::c_char; 4096] = [0 as *mut libc::c_char; 4096];
     let mut i: i32 = 0;
-    let mut st: crate::stdlib::stat = crate::stdlib::stat {
+    let mut st: stat = stat {
         st_dev: 0,
         st_ino: 0,
         st_nlink: 0,
@@ -12954,15 +12954,15 @@ pub unsafe extern "C" fn Sys_ListFiles(
         st_size: 0,
         st_blksize: 0,
         st_blocks: 0,
-        st_atim: ::libc::timespec {
+        st_atim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_mtim: ::libc::timespec {
+        st_mtim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
-        st_ctim: ::libc::timespec {
+        st_ctim: timespec {
             tv_sec: 0,
             tv_nsec: 0,
         },
@@ -12983,7 +12983,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
         if nfiles == 0 {
             return 0 as *mut *mut libc::c_char;
         }
-        listCopy = crate::src::qcommon::common::Z_Malloc(
+        listCopy = Z_Malloc(
             ((nfiles + 1 as i32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
                 as i32,
@@ -13005,23 +13005,23 @@ pub unsafe extern "C" fn Sys_ListFiles(
         && *extension.offset(1 as i32 as isize) as i32 == 0 as i32
     {
         extension = b"\x00" as *const u8 as *const libc::c_char;
-        dironly = crate::src::qcommon::q_shared::qtrue
+        dironly = qtrue
     }
     extLen = crate::stdlib::strlen(extension) as i32;
     // search
     nfiles = 0 as i32;
-    fdir = crate::stdlib::opendir(directory);
+    fdir = opendir(directory);
     if fdir.is_null() {
         *numfiles = 0 as i32;
         return 0 as *mut *mut libc::c_char;
     }
     loop {
-        d = crate::stdlib::readdir(fdir);
+        d = readdir(fdir);
         if d.is_null() {
             break;
             // didn't match
         }
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             search.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"%s/%s\x00" as *const u8 as *const libc::c_char,
@@ -13038,7 +13038,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
         }
         if *extension != 0 {
             if crate::stdlib::strlen((*d).d_name.as_mut_ptr()) < extLen as libc::c_ulong
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     (*d).d_name
                         .as_mut_ptr()
                         .offset(crate::stdlib::strlen((*d).d_name.as_mut_ptr()) as isize)
@@ -13052,17 +13052,17 @@ pub unsafe extern "C" fn Sys_ListFiles(
         if nfiles == 0x1000 as i32 - 1 as i32 {
             break;
         }
-        list[nfiles as usize] = crate::src::qcommon::common::CopyString((*d).d_name.as_mut_ptr());
+        list[nfiles as usize] = CopyString((*d).d_name.as_mut_ptr());
         nfiles += 1
     }
     list[nfiles as usize] = 0 as *mut libc::c_char;
-    crate::stdlib::closedir(fdir);
+    closedir(fdir);
     // return a copy of the list
     *numfiles = nfiles;
     if nfiles == 0 {
         return 0 as *mut *mut libc::c_char;
     }
-    listCopy = crate::src::qcommon::common::Z_Malloc(
+    listCopy = Z_Malloc(
         ((nfiles + 1 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
             as i32,
@@ -13091,10 +13091,10 @@ pub unsafe extern "C" fn Sys_FreeFileList(mut list: *mut *mut libc::c_char) {
     }
     i = 0 as i32;
     while !(*list.offset(i as isize)).is_null() {
-        crate::src::qcommon::common::Z_Free(*list.offset(i as isize) as *mut libc::c_void);
+        Z_Free(*list.offset(i as isize) as *mut libc::c_void);
         i += 1
     }
-    crate::src::qcommon::common::Z_Free(list as *mut libc::c_void);
+    Z_Free(list as *mut libc::c_void);
 }
 /*
 ==================
@@ -13110,7 +13110,7 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         return;
     }
     if stdinIsATTY as u64 != 0 {
-        let mut fdset: crate::stdlib::fd_set = crate::stdlib::fd_set {
+        let mut fdset: fd_set = fd_set {
             __fds_bits: [0; 16],
         };
         let mut __d0: i32 = 0;
@@ -13119,10 +13119,10 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         let fresh6;
         let fresh7 = &mut __d1;
         let fresh8;
-        let fresh9 = (::std::mem::size_of::<crate::stdlib::fd_set>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong);
+        let fresh9 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
+            .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
         let fresh10 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
-            as *mut crate::stdlib::__fd_mask;
+            as *mut __fd_mask;
         asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
      (0 as i32), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh9)), "1"
@@ -13132,33 +13132,33 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh10, fresh8);
         fdset.__fds_bits[(0 as i32
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize] |= ((1 as libc::c_ulong)
             << 0 as i32
                 % (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
-            as crate::stdlib::__fd_mask;
+                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            as __fd_mask;
         if msec < 0 as i32 {
-            crate::stdlib::select(
+            select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut crate::stdlib::fd_set,
-                0 as *mut crate::stdlib::fd_set,
-                0 as *mut ::libc::timeval,
+                0 as *mut fd_set,
+                0 as *mut fd_set,
+                0 as *mut timeval,
             );
         } else {
-            let mut timeout: ::libc::timeval = ::libc::timeval {
+            let mut timeout: timeval = timeval {
                 tv_sec: 0,
                 tv_usec: 0,
             };
-            timeout.tv_sec = ((msec / 1000 as i32) as crate::stdlib::__time_t) as libc::time_t;
-            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t)
+            timeout.tv_sec = ((msec / 1000 as i32) as __time_t) as libc::time_t;
+            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as __suseconds_t)
                 as libc::suseconds_t;
-            crate::stdlib::select(
+            select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut crate::stdlib::fd_set,
-                0 as *mut crate::stdlib::fd_set,
+                0 as *mut fd_set,
+                0 as *mut fd_set,
                 &mut timeout,
             );
         }
@@ -13167,7 +13167,7 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         if msec < 0 as i32 {
             msec = 10 as i32
         }
-        ::libc::usleep((msec * 1000 as i32) as crate::stdlib::__useconds_t);
+        libc::usleep((msec * 1000 as i32) as __useconds_t);
     };
 }
 /*
@@ -13183,27 +13183,27 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
     let mut size: u32 = 0;
     let mut f: i32 = -(1 as i32);
-    let mut homepath: *const libc::c_char = crate::src::qcommon::cvar::Cvar_VariableString(
+    let mut homepath: *const libc::c_char = Cvar_VariableString(
         b"fs_homepath\x00" as *const u8 as *const libc::c_char,
     );
-    let mut gamedir: *const libc::c_char = crate::src::qcommon::cvar::Cvar_VariableString(
+    let mut gamedir: *const libc::c_char = Cvar_VariableString(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
     );
     let mut fileName: *const libc::c_char = b"crashlog.txt\x00" as *const u8 as *const libc::c_char;
-    let mut dirpath: *mut libc::c_char = crate::src::qcommon::files::FS_BuildOSPath(
+    let mut dirpath: *mut libc::c_char = FS_BuildOSPath(
         homepath,
         gamedir,
         b"\x00" as *const u8 as *const libc::c_char,
     );
     let mut ospath: *mut libc::c_char =
-        crate::src::qcommon::files::FS_BuildOSPath(homepath, gamedir, fileName);
-    crate::src::sys::sys_main::Sys_Print(crate::src::qcommon::q_shared::va(
+        FS_BuildOSPath(homepath, gamedir, fileName);
+    Sys_Print(va(
         b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         error,
     ));
     Sys_Dialog(
-        crate::qcommon_h::DT_ERROR,
-        crate::src::qcommon::q_shared::va(
+        DT_ERROR,
+        va(
             b"%s. See \"%s\" for details.\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             error,
@@ -13213,7 +13213,7 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
     );
     // Make sure the write path for the crashlog exists...
     if Sys_Mkdir(homepath) as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"ERROR: couldn\'t create path \'%s\' for crash log.\n\x00" as *const u8
                 as *const libc::c_char,
             homepath,
@@ -13221,7 +13221,7 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
         return;
     }
     if Sys_Mkdir(dirpath) as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"ERROR: couldn\'t create path \'%s\' for crash log.\n\x00" as *const u8
                 as *const libc::c_char,
             dirpath,
@@ -13231,13 +13231,13 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
     // We might be crashing because we maxed out the Quake MAX_FILE_HANDLES,
     // which will come through here, so we don't want to recurse forever by
     // calling FS_FOpenFileWrite()...use the Unix system APIs instead.
-    f = ::libc::open(
+    f = libc::open(
         ospath,
         0o100 as i32 | 0o1000 as i32 | 0o1 as i32,
         0o640 as i32,
     );
     if f == -(1 as i32) {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"ERROR: couldn\'t open %s\n\x00" as *const u8 as *const libc::c_char,
             fileName,
         );
@@ -13256,18 +13256,18 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
         if !(crate::stdlib::write(
             f,
             buffer.as_mut_ptr() as *const libc::c_void,
-            size as crate::stddef_h::size_t,
+            size as size_t,
         ) != size as isize)
         {
             continue;
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"ERROR: couldn\'t fully write to %s\n\x00" as *const u8 as *const libc::c_char,
             fileName,
         );
         break;
     }
-    ::libc::close(f);
+    libc::close(f);
 }
 
 static mut execBuffer: [libc::c_char; 1024] = [0; 1024];
@@ -13299,7 +13299,7 @@ Sys_AppendToExecBuffer
 */
 
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
-    let mut size: crate::stddef_h::size_t =
+    let mut size: size_t =
         (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong).wrapping_sub(
             execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as libc::c_ulong,
         );
@@ -13312,7 +13312,7 @@ unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
     {
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(execBufferPointer, text, size as i32);
+    Q_strncpyz(execBufferPointer, text, size as i32);
     let fresh11 = execArgc;
     execArgc = execArgc + 1;
     execArgv[fresh11 as usize] = execBufferPointer;
@@ -13325,14 +13325,14 @@ Sys_Exec
 */
 
 unsafe extern "C" fn Sys_Exec() -> i32 {
-    let mut pid: crate::stdlib::pid_t = ::libc::fork();
+    let mut pid: pid_t = libc::fork();
     if pid < 0 as i32 {
         return -(1 as i32);
     }
     if pid != 0 {
         // Parent
         let mut exitCode: i32 = 0;
-        ::libc::wait(&mut exitCode);
+        libc::wait(&mut exitCode);
         return (exitCode & 0xff00 as i32) >> 8 as i32;
     } else {
         // Child
@@ -13341,7 +13341,7 @@ unsafe extern "C" fn Sys_Exec() -> i32 {
             execArgv.as_mut_ptr() as *const *mut libc::c_char,
         );
         // Failed to execute
-        ::libc::exit(-(1 as i32));
+        libc::exit(-(1 as i32));
     };
 }
 /*
@@ -13351,7 +13351,7 @@ Sys_ZenityCommand
 */
 
 unsafe extern "C" fn Sys_ZenityCommand(
-    mut type_0: crate::qcommon_h::dialogType_t,
+    mut type_0: dialogType_t,
     mut message: *const libc::c_char,
     mut title: *const libc::c_char,
 ) {
@@ -13380,11 +13380,11 @@ unsafe extern "C" fn Sys_ZenityCommand(
             Sys_AppendToExecBuffer(b"--info\x00" as *const u8 as *const libc::c_char);
         }
     }
-    Sys_AppendToExecBuffer(crate::src::qcommon::q_shared::va(
+    Sys_AppendToExecBuffer(va(
         b"--text=%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         message,
     ));
-    Sys_AppendToExecBuffer(crate::src::qcommon::q_shared::va(
+    Sys_AppendToExecBuffer(va(
         b"--title=%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         title,
     ));
@@ -13396,7 +13396,7 @@ Sys_KdialogCommand
 */
 
 unsafe extern "C" fn Sys_KdialogCommand(
-    mut type_0: crate::qcommon_h::dialogType_t,
+    mut type_0: dialogType_t,
     mut message: *const libc::c_char,
     mut title: *const libc::c_char,
 ) {
@@ -13422,7 +13422,7 @@ unsafe extern "C" fn Sys_KdialogCommand(
         }
     }
     Sys_AppendToExecBuffer(message);
-    Sys_AppendToExecBuffer(crate::src::qcommon::q_shared::va(
+    Sys_AppendToExecBuffer(va(
         b"--title=%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         title,
     ));
@@ -13434,7 +13434,7 @@ Sys_XmessageCommand
 */
 
 unsafe extern "C" fn Sys_XmessageCommand(
-    mut type_0: crate::qcommon_h::dialogType_t,
+    mut type_0: dialogType_t,
     mut message: *const libc::c_char,
     mut _title: *const libc::c_char,
 ) {
@@ -13465,17 +13465,17 @@ Display a *nix dialog box
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_Dialog(
-    mut type_0: crate::qcommon_h::dialogType_t,
+    mut type_0: dialogType_t,
     mut message: *const libc::c_char,
     mut title: *const libc::c_char,
-) -> crate::qcommon_h::dialogResult_t {
+) -> dialogResult_t {
     let mut session: *const libc::c_char =
-        ::libc::getenv(b"DESKTOP_SESSION\x00" as *const u8 as *const libc::c_char);
-    let mut tried: [crate::src::qcommon::q_shared::qboolean; 4] = [
-        crate::src::qcommon::q_shared::qfalse,
-        crate::src::qcommon::q_shared::qfalse,
-        crate::src::qcommon::q_shared::qfalse,
-        crate::src::qcommon::q_shared::qfalse,
+        libc::getenv(b"DESKTOP_SESSION\x00" as *const u8 as *const libc::c_char);
+    let mut tried: [qboolean; 4] = [
+        qfalse,
+        qfalse,
+        qfalse,
+        qfalse,
     ];
     let mut commands: [dialogCommandBuilder_t; 4] = [None, None, None, None];
     let mut preferredCommandType: dialogCommandType_t = NONE;
@@ -13483,7 +13483,7 @@ pub unsafe extern "C" fn Sys_Dialog(
     commands[ZENITY as i32 as usize] = Some(
         Sys_ZenityCommand
             as unsafe extern "C" fn(
-                _: crate::qcommon_h::dialogType_t,
+                _: dialogType_t,
                 _: *const libc::c_char,
                 _: *const libc::c_char,
             ) -> (),
@@ -13491,7 +13491,7 @@ pub unsafe extern "C" fn Sys_Dialog(
     commands[KDIALOG as i32 as usize] = Some(
         Sys_KdialogCommand
             as unsafe extern "C" fn(
-                _: crate::qcommon_h::dialogType_t,
+                _: dialogType_t,
                 _: *const libc::c_char,
                 _: *const libc::c_char,
             ) -> (),
@@ -13499,19 +13499,19 @@ pub unsafe extern "C" fn Sys_Dialog(
     commands[XMESSAGE as i32 as usize] = Some(
         Sys_XmessageCommand
             as unsafe extern "C" fn(
-                _: crate::qcommon_h::dialogType_t,
+                _: dialogType_t,
                 _: *const libc::c_char,
                 _: *const libc::c_char,
             ) -> (),
     );
     // This may not be the best way
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         session,
         b"gnome\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         preferredCommandType = ZENITY
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+    } else if Q_stricmp(
         session,
         b"kde\x00" as *const u8 as *const libc::c_char,
     ) == 0
@@ -13531,24 +13531,24 @@ pub unsafe extern "C" fn Sys_Dialog(
                     match type_0 as u32 {
                         3 => {
                             return if exitCode != 0 {
-                                crate::qcommon_h::DR_NO as i32
+                                DR_NO as i32
                             } else {
-                                crate::qcommon_h::DR_YES as i32
+                                DR_YES as i32
                             }
-                                as crate::qcommon_h::dialogResult_t
+                                as dialogResult_t
                         }
                         4 => {
                             return if exitCode != 0 {
-                                crate::qcommon_h::DR_CANCEL as i32
+                                DR_CANCEL as i32
                             } else {
-                                crate::qcommon_h::DR_OK as i32
+                                DR_OK as i32
                             }
-                                as crate::qcommon_h::dialogResult_t
+                                as dialogResult_t
                         }
-                        _ => return crate::qcommon_h::DR_OK,
+                        _ => return DR_OK,
                     }
                 }
-                tried[i as usize] = crate::src::qcommon::q_shared::qtrue;
+                tried[i as usize] = qtrue;
                 // The preference failed, so start again in order
                 if preferredCommandType as u32 != NONE as i32 as u32 {
                     preferredCommandType = NONE;
@@ -13558,10 +13558,10 @@ pub unsafe extern "C" fn Sys_Dialog(
         }
         i += 1
     }
-    crate::src::qcommon::common::Com_DPrintf(
+    Com_DPrintf(
         b"^3WARNING: failed to show a dialog\n\x00" as *const u8 as *const libc::c_char,
     );
-    return crate::qcommon_h::DR_OK;
+    return DR_OK;
 }
 /*
 ==============
@@ -13604,58 +13604,58 @@ Unix specific initialisation
 
 pub unsafe extern "C" fn Sys_PlatformInit() {
     let mut term: *const libc::c_char =
-        ::libc::getenv(b"TERM\x00" as *const u8 as *const libc::c_char);
-    crate::stdlib::signal(
+        libc::getenv(b"TERM\x00" as *const u8 as *const libc::c_char);
+    signal(
         1 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
-    crate::stdlib::signal(
+    signal(
         3 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
-    crate::stdlib::signal(
+    signal(
         5 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
-    crate::stdlib::signal(
+    signal(
         6 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
-    crate::stdlib::signal(
+    signal(
         7 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
-            crate::stdlib::__sighandler_t,
+            __sighandler_t,
         >(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
     Sys_SetFloatEnv();
-    stdinIsATTY = (::libc::isatty(0 as i32) != 0
+    stdinIsATTY = (libc::isatty(0 as i32) != 0
         && !(!term.is_null()
-            && (::libc::strcmp(term, b"raw\x00" as *const u8 as *const libc::c_char) == 0
-                || ::libc::strcmp(term, b"dumb\x00" as *const u8 as *const libc::c_char) == 0)))
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+            && (libc::strcmp(term, b"raw\x00" as *const u8 as *const libc::c_char) == 0
+                || libc::strcmp(term, b"dumb\x00" as *const u8 as *const libc::c_char) == 0)))
+        as i32 as qboolean;
 }
 /*
 ==============
@@ -13678,9 +13678,9 @@ set/unset environment variables (empty value removes it)
 
 pub unsafe extern "C" fn Sys_SetEnv(mut name: *const libc::c_char, mut value: *const libc::c_char) {
     if !value.is_null() && *value as i32 != 0 {
-        ::libc::setenv(name, value, 1 as i32);
+        libc::setenv(name, value, 1 as i32);
     } else {
-        ::libc::unsetenv(name);
+        libc::unsetenv(name);
     };
 }
 /*
@@ -13691,7 +13691,7 @@ Sys_PID
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_PID() -> i32 {
-    return ::libc::getpid();
+    return libc::getpid();
 }
 /*
 ==============
@@ -13700,9 +13700,9 @@ Sys_PIDIsRunning
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_PIDIsRunning(mut pid: i32) -> crate::src::qcommon::q_shared::qboolean {
-    return (::libc::kill(pid, 0 as i32) == 0 as i32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+pub unsafe extern "C" fn Sys_PIDIsRunning(mut pid: i32) -> qboolean {
+    return (kill(pid, 0 as i32) == 0 as i32) as i32
+        as qboolean;
 }
 /*
 =================
@@ -13715,38 +13715,38 @@ Check if filename should be allowed to be loaded as a DLL.
 
 pub unsafe extern "C" fn Sys_DllExtension(
     mut name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut p: *const libc::c_char = 0 as *const libc::c_char;
     let mut c: libc::c_char = 0 as i32 as libc::c_char;
-    if crate::src::qcommon::q_shared::COM_CompareExtension(
+    if COM_CompareExtension(
         name,
         b".so\x00" as *const u8 as *const libc::c_char,
     ) as u64
         != 0
     {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // Check for format of filename.so.1.2.3
-    p = ::libc::strstr(name, b".so.\x00" as *const u8 as *const libc::c_char);
+    p = libc::strstr(name, b".so.\x00" as *const u8 as *const libc::c_char);
     if !p.is_null() {
         p = p
             .offset(crate::stdlib::strlen(b".so\x00" as *const u8 as *const libc::c_char) as isize);
         // Check if .so is only followed for periods and numbers.
         while *p != 0 {
             c = *p;
-            if *(*crate::stdlib::__ctype_b_loc()).offset(c as i32 as isize) as i32
-                & crate::stdlib::_ISdigit as i32 as u16 as i32
+            if *(*__ctype_b_loc()).offset(c as i32 as isize) as i32
+                & _ISdigit as i32 as u16 as i32
                 == 0
                 && c as i32 != '.' as i32
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             p = p.offset(1)
         }
         // Don't allow filename to end in a period. file.so., file.so.0., etc
         if c as i32 != '.' as i32 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }

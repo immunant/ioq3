@@ -66,7 +66,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         text.as_mut_ptr(),
     );

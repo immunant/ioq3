@@ -19,7 +19,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -403,7 +403,7 @@ extern "C" {
     */
     // cl_cgame.c  -- client system interaction with client game
     #[no_mangle]
-    pub static mut botlib_export: *mut crate::botlib_h::botlib_export_t;
+    pub static mut botlib_export: *mut botlib_export_t;
 }
 /*
 ====================
@@ -412,8 +412,8 @@ CL_GetGameState
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GetGameState(mut gs: *mut crate::src::qcommon::q_shared::gameState_t) {
-    *gs = crate::src::client::cl_main::cl.gameState;
+pub unsafe extern "C" fn CL_GetGameState(mut gs: *mut gameState_t) {
+    *gs = cl.gameState;
 }
 /*
 ====================
@@ -422,8 +422,8 @@ CL_GetGlconfig
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GetGlconfig(mut glconfig: *mut crate::tr_types_h::glconfig_t) {
-    *glconfig = crate::src::client::cl_main::cls.glconfig;
+pub unsafe extern "C" fn CL_GetGlconfig(mut glconfig: *mut glconfig_t) {
+    *glconfig = cls.glconfig;
 }
 /*
 ====================
@@ -434,30 +434,30 @@ CL_GetUserCmd
 
 pub unsafe extern "C" fn CL_GetUserCmd(
     mut cmdNumber: i32,
-    mut ucmd: *mut crate::src::qcommon::q_shared::usercmd_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut ucmd: *mut usercmd_t,
+) -> qboolean {
     // cmds[cmdNumber] is the last properly generated command
     // can't return anything that we haven't created yet
-    if cmdNumber > crate::src::client::cl_main::cl.cmdNumber {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if cmdNumber > cl.cmdNumber {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_GetUserCmd: %i >= %i\x00" as *const u8 as *const libc::c_char,
             cmdNumber,
-            crate::src::client::cl_main::cl.cmdNumber,
+            cl.cmdNumber,
         );
     }
     // the usercmd has been overwritten in the wrapping
     // buffer because it is too far out of date
-    if cmdNumber <= crate::src::client::cl_main::cl.cmdNumber - 64 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+    if cmdNumber <= cl.cmdNumber - 64 as i32 {
+        return qfalse;
     }
-    *ucmd = crate::src::client::cl_main::cl.cmds[(cmdNumber & 64 as i32 - 1 as i32) as usize];
-    return crate::src::qcommon::q_shared::qtrue;
+    *ucmd = cl.cmds[(cmdNumber & 64 as i32 - 1 as i32) as usize];
+    return qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_GetCurrentCmdNumber() -> i32 {
-    return crate::src::client::cl_main::cl.cmdNumber;
+    return cl.cmdNumber;
 }
 /*
 ====================
@@ -468,26 +468,26 @@ CL_GetParseEntityState
 
 pub unsafe extern "C" fn CL_GetParseEntityState(
     mut parseEntityNumber: i32,
-    mut state: *mut crate::src::qcommon::q_shared::entityState_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut state: *mut entityState_t,
+) -> qboolean {
     // can't return anything that hasn't been parsed yet
-    if parseEntityNumber >= crate::src::client::cl_main::cl.parseEntitiesNum {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if parseEntityNumber >= cl.parseEntitiesNum {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_GetParseEntityState: %i >= %i\x00" as *const u8 as *const libc::c_char,
             parseEntityNumber,
-            crate::src::client::cl_main::cl.parseEntitiesNum,
+            cl.parseEntitiesNum,
         );
     }
     // can't return anything that has been overwritten in the circular buffer
     if parseEntityNumber
-        <= crate::src::client::cl_main::cl.parseEntitiesNum - 32 as i32 * 256 as i32
+        <= cl.parseEntitiesNum - 32 as i32 * 256 as i32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    *state = crate::src::client::cl_main::cl.parseEntities
+    *state = cl.parseEntities
         [(parseEntityNumber & 32 as i32 * 256 as i32 - 1 as i32) as usize];
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ====================
@@ -500,8 +500,8 @@ pub unsafe extern "C" fn CL_GetCurrentSnapshotNumber(
     mut snapshotNumber: *mut i32,
     mut serverTime: *mut i32,
 ) {
-    *snapshotNumber = crate::src::client::cl_main::cl.snap.messageNum;
-    *serverTime = crate::src::client::cl_main::cl.snap.serverTime;
+    *snapshotNumber = cl.snap.messageNum;
+    *serverTime = cl.snap.serverTime;
 }
 /*
 ====================
@@ -512,37 +512,37 @@ CL_GetSnapshot
 
 pub unsafe extern "C" fn CL_GetSnapshot(
     mut snapshotNumber: i32,
-    mut snapshot: *mut crate::cg_public_h::snapshot_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut clSnap: *mut crate::client_h::clSnapshot_t = 0 as *mut crate::client_h::clSnapshot_t;
+    mut snapshot: *mut snapshot_t,
+) -> qboolean {
+    let mut clSnap: *mut clSnapshot_t = 0 as *mut clSnapshot_t;
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    if snapshotNumber > crate::src::client::cl_main::cl.snap.messageNum {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if snapshotNumber > cl.snap.messageNum {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_GetSnapshot: snapshotNumber > cl.snapshot.messageNum\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // if the frame has fallen out of the circular buffer, we can't return it
-    if crate::src::client::cl_main::cl.snap.messageNum - snapshotNumber >= 32 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+    if cl.snap.messageNum - snapshotNumber >= 32 as i32 {
+        return qfalse;
     }
     // if the frame is not valid, we can't return it
-    clSnap = &mut *crate::src::client::cl_main::cl
+    clSnap = &mut *cl
         .snapshots
         .as_mut_ptr()
         .offset((snapshotNumber & 32 as i32 - 1 as i32) as isize)
-        as *mut crate::client_h::clSnapshot_t;
+        as *mut clSnapshot_t;
     if (*clSnap).valid as u64 == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // if the entities in the frame have fallen out of their
     // circular buffer, we can't return it
-    if crate::src::client::cl_main::cl.parseEntitiesNum - (*clSnap).parseEntitiesNum
+    if cl.parseEntitiesNum - (*clSnap).parseEntitiesNum
         >= 32 as i32 * 256 as i32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // write the snapshot
     (*snapshot).snapFlags = (*clSnap).snapFlags;
@@ -552,12 +552,12 @@ pub unsafe extern "C" fn CL_GetSnapshot(
     crate::stdlib::memcpy(
         (*snapshot).areamask.as_mut_ptr() as *mut libc::c_void,
         (*clSnap).areamask.as_mut_ptr() as *const libc::c_void,
-        ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 32]>() as libc::c_ulong,
+        ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong,
     );
     (*snapshot).ps = (*clSnap).ps;
     count = (*clSnap).numEntities;
     if count > 256 as i32 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"CL_GetSnapshot: truncated %i entities to %i\n\x00" as *const u8
                 as *const libc::c_char,
             count,
@@ -568,12 +568,12 @@ pub unsafe extern "C" fn CL_GetSnapshot(
     (*snapshot).numEntities = count;
     i = 0 as i32;
     while i < count {
-        (*snapshot).entities[i as usize] = crate::src::client::cl_main::cl.parseEntities
+        (*snapshot).entities[i as usize] = cl.parseEntities
             [((*clSnap).parseEntitiesNum + i & 32 as i32 * 256 as i32 - 1 as i32) as usize];
         i += 1
     }
     // FIXME: configstring changes and server commands!!!
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =====================
@@ -583,8 +583,8 @@ CL_SetUserCmdValue
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_SetUserCmdValue(mut userCmdValue: i32, mut sensitivityScale: f32) {
-    crate::src::client::cl_main::cl.cgameUserCmdValue = userCmdValue;
-    crate::src::client::cl_main::cl.cgameSensitivity = sensitivityScale;
+    cl.cgameUserCmdValue = userCmdValue;
+    cl.cgameSensitivity = sensitivityScale;
 }
 /*
 =====================
@@ -594,7 +594,7 @@ CL_AddCgameCommand
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_AddCgameCommand(mut cmdName: *const libc::c_char) {
-    crate::src::qcommon::cmd::Cmd_AddCommand(cmdName, None);
+    Cmd_AddCommand(cmdName, None);
 }
 /*
 =====================
@@ -609,42 +609,42 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
     let mut i: i32 = 0;
     let mut index: i32 = 0;
     let mut dup: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut oldGs: crate::src::qcommon::q_shared::gameState_t =
-        crate::src::qcommon::q_shared::gameState_t {
+    let mut oldGs: gameState_t =
+        gameState_t {
             stringOffsets: [0; 1024],
             stringData: [0; 16000],
             dataCount: 0,
         };
     let mut len: i32 = 0;
-    index = atoi(crate::src::qcommon::cmd::Cmd_Argv(1 as i32));
+    index = atoi(Cmd_Argv(1 as i32));
     if index < 0 as i32 || index >= 1024 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_ConfigstringModified: bad index %i\x00" as *const u8 as *const libc::c_char,
             index,
         );
     }
     // get everything after "cs <num>"
-    s = crate::src::qcommon::cmd::Cmd_ArgsFrom(2 as i32);
-    old = crate::src::client::cl_main::cl
+    s = Cmd_ArgsFrom(2 as i32);
+    old = cl
         .gameState
         .stringData
         .as_mut_ptr()
-        .offset(crate::src::client::cl_main::cl.gameState.stringOffsets[index as usize] as isize);
-    if ::libc::strcmp(old, s) == 0 {
+        .offset(cl.gameState.stringOffsets[index as usize] as isize);
+    if libc::strcmp(old, s) == 0 {
         return;
         // unchanged
     }
     // build the new gameState_t
-    oldGs = crate::src::client::cl_main::cl.gameState;
+    oldGs = cl.gameState;
     crate::stdlib::memset(
-        &mut crate::src::client::cl_main::cl.gameState
-            as *mut crate::src::qcommon::q_shared::gameState_t as *mut libc::c_void,
+        &mut cl.gameState
+            as *mut gameState_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::qcommon::q_shared::gameState_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gameState_t>() as libc::c_ulong,
     );
     // leave the first 0 for uninitialized strings
-    crate::src::client::cl_main::cl.gameState.dataCount = 1 as i32;
+    cl.gameState.dataCount = 1 as i32;
     i = 0 as i32;
     while i < 1024 as i32 {
         if i == index {
@@ -657,33 +657,33 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
         }
         if !(*dup.offset(0 as i32 as isize) == 0) {
             len = crate::stdlib::strlen(dup) as i32;
-            if len + 1 as i32 + crate::src::client::cl_main::cl.gameState.dataCount > 16000 as i32 {
-                crate::src::qcommon::common::Com_Error(
-                    crate::src::qcommon::q_shared::ERR_DROP as i32,
+            if len + 1 as i32 + cl.gameState.dataCount > 16000 as i32 {
+                Com_Error(
+                    ERR_DROP as i32,
                     b"MAX_GAMESTATE_CHARS exceeded\x00" as *const u8 as *const libc::c_char,
                 );
             }
             // append it to the gameState string buffer
-            crate::src::client::cl_main::cl.gameState.stringOffsets[i as usize] =
-                crate::src::client::cl_main::cl.gameState.dataCount;
+            cl.gameState.stringOffsets[i as usize] =
+                cl.gameState.dataCount;
             crate::stdlib::memcpy(
-                crate::src::client::cl_main::cl
+                cl
                     .gameState
                     .stringData
                     .as_mut_ptr()
-                    .offset(crate::src::client::cl_main::cl.gameState.dataCount as isize)
+                    .offset(cl.gameState.dataCount as isize)
                     as *mut libc::c_void,
                 dup as *const libc::c_void,
                 (len + 1 as i32) as libc::c_ulong,
             );
-            crate::src::client::cl_main::cl.gameState.dataCount += len + 1 as i32
+            cl.gameState.dataCount += len + 1 as i32
         }
         i += 1
         // leave with the default empty string
     }
     if index == 1 as i32 {
         // parse serverId and other cvars
-        crate::src::client::cl_parse::CL_SystemInfoChanged();
+        CL_SystemInfoChanged();
     };
 }
 /*
@@ -697,131 +697,131 @@ Set up argc/argv for the given command
 
 pub unsafe extern "C" fn CL_GetServerCommand(
     mut serverCommandNumber: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     static mut bigConfigString: [libc::c_char; 8192] = [0; 8192];
     let mut argc: i32 = 0;
     // if we have irretrievably lost a reliable command, drop the connection
-    if serverCommandNumber <= crate::src::client::cl_main::clc.serverCommandSequence - 64 as i32 {
+    if serverCommandNumber <= clc.serverCommandSequence - 64 as i32 {
         // when a demo record was started after the client got a whole bunch of
         // reliable commands then the client never got those first reliable commands
-        if crate::src::client::cl_main::clc.demoplaying as u64 != 0 {
-            return crate::src::qcommon::q_shared::qfalse;
+        if clc.demoplaying as u64 != 0 {
+            return qfalse;
         }
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_GetServerCommand: a reliable command was cycled out\x00" as *const u8
                 as *const libc::c_char,
         );
     }
-    if serverCommandNumber > crate::src::client::cl_main::clc.serverCommandSequence {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if serverCommandNumber > clc.serverCommandSequence {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_GetServerCommand: requested a command not received\x00" as *const u8
                 as *const libc::c_char,
         );
     }
-    s = crate::src::client::cl_main::clc.serverCommands
+    s = clc.serverCommands
         [(serverCommandNumber & 64 as i32 - 1 as i32) as usize]
         .as_mut_ptr();
-    crate::src::client::cl_main::clc.lastExecutedServerCommand = serverCommandNumber;
-    crate::src::qcommon::common::Com_DPrintf(
+    clc.lastExecutedServerCommand = serverCommandNumber;
+    Com_DPrintf(
         b"serverCommand: %i : %s\n\x00" as *const u8 as *const libc::c_char,
         serverCommandNumber,
         s,
     );
     loop {
-        crate::src::qcommon::cmd::Cmd_TokenizeString(s);
-        cmd = crate::src::qcommon::cmd::Cmd_Argv(0 as i32);
-        argc = crate::src::qcommon::cmd::Cmd_Argc();
-        if ::libc::strcmp(cmd, b"disconnect\x00" as *const u8 as *const libc::c_char) == 0 {
+        Cmd_TokenizeString(s);
+        cmd = Cmd_Argv(0 as i32);
+        argc = Cmd_Argc();
+        if libc::strcmp(cmd, b"disconnect\x00" as *const u8 as *const libc::c_char) == 0 {
             // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=552
             // allow server to indicate why they were disconnected
             if argc >= 2 as i32 {
-                crate::src::qcommon::common::Com_Error(
-                    crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT as i32,
+                Com_Error(
+                    ERR_SERVERDISCONNECT as i32,
                     b"Server disconnected - %s\x00" as *const u8 as *const libc::c_char,
-                    crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
+                    Cmd_Argv(1 as i32),
                 );
             } else {
-                crate::src::qcommon::common::Com_Error(
-                    crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT as i32,
+                Com_Error(
+                    ERR_SERVERDISCONNECT as i32,
                     b"Server disconnected\x00" as *const u8 as *const libc::c_char,
                 );
             }
         }
-        if ::libc::strcmp(cmd, b"bcs0\x00" as *const u8 as *const libc::c_char) == 0 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+        if libc::strcmp(cmd, b"bcs0\x00" as *const u8 as *const libc::c_char) == 0 {
+            Com_sprintf(
                 bigConfigString.as_mut_ptr(),
                 8192 as i32,
                 b"cs %s \"%s\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
-                crate::src::qcommon::cmd::Cmd_Argv(2 as i32),
+                Cmd_Argv(1 as i32),
+                Cmd_Argv(2 as i32),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        if ::libc::strcmp(cmd, b"bcs1\x00" as *const u8 as *const libc::c_char) == 0 {
-            s = crate::src::qcommon::cmd::Cmd_Argv(2 as i32);
+        if libc::strcmp(cmd, b"bcs1\x00" as *const u8 as *const libc::c_char) == 0 {
+            s = Cmd_Argv(2 as i32);
             if crate::stdlib::strlen(bigConfigString.as_mut_ptr())
                 .wrapping_add(crate::stdlib::strlen(s))
                 >= 8192 as i32 as libc::c_ulong
             {
-                crate::src::qcommon::common::Com_Error(
-                    crate::src::qcommon::q_shared::ERR_DROP as i32,
+                Com_Error(
+                    ERR_DROP as i32,
                     b"bcs exceeded BIG_INFO_STRING\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            ::libc::strcat(bigConfigString.as_mut_ptr(), s);
-            return crate::src::qcommon::q_shared::qfalse;
+            libc::strcat(bigConfigString.as_mut_ptr(), s);
+            return qfalse;
         }
-        if !(::libc::strcmp(cmd, b"bcs2\x00" as *const u8 as *const libc::c_char) == 0) {
+        if !(libc::strcmp(cmd, b"bcs2\x00" as *const u8 as *const libc::c_char) == 0) {
             break;
         }
-        s = crate::src::qcommon::cmd::Cmd_Argv(2 as i32);
+        s = Cmd_Argv(2 as i32);
         if crate::stdlib::strlen(bigConfigString.as_mut_ptr())
             .wrapping_add(crate::stdlib::strlen(s))
             .wrapping_add(1 as i32 as libc::c_ulong)
             >= 8192 as i32 as libc::c_ulong
         {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"bcs exceeded BIG_INFO_STRING\x00" as *const u8 as *const libc::c_char,
             );
         }
-        ::libc::strcat(bigConfigString.as_mut_ptr(), s);
-        ::libc::strcat(
+        libc::strcat(bigConfigString.as_mut_ptr(), s);
+        libc::strcat(
             bigConfigString.as_mut_ptr(),
             b"\"\x00" as *const u8 as *const libc::c_char,
         );
         s = bigConfigString.as_mut_ptr()
     }
-    if ::libc::strcmp(cmd, b"cs\x00" as *const u8 as *const libc::c_char) == 0 {
+    if libc::strcmp(cmd, b"cs\x00" as *const u8 as *const libc::c_char) == 0 {
         CL_ConfigstringModified();
         // reparse the string, because CL_ConfigstringModified may have done another Cmd_TokenizeString()
-        crate::src::qcommon::cmd::Cmd_TokenizeString(s);
-        return crate::src::qcommon::q_shared::qtrue;
+        Cmd_TokenizeString(s);
+        return qtrue;
     }
-    if ::libc::strcmp(cmd, b"map_restart\x00" as *const u8 as *const libc::c_char) == 0 {
+    if libc::strcmp(cmd, b"map_restart\x00" as *const u8 as *const libc::c_char) == 0 {
         // clear notify lines and outgoing commands before passing
         // the restart to the cgame
-        crate::src::client::cl_console::Con_ClearNotify();
+        Con_ClearNotify();
         // reparse the string, because Con_ClearNotify() may have done another Cmd_TokenizeString()
-        crate::src::qcommon::cmd::Cmd_TokenizeString(s);
+        Cmd_TokenizeString(s);
         crate::stdlib::memset(
-            crate::src::client::cl_main::cl.cmds.as_mut_ptr() as *mut libc::c_void,
+            cl.cmds.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::src::qcommon::q_shared::usercmd_t; 64]>()
+            ::std::mem::size_of::<[usercmd_t; 64]>()
                 as libc::c_ulong,
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // the clientLevelShot command is used during development
     // to generate 128*128 screenshots from the intermission
     // point of levels for the menu system to use
     // we pass it along to the cgame to make appropriate adjustments,
     // but we also clear the console and notify lines here
-    if ::libc::strcmp(
+    if libc::strcmp(
         cmd,
         b"clientLevelShot\x00" as *const u8 as *const libc::c_char,
     ) == 0
@@ -829,21 +829,21 @@ pub unsafe extern "C" fn CL_GetServerCommand(
         // don't do it if we aren't running the server locally,
         // otherwise malicious remote servers could overwrite
         // the existing thumbnails
-        if (*crate::src::qcommon::common::com_sv_running).integer == 0 {
-            return crate::src::qcommon::q_shared::qfalse;
+        if (*com_sv_running).integer == 0 {
+            return qfalse;
         }
         // close the console
-        crate::src::client::cl_console::Con_Close();
+        Con_Close();
         // take a special screenshot next frame
-        crate::src::qcommon::cmd::Cbuf_AddText(
+        Cbuf_AddText(
             b"wait ; wait ; wait ; wait ; screenshot levelshot\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // we may want to put a "connect to other server" command here
     // cgame can now act on the command
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ====================
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn CL_CM_LoadMap(mut mapname: *const libc::c_char) {
     let mut checksum: i32 = 0;
     crate::src::qcommon::cm_load::CM_LoadMap(
         mapname,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
         &mut checksum,
     );
 }
@@ -871,24 +871,24 @@ CL_ShutdonwCGame
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ShutdownCGame() {
-    crate::src::client::cl_keys::Key_SetCatcher(
-        crate::src::client::cl_keys::Key_GetCatcher() & !(0x8 as i32),
+    Key_SetCatcher(
+        Key_GetCatcher() & !(0x8 as i32),
     );
-    crate::src::client::cl_main::cls.cgameStarted = crate::src::qcommon::q_shared::qfalse;
-    if crate::src::client::cl_main::cgvm.is_null() {
+    cls.cgameStarted = qfalse;
+    if cgvm.is_null() {
         return;
     }
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::client::cl_main::cgvm,
-        crate::cg_public_h::CG_SHUTDOWN as i32,
+    VM_Call(
+        cgvm,
+        CG_SHUTDOWN as i32,
     );
-    crate::src::qcommon::vm::VM_Free(crate::src::client::cl_main::cgvm);
-    crate::src::client::cl_main::cgvm = 0 as *mut crate::qcommon_h::vm_t;
+    VM_Free(cgvm);
+    cgvm = 0 as *mut vm_t;
 }
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
-    let mut fi: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut fi: floatint_t =
+        floatint_t { f: 0. };
     fi.f = f;
     return fi.i;
 }
@@ -902,148 +902,148 @@ The cgame module is making a system call
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_CgameSystemCalls(
-    mut args: *mut crate::stdlib::intptr_t,
-) -> crate::stdlib::intptr_t {
+    mut args: *mut intptr_t,
+) -> intptr_t {
     match *args.offset(0 as i32 as isize) {
         0 => {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         1 => {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
         }
-        2 => return crate::src::sys::sys_unix::Sys_Milliseconds() as crate::stdlib::intptr_t,
+        2 => return Sys_Milliseconds() as intptr_t,
         3 => {
-            crate::src::qcommon::cvar::Cvar_Register(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+            Cvar_Register(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vmCvar_t
+                    as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         4 => {
-            crate::src::qcommon::cvar::Cvar_Update(crate::src::qcommon::vm::VM_ArgPtr(
+            Cvar_Update(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::vmCvar_t
-                as *mut crate::src::qcommon::q_shared::vmCvar_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut vmCvar_t
+                as *mut vmCvar_t);
+            return 0 as i32 as intptr_t;
         }
         5 => {
-            crate::src::qcommon::cvar::Cvar_SetSafe(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Cvar_SetSafe(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         6 => {
-            crate::src::qcommon::cvar::Cvar_VariableStringBuffer(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Cvar_VariableStringBuffer(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
-        7 => return crate::src::qcommon::cmd::Cmd_Argc() as crate::stdlib::intptr_t,
+        7 => return Cmd_Argc() as intptr_t,
         8 => {
-            crate::src::qcommon::cmd::Cmd_ArgvBuffer(
+            Cmd_ArgvBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         9 => {
-            crate::src::qcommon::cmd::Cmd_ArgsBuffer(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Cmd_ArgsBuffer(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         10 => {
-            return crate::src::qcommon::files::FS_FOpenFileByMode(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            return FS_FOpenFileByMode(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::fileHandle_t,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fsMode_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut fileHandle_t,
+                *args.offset(3 as i32 as isize) as fsMode_t,
+            ) as intptr_t
         }
         11 => {
-            crate::src::qcommon::files::FS_Read(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+            FS_Read(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as fileHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         12 => {
-            crate::src::qcommon::files::FS_Write(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+            FS_Write(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as fileHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         13 => {
-            crate::src::qcommon::files::FS_FCloseFile(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t
+            FS_FCloseFile(
+                *args.offset(1 as i32 as isize) as fileHandle_t
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         89 => {
-            return crate::src::qcommon::files::FS_Seek(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+            return FS_Seek(
+                *args.offset(1 as i32 as isize) as fileHandle_t,
                 *args.offset(2 as i32 as isize),
                 *args.offset(3 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         14 => {
-            crate::src::qcommon::cmd::Cbuf_AddText(crate::src::qcommon::vm::VM_ArgPtr(
+            Cbuf_AddText(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             ) as *const libc::c_char);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         15 => {
             CL_AddCgameCommand(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         72 => {
-            crate::src::qcommon::cmd::Cmd_RemoveCommandSafe(crate::src::qcommon::vm::VM_ArgPtr(
+            Cmd_RemoveCommandSafe(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             ) as *const libc::c_char);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         16 => {
-            crate::src::client::cl_main::CL_AddReliableCommand(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            CL_AddReliableCommand(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         17 => {
             // this is used during lengthy level loading, so pump message loop
@@ -1051,402 +1051,402 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             // We can't call Com_EventLoop here, a restart will crash and this _does_ happen
             // if there is a map change while we are downloading at pk3.
             // ZOID
-            crate::src::client::cl_scrn::SCR_UpdateScreen();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            SCR_UpdateScreen();
+            return 0 as i32 as intptr_t;
         }
         18 => {
             CL_CM_LoadMap(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
-        19 => return crate::src::qcommon::cm_load::CM_NumInlineModels() as crate::stdlib::intptr_t,
+        19 => return crate::src::qcommon::cm_load::CM_NumInlineModels() as intptr_t,
         20 => {
             return crate::src::qcommon::cm_load::CM_InlineModel(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         22 => {
             return crate::src::qcommon::cm_load::CM_TempBoxModel(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_shared::qfalse as i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                qfalse as i32,
+            ) as intptr_t
         }
         82 => {
             return crate::src::qcommon::cm_load::CM_TempBoxModel(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_shared::qtrue as i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                qtrue as i32,
+            ) as intptr_t
         }
         23 => {
             return crate::src::qcommon::cm_test::CM_PointContents(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                *args.offset(2 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                *args.offset(2 as i32 as isize) as clipHandle_t,
+            ) as intptr_t
         }
         24 => {
             return crate::src::qcommon::cm_test::CM_TransformedPointContents(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                *args.offset(2 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                *args.offset(2 as i32 as isize) as clipHandle_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *const vec_t,
+            ) as intptr_t
         }
         25 => {
             crate::src::qcommon::cm_trace::CM_BoxTrace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                *args.offset(6 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+                *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         83 => {
             crate::src::qcommon::cm_trace::CM_BoxTrace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                *args.offset(6 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+                *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::q_shared::qtrue as i32,
+                qtrue as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         26 => {
             crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                *args.offset(6 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+                *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                VM_ArgPtr(*args.offset(8 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(9 as i32 as isize))
+                    as *const vec_t,
+                qfalse as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         84 => {
             crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                *args.offset(6 as i32 as isize) as crate::src::qcommon::q_shared::clipHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+                *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::q_shared::qtrue as i32,
+                VM_ArgPtr(*args.offset(8 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(9 as i32 as isize))
+                    as *const vec_t,
+                qtrue as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         27 => {
-            return crate::src::client::cl_main::re
+            return re
                 .MarkFragments
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec3_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec3_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
                 *args.offset(4 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(6 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::markFragment_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(7 as i32 as isize))
+                    as *mut markFragment_t,
+            ) as intptr_t
         }
         28 => {
             crate::src::client::snd_main::S_StartSound(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
-                *args.offset(4 as i32 as isize) as crate::src::qcommon::q_shared::sfxHandle_t,
+                *args.offset(4 as i32 as isize) as sfxHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         29 => {
             crate::src::client::snd_main::S_StartLocalSound(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::sfxHandle_t,
+                *args.offset(1 as i32 as isize) as sfxHandle_t,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         30 => {
             crate::src::client::snd_main::S_ClearLoopingSounds(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qboolean
+                *args.offset(1 as i32 as isize) as qboolean
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         31 => {
             crate::src::client::snd_main::S_AddLoopingSound(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                *args.offset(4 as i32 as isize) as crate::src::qcommon::q_shared::sfxHandle_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                *args.offset(4 as i32 as isize) as sfxHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         80 => {
             crate::src::client::snd_main::S_AddRealLoopingSound(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                *args.offset(4 as i32 as isize) as crate::src::qcommon::q_shared::sfxHandle_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const vec_t,
+                *args.offset(4 as i32 as isize) as sfxHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         81 => {
             crate::src::client::snd_main::S_StopLoopingSound(*args.offset(1 as i32 as isize) as i32);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         32 => {
             crate::src::client::snd_main::S_UpdateEntityPosition(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         33 => {
             crate::src::client::snd_main::S_Respatialize(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec3_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec3_t,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         34 => {
             return crate::src::client::snd_main::S_RegisterSound(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                *args.offset(2 as i32 as isize) as crate::src::qcommon::q_shared::qboolean,
-            ) as crate::stdlib::intptr_t
+                *args.offset(2 as i32 as isize) as qboolean,
+            ) as intptr_t
         }
         35 => {
             crate::src::client::snd_main::S_StartBackgroundTrack(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         36 => {
-            crate::src::client::cl_main::re
+            re
                 .LoadWorld
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(
+                VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
                 as *const libc::c_char
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         37 => {
-            return crate::src::client::cl_main::re
+            return re
                 .RegisterModel
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         38 => {
-            return crate::src::client::cl_main::re
+            return re
                 .RegisterSkin
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         39 => {
-            return crate::src::client::cl_main::re
+            return re
                 .RegisterShader
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         57 => {
-            return crate::src::client::cl_main::re
+            return re
                 .RegisterShaderNoMip
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         59 => {
-            crate::src::client::cl_main::re
+            re
                 .RegisterFont
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::fontInfo_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut fontInfo_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         40 => {
-            crate::src::client::cl_main::re
+            re
                 .ClearScene
                 .expect("non-null function pointer")();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         41 => {
-            crate::src::client::cl_main::re
+            re
                 .AddRefEntityToScene
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(
+                VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *const crate::tr_types_h::refEntity_t
+                as *const refEntity_t
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         42 => {
-            crate::src::client::cl_main::re
+            re
                 .AddPolyToScene
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qhandle_t,
+                *args.offset(1 as i32 as isize) as qhandle_t,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::tr_types_h::polyVert_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const polyVert_t,
                 1 as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         87 => {
-            crate::src::client::cl_main::re
+            re
                 .AddPolyToScene
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qhandle_t,
+                *args.offset(1 as i32 as isize) as qhandle_t,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::tr_types_h::polyVert_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const polyVert_t,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         73 => {
-            return crate::src::client::cl_main::re
+            return re
                 .LightForPoint
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         43 => {
-            crate::src::client::cl_main::re
+            re
                 .AddLightToScene
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
                 _vmf(*args.offset(5 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         85 => {
-            crate::src::client::cl_main::re
+            re
                 .AddAdditiveLightToScene
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
                 _vmf(*args.offset(5 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         44 => {
-            crate::src::client::cl_main::re
+            re
                 .RenderScene
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(
+                VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *const crate::tr_types_h::refdef_t
+                as *const refdef_t
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         45 => {
-            crate::src::client::cl_main::re
+            re
                 .SetColor
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(
+                VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             ) as *const f32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         46 => {
-            crate::src::client::cl_main::re
+            re
                 .DrawStretchPic
                 .expect("non-null function pointer")(
                 _vmf(*args.offset(1 as i32 as isize)),
@@ -1457,126 +1457,126 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 _vmf(*args.offset(6 as i32 as isize)),
                 _vmf(*args.offset(7 as i32 as isize)),
                 _vmf(*args.offset(8 as i32 as isize)),
-                *args.offset(9 as i32 as isize) as crate::src::qcommon::q_shared::qhandle_t,
+                *args.offset(9 as i32 as isize) as qhandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         47 => {
-            crate::src::client::cl_main::re
+            re
                 .ModelBounds
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qhandle_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                *args.offset(1 as i32 as isize) as qhandle_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         48 => {
-            return crate::src::client::cl_main::re
+            return re
                 .LerpTag
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::orientation_t,
-                *args.offset(2 as i32 as isize) as crate::src::qcommon::q_shared::qhandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut orientation_t,
+                *args.offset(2 as i32 as isize) as qhandle_t,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
                 _vmf(*args.offset(5 as i32 as isize)),
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(6 as i32 as isize))
+                VM_ArgPtr(*args.offset(6 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         49 => {
             CL_GetGlconfig(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::tr_types_h::glconfig_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut glconfig_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         50 => {
             CL_GetGameState(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::gameState_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut gameState_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         51 => {
             CL_GetCurrentSnapshotNumber(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         52 => {
             return CL_GetSnapshot(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::cg_public_h::snapshot_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut snapshot_t,
+            ) as intptr_t
         }
         53 => {
             return CL_GetServerCommand(*args.offset(1 as i32 as isize) as i32)
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
-        54 => return CL_GetCurrentCmdNumber() as crate::stdlib::intptr_t,
+        54 => return CL_GetCurrentCmdNumber() as intptr_t,
         55 => {
             return CL_GetUserCmd(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::usercmd_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut usercmd_t,
+            ) as intptr_t
         }
         56 => {
             CL_SetUserCmdValue(
                 *args.offset(1 as i32 as isize) as i32,
                 _vmf(*args.offset(2 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         58 => {
-            return crate::src::qcommon::common::Hunk_MemoryRemaining() as crate::stdlib::intptr_t
+            return Hunk_MemoryRemaining() as intptr_t
         }
         60 => {
             return crate::src::client::cl_keys::Key_IsDown(*args.offset(1 as i32 as isize) as i32)
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
-        61 => return crate::src::client::cl_keys::Key_GetCatcher() as crate::stdlib::intptr_t,
+        61 => return Key_GetCatcher() as intptr_t,
         62 => {
             // Don't allow the cgame module to close the console
-            crate::src::client::cl_keys::Key_SetCatcher(
+            Key_SetCatcher(
                 (*args.offset(1 as i32 as isize)
-                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as isize)
+                    | (Key_GetCatcher() & 0x1 as i32) as isize)
                     as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         63 => {
-            return crate::src::client::cl_keys::Key_GetKey(crate::src::qcommon::vm::VM_ArgPtr(
+            return crate::src::client::cl_keys::Key_GetKey(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            ) as *const libc::c_char) as crate::stdlib::intptr_t
+            ) as *const libc::c_char) as intptr_t
         }
         100 => {
             crate::stdlib::memset(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         101 => {
             crate::stdlib::memcpy(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)),
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
+                VM_ArgPtr(*args.offset(2 as i32 as isize)),
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         102 => {
             crate::stdlib::strncpy(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
@@ -1585,147 +1585,147 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         103 => {
             return FloatAsInt(
                 crate::stdlib::sin(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         104 => {
             return FloatAsInt(
                 crate::stdlib::cos(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         105 => {
             return FloatAsInt(crate::stdlib::atan2(
                 _vmf(*args.offset(1 as i32 as isize)) as f64,
                 _vmf(*args.offset(2 as i32 as isize)) as f64,
-            ) as f32) as crate::stdlib::intptr_t
+            ) as f32) as intptr_t
         }
         106 => {
             return FloatAsInt(
                 crate::stdlib::sqrt(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         107 => {
             return FloatAsInt(
                 crate::stdlib::floor(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         108 => {
             return FloatAsInt(
                 crate::stdlib::ceil(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         111 => {
-            return FloatAsInt(crate::src::qcommon::q_math::Q_acos(_vmf(
+            return FloatAsInt(Q_acos(_vmf(
                 *args.offset(1 as i32 as isize),
-            ))) as crate::stdlib::intptr_t
+            ))) as intptr_t
         }
         64 => {
             return (*botlib_export)
                 .PC_AddGlobalDefine
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         65 => {
             return (*botlib_export)
                 .PC_LoadSourceHandle
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         66 => {
             return (*botlib_export)
                 .PC_FreeSourceHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         67 => {
             return (*botlib_export)
                 .PC_ReadTokenHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::pc_token_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut pc_token_t,
+            ) as intptr_t
         }
         68 => {
             return (*botlib_export)
                 .PC_SourceFileAndLine
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+            ) as intptr_t
         }
         69 => {
             crate::src::client::snd_main::S_StopBackgroundTrack();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         70 => {
-            return crate::src::qcommon::common::Com_RealTime(crate::src::qcommon::vm::VM_ArgPtr(
+            return Com_RealTime(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::qtime_t
-                as *mut crate::src::qcommon::q_shared::qtime_s)
-                as crate::stdlib::intptr_t
+                as *mut qtime_t
+                as *mut qtime_s)
+                as intptr_t
         }
         71 => {
-            crate::src::asm::snapvector::qsnapvectorsse(crate::src::qcommon::vm::VM_ArgPtr(
+            qsnapvectorsse(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::vec_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut vec_t);
+            return 0 as i32 as intptr_t;
         }
         74 => {
-            return crate::src::client::cl_cin::CIN_PlayCinematic(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            return CIN_PlayCinematic(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
                 *args.offset(6 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         75 => {
-            return crate::src::client::cl_cin::CIN_StopCinematic(
+            return CIN_StopCinematic(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         76 => {
-            return crate::src::client::cl_cin::CIN_RunCinematic(
+            return CIN_RunCinematic(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         77 => {
-            crate::src::client::cl_cin::CIN_DrawCinematic(*args.offset(1 as i32 as isize) as i32);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            CIN_DrawCinematic(*args.offset(1 as i32 as isize) as i32);
+            return 0 as i32 as intptr_t;
         }
         78 => {
-            crate::src::client::cl_cin::CIN_SetExtents(
+            CIN_SetExtents(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         79 => {
-            crate::src::client::cl_main::re
+            re
                 .RemapShader
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         86 => {
             /*
@@ -1739,27 +1739,27 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 case CG_GETCAMERAINFO:
                     return getCameraInfo(args[1], VMA(2), VMA(3));
             */
-            return crate::src::client::cl_main::re
+            return re
                 .GetEntityToken
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t;
+            ) as intptr_t;
         }
         88 => {
-            return crate::src::client::cl_main::re
+            return re
                 .inPVS
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+            ) as intptr_t
         }
         _ => {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"Bad cgame system trap: %ld\x00" as *const u8 as *const libc::c_char,
                 *args.offset(0 as i32 as isize),
             );
@@ -1780,90 +1780,90 @@ pub unsafe extern "C" fn CL_InitCGame() {
     let mut mapname: *const libc::c_char = 0 as *const libc::c_char;
     let mut t1: i32 = 0;
     let mut t2: i32 = 0;
-    let mut interpret: crate::qcommon_h::vmInterpret_t = crate::qcommon_h::VMI_NATIVE;
-    t1 = crate::src::sys::sys_unix::Sys_Milliseconds();
+    let mut interpret: vmInterpret_t = VMI_NATIVE;
+    t1 = Sys_Milliseconds();
     // put away the console
-    crate::src::client::cl_console::Con_Close();
+    Con_Close();
     // find the current mapname
-    info = crate::src::client::cl_main::cl
+    info = cl
         .gameState
         .stringData
         .as_mut_ptr()
         .offset(
-            crate::src::client::cl_main::cl.gameState.stringOffsets[0 as i32 as usize] as isize,
+            cl.gameState.stringOffsets[0 as i32 as usize] as isize,
         );
-    mapname = crate::src::qcommon::q_shared::Info_ValueForKey(
+    mapname = Info_ValueForKey(
         info,
         b"mapname\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
-        crate::src::client::cl_main::cl.mapname.as_mut_ptr(),
+    Com_sprintf(
+        cl.mapname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         mapname,
     );
     // load the dll or bytecode
-    interpret = crate::src::qcommon::cvar::Cvar_VariableValue(
+    interpret = Cvar_VariableValue(
         b"vm_cgame\x00" as *const u8 as *const libc::c_char,
-    ) as crate::qcommon_h::vmInterpret_t;
-    if crate::src::client::cl_parse::cl_connectedToPureServer != 0 {
+    ) as vmInterpret_t;
+    if cl_connectedToPureServer != 0 {
         // if sv_pure is set we only allow qvms to be loaded
-        if interpret as u32 != crate::qcommon_h::VMI_COMPILED as i32 as u32
-            && interpret as u32 != crate::qcommon_h::VMI_BYTECODE as i32 as u32
+        if interpret as u32 != VMI_COMPILED as i32 as u32
+            && interpret as u32 != VMI_BYTECODE as i32 as u32
         {
-            interpret = crate::qcommon_h::VMI_COMPILED
+            interpret = VMI_COMPILED
         }
     }
-    crate::src::client::cl_main::cgvm = crate::src::qcommon::vm::VM_Create(
+    cgvm = VM_Create(
         b"cgame\x00" as *const u8 as *const libc::c_char,
         Some(
             CL_CgameSystemCalls
-                as unsafe extern "C" fn(_: *mut crate::stdlib::intptr_t) -> crate::stdlib::intptr_t,
+                as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
         ),
         interpret,
     );
-    if crate::src::client::cl_main::cgvm.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if cgvm.is_null() {
+        Com_Error(
+            ERR_DROP as i32,
             b"VM_Create on cgame failed\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::src::client::cl_main::clc.state = crate::src::qcommon::q_shared::CA_LOADING;
+    clc.state = CA_LOADING;
     // init for this gamestate
     // use the lastExecutedServerCommand instead of the serverCommandSequence
     // otherwise server commands sent just before a gamestate are dropped
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::client::cl_main::cgvm,
-        crate::cg_public_h::CG_INIT as i32,
-        crate::src::client::cl_main::clc.serverMessageSequence,
-        crate::src::client::cl_main::clc.lastExecutedServerCommand,
-        crate::src::client::cl_main::clc.clientNum,
+    VM_Call(
+        cgvm,
+        CG_INIT as i32,
+        clc.serverMessageSequence,
+        clc.lastExecutedServerCommand,
+        clc.clientNum,
     );
     // reset any CVAR_CHEAT cvars registered by cgame
-    if crate::src::client::cl_main::clc.demoplaying as u64 == 0
-        && crate::src::client::cl_parse::cl_connectedToCheatServer == 0
+    if clc.demoplaying as u64 == 0
+        && cl_connectedToCheatServer == 0
     {
-        crate::src::qcommon::cvar::Cvar_SetCheatState();
+        Cvar_SetCheatState();
     }
     // we will send a usercmd this frame, which
     // will cause the server to send us the first snapshot
-    crate::src::client::cl_main::clc.state = crate::src::qcommon::q_shared::CA_PRIMED;
-    t2 = crate::src::sys::sys_unix::Sys_Milliseconds();
-    crate::src::qcommon::common::Com_Printf(
+    clc.state = CA_PRIMED;
+    t2 = Sys_Milliseconds();
+    Com_Printf(
         b"CL_InitCGame: %5.2f seconds\n\x00" as *const u8 as *const libc::c_char,
         (t2 - t1) as f64 / 1000.0f64,
     );
     // have the renderer touch all its images, so they are present
     // on the card even if the driver does deferred loading
-    crate::src::client::cl_main::re
+    re
         .EndRegistration
         .expect("non-null function pointer")();
     // make sure everything is paged in
-    if crate::src::sys::sys_unix::Sys_LowPhysicalMemory() as u64 == 0 {
-        crate::src::qcommon::common::Com_TouchMemory();
+    if Sys_LowPhysicalMemory() as u64 == 0 {
+        Com_TouchMemory();
     }
     // clear anything that got printed
-    crate::src::client::cl_console::Con_ClearNotify();
+    Con_ClearNotify();
 }
 /*
 ===========================================================================
@@ -2198,14 +2198,14 @@ See if the current console command is claimed by the cgame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GameCommand() -> crate::src::qcommon::q_shared::qboolean {
-    if crate::src::client::cl_main::cgvm.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+pub unsafe extern "C" fn CL_GameCommand() -> qboolean {
+    if cgvm.is_null() {
+        return qfalse;
     }
-    return crate::src::qcommon::vm::VM_Call(
-        crate::src::client::cl_main::cgvm,
-        crate::cg_public_h::CG_CONSOLE_COMMAND as i32,
-    ) as crate::src::qcommon::q_shared::qboolean;
+    return VM_Call(
+        cgvm,
+        CG_CONSOLE_COMMAND as i32,
+    ) as qboolean;
 }
 /*
 =====================
@@ -2214,69 +2214,69 @@ CL_CGameRendering
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_CGameRendering(mut stereo: crate::tr_types_h::stereoFrame_t) {
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::client::cl_main::cgvm,
-        crate::cg_public_h::CG_DRAW_ACTIVE_FRAME as i32,
-        crate::src::client::cl_main::cl.serverTime,
+pub unsafe extern "C" fn CL_CGameRendering(mut stereo: stereoFrame_t) {
+    VM_Call(
+        cgvm,
+        CG_DRAW_ACTIVE_FRAME as i32,
+        cl.serverTime,
         stereo as u32,
-        crate::src::client::cl_main::clc.demoplaying as u32,
+        clc.demoplaying as u32,
     );
-    crate::src::qcommon::vm::VM_Debug(0 as i32);
+    VM_Debug(0 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_AdjustTimeDelta() {
     let mut newDelta: i32 = 0;
     let mut deltaDelta: i32 = 0;
-    crate::src::client::cl_main::cl.newSnapshots = crate::src::qcommon::q_shared::qfalse;
+    cl.newSnapshots = qfalse;
     // the delta never drifts when replaying a demo
-    if crate::src::client::cl_main::clc.demoplaying as u64 != 0 {
+    if clc.demoplaying as u64 != 0 {
         return;
     } // FIXME: is this a problem for cgame?
     newDelta =
-        crate::src::client::cl_main::cl.snap.serverTime - crate::src::client::cl_main::cls.realtime;
-    deltaDelta = ::libc::abs(newDelta - crate::src::client::cl_main::cl.serverTimeDelta);
+        cl.snap.serverTime - cls.realtime;
+    deltaDelta = abs(newDelta - cl.serverTimeDelta);
     if deltaDelta > 500 as i32 {
-        crate::src::client::cl_main::cl.serverTimeDelta = newDelta;
-        crate::src::client::cl_main::cl.oldServerTime =
-            crate::src::client::cl_main::cl.snap.serverTime;
-        crate::src::client::cl_main::cl.serverTime =
-            crate::src::client::cl_main::cl.snap.serverTime;
-        if (*crate::src::client::cl_main::cl_showTimeDelta).integer != 0 {
-            crate::src::qcommon::common::Com_Printf(
+        cl.serverTimeDelta = newDelta;
+        cl.oldServerTime =
+            cl.snap.serverTime;
+        cl.serverTime =
+            cl.snap.serverTime;
+        if (*cl_showTimeDelta).integer != 0 {
+            Com_Printf(
                 b"<RESET> \x00" as *const u8 as *const libc::c_char,
             );
         }
     } else if deltaDelta > 100 as i32 {
         // fast adjust, cut the difference in half
-        if (*crate::src::client::cl_main::cl_showTimeDelta).integer != 0 {
-            crate::src::qcommon::common::Com_Printf(
+        if (*cl_showTimeDelta).integer != 0 {
+            Com_Printf(
                 b"<FAST> \x00" as *const u8 as *const libc::c_char,
             );
         }
-        crate::src::client::cl_main::cl.serverTimeDelta =
-            crate::src::client::cl_main::cl.serverTimeDelta + newDelta >> 1 as i32
-    } else if (*crate::src::qcommon::common::com_timescale).value == 0 as i32 as f32
-        || (*crate::src::qcommon::common::com_timescale).value == 1 as i32 as f32
+        cl.serverTimeDelta =
+            cl.serverTimeDelta + newDelta >> 1 as i32
+    } else if (*com_timescale).value == 0 as i32 as f32
+        || (*com_timescale).value == 1 as i32 as f32
     {
-        if crate::src::client::cl_main::cl.extrapolatedSnapshot as u64 != 0 {
-            crate::src::client::cl_main::cl.extrapolatedSnapshot =
-                crate::src::qcommon::q_shared::qfalse;
-            crate::src::client::cl_main::cl.serverTimeDelta -= 2 as i32
+        if cl.extrapolatedSnapshot as u64 != 0 {
+            cl.extrapolatedSnapshot =
+                qfalse;
+            cl.serverTimeDelta -= 2 as i32
         } else {
             // slow drift adjust, only move 1 or 2 msec
             // if any of the frames between this and the previous snapshot
             // had to be extrapolated, nudge our sense of time back a little
             // the granularity of +1 / -2 is too high for timescale modified frametimes
             // otherwise, move our sense of time forward to minimize total latency
-            crate::src::client::cl_main::cl.serverTimeDelta += 1
+            cl.serverTimeDelta += 1
         }
     }
-    if (*crate::src::client::cl_main::cl_showTimeDelta).integer != 0 {
-        crate::src::qcommon::common::Com_Printf(
+    if (*cl_showTimeDelta).integer != 0 {
+        Com_Printf(
             b"%i \x00" as *const u8 as *const libc::c_char,
-            crate::src::client::cl_main::cl.serverTimeDelta,
+            cl.serverTimeDelta,
         );
     };
 }
@@ -2289,40 +2289,40 @@ CL_FirstSnapshot
 
 pub unsafe extern "C" fn CL_FirstSnapshot() {
     // ignore snapshots that don't have entities
-    if crate::src::client::cl_main::cl.snap.snapFlags & 2 as i32 != 0 {
+    if cl.snap.snapFlags & 2 as i32 != 0 {
         return;
     }
-    crate::src::client::cl_main::clc.state = crate::src::qcommon::q_shared::CA_ACTIVE;
+    clc.state = CA_ACTIVE;
     // set the timedelta so we are exactly on this first frame
-    crate::src::client::cl_main::cl.serverTimeDelta =
-        crate::src::client::cl_main::cl.snap.serverTime - crate::src::client::cl_main::cls.realtime;
-    crate::src::client::cl_main::cl.oldServerTime = crate::src::client::cl_main::cl.snap.serverTime;
-    crate::src::client::cl_main::clc.timeDemoBaseTime =
-        crate::src::client::cl_main::cl.snap.serverTime;
+    cl.serverTimeDelta =
+        cl.snap.serverTime - cls.realtime;
+    cl.oldServerTime = cl.snap.serverTime;
+    clc.timeDemoBaseTime =
+        cl.snap.serverTime;
     // if this is the first frame of active play,
     // execute the contents of activeAction now
     // this is to allow scripting a timedemo to start right
     // after loading
-    if *(*crate::src::client::cl_main::cl_activeAction)
+    if *(*cl_activeAction)
         .string
         .offset(0 as i32 as isize)
         != 0
     {
-        crate::src::qcommon::cmd::Cbuf_AddText(
-            (*crate::src::client::cl_main::cl_activeAction).string,
+        Cbuf_AddText(
+            (*cl_activeAction).string,
         );
-        crate::src::qcommon::cvar::Cvar_Set(
+        Cvar_Set(
             b"activeAction\x00" as *const u8 as *const libc::c_char,
             b"\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*crate::src::client::cl_main::cl_useMumble).integer != 0
+    if (*cl_useMumble).integer != 0
         && crate::src::client::libmumblelink::mumble_islinked() == 0
     {
         let mut ret: i32 = crate::src::client::libmumblelink::mumble_link(
             b"ioquake3\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Mumble: Linking to Mumble application %s\n\x00" as *const u8 as *const libc::c_char,
             if ret == 0 as i32 {
                 b"ok\x00" as *const u8 as *const libc::c_char
@@ -2331,10 +2331,10 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
             },
         );
     }
-    if crate::src::client::cl_main::clc.voipCodecInitialized as u64 == 0 {
+    if clc.voipCodecInitialized as u64 == 0 {
         let mut i: i32 = 0;
         let mut error: i32 = 0;
-        crate::src::client::cl_main::clc.opusEncoder =
+        clc.opusEncoder =
             crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_create(
                 48000 as i32,
                 1 as i32,
@@ -2342,7 +2342,7 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
                 &mut error,
             );
         if error != 0 {
-            crate::src::qcommon::common::Com_DPrintf(
+            Com_DPrintf(
                 b"VoIP: Error opus_encoder_create %d\n\x00" as *const u8 as *const libc::c_char,
                 error,
             );
@@ -2350,14 +2350,14 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
         }
         i = 0 as i32;
         while i < 64 as i32 {
-            crate::src::client::cl_main::clc.opusDecoder[i as usize] =
+            clc.opusDecoder[i as usize] =
                 crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_create(
                     48000 as i32,
                     1 as i32,
                     &mut error,
                 );
             if error != 0 {
-                crate::src::qcommon::common::Com_DPrintf(
+                Com_DPrintf(
                     b"VoIP: Error opus_decoder_create(%d) %d\n\x00" as *const u8
                         as *const libc::c_char,
                     i,
@@ -2365,26 +2365,26 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
                 );
                 return;
             }
-            crate::src::client::cl_main::clc.voipIgnore[i as usize] =
-                crate::src::qcommon::q_shared::qfalse;
-            crate::src::client::cl_main::clc.voipGain[i as usize] = 1.0f32;
+            clc.voipIgnore[i as usize] =
+                qfalse;
+            clc.voipGain[i as usize] = 1.0f32;
             i += 1
         }
-        crate::src::client::cl_main::clc.voipCodecInitialized =
-            crate::src::qcommon::q_shared::qtrue;
-        crate::src::client::cl_main::clc.voipMuteAll = crate::src::qcommon::q_shared::qfalse;
-        crate::src::qcommon::cmd::Cmd_AddCommand(
+        clc.voipCodecInitialized =
+            qtrue;
+        clc.voipMuteAll = qfalse;
+        Cmd_AddCommand(
             b"voip\x00" as *const u8 as *const libc::c_char,
-            Some(crate::src::client::cl_main::CL_Voip_f as unsafe extern "C" fn() -> ()),
+            Some(CL_Voip_f as unsafe extern "C" fn() -> ()),
         );
-        crate::src::qcommon::cvar::Cvar_Set(
+        Cvar_Set(
             b"cl_voipSendTarget\x00" as *const u8 as *const libc::c_char,
             b"spatial\x00" as *const u8 as *const libc::c_char,
         );
         crate::stdlib::memset(
-            crate::src::client::cl_main::clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
+            clc.voipTargets.as_mut_ptr() as *mut libc::c_void,
             !(0 as i32),
-            ::std::mem::size_of::<[crate::stdlib::uint8_t; 8]>() as libc::c_ulong,
+            ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong,
         );
     };
 }
@@ -2596,102 +2596,102 @@ CL_SetCGameTime
 
 pub unsafe extern "C" fn CL_SetCGameTime() {
     // getting a valid frame message ends the connection process
-    if crate::src::client::cl_main::clc.state as u32
-        != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
+    if clc.state as u32
+        != CA_ACTIVE as i32 as u32
     {
-        if crate::src::client::cl_main::clc.state as u32
-            != crate::src::qcommon::q_shared::CA_PRIMED as i32 as u32
+        if clc.state as u32
+            != CA_PRIMED as i32 as u32
         {
             return;
         }
-        if crate::src::client::cl_main::clc.demoplaying as u64 != 0 {
+        if clc.demoplaying as u64 != 0 {
             // we shouldn't get the first snapshot on the same frame
             // as the gamestate, because it causes a bad time skip
-            if crate::src::client::cl_main::clc.firstDemoFrameSkipped as u64 == 0 {
-                crate::src::client::cl_main::clc.firstDemoFrameSkipped =
-                    crate::src::qcommon::q_shared::qtrue;
+            if clc.firstDemoFrameSkipped as u64 == 0 {
+                clc.firstDemoFrameSkipped =
+                    qtrue;
                 return;
             }
-            crate::src::client::cl_main::CL_ReadDemoMessage();
+            CL_ReadDemoMessage();
         }
-        if crate::src::client::cl_main::cl.newSnapshots as u64 != 0 {
-            crate::src::client::cl_main::cl.newSnapshots = crate::src::qcommon::q_shared::qfalse;
+        if cl.newSnapshots as u64 != 0 {
+            cl.newSnapshots = qfalse;
             CL_FirstSnapshot();
         }
-        if crate::src::client::cl_main::clc.state as u32
-            != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
+        if clc.state as u32
+            != CA_ACTIVE as i32 as u32
         {
             return;
         }
     }
     // if we have gotten to this point, cl.snap is guaranteed to be valid
-    if crate::src::client::cl_main::cl.snap.valid as u64 == 0 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if cl.snap.valid as u64 == 0 {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_SetCGameTime: !cl.snap.valid\x00" as *const u8 as *const libc::c_char,
         );
     }
     // allow pause in single player
-    if (*crate::src::qcommon::common::sv_paused).integer != 0
-        && crate::src::client::cl_main::CL_CheckPaused() as u32 != 0
-        && (*crate::src::qcommon::common::com_sv_running).integer != 0
+    if (*sv_paused).integer != 0
+        && CL_CheckPaused() as u32 != 0
+        && (*com_sv_running).integer != 0
     {
         // paused
         return;
     }
-    if crate::src::client::cl_main::cl.snap.serverTime
-        < crate::src::client::cl_main::cl.oldFrameServerTime
+    if cl.snap.serverTime
+        < cl.oldFrameServerTime
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"cl.snap.serverTime < cl.oldFrameServerTime\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::src::client::cl_main::cl.oldFrameServerTime =
-        crate::src::client::cl_main::cl.snap.serverTime;
+    cl.oldFrameServerTime =
+        cl.snap.serverTime;
     // get our current view of time
-    if !(crate::src::client::cl_main::clc.demoplaying as u32 != 0
-        && (*crate::src::client::cl_main::cl_freezeDemo).integer != 0)
+    if !(clc.demoplaying as u32 != 0
+        && (*cl_freezeDemo).integer != 0)
     {
         // cl_timeNudge is a user adjustable cvar that allows more
         // or less latency to be added in the interest of better
         // smoothness or better responsiveness.
         let mut tn: i32 = 0;
-        tn = (*crate::src::client::cl_main::cl_timeNudge).integer;
+        tn = (*cl_timeNudge).integer;
         if tn < -(30 as i32) {
             tn = -(30 as i32)
         } else if tn > 30 as i32 {
             tn = 30 as i32
         }
-        crate::src::client::cl_main::cl.serverTime = crate::src::client::cl_main::cls.realtime
-            + crate::src::client::cl_main::cl.serverTimeDelta
+        cl.serverTime = cls.realtime
+            + cl.serverTimeDelta
             - tn;
         // guarantee that time will never flow backwards, even if
         // serverTimeDelta made an adjustment or cl_timeNudge was changed
-        if crate::src::client::cl_main::cl.serverTime
-            < crate::src::client::cl_main::cl.oldServerTime
+        if cl.serverTime
+            < cl.oldServerTime
         {
-            crate::src::client::cl_main::cl.serverTime =
-                crate::src::client::cl_main::cl.oldServerTime
+            cl.serverTime =
+                cl.oldServerTime
         }
-        crate::src::client::cl_main::cl.oldServerTime = crate::src::client::cl_main::cl.serverTime;
+        cl.oldServerTime = cl.serverTime;
         // note if we are almost past the latest frame (without timeNudge),
         // so we will try and adjust back a bit when the next snapshot arrives
-        if crate::src::client::cl_main::cls.realtime
-            + crate::src::client::cl_main::cl.serverTimeDelta
-            >= crate::src::client::cl_main::cl.snap.serverTime - 5 as i32
+        if cls.realtime
+            + cl.serverTimeDelta
+            >= cl.snap.serverTime - 5 as i32
         {
-            crate::src::client::cl_main::cl.extrapolatedSnapshot =
-                crate::src::qcommon::q_shared::qtrue
+            cl.extrapolatedSnapshot =
+                qtrue
         }
     }
     // if we have gotten new snapshots, drift serverTimeDelta
     // don't do this every frame, or a period of packet loss would
     // make a huge adjustment
-    if crate::src::client::cl_main::cl.newSnapshots as u64 != 0 {
+    if cl.newSnapshots as u64 != 0 {
         CL_AdjustTimeDelta();
     }
-    if crate::src::client::cl_main::clc.demoplaying as u64 == 0 {
+    if clc.demoplaying as u64 == 0 {
         return;
     }
     // if we are playing a demo back, we can just keep reading
@@ -2701,49 +2701,49 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
     // no matter what speed machine it is run on,
     // while a normal demo may have different time samples
     // each time it is played back
-    if (*crate::src::client::cl_main::cl_timedemo).integer != 0 {
-        let mut now: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
+    if (*cl_timedemo).integer != 0 {
+        let mut now: i32 = Sys_Milliseconds();
         let mut frameDuration: i32 = 0;
-        if crate::src::client::cl_main::clc.timeDemoStart == 0 {
-            crate::src::client::cl_main::clc.timeDemoLastFrame = now;
-            crate::src::client::cl_main::clc.timeDemoStart =
-                crate::src::client::cl_main::clc.timeDemoLastFrame;
-            crate::src::client::cl_main::clc.timeDemoMinDuration = 2147483647 as i32;
-            crate::src::client::cl_main::clc.timeDemoMaxDuration = 0 as i32
+        if clc.timeDemoStart == 0 {
+            clc.timeDemoLastFrame = now;
+            clc.timeDemoStart =
+                clc.timeDemoLastFrame;
+            clc.timeDemoMinDuration = 2147483647 as i32;
+            clc.timeDemoMaxDuration = 0 as i32
         }
-        frameDuration = now - crate::src::client::cl_main::clc.timeDemoLastFrame;
-        crate::src::client::cl_main::clc.timeDemoLastFrame = now;
+        frameDuration = now - clc.timeDemoLastFrame;
+        clc.timeDemoLastFrame = now;
         // Ignore the first measurement as it'll always be 0
-        if crate::src::client::cl_main::clc.timeDemoFrames > 0 as i32 {
-            if frameDuration > crate::src::client::cl_main::clc.timeDemoMaxDuration {
-                crate::src::client::cl_main::clc.timeDemoMaxDuration = frameDuration
+        if clc.timeDemoFrames > 0 as i32 {
+            if frameDuration > clc.timeDemoMaxDuration {
+                clc.timeDemoMaxDuration = frameDuration
             }
-            if frameDuration < crate::src::client::cl_main::clc.timeDemoMinDuration {
-                crate::src::client::cl_main::clc.timeDemoMinDuration = frameDuration
+            if frameDuration < clc.timeDemoMinDuration {
+                clc.timeDemoMinDuration = frameDuration
             }
             // 255 ms = about 4fps
             if frameDuration > 127 as i32 * 2 as i32 + 1 as i32 {
                 frameDuration = 127 as i32 * 2 as i32 + 1 as i32
             }
-            crate::src::client::cl_main::clc.timeDemoDurations[((crate::src::client::cl_main::clc
+            clc.timeDemoDurations[((clc
                 .timeDemoFrames
                 - 1 as i32)
                 % 4096 as i32)
                 as usize] = frameDuration as u8
         }
-        crate::src::client::cl_main::clc.timeDemoFrames += 1;
-        crate::src::client::cl_main::cl.serverTime = crate::src::client::cl_main::clc
+        clc.timeDemoFrames += 1;
+        cl.serverTime = clc
             .timeDemoBaseTime
-            + crate::src::client::cl_main::clc.timeDemoFrames * 50 as i32
+            + clc.timeDemoFrames * 50 as i32
     }
-    while crate::src::client::cl_main::cl.serverTime
-        >= crate::src::client::cl_main::cl.snap.serverTime
+    while cl.serverTime
+        >= cl.snap.serverTime
     {
         // feed another messag, which should change
         // the contents of cl.snap
-        crate::src::client::cl_main::CL_ReadDemoMessage();
-        if crate::src::client::cl_main::clc.state as u32
-            != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
+        CL_ReadDemoMessage();
+        if clc.state as u32
+            != CA_ACTIVE as i32 as u32
         {
             return;
             // end of demo

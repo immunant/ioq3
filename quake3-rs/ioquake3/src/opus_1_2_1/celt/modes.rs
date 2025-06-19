@@ -7179,29 +7179,29 @@ Written by Jean-Marc Valin and Gregory Maxwell */
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-static mut eband5ms: [crate::opus_types_h::opus_int16; 22] = [
-    0 as i32 as crate::opus_types_h::opus_int16,
-    1 as i32 as crate::opus_types_h::opus_int16,
-    2 as i32 as crate::opus_types_h::opus_int16,
-    3 as i32 as crate::opus_types_h::opus_int16,
-    4 as i32 as crate::opus_types_h::opus_int16,
-    5 as i32 as crate::opus_types_h::opus_int16,
-    6 as i32 as crate::opus_types_h::opus_int16,
-    7 as i32 as crate::opus_types_h::opus_int16,
-    8 as i32 as crate::opus_types_h::opus_int16,
-    10 as i32 as crate::opus_types_h::opus_int16,
-    12 as i32 as crate::opus_types_h::opus_int16,
-    14 as i32 as crate::opus_types_h::opus_int16,
-    16 as i32 as crate::opus_types_h::opus_int16,
-    20 as i32 as crate::opus_types_h::opus_int16,
-    24 as i32 as crate::opus_types_h::opus_int16,
-    28 as i32 as crate::opus_types_h::opus_int16,
-    34 as i32 as crate::opus_types_h::opus_int16,
-    40 as i32 as crate::opus_types_h::opus_int16,
-    48 as i32 as crate::opus_types_h::opus_int16,
-    60 as i32 as crate::opus_types_h::opus_int16,
-    78 as i32 as crate::opus_types_h::opus_int16,
-    100 as i32 as crate::opus_types_h::opus_int16,
+static mut eband5ms: [opus_int16; 22] = [
+    0 as i32 as opus_int16,
+    1 as i32 as opus_int16,
+    2 as i32 as opus_int16,
+    3 as i32 as opus_int16,
+    4 as i32 as opus_int16,
+    5 as i32 as opus_int16,
+    6 as i32 as opus_int16,
+    7 as i32 as opus_int16,
+    8 as i32 as opus_int16,
+    10 as i32 as opus_int16,
+    12 as i32 as opus_int16,
+    14 as i32 as opus_int16,
+    16 as i32 as opus_int16,
+    20 as i32 as opus_int16,
+    24 as i32 as opus_int16,
+    28 as i32 as opus_int16,
+    34 as i32 as opus_int16,
+    40 as i32 as opus_int16,
+    48 as i32 as opus_int16,
+    60 as i32 as opus_int16,
+    78 as i32 as opus_int16,
+    100 as i32 as opus_int16,
 ];
 /* Alternate tuning (partially derived from Vorbis) */
 /* Bit allocation table in units of 1/32 bit/sample (0.1875 dB SNR) */
@@ -7534,7 +7534,7 @@ Written by Jean-Marc Valin and Gregory Maxwell */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_custom_mode_create(
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut frame_size: i32,
     mut error: *mut i32,
 ) -> *mut crate::src::opus_1_2_1::celt::modes::OpusCustomMode {

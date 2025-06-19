@@ -53,7 +53,7 @@ unsafe extern "C" fn combine_pulses(mut out: *mut i32, mut in_0: *const i32, len
 #[inline]
 
 unsafe extern "C" fn encode_split(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     p_child1: i32,
     p: i32,
     mut shell_table: *const u8,
@@ -61,7 +61,7 @@ unsafe extern "C" fn encode_split(
 /* I    table of shell cdfs                         */
 {
     if p > 0 as i32 {
-        crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx, p_child1,
+        crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(psRangeEnc as *mut ec_ctx, p_child1,
                     &*shell_table.offset(*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table_offsets.as_ptr().offset(p
                                                                                             as
                                                                                             isize)
@@ -72,9 +72,9 @@ unsafe extern "C" fn encode_split(
 #[inline]
 
 unsafe extern "C" fn decode_split(
-    mut p_child1: *mut crate::opus_types_h::opus_int16,
-    mut p_child2: *mut crate::opus_types_h::opus_int16,
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut p_child1: *mut opus_int16,
+    mut p_child2: *mut opus_int16,
+    mut psRangeDec: *mut ec_dec,
     p: i32,
     mut shell_table: *const u8,
 )
@@ -82,24 +82,24 @@ unsafe extern "C" fn decode_split(
 {
     if p > 0 as i32 {
         *p_child1.offset(0 as i32 as isize) =
-            crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(psRangeDec as *mut ec_ctx,
                         &*shell_table.offset(*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table_offsets.as_ptr().offset(p
                                                                                                 as
                                                                                                 isize)
                                                  as isize),
-                        8 as i32 as u32) as crate::opus_types_h::opus_int16;
+                        8 as i32 as u32) as opus_int16;
         *p_child2.offset(0 as i32 as isize) =
-            (p - *p_child1.offset(0 as i32 as isize) as i32) as crate::opus_types_h::opus_int16
+            (p - *p_child1.offset(0 as i32 as isize) as i32) as opus_int16
     } else {
-        *p_child1.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16;
-        *p_child2.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16
+        *p_child1.offset(0 as i32 as isize) = 0 as i32 as opus_int16;
+        *p_child2.offset(0 as i32 as isize) = 0 as i32 as opus_int16
     };
 }
 /* Shell encoder, operates on one shell code frame of 16 pulses */
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_shell_encoder(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     mut pulses0: *const i32,
 )
 /* I    data: nonnegative pulse amplitudes          */
@@ -311,15 +311,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_shell_decoder(
-    mut pulses0: *mut crate::opus_types_h::opus_int16,
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut pulses0: *mut opus_int16,
+    mut psRangeDec: *mut ec_dec,
     pulses4: i32,
 )
 /* I    number of pulses per pulse-subframe         */
 {
-    let mut pulses3: [crate::opus_types_h::opus_int16; 2] = [0; 2];
-    let mut pulses2: [crate::opus_types_h::opus_int16; 4] = [0; 4];
-    let mut pulses1: [crate::opus_types_h::opus_int16; 8] = [0; 8];
+    let mut pulses3: [opus_int16; 2] = [0; 2];
+    let mut pulses2: [opus_int16; 4] = [0; 4];
+    let mut pulses1: [opus_int16; 8] = [0; 8];
     /* this function operates on one shell code frame of 16 pulses */
     decode_split(
         &mut *pulses3.as_mut_ptr().offset(0 as i32 as isize),

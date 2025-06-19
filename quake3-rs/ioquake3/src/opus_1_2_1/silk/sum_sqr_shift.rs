@@ -376,40 +376,40 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_sum_sqr_shift(
-    mut energy: *mut crate::opus_types_h::opus_int32,
+    mut energy: *mut opus_int32,
     mut shift: *mut i32,
-    mut x: *const crate::opus_types_h::opus_int16,
+    mut x: *const opus_int16,
     mut len: i32,
 )
 /* I   Length of input vector                                       */
 {
     let mut i: i32 = 0;
     let mut shft: i32 = 0;
-    let mut nrg_tmp: crate::opus_types_h::opus_uint32 = 0;
-    let mut nrg: crate::opus_types_h::opus_int32 = 0;
+    let mut nrg_tmp: opus_uint32 = 0;
+    let mut nrg: opus_int32 = 0;
     /* Do a first run with the maximum shift we could have. */
     shft = 31 as i32 - silk_CLZ32(len);
     /* Let's be conservative with rounding and start with nrg=len. */
     nrg = len;
     i = 0 as i32;
     while i < len - 1 as i32 {
-        nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
-            * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32;
+        nrg_tmp = (*x.offset(i as isize) as opus_int32
+            * *x.offset(i as isize) as opus_int32)
+            as opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
-            (*x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+            (*x.offset((i + 1 as i32) as isize) as opus_int32
+                * *x.offset((i + 1 as i32) as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32 as opus_uint32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32;
         i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
-        nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
-            * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
+        nrg_tmp = (*x.offset(i as isize) as opus_int32
+            * *x.offset(i as isize) as opus_int32)
+            as opus_uint32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32
     }
     /* Make sure the result will fit in a 32-bit signed integer with two bits
     of headroom. */
@@ -417,23 +417,23 @@ pub unsafe extern "C" fn silk_sum_sqr_shift(
     nrg = 0 as i32;
     i = 0 as i32;
     while i < len - 1 as i32 {
-        nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
-            * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32;
+        nrg_tmp = (*x.offset(i as isize) as opus_int32
+            * *x.offset(i as isize) as opus_int32)
+            as opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
-            (*x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+            (*x.offset((i + 1 as i32) as isize) as opus_int32
+                * *x.offset((i + 1 as i32) as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32 as opus_uint32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32;
         i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
-        nrg_tmp = (*x.offset(i as isize) as crate::opus_types_h::opus_int32
-            * *x.offset(i as isize) as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32;
-        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32
+        nrg_tmp = (*x.offset(i as isize) as opus_int32
+            * *x.offset(i as isize) as opus_int32)
+            as opus_uint32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32
     }
     /* Output arguments */
     *shift = shft;

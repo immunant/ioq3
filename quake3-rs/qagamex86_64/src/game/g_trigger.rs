@@ -447,20 +447,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub unsafe extern "C" fn InitTrigger(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn InitTrigger(mut self_0: *mut gentity_t) {
     if VectorCompare(
-        (*self_0).s.angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        (*self_0).s.angles.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
     ) == 0
     {
-        crate::src::game::g_utils::G_SetMovedir(
+        G_SetMovedir(
             (*self_0).s.angles.as_mut_ptr(),
             (*self_0).movedir.as_mut_ptr(),
         ); // replaces the -1 from trap_SetBrushModel
     }
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        self_0 as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        self_0 as *mut gentity_s,
         (*self_0).model,
     );
     (*self_0).r.contents = 0x40000000 as i32;
@@ -469,7 +469,7 @@ pub unsafe extern "C" fn InitTrigger(mut self_0: *mut crate::g_local_h::gentity_
 // the wait time has passed, so set back up for another activation
 #[no_mangle]
 
-pub unsafe extern "C" fn multi_wait(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn multi_wait(mut ent: *mut gentity_t) {
     (*ent).nextthink = 0 as i32;
 }
 // the trigger was just activated
@@ -478,8 +478,8 @@ pub unsafe extern "C" fn multi_wait(mut ent: *mut crate::g_local_h::gentity_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn multi_trigger(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
     (*ent).activator = activator;
     if (*ent).nextthink != 0 {
@@ -489,29 +489,29 @@ pub unsafe extern "C" fn multi_trigger(
     if !(*activator).client.is_null() {
         if (*ent).spawnflags & 1 as i32 != 0
             && (*(*activator).client).sess.sessionTeam as u32
-                != crate::bg_public_h::TEAM_RED as i32 as u32
+                != TEAM_RED as i32 as u32
         {
             return;
         }
         if (*ent).spawnflags & 2 as i32 != 0
             && (*(*activator).client).sess.sessionTeam as u32
-                != crate::bg_public_h::TEAM_BLUE as i32 as u32
+                != TEAM_BLUE as i32 as u32
         {
             return;
         }
     }
-    crate::src::game::g_utils::G_UseTargets(
-        ent as *mut crate::g_local_h::gentity_s,
-        (*ent).activator as *mut crate::g_local_h::gentity_s,
+    G_UseTargets(
+        ent as *mut gentity_s,
+        (*ent).activator as *mut gentity_s,
     );
     if (*ent).wait > 0 as i32 as f32 {
         (*ent).think =
-            Some(multi_wait as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-        (*ent).nextthink = (crate::src::game::g_main::level.time as f64
+            Some(multi_wait as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*ent).nextthink = (level.time as f64
             + ((*ent).wait as f64
                 + (*ent).random as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                        * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
                 * 1000 as i32 as f64) as i32
@@ -519,28 +519,28 @@ pub unsafe extern "C" fn multi_trigger(
         // we can't just remove (self) here, because this is a touch function
         // called while looping through area links...
         (*ent).touch = None;
-        (*ent).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+        (*ent).nextthink = level.time + 100 as i32;
         (*ent).think = Some(
-            crate::src::game::g_utils::G_FreeEntity
-                as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+            G_FreeEntity
+                as unsafe extern "C" fn(_: *mut gentity_t) -> (),
         )
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn Use_Multi(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut _other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
+    mut _other: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
     multi_trigger(ent, activator);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn Touch_Multi(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut self_0: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     if (*other).client.is_null() {
         return;
@@ -556,41 +556,41 @@ so, the basic time between firing is a random time between
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_trigger_multiple(mut ent: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_spawn::G_SpawnFloat(
+pub unsafe extern "C" fn SP_trigger_multiple(mut ent: *mut gentity_t) {
+    G_SpawnFloat(
         b"wait\x00" as *const u8 as *const libc::c_char,
         b"0.5\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).wait,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"random\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).random,
     );
     if (*ent).random >= (*ent).wait && (*ent).wait >= 0 as i32 as f32 {
         (*ent).random = (*ent).wait - 100 as i32 as f32;
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"trigger_multiple has random >= wait\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     (*ent).touch = Some(
         Touch_Multi
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
     (*ent).use_0 = Some(
         Use_Multi
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     InitTrigger(ent);
-    crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(ent as *mut gentity_s);
 }
 /*
 ==============================================================================
@@ -601,23 +601,23 @@ trigger_always
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn trigger_always_think(mut ent: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_utils::G_UseTargets(
-        ent as *mut crate::g_local_h::gentity_s,
-        ent as *mut crate::g_local_h::gentity_s,
+pub unsafe extern "C" fn trigger_always_think(mut ent: *mut gentity_t) {
+    G_UseTargets(
+        ent as *mut gentity_s,
+        ent as *mut gentity_s,
     );
-    crate::src::game::g_utils::G_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
+    G_FreeEntity(ent as *mut gentity_s);
 }
 /*QUAKED trigger_always (.5 .5 .5) (-8 -8 -8) (8 8 8)
 This trigger will always fire.  It is activated by the world.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_trigger_always(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_trigger_always(mut ent: *mut gentity_t) {
     // we must have some delay to make sure our use targets are present
-    (*ent).nextthink = crate::src::game::g_main::level.time + 300 as i32;
+    (*ent).nextthink = level.time + 300 as i32;
     (*ent).think = Some(
-        trigger_always_think as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+        trigger_always_think as unsafe extern "C" fn(_: *mut gentity_t) -> (),
     );
 }
 /*
@@ -630,16 +630,16 @@ trigger_push
 #[no_mangle]
 
 pub unsafe extern "C" fn trigger_push_touch(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut self_0: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     if (*other).client.is_null() {
         return;
     }
-    crate::src::game::bg_misc::BG_TouchJumpPad(
-        &mut (*(*other).client).ps as *mut _ as *mut crate::src::qcommon::q_shared::playerState_s,
-        &mut (*self_0).s as *mut _ as *mut crate::src::qcommon::q_shared::entityState_s,
+    BG_TouchJumpPad(
+        &mut (*(*other).client).ps as *mut _ as *mut playerState_s,
+        &mut (*self_0).s as *mut _ as *mut entityState_s,
     );
 }
 /*
@@ -651,9 +651,9 @@ Calculate origin2 so the target apogee will be hit
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_t) {
-    let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut gentity_t) {
+    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut origin: vec3_t = [0.; 3];
     let mut height: f32 = 0.;
     let mut gravity: f32 = 0.;
     let mut time: f32 = 0.;
@@ -666,22 +666,22 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_
     origin[2 as i32 as usize] =
         (*self_0).r.absmin[2 as i32 as usize] + (*self_0).r.absmax[2 as i32 as usize];
     origin[0 as i32 as usize] =
-        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     origin[1 as i32 as usize] =
-        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
     origin[2 as i32 as usize] =
-        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    ent = crate::src::game::g_utils::G_PickTarget((*self_0).target)
-        as *mut crate::g_local_h::gentity_s;
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    ent = G_PickTarget((*self_0).target)
+        as *mut gentity_s;
     if ent.is_null() {
-        crate::src::game::g_utils::G_FreeEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(self_0 as *mut gentity_s);
         return;
     }
     height = (*ent).s.origin[2 as i32 as usize] - origin[2 as i32 as usize];
-    gravity = crate::src::game::g_main::g_gravity.value;
+    gravity = g_gravity.value;
     time = crate::stdlib::sqrt(height as f64 / (0.5f64 * gravity as f64)) as f32;
     if time == 0. {
-        crate::src::game::g_utils::G_FreeEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(self_0 as *mut gentity_s);
         return;
     }
     // set s.origin2 to the push velocity
@@ -691,8 +691,8 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_
         (*ent).s.origin[1 as i32 as usize] - origin[1 as i32 as usize];
     (*self_0).s.origin2[2 as i32 as usize] =
         (*ent).s.origin[2 as i32 as usize] - origin[2 as i32 as usize];
-    (*self_0).s.origin2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize((*self_0).s.origin2.as_mut_ptr());
+    (*self_0).s.origin2[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize((*self_0).s.origin2.as_mut_ptr());
     forward = dist / time;
     (*self_0).s.origin2[0 as i32 as usize] = (*self_0).s.origin2[0 as i32 as usize] * forward;
     (*self_0).s.origin2[1 as i32 as usize] = (*self_0).s.origin2[1 as i32 as usize] * forward;
@@ -705,53 +705,53 @@ This will be client side predicted, unlike target_push
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_trigger_push(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_trigger_push(mut self_0: *mut gentity_t) {
     InitTrigger(self_0);
     // unlike other triggers, we need to send this one to the client
     (*self_0).r.svFlags &= !(0x1 as i32);
     // make sure the client precaches this sound
-    crate::src::game::g_utils::G_SoundIndex(
+    G_SoundIndex(
         b"sound/world/jumppad.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    (*self_0).s.eType = crate::bg_public_h::ET_PUSH_TRIGGER as i32;
+    (*self_0).s.eType = ET_PUSH_TRIGGER as i32;
     (*self_0).touch = Some(
         trigger_push_touch
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
     (*self_0).think =
-        Some(AimAtTarget as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-    (*self_0).nextthink = crate::src::game::g_main::level.time + 100 as i32;
-    crate::src::game::g_syscalls::trap_LinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).nextthink = level.time + 100 as i32;
+    trap_LinkEntity(self_0 as *mut gentity_s);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn Use_target_push(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut _other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut self_0: *mut gentity_t,
+    mut _other: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
     if (*activator).client.is_null() {
         return;
     }
-    if (*(*activator).client).ps.pm_type != crate::bg_public_h::PM_NORMAL as i32 {
+    if (*(*activator).client).ps.pm_type != PM_NORMAL as i32 {
         return;
     }
-    if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_FLIGHT as i32 as usize] != 0 {
+    if (*(*activator).client).ps.powerups[PW_FLIGHT as i32 as usize] != 0 {
         return;
     }
     (*(*activator).client).ps.velocity[0 as i32 as usize] = (*self_0).s.origin2[0 as i32 as usize];
     (*(*activator).client).ps.velocity[1 as i32 as usize] = (*self_0).s.origin2[1 as i32 as usize];
     (*(*activator).client).ps.velocity[2 as i32 as usize] = (*self_0).s.origin2[2 as i32 as usize];
     // play fly sound every 1.5 seconds
-    if (*activator).fly_sound_debounce_time < crate::src::game::g_main::level.time {
-        (*activator).fly_sound_debounce_time = crate::src::game::g_main::level.time + 1500 as i32;
-        crate::src::game::g_utils::G_Sound(
-            activator as *mut crate::g_local_h::gentity_s,
-            crate::src::qcommon::q_shared::CHAN_AUTO as i32,
+    if (*activator).fly_sound_debounce_time < level.time {
+        (*activator).fly_sound_debounce_time = level.time + 1500 as i32;
+        G_Sound(
+            activator as *mut gentity_s,
+            CHAN_AUTO as i32,
             (*self_0).noise_index,
         );
     };
@@ -763,11 +763,11 @@ if "bouncepad", play bounce noise instead of windfly
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_target_push(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_target_push(mut self_0: *mut gentity_t) {
     if (*self_0).speed == 0. {
         (*self_0).speed = 1000 as i32 as f32
     }
-    crate::src::game::g_utils::G_SetMovedir(
+    G_SetMovedir(
         (*self_0).s.angles.as_mut_ptr(),
         (*self_0).s.origin2.as_mut_ptr(),
     );
@@ -778,11 +778,11 @@ pub unsafe extern "C" fn SP_target_push(mut self_0: *mut crate::g_local_h::genti
     (*self_0).s.origin2[2 as i32 as usize] =
         (*self_0).s.origin2[2 as i32 as usize] * (*self_0).speed;
     if (*self_0).spawnflags & 1 as i32 != 0 {
-        (*self_0).noise_index = crate::src::game::g_utils::G_SoundIndex(
+        (*self_0).noise_index = G_SoundIndex(
             b"sound/world/jumppad.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         )
     } else {
-        (*self_0).noise_index = crate::src::game::g_utils::G_SoundIndex(
+        (*self_0).noise_index = G_SoundIndex(
             b"sound/misc/windfly.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         )
     }
@@ -794,15 +794,15 @@ pub unsafe extern "C" fn SP_target_push(mut self_0: *mut crate::g_local_h::genti
         (*self_0).r.absmax[1 as i32 as usize] = (*self_0).s.origin[1 as i32 as usize];
         (*self_0).r.absmax[2 as i32 as usize] = (*self_0).s.origin[2 as i32 as usize];
         (*self_0).think =
-            Some(AimAtTarget as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-        (*self_0).nextthink = crate::src::game::g_main::level.time + 100 as i32
+            Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*self_0).nextthink = level.time + 100 as i32
     }
     (*self_0).use_0 = Some(
         Use_target_push
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
 }
@@ -826,34 +826,34 @@ trigger_teleport
 #[no_mangle]
 
 pub unsafe extern "C" fn trigger_teleporter_touch(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut self_0: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
-    let mut dest: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut dest: *mut gentity_t = 0 as *mut gentity_t;
     if (*other).client.is_null() {
         return;
     }
-    if (*(*other).client).ps.pm_type == crate::bg_public_h::PM_DEAD as i32 {
+    if (*(*other).client).ps.pm_type == PM_DEAD as i32 {
         return;
     }
     // Spectators only?
     if (*self_0).spawnflags & 1 as i32 != 0
         && (*(*other).client).sess.sessionTeam as u32
-            != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+            != TEAM_SPECTATOR as i32 as u32
     {
         return;
     }
-    dest = crate::src::game::g_utils::G_PickTarget((*self_0).target)
-        as *mut crate::g_local_h::gentity_s;
+    dest = G_PickTarget((*self_0).target)
+        as *mut gentity_s;
     if dest.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"Couldn\'t find teleporter destination\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    crate::src::game::g_misc::TeleportPlayer(
-        other as *mut crate::g_local_h::gentity_s,
+    TeleportPlayer(
+        other as *mut gentity_s,
         (*dest).s.origin.as_mut_ptr(),
         (*dest).s.angles.as_mut_ptr(),
     );
@@ -868,7 +868,7 @@ automatically near doors to allow spectators to move through them
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_trigger_teleport(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_trigger_teleport(mut self_0: *mut gentity_t) {
     InitTrigger(self_0);
     // unlike other triggers, we need to send this one to the client
     // unless is a spectator trigger
@@ -878,19 +878,19 @@ pub unsafe extern "C" fn SP_trigger_teleport(mut self_0: *mut crate::g_local_h::
         (*self_0).r.svFlags &= !(0x1 as i32)
     }
     // make sure the client precaches this sound
-    crate::src::game::g_utils::G_SoundIndex(
+    G_SoundIndex(
         b"sound/world/jumppad.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    (*self_0).s.eType = crate::bg_public_h::ET_TELEPORT_TRIGGER as i32;
+    (*self_0).s.eType = ET_TELEPORT_TRIGGER as i32;
     (*self_0).touch = Some(
         trigger_teleporter_touch
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
-    crate::src::game::g_syscalls::trap_LinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(self_0 as *mut gentity_s);
 }
 /*
 ==============================================================================
@@ -914,40 +914,40 @@ NO_PROTECTION	*nothing* stops the damage
 #[no_mangle]
 
 pub unsafe extern "C" fn hurt_use(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut _other: *mut crate::g_local_h::gentity_t,
-    mut _activator: *mut crate::g_local_h::gentity_t,
+    mut self_0: *mut gentity_t,
+    mut _other: *mut gentity_t,
+    mut _activator: *mut gentity_t,
 ) {
     if (*self_0).r.linked as u64 != 0 {
-        crate::src::game::g_syscalls::trap_UnlinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        trap_UnlinkEntity(self_0 as *mut gentity_s);
     } else {
-        crate::src::game::g_syscalls::trap_LinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        trap_LinkEntity(self_0 as *mut gentity_s);
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn hurt_touch(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut self_0: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     let mut dflags: i32 = 0;
     if (*other).takedamage as u64 == 0 {
         return;
     }
-    if (*self_0).timestamp > crate::src::game::g_main::level.time {
+    if (*self_0).timestamp > level.time {
         return;
     }
     if (*self_0).spawnflags & 16 as i32 != 0 {
-        (*self_0).timestamp = crate::src::game::g_main::level.time + 1000 as i32
+        (*self_0).timestamp = level.time + 1000 as i32
     } else {
-        (*self_0).timestamp = crate::src::game::g_main::level.time + 100 as i32
+        (*self_0).timestamp = level.time + 100 as i32
     }
     // play sound
     if (*self_0).spawnflags & 4 as i32 == 0 {
-        crate::src::game::g_utils::G_Sound(
-            other as *mut crate::g_local_h::gentity_s,
-            crate::src::qcommon::q_shared::CHAN_AUTO as i32,
+        G_Sound(
+            other as *mut gentity_s,
+            CHAN_AUTO as i32,
             (*self_0).noise_index,
         );
     }
@@ -956,30 +956,30 @@ pub unsafe extern "C" fn hurt_touch(
     } else {
         dflags = 0 as i32
     }
-    crate::src::game::g_combat::G_Damage(
-        other as *mut crate::g_local_h::gentity_s,
-        self_0 as *mut crate::g_local_h::gentity_s,
-        self_0 as *mut crate::g_local_h::gentity_s,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+    G_Damage(
+        other as *mut gentity_s,
+        self_0 as *mut gentity_s,
+        self_0 as *mut gentity_s,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
         (*self_0).damage,
         dflags,
-        crate::bg_public_h::MOD_TRIGGER_HURT as i32,
+        MOD_TRIGGER_HURT as i32,
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_trigger_hurt(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_trigger_hurt(mut self_0: *mut gentity_t) {
     InitTrigger(self_0);
-    (*self_0).noise_index = crate::src::game::g_utils::G_SoundIndex(
+    (*self_0).noise_index = G_SoundIndex(
         b"sound/world/electro.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     (*self_0).touch = Some(
         hurt_touch
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
     if (*self_0).damage == 0 {
@@ -988,16 +988,16 @@ pub unsafe extern "C" fn SP_trigger_hurt(mut self_0: *mut crate::g_local_h::gent
     (*self_0).use_0 = Some(
         hurt_use
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     // link in to the world if starting active
     if (*self_0).spawnflags & 1 as i32 != 0 {
-        crate::src::game::g_syscalls::trap_UnlinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        trap_UnlinkEntity(self_0 as *mut gentity_s);
     } else {
-        crate::src::game::g_syscalls::trap_LinkEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        trap_LinkEntity(self_0 as *mut gentity_s);
     };
 }
 /*
@@ -1020,26 +1020,26 @@ so, the basic time between firing is a random time between
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn func_timer_think(mut self_0: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_utils::G_UseTargets(
-        self_0 as *mut crate::g_local_h::gentity_s,
-        (*self_0).activator as *mut crate::g_local_h::gentity_s,
+pub unsafe extern "C" fn func_timer_think(mut self_0: *mut gentity_t) {
+    G_UseTargets(
+        self_0 as *mut gentity_s,
+        (*self_0).activator as *mut gentity_s,
     );
     // set time before next firing
-    (*self_0).nextthink = (crate::src::game::g_main::level.time as f64
+    (*self_0).nextthink = (level.time as f64
         + 1000 as i32 as f64
             * ((*self_0).wait as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * (*self_0).random as f64)) as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn func_timer_use(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut _other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut self_0: *mut gentity_t,
+    mut _other: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
     (*self_0).activator = activator;
     // if on, turn it off
@@ -1052,13 +1052,13 @@ pub unsafe extern "C" fn func_timer_use(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_timer(mut self_0: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_spawn::G_SpawnFloat(
+pub unsafe extern "C" fn SP_func_timer(mut self_0: *mut gentity_t) {
+    G_SpawnFloat(
         b"random\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         &mut (*self_0).random,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"wait\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         &mut (*self_0).wait,
@@ -1066,24 +1066,24 @@ pub unsafe extern "C" fn SP_func_timer(mut self_0: *mut crate::g_local_h::gentit
     (*self_0).use_0 = Some(
         func_timer_use
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     (*self_0).think =
-        Some(func_timer_think as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
+        Some(func_timer_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     if (*self_0).random >= (*self_0).wait {
         (*self_0).random = (*self_0).wait - 100 as i32 as f32;
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"func_timer at %s has random >= wait\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_utils::vtos(
-                (*self_0).s.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+            vtos(
+                (*self_0).s.origin.as_mut_ptr() as *const vec_t
             ),
         );
     }
     if (*self_0).spawnflags & 1 as i32 != 0 {
-        (*self_0).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+        (*self_0).nextthink = level.time + 100 as i32;
         (*self_0).activator = self_0
     }
     (*self_0).r.svFlags = 0x1 as i32;

@@ -116,11 +116,11 @@ pub use crate::jpeglib_h::J_DITHER_MODE;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_idct_float(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
-    mut coef_block: crate::jpeglib_h::JCOEFPTR,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_col: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_decompress_ptr,
+    mut compptr: *mut jpeg_component_info,
+    mut coef_block: JCOEFPTR,
+    mut output_buf: JSAMPARRAY,
+    mut output_col: JDIMENSION,
 ) {
     let mut tmp0: f32 = 0.; /* buffers data between passes */
     let mut tmp1: f32 = 0.;
@@ -139,17 +139,17 @@ pub unsafe extern "C" fn jpeg_idct_float(
     let mut z11: f32 = 0.;
     let mut z12: f32 = 0.;
     let mut z13: f32 = 0.;
-    let mut inptr: crate::jpeglib_h::JCOEFPTR = 0 as *mut crate::jmorecfg_h::JCOEF;
-    let mut quantptr: *mut crate::jdct_h::FLOAT_MULT_TYPE =
-        0 as *mut crate::jdct_h::FLOAT_MULT_TYPE;
+    let mut inptr: JCOEFPTR = 0 as *mut JCOEF;
+    let mut quantptr: *mut FLOAT_MULT_TYPE =
+        0 as *mut FLOAT_MULT_TYPE;
     let mut wsptr: *mut f32 = 0 as *mut f32;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut range_limit: *mut crate::jmorecfg_h::JSAMPLE = (*cinfo).sample_range_limit;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut range_limit: *mut JSAMPLE = (*cinfo).sample_range_limit;
     let mut ctr: i32 = 0;
     let mut workspace: [f32; 64] = [0.; 64];
     /* Pass 1: process columns from input, store into work array. */
     inptr = coef_block;
-    quantptr = (*compptr).dct_table as *mut crate::jdct_h::FLOAT_MULT_TYPE;
+    quantptr = (*compptr).dct_table as *mut FLOAT_MULT_TYPE;
     wsptr = workspace.as_mut_ptr();
     ctr = 8 as i32;
     while ctr > 0 as i32 {

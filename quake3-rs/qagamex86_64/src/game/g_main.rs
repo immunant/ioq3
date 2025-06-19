@@ -5,7 +5,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -233,13 +233,13 @@ pub use crate::src::qcommon::q_shared::TR_STATIONARY;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct cvarTable_t {
-    pub vmCvar: *mut crate::src::qcommon::q_shared::vmCvar_t,
+    pub vmCvar: *mut vmCvar_t,
     pub cvarName: *mut libc::c_char,
     pub defaultString: *mut libc::c_char,
     pub cvarFlags: i32,
     pub modificationCount: i32,
-    pub trackChange: crate::src::qcommon::q_shared::qboolean,
-    pub teamShader: crate::src::qcommon::q_shared::qboolean,
+    pub trackChange: qboolean,
+    pub teamShader: qboolean,
 }
 /*
 ===========================================================================
@@ -265,9 +265,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub static mut level: crate::g_local_h::level_locals_t = crate::g_local_h::level_locals_t {
-    clients: 0 as *const crate::g_local_h::gclient_s as *mut crate::g_local_h::gclient_s,
-    gentities: 0 as *const crate::g_local_h::gentity_s as *mut crate::g_local_h::gentity_s,
+pub static mut level: level_locals_t = level_locals_t {
+    clients: 0 as *const gclient_s as *mut gclient_s,
+    gentities: 0 as *const gentity_s as *mut gentity_s,
     gentitySize: 0,
     num_entities: 0,
     warmupTime: 0,
@@ -279,8 +279,8 @@ pub static mut level: crate::g_local_h::level_locals_t = crate::g_local_h::level
     startTime: 0,
     teamScores: [0; 4],
     lastTeamLocationTime: 0,
-    newSession: crate::src::qcommon::q_shared::qfalse,
-    restarted: crate::src::qcommon::q_shared::qfalse,
+    newSession: qfalse,
+    restarted: qfalse,
     numConnectedClients: 0,
     numNonSpectatorClients: 0,
     numPlayingClients: 0,
@@ -301,7 +301,7 @@ pub static mut level: crate::g_local_h::level_locals_t = crate::g_local_h::level
     teamVoteYes: [0; 2],
     teamVoteNo: [0; 2],
     numteamVotingClients: [0; 2],
-    spawning: crate::src::qcommon::q_shared::qfalse,
+    spawning: qfalse,
     numSpawnVars: 0,
     spawnVars: [[0 as *const libc::c_char as *mut libc::c_char; 2]; 64],
     numSpawnVarChars: 0,
@@ -309,31 +309,31 @@ pub static mut level: crate::g_local_h::level_locals_t = crate::g_local_h::level
     intermissionQueued: 0,
     intermissiontime: 0,
     changemap: 0 as *const libc::c_char as *mut libc::c_char,
-    readyToExit: crate::src::qcommon::q_shared::qfalse,
+    readyToExit: qfalse,
     exitTime: 0,
     intermission_origin: [0.; 3],
     intermission_angle: [0.; 3],
-    locationLinked: crate::src::qcommon::q_shared::qfalse,
-    locationHead: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    locationLinked: qfalse,
+    locationHead: 0 as *const gentity_t as *mut gentity_t,
     bodyQueIndex: 0,
-    bodyQue: [0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t; 8],
+    bodyQue: [0 as *const gentity_t as *mut gentity_t; 8],
 };
 #[no_mangle]
 
-pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local_h::gentity_t {
-    s: crate::src::qcommon::q_shared::entityState_t {
+pub static mut g_entities: [gentity_t; 1024] = [gentity_t {
+    s: entityState_t {
         number: 0,
         eType: 0,
         eFlags: 0,
-        pos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
             trDelta: [0.; 3],
         },
-        apos: crate::src::qcommon::q_shared::trajectory_t {
-            trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
             trTime: 0,
             trDuration: 0,
             trBase: [0.; 3],
@@ -363,20 +363,20 @@ pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local
         torsoAnim: 0,
         generic1: 0,
     },
-    r: crate::g_public_h::entityShared_t {
-        unused: crate::src::qcommon::q_shared::entityState_t {
+    r: entityShared_t {
+        unused: entityState_t {
             number: 0,
             eType: 0,
             eFlags: 0,
-            pos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            pos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
                 trDelta: [0.; 3],
             },
-            apos: crate::src::qcommon::q_shared::trajectory_t {
-                trType: crate::src::qcommon::q_shared::TR_STATIONARY,
+            apos: trajectory_t {
+                trType: TR_STATIONARY,
                 trTime: 0,
                 trDuration: 0,
                 trBase: [0.; 3],
@@ -406,11 +406,11 @@ pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local
             torsoAnim: 0,
             generic1: 0,
         },
-        linked: crate::src::qcommon::q_shared::qfalse,
+        linked: qfalse,
         linkcount: 0,
         svFlags: 0,
         singleClient: 0,
-        bmodel: crate::src::qcommon::q_shared::qfalse,
+        bmodel: qfalse,
         mins: [0.; 3],
         maxs: [0.; 3],
         contents: 0,
@@ -420,30 +420,30 @@ pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local
         currentAngles: [0.; 3],
         ownerNum: 0,
     },
-    client: 0 as *const crate::g_local_h::gclient_s as *mut crate::g_local_h::gclient_s,
-    inuse: crate::src::qcommon::q_shared::qfalse,
+    client: 0 as *const gclient_s as *mut gclient_s,
+    inuse: qfalse,
     classname: 0 as *const libc::c_char as *mut libc::c_char,
     spawnflags: 0,
-    neverFree: crate::src::qcommon::q_shared::qfalse,
+    neverFree: qfalse,
     flags: 0,
     model: 0 as *const libc::c_char as *mut libc::c_char,
     model2: 0 as *const libc::c_char as *mut libc::c_char,
     freetime: 0,
     eventTime: 0,
-    freeAfterEvent: crate::src::qcommon::q_shared::qfalse,
-    unlinkAfterEvent: crate::src::qcommon::q_shared::qfalse,
-    physicsObject: crate::src::qcommon::q_shared::qfalse,
+    freeAfterEvent: qfalse,
+    unlinkAfterEvent: qfalse,
+    physicsObject: qfalse,
     physicsBounce: 0.,
     clipmask: 0,
-    moverState: crate::g_local_h::MOVER_POS1,
+    moverState: MOVER_POS1,
     soundPos1: 0,
     sound1to2: 0,
     sound2to1: 0,
     soundPos2: 0,
     soundLoop: 0,
-    parent: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    nextTrain: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    prevTrain: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    parent: 0 as *const gentity_t as *mut gentity_t,
+    nextTrain: 0 as *const gentity_t as *mut gentity_t,
+    prevTrain: 0 as *const gentity_t as *mut gentity_t,
     pos1: [0.; 3],
     pos2: [0.; 3],
     message: 0 as *const libc::c_char as *mut libc::c_char,
@@ -453,7 +453,7 @@ pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local
     team: 0 as *const libc::c_char as *mut libc::c_char,
     targetShaderName: 0 as *const libc::c_char as *mut libc::c_char,
     targetShaderNewName: 0 as *const libc::c_char as *mut libc::c_char,
-    target_ent: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    target_ent: 0 as *const gentity_t as *mut gentity_t,
     speed: 0.,
     movedir: [0.; 3],
     nextthink: 0,
@@ -468,29 +468,29 @@ pub static mut g_entities: [crate::g_local_h::gentity_t; 1024] = [crate::g_local
     fly_sound_debounce_time: 0,
     last_move_time: 0,
     health: 0,
-    takedamage: crate::src::qcommon::q_shared::qfalse,
+    takedamage: qfalse,
     damage: 0,
     splashDamage: 0,
     splashRadius: 0,
     methodOfDeath: 0,
     splashMethodOfDeath: 0,
     count: 0,
-    chain: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    enemy: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    activator: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    teamchain: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
-    teammaster: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    chain: 0 as *const gentity_t as *mut gentity_t,
+    enemy: 0 as *const gentity_t as *mut gentity_t,
+    activator: 0 as *const gentity_t as *mut gentity_t,
+    teamchain: 0 as *const gentity_t as *mut gentity_t,
+    teammaster: 0 as *const gentity_t as *mut gentity_t,
     watertype: 0,
     waterlevel: 0,
     noise_index: 0,
     wait: 0.,
     random: 0.,
-    item: 0 as *const crate::bg_public_h::gitem_t as *mut crate::bg_public_h::gitem_t,
+    item: 0 as *const gitem_t as *mut gitem_t,
 }; 1024];
 #[no_mangle]
 
-pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h::gclient_t {
-    ps: crate::src::qcommon::q_shared::playerState_t {
+pub static mut g_clients: [gclient_t; 64] = [gclient_t {
+    ps: playerState_t {
         commandTime: 0,
         pm_type: 0,
         bobCycle: 0,
@@ -537,9 +537,9 @@ pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h:
         jumppad_frame: 0,
         entityEventSequence: 0,
     },
-    pers: crate::g_local_h::clientPersistant_t {
-        connected: crate::g_local_h::CON_DISCONNECTED,
-        cmd: crate::src::qcommon::q_shared::usercmd_t {
+    pers: clientPersistant_t {
+        connected: CON_DISCONNECTED,
+        cmd: usercmd_t {
             serverTime: 0,
             angles: [0; 3],
             buttons: 0,
@@ -548,15 +548,15 @@ pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h:
             rightmove: 0,
             upmove: 0,
         },
-        localClient: crate::src::qcommon::q_shared::qfalse,
-        initialSpawn: crate::src::qcommon::q_shared::qfalse,
-        predictItemPickup: crate::src::qcommon::q_shared::qfalse,
-        pmoveFixed: crate::src::qcommon::q_shared::qfalse,
+        localClient: qfalse,
+        initialSpawn: qfalse,
+        predictItemPickup: qfalse,
+        pmoveFixed: qfalse,
         netname: [0; 36],
         maxHealth: 0,
         enterTime: 0,
-        teamState: crate::g_local_h::playerTeamState_t {
-            state: crate::g_local_h::TEAM_BEGIN,
+        teamState: playerTeamState_t {
+            state: TEAM_BEGIN,
             location: 0,
             captures: 0,
             basedefense: 0,
@@ -571,19 +571,19 @@ pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h:
         },
         voteCount: 0,
         teamVoteCount: 0,
-        teamInfo: crate::src::qcommon::q_shared::qfalse,
+        teamInfo: qfalse,
     },
-    sess: crate::g_local_h::clientSession_t {
-        sessionTeam: crate::bg_public_h::TEAM_FREE,
+    sess: clientSession_t {
+        sessionTeam: TEAM_FREE,
         spectatorNum: 0,
-        spectatorState: crate::g_local_h::SPECTATOR_NOT,
+        spectatorState: SPECTATOR_NOT,
         spectatorClient: 0,
         wins: 0,
         losses: 0,
-        teamLeader: crate::src::qcommon::q_shared::qfalse,
+        teamLeader: qfalse,
     },
-    readyToExit: crate::src::qcommon::q_shared::qfalse,
-    noclip: crate::src::qcommon::q_shared::qfalse,
+    readyToExit: qfalse,
+    noclip: qfalse,
     lastCmdTime: 0,
     buttons: 0,
     oldbuttons: 0,
@@ -593,7 +593,7 @@ pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h:
     damage_blood: 0,
     damage_knockback: 0,
     damage_from: [0.; 3],
-    damage_fromWorld: crate::src::qcommon::q_shared::qfalse,
+    damage_fromWorld: qfalse,
     accurateCount: 0,
     accuracy_shots: 0,
     accuracy_hits: 0,
@@ -602,20 +602,20 @@ pub static mut g_clients: [crate::g_local_h::gclient_t; 64] = [crate::g_local_h:
     lasthurt_mod: 0,
     respawnTime: 0,
     inactivityTime: 0,
-    inactivityWarning: crate::src::qcommon::q_shared::qfalse,
+    inactivityWarning: qfalse,
     rewardTime: 0,
     airOutTime: 0,
     lastKillTime: 0,
-    fireHeld: crate::src::qcommon::q_shared::qfalse,
-    hook: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    fireHeld: qfalse,
+    hook: 0 as *const gentity_t as *mut gentity_t,
     switchTeamTime: 0,
     timeResidual: 0,
     areabits: 0 as *const libc::c_char as *mut libc::c_char,
 }; 64];
 #[no_mangle]
 
-pub static mut g_gametype: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_gametype: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -624,8 +624,8 @@ pub static mut g_gametype: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_dmflags: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_dmflags: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -634,8 +634,8 @@ pub static mut g_dmflags: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_fraglimit: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_fraglimit: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -644,8 +644,8 @@ pub static mut g_fraglimit: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_timelimit: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_timelimit: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -654,8 +654,8 @@ pub static mut g_timelimit: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_capturelimit: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_capturelimit: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -664,8 +664,8 @@ pub static mut g_capturelimit: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_friendlyFire: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_friendlyFire: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -674,8 +674,8 @@ pub static mut g_friendlyFire: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_password: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_password: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -684,8 +684,8 @@ pub static mut g_password: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_needpass: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_needpass: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -694,8 +694,8 @@ pub static mut g_needpass: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_maxclients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_maxclients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -704,8 +704,8 @@ pub static mut g_maxclients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_maxGameClients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_maxGameClients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -714,8 +714,8 @@ pub static mut g_maxGameClients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_dedicated: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_dedicated: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -724,8 +724,8 @@ pub static mut g_dedicated: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_speed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_speed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -734,8 +734,8 @@ pub static mut g_speed: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_gravity: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_gravity: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -744,8 +744,8 @@ pub static mut g_gravity: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_cheats: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_cheats: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -754,8 +754,8 @@ pub static mut g_cheats: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_knockback: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_knockback: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -764,8 +764,8 @@ pub static mut g_knockback: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_quadfactor: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_quadfactor: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -774,8 +774,8 @@ pub static mut g_quadfactor: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_forcerespawn: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_forcerespawn: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -784,8 +784,8 @@ pub static mut g_forcerespawn: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_inactivity: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_inactivity: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -794,8 +794,8 @@ pub static mut g_inactivity: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_debugMove: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_debugMove: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -804,8 +804,8 @@ pub static mut g_debugMove: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_debugDamage: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_debugDamage: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -814,8 +814,8 @@ pub static mut g_debugDamage: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_debugAlloc: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_debugAlloc: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -824,8 +824,8 @@ pub static mut g_debugAlloc: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_weaponRespawn: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_weaponRespawn: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -834,8 +834,8 @@ pub static mut g_weaponRespawn: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_weaponTeamRespawn: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_weaponTeamRespawn: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -844,8 +844,8 @@ pub static mut g_weaponTeamRespawn: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_motd: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_motd: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -854,8 +854,8 @@ pub static mut g_motd: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_synchronousClients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_synchronousClients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -864,8 +864,8 @@ pub static mut g_synchronousClients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_warmup: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_warmup: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -874,8 +874,8 @@ pub static mut g_warmup: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_doWarmup: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_doWarmup: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -884,8 +884,8 @@ pub static mut g_doWarmup: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_restarted: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_restarted: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -894,8 +894,8 @@ pub static mut g_restarted: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_logfile: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_logfile: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -904,8 +904,8 @@ pub static mut g_logfile: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_logfileSync: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_logfileSync: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -914,8 +914,8 @@ pub static mut g_logfileSync: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_blood: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_blood: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -924,8 +924,8 @@ pub static mut g_blood: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_podiumDist: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_podiumDist: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -934,8 +934,8 @@ pub static mut g_podiumDist: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_podiumDrop: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_podiumDrop: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -944,8 +944,8 @@ pub static mut g_podiumDrop: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_allowVote: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_allowVote: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -954,8 +954,8 @@ pub static mut g_allowVote: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_teamAutoJoin: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_teamAutoJoin: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -964,8 +964,8 @@ pub static mut g_teamAutoJoin: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_teamForceBalance: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_teamForceBalance: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -974,8 +974,8 @@ pub static mut g_teamForceBalance: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_banIPs: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_banIPs: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -984,8 +984,8 @@ pub static mut g_banIPs: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_filterBan: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_filterBan: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -994,8 +994,8 @@ pub static mut g_filterBan: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_smoothClients: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_smoothClients: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1004,8 +1004,8 @@ pub static mut g_smoothClients: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut pmove_fixed: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut pmove_fixed: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1014,8 +1014,8 @@ pub static mut pmove_fixed: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut pmove_msec: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1024,8 +1024,8 @@ pub static mut pmove_msec: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_rankings: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_rankings: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1034,8 +1034,8 @@ pub static mut g_rankings: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_listEntity: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_listEntity: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1044,8 +1044,8 @@ pub static mut g_listEntity: crate::src::qcommon::q_shared::vmCvar_t =
     };
 #[no_mangle]
 
-pub static mut g_localTeamPref: crate::src::qcommon::q_shared::vmCvar_t =
-    crate::src::qcommon::q_shared::vmCvar_t {
+pub static mut g_localTeamPref: vmCvar_t =
+    vmCvar_t {
         handle: 0,
         modificationCount: 0,
         value: 0.,
@@ -1057,633 +1057,633 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
     [
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_cheats as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_cheats as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"sv_cheats\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: 0 as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: 0 as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"gamename\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"baseq3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x40 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: 0 as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: 0 as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"gamedate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"Jan 10 2020\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cvarFlags: 0x40 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_restarted as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_restarted as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_restarted\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x40 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_gametype as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_gametype as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_gametype\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x2 as i32 | 0x20 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_maxclients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_maxclients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"sv_maxclients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x20 as i32 | 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_maxGameClients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_maxGameClients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_maxGameClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x20 as i32 | 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_dmflags as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_dmflags as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"dmflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_fraglimit as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_fraglimit as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"fraglimit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32 | 0x400 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_timelimit as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_timelimit as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"timelimit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32 | 0x400 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_capturelimit as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_capturelimit as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"capturelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32 | 0x400 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_synchronousClients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_synchronousClients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_synchronousClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x8 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_friendlyFire as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_friendlyFire as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_friendlyFire\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_teamAutoJoin as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_teamAutoJoin as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_teamAutoJoin\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_teamForceBalance as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_teamForceBalance as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_teamForceBalance\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_warmup as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_warmup as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_warmup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_doWarmup as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_doWarmup as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_doWarmup\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_logfile as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_logfile as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_log\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"games.log\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_logfileSync as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_logfileSync as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_logsync\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_password as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_password as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_password\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x2 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_banIPs as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_banIPs as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_banIPs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_filterBan as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_filterBan as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_filterBan\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_needpass as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_needpass as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_needpass\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x40 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_dedicated as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_dedicated as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"dedicated\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_speed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_speed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"320\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_gravity as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_gravity as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_gravity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"800\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_knockback as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_knockback as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_knockback\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1000\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_quadfactor as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_quadfactor as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_quadfactor\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_weaponRespawn as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_weaponRespawn as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_weaponrespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_weaponTeamRespawn as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_weaponTeamRespawn as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_weaponTeamRespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"30\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_forcerespawn as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_forcerespawn as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_forcerespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_inactivity as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_inactivity as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_inactivity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qtrue,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qtrue,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugMove as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_debugMove as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_debugMove\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugDamage as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_debugDamage as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_debugDamage\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugAlloc as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_debugAlloc as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_debugAlloc\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_motd as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_motd as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_motd\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_blood as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_blood as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"com_blood\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_podiumDist as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_podiumDist as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_podiumDist\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"80\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_podiumDrop as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_podiumDrop as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_podiumDrop\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"70\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_allowVote as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_allowVote as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_allowVote\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_listEntity as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_listEntity as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_listEntity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_smoothClients as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_smoothClients as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_smoothClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_fixed as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &pmove_fixed as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"pmove_fixed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x8 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_msec as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &pmove_msec as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"pmove_msec\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x8 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_rankings as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_rankings as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_rankings\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_localTeamPref as *const crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
+                vmCvar: &g_localTeamPref as *const vmCvar_t
+                    as *mut vmCvar_t,
                 cvarName: b"g_localTeamPref\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
                 modificationCount: 0 as i32,
-                trackChange: crate::src::qcommon::q_shared::qfalse,
-                teamShader: crate::src::qcommon::q_shared::qfalse,
+                trackChange: qfalse,
+                teamShader: qfalse,
             };
             init
         },
@@ -1716,52 +1716,52 @@ pub unsafe extern "C" fn vmMain(
     mut _arg9: i32,
     mut _arg10: i32,
     mut _arg11: i32,
-) -> crate::stdlib::intptr_t {
+) -> intptr_t {
     match command {
         0 => {
             G_InitGame(arg0, arg1, arg2);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         1 => {
             G_ShutdownGame(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         2 => {
-            return crate::src::game::g_client::ClientConnect(
+            return ClientConnect(
                 arg0,
-                arg1 as crate::src::qcommon::q_shared::qboolean,
-                arg2 as crate::src::qcommon::q_shared::qboolean,
-            ) as crate::stdlib::intptr_t
+                arg1 as qboolean,
+                arg2 as qboolean,
+            ) as intptr_t
         }
         7 => {
-            crate::src::game::g_active::ClientThink(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            ClientThink(arg0);
+            return 0 as i32 as intptr_t;
         }
         4 => {
-            crate::src::game::g_client::ClientUserinfoChanged(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            ClientUserinfoChanged(arg0);
+            return 0 as i32 as intptr_t;
         }
         5 => {
-            crate::src::game::g_client::ClientDisconnect(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            ClientDisconnect(arg0);
+            return 0 as i32 as intptr_t;
         }
         3 => {
-            crate::src::game::g_client::ClientBegin(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            ClientBegin(arg0);
+            return 0 as i32 as intptr_t;
         }
         6 => {
-            crate::src::game::g_cmds::ClientCommand(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            ClientCommand(arg0);
+            return 0 as i32 as intptr_t;
         }
         8 => {
             G_RunFrame(arg0);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
-        9 => return crate::src::game::g_svcmds::ConsoleCommand() as crate::stdlib::intptr_t,
-        10 => return crate::src::game::ai_main::BotAIStartFrame(arg0) as crate::stdlib::intptr_t,
+        9 => return ConsoleCommand() as intptr_t,
+        10 => return BotAIStartFrame(arg0) as intptr_t,
         _ => {}
     }
-    return -(1 as i32) as crate::stdlib::intptr_t;
+    return -(1 as i32) as intptr_t;
 }
 #[no_mangle]
 
@@ -1775,7 +1775,7 @@ pub unsafe extern "C" fn G_Printf(mut fmt: *const libc::c_char, mut args: ...) {
         fmt,
         argptr.as_va_list(),
     );
-    crate::src::game::g_syscalls::trap_Print(text.as_mut_ptr());
+    trap_Print(text.as_mut_ptr());
 }
 #[no_mangle]
 
@@ -1789,7 +1789,7 @@ pub unsafe extern "C" fn G_Error(mut fmt: *const libc::c_char, mut args: ...) ->
         fmt,
         argptr.as_va_list(),
     );
-    crate::src::game::g_syscalls::trap_Error(text.as_mut_ptr());
+    trap_Error(text.as_mut_ptr());
 }
 /*
 ================
@@ -1805,8 +1805,8 @@ All but the last will have the teamchain field set to the next one
 #[no_mangle]
 
 pub unsafe extern "C" fn G_FindTeams() {
-    let mut e: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut e2: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    let mut e2: *mut gentity_t = 0 as *mut gentity_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut c: i32 = 0;
@@ -1828,7 +1828,7 @@ pub unsafe extern "C" fn G_FindTeams() {
                         if !((*e2).inuse as u64 == 0) {
                             if !(*e2).team.is_null() {
                                 if !((*e2).flags & 0x400 as i32 != 0) {
-                                    if ::libc::strcmp((*e).team, (*e2).team) == 0 {
+                                    if libc::strcmp((*e).team, (*e2).team) == 0 {
                                         c2 += 1;
                                         (*e2).teamchain = (*e).teamchain;
                                         (*e).teamchain = e2;
@@ -1871,13 +1871,13 @@ G_RegisterCvars
 pub unsafe extern "C" fn G_RegisterCvars() {
     let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    let mut remapped: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut remapped: qboolean =
+        qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
     while i < gameCvarTableSize {
-        crate::src::game::g_syscalls::trap_Cvar_Register(
-            (*cv).vmCvar as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Register(
+            (*cv).vmCvar as *mut vmCvar_t,
             (*cv).cvarName,
             (*cv).defaultString,
             (*cv).cvarFlags,
@@ -1886,7 +1886,7 @@ pub unsafe extern "C" fn G_RegisterCvars() {
             (*cv).modificationCount = (*(*cv).vmCvar).modificationCount
         }
         if (*cv).teamShader as u64 != 0 {
-            remapped = crate::src::qcommon::q_shared::qtrue
+            remapped = qtrue
         }
         i += 1;
         cv = cv.offset(1)
@@ -1896,19 +1896,19 @@ pub unsafe extern "C" fn G_RegisterCvars() {
     }
     // check some things
     if g_gametype.integer < 0 as i32
-        || g_gametype.integer >= crate::bg_public_h::GT_MAX_GAME_TYPE as i32
+        || g_gametype.integer >= GT_MAX_GAME_TYPE as i32
     {
         G_Printf(
             b"g_gametype %i is out of range, defaulting to 0\n\x00" as *const u8
                 as *const libc::c_char,
             g_gametype.integer,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"g_gametype\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Update(
-            &mut g_gametype as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Update(
+            &mut g_gametype as *mut _ as *mut vmCvar_t,
         );
     }
     level.warmupModificationCount = g_warmup.modificationCount;
@@ -1923,21 +1923,21 @@ G_UpdateCvars
 pub unsafe extern "C" fn G_UpdateCvars() {
     let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    let mut remapped: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut remapped: qboolean =
+        qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
     while i < gameCvarTableSize {
         if !(*cv).vmCvar.is_null() {
-            crate::src::game::g_syscalls::trap_Cvar_Update(
-                (*cv).vmCvar as *mut crate::src::qcommon::q_shared::vmCvar_t,
+            trap_Cvar_Update(
+                (*cv).vmCvar as *mut vmCvar_t,
             );
             if (*cv).modificationCount != (*(*cv).vmCvar).modificationCount {
                 (*cv).modificationCount = (*(*cv).vmCvar).modificationCount;
                 if (*cv).trackChange as u64 != 0 {
-                    crate::src::game::g_syscalls::trap_SendServerCommand(
+                    trap_SendServerCommand(
                         -(1 as i32),
-                        crate::src::qcommon::q_shared::va(
+                        va(
                             b"print \"Server: %s changed to %s\n\"\x00" as *const u8
                                 as *const libc::c_char
                                 as *mut libc::c_char,
@@ -1947,7 +1947,7 @@ pub unsafe extern "C" fn G_UpdateCvars() {
                     );
                 }
                 if (*cv).teamShader as u64 != 0 {
-                    remapped = crate::src::qcommon::q_shared::qtrue
+                    remapped = qtrue
                 }
             }
         }
@@ -1977,35 +1977,35 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
         b"gamedate: %s\n\x00" as *const u8 as *const libc::c_char,
         b"Jan 10 2020\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::srand(randomSeed as u32);
+    srand(randomSeed as u32);
     G_RegisterCvars();
-    crate::src::game::g_svcmds::G_ProcessIPBans();
-    crate::src::game::g_mem::G_InitMemory();
+    G_ProcessIPBans();
+    G_InitMemory();
     // set some level globals
     crate::stdlib::memset(
-        &mut level as *mut crate::g_local_h::level_locals_t as *mut libc::c_void,
+        &mut level as *mut level_locals_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::g_local_h::level_locals_t>() as libc::c_ulong,
+        ::std::mem::size_of::<level_locals_t>() as libc::c_ulong,
     ); // FIXME standing in lava / slime
     level.time = levelTime;
     level.startTime = levelTime;
-    level.snd_fry = crate::src::game::g_utils::G_SoundIndex(
+    level.snd_fry = G_SoundIndex(
         b"sound/player/fry.wav\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    if g_gametype.integer != crate::bg_public_h::GT_SINGLE_PLAYER as i32
+    if g_gametype.integer != GT_SINGLE_PLAYER as i32
         && g_logfile.string[0 as i32 as usize] as i32 != 0
     {
         if g_logfileSync.integer != 0 {
-            crate::src::game::g_syscalls::trap_FS_FOpenFile(
+            trap_FS_FOpenFile(
                 g_logfile.string.as_mut_ptr(),
                 &mut level.logFile,
-                crate::src::qcommon::q_shared::FS_APPEND_SYNC,
+                FS_APPEND_SYNC,
             );
         } else {
-            crate::src::game::g_syscalls::trap_FS_FOpenFile(
+            trap_FS_FOpenFile(
                 g_logfile.string.as_mut_ptr(),
                 &mut level.logFile,
-                crate::src::qcommon::q_shared::FS_APPEND,
+                FS_APPEND,
             );
         }
         if level.logFile == 0 {
@@ -2015,7 +2015,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
             );
         } else {
             let mut serverinfo: [libc::c_char; 1024] = [0; 1024];
-            crate::src::game::g_syscalls::trap_GetServerinfo(
+            trap_GetServerinfo(
                 serverinfo.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             );
@@ -2031,13 +2031,13 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     } else {
         G_Printf(b"Not logging to disk.\n\x00" as *const u8 as *const libc::c_char);
     }
-    crate::src::game::g_session::G_InitWorldSession();
+    G_InitWorldSession();
     // initialize all entities for this game
     crate::stdlib::memset(
         g_entities.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         (((1 as i32) << 10 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::g_local_h::gentity_t>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<gentity_t>() as libc::c_ulong),
     );
     level.gentities = g_entities.as_mut_ptr();
     // initialize all clients for this game
@@ -2046,7 +2046,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
         g_clients.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         (64 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::g_local_h::gclient_t>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<gclient_t>() as libc::c_ulong),
     );
     level.clients = g_clients.as_mut_ptr();
     // set client fields on player ents
@@ -2066,47 +2066,47 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
         i += 1
     }
     // let the server system know where the entites are
-    crate::src::game::g_syscalls::trap_LocateGameData(
-        level.gentities as *mut crate::g_local_h::gentity_s,
+    trap_LocateGameData(
+        level.gentities as *mut gentity_s,
         level.num_entities,
-        ::std::mem::size_of::<crate::g_local_h::gentity_t>() as libc::c_ulong as i32,
+        ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
         &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _
-            as *mut crate::src::qcommon::q_shared::playerState_s,
-        ::std::mem::size_of::<crate::g_local_h::gclient_s>() as libc::c_ulong as i32,
+            as *mut playerState_s,
+        ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
     );
     // reserve some spots for dead player bodies
-    crate::src::game::g_client::InitBodyQue();
-    crate::src::game::g_items::ClearRegisteredItems();
+    InitBodyQue();
+    ClearRegisteredItems();
     // parse the key/value pairs and spawn gentities
-    crate::src::game::g_spawn::G_SpawnEntitiesFromString();
+    G_SpawnEntitiesFromString();
     // general initialization
     G_FindTeams();
     // make sure we have flags for CTF, etc
-    if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-        crate::src::game::g_items::G_CheckTeamItems();
+    if g_gametype.integer >= GT_TEAM as i32 {
+        G_CheckTeamItems();
     }
-    crate::src::game::g_items::SaveRegisteredItems();
+    SaveRegisteredItems();
     G_Printf(b"-----------------------------------\n\x00" as *const u8 as *const libc::c_char);
-    if g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32
-        || crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    if g_gametype.integer == GT_SINGLE_PLAYER as i32
+        || trap_Cvar_VariableIntegerValue(
             b"com_buildScript\x00" as *const u8 as *const libc::c_char,
         ) != 0
     {
-        crate::src::game::g_utils::G_ModelIndex(
+        G_ModelIndex(
             b"models/mapobjects/podium/podium4.md3\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
     }
-    if crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    if trap_Cvar_VariableIntegerValue(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
     ) != 0
     {
-        crate::src::game::ai_main::BotAISetup(restart);
-        crate::src::game::ai_main::BotAILoadMap(restart);
-        crate::src::game::g_bot::G_InitBots(restart as crate::src::qcommon::q_shared::qboolean);
+        BotAISetup(restart);
+        BotAILoadMap(restart);
+        G_InitBots(restart as qboolean);
     }
     G_RemapTeamShaders();
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         22 as i32,
         b"\x00" as *const u8 as *const libc::c_char,
     );
@@ -2126,16 +2126,16 @@ pub unsafe extern "C" fn G_ShutdownGame(mut restart: i32) {
             b"------------------------------------------------------------\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_FS_FCloseFile(level.logFile);
+        trap_FS_FCloseFile(level.logFile);
         level.logFile = 0 as i32
     }
     // write all the client session data so we can get it back
-    crate::src::game::g_session::G_WriteSessionData();
-    if crate::src::game::g_syscalls::trap_Cvar_VariableIntegerValue(
+    G_WriteSessionData();
+    if trap_Cvar_VariableIntegerValue(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
     ) != 0
     {
-        crate::src::game::ai_main::BotAIShutdown(restart);
+        BotAIShutdown(restart);
     };
 }
 //===================================================================
@@ -2155,7 +2155,7 @@ pub unsafe extern "C" fn Com_Error(
         error,
         argptr.as_va_list(),
     );
-    crate::src::game::g_syscalls::trap_Error(text.as_mut_ptr());
+    trap_Error(text.as_mut_ptr());
 }
 /*
 ===========================================================================
@@ -2320,7 +2320,7 @@ pub unsafe extern "C" fn Com_Printf(mut msg: *const libc::c_char, mut args: ...)
         msg,
         argptr.as_va_list(),
     );
-    crate::src::game::g_syscalls::trap_Print(text.as_mut_ptr());
+    trap_Print(text.as_mut_ptr());
 }
 /*
 ========================================================================
@@ -2341,8 +2341,8 @@ spectator in the game and restart
 
 pub unsafe extern "C" fn AddTournamentPlayer() {
     let mut i: i32 = 0;
-    let mut client: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    let mut nextInLine: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut client: *mut gclient_t = 0 as *mut gclient_t;
+    let mut nextInLine: *mut gclient_t = 0 as *mut gclient_t;
     if level.numPlayingClients >= 2 as i32 {
         return;
     }
@@ -2350,17 +2350,17 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     if level.intermissiontime != 0 {
         return;
     }
-    nextInLine = 0 as *mut crate::g_local_h::gclient_t;
+    nextInLine = 0 as *mut gclient_t;
     i = 0 as i32;
     while i < level.maxclients {
-        client = &mut *level.clients.offset(i as isize) as *mut crate::g_local_h::gclient_s;
-        if !((*client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
+        client = &mut *level.clients.offset(i as isize) as *mut gclient_s;
+        if !((*client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
             if !((*client).sess.sessionTeam as u32
-                != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32)
+                != TEAM_SPECTATOR as i32 as u32)
             {
                 // never select the dedicated follow or scoreboard clients
                 if !((*client).sess.spectatorState as u32
-                    == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
+                    == SPECTATOR_SCOREBOARD as i32 as u32
                     || (*client).sess.spectatorClient < 0 as i32)
                 {
                     if nextInLine.is_null()
@@ -2378,11 +2378,11 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     }
     level.warmupTime = -(1 as i32);
     // set them to free-for-all team
-    crate::src::game::g_cmds::SetTeam(
+    SetTeam(
         &mut *g_entities
             .as_mut_ptr()
             .offset(nextInLine.offset_from(level.clients) as isize) as *mut _
-            as *mut crate::g_local_h::gentity_s,
+            as *mut gentity_s,
         b"f\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2395,17 +2395,17 @@ Add client to end of tournament queue
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AddTournamentQueue(mut client: *mut crate::g_local_h::gclient_t) {
+pub unsafe extern "C" fn AddTournamentQueue(mut client: *mut gclient_t) {
     let mut index: i32 = 0;
-    let mut curclient: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut curclient: *mut gclient_t = 0 as *mut gclient_t;
     index = 0 as i32;
     while index < level.maxclients {
-        curclient = &mut *level.clients.offset(index as isize) as *mut crate::g_local_h::gclient_s;
-        if (*curclient).pers.connected as u32 != crate::g_local_h::CON_DISCONNECTED as i32 as u32 {
+        curclient = &mut *level.clients.offset(index as isize) as *mut gclient_s;
+        if (*curclient).pers.connected as u32 != CON_DISCONNECTED as i32 as u32 {
             if curclient == client {
                 (*curclient).sess.spectatorNum = 0 as i32
             } else if (*curclient).sess.sessionTeam as u32
-                == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+                == TEAM_SPECTATOR as i32 as u32
             {
                 (*curclient).sess.spectatorNum += 1
             }
@@ -2429,14 +2429,14 @@ pub unsafe extern "C" fn RemoveTournamentLoser() {
     }
     clientNum = level.sortedClients[1 as i32 as usize];
     if (*level.clients.offset(clientNum as isize)).pers.connected as u32
-        != crate::g_local_h::CON_CONNECTED as i32 as u32
+        != CON_CONNECTED as i32 as u32
     {
         return;
     }
     // make them a spectator
-    crate::src::game::g_cmds::SetTeam(
+    SetTeam(
         &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _
-            as *mut crate::g_local_h::gentity_s,
+            as *mut gentity_s,
         b"s\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2454,14 +2454,14 @@ pub unsafe extern "C" fn RemoveTournamentWinner() {
     }
     clientNum = level.sortedClients[0 as i32 as usize];
     if (*level.clients.offset(clientNum as isize)).pers.connected as u32
-        != crate::g_local_h::CON_CONNECTED as i32 as u32
+        != CON_CONNECTED as i32 as u32
     {
         return;
     }
     // make them a spectator
-    crate::src::game::g_cmds::SetTeam(
+    SetTeam(
         &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _
-            as *mut crate::g_local_h::gentity_s,
+            as *mut gentity_s,
         b"s\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2476,19 +2476,19 @@ pub unsafe extern "C" fn AdjustTournamentScores() {
     let mut clientNum: i32 = 0;
     clientNum = level.sortedClients[0 as i32 as usize];
     if (*level.clients.offset(clientNum as isize)).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTED as i32 as u32
+        == CON_CONNECTED as i32 as u32
     {
         let ref mut fresh0 = (*level.clients.offset(clientNum as isize)).sess.wins;
         *fresh0 += 1;
-        crate::src::game::g_client::ClientUserinfoChanged(clientNum);
+        ClientUserinfoChanged(clientNum);
     }
     clientNum = level.sortedClients[1 as i32 as usize];
     if (*level.clients.offset(clientNum as isize)).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTED as i32 as u32
+        == CON_CONNECTED as i32 as u32
     {
         let ref mut fresh1 = (*level.clients.offset(clientNum as isize)).sess.losses;
         *fresh1 += 1;
-        crate::src::game::g_client::ClientUserinfoChanged(clientNum);
+        ClientUserinfoChanged(clientNum);
     };
 }
 /*
@@ -2500,31 +2500,31 @@ SortRanks
 #[no_mangle]
 
 pub unsafe extern "C" fn SortRanks(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    let mut ca: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    let mut cb: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    ca = &mut *level.clients.offset(*(a as *mut i32) as isize) as *mut crate::g_local_h::gclient_s;
-    cb = &mut *level.clients.offset(*(b as *mut i32) as isize) as *mut crate::g_local_h::gclient_s;
+    let mut ca: *mut gclient_t = 0 as *mut gclient_t;
+    let mut cb: *mut gclient_t = 0 as *mut gclient_t;
+    ca = &mut *level.clients.offset(*(a as *mut i32) as isize) as *mut gclient_s;
+    cb = &mut *level.clients.offset(*(b as *mut i32) as isize) as *mut gclient_s;
     // sort special clients last
-    if (*ca).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
+    if (*ca).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32
         || (*ca).sess.spectatorClient < 0 as i32
     {
         return 1 as i32;
     }
-    if (*cb).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
+    if (*cb).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32
         || (*cb).sess.spectatorClient < 0 as i32
     {
         return -(1 as i32);
     }
     // then connecting clients
-    if (*ca).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32 {
+    if (*ca).pers.connected as u32 == CON_CONNECTING as i32 as u32 {
         return 1 as i32;
     }
-    if (*cb).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32 {
+    if (*cb).pers.connected as u32 == CON_CONNECTING as i32 as u32 {
         return -(1 as i32);
     }
     // then spectators
-    if (*ca).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-        && (*cb).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*ca).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32
+        && (*cb).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32
     {
         if (*ca).sess.spectatorNum > (*cb).sess.spectatorNum {
             return -(1 as i32);
@@ -2534,20 +2534,20 @@ pub unsafe extern "C" fn SortRanks(mut a: *const libc::c_void, mut b: *const lib
         }
         return 0 as i32;
     }
-    if (*ca).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
+    if (*ca).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
         return 1 as i32;
     }
-    if (*cb).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
+    if (*cb).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
         return -(1 as i32);
     }
     // then sort by score
-    if (*ca).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
-        > (*cb).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
+    if (*ca).ps.persistant[PERS_SCORE as i32 as usize]
+        > (*cb).ps.persistant[PERS_SCORE as i32 as usize]
     {
         return -(1 as i32);
     }
-    if (*ca).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
-        < (*cb).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
+    if (*ca).ps.persistant[PERS_SCORE as i32 as usize]
+        < (*cb).ps.persistant[PERS_SCORE as i32 as usize]
     {
         return 1 as i32;
     }
@@ -2569,7 +2569,7 @@ pub unsafe extern "C" fn CalculateRanks() {
     let mut rank: i32 = 0;
     let mut score: i32 = 0;
     let mut newScore: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     level.follow1 = -(1 as i32);
     level.follow2 = -(1 as i32);
     level.numConnectedClients = 0 as i32;
@@ -2587,27 +2587,27 @@ pub unsafe extern "C" fn CalculateRanks() {
     i = 0 as i32;
     while i < level.maxclients {
         if (*level.clients.offset(i as isize)).pers.connected as u32
-            != crate::g_local_h::CON_DISCONNECTED as i32 as u32
+            != CON_DISCONNECTED as i32 as u32
         {
             level.sortedClients[level.numConnectedClients as usize] = i;
             level.numConnectedClients += 1;
             if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
-                != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+                != TEAM_SPECTATOR as i32 as u32
             {
                 level.numNonSpectatorClients += 1;
                 // decide if this should be auto-followed
                 if (*level.clients.offset(i as isize)).pers.connected as u32
-                    == crate::g_local_h::CON_CONNECTED as i32 as u32
+                    == CON_CONNECTED as i32 as u32
                 {
                     level.numPlayingClients += 1;
                     if g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
                         level.numVotingClients += 1;
                         if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
-                            == crate::bg_public_h::TEAM_RED as i32 as u32
+                            == TEAM_RED as i32 as u32
                         {
                             level.numteamVotingClients[0 as i32 as usize] += 1
                         } else if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
-                            == crate::bg_public_h::TEAM_BLUE as i32 as u32
+                            == TEAM_BLUE as i32 as u32
                         {
                             level.numteamVotingClients[1 as i32 as usize] += 1
                         }
@@ -2622,9 +2622,9 @@ pub unsafe extern "C" fn CalculateRanks() {
         }
         i += 1
     }
-    crate::stdlib::qsort(
+    qsort(
         level.sortedClients.as_mut_ptr() as *mut libc::c_void,
-        level.numConnectedClients as crate::stddef_h::size_t,
+        level.numConnectedClients as size_t,
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             SortRanks
@@ -2632,24 +2632,24 @@ pub unsafe extern "C" fn CalculateRanks() {
         ),
     );
     // set the rank value for all clients that are connected and not spectators
-    if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
+    if g_gametype.integer >= GT_TEAM as i32 {
         // in team games, rank is just the order of the teams, 0=red, 1=blue, 2=tied
         i = 0 as i32;
         while i < level.numConnectedClients {
             cl = &mut *level
                 .clients
                 .offset(*level.sortedClients.as_mut_ptr().offset(i as isize) as isize)
-                as *mut crate::g_local_h::gclient_s;
-            if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
-                == level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
+                as *mut gclient_s;
+            if level.teamScores[TEAM_RED as i32 as usize]
+                == level.teamScores[TEAM_BLUE as i32 as usize]
             {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 2 as i32
-            } else if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
-                > level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
+                (*cl).ps.persistant[PERS_RANK as i32 as usize] = 2 as i32
+            } else if level.teamScores[TEAM_RED as i32 as usize]
+                > level.teamScores[TEAM_BLUE as i32 as usize]
             {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 0 as i32
+                (*cl).ps.persistant[PERS_RANK as i32 as usize] = 0 as i32
             } else {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 1 as i32
+                (*cl).ps.persistant[PERS_RANK as i32 as usize] = 1 as i32
             }
             i += 1
         }
@@ -2661,8 +2661,8 @@ pub unsafe extern "C" fn CalculateRanks() {
             cl = &mut *level
                 .clients
                 .offset(*level.sortedClients.as_mut_ptr().offset(i as isize) as isize)
-                as *mut crate::g_local_h::gclient_s;
-            newScore = (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize];
+                as *mut gclient_s;
+            newScore = (*cl).ps.persistant[PERS_SCORE as i32 as usize];
             if i == 0 as i32 || newScore != score {
                 rank = i;
                 // assume we aren't tied until the next client is checked
@@ -2670,104 +2670,104 @@ pub unsafe extern "C" fn CalculateRanks() {
                     .clients
                     .offset(level.sortedClients[i as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank
+                .persistant[PERS_RANK as i32 as usize] = rank
             } else {
                 // we are tied with the previous client
                 (*level
                     .clients
                     .offset(level.sortedClients[(i - 1 as i32) as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32;
+                .persistant[PERS_RANK as i32 as usize] = rank | 0x4000 as i32;
                 (*level
                     .clients
                     .offset(level.sortedClients[i as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32
+                .persistant[PERS_RANK as i32 as usize] = rank | 0x4000 as i32
             }
             score = newScore;
-            if g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32
+            if g_gametype.integer == GT_SINGLE_PLAYER as i32
                 && level.numPlayingClients == 1 as i32
             {
                 (*level
                     .clients
                     .offset(level.sortedClients[i as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32
+                .persistant[PERS_RANK as i32 as usize] = rank | 0x4000 as i32
             }
             i += 1
         }
     }
     // set the CS_SCORES1/2 configstrings, which will be visible to everyone
-    if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+    if g_gametype.integer >= GT_TEAM as i32 {
+        trap_SetConfigstring(
             6 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize],
+                level.teamScores[TEAM_RED as i32 as usize],
             ),
         );
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             7 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize],
+                level.teamScores[TEAM_BLUE as i32 as usize],
             ),
         );
     } else if level.numConnectedClients == 0 as i32 {
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             6 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 -(9999 as i32),
             ),
         );
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             7 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 -(9999 as i32),
             ),
         );
     } else if level.numConnectedClients == 1 as i32 {
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             6 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*level
                     .clients
                     .offset(level.sortedClients[0 as i32 as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                .persistant[PERS_SCORE as i32 as usize],
             ),
         );
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             7 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 -(9999 as i32),
             ),
         );
     } else {
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             6 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*level
                     .clients
                     .offset(level.sortedClients[0 as i32 as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                .persistant[PERS_SCORE as i32 as usize],
             ),
         );
-        crate::src::game::g_syscalls::trap_SetConfigstring(
+        trap_SetConfigstring(
             7 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*level
                     .clients
                     .offset(level.sortedClients[1 as i32 as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                .persistant[PERS_SCORE as i32 as usize],
             ),
         );
     }
@@ -2800,10 +2800,10 @@ pub unsafe extern "C" fn SendScoreboardMessageToAllClients() {
     i = 0 as i32;
     while i < level.maxclients {
         if (*level.clients.offset(i as isize)).pers.connected as u32
-            == crate::g_local_h::CON_CONNECTED as i32 as u32
+            == CON_CONNECTED as i32 as u32
         {
-            crate::src::game::g_cmds::DeathmatchScoreboardMessage(
-                g_entities.as_mut_ptr().offset(i as isize) as *mut crate::g_local_h::gentity_s,
+            DeathmatchScoreboardMessage(
+                g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_s,
             );
         }
         i += 1
@@ -2819,12 +2819,12 @@ If a new client connects, this will be called after the spawn function.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut gentity_t) {
     // take out of follow mode if needed
     if (*(*ent).client).sess.spectatorState as u32
-        == crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
+        == SPECTATOR_FOLLOW as i32 as u32
     {
-        crate::src::game::g_cmds::StopFollowing(ent as *mut crate::g_local_h::gentity_s);
+        StopFollowing(ent as *mut gentity_s);
     }
     FindIntermissionPoint();
     // move to the spot
@@ -2837,7 +2837,7 @@ pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut crate::g_local_h
     (*(*ent).client).ps.viewangles[0 as i32 as usize] = level.intermission_angle[0 as i32 as usize];
     (*(*ent).client).ps.viewangles[1 as i32 as usize] = level.intermission_angle[1 as i32 as usize];
     (*(*ent).client).ps.viewangles[2 as i32 as usize] = level.intermission_angle[2 as i32 as usize];
-    (*(*ent).client).ps.pm_type = crate::bg_public_h::PM_INTERMISSION as i32;
+    (*(*ent).client).ps.pm_type = PM_INTERMISSION as i32;
     // clean up powerup info
     crate::stdlib::memset(
         (*(*ent).client).ps.powerups.as_mut_ptr() as *mut libc::c_void,
@@ -2846,7 +2846,7 @@ pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut crate::g_local_h
     );
     (*(*ent).client).ps.eFlags = 0 as i32;
     (*ent).s.eFlags = 0 as i32;
-    (*ent).s.eType = crate::bg_public_h::ET_GENERAL as i32;
+    (*ent).s.eType = ET_GENERAL as i32;
     (*ent).s.modelindex = 0 as i32;
     (*ent).s.loopSound = 0 as i32;
     (*ent).s.event = 0 as i32;
@@ -2862,25 +2862,25 @@ This is also used for spectator spawns
 #[no_mangle]
 
 pub unsafe extern "C" fn FindIntermissionPoint() {
-    let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut target: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
+    let mut target: *mut gentity_t = 0 as *mut gentity_t;
+    let mut dir: vec3_t = [0.; 3];
     // find the intermission spot
-    ent = crate::src::game::g_utils::G_Find(
-        0 as *mut crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_s,
-        &mut (*(0 as *mut crate::g_local_h::gentity_t)).classname as *mut *mut libc::c_char
-            as crate::stddef_h::size_t as i32,
+    ent = G_Find(
+        0 as *mut gentity_t as *mut gentity_s,
+        &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
+            as size_t as i32,
         b"info_player_intermission\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::g_local_h::gentity_s;
+    ) as *mut gentity_s;
     if ent.is_null() {
         // the map creator forgot to put in an intermission point...
 
-        crate::src::game::g_client::SelectSpawnPoint(
-            crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+        SelectSpawnPoint(
+            vec3_origin.as_mut_ptr(),
             level.intermission_origin.as_mut_ptr(),
             level.intermission_angle.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        ) as *mut crate::g_local_h::gentity_s;
+            qfalse,
+        ) as *mut gentity_s;
     } else {
         level.intermission_origin[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
         level.intermission_origin[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
@@ -2890,8 +2890,8 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
         level.intermission_angle[2 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
         // if it has a target, look towards it
         if !(*ent).target.is_null() {
-            target = crate::src::game::g_utils::G_PickTarget((*ent).target)
-                as *mut crate::g_local_h::gentity_s;
+            target = G_PickTarget((*ent).target)
+                as *mut gentity_s;
             if !target.is_null() {
                 dir[0 as i32 as usize] = (*target).s.origin[0 as i32 as usize]
                     - level.intermission_origin[0 as i32 as usize];
@@ -2899,8 +2899,8 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
                     - level.intermission_origin[1 as i32 as usize];
                 dir[2 as i32 as usize] = (*target).s.origin[2 as i32 as usize]
                     - level.intermission_origin[2 as i32 as usize];
-                crate::src::qcommon::q_math::vectoangles(
-                    dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                vectoangles(
+                    dir.as_mut_ptr() as *const vec_t,
                     level.intermission_angle.as_mut_ptr(),
                 );
             }
@@ -2916,13 +2916,13 @@ BeginIntermission
 
 pub unsafe extern "C" fn BeginIntermission() {
     let mut i: i32 = 0;
-    let mut client: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut client: *mut gentity_t = 0 as *mut gentity_t;
     if level.intermissiontime != 0 {
         return;
         // already active
     }
     // if in tournement mode, change the wins / losses
-    if g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32 {
+    if g_gametype.integer == GT_TOURNAMENT as i32 {
         AdjustTournamentScores();
     }
     level.intermissiontime = level.time;
@@ -2933,8 +2933,8 @@ pub unsafe extern "C" fn BeginIntermission() {
         if !((*client).inuse as u64 == 0) {
             // respawn if dead
             if (*client).health <= 0 as i32 {
-                crate::src::game::g_client::ClientRespawn(
-                    client as *mut crate::g_local_h::gentity_s,
+                ClientRespawn(
+                    client as *mut gentity_s,
                 );
             }
             MoveClientToIntermission(client);
@@ -2942,9 +2942,9 @@ pub unsafe extern "C" fn BeginIntermission() {
         i += 1
     }
     // if single player game
-    if g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
-        crate::src::game::g_arenas::UpdateTournamentInfo();
-        crate::src::game::g_arenas::SpawnModelsOnVictoryPads();
+    if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
+        UpdateTournamentInfo();
+        SpawnModelsOnVictoryPads();
     }
     // send the current scoring to all clients
     SendScoreboardMessageToAllClients();
@@ -2962,82 +2962,82 @@ or moved to a new level based on the "nextmap" cvar
 
 pub unsafe extern "C" fn ExitLevel() {
     let mut i: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut nextmap: [libc::c_char; 1024] = [0; 1024];
     let mut d1: [libc::c_char; 1024] = [0; 1024];
     //bot interbreeding
-    crate::src::game::ai_main::BotInterbreedEndMatch();
+    BotInterbreedEndMatch();
     // if we are running a tournement map, kick the loser to spectator status,
     // which will automatically grab the next spectator and restart
-    if g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32 {
+    if g_gametype.integer == GT_TOURNAMENT as i32 {
         if level.restarted as u64 == 0 {
             RemoveTournamentLoser();
-            crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+            trap_SendConsoleCommand(
+                EXEC_APPEND as i32,
                 b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
             );
-            level.restarted = crate::src::qcommon::q_shared::qtrue;
+            level.restarted = qtrue;
             level.changemap = 0 as *mut libc::c_char;
             level.intermissiontime = 0 as i32
         }
         return;
     }
-    crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"nextmap\x00" as *const u8 as *const libc::c_char,
         nextmap.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"d1\x00" as *const u8 as *const libc::c_char,
         d1.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         nextmap.as_mut_ptr(),
         b"map_restart 0\x00" as *const u8 as *const libc::c_char,
     ) == 0
-        && crate::src::qcommon::q_shared::Q_stricmp(
+        && Q_stricmp(
             d1.as_mut_ptr(),
             b"\x00" as *const u8 as *const libc::c_char,
         ) != 0
     {
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"nextmap\x00" as *const u8 as *const libc::c_char,
             b"vstr d2\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+        trap_SendConsoleCommand(
+            EXEC_APPEND as i32,
             b"vstr d1\n\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+        trap_SendConsoleCommand(
+            EXEC_APPEND as i32,
             b"vstr nextmap\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     level.changemap = 0 as *mut libc::c_char;
     level.intermissiontime = 0 as i32;
     // reset all the scores so we don't enter the intermission again
-    level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize] = 0 as i32;
-    level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize] = 0 as i32;
+    level.teamScores[TEAM_RED as i32 as usize] = 0 as i32;
+    level.teamScores[TEAM_BLUE as i32 as usize] = 0 as i32;
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
-            (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize] = 0 as i32
+        if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
+            (*cl).ps.persistant[PERS_SCORE as i32 as usize] = 0 as i32
         }
         i += 1
     }
     // we need to do this here before changing to CON_CONNECTING
-    crate::src::game::g_session::G_WriteSessionData();
+    G_WriteSessionData();
     // change all client states to connecting, so the early players into the
     // next level will know the others aren't done reconnecting
     i = 0 as i32;
     while i < g_maxclients.integer {
         if (*level.clients.offset(i as isize)).pers.connected as u32
-            == crate::g_local_h::CON_CONNECTED as i32 as u32
+            == CON_CONNECTED as i32 as u32
         {
-            (*level.clients.offset(i as isize)).pers.connected = crate::g_local_h::CON_CONNECTING
+            (*level.clients.offset(i as isize)).pers.connected = CON_CONNECTING
         }
         i += 1
     }
@@ -3062,7 +3062,7 @@ pub unsafe extern "C" fn G_LogPrintf(mut fmt: *const libc::c_char, mut args: ...
     sec -= min * 60 as i32;
     tens = sec / 10 as i32;
     sec -= tens * 10 as i32;
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         string.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"%3i:%i%i \x00" as *const u8 as *const libc::c_char,
@@ -3087,7 +3087,7 @@ pub unsafe extern "C" fn G_LogPrintf(mut fmt: *const libc::c_char, mut args: ...
     if level.logFile == 0 {
         return;
     }
-    crate::src::game::g_syscalls::trap_FS_Write(
+    trap_FS_Write(
         string.as_mut_ptr() as *const libc::c_void,
         crate::stdlib::strlen(string.as_mut_ptr()) as i32,
         level.logFile,
@@ -3105,7 +3105,7 @@ Append information about this game to the log file
 pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut numSorted: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     G_LogPrintf(
         b"Exit: %s\n\x00" as *const u8 as *const libc::c_char,
         string,
@@ -3113,7 +3113,7 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
     level.intermissionQueued = level.time;
     // this will keep the clients from playing any voice sounds
     // that will get cut off when the queued intermission starts
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         22 as i32,
         b"1\x00" as *const u8 as *const libc::c_char,
     );
@@ -3122,11 +3122,11 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
     if numSorted > 32 as i32 {
         numSorted = 32 as i32
     }
-    if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
+    if g_gametype.integer >= GT_TEAM as i32 {
         G_LogPrintf(
             b"red:%i  blue:%i\n\x00" as *const u8 as *const libc::c_char,
-            level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize],
-            level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize],
+            level.teamScores[TEAM_RED as i32 as usize],
+            level.teamScores[TEAM_BLUE as i32 as usize],
         );
     }
     i = 0 as i32;
@@ -3135,9 +3135,9 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
         cl = &mut *level
             .clients
             .offset(*level.sortedClients.as_mut_ptr().offset(i as isize) as isize)
-            as *mut crate::g_local_h::gclient_s;
-        if !((*cl).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32) {
-            if !((*cl).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32) {
+            as *mut gclient_s;
+        if !((*cl).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32) {
+            if !((*cl).pers.connected as u32 == CON_CONNECTING as i32 as u32) {
                 ping = if (*cl).ps.ping < 999 as i32 {
                     (*cl).ps.ping
                 } else {
@@ -3145,7 +3145,7 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
                 };
                 G_LogPrintf(
                     b"score: %i  ping: %i  client: %i %s\n\x00" as *const u8 as *const libc::c_char,
-                    (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
+                    (*cl).ps.persistant[PERS_SCORE as i32 as usize],
                     ping,
                     level.sortedClients[i as usize],
                     (*cl).pers.netname.as_mut_ptr(),
@@ -3172,9 +3172,9 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     let mut notReady: i32 = 0;
     let mut playerCount: i32 = 0;
     let mut i: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut readyMask: i32 = 0;
-    if g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
+    if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
         return;
     }
     // see which players are ready
@@ -3185,7 +3185,7 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
+        if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
             if !(g_entities[i as usize].r.svFlags & 0x8 as i32 != 0) {
                 playerCount += 1;
                 if (*cl).readyToExit as u64 != 0 {
@@ -3205,8 +3205,8 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
-            (*cl).ps.stats[crate::bg_public_h::STAT_CLIENTS_READY as i32 as usize] = readyMask
+        if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
+            (*cl).ps.stats[STAT_CLIENTS_READY as i32 as usize] = readyMask
         }
         i += 1
     }
@@ -3218,7 +3218,7 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     if playerCount > 0 as i32 {
         // if nobody wants to go, clear timer
         if ready == 0 {
-            level.readyToExit = crate::src::qcommon::q_shared::qfalse;
+            level.readyToExit = qfalse;
             return;
         }
         // if everyone wants to go, go now
@@ -3229,7 +3229,7 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     }
     // the first person to ready starts the ten second timeout
     if level.readyToExit as u64 == 0 {
-        level.readyToExit = crate::src::qcommon::q_shared::qtrue;
+        level.readyToExit = qtrue;
         level.exitTime = level.time
     }
     // if we have waited ten seconds since at least one player
@@ -3246,28 +3246,28 @@ ScoreIsTied
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ScoreIsTied() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn ScoreIsTied() -> qboolean {
     let mut a: i32 = 0;
     let mut b: i32 = 0;
     if level.numPlayingClients < 2 as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-        return (level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
-            == level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize])
-            as i32 as crate::src::qcommon::q_shared::qboolean;
+    if g_gametype.integer >= GT_TEAM as i32 {
+        return (level.teamScores[TEAM_RED as i32 as usize]
+            == level.teamScores[TEAM_BLUE as i32 as usize])
+            as i32 as qboolean;
     }
     a = (*level
         .clients
         .offset(level.sortedClients[0 as i32 as usize] as isize))
     .ps
-    .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize];
+    .persistant[PERS_SCORE as i32 as usize];
     b = (*level
         .clients
         .offset(level.sortedClients[1 as i32 as usize] as isize))
     .ps
-    .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize];
-    return (a == b) as i32 as crate::src::qcommon::q_shared::qboolean;
+    .persistant[PERS_SCORE as i32 as usize];
+    return (a == b) as i32 as qboolean;
 }
 /*
 =================
@@ -3282,7 +3282,7 @@ can see the last frag.
 
 pub unsafe extern "C" fn CheckExitRules() {
     let mut i: i32 = 0;
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     // if at the intermission, wait for all non-bots to
     // signal ready, then go to next level
     if level.intermissiontime != 0 {
@@ -3307,17 +3307,17 @@ pub unsafe extern "C" fn CheckExitRules() {
                 as *const libc::c_char,
             g_timelimit.integer,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"timelimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Update(
-            &mut g_timelimit as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Update(
+            &mut g_timelimit as *mut _ as *mut vmCvar_t,
         );
     }
     if g_timelimit.integer != 0 && level.warmupTime == 0 {
         if level.time - level.startTime >= g_timelimit.integer * 60000 as i32 {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+            trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Timelimit hit.\n\"\x00" as *const u8 as *const libc::c_char,
             );
@@ -3331,25 +3331,25 @@ pub unsafe extern "C" fn CheckExitRules() {
                 as *const libc::c_char,
             g_fraglimit.integer,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"fraglimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Update(
-            &mut g_fraglimit as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Update(
+            &mut g_fraglimit as *mut _ as *mut vmCvar_t,
         );
     }
-    if g_gametype.integer < crate::bg_public_h::GT_CTF as i32 && g_fraglimit.integer != 0 {
-        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize] >= g_fraglimit.integer {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+    if g_gametype.integer < GT_CTF as i32 && g_fraglimit.integer != 0 {
+        if level.teamScores[TEAM_RED as i32 as usize] >= g_fraglimit.integer {
+            trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Red hit the fraglimit.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             LogExit(b"Fraglimit hit.\x00" as *const u8 as *const libc::c_char);
             return;
         }
-        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize] >= g_fraglimit.integer {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+        if level.teamScores[TEAM_BLUE as i32 as usize] >= g_fraglimit.integer {
+            trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Blue hit the fraglimit.\n\"\x00" as *const u8 as *const libc::c_char,
             );
@@ -3359,15 +3359,15 @@ pub unsafe extern "C" fn CheckExitRules() {
         i = 0 as i32;
         while i < g_maxclients.integer {
             cl = level.clients.offset(i as isize);
-            if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
-                if !((*cl).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_FREE as i32 as u32) {
-                    if (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
+            if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
+                if !((*cl).sess.sessionTeam as u32 != TEAM_FREE as i32 as u32) {
+                    if (*cl).ps.persistant[PERS_SCORE as i32 as usize]
                         >= g_fraglimit.integer
                     {
                         LogExit(b"Fraglimit hit.\x00" as *const u8 as *const libc::c_char);
-                        crate::src::game::g_syscalls::trap_SendServerCommand(
+                        trap_SendServerCommand(
                             -(1 as i32),
-                            crate::src::qcommon::q_shared::va(
+                            va(
                                 b"print \"%s^7 hit the fraglimit.\n\"\x00" as *const u8
                                     as *const libc::c_char
                                     as *mut libc::c_char,
@@ -3387,27 +3387,27 @@ pub unsafe extern "C" fn CheckExitRules() {
                 as *const libc::c_char,
             g_capturelimit.integer,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"capturelimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::game::g_syscalls::trap_Cvar_Update(
-            &mut g_capturelimit as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
+        trap_Cvar_Update(
+            &mut g_capturelimit as *mut _ as *mut vmCvar_t,
         );
     }
-    if g_gametype.integer >= crate::bg_public_h::GT_CTF as i32 && g_capturelimit.integer != 0 {
-        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize] >= g_capturelimit.integer
+    if g_gametype.integer >= GT_CTF as i32 && g_capturelimit.integer != 0 {
+        if level.teamScores[TEAM_RED as i32 as usize] >= g_capturelimit.integer
         {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+            trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Red hit the capturelimit.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             LogExit(b"Capturelimit hit.\x00" as *const u8 as *const libc::c_char);
             return;
         }
-        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize] >= g_capturelimit.integer
+        if level.teamScores[TEAM_BLUE as i32 as usize] >= g_capturelimit.integer
         {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+            trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Blue hit the capturelimit.\n\"\x00" as *const u8 as *const libc::c_char,
             );
@@ -3438,7 +3438,7 @@ pub unsafe extern "C" fn CheckTournament() {
     if level.numPlayingClients == 0 as i32 {
         return;
     }
-    if g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32 {
+    if g_gametype.integer == GT_TOURNAMENT as i32 {
         // pull in a spectator if needed
         if level.numPlayingClients < 2 as i32 {
             AddTournamentPlayer();
@@ -3447,9 +3447,9 @@ pub unsafe extern "C" fn CheckTournament() {
         if level.numPlayingClients != 2 as i32 {
             if level.warmupTime != -(1 as i32) {
                 level.warmupTime = -(1 as i32);
-                crate::src::game::g_syscalls::trap_SetConfigstring(
+                trap_SetConfigstring(
                     5 as i32,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         level.warmupTime,
                     ),
@@ -3475,9 +3475,9 @@ pub unsafe extern "C" fn CheckTournament() {
                 } else {
                     level.warmupTime = 0 as i32
                 }
-                crate::src::game::g_syscalls::trap_SetConfigstring(
+                trap_SetConfigstring(
                     5 as i32,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         level.warmupTime,
                     ),
@@ -3488,42 +3488,42 @@ pub unsafe extern "C" fn CheckTournament() {
         // if the warmup time has counted down, restart
         if level.time > level.warmupTime {
             level.warmupTime += 10000 as i32;
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"g_restarted\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+            trap_SendConsoleCommand(
+                EXEC_APPEND as i32,
                 b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
             );
-            level.restarted = crate::src::qcommon::q_shared::qtrue;
+            level.restarted = qtrue;
             return;
         }
-    } else if g_gametype.integer != crate::bg_public_h::GT_SINGLE_PLAYER as i32
+    } else if g_gametype.integer != GT_SINGLE_PLAYER as i32
         && level.warmupTime != 0 as i32
     {
         let mut counts: [i32; 4] = [0; 4];
-        let mut notEnough: crate::src::qcommon::q_shared::qboolean =
-            crate::src::qcommon::q_shared::qfalse;
-        if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
-            counts[crate::bg_public_h::TEAM_BLUE as i32 as usize] =
-                crate::src::game::g_client::TeamCount(-(1 as i32), crate::bg_public_h::TEAM_BLUE);
-            counts[crate::bg_public_h::TEAM_RED as i32 as usize] =
-                crate::src::game::g_client::TeamCount(-(1 as i32), crate::bg_public_h::TEAM_RED);
-            if counts[crate::bg_public_h::TEAM_RED as i32 as usize] < 1 as i32
-                || counts[crate::bg_public_h::TEAM_BLUE as i32 as usize] < 1 as i32
+        let mut notEnough: qboolean =
+            qfalse;
+        if g_gametype.integer >= GT_TEAM as i32 {
+            counts[TEAM_BLUE as i32 as usize] =
+                TeamCount(-(1 as i32), TEAM_BLUE);
+            counts[TEAM_RED as i32 as usize] =
+                TeamCount(-(1 as i32), TEAM_RED);
+            if counts[TEAM_RED as i32 as usize] < 1 as i32
+                || counts[TEAM_BLUE as i32 as usize] < 1 as i32
             {
-                notEnough = crate::src::qcommon::q_shared::qtrue
+                notEnough = qtrue
             }
         } else if level.numPlayingClients < 2 as i32 {
-            notEnough = crate::src::qcommon::q_shared::qtrue
+            notEnough = qtrue
         }
         if notEnough as u64 != 0 {
             if level.warmupTime != -(1 as i32) {
                 level.warmupTime = -(1 as i32);
-                crate::src::game::g_syscalls::trap_SetConfigstring(
+                trap_SetConfigstring(
                     5 as i32,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         level.warmupTime,
                     ),
@@ -3549,9 +3549,9 @@ pub unsafe extern "C" fn CheckTournament() {
             } else {
                 level.warmupTime = 0 as i32
             }
-            crate::src::game::g_syscalls::trap_SetConfigstring(
+            trap_SetConfigstring(
                 5 as i32,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     level.warmupTime,
                 ),
@@ -3561,15 +3561,15 @@ pub unsafe extern "C" fn CheckTournament() {
         // if the warmup time has counted down, restart
         if level.time > level.warmupTime {
             level.warmupTime += 10000 as i32;
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"g_restarted\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
-            crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+            trap_SendConsoleCommand(
+                EXEC_APPEND as i32,
                 b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
             );
-            level.restarted = crate::src::qcommon::q_shared::qtrue;
+            level.restarted = qtrue;
             return;
         }
     };
@@ -3584,9 +3584,9 @@ CheckVote
 pub unsafe extern "C" fn CheckVote() {
     if level.voteExecuteTime != 0 && level.voteExecuteTime < level.time {
         level.voteExecuteTime = 0 as i32;
-        crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-            crate::src::qcommon::q_shared::va(
+        trap_SendConsoleCommand(
+            EXEC_APPEND as i32,
+            va(
                 b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 level.voteString.as_mut_ptr(),
             ),
@@ -3596,21 +3596,21 @@ pub unsafe extern "C" fn CheckVote() {
         return;
     }
     if level.time - level.voteTime >= 30000 as i32 {
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Vote failed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
     } else if level.voteYes > level.numVotingClients / 2 as i32 {
         // ATVI Q3 1.32 Patch #9, WNF
         // execute the command, then remove the vote
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Vote passed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         level.voteExecuteTime = level.time + 3000 as i32
     } else if level.voteNo >= level.numVotingClients / 2 as i32 {
         // same behavior as a timeout
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Vote failed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
@@ -3619,7 +3619,7 @@ pub unsafe extern "C" fn CheckVote() {
         return;
     }
     level.voteTime = 0 as i32;
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         8 as i32,
         b"\x00" as *const u8 as *const libc::c_char,
     );
@@ -3636,7 +3636,7 @@ pub unsafe extern "C" fn PrintTeam(mut team: i32, mut message: *mut libc::c_char
     i = 0 as i32;
     while i < level.maxclients {
         if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
-            crate::src::game::g_syscalls::trap_SendServerCommand(i, message);
+            trap_SendServerCommand(i, message);
         }
         i += 1
     }
@@ -3651,11 +3651,11 @@ SetLeader
 pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
     let mut i: i32 = 0;
     if (*level.clients.offset(client as isize)).pers.connected as u32
-        == crate::g_local_h::CON_DISCONNECTED as i32 as u32
+        == CON_DISCONNECTED as i32 as u32
     {
         PrintTeam(
             team,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"print \"%s is not connected\n\"\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 (*level.clients.offset(client as isize))
@@ -3669,7 +3669,7 @@ pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
     if (*level.clients.offset(client as isize)).sess.sessionTeam as u32 != team as u32 {
         PrintTeam(
             team,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"print \"%s is not on the team anymore\n\"\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 (*level.clients.offset(client as isize))
@@ -3685,17 +3685,17 @@ pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
         if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
             if (*level.clients.offset(i as isize)).sess.teamLeader as u64 != 0 {
                 (*level.clients.offset(i as isize)).sess.teamLeader =
-                    crate::src::qcommon::q_shared::qfalse;
-                crate::src::game::g_client::ClientUserinfoChanged(i);
+                    qfalse;
+                ClientUserinfoChanged(i);
             }
         }
         i += 1
     }
-    (*level.clients.offset(client as isize)).sess.teamLeader = crate::src::qcommon::q_shared::qtrue;
-    crate::src::game::g_client::ClientUserinfoChanged(client);
+    (*level.clients.offset(client as isize)).sess.teamLeader = qtrue;
+    ClientUserinfoChanged(client);
     PrintTeam(
         team,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"print \"%s is the new team leader\n\"\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             (*level.clients.offset(client as isize))
@@ -3729,7 +3729,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
             if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
                 if g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
                     (*level.clients.offset(i as isize)).sess.teamLeader =
-                        crate::src::qcommon::q_shared::qtrue;
+                        qtrue;
                     break;
                 }
             }
@@ -3742,7 +3742,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
                     i += 1
                 } else {
                     (*level.clients.offset(i as isize)).sess.teamLeader =
-                        crate::src::qcommon::q_shared::qtrue;
+                        qtrue;
                     break;
                 }
             }
@@ -3758,9 +3758,9 @@ CheckTeamVote
 
 pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
     let mut cs_offset: i32 = 0;
-    if team == crate::bg_public_h::TEAM_RED as i32 {
+    if team == TEAM_RED as i32 {
         cs_offset = 0 as i32
-    } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
+    } else if team == TEAM_BLUE as i32 {
         cs_offset = 1 as i32
     } else {
         return;
@@ -3769,7 +3769,7 @@ pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
         return;
     }
     if level.time - level.teamVoteTime[cs_offset as usize] >= 30000 as i32 {
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Team vote failed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
@@ -3777,12 +3777,12 @@ pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
         > level.numteamVotingClients[cs_offset as usize] / 2 as i32
     {
         // execute the command, then remove the vote
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Team vote passed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         //
-        if crate::src::qcommon::q_shared::Q_strncmp(
+        if Q_strncmp(
             b"leader\x00" as *const u8 as *const libc::c_char,
             level.teamVoteString[cs_offset as usize].as_mut_ptr(),
             6 as i32,
@@ -3798,9 +3798,9 @@ pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
                 ),
             );
         } else {
-            crate::src::game::g_syscalls::trap_SendConsoleCommand(
-                crate::src::qcommon::q_shared::EXEC_APPEND as i32,
-                crate::src::qcommon::q_shared::va(
+            trap_SendConsoleCommand(
+                EXEC_APPEND as i32,
+                va(
                     b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     level.teamVoteString[cs_offset as usize].as_mut_ptr(),
                 ),
@@ -3810,7 +3810,7 @@ pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
         >= level.numteamVotingClients[cs_offset as usize] / 2 as i32
     {
         // same behavior as a timeout
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
             b"print \"Team vote failed.\n\"\x00" as *const u8 as *const libc::c_char,
         );
@@ -3819,7 +3819,7 @@ pub unsafe extern "C" fn CheckTeamVote(mut team: i32) {
         return;
     }
     level.teamVoteTime[cs_offset as usize] = 0 as i32;
-    crate::src::game::g_syscalls::trap_SetConfigstring(
+    trap_SetConfigstring(
         12 as i32 + cs_offset,
         b"\x00" as *const u8 as *const libc::c_char,
     );
@@ -3836,17 +3836,17 @@ pub unsafe extern "C" fn CheckCvars() {
     if g_password.modificationCount != lastMod {
         lastMod = g_password.modificationCount;
         if *g_password.string.as_mut_ptr() as i32 != 0
-            && crate::src::qcommon::q_shared::Q_stricmp(
+            && Q_stricmp(
                 g_password.string.as_mut_ptr(),
                 b"none\x00" as *const u8 as *const libc::c_char,
             ) != 0
         {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"g_needpass\x00" as *const u8 as *const libc::c_char,
                 b"1\x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::game::g_syscalls::trap_Cvar_Set(
+            trap_Cvar_Set(
                 b"g_needpass\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
@@ -4074,7 +4074,7 @@ Runs thinking code for this frame if necessary
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_RunThink(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn G_RunThink(mut ent: *mut gentity_t) {
     let mut thinktime: i32 = 0;
     thinktime = (*ent).nextthink;
     if thinktime <= 0 as i32 {
@@ -4100,7 +4100,7 @@ Advances the non-player objects in the world
 
 pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     let mut i: i32 = 0;
-    let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     // if we are waiting for the level to restart, do nothing
     if level.restarted as u64 != 0 {
         return;
@@ -4114,7 +4114,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     // go through all allocated objects
     //
     ent =
-        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut crate::g_local_h::gentity_t;
+        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
     let mut current_block_24: u64;
     i = 0 as i32;
     while i < level.num_entities {
@@ -4132,16 +4132,16 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
                 }
                 if (*ent).freeAfterEvent as u64 != 0 {
                     // tempEntities or dropped items completely go away after their event
-                    crate::src::game::g_utils::G_FreeEntity(
-                        ent as *mut crate::g_local_h::gentity_s,
+                    G_FreeEntity(
+                        ent as *mut gentity_s,
                     );
                     current_block_24 = 17216689946888361452;
                 } else {
                     if (*ent).unlinkAfterEvent as u64 != 0 {
                         // items that will respawn will hide themselves after their pickup event
-                        (*ent).unlinkAfterEvent = crate::src::qcommon::q_shared::qfalse;
-                        crate::src::game::g_syscalls::trap_UnlinkEntity(
-                            ent as *mut crate::g_local_h::gentity_s,
+                        (*ent).unlinkAfterEvent = qfalse;
+                        trap_UnlinkEntity(
+                            ent as *mut gentity_s,
                         );
                     }
                     current_block_24 = 17478428563724192186;
@@ -4156,23 +4156,23 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
                 {
                     if !((*ent).freeAfterEvent as u64 != 0) {
                         if !((*ent).r.linked as u64 == 0 && (*ent).neverFree as u32 != 0) {
-                            if (*ent).s.eType == crate::bg_public_h::ET_MISSILE as i32 {
-                                crate::src::game::g_missile::G_RunMissile(
-                                    ent as *mut crate::g_local_h::gentity_s,
+                            if (*ent).s.eType == ET_MISSILE as i32 {
+                                G_RunMissile(
+                                    ent as *mut gentity_s,
                                 );
-                            } else if (*ent).s.eType == crate::bg_public_h::ET_ITEM as i32
+                            } else if (*ent).s.eType == ET_ITEM as i32
                                 || (*ent).physicsObject as u32 != 0
                             {
-                                crate::src::game::g_items::G_RunItem(
-                                    ent as *mut crate::g_local_h::gentity_s,
+                                G_RunItem(
+                                    ent as *mut gentity_s,
                                 );
-                            } else if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
-                                crate::src::game::g_mover::G_RunMover(
-                                    ent as *mut crate::g_local_h::gentity_s,
+                            } else if (*ent).s.eType == ET_MOVER as i32 {
+                                G_RunMover(
+                                    ent as *mut gentity_s,
                                 );
                             } else if i < 64 as i32 {
-                                crate::src::game::g_active::G_RunClient(
-                                    ent as *mut crate::g_local_h::gentity_s,
+                                G_RunClient(
+                                    ent as *mut gentity_s,
                                 );
                             } else {
                                 G_RunThink(ent);
@@ -4187,11 +4187,11 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     }
     // perform final fixups on the players
     ent =
-        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut crate::g_local_h::gentity_t;
+        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
     i = 0 as i32;
     while i < level.maxclients {
         if (*ent).inuse as u64 != 0 {
-            crate::src::game::g_active::ClientEndFrame(ent as *mut crate::g_local_h::gentity_s);
+            ClientEndFrame(ent as *mut gentity_s);
         }
         i += 1;
         ent = ent.offset(1)
@@ -4205,8 +4205,8 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     // cancel vote if timed out
     CheckVote();
     // check team votes
-    CheckTeamVote(crate::bg_public_h::TEAM_RED as i32);
-    CheckTeamVote(crate::bg_public_h::TEAM_BLUE as i32);
+    CheckTeamVote(TEAM_RED as i32);
+    CheckTeamVote(TEAM_BLUE as i32);
     // for tracking changes
     CheckCvars();
     if g_listEntity.integer != 0 {
@@ -4219,7 +4219,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
             );
             i += 1
         }
-        crate::src::game::g_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"g_listEntity\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );

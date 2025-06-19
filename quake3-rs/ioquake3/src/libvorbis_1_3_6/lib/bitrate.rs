@@ -87,11 +87,11 @@ function: bitrate tracking and management
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_bitrate_init(
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut vi: *mut vorbis_info,
     mut bm: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state,
 ) {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut bi: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_info =
         &mut (*ci).bi;
     crate::stdlib::memset(
@@ -137,10 +137,10 @@ pub unsafe extern "C" fn vorbis_bitrate_clear(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_bitrate_managed(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
-    let mut vd: *mut crate::codec_h::vorbis_dsp_state = (*vb).vd;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*vd).backend_state as *mut crate::codec_internal_h::private_state;
+pub unsafe extern "C" fn vorbis_bitrate_managed(mut vb: *mut vorbis_block) -> i32 {
+    let mut vd: *mut vorbis_dsp_state = (*vb).vd;
+    let mut b: *mut private_state =
+        (*vd).backend_state as *mut private_state;
     let mut bm: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state =
         &mut (*b).bms;
     if !bm.is_null() && (*bm).managed != 0 {
@@ -151,22 +151,22 @@ pub unsafe extern "C" fn vorbis_bitrate_managed(mut vb: *mut crate::codec_h::vor
 /* finish taking in the block we just processed */
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
-    let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
-        (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
-    let mut vd: *mut crate::codec_h::vorbis_dsp_state = (*vb).vd;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*vd).backend_state as *mut crate::codec_internal_h::private_state;
+pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut vorbis_block) -> i32 {
+    let mut vbi: *mut vorbis_block_internal =
+        (*vb).internal as *mut vorbis_block_internal;
+    let mut vd: *mut vorbis_dsp_state = (*vb).vd;
+    let mut b: *mut private_state =
+        (*vd).backend_state as *mut private_state;
     let mut bm: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state =
         &mut (*b).bms;
-    let mut vi: *mut crate::codec_h::vorbis_info = (*vd).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut vi: *mut vorbis_info = (*vd).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut bi: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_info =
         &mut (*ci).bi;
     let mut choice: i32 = crate::stdlib::rint((*bm).avgfloat) as i32;
-    let mut this_bits: isize = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-        (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+    let mut this_bits: isize = oggpack_bytes(
+        (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
     ) * 8 as i32 as isize;
     let mut min_target_bits: isize = if (*vb).W != 0 {
         ((*bm).min_bitsper) * (*bm).short_per_long
@@ -216,8 +216,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
                 && (*bm).avg_reservoir + (this_bits - avg_target_bits) > desired_fill
             {
                 choice -= 1;
-                this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+                this_bits = oggpack_bytes(
+                    (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 ) * 8 as i32 as isize
             }
         } else if (*bm).avg_reservoir + (this_bits - avg_target_bits) < desired_fill {
@@ -226,8 +226,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
                 && (*bm).avg_reservoir + (this_bits - avg_target_bits) < desired_fill
             {
                 choice += 1;
-                this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+                this_bits = oggpack_bytes(
+                    (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 ) * 8 as i32 as isize
             }
         }
@@ -241,8 +241,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
         }
         (*bm).avgfloat += slew / (*vi).rate as f64 * samples as f64;
         choice = crate::stdlib::rint((*bm).avgfloat) as i32;
-        this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        this_bits = oggpack_bytes(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         ) * 8 as i32 as isize
     }
     /* enforce min(if used) on the current floater (if used) */
@@ -254,8 +254,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
                 if choice >= 15 as i32 {
                     break;
                 }
-                this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+                this_bits = oggpack_bytes(
+                    (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 ) * 8 as i32 as isize
             }
         }
@@ -269,8 +269,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
                 if choice < 0 as i32 {
                     break;
                 }
-                this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+                this_bits = oggpack_bytes(
+                    (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 ) * 8 as i32 as isize
             }
         }
@@ -284,16 +284,16 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
             (max_target_bits + ((*bi).reservoir_bits - (*bm).minmax_reservoir)) / 8 as i32 as isize;
         choice = 0 as i32;
         (*bm).choice = choice;
-        if crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        if oggpack_bytes(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         ) > maxsize
         {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_writetrunc(
-                (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_writetrunc(
+                (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 maxsize * 8 as i32 as isize,
             );
-            this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+            this_bits = oggpack_bytes(
+                (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
             ) * 8 as i32 as isize
         }
     } else {
@@ -304,8 +304,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
         }
         (*bm).choice = choice;
         /* prop up bitrate according to demand. pad this frame out with zeroes */
-        minsize -= crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        minsize -= oggpack_bytes(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         );
         loop {
             let fresh0 = minsize;
@@ -313,14 +313,14 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
             if !(fresh0 > 0 as i32 as isize) {
                 break;
             }
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
                 0 as i32 as libc::c_ulong,
                 8 as i32,
             );
         }
-        this_bits = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        this_bits = oggpack_bytes(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         ) * 8 as i32 as isize
     }
     /* now we have the final packet and the final packet size.  Update statistics */
@@ -365,29 +365,29 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_bitrate_flushpacket(
-    mut vd: *mut crate::codec_h::vorbis_dsp_state,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vd: *mut vorbis_dsp_state,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*vd).backend_state as *mut crate::codec_internal_h::private_state;
+    let mut b: *mut private_state =
+        (*vd).backend_state as *mut private_state;
     let mut bm: *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state =
         &mut (*b).bms;
-    let mut vb: *mut crate::codec_h::vorbis_block = (*bm).vb;
+    let mut vb: *mut vorbis_block = (*bm).vb;
     let mut choice: i32 = 15 as i32 / 2 as i32;
     if vb.is_null() {
         return 0 as i32;
     }
     if !op.is_null() {
-        let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
-            (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
+        let mut vbi: *mut vorbis_block_internal =
+            (*vb).internal as *mut vorbis_block_internal;
         if vorbis_bitrate_managed(vb) != 0 {
             choice = (*bm).choice
         }
-        (*op).packet = crate::src::libogg_1_3_3::src::bitwise::oggpack_get_buffer(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        (*op).packet = oggpack_get_buffer(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         );
-        (*op).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            (*vbi).packetblob[choice as usize] as *mut crate::ogg_h::oggpack_buffer,
+        (*op).bytes = oggpack_bytes(
+            (*vbi).packetblob[choice as usize] as *mut oggpack_buffer,
         );
         (*op).b_o_s = 0 as i32 as isize;
         (*op).e_o_s = (*vb).eofflag as isize;
@@ -395,6 +395,6 @@ pub unsafe extern "C" fn vorbis_bitrate_flushpacket(
         (*op).packetno = (*vb).sequence
         /* for sake of completeness */
     }
-    (*bm).vb = 0 as *mut crate::codec_h::vorbis_block;
+    (*bm).vb = 0 as *mut vorbis_block;
     return 1 as i32;
 }

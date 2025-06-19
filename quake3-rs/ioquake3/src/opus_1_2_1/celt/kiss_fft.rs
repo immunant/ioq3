@@ -80,7 +80,7 @@ unsafe extern "C" fn kf_bfly2(
     let mut Fout2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
         0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
     let mut i: i32 = 0;
-    let mut tw: crate::arch_h::opus_val16 = 0.;
+    let mut tw: opus_val16 = 0.;
     tw = 0.7071067812f32;
     /* We know that m==4 here because the radix-2 is just after a radix-4 */
     i = 0 as i32;
@@ -118,7 +118,7 @@ unsafe extern "C" fn kf_bfly2(
 
 unsafe extern "C" fn kf_bfly4(
     mut Fout: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
-    fstride: crate::stddef_h::size_t,
+    fstride: size_t,
     mut st: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
     mut m: i32,
     mut N: i32,
@@ -223,15 +223,15 @@ unsafe extern "C" fn kf_bfly4(
 
 unsafe extern "C" fn kf_bfly3(
     mut Fout: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
-    fstride: crate::stddef_h::size_t,
+    fstride: size_t,
     mut st: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
     mut m: i32,
     mut N: i32,
     mut mm: i32,
 ) {
     let mut i: i32 = 0;
-    let mut k: crate::stddef_h::size_t = 0;
-    let m2: crate::stddef_h::size_t = (2 as i32 * m) as crate::stddef_h::size_t;
+    let mut k: size_t = 0;
+    let m2: size_t = (2 as i32 * m) as size_t;
     let mut tw1: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
         0 as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
     let mut tw2: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx =
@@ -250,7 +250,7 @@ unsafe extern "C" fn kf_bfly3(
         tw2 = (*st).twiddles;
         tw1 = tw2;
         /* For non-custom modes, m is guaranteed to be a multiple of 4. */
-        k = m as crate::stddef_h::size_t;
+        k = m as size_t;
         loop {
             scratch[1 as i32 as usize].r =
                 (*Fout.offset(m as isize)).r * (*tw1).r - (*Fout.offset(m as isize)).i * (*tw1).i;
@@ -296,7 +296,7 @@ unsafe extern "C" fn kf_bfly3(
 
 unsafe extern "C" fn kf_bfly5(
     mut Fout: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
-    fstride: crate::stddef_h::size_t,
+    fstride: size_t,
     mut st: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
     mut m: i32,
     mut N: i32,
@@ -485,7 +485,7 @@ pub unsafe extern "C" fn opus_fft_impl(
             4 => {
                 kf_bfly4(
                     fout,
-                    (fstride[i as usize] << shift) as crate::stddef_h::size_t,
+                    (fstride[i as usize] << shift) as size_t,
                     st,
                     m,
                     fstride[i as usize],
@@ -495,7 +495,7 @@ pub unsafe extern "C" fn opus_fft_impl(
             3 => {
                 kf_bfly3(
                     fout,
-                    (fstride[i as usize] << shift) as crate::stddef_h::size_t,
+                    (fstride[i as usize] << shift) as size_t,
                     st,
                     m,
                     fstride[i as usize],
@@ -505,7 +505,7 @@ pub unsafe extern "C" fn opus_fft_impl(
             5 => {
                 kf_bfly5(
                     fout,
-                    (fstride[i as usize] << shift) as crate::stddef_h::size_t,
+                    (fstride[i as usize] << shift) as size_t,
                     st,
                     m,
                     fstride[i as usize],
@@ -526,7 +526,7 @@ pub unsafe extern "C" fn opus_fft_c(
     mut fout: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
 ) {
     let mut i: i32 = 0;
-    let mut scale: crate::arch_h::opus_val16 = 0.;
+    let mut scale: opus_val16 = 0.;
     scale = (*st).scale;
     /* Bit-reverse the input */
     i = 0 as i32;

@@ -131,15 +131,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_control_audio_bandwidth(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut encControl: *mut crate::control_h::silk_EncControlStruct,
+    mut psEncC: *mut silk_encoder_state,
+    mut encControl: *mut silk_EncControlStruct,
 ) -> i32
 /* I    Control structure                           */ {
     let mut fs_kHz: i32 = 0;
-    let mut fs_Hz: crate::opus_types_h::opus_int32 = 0;
+    let mut fs_Hz: opus_int32 = 0;
     fs_kHz = (*psEncC).fs_kHz;
-    fs_Hz = fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-        * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+    fs_Hz = fs_kHz as opus_int16 as opus_int32
+        * 1000 as i32 as opus_int16 as opus_int32;
     if fs_Hz == 0 as i32 {
         /* Encoder has just been initialized */
         fs_Hz = if (*psEncC).desiredInternal_fs_Hz < (*psEncC).API_fs_Hz {
@@ -173,9 +173,9 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
         }
         if (*psEncC).allow_bandwidth_switch != 0 || (*encControl).opusCanSwitch != 0 {
             /* Check if we should switch down */
-            if (*psEncC).fs_kHz as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+            if (*psEncC).fs_kHz as opus_int16
+                as opus_int32
+                * 1000 as i32 as opus_int16 as opus_int32
                 > (*psEncC).desiredInternal_fs_Hz
             {
                 /* Switch down */
@@ -186,7 +186,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>()
+                        ::std::mem::size_of::<[opus_int32; 2]>()
                             as libc::c_ulong,
                     );
                 }
@@ -208,9 +208,9 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     /* Direction: down (at double speed) */
                     (*psEncC).sLP.mode = -(2 as i32)
                 }
-            } else if ((*psEncC).fs_kHz as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
+            } else if ((*psEncC).fs_kHz as opus_int16
+                as opus_int32
+                * 1000 as i32 as opus_int16 as opus_int32)
                 < (*psEncC).desiredInternal_fs_Hz
             {
                 /* Check if we should switch up */
@@ -228,7 +228,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>()
+                        ::std::mem::size_of::<[opus_int32; 2]>()
                             as libc::c_ulong,
                     );
                     /* Direction: up */

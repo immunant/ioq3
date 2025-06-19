@@ -346,43 +346,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // memcpy
 #[no_mangle]
 
-pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals_t {
-    registered: crate::src::qcommon::q_shared::qfalse,
+pub static mut tr: trGlobals_t = trGlobals_t {
+    registered: qfalse,
     visCount: 0,
     frameCount: 0,
     sceneCount: 0,
     viewCount: 0,
     frameSceneNum: 0,
-    worldMapLoaded: crate::src::qcommon::q_shared::qfalse,
-    world: 0 as *const crate::tr_local_h::world_t as *mut crate::tr_local_h::world_t,
-    externalVisData: 0 as *const crate::src::qcommon::q_shared::byte,
-    defaultImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    scratchImage: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 32],
-    fogImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    dlightImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    flareImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    whiteImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    identityLightImage: 0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t,
-    defaultShader: 0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t,
-    shadowShader: 0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t,
-    projectionShadowShader: 0 as *const crate::tr_local_h::shader_t
-        as *mut crate::tr_local_h::shader_t,
-    flareShader: 0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t,
-    sunShader: 0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t,
+    worldMapLoaded: qfalse,
+    world: 0 as *const world_t as *mut world_t,
+    externalVisData: 0 as *const byte,
+    defaultImage: 0 as *const image_t as *mut image_t,
+    scratchImage: [0 as *const image_t as *mut image_t; 32],
+    fogImage: 0 as *const image_t as *mut image_t,
+    dlightImage: 0 as *const image_t as *mut image_t,
+    flareImage: 0 as *const image_t as *mut image_t,
+    whiteImage: 0 as *const image_t as *mut image_t,
+    identityLightImage: 0 as *const image_t as *mut image_t,
+    defaultShader: 0 as *const shader_t as *mut shader_t,
+    shadowShader: 0 as *const shader_t as *mut shader_t,
+    projectionShadowShader: 0 as *const shader_t
+        as *mut shader_t,
+    flareShader: 0 as *const shader_t as *mut shader_t,
+    sunShader: 0 as *const shader_t as *mut shader_t,
     numLightmaps: 0,
-    lightmaps: 0 as *const *mut crate::tr_common_h::image_t
-        as *mut *mut crate::tr_common_h::image_t,
-    currentEntity: 0 as *const crate::tr_local_h::trRefEntity_t
-        as *mut crate::tr_local_h::trRefEntity_t,
-    worldEntity: crate::tr_local_h::trRefEntity_t {
-        e: crate::tr_types_h::refEntity_t {
-            reType: crate::tr_types_h::RT_MODEL,
+    lightmaps: 0 as *const *mut image_t
+        as *mut *mut image_t,
+    currentEntity: 0 as *const trRefEntity_t
+        as *mut trRefEntity_t,
+    worldEntity: trRefEntity_t {
+        e: refEntity_t {
+            reType: RT_MODEL,
             renderfx: 0,
             hModel: 0,
             lightingOrigin: [0.; 3],
             shadowPlane: 0.,
             axis: [[0.; 3]; 3],
-            nonNormalizedAxes: crate::src::qcommon::q_shared::qfalse,
+            nonNormalizedAxes: qfalse,
             origin: [0.; 3],
             frame: 0,
             oldorigin: [0.; 3],
@@ -398,8 +398,8 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
             rotation: 0.,
         },
         axisLength: 0.,
-        needDlights: crate::src::qcommon::q_shared::qfalse,
-        lightingCalculated: crate::src::qcommon::q_shared::qfalse,
+        needDlights: qfalse,
+        lightingCalculated: qfalse,
         lightDir: [0.; 3],
         ambientLight: [0.; 3],
         ambientLightInt: 0,
@@ -407,26 +407,26 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
     },
     currentEntityNum: 0,
     shiftedEntityNum: 0,
-    currentModel: 0 as *const crate::tr_local_h::model_t as *mut crate::tr_local_h::model_t,
-    viewParms: crate::tr_local_h::viewParms_t {
-        or: crate::tr_local_h::orientationr_t {
+    currentModel: 0 as *const model_t as *mut model_t,
+    viewParms: viewParms_t {
+        or: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
-        world: crate::tr_local_h::orientationr_t {
+        world: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
         pvsOrigin: [0.; 3],
-        isPortal: crate::src::qcommon::q_shared::qfalse,
-        isMirror: crate::src::qcommon::q_shared::qfalse,
+        isPortal: qfalse,
+        isMirror: qfalse,
         frameSceneNum: 0,
         frameCount: 0,
-        portalPlane: crate::src::qcommon::q_shared::cplane_t {
+        portalPlane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -440,7 +440,7 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
         fovX: 0.,
         fovY: 0.,
         projectionMatrix: [0.; 16],
-        frustum: [crate::src::qcommon::q_shared::cplane_t {
+        frustum: [cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -449,18 +449,18 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
         }; 4],
         visBounds: [[0.; 3]; 2],
         zFar: 0.,
-        stereoFrame: crate::tr_types_h::STEREO_CENTER,
+        stereoFrame: STEREO_CENTER,
     },
     identityLight: 0.,
     identityLightByte: 0,
     overbrightBits: 0,
-    or: crate::tr_local_h::orientationr_t {
+    or: orientationr_t {
         origin: [0.; 3],
         axis: [[0.; 3]; 3],
         viewOrigin: [0.; 3],
         modelMatrix: [0.; 16],
     },
-    refdef: crate::tr_local_h::trRefdef_t {
+    refdef: trRefdef_t {
         x: 0,
         y: 0,
         width: 0,
@@ -469,27 +469,27 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
         fov_y: 0.,
         vieworg: [0.; 3],
         viewaxis: [[0.; 3]; 3],
-        stereoFrame: crate::tr_types_h::STEREO_CENTER,
+        stereoFrame: STEREO_CENTER,
         time: 0,
         rdflags: 0,
         areamask: [0; 32],
-        areamaskModified: crate::src::qcommon::q_shared::qfalse,
+        areamaskModified: qfalse,
         floatTime: 0.,
         text: [[0; 32]; 8],
         num_entities: 0,
-        entities: 0 as *const crate::tr_local_h::trRefEntity_t
-            as *mut crate::tr_local_h::trRefEntity_t,
+        entities: 0 as *const trRefEntity_t
+            as *mut trRefEntity_t,
         num_dlights: 0,
-        dlights: 0 as *const crate::tr_local_h::dlight_s as *mut crate::tr_local_h::dlight_s,
+        dlights: 0 as *const dlight_s as *mut dlight_s,
         numPolys: 0,
-        polys: 0 as *const crate::tr_local_h::srfPoly_s as *mut crate::tr_local_h::srfPoly_s,
+        polys: 0 as *const srfPoly_s as *mut srfPoly_s,
         numDrawSurfs: 0,
-        drawSurfs: 0 as *const crate::tr_local_h::drawSurf_s as *mut crate::tr_local_h::drawSurf_s,
+        drawSurfs: 0 as *const drawSurf_s as *mut drawSurf_s,
     },
     viewCluster: 0,
     sunLight: [0.; 3],
     sunDirection: [0.; 3],
-    pc: crate::tr_local_h::frontEndCounters_t {
+    pc: frontEndCounters_t {
         c_sphere_cull_patch_in: 0,
         c_sphere_cull_patch_clip: 0,
         c_sphere_cull_patch_out: 0,
@@ -507,16 +507,16 @@ pub static mut tr: crate::tr_local_h::trGlobals_t = crate::tr_local_h::trGlobals
         c_dlightSurfacesCulled: 0,
     },
     frontEndMsec: 0,
-    models: [0 as *const crate::tr_local_h::model_t as *mut crate::tr_local_h::model_t; 1024],
+    models: [0 as *const model_t as *mut model_t; 1024],
     numModels: 0,
     numImages: 0,
-    images: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 2048],
+    images: [0 as *const image_t as *mut image_t; 2048],
     numShaders: 0,
-    shaders: [0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t; 16384],
-    sortedShaders: [0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t;
+    shaders: [0 as *const shader_t as *mut shader_t; 16384],
+    sortedShaders: [0 as *const shader_t as *mut shader_t;
         16384],
     numSkins: 0,
-    skins: [0 as *const crate::tr_local_h::skin_t as *mut crate::tr_local_h::skin_t; 1024],
+    skins: [0 as *const skin_t as *mut skin_t; 1024],
     sinTable: [0.; 1024],
     squareTable: [0.; 1024],
     triangleTable: [0.; 1024],
@@ -545,7 +545,7 @@ static mut s_flipMatrix: [f32; 16] = [
 ];
 #[no_mangle]
 
-pub static mut ri: crate::tr_public_h::refimport_t = crate::tr_public_h::refimport_t {
+pub static mut ri: refimport_t = refimport_t {
     Printf: None,
     Error: None,
     Milliseconds: None,
@@ -591,7 +591,7 @@ pub static mut ri: crate::tr_public_h::refimport_t = crate::tr_public_h::refimpo
 // point at this for their sorting surface
 #[no_mangle]
 
-pub static mut entitySurface: crate::tr_local_h::surfaceType_t = crate::tr_local_h::SF_ENTITY;
+pub static mut entitySurface: surfaceType_t = SF_ENTITY;
 /*
 =================
 R_CullLocalBox
@@ -602,19 +602,19 @@ Returns CULL_IN, CULL_CLIP, or CULL_OUT
 #[no_mangle]
 
 pub unsafe extern "C" fn R_CullLocalBox(
-    mut bounds: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut bounds: *mut vec3_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut transformed: [crate::src::qcommon::q_shared::vec3_t; 8] = [[0.; 3]; 8];
+    let mut transformed: [vec3_t; 8] = [[0.; 3]; 8];
     let mut dists: [f32; 8] = [0.; 8];
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut frust: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
+    let mut v: vec3_t = [0.; 3];
+    let mut frust: *mut cplane_t =
+        0 as *mut cplane_t;
     let mut anyBack: i32 = 0;
     let mut front: i32 = 0;
     let mut back: i32 = 0;
-    if (*crate::src::renderergl1::tr_init::r_nocull).integer != 0 {
+    if (*r_nocull).integer != 0 {
         return 1 as i32;
     }
     // transform into world space
@@ -653,7 +653,7 @@ pub unsafe extern "C" fn R_CullLocalBox(
     i = 0 as i32;
     while i < 4 as i32 {
         frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
-            as *mut crate::src::qcommon::q_shared::cplane_t;
+            as *mut cplane_t;
         back = 0 as i32;
         front = back;
         j = 0 as i32;
@@ -692,10 +692,10 @@ pub unsafe extern "C" fn R_CullLocalBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn R_CullLocalPointAndRadius(
-    mut pt: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pt: *mut vec_t,
     mut radius: f32,
 ) -> i32 {
-    let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut transformed: vec3_t = [0.; 3];
     R_LocalPointToWorld(pt, transformed.as_mut_ptr());
     return R_CullPointAndRadius(transformed.as_mut_ptr(), radius);
 }
@@ -705,23 +705,23 @@ pub unsafe extern "C" fn R_CullLocalPointAndRadius(
 #[no_mangle]
 
 pub unsafe extern "C" fn R_CullPointAndRadius(
-    mut pt: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pt: *mut vec_t,
     mut radius: f32,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut dist: f32 = 0.;
-    let mut frust: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
-    let mut mightBeClipped: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    if (*crate::src::renderergl1::tr_init::r_nocull).integer != 0 {
+    let mut frust: *mut cplane_t =
+        0 as *mut cplane_t;
+    let mut mightBeClipped: qboolean =
+        qfalse;
+    if (*r_nocull).integer != 0 {
         return 1 as i32;
     }
     // check against frustum planes
     i = 0 as i32;
     while i < 4 as i32 {
         frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
-            as *mut crate::src::qcommon::q_shared::cplane_t;
+            as *mut cplane_t;
         dist = *pt.offset(0 as i32 as isize) * (*frust).normal[0 as i32 as usize]
             + *pt.offset(1 as i32 as isize) * (*frust).normal[1 as i32 as usize]
             + *pt.offset(2 as i32 as isize) * (*frust).normal[2 as i32 as usize]
@@ -730,7 +730,7 @@ pub unsafe extern "C" fn R_CullPointAndRadius(
             return 2 as i32;
         } else {
             if dist <= radius {
-                mightBeClipped = crate::src::qcommon::q_shared::qtrue
+                mightBeClipped = qtrue
             }
         }
         i += 1
@@ -750,8 +750,8 @@ R_LocalNormalToWorld
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LocalNormalToWorld(
-    mut local: *mut crate::src::qcommon::q_shared::vec_t,
-    mut world: *mut crate::src::qcommon::q_shared::vec_t,
+    mut local: *mut vec_t,
+    mut world: *mut vec_t,
 ) {
     *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
@@ -775,8 +775,8 @@ R_LocalPointToWorld
 #[no_mangle]
 
 pub unsafe extern "C" fn R_LocalPointToWorld(
-    mut local: *mut crate::src::qcommon::q_shared::vec_t,
-    mut world: *mut crate::src::qcommon::q_shared::vec_t,
+    mut local: *mut vec_t,
+    mut world: *mut vec_t,
 ) {
     *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
@@ -803,8 +803,8 @@ R_WorldToLocal
 #[no_mangle]
 
 pub unsafe extern "C" fn R_WorldToLocal(
-    mut world: *mut crate::src::qcommon::q_shared::vec_t,
-    mut local: *mut crate::src::qcommon::q_shared::vec_t,
+    mut world: *mut vec_t,
+    mut local: *mut vec_t,
 ) {
     *local.offset(0 as i32 as isize) = *world.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
@@ -828,11 +828,11 @@ R_TransformModelToClip
 #[no_mangle]
 
 pub unsafe extern "C" fn R_TransformModelToClip(
-    mut src: *const crate::src::qcommon::q_shared::vec_t,
+    mut src: *const vec_t,
     mut modelMatrix: *const f32,
     mut projectionMatrix: *const f32,
-    mut eye: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dst: *mut crate::src::qcommon::q_shared::vec_t,
+    mut eye: *mut vec_t,
+    mut dst: *mut vec_t,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
@@ -958,10 +958,10 @@ R_TransformClipToWindow
 #[no_mangle]
 
 pub unsafe extern "C" fn R_TransformClipToWindow(
-    mut clip: *const crate::src::qcommon::q_shared::vec_t,
-    mut view: *const crate::tr_local_h::viewParms_t,
-    mut normalized: *mut crate::src::qcommon::q_shared::vec_t,
-    mut window: *mut crate::src::qcommon::q_shared::vec_t,
+    mut clip: *const vec_t,
+    mut view: *const viewParms_t,
+    mut normalized: *mut vec_t,
+    mut window: *mut vec_t,
 ) {
     *normalized.offset(0 as i32 as isize) =
         *clip.offset(0 as i32 as isize) / *clip.offset(3 as i32 as isize);
@@ -976,9 +976,9 @@ pub unsafe extern "C" fn R_TransformClipToWindow(
         0.5f32 * (1.0f32 + *normalized.offset(1 as i32 as isize)) * (*view).viewportHeight as f32;
     *window.offset(2 as i32 as isize) = *normalized.offset(2 as i32 as isize);
     *window.offset(0 as i32 as isize) = (*window.offset(0 as i32 as isize) as f64 + 0.5f64) as i32
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     *window.offset(1 as i32 as isize) = (*window.offset(1 as i32 as isize) as f64 + 0.5f64) as i32
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
 }
 /*
 ==========================
@@ -1021,14 +1021,14 @@ Called by both the front end and the back end
 #[no_mangle]
 
 pub unsafe extern "C" fn R_RotateForEntity(
-    mut ent: *const crate::tr_local_h::trRefEntity_t,
-    mut viewParms: *const crate::tr_local_h::viewParms_t,
-    mut or: *mut crate::tr_local_h::orientationr_t,
+    mut ent: *const trRefEntity_t,
+    mut viewParms: *const viewParms_t,
+    mut or: *mut orientationr_t,
 ) {
     let mut glMatrix: [f32; 16] = [0.; 16];
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut axisLength: f32 = 0.;
-    if (*ent).e.reType as u32 != crate::tr_types_h::RT_MODEL as i32 as u32 {
+    if (*ent).e.reType as u32 != RT_MODEL as i32 as u32 {
         *or = (*viewParms).world;
         return;
     }
@@ -1120,18 +1120,18 @@ Sets up the modelview matrix for a given viewParm
 
 pub unsafe extern "C" fn R_RotateForViewer() {
     let mut viewerMatrix: [f32; 16] = [0.; 16];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
     crate::stdlib::memset(
-        &mut tr.or as *mut crate::tr_local_h::orientationr_t as *mut libc::c_void,
+        &mut tr.or as *mut orientationr_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_local_h::orientationr_t>() as libc::c_ulong,
+        ::std::mem::size_of::<orientationr_t>() as libc::c_ulong,
     );
     tr.or.axis[0 as i32 as usize][0 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
     tr.or.axis[1 as i32 as usize][1 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
     tr.or.axis[2 as i32 as usize][2 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        1 as i32 as vec_t;
     tr.or.viewOrigin[0 as i32 as usize] = tr.viewParms.or.origin[0 as i32 as usize];
     tr.or.viewOrigin[1 as i32 as usize] = tr.viewParms.or.origin[1 as i32 as usize];
     tr.or.viewOrigin[2 as i32 as usize] = tr.viewParms.or.origin[2 as i32 as usize];
@@ -1189,8 +1189,8 @@ unsafe extern "C" fn R_SetFarClip() {
     farthestCornerDistance = 0 as i32 as f32;
     i = 0 as i32;
     while i < 8 as i32 {
-        let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut vecTo: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut v: vec3_t = [0.; 3];
+        let mut vecTo: vec3_t = [0.; 3];
         let mut distance: f32 = 0.;
         if i & 1 as i32 != 0 {
             v[0 as i32 as usize] = tr.viewParms.visBounds[0 as i32 as usize][0 as i32 as usize]
@@ -1231,14 +1231,14 @@ the projection matrix.
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SetupFrustum(
-    mut dest: *mut crate::tr_local_h::viewParms_t,
+    mut dest: *mut viewParms_t,
     mut xmin: f32,
     mut xmax: f32,
     mut ymax: f32,
     mut zProj: f32,
     mut stereoSep: f32,
 ) {
-    let mut ofsorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ofsorigin: vec3_t = [0.; 3];
     let mut oppleg: f32 = 0.;
     let mut adjleg: f32 = 0.;
     let mut length: f32 = 0.;
@@ -1360,14 +1360,14 @@ pub unsafe extern "C" fn R_SetupFrustum(
             + (*dest).or.axis[2 as i32 as usize][2 as i32 as usize] * -adjleg;
     i = 0 as i32;
     while i < 4 as i32 {
-        (*dest).frustum[i as usize].type_0 = 3 as i32 as crate::src::qcommon::q_shared::byte;
+        (*dest).frustum[i as usize].type_0 = 3 as i32 as byte;
         (*dest).frustum[i as usize].dist = ofsorigin[0 as i32 as usize]
             * (*dest).frustum[i as usize].normal[0 as i32 as usize]
             + ofsorigin[1 as i32 as usize] * (*dest).frustum[i as usize].normal[1 as i32 as usize]
             + ofsorigin[2 as i32 as usize] * (*dest).frustum[i as usize].normal[2 as i32 as usize];
-        crate::src::qcommon::q_math::SetPlaneSignbits(
+        SetPlaneSignbits(
             &mut *(*dest).frustum.as_mut_ptr().offset(i as isize) as *mut _
-                as *mut crate::src::qcommon::q_shared::cplane_s,
+                as *mut cplane_s,
         );
         i += 1
     }
@@ -1383,9 +1383,9 @@ R_SetupProjection
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SetupProjection(
-    mut dest: *mut crate::tr_local_h::viewParms_t,
+    mut dest: *mut viewParms_t,
     mut zProj: f32,
-    mut computeFrustum: crate::src::qcommon::q_shared::qboolean,
+    mut computeFrustum: qboolean,
 ) {
     let mut xmin: f32 = 0.;
     let mut xmax: f32 = 0.;
@@ -1393,15 +1393,15 @@ pub unsafe extern "C" fn R_SetupProjection(
     let mut ymax: f32 = 0.;
     let mut width: f32 = 0.;
     let mut height: f32 = 0.;
-    let mut stereoSep: f32 = (*crate::src::renderergl1::tr_init::r_stereoSeparation).value;
+    let mut stereoSep: f32 = (*r_stereoSeparation).value;
     /*
      * offset the view origin of the viewer for stereo rendering
      * by setting the projection matrix appropriately.
      */
     if stereoSep != 0 as i32 as f32 {
-        if (*dest).stereoFrame as u32 == crate::tr_types_h::STEREO_LEFT as i32 as u32 {
+        if (*dest).stereoFrame as u32 == STEREO_LEFT as i32 as u32 {
             stereoSep = zProj / stereoSep
-        } else if (*dest).stereoFrame as u32 == crate::tr_types_h::STEREO_RIGHT as i32 as u32 {
+        } else if (*dest).stereoFrame as u32 == STEREO_RIGHT as i32 as u32 {
             stereoSep = zProj / -stereoSep
         } else {
             stereoSep = 0 as i32 as f32
@@ -1444,11 +1444,11 @@ Sets the z-component transformation part in the projection matrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_SetupProjectionZ(mut dest: *mut crate::tr_local_h::viewParms_t) {
+pub unsafe extern "C" fn R_SetupProjectionZ(mut dest: *mut viewParms_t) {
     let mut zNear: f32 = 0.;
     let mut zFar: f32 = 0.;
     let mut depth: f32 = 0.;
-    zNear = (*crate::src::renderergl1::tr_init::r_znear).value;
+    zNear = (*r_znear).value;
     zFar = (*dest).zFar;
     depth = zFar - zNear;
     (*dest).projectionMatrix[2 as i32 as usize] = 0 as i32 as f32;
@@ -1464,14 +1464,14 @@ R_MirrorPoint
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MirrorPoint(
-    mut in_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut surface: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *mut vec_t,
+    mut surface: *mut orientation_t,
+    mut camera: *mut orientation_t,
+    mut out: *mut vec_t,
 ) {
     let mut i: i32 = 0;
-    let mut local: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut local: vec3_t = [0.; 3];
+    let mut transformed: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
     local[0 as i32 as usize] =
         *in_0.offset(0 as i32 as isize) - (*surface).origin[0 as i32 as usize];
@@ -1479,7 +1479,7 @@ pub unsafe extern "C" fn R_MirrorPoint(
         *in_0.offset(1 as i32 as isize) - (*surface).origin[1 as i32 as usize];
     local[2 as i32 as usize] =
         *in_0.offset(2 as i32 as isize) - (*surface).origin[2 as i32 as usize];
-    transformed[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    transformed[2 as i32 as usize] = 0 as i32 as vec_t;
     transformed[1 as i32 as usize] = transformed[2 as i32 as usize];
     transformed[0 as i32 as usize] = transformed[1 as i32 as usize];
     i = 0 as i32;
@@ -1505,15 +1505,15 @@ pub unsafe extern "C" fn R_MirrorPoint(
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MirrorVector(
-    mut in_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut surface: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *mut vec_t,
+    mut surface: *mut orientation_t,
+    mut camera: *mut orientation_t,
+    mut out: *mut vec_t,
 ) {
     let mut i: i32 = 0;
     let mut d: f32 = 0.;
     let ref mut fresh0 = *out.offset(2 as i32 as isize);
-    *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *fresh0 = 0 as i32 as vec_t;
     let ref mut fresh1 = *out.offset(1 as i32 as isize);
     *fresh1 = *fresh0;
     *out.offset(0 as i32 as isize) = *fresh1;
@@ -1539,32 +1539,32 @@ R_PlaneForSurface
 #[no_mangle]
 
 pub unsafe extern "C" fn R_PlaneForSurface(
-    mut surfType: *mut crate::tr_local_h::surfaceType_t,
-    mut plane: *mut crate::src::qcommon::q_shared::cplane_t,
+    mut surfType: *mut surfaceType_t,
+    mut plane: *mut cplane_t,
 ) {
-    let mut tri: *mut crate::tr_local_h::srfTriangles_t =
-        0 as *mut crate::tr_local_h::srfTriangles_t;
-    let mut poly: *mut crate::tr_local_h::srfPoly_t = 0 as *mut crate::tr_local_h::srfPoly_t;
-    let mut v1: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut v2: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut v3: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut plane4: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut tri: *mut srfTriangles_t =
+        0 as *mut srfTriangles_t;
+    let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
+    let mut v1: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut v2: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut v3: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut plane4: vec4_t = [0.; 4];
     if surfType.is_null() {
         crate::stdlib::memset(
             plane as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::qcommon::q_shared::cplane_t>() as libc::c_ulong,
+            ::std::mem::size_of::<cplane_t>() as libc::c_ulong,
         );
-        (*plane).normal[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*plane).normal[0 as i32 as usize] = 1 as i32 as vec_t;
         return;
     }
     match *surfType as u32 {
         2 => {
-            *plane = (*(surfType as *mut crate::tr_local_h::srfSurfaceFace_t)).plane;
+            *plane = (*(surfType as *mut srfSurfaceFace_t)).plane;
             return;
         }
         4 => {
-            tri = surfType as *mut crate::tr_local_h::srfTriangles_t;
+            tri = surfType as *mut srfTriangles_t;
             v1 = (*tri)
                 .verts
                 .offset(*(*tri).indexes.offset(0 as i32 as isize) as isize);
@@ -1574,11 +1574,11 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             v3 = (*tri)
                 .verts
                 .offset(*(*tri).indexes.offset(2 as i32 as isize) as isize);
-            crate::src::qcommon::q_math::PlaneFromPoints(
+            PlaneFromPoints(
                 plane4.as_mut_ptr(),
-                (*v1).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (*v2).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                (*v3).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                (*v1).xyz.as_mut_ptr() as *const vec_t,
+                (*v2).xyz.as_mut_ptr() as *const vec_t,
+                (*v3).xyz.as_mut_ptr() as *const vec_t,
             );
             (*plane).normal[0 as i32 as usize] = plane4[0 as i32 as usize];
             (*plane).normal[1 as i32 as usize] = plane4[1 as i32 as usize];
@@ -1587,15 +1587,15 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             return;
         }
         5 => {
-            poly = surfType as *mut crate::tr_local_h::srfPoly_t;
-            crate::src::qcommon::q_math::PlaneFromPoints(
+            poly = surfType as *mut srfPoly_t;
+            PlaneFromPoints(
                 plane4.as_mut_ptr(),
                 (*(*poly).verts.offset(0 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                    as *const vec_t,
                 (*(*poly).verts.offset(1 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                    as *const vec_t,
                 (*(*poly).verts.offset(2 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+                    as *const vec_t,
             );
             (*plane).normal[0 as i32 as usize] = plane4[0 as i32 as usize];
             (*plane).normal[1 as i32 as usize] = plane4[1 as i32 as usize];
@@ -1607,9 +1607,9 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             crate::stdlib::memset(
                 plane as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<crate::src::qcommon::q_shared::cplane_t>() as libc::c_ulong,
+                ::std::mem::size_of::<cplane_t>() as libc::c_ulong,
             );
-            (*plane).normal[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*plane).normal[0 as i32 as usize] = 1 as i32 as vec_t;
             return;
         }
     };
@@ -1627,40 +1627,40 @@ Returns qtrue if it should be mirrored
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GetPortalOrientations(
-    mut drawSurf: *mut crate::tr_local_h::drawSurf_t,
+    mut drawSurf: *mut drawSurf_t,
     mut entityNum: i32,
-    mut surface: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut camera: *mut crate::src::qcommon::q_shared::orientation_t,
-    mut pvsOrigin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mirror: *mut crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut surface: *mut orientation_t,
+    mut camera: *mut orientation_t,
+    mut pvsOrigin: *mut vec_t,
+    mut mirror: *mut qboolean,
+) -> qboolean {
     let mut i: i32 = 0;
-    let mut originalPlane: crate::src::qcommon::q_shared::cplane_t =
-        crate::src::qcommon::q_shared::cplane_t {
+    let mut originalPlane: cplane_t =
+        cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
             signbits: 0,
             pad: [0; 2],
         };
-    let mut plane: crate::src::qcommon::q_shared::cplane_t =
-        crate::src::qcommon::q_shared::cplane_t {
+    let mut plane: cplane_t =
+        cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
             signbits: 0,
             pad: [0; 2],
         };
-    let mut e: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
+    let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
     let mut d: f32 = 0.;
-    let mut transformed: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut transformed: vec3_t = [0.; 3];
     // create plane axis for the portal we are seeing
     R_PlaneForSurface((*drawSurf).surface, &mut originalPlane);
     // rotate the plane if necessary
     if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
         tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
-            as *mut crate::tr_local_h::trRefEntity_t;
+            as *mut trRefEntity_t;
         // get the orientation of the entity
         R_RotateForEntity(tr.currentEntity, &mut tr.viewParms, &mut tr.or);
         // rotate the plane, but keep the non-rotated version for matching
@@ -1681,16 +1681,16 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     (*surface).axis[0 as i32 as usize][0 as i32 as usize] = plane.normal[0 as i32 as usize];
     (*surface).axis[0 as i32 as usize][1 as i32 as usize] = plane.normal[1 as i32 as usize];
     (*surface).axis[0 as i32 as usize][2 as i32 as usize] = plane.normal[2 as i32 as usize];
-    crate::src::qcommon::q_math::PerpendicularVector(
+    PerpendicularVector(
         (*surface).axis[1 as i32 as usize].as_mut_ptr(),
         (*surface).axis[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
     );
     CrossProduct(
         (*surface).axis[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
         (*surface).axis[1 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+            as *const vec_t,
         (*surface).axis[2 as i32 as usize].as_mut_ptr(),
     );
     // locate the portal entity closest to this plane.
@@ -1698,8 +1698,8 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     // the origin of the camera
     i = 0 as i32;
     while i < tr.refdef.num_entities {
-        e = &mut *tr.refdef.entities.offset(i as isize) as *mut crate::tr_local_h::trRefEntity_t;
-        if !((*e).e.reType as u32 != crate::tr_types_h::RT_PORTALSURFACE as i32 as u32) {
+        e = &mut *tr.refdef.entities.offset(i as isize) as *mut trRefEntity_t;
+        if !((*e).e.reType as u32 != RT_PORTALSURFACE as i32 as u32) {
             d = (*e).e.origin[0 as i32 as usize] * originalPlane.normal[0 as i32 as usize]
                 + (*e).e.origin[1 as i32 as usize] * originalPlane.normal[1 as i32 as usize]
                 + (*e).e.origin[2 as i32 as usize] * originalPlane.normal[2 as i32 as usize]
@@ -1724,13 +1724,13 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                     (*camera).origin[1 as i32 as usize] = (*surface).origin[1 as i32 as usize];
                     (*camera).origin[2 as i32 as usize] = (*surface).origin[2 as i32 as usize];
                     (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                        vec3_origin[0 as i32 as usize]
                             - (*surface).axis[0 as i32 as usize][0 as i32 as usize];
                     (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                        vec3_origin[1 as i32 as usize]
                             - (*surface).axis[0 as i32 as usize][1 as i32 as usize];
                     (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
-                        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                        vec3_origin[2 as i32 as usize]
                             - (*surface).axis[0 as i32 as usize][2 as i32 as usize];
                     (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
                         (*surface).axis[1 as i32 as usize][0 as i32 as usize];
@@ -1744,8 +1744,8 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                         (*surface).axis[2 as i32 as usize][1 as i32 as usize];
                     (*camera).axis[2 as i32 as usize][2 as i32 as usize] =
                         (*surface).axis[2 as i32 as usize][2 as i32 as usize];
-                    *mirror = crate::src::qcommon::q_shared::qtrue;
-                    return crate::src::qcommon::q_shared::qtrue;
+                    *mirror = qtrue;
+                    return qtrue;
                 }
                 // project the origin onto the surface plane to get
                 // an origin point we can rotate around
@@ -1763,27 +1763,27 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                 (*camera).origin[0 as i32 as usize] = (*e).e.oldorigin[0 as i32 as usize];
                 (*camera).origin[1 as i32 as usize] = (*e).e.oldorigin[1 as i32 as usize];
                 (*camera).origin[2 as i32 as usize] = (*e).e.oldorigin[2 as i32 as usize];
-                crate::src::qcommon::q_math::AxisCopy(
+                AxisCopy(
                     (*e).e.axis.as_mut_ptr(),
                     (*camera).axis.as_mut_ptr(),
                 );
                 (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                    vec3_origin[0 as i32 as usize]
                         - (*camera).axis[0 as i32 as usize][0 as i32 as usize];
                 (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                    vec3_origin[1 as i32 as usize]
                         - (*camera).axis[0 as i32 as usize][1 as i32 as usize];
                 (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                    vec3_origin[2 as i32 as usize]
                         - (*camera).axis[0 as i32 as usize][2 as i32 as usize];
                 (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+                    vec3_origin[0 as i32 as usize]
                         - (*camera).axis[1 as i32 as usize][0 as i32 as usize];
                 (*camera).axis[1 as i32 as usize][1 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+                    vec3_origin[1 as i32 as usize]
                         - (*camera).axis[1 as i32 as usize][1 as i32 as usize];
                 (*camera).axis[1 as i32 as usize][2 as i32 as usize] =
-                    crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+                    vec3_origin[2 as i32 as usize]
                         - (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                 // optionally rotate
                 if (*e).e.oldframe != 0 {
@@ -1797,18 +1797,18 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                             (*camera).axis[1 as i32 as usize][1 as i32 as usize];
                         transformed[2 as i32 as usize] =
                             (*camera).axis[1 as i32 as usize][2 as i32 as usize];
-                        crate::src::qcommon::q_math::RotatePointAroundVector(
+                        RotatePointAroundVector(
                             (*camera).axis[1 as i32 as usize].as_mut_ptr(),
                             (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
-                            transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
+                            transformed.as_mut_ptr() as *const vec_t,
                             d,
                         );
                         CrossProduct(
                             (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
                             (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
                             (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     } else {
@@ -1821,18 +1821,18 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                             (*camera).axis[1 as i32 as usize][1 as i32 as usize];
                         transformed[2 as i32 as usize] =
                             (*camera).axis[1 as i32 as usize][2 as i32 as usize];
-                        crate::src::qcommon::q_math::RotatePointAroundVector(
+                        RotatePointAroundVector(
                             (*camera).axis[1 as i32 as usize].as_mut_ptr(),
                             (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
-                            transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
+                            transformed.as_mut_ptr() as *const vec_t,
                             d,
                         );
                         CrossProduct(
                             (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
                             (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                                as *const crate::src::qcommon::q_shared::vec_t,
+                                as *const vec_t,
                             (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     }
@@ -1844,23 +1844,23 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                         (*camera).axis[1 as i32 as usize][1 as i32 as usize];
                     transformed[2 as i32 as usize] =
                         (*camera).axis[1 as i32 as usize][2 as i32 as usize];
-                    crate::src::qcommon::q_math::RotatePointAroundVector(
+                    RotatePointAroundVector(
                         (*camera).axis[1 as i32 as usize].as_mut_ptr(),
                         (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                            as *const crate::src::qcommon::q_shared::vec_t,
-                        transformed.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                            as *const vec_t,
+                        transformed.as_mut_ptr() as *const vec_t,
                         d,
                     );
                     CrossProduct(
                         (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                            as *const crate::src::qcommon::q_shared::vec_t,
+                            as *const vec_t,
                         (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                            as *const crate::src::qcommon::q_shared::vec_t,
+                            as *const vec_t,
                         (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                     );
                 }
-                *mirror = crate::src::qcommon::q_shared::qfalse;
-                return crate::src::qcommon::q_shared::qtrue;
+                *mirror = qfalse;
+                return qtrue;
             }
         }
         i += 1
@@ -1873,31 +1873,31 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     // to see a surface before the server has communicated the matching
     // portal surface entity, so we don't want to print anything here...
     //ri.Printf( PRINT_ALL, "Portal surface without a portal entity\n" );
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 
 unsafe extern "C" fn IsMirror(
-    mut drawSurf: *const crate::tr_local_h::drawSurf_t,
+    mut drawSurf: *const drawSurf_t,
     mut entityNum: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: i32 = 0;
-    let mut originalPlane: crate::src::qcommon::q_shared::cplane_t =
-        crate::src::qcommon::q_shared::cplane_t {
+    let mut originalPlane: cplane_t =
+        cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
             signbits: 0,
             pad: [0; 2],
         };
-    let mut plane: crate::src::qcommon::q_shared::cplane_t =
-        crate::src::qcommon::q_shared::cplane_t {
+    let mut plane: cplane_t =
+        cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
             signbits: 0,
             pad: [0; 2],
         };
-    let mut e: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
+    let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
     let mut d: f32 = 0.;
     // create plane axis for the portal we are seeing
     R_PlaneForSurface((*drawSurf).surface, &mut originalPlane);
@@ -1905,7 +1905,7 @@ unsafe extern "C" fn IsMirror(
     if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
         tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
-            as *mut crate::tr_local_h::trRefEntity_t;
+            as *mut trRefEntity_t;
         // get the orientation of the entity
         R_RotateForEntity(tr.currentEntity, &mut tr.viewParms, &mut tr.or);
         // rotate the plane, but keep the non-rotated version for matching
@@ -1926,8 +1926,8 @@ unsafe extern "C" fn IsMirror(
     // the origin of the camera
     i = 0 as i32;
     while i < tr.refdef.num_entities {
-        e = &mut *tr.refdef.entities.offset(i as isize) as *mut crate::tr_local_h::trRefEntity_t;
-        if !((*e).e.reType as u32 != crate::tr_types_h::RT_PORTALSURFACE as i32 as u32) {
+        e = &mut *tr.refdef.entities.offset(i as isize) as *mut trRefEntity_t;
+        if !((*e).e.reType as u32 != RT_PORTALSURFACE as i32 as u32) {
             d = (*e).e.origin[0 as i32 as usize] * originalPlane.normal[0 as i32 as usize]
                 + (*e).e.origin[1 as i32 as usize] * originalPlane.normal[1 as i32 as usize]
                 + (*e).e.origin[2 as i32 as usize] * originalPlane.normal[2 as i32 as usize]
@@ -1938,14 +1938,14 @@ unsafe extern "C" fn IsMirror(
                     && (*e).e.oldorigin[1 as i32 as usize] == (*e).e.origin[1 as i32 as usize]
                     && (*e).e.oldorigin[2 as i32 as usize] == (*e).e.origin[2 as i32 as usize]
                 {
-                    return crate::src::qcommon::q_shared::qtrue;
+                    return qtrue;
                 }
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ** SurfIsOffscreen
@@ -1954,17 +1954,17 @@ unsafe extern "C" fn IsMirror(
 */
 
 unsafe extern "C" fn SurfIsOffscreen(
-    mut drawSurf: *const crate::tr_local_h::drawSurf_t,
-    mut _clipDest: *mut crate::src::qcommon::q_shared::vec4_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut drawSurf: *const drawSurf_t,
+    mut _clipDest: *mut vec4_t,
+) -> qboolean {
     let mut shortest: f32 = 100000000 as i32 as f32;
     let mut entityNum: i32 = 0;
     let mut numTriangles: i32 = 0;
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut fogNum: i32 = 0;
     let mut dlighted: i32 = 0;
-    let mut clip: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut eye: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
+    let mut clip: vec4_t = [0.; 4];
+    let mut eye: vec4_t = [0.; 4];
     let mut i: i32 = 0;
     let mut pointAnd: u32 = !(0 as i32) as u32;
     R_RotateForViewer();
@@ -1975,19 +1975,19 @@ unsafe extern "C" fn SurfIsOffscreen(
         &mut fogNum,
         &mut dlighted,
     );
-    crate::src::renderergl1::tr_shade::RB_BeginSurface(
-        shader as *mut crate::tr_local_h::shader_s,
+    RB_BeginSurface(
+        shader as *mut shader_s,
         fogNum,
     );
-    crate::src::renderergl1::tr_surface::rb_surfaceTable[*(*drawSurf).surface as usize]
+    rb_surfaceTable[*(*drawSurf).surface as usize]
         .expect("non-null function pointer")((*drawSurf).surface as *mut libc::c_void);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut j: i32 = 0;
         let mut pointFlags: u32 = 0 as i32 as u32;
         R_TransformModelToClip(
-            crate::src::renderergl1::tr_shade::tess.xyz[i as usize].as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+            tess.xyz[i as usize].as_mut_ptr()
+                as *const vec_t,
             tr.or.modelMatrix.as_mut_ptr(),
             tr.viewParms.projectionMatrix.as_mut_ptr(),
             eye.as_mut_ptr(),
@@ -2007,46 +2007,46 @@ unsafe extern "C" fn SurfIsOffscreen(
     }
     // trivially reject
     if pointAnd != 0 {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // determine if this surface is backfaced and also determine the distance
     // to the nearest vertex so we can cull based on portal range.  Culling
     // based on vertex distance isn't 100% correct (we should be checking for
     // range to the surface), but it's good enough for the types of portals
     // we have in the game right now.
-    numTriangles = crate::src::renderergl1::tr_shade::tess.numIndexes / 3 as i32; // lose the sqrt
+    numTriangles = tess.numIndexes / 3 as i32; // lose the sqrt
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numIndexes {
-        let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    while i < tess.numIndexes {
+        let mut normal: vec3_t = [0.; 3];
         let mut len: f32 = 0.;
-        normal[0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
-            [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+        normal[0 as i32 as usize] = tess.xyz
+            [tess.indexes[i as usize] as usize]
             [0 as i32 as usize]
             - tr.viewParms.or.origin[0 as i32 as usize];
-        normal[1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
-            [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+        normal[1 as i32 as usize] = tess.xyz
+            [tess.indexes[i as usize] as usize]
             [1 as i32 as usize]
             - tr.viewParms.or.origin[1 as i32 as usize];
-        normal[2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
-            [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+        normal[2 as i32 as usize] = tess.xyz
+            [tess.indexes[i as usize] as usize]
             [2 as i32 as usize]
             - tr.viewParms.or.origin[2 as i32 as usize];
         len =
-            VectorLengthSquared(normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+            VectorLengthSquared(normal.as_mut_ptr() as *const vec_t);
         if len < shortest {
             shortest = len
         }
         if normal[0 as i32 as usize]
-            * crate::src::renderergl1::tr_shade::tess.normal
-                [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+            * tess.normal
+                [tess.indexes[i as usize] as usize]
                 [0 as i32 as usize]
             + normal[1 as i32 as usize]
-                * crate::src::renderergl1::tr_shade::tess.normal
-                    [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+                * tess.normal
+                    [tess.indexes[i as usize] as usize]
                     [1 as i32 as usize]
             + normal[2 as i32 as usize]
-                * crate::src::renderergl1::tr_shade::tess.normal
-                    [crate::src::renderergl1::tr_shade::tess.indexes[i as usize] as usize]
+                * tess.normal
+                    [tess.indexes[i as usize] as usize]
                     [2 as i32 as usize]
             >= 0 as i32 as f32
         {
@@ -2055,20 +2055,20 @@ unsafe extern "C" fn SurfIsOffscreen(
         i += 3 as i32
     }
     if numTriangles == 0 {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // mirrors can early out at this point, since we don't do a fade over distance
     // with them (although we could)
     if IsMirror(drawSurf, entityNum) as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if shortest
-        > (*crate::src::renderergl1::tr_shade::tess.shader).portalRange
-            * (*crate::src::renderergl1::tr_shade::tess.shader).portalRange
+        > (*tess.shader).portalRange
+            * (*tess.shader).portalRange
     {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ========================
@@ -2080,29 +2080,29 @@ Returns qtrue if another view has been rendered
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MirrorViewBySurface(
-    mut drawSurf: *mut crate::tr_local_h::drawSurf_t,
+    mut drawSurf: *mut drawSurf_t,
     mut entityNum: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut clipDest: [crate::src::qcommon::q_shared::vec4_t; 128] = [[0.; 4]; 128];
-    let mut newParms: crate::tr_local_h::viewParms_t = crate::tr_local_h::viewParms_t {
-        or: crate::tr_local_h::orientationr_t {
+) -> qboolean {
+    let mut clipDest: [vec4_t; 128] = [[0.; 4]; 128];
+    let mut newParms: viewParms_t = viewParms_t {
+        or: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
-        world: crate::tr_local_h::orientationr_t {
+        world: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
         pvsOrigin: [0.; 3],
-        isPortal: crate::src::qcommon::q_shared::qfalse,
-        isMirror: crate::src::qcommon::q_shared::qfalse,
+        isPortal: qfalse,
+        isMirror: qfalse,
         frameSceneNum: 0,
         frameCount: 0,
-        portalPlane: crate::src::qcommon::q_shared::cplane_t {
+        portalPlane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2116,7 +2116,7 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         fovX: 0.,
         fovY: 0.,
         projectionMatrix: [0.; 16],
-        frustum: [crate::src::qcommon::q_shared::cplane_t {
+        frustum: [cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2125,27 +2125,27 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         }; 4],
         visBounds: [[0.; 3]; 2],
         zFar: 0.,
-        stereoFrame: crate::tr_types_h::STEREO_CENTER,
+        stereoFrame: STEREO_CENTER,
     };
-    let mut oldParms: crate::tr_local_h::viewParms_t = crate::tr_local_h::viewParms_t {
-        or: crate::tr_local_h::orientationr_t {
+    let mut oldParms: viewParms_t = viewParms_t {
+        or: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
-        world: crate::tr_local_h::orientationr_t {
+        world: orientationr_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
             viewOrigin: [0.; 3],
             modelMatrix: [0.; 16],
         },
         pvsOrigin: [0.; 3],
-        isPortal: crate::src::qcommon::q_shared::qfalse,
-        isMirror: crate::src::qcommon::q_shared::qfalse,
+        isPortal: qfalse,
+        isMirror: qfalse,
         frameSceneNum: 0,
         frameCount: 0,
-        portalPlane: crate::src::qcommon::q_shared::cplane_t {
+        portalPlane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2159,7 +2159,7 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         fovX: 0.,
         fovY: 0.,
         projectionMatrix: [0.; 16],
-        frustum: [crate::src::qcommon::q_shared::cplane_t {
+        frustum: [cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2168,39 +2168,39 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         }; 4],
         visBounds: [[0.; 3]; 2],
         zFar: 0.,
-        stereoFrame: crate::tr_types_h::STEREO_CENTER,
+        stereoFrame: STEREO_CENTER,
     };
-    let mut surface: crate::src::qcommon::q_shared::orientation_t =
-        crate::src::qcommon::q_shared::orientation_t {
+    let mut surface: orientation_t =
+        orientation_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
         };
-    let mut camera: crate::src::qcommon::q_shared::orientation_t =
-        crate::src::qcommon::q_shared::orientation_t {
+    let mut camera: orientation_t =
+        orientation_t {
             origin: [0.; 3],
             axis: [[0.; 3]; 3],
         };
     // don't recursively mirror
     if tr.viewParms.isPortal as u64 != 0 {
         ri.Printf.expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"WARNING: recursive mirror/portal found\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if (*crate::src::renderergl1::tr_init::r_noportals).integer != 0
-        || (*crate::src::renderergl1::tr_init::r_fastsky).integer == 1 as i32
+    if (*r_noportals).integer != 0
+        || (*r_fastsky).integer == 1 as i32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // trivially reject portal/mirror
     if SurfIsOffscreen(drawSurf, clipDest.as_mut_ptr()) as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // save old viewParms so we can return to it after the mirror view
     oldParms = tr.viewParms;
     newParms = tr.viewParms;
-    newParms.isPortal = crate::src::qcommon::q_shared::qtrue;
+    newParms.isPortal = qtrue;
     if R_GetPortalOrientations(
         drawSurf,
         entityNum,
@@ -2211,7 +2211,7 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
     ) as u64
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
         // bad portal, no portalentity
     }
     R_MirrorPoint(
@@ -2220,13 +2220,13 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         &mut camera,
         newParms.or.origin.as_mut_ptr(),
     );
-    newParms.portalPlane.normal[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+    newParms.portalPlane.normal[0 as i32 as usize] = vec3_origin
         [0 as i32 as usize]
         - camera.axis[0 as i32 as usize][0 as i32 as usize];
-    newParms.portalPlane.normal[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+    newParms.portalPlane.normal[1 as i32 as usize] = vec3_origin
         [1 as i32 as usize]
         - camera.axis[0 as i32 as usize][1 as i32 as usize];
-    newParms.portalPlane.normal[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+    newParms.portalPlane.normal[2 as i32 as usize] = vec3_origin
         [2 as i32 as usize]
         - camera.axis[0 as i32 as usize][2 as i32 as usize];
     newParms.portalPlane.dist = camera.origin[0 as i32 as usize]
@@ -2255,7 +2255,7 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
     // render the mirror view
     R_RenderView(&mut newParms);
     tr.viewParms = oldParms;
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -2266,10 +2266,10 @@ See if a sprite is inside a fog volume
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_SpriteFogNum(mut ent: *mut crate::tr_local_h::trRefEntity_t) -> i32 {
+pub unsafe extern "C" fn R_SpriteFogNum(mut ent: *mut trRefEntity_t) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
+    let mut fog: *mut fog_t = 0 as *mut fog_t;
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
@@ -2278,7 +2278,7 @@ pub unsafe extern "C" fn R_SpriteFogNum(mut ent: *mut crate::tr_local_h::trRefEn
     }
     i = 1 as i32;
     while i < (*tr.world).numfogs {
-        fog = &mut *(*tr.world).fogs.offset(i as isize) as *mut crate::tr_local_h::fog_t;
+        fog = &mut *(*tr.world).fogs.offset(i as isize) as *mut fog_t;
         j = 0 as i32;
         while j < 3 as i32 {
             if (*ent).e.origin[j as usize] - (*ent).e.radius
@@ -2317,8 +2317,8 @@ R_Radix
 unsafe extern "C" fn R_Radix(
     mut byte: i32,
     mut size: i32,
-    mut source: *mut crate::tr_local_h::drawSurf_t,
-    mut dest: *mut crate::tr_local_h::drawSurf_t,
+    mut source: *mut drawSurf_t,
+    mut dest: *mut drawSurf_t,
 ) {
     let mut count: [i32; 256] = [
         0 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2339,13 +2339,13 @@ unsafe extern "C" fn R_Radix(
         .offset(byte as isize);
     end = sortKey.offset(
         (size as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::drawSurf_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong)
             as isize,
     );
     while sortKey < end {
         count[*sortKey as usize] += 1;
         sortKey = sortKey.offset(
-            ::std::mem::size_of::<crate::tr_local_h::drawSurf_t>() as libc::c_ulong as isize
+            ::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize
         )
     }
     index[0 as i32 as usize] = 0 as i32;
@@ -2363,7 +2363,7 @@ unsafe extern "C" fn R_Radix(
         *dest.offset(fresh2 as isize) = *source.offset(i as isize);
         i += 1;
         sortKey = sortKey.offset(
-            ::std::mem::size_of::<crate::tr_local_h::drawSurf_t>() as libc::c_ulong as isize
+            ::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize
         )
     }
 }
@@ -2375,11 +2375,11 @@ Radix sort with 4 byte size buckets
 ===============
 */
 
-unsafe extern "C" fn R_RadixSort(mut source: *mut crate::tr_local_h::drawSurf_t, mut size: i32) {
-    static mut scratch: [crate::tr_local_h::drawSurf_t; 65536] = [crate::tr_local_h::drawSurf_t {
+unsafe extern "C" fn R_RadixSort(mut source: *mut drawSurf_t, mut size: i32) {
+    static mut scratch: [drawSurf_t; 65536] = [drawSurf_t {
         sort: 0,
-        surface: 0 as *const crate::tr_local_h::surfaceType_t
-            as *mut crate::tr_local_h::surfaceType_t,
+        surface: 0 as *const surfaceType_t
+            as *mut surfaceType_t,
     }; 65536];
     R_Radix(0 as i32, size, source, scratch.as_mut_ptr());
     R_Radix(1 as i32, size, scratch.as_mut_ptr(), source);
@@ -2396,8 +2396,8 @@ R_AddDrawSurf
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddDrawSurf(
-    mut surface: *mut crate::tr_local_h::surfaceType_t,
-    mut shader: *mut crate::tr_local_h::shader_t,
+    mut surface: *mut surfaceType_t,
+    mut shader: *mut shader_t,
     mut fogIndex: i32,
     mut dlightMap: i32,
 ) {
@@ -2426,7 +2426,7 @@ R_DecomposeSort
 pub unsafe extern "C" fn R_DecomposeSort(
     mut sort: u32,
     mut entityNum: *mut i32,
-    mut shader: *mut *mut crate::tr_local_h::shader_t,
+    mut shader: *mut *mut shader_t,
     mut fogNum: *mut i32,
     mut dlightMap: *mut i32,
 ) {
@@ -2444,10 +2444,10 @@ R_SortDrawSurfs
 #[no_mangle]
 
 pub unsafe extern "C" fn R_SortDrawSurfs(
-    mut drawSurfs: *mut crate::tr_local_h::drawSurf_t,
+    mut drawSurfs: *mut drawSurf_t,
     mut numDrawSurfs: i32,
 ) {
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut fogNum: i32 = 0;
     let mut entityNum: i32 = 0;
     let mut dlighted: i32 = 0;
@@ -2455,8 +2455,8 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
     // it is possible for some views to not have any surfaces
     if numDrawSurfs < 1 as i32 {
         // we still need to add it for hyperspace cases
-        crate::src::renderergl1::tr_cmds::R_AddDrawSurfCmd(
-            drawSurfs as *mut crate::tr_local_h::drawSurf_s,
+        R_AddDrawSurfCmd(
+            drawSurfs as *mut drawSurf_s,
             numDrawSurfs,
         );
         return;
@@ -2474,13 +2474,13 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
             &mut fogNum,
             &mut dlighted,
         );
-        if (*shader).sort > crate::tr_local_h::SS_PORTAL as i32 as f32 {
+        if (*shader).sort > SS_PORTAL as i32 as f32 {
             break;
         }
         // no shader should ever have this sort type
-        if (*shader).sort == crate::tr_local_h::SS_BAD as i32 as f32 {
+        if (*shader).sort == SS_BAD as i32 as f32 {
             ri.Error.expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"Shader \'%s\'with sort == SS_BAD\x00" as *const u8 as *const libc::c_char,
                 (*shader).name.as_mut_ptr(),
             );
@@ -2488,7 +2488,7 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
         // if the mirror was completely clipped away, we may need to check another surface
         if R_MirrorViewBySurface(drawSurfs.offset(i as isize), entityNum) as u64 != 0 {
             // this is a debug option to see exactly what is being mirrored
-            if (*crate::src::renderergl1::tr_init::r_portalOnly).integer != 0 {
+            if (*r_portalOnly).integer != 0 {
                 return;
             }
             break;
@@ -2497,8 +2497,8 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
             i += 1
         }
     }
-    crate::src::renderergl1::tr_cmds::R_AddDrawSurfCmd(
-        drawSurfs as *mut crate::tr_local_h::drawSurf_s,
+    R_AddDrawSurfCmd(
+        drawSurfs as *mut drawSurf_s,
         numDrawSurfs,
     );
 }
@@ -2510,18 +2510,18 @@ R_AddEntitySurfaces
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddEntitySurfaces() {
-    let mut ent: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    if (*crate::src::renderergl1::tr_init::r_drawentities).integer == 0 {
+    let mut ent: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    if (*r_drawentities).integer == 0 {
         return;
     }
     let mut current_block_22: u64;
     tr.currentEntityNum = 0 as i32;
     while tr.currentEntityNum < tr.refdef.num_entities {
         tr.currentEntity = &mut *tr.refdef.entities.offset(tr.currentEntityNum as isize)
-            as *mut crate::tr_local_h::trRefEntity_t;
+            as *mut trRefEntity_t;
         ent = tr.currentEntity;
-        (*ent).needDlights = crate::src::qcommon::q_shared::qfalse;
+        (*ent).needDlights = qfalse;
         // preshift the value we are going to OR into the drawsurf sort
         tr.shiftedEntityNum = tr.currentEntityNum << 7 as i32;
         //
@@ -2538,7 +2538,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -2546,10 +2546,10 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                         12015117824625712224 => {
                             // we must set up parts of tr.or for model culling
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = crate::src::renderergl1::tr_model::R_GetModelByHandle(
+                            tr.currentModel = R_GetModelByHandle(
                                 (*ent).e.hModel,
                             )
-                                as *mut crate::tr_local_h::model_s;
+                                as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2560,23 +2560,23 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddMD3Surfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     3 => {
-                                        crate::src::renderergl1::tr_animation::R_MDRAddAnimSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_MDRAddAnimSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     4 => {
-                                        crate::src::renderergl1::tr_model_iqm::R_AddIQMSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddIQMSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     1 => {
-                                        crate::src::renderergl1::tr_world::R_AddBrushModelSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddBrushModelSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     0 => {
@@ -2594,7 +2594,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                            ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -2610,10 +2610,10 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
+                                shader = R_GetShaderByHandle(
                                     (*ent).e.customShader,
                                 )
-                                    as *mut crate::tr_local_h::shader_s; // don't draw anything
+                                    as *mut shader_s; // don't draw anything
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2629,17 +2629,17 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
                         }
                         12015117824625712224 => {
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = crate::src::renderergl1::tr_model::R_GetModelByHandle(
+                            tr.currentModel = R_GetModelByHandle(
                                 (*ent).e.hModel,
                             )
-                                as *mut crate::tr_local_h::model_s;
+                                as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2650,23 +2650,23 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddMD3Surfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     3 => {
-                                        crate::src::renderergl1::tr_animation::R_MDRAddAnimSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_MDRAddAnimSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     4 => {
-                                        crate::src::renderergl1::tr_model_iqm::R_AddIQMSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddIQMSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     1 => {
-                                        crate::src::renderergl1::tr_world::R_AddBrushModelSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddBrushModelSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     0 => {
@@ -2683,7 +2683,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                            ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -2695,10 +2695,10 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
+                                shader = R_GetShaderByHandle(
                                     (*ent).e.customShader,
                                 )
-                                    as *mut crate::tr_local_h::shader_s;
+                                    as *mut shader_s;
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2714,17 +2714,17 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                     match current_block_22 {
                         5465853293512199010 => {
                             ri.Error.expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                ERR_DROP as i32,
                                 b"R_AddEntitySurfaces: Bad reType\x00" as *const u8
                                     as *const libc::c_char,
                             );
                         }
                         12015117824625712224 => {
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = crate::src::renderergl1::tr_model::R_GetModelByHandle(
+                            tr.currentModel = R_GetModelByHandle(
                                 (*ent).e.hModel,
                             )
-                                as *mut crate::tr_local_h::model_s;
+                                as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2735,23 +2735,23 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        crate::src::renderergl1::tr_mesh::R_AddMD3Surfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddMD3Surfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     3 => {
-                                        crate::src::renderergl1::tr_animation::R_MDRAddAnimSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_MDRAddAnimSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     4 => {
-                                        crate::src::renderergl1::tr_model_iqm::R_AddIQMSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddIQMSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     1 => {
-                                        crate::src::renderergl1::tr_world::R_AddBrushModelSurfaces(
-                                            ent as *mut crate::tr_local_h::trRefEntity_t,
+                                        R_AddBrushModelSurfaces(
+                                            ent as *mut trRefEntity_t,
                                         );
                                     }
                                     0 => {
@@ -2768,7 +2768,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                                     }
                                     _ => {
                                         ri.Error.expect("non-null function pointer")(
-                                            crate::src::qcommon::q_shared::ERR_DROP as i32,
+                                            ERR_DROP as i32,
                                             b"R_AddEntitySurfaces: Bad modeltype\x00" as *const u8
                                                 as *const libc::c_char,
                                         );
@@ -2780,10 +2780,10 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle(
+                                shader = R_GetShaderByHandle(
                                     (*ent).e.customShader,
                                 )
-                                    as *mut crate::tr_local_h::shader_s;
+                                    as *mut shader_s;
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2807,8 +2807,8 @@ R_GenerateDrawSurfs
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GenerateDrawSurfs() {
-    crate::src::renderergl1::tr_world::R_AddWorldSurfaces();
-    crate::src::renderergl1::tr_scene::R_AddPolygonSurfaces();
+    R_AddWorldSurfaces();
+    R_AddPolygonSurfaces();
     // set the projection matrix with the minimum zfar
     // now that we have the world bounded
     // this needs to be done before entities are
@@ -2829,53 +2829,53 @@ R_DebugPolygon
 
 pub unsafe extern "C" fn R_DebugPolygon(mut color: i32, mut numPoints: i32, mut points: *mut f32) {
     let mut i: i32 = 0;
-    crate::src::renderergl1::tr_backend::GL_State(
+    GL_State(
         (0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong,
     );
     // draw solid shade
-    crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        (color & 1 as i32) as crate::stdlib::GLfloat,
-        (color >> 1 as i32 & 1 as i32) as crate::stdlib::GLfloat,
-        (color >> 2 as i32 & 1 as i32) as crate::stdlib::GLfloat,
+    qglColor3f.expect("non-null function pointer")(
+        (color & 1 as i32) as GLfloat,
+        (color >> 1 as i32 & 1 as i32) as GLfloat,
+        (color >> 2 as i32 & 1 as i32) as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x9 as i32 as crate::stdlib::GLenum,
+    qglBegin.expect("non-null function pointer")(
+        0x9 as i32 as GLenum,
     );
     i = 0 as i32;
     while i < numPoints {
-        crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+        qglVertex3fv.expect("non-null function pointer")(
             points.offset((i * 3 as i32) as isize),
         );
         i += 1
     }
-    crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
+    qglEnd.expect("non-null function pointer")();
     // draw wireframe outline
-    crate::src::renderergl1::tr_backend::GL_State(
+    GL_State(
         (0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong,
     );
-    crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as i32 as crate::stdlib::GLclampd,
-        0 as i32 as crate::stdlib::GLclampd,
+    qglDepthRange.expect("non-null function pointer")(
+        0 as i32 as GLclampd,
+        0 as i32 as GLclampd,
     );
-    crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
-        1 as i32 as crate::stdlib::GLfloat,
-        1 as i32 as crate::stdlib::GLfloat,
-        1 as i32 as crate::stdlib::GLfloat,
+    qglColor3f.expect("non-null function pointer")(
+        1 as i32 as GLfloat,
+        1 as i32 as GLfloat,
+        1 as i32 as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x9 as i32 as crate::stdlib::GLenum,
+    qglBegin.expect("non-null function pointer")(
+        0x9 as i32 as GLenum,
     );
     i = 0 as i32;
     while i < numPoints {
-        crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+        qglVertex3fv.expect("non-null function pointer")(
             points.offset((i * 3 as i32) as isize),
         );
         i += 1
     }
-    crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
-    crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
-        0 as i32 as crate::stdlib::GLclampd,
-        1 as i32 as crate::stdlib::GLclampd,
+    qglEnd.expect("non-null function pointer")();
+    qglDepthRange.expect("non-null function pointer")(
+        0 as i32 as GLclampd,
+        1 as i32 as GLclampd,
     );
 }
 /*
@@ -2891,12 +2891,12 @@ pub unsafe extern "C" fn R_DebugGraphics() {
     if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return;
     }
-    if (*crate::src::renderergl1::tr_init::r_debugSurface).integer == 0 {
+    if (*r_debugSurface).integer == 0 {
         return;
     }
-    crate::src::renderergl1::tr_cmds::R_IssuePendingRenderCommands();
-    crate::src::renderergl1::tr_backend::GL_Bind(tr.whiteImage as *mut crate::tr_common_h::image_s);
-    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_FRONT_SIDED as i32);
+    R_IssuePendingRenderCommands();
+    GL_Bind(tr.whiteImage as *mut image_s);
+    GL_Cull(CT_FRONT_SIDED as i32);
     ri.CM_DrawDebugSurface.expect("non-null function pointer")(Some(
         R_DebugPolygon as unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
     ));
@@ -3223,7 +3223,7 @@ or a mirror / remote location
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_RenderView(mut parms: *mut crate::tr_local_h::viewParms_t) {
+pub unsafe extern "C" fn R_RenderView(mut parms: *mut viewParms_t) {
     let mut firstDrawSurf: i32 = 0;
     let mut numDrawSurfs: i32 = 0;
     if (*parms).viewportWidth <= 0 as i32 || (*parms).viewportHeight <= 0 as i32 {
@@ -3239,8 +3239,8 @@ pub unsafe extern "C" fn R_RenderView(mut parms: *mut crate::tr_local_h::viewPar
     R_RotateForViewer();
     R_SetupProjection(
         &mut tr.viewParms,
-        (*crate::src::renderergl1::tr_init::r_zproj).value,
-        crate::src::qcommon::q_shared::qtrue,
+        (*r_zproj).value,
+        qtrue,
     );
     R_GenerateDrawSurfs();
     // if we overflowed MAX_DRAWSURFS, the drawsurfs
