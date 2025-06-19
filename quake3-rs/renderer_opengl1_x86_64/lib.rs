@@ -6,10 +6,8 @@
 #![allow(unused_assignments)]
 #![allow(unused_mut)]
 #![feature(c_variadic)]
-#![feature(const_raw_ptr_to_usize_cast)]
 #![feature(const_transmute)]
 #![feature(extern_types)]
-#![feature(ptr_offset_from)]
 #![feature(register_tool)]
 #![register_tool(c2rust)]
 
