@@ -281,8 +281,7 @@ pub unsafe extern "C" fn silk_resampler(
         &mut *(*S).delayBuf.as_mut_ptr().offset((*S).inputDelay as isize) as *mut opus_int16
             as *mut libc::c_void,
         in_0 as *const libc::c_void,
-        (nSamples as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (nSamples as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     match (*S).resampler_function {
         1 => {
@@ -342,8 +341,7 @@ pub unsafe extern "C" fn silk_resampler(
         (*S).delayBuf.as_mut_ptr() as *mut libc::c_void,
         &*in_0.offset((inLen - (*S).inputDelay) as isize) as *const opus_int16
             as *const libc::c_void,
-        ((*S).inputDelay as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        ((*S).inputDelay as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     return 0 as i32;
 }

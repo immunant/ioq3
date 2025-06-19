@@ -130,8 +130,7 @@ pub unsafe extern "C" fn vorbis_comment_add(
     ) as *mut *mut libc::c_char;
     (*vc).comment_lengths = crate::stdlib::realloc(
         (*vc).comment_lengths as *mut libc::c_void,
-        (((*vc).comments + 2 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+        (((*vc).comments + 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     *(*vc).comment_lengths.offset((*vc).comments as isize) = crate::stdlib::strlen(comment) as i32;
     let ref mut fresh4 = *(*vc).user_comments.offset((*vc).comments as isize);
@@ -477,10 +476,8 @@ unsafe extern "C" fn _vorbis_unpack_comment(
     let mut vendorlen: i32 = oggpack_read(opb as *mut oggpack_buffer, 32 as i32) as i32;
     if !(vendorlen < 0 as i32) {
         if !(vendorlen as isize > (*opb).storage - 8 as i32 as isize) {
-            (*vc).vendor = crate::stdlib::calloc(
-                (vendorlen + 1 as i32) as usize,
-                1 as i32 as usize,
-            ) as *mut libc::c_char;
+            (*vc).vendor = crate::stdlib::calloc((vendorlen + 1 as i32) as usize, 1 as i32 as usize)
+                as *mut libc::c_char;
             _v_readstring(opb, (*vc).vendor, vendorlen);
             i = oggpack_read(opb as *mut oggpack_buffer, 32 as i32) as i32;
             if !(i < 0 as i32) {
@@ -515,10 +512,9 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                         }
                         *(*vc).comment_lengths.offset(i as isize) = len;
                         let ref mut fresh6 = *(*vc).user_comments.offset(i as isize);
-                        *fresh6 = crate::stdlib::calloc(
-                            (len + 1 as i32) as usize,
-                            1 as i32 as usize,
-                        ) as *mut libc::c_char;
+                        *fresh6 =
+                            crate::stdlib::calloc((len + 1 as i32) as usize, 1 as i32 as usize)
+                                as *mut libc::c_char;
                         _v_readstring(opb, *(*vc).user_comments.offset(i as isize), len);
                         i += 1
                     }
@@ -1014,32 +1010,20 @@ unsafe extern "C" fn _vorbis_pack_info(
         return -(129 as i32);
     }
     /* preamble */
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        0x1 as i32 as usize,
-        8 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 0x1 as i32 as usize, 8 as i32);
     _v_writestring(
         opb,
         b"vorbis\x00" as *const u8 as *const libc::c_char,
         6 as i32,
     );
     /* basic information about the stream */
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        0 as i32 as usize,
-        32 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 32 as i32);
     oggpack_write(
         opb as *mut oggpack_buffer,
         (*vi).channels as usize,
         8 as i32,
     );
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        (*vi).rate as usize,
-        32 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, (*vi).rate as usize, 32 as i32);
     oggpack_write(
         opb as *mut oggpack_buffer,
         (*vi).bitrate_upper as usize,
@@ -1069,11 +1053,7 @@ unsafe extern "C" fn _vorbis_pack_info(
         ) as usize,
         4 as i32,
     );
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        1 as i32 as usize,
-        1 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
     return 0 as i32;
 }
 
@@ -1086,22 +1066,14 @@ unsafe extern "C" fn _vorbis_pack_comment(
             as *const libc::c_char,
     ) as i32;
     /* preamble */
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        0x3 as i32 as usize,
-        8 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 0x3 as i32 as usize, 8 as i32);
     _v_writestring(
         opb,
         b"vorbis\x00" as *const u8 as *const libc::c_char,
         6 as i32,
     );
     /* vendor */
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        bytes as usize,
-        32 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, bytes as usize, 32 as i32);
     _v_writestring(
         opb,
         b"Xiph.Org libVorbis I 20180316 (Now 100% fewer shells)\x00" as *const u8
@@ -1130,20 +1102,12 @@ unsafe extern "C" fn _vorbis_pack_comment(
                     *(*vc).comment_lengths.offset(i as isize),
                 );
             } else {
-                oggpack_write(
-                    opb as *mut oggpack_buffer,
-                    0 as i32 as usize,
-                    32 as i32,
-                );
+                oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 32 as i32);
             }
             i += 1
         }
     }
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        1 as i32 as usize,
-        1 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
     return 0 as i32;
 }
 
@@ -1157,11 +1121,7 @@ unsafe extern "C" fn _vorbis_pack_books(
     if ci.is_null() {
         return -(129 as i32);
     }
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        0x5 as i32 as usize,
-        8 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 0x5 as i32 as usize, 8 as i32);
     _v_writestring(
         opb,
         b"vorbis\x00" as *const u8 as *const libc::c_char,
@@ -1192,16 +1152,8 @@ unsafe extern "C" fn _vorbis_pack_books(
     match current_block {
         14523784380283086299 => {
             /* times; hook placeholders */
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                0 as i32 as usize,
-                6 as i32,
-            );
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                0 as i32 as usize,
-                16 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 6 as i32);
+            oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 16 as i32);
             /* floors */
             oggpack_write(
                 opb as *mut oggpack_buffer,
@@ -1314,11 +1266,7 @@ unsafe extern "C" fn _vorbis_pack_books(
                         );
                         i += 1
                     }
-                    oggpack_write(
-                        opb as *mut oggpack_buffer,
-                        1 as i32 as usize,
-                        1 as i32,
-                    );
+                    oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
                     return 0 as i32;
                 }
             }
@@ -1345,9 +1293,9 @@ pub unsafe extern "C" fn vorbis_commentheader_out(
         oggpack_writeclear(&mut opb as *mut _ as *mut oggpack_buffer);
         return -(130 as i32);
     }
-    (*op).packet = crate::stdlib::malloc(
-        oggpack_bytes(&mut opb as *mut _ as *mut oggpack_buffer) as usize
-    ) as *mut u8;
+    (*op).packet =
+        crate::stdlib::malloc(oggpack_bytes(&mut opb as *mut _ as *mut oggpack_buffer) as usize)
+            as *mut u8;
     crate::stdlib::memcpy(
         (*op).packet as *mut libc::c_void,
         opb.buffer as *const libc::c_void,

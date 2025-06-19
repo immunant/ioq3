@@ -1134,8 +1134,7 @@ pub unsafe extern "C" fn UI_UpdateCvars() {
 }
 unsafe extern "C" fn run_static_initializers() {
     cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 49]>() as usize)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
-        as i32
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

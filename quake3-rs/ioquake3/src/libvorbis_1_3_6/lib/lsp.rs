@@ -141,8 +141,7 @@ unsafe extern "C" fn Laguerre_With_Deflation(
     let mut m: i32 = 0;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f64>() as usize)
-            .wrapping_mul((ord + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f64>() as usize).wrapping_mul((ord + 1 as i32) as usize) as usize,
     );
     let mut defl: *mut f64 = fresh0.as_mut_ptr() as *mut f64;
     i = 0 as i32;
@@ -285,26 +284,22 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
     let mut g2_order: i32 = 0;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g1: *mut f32 = fresh2.as_mut_ptr() as *mut f32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g2: *mut f32 = fresh3.as_mut_ptr() as *mut f32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g1r: *mut f32 = fresh4.as_mut_ptr() as *mut f32;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((order2 + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((order2 + 1 as i32) as usize) as usize,
     );
     let mut g2r: *mut f32 = fresh5.as_mut_ptr() as *mut f32;
     let mut i: i32 = 0;

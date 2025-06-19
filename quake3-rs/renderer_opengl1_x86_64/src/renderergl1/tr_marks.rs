@@ -561,8 +561,7 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
         crate::stdlib::memcpy(
             outPoints as *mut libc::c_void,
             inPoints as *const libc::c_void,
-            (numInPoints as usize)
-                .wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
+            (numInPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
         );
         return;
     }
@@ -777,8 +776,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
     crate::stdlib::memcpy(
         pointBuffer.offset((*returnedPoints * 3 as i32) as isize) as *mut libc::c_void,
         (*clipPoints.offset(pingPong as isize)).as_mut_ptr() as *const libc::c_void,
-        (numClipPoints as usize)
-            .wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
+        (numClipPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
     );
     *returnedPoints += numClipPoints;
     *returnedFragments += 1;

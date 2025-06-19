@@ -1,5 +1,3 @@
-use ::libc;
-
 /* JERROR_H */
 
 /* Informational/debugging messages */
@@ -1004,8 +1002,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (64 as i32 as usize)
-                            .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+                        (64 as i32 as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
                     ) as *mut f32
                 }
                 fdtbl = (*fdct).float_divisors[qtblno as usize];

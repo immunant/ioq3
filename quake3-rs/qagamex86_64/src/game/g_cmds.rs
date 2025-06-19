@@ -345,9 +345,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut gentity_t) {
             (*cl).ps.persistant[PERS_CAPTURES as i32 as usize],
         );
         j = crate::stdlib::strlen(entry.as_mut_ptr()) as i32;
-        if (stringlength + j) as usize
-            >= ::std::mem::size_of::<[libc::c_char; 1000]>() as usize
-        {
+        if (stringlength + j) as usize >= ::std::mem::size_of::<[libc::c_char; 1000]>() as usize {
             break;
         }
         libc::strcpy(
@@ -2941,8 +2939,7 @@ pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
 }
 unsafe extern "C" fn run_static_initializers() {
     numgc_orders = (::std::mem::size_of::<[*mut libc::c_char; 7]>() as usize)
-        .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize)
-        as i32
+        .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

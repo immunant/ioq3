@@ -481,9 +481,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(mut vm: *mut vm_t, mut args: *mut i3
                                 i = 0 as i32;
                                 while (i as usize)
                                     < (::std::mem::size_of::<[intptr_t; 16]>() as usize)
-                                        .wrapping_div(
-                                            ::std::mem::size_of::<intptr_t>() as usize
-                                        )
+                                        .wrapping_div(::std::mem::size_of::<intptr_t>() as usize)
                                 {
                                     imagePtr = imagePtr.offset(1);
                                     argarr[i as usize] = *imagePtr as intptr_t;

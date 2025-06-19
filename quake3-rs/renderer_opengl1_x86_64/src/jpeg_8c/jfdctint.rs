@@ -261,8 +261,7 @@ pub unsafe extern "C" fn jpeg_fdct_7x7(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -461,8 +460,7 @@ pub unsafe extern "C" fn jpeg_fdct_6x6(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -597,8 +595,7 @@ pub unsafe extern "C" fn jpeg_fdct_5x5(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -734,8 +731,7 @@ pub unsafe extern "C" fn jpeg_fdct_4x4(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -826,8 +822,7 @@ pub unsafe extern "C" fn jpeg_fdct_3x3(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -917,8 +912,7 @@ pub unsafe extern "C" fn jpeg_fdct_2x2(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -961,8 +955,7 @@ pub unsafe extern "C" fn jpeg_fdct_1x1(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* We leave the result scaled up by an overall factor of 8. */
     /* We must also scale the output by (8/1)**2 = 2**6. */
@@ -4190,8 +4183,7 @@ pub unsafe extern "C" fn jpeg_fdct_6x3(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -4303,8 +4295,7 @@ pub unsafe extern "C" fn jpeg_fdct_4x2(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -4381,8 +4372,7 @@ pub unsafe extern "C" fn jpeg_fdct_2x1(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     elemptr = (*sample_data.offset(0 as i32 as isize)).offset(start_col as isize);
     tmp0 = *elemptr.offset(0 as i32 as isize) as i32 as INT32;
@@ -4706,8 +4696,7 @@ pub unsafe extern "C" fn jpeg_fdct_7x14(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -4959,8 +4948,7 @@ pub unsafe extern "C" fn jpeg_fdct_6x12(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -5168,8 +5156,7 @@ pub unsafe extern "C" fn jpeg_fdct_5x10(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -5361,8 +5348,7 @@ pub unsafe extern "C" fn jpeg_fdct_4x8(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -5507,8 +5493,7 @@ pub unsafe extern "C" fn jpeg_fdct_3x6(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT; */
@@ -5631,8 +5616,7 @@ pub unsafe extern "C" fn jpeg_fdct_2x4(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     /* Pass 1: process rows. */
     /* Note results are scaled up by sqrt(8) compared to a true DCT. */
@@ -5704,8 +5688,7 @@ pub unsafe extern "C" fn jpeg_fdct_1x2(
     crate::stdlib::memset(
         data as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<DCTELEM>() as usize)
-            .wrapping_mul(64 as i32 as usize),
+        (::std::mem::size_of::<DCTELEM>() as usize).wrapping_mul(64 as i32 as usize),
     );
     tmp0 = *(*sample_data.offset(0 as i32 as isize)).offset(start_col as isize) as i32 as INT32;
     tmp1 = *(*sample_data.offset(1 as i32 as isize)).offset(start_col as isize) as i32 as INT32;

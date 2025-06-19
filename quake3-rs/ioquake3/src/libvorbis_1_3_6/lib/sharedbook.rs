@@ -175,10 +175,7 @@ pub unsafe extern "C" fn _make_words(
     if !(count == 1 as i32 as isize && marker[2 as i32 as usize] == 2 as i32 as u32) {
         i = 1 as i32 as isize;
         while i < 33 as i32 as isize {
-            if marker[i as usize] as usize
-                & 0xffffffff as usize >> 32 as i32 as isize - i
-                != 0
-            {
+            if marker[i as usize] as usize & 0xffffffff as usize >> 32 as i32 as isize - i != 0 {
                 free(r as *mut libc::c_void);
                 return 0 as *mut ogg_uint32_t;
             }
@@ -447,8 +444,7 @@ unsafe extern "C" fn bitreverse(mut x: ogg_uint32_t) -> ogg_uint32_t {
     x = ((x >> 2 as i32) as usize & 0x33333333 as usize
         | (x << 2 as i32) as usize & 0xcccccccc as usize) as ogg_uint32_t;
     return ((x >> 1 as i32) as usize & 0x55555555 as usize
-        | (x << 1 as i32) as usize & 0xaaaaaaaa as usize)
-        as ogg_uint32_t;
+        | (x << 1 as i32) as usize & 0xaaaaaaaa as usize) as ogg_uint32_t;
 }
 
 unsafe extern "C" fn sort32a(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
@@ -498,8 +494,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             _make_words((*s).lengthlist, (*s).entries, (*c).used_entries);
         let mut fresh3 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<*mut ogg_uint32_t>() as usize)
-                .wrapping_mul(n as usize) as usize,
+            (::std::mem::size_of::<*mut ogg_uint32_t>() as usize).wrapping_mul(n as usize) as usize,
         );
         let mut codep: *mut *mut ogg_uint32_t = fresh3.as_mut_ptr() as *mut *mut ogg_uint32_t;
         if codes.is_null() {
@@ -527,14 +522,12 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             );
             let mut fresh5 = ::std::vec::from_elem(
                 0,
-                (n as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
-                    as usize,
+                (n as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as usize,
             );
             sortindex = fresh5.as_mut_ptr() as *mut i32;
-            (*c).codelist = malloc(
-                (n as usize)
-                    .wrapping_mul(::std::mem::size_of::<ogg_uint32_t>() as usize),
-            ) as *mut ogg_uint32_t;
+            (*c).codelist =
+                malloc((n as usize).wrapping_mul(::std::mem::size_of::<ogg_uint32_t>() as usize))
+                    as *mut ogg_uint32_t;
             /* the index is a reverse index */
             i = 0 as i32;
             while i < n {
@@ -551,9 +544,9 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             }
             free(codes as *mut libc::c_void);
             (*c).valuelist = _book_unquantize(s, n, sortindex);
-            (*c).dec_index = malloc(
-                (n as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
-            ) as *mut i32;
+            (*c).dec_index =
+                malloc((n as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize))
+                    as *mut i32;
             n = 0 as i32;
             i = 0 as i32;
             while (i as isize) < (*s).entries {
@@ -566,10 +559,9 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 }
                 i += 1
             }
-            (*c).dec_codelengths = malloc(
-                (n as usize)
-                    .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
-            ) as *mut libc::c_char;
+            (*c).dec_codelengths =
+                malloc((n as usize).wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize))
+                    as *mut libc::c_char;
             (*c).dec_maxlength = 0 as i32;
             n = 0 as i32;
             i = 0 as i32;
@@ -634,9 +626,8 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 }
                 /* now fill in 'unused' entries in the firsttable with hi/lo search
                 hints for the non-direct-hits */
-                let mut mask: ogg_uint32_t = ((0xfffffffe as usize)
-                    << 31 as i32 - (*c).dec_firsttablen)
-                    as ogg_uint32_t;
+                let mut mask: ogg_uint32_t =
+                    ((0xfffffffe as usize) << 31 as i32 - (*c).dec_firsttablen) as ogg_uint32_t;
                 let mut lo: isize = 0 as i32 as isize;
                 let mut hi: isize = 0 as i32 as isize;
                 i = 0 as i32;
@@ -664,8 +655,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                             hival = 0x7fff as i32 as usize
                         }
                         *(*c).dec_firsttable.offset(bitreverse(word) as isize) =
-                            (0x80000000 as usize | loval << 15 as i32 | hival)
-                                as ogg_uint32_t
+                            (0x80000000 as usize | loval << 15 as i32 | hival) as ogg_uint32_t
                     }
                     i += 1
                 }

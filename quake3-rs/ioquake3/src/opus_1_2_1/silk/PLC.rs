@@ -400,8 +400,7 @@ unsafe extern "C" fn silk_PLC_update(
                             * 5 as i32 as opus_int16 as opus_int32)
                             as isize,
                     ) as *mut opus_int16 as *const libc::c_void,
-                    (5 as i32 as usize)
-                        .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+                    (5 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
                 );
                 (*psPLC).pitchL_Q8 = (((*psDecCtrl).pitchL
                     [((*psDec).nb_subfr - 1 as i32 - j) as usize]
@@ -413,8 +412,7 @@ unsafe extern "C" fn silk_PLC_update(
         crate::stdlib::memset(
             (*psPLC).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (5 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+            (5 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
         (*psPLC).LTPCoef_Q14[(5 as i32 / 2 as i32) as usize] = LTP_Gain_Q14 as opus_int16;
         /* Limit LT coefs */
@@ -460,16 +458,14 @@ unsafe extern "C" fn silk_PLC_update(
         crate::stdlib::memset(
             (*psPLC).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (5 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+            (5 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     }
     /* Save LPC coeficients */
     crate::stdlib::memcpy(
         (*psPLC).prevLPC_Q12.as_mut_ptr() as *mut libc::c_void,
         (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
-        ((*psDec).LPC_order as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        ((*psDec).LPC_order as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     (*psPLC).prevLTP_scale_Q14 = (*psDecCtrl).LTP_scale_Q14 as opus_int16;
     /* Save last two gains */
@@ -480,8 +476,7 @@ unsafe extern "C" fn silk_PLC_update(
             .as_mut_ptr()
             .offset(((*psDec).nb_subfr - 2 as i32) as isize) as *mut opus_int32
             as *const libc::c_void,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     (*psPLC).subfr_length = (*psDec).subfr_length;
     (*psPLC).nb_subfr = (*psDec).nb_subfr;
@@ -660,8 +655,7 @@ unsafe extern "C" fn silk_PLC_conceal(
     crate::stdlib::memcpy(
         A_Q12.as_mut_ptr() as *mut libc::c_void,
         (*psPLC).prevLPC_Q12.as_mut_ptr() as *const libc::c_void,
-        ((*psDec).LPC_order as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        ((*psDec).LPC_order as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* First Lost frame */
     if (*psDec).lossCnt == 0 as i32 {
@@ -809,8 +803,7 @@ unsafe extern "C" fn silk_PLC_conceal(
     crate::stdlib::memcpy(
         sLPC_Q14_ptr as *mut libc::c_void,
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     /* check that unrolling works */
     i = 0 as i32;
@@ -1190,8 +1183,7 @@ unsafe extern "C" fn silk_PLC_conceal(
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
         &mut *sLPC_Q14_ptr.offset((*psDec).frame_length as isize) as *mut opus_int32
             as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     /* *************************************/
     /* Update states                      */

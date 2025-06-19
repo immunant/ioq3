@@ -135,29 +135,17 @@ unsafe extern "C" fn mapping0_pack(
     bit2,3:reserved. This is backward compatable with all actual uses
     of the beta code. */
     if (*info).submaps > 1 as i32 {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            1 as i32 as usize,
-            1 as i32,
-        ); /* 2,3:reserved */
+        oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32); /* 2,3:reserved */
         oggpack_write(
             opb as *mut oggpack_buffer,
             ((*info).submaps - 1 as i32) as usize,
             4 as i32,
         );
     } else {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
     }
     if (*info).coupling_steps > 0 as i32 {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            1 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
         oggpack_write(
             opb as *mut oggpack_buffer,
             ((*info).coupling_steps - 1 as i32) as usize,
@@ -182,17 +170,9 @@ unsafe extern "C" fn mapping0_pack(
             i += 1
         }
     } else {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
     }
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        0 as i32 as usize,
-        2 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 2 as i32);
     /* we don't write the channel submappings if we only have one... */
     if (*info).submaps > 1 as i32 {
         i = 0 as i32; /* time submap unused */
@@ -207,11 +187,7 @@ unsafe extern "C" fn mapping0_pack(
     }
     i = 0 as i32;
     while i < (*info).submaps {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            8 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 8 as i32);
         oggpack_write(
             opb as *mut oggpack_buffer,
             (*info).floorsubmap[i as usize] as usize,
@@ -409,32 +385,27 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     let mut k: i32 = 0;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut nonzero: *mut i32 = fresh0.as_mut_ptr() as *mut i32;
     let mut gmdct: *mut *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((*vi).channels as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as usize) as isize,
+        ((*vi).channels as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize) as isize,
     ) as *mut *mut f32;
     let mut iwork: *mut *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((*vi).channels as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize) as isize,
+        ((*vi).channels as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize) as isize,
     ) as *mut *mut i32;
     let mut floor_posts: *mut *mut *mut i32 =
         crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((*vi).channels as usize)
-                .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as usize)
+            ((*vi).channels as usize).wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as usize)
                 as isize,
         ) as *mut *mut *mut i32;
     let mut global_ampmax: f32 = (*vbi).ampmax;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut local_ampmax: *mut f32 = fresh1.as_mut_ptr() as *mut f32;
     let mut blocktype: i32 = (*vbi).blocktype;
@@ -455,14 +426,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         let ref mut fresh2 = *iwork.offset(i as isize);
         *fresh2 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((n / 2 as i32) as usize)
-                .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
+            ((n / 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
         ) as *mut i32;
         let ref mut fresh3 = *gmdct.offset(i as isize);
         *fresh3 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((n / 2 as i32) as usize)
-                .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
+            ((n / 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
         ) as *mut f32;
         scale_dB = (todB(&mut scale) as f64 + 0.345f64) as f32;
         /* window the PCM data */
@@ -538,13 +507,11 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     }
     let mut noise: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((n / 2 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
+        ((n / 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
     ) as *mut f32;
     let mut tone: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((n / 2 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
+        ((n / 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as isize,
     ) as *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -573,15 +540,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         let ref mut fresh5 = *floor_posts.offset(i as isize);
         *fresh5 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            (15 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
-                as isize,
+            (15 as i32 as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize) as isize,
         ) as *mut *mut i32;
         crate::stdlib::memset(
             *floor_posts.offset(i as isize) as *mut libc::c_void,
             0 as i32,
-            (::std::mem::size_of::<*mut i32>() as usize)
-                .wrapping_mul(15 as i32 as usize),
+            (::std::mem::size_of::<*mut i32>() as usize).wrapping_mul(15 as i32 as usize),
         );
         j = 0 as i32;
         while j < n / 2 as i32 {
@@ -732,14 +696,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     /* iterate over the many masking curve fits we've created */
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut i32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<*mut i32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut couple_bundle: *mut *mut i32 = fresh11.as_mut_ptr() as *mut *mut i32;
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut zerobundle: *mut i32 = fresh12.as_mut_ptr() as *mut i32;
     k = if vorbis_bitrate_managed(vb as *mut vorbis_block) != 0 {
@@ -756,27 +718,15 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     {
         let mut opb: *mut oggpack_buffer = (*vbi).packetblob[k as usize];
         /* ok, done encoding.  Next protopacket. */
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
         oggpack_write(
             opb as *mut oggpack_buffer,
             modenumber as usize,
             (*b).modebits,
         );
         if (*vb).W != 0 {
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                (*vb).lW as usize,
-                1 as i32,
-            );
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                (*vb).nW as usize,
-                1 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, (*vb).lW as usize, 1 as i32);
+            oggpack_write(opb as *mut oggpack_buffer, (*vb).nW as usize, 1 as i32);
         }
         i = 0 as i32;
         while i < (*vi).channels {
@@ -879,26 +829,23 @@ unsafe extern "C" fn mapping0_inverse(mut vb: *mut vorbis_block, mut l: *mut lib
     let mut n: isize = (*vb).pcmend as isize;
     let mut fresh17 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut f32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut pcmbundle: *mut *mut f32 = fresh17.as_mut_ptr() as *mut *mut f32;
     let mut fresh18 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut zerobundle: *mut i32 = fresh18.as_mut_ptr() as *mut i32;
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((*vi).channels as usize) as usize,
     );
     let mut nonzero: *mut i32 = fresh19.as_mut_ptr() as *mut i32;
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut libc::c_void>() as usize)
-            .wrapping_mul((*vi).channels as usize) as usize,
+        (::std::mem::size_of::<*mut libc::c_void>() as usize).wrapping_mul((*vi).channels as usize)
+            as usize,
     );
     let mut floormemo: *mut *mut libc::c_void = fresh20.as_mut_ptr() as *mut *mut libc::c_void;
     /* start out our new packet blob with packet type and mode */

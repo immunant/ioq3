@@ -1057,8 +1057,7 @@ unsafe extern "C" fn R_LoadMDR(
             while j < (*mdr).numBones {
                 k = 0 as i32;
                 while (k as usize)
-                    < (::std::mem::size_of::<[u8; 24]>() as usize)
-                        .wrapping_div(2 as i32 as usize)
+                    < (::std::mem::size_of::<[u8; 24]>() as usize).wrapping_div(2 as i32 as usize)
                 {
                     // Do swapping for the uncompressing functions. They seem to use shorts
                     // values only, so I assume this will work. Never tested it on other

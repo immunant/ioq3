@@ -2048,8 +2048,7 @@ unsafe extern "C" fn IN_JoyMove() {
                 .wrapping_div(::std::mem::size_of::<qboolean>() as usize)
         {
             total = (::std::mem::size_of::<[qboolean; 16]>() as usize)
-                .wrapping_div(::std::mem::size_of::<qboolean>() as usize)
-                as i32
+                .wrapping_div(::std::mem::size_of::<qboolean>() as usize) as i32
         }
         i = 0 as i32;
         while i < total {

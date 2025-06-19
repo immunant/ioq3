@@ -1,5 +1,3 @@
-use ::libc;
-
 /* INCOMPLETE_TYPES_BROKEN */
 
 /* Suppress undefined-structure complaints if necessary. */

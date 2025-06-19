@@ -1470,8 +1470,7 @@ unsafe extern "C" fn GraphicsOptions_CheckConfig() {
         i += 1
     }
     // return 'Custom' ivo template
-    s_graphicsoptions.list.curvalue = (::std::mem::size_of::<[InitialVideoOptions_s; 6]>()
-        as usize)
+    s_graphicsoptions.list.curvalue = (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as usize)
         .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as usize)
         .wrapping_sub(1 as i32 as usize) as i32;
 }
@@ -1841,8 +1840,8 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
                     .wrapping_sub(2 as i32 as usize) as i32,
             );
-            buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as usize)
-                as usize] = 0 as i32 as libc::c_char;
+            buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as usize) as usize] =
+                0 as i32 as libc::c_char;
             buf[crate::stdlib::strlen(buf.as_mut_ptr()) as usize] = 'x' as i32 as libc::c_char;
             trap_Cvar_VariableStringBuffer(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,

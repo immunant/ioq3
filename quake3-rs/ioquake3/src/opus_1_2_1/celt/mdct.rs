@@ -7,7 +7,6 @@ pub struct mdct_lookup {
     pub kfft: [*const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state; 4],
     pub trig: *const f32,
 }
-use ::libc;
 
 pub use crate::arch_h::opus_val16;
 pub use crate::opus_types_h::opus_int16;
@@ -99,8 +98,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     f = fresh0.as_mut_ptr() as *mut f32;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as usize).wrapping_mul(N4 as usize)
-            as usize,
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize).wrapping_mul(N4 as usize) as usize,
     );
     f2 = fresh1.as_mut_ptr() as *mut kiss_fft_cpx;
     /* Consider the input to be composed of four blocks: [a, b, c, d] */

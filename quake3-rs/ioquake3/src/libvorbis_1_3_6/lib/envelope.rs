@@ -136,10 +136,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
     (*e).ch = ch;
     (*e).storage = 128 as i32 as isize;
     (*e).cursor = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize;
-    (*e).mdct_win = crate::stdlib::calloc(
-        n as usize,
-        ::std::mem::size_of::<f32>() as usize,
-    ) as *mut f32;
+    (*e).mdct_win =
+        crate::stdlib::calloc(n as usize, ::std::mem::size_of::<f32>() as usize) as *mut f32;
     mdct_init(&mut (*e).mdct as *mut _ as *mut mdct_lookup, n);
     i = 0 as i32;
     while i < n {
@@ -166,9 +164,9 @@ pub unsafe extern "C" fn _ve_envelope_init(
     j = 0 as i32;
     while j < 7 as i32 {
         n = (*e).band[j as usize].end;
-        (*e).band[j as usize].window = crate::stdlib::malloc(
-            (n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
-        ) as *mut f32;
+        (*e).band[j as usize].window =
+            crate::stdlib::malloc((n as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize))
+                as *mut f32;
         i = 0 as i32;
         while i < n {
             *(*e).band[j as usize].window.offset(i as isize) =
@@ -185,10 +183,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::envelope::envelope_filter_state>()
             as usize,
     ) as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_filter_state;
-    (*e).mark = crate::stdlib::calloc(
-        (*e).storage as usize,
-        ::std::mem::size_of::<i32>() as usize,
-    ) as *mut i32;
+    (*e).mark = crate::stdlib::calloc((*e).storage as usize, ::std::mem::size_of::<i32>() as usize)
+        as *mut i32;
 }
 #[no_mangle]
 
@@ -401,8 +397,7 @@ pub unsafe extern "C" fn _ve_envelope_search(mut v: *mut vorbis_dsp_state) -> is
         (*ve).storage = (last + 4 as i32 + 2 as i32) as isize; /* be sure */
         (*ve).mark = crate::stdlib::realloc(
             (*ve).mark as *mut libc::c_void,
-            ((*ve).storage as usize)
-                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+            ((*ve).storage as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32
     }
     j = first as isize;
@@ -529,8 +524,7 @@ pub unsafe extern "C" fn _ve_envelope_shift(
     crate::stdlib::memmove(
         (*e).mark as *mut libc::c_void,
         (*e).mark.offset(smallshift as isize) as *const libc::c_void,
-        ((smallsize - smallshift) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+        ((smallsize - smallshift) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     );
     (*e).current -= shift;
     if (*e).curmark >= 0 as i32 as isize {

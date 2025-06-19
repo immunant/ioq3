@@ -452,8 +452,7 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
     crate::stdlib::memset(
         table.offset(-((255 as i32 + 1 as i32) as isize)) as *mut libc::c_void,
         0 as i32,
-        ((255 as i32 + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
+        ((255 as i32 + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     );
     /* Main part of "simple" table: limit[x] = x */
     i = 0 as i32; /* Point to where post-IDCT table starts */
@@ -479,8 +478,7 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: j_decompress_ptr)
         table.offset((4 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as isize)
             as *mut libc::c_void,
         (*cinfo).sample_range_limit as *const libc::c_void,
-        (128 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
+        (128 as i32 as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
     );
 }
 /*

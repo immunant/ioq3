@@ -1895,15 +1895,13 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (257 as i32 as usize)
-                            .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+                        (257 as i32 as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
                     ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).dc_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
-                    (257 as i32 as usize)
-                        .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+                    (257 as i32 as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
                 );
             } else {
                 /* Compute derived values for Huffman tables */
@@ -1941,15 +1939,13 @@ unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_stati
                     .expect("non-null function pointer")(
                         cinfo as j_common_ptr,
                         1 as i32,
-                        (257 as i32 as usize)
-                            .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+                        (257 as i32 as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
                     ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).ac_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
-                    (257 as i32 as usize)
-                        .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+                    (257 as i32 as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
                 );
             } else {
                 jpeg_make_c_derived_tbl(

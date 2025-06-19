@@ -557,8 +557,7 @@ unsafe extern "C" fn transient_analysis(
     ];
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(len as usize)
-            as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(len as usize) as usize,
     );
     tmp = fresh0.as_mut_ptr() as *mut opus_val16;
     *weak_transient = 0 as i32;
@@ -596,8 +595,7 @@ unsafe extern "C" fn transient_analysis(
         crate::stdlib::memset(
             tmp as *mut libc::c_void,
             0 as i32,
-            (12 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
+            (12 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
         );
         mean = 0 as i32 as opus_val32;
         mem0 = 0 as i32 as opus_val32;
@@ -890,8 +888,7 @@ unsafe extern "C" fn compute_mdcts(
                 &mut *out.offset((c * B * N + bound) as isize) as *mut celt_sig
                     as *mut libc::c_void,
                 0 as i32,
-                ((B * N - bound) as usize)
-                    .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
+                ((B * N - bound) as usize).wrapping_mul(::std::mem::size_of::<celt_sig>() as usize),
             );
             c += 1;
             if !(c < C) {
@@ -1097,9 +1094,7 @@ unsafe extern "C" fn tf_analysis(
                 tmp as *const libc::c_void,
                 (N as usize)
                     .wrapping_mul(::std::mem::size_of::<celt_norm>() as usize)
-                    .wrapping_add(
-                        (0 as i32 as isize * tmp_1.offset_from(tmp) as isize) as usize,
-                    ),
+                    .wrapping_add((0 as i32 as isize * tmp_1.offset_from(tmp) as isize) as usize),
             );
             crate::src::opus_1_2_1::celt::bands::haar1(tmp_1, N >> LM, (1 as i32) << LM);
             L1 = l1_metric(tmp_1, N, LM + 1 as i32, bias);
@@ -1619,14 +1614,14 @@ unsafe extern "C" fn dynalloc_analysis(
     let mut noise_floor: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
+            as usize,
     );
     follower = fresh7.as_mut_ptr() as *mut opus_val16;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
+            as usize,
     );
     noise_floor = fresh8.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memset(
@@ -1927,8 +1922,8 @@ unsafe extern "C" fn run_prefilter(
     overlap = (*mode).overlap;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as usize)
-            .wrapping_mul((CC * (N + 1024 as i32)) as usize) as usize,
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul((CC * (N + 1024 as i32)) as usize)
+            as usize,
     );
     _pre = fresh10.as_mut_ptr() as *mut celt_sig;
     pre[0 as i32 as usize] = _pre;
@@ -2616,8 +2611,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as usize)
-            .wrapping_mul((CC * (N + overlap)) as usize) as usize,
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul((CC * (N + overlap)) as usize)
+            as usize,
     );
     in_0 = fresh12.as_mut_ptr() as *mut celt_sig;
     sample_max = if (*st).overlap_max > celt_maxabs16(pcm, C * (N - overlap) / (*st).upsample) {
@@ -2788,27 +2783,26 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul((CC * N) as usize)
-            as usize,
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul((CC * N) as usize) as usize,
     );
     freq = fresh13.as_mut_ptr() as *mut celt_sig;
     let mut fresh14 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_ener>() as usize)
-            .wrapping_mul((nbEBands * CC) as usize) as usize,
+        (::std::mem::size_of::<celt_ener>() as usize).wrapping_mul((nbEBands * CC) as usize)
+            as usize,
     );
     bandE = fresh14.as_mut_ptr() as *mut celt_ener;
     let mut fresh15 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((nbEBands * CC) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((nbEBands * CC) as usize)
+            as usize,
     );
     bandLogE = fresh15.as_mut_ptr() as *mut opus_val16;
     secondMdct = (shortBlocks != 0 && (*st).complexity >= 8 as i32) as i32;
     let mut fresh16 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
+            as usize,
     );
     bandLogE2 = fresh16.as_mut_ptr() as *mut opus_val16;
     if secondMdct != 0 {
@@ -2897,8 +2891,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     );
     let mut fresh18 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
+            as usize,
     );
     surround_dynalloc = fresh18.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memset(
@@ -3010,8 +3004,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 crate::stdlib::memset(
                     surround_dynalloc as *mut libc::c_void,
                     0 as i32,
-                    (mask_end as usize)
-                        .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
+                    (mask_end as usize).wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
                 );
             } else {
                 i = 0 as i32;
@@ -3147,8 +3140,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize)
-            as usize,
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize) as usize,
     );
     X = fresh20.as_mut_ptr() as *mut celt_norm;
     /* Band normalisation */
@@ -3163,8 +3155,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     );
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     tf_res = fresh21.as_mut_ptr() as *mut i32;
     /* Disable variable tf resolution for hybrid and at very low bitrate */
@@ -3224,8 +3215,8 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * nbEBands) as usize)
+            as usize,
     );
     error = fresh22.as_mut_ptr() as *mut opus_val16;
     c = 0 as i32;
@@ -3320,8 +3311,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh24 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     offsets = fresh24.as_mut_ptr() as *mut i32;
     maxDepth = dynalloc_analysis(
@@ -3355,8 +3345,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     }
     let mut fresh25 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     cap = fresh25.as_mut_ptr() as *mut i32;
     init_caps(mode as *const OpusCustomMode, cap, LM, C);
@@ -3691,20 +3680,17 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     /* Bit allocation */
     let mut fresh26 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     fine_quant = fresh26.as_mut_ptr() as *mut i32;
     let mut fresh27 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     pulses = fresh27.as_mut_ptr() as *mut i32;
     let mut fresh28 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     fine_priority = fresh28.as_mut_ptr() as *mut i32;
     /* bits =           packet size                    - where we are - safety*/
@@ -3791,8 +3777,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     /* Residual quantisation */
     let mut fresh29 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<u8>() as usize).wrapping_mul((C * nbEBands) as usize)
-            as usize,
+        (::std::mem::size_of::<u8>() as usize).wrapping_mul((C * nbEBands) as usize) as usize,
     );
     collapse_masks = fresh29.as_mut_ptr() as *mut u8;
     crate::src::opus_1_2_1::celt::bands::quant_all_bands(
@@ -3847,8 +3832,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
     crate::stdlib::memset(
         energyError as *mut libc::c_void,
         0 as i32,
-        ((nbEBands * CC) as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
+        ((nbEBands * CC) as usize).wrapping_mul(::std::mem::size_of::<opus_val16>() as usize),
     );
     c = 0 as i32;
     loop {
@@ -4106,8 +4090,7 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                 0 as i32,
                 ((opus_custom_encoder_get_size((*st).mode, (*st).channels) as isize
                     - (&mut (*st).rng as *mut opus_uint32 as *mut libc::c_char)
-                        .offset_from(st as *mut libc::c_char) as isize)
-                    as usize)
+                        .offset_from(st as *mut libc::c_char) as isize) as usize)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
             );
             i = 0 as i32;

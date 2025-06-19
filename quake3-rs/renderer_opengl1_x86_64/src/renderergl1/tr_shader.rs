@@ -3023,8 +3023,7 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                 .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
                 .wrapping_sub(1 as i32 as usize)
                 & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
-                    .wrapping_sub(1 as i32 as usize))
-                as *mut libc::c_void;
+                    .wrapping_sub(1 as i32 as usize)) as *mut libc::c_void;
             match *(curCmd as *const i32) {
                 1 => {
                     let mut sc_cmd: *const setColorCommand_t = curCmd as *const setColorCommand_t;
@@ -3164,8 +3163,7 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
         *(*newShader).stages[i as usize] = stages[i as usize];
         b = 0 as i32;
         while b < 2 as i32 {
-            size = ((*(*newShader).stages[i as usize]).bundle[b as usize].numTexMods
-                as usize)
+            size = ((*(*newShader).stages[i as usize]).bundle[b as usize].numTexMods as usize)
                 .wrapping_mul(::std::mem::size_of::<texModInfo_t>() as usize)
                 as i32;
             (*(*newShader).stages[i as usize]).bundle[b as usize].texMods =
@@ -8458,9 +8456,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     }
     size += 2048 as i32;
     hashMem = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (size as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
-            as i32,
+        (size as usize).wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
         h_low,
     ) as *mut libc::c_char;
     i = 0 as i32;

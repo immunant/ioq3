@@ -1654,9 +1654,7 @@ pub unsafe extern "C" fn stristr(
         while *charset.offset(i as isize) as i32 != 0 && *str.offset(i as isize) as i32 != 0 {
             if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *charset.offset(i as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1674,9 +1672,7 @@ pub unsafe extern "C" fn stristr(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str.offset(i as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1871,8 +1867,7 @@ pub unsafe extern "C" fn EasyClientName(
         crate::stdlib::memmove(
             ptr as *mut libc::c_void,
             ptr.offset(1 as i32 as isize) as *const libc::c_void,
-            crate::stdlib::strlen(ptr.offset(1 as i32 as isize))
-                .wrapping_add(1 as i32 as usize),
+            crate::stdlib::strlen(ptr.offset(1 as i32 as isize)).wrapping_add(1 as i32 as usize),
         );
         ptr = libc::strstr(
             name.as_mut_ptr(),
@@ -5329,11 +5324,10 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut bot_state_t) {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        (::std::mem::size_of::<[libc::c_char; 128]>() as usize)
-            .wrapping_sub(1 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 128]>() as usize).wrapping_sub(1 as i32 as usize),
     );
-    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize)
-        .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
+    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize).wrapping_sub(1 as i32 as usize)
+        as usize] = '\u{0}' as i32 as libc::c_char;
     if Q_stricmp(
         mapname.as_mut_ptr(),
         b"q3tourney6\x00" as *const u8 as *const libc::c_char,

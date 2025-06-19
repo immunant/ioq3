@@ -460,8 +460,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
     //initialize item config
     ic = crate::src::botlib::l_memory::GetClearedHunkMemory(
         (::std::mem::size_of::<itemconfig_t>() as usize).wrapping_add(
-            (max_iteminfo as usize)
-                .wrapping_mul(::std::mem::size_of::<iteminfo_t>() as usize),
+            (max_iteminfo as usize).wrapping_mul(::std::mem::size_of::<iteminfo_t>() as usize),
         ),
     ) as *mut itemconfig_t;
     (*ic).iteminfo = (ic as *mut libc::c_char)
@@ -576,8 +575,7 @@ pub unsafe extern "C" fn ItemWeightIndex(
     let mut i: i32 = 0;
     //initialize item weight index
     index = crate::src::botlib::l_memory::GetClearedMemory(
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((*ic).numiteminfo as usize),
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((*ic).numiteminfo as usize),
     ) as *mut i32; //end for
     i = 0 as i32;
     while i < (*ic).numiteminfo {
@@ -618,8 +616,7 @@ pub unsafe extern "C" fn InitLevelItemHeap() {
         b"256\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     levelitemheap = crate::src::botlib::l_memory::GetClearedMemory(
-        (max_levelitems as usize)
-            .wrapping_mul(::std::mem::size_of::<levelitem_t>() as usize),
+        (max_levelitems as usize).wrapping_mul(::std::mem::size_of::<levelitem_t>() as usize),
     ) as *mut levelitem_t;
     i = 0 as i32;
     while i < max_levelitems - 1 as i32 {
@@ -777,8 +774,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
             {
                 ml = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
                     maplocation_t,
-                >()
-                    as usize) as *mut maplocation_t; //end if
+                >() as usize) as *mut maplocation_t; //end if
                 crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey(
                     ent,
                     b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,

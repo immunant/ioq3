@@ -473,14 +473,14 @@ pub unsafe extern "C" fn pitch_search(
     lag = len + max_pitch;
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((len >> 2 as i32) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((len >> 2 as i32) as usize)
+            as usize,
     );
     x_lp4 = fresh21.as_mut_ptr() as *mut opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((lag >> 2 as i32) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((lag >> 2 as i32) as usize)
+            as usize,
     );
     y_lp4 = fresh22.as_mut_ptr() as *mut opus_val16;
     let mut fresh23 = ::std::vec::from_elem(
@@ -649,8 +649,8 @@ pub unsafe extern "C" fn remove_doubling(
     T = T0;
     let mut fresh24 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val32>() as usize)
-            .wrapping_mul((maxperiod + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<opus_val32>() as usize).wrapping_mul((maxperiod + 1 as i32) as usize)
+            as usize,
     );
     yy_lookup = fresh24.as_mut_ptr() as *mut opus_val32;
     dual_inner_prod_c(x, x, x.offset(-(T0 as isize)), N, &mut xx, &mut xy);

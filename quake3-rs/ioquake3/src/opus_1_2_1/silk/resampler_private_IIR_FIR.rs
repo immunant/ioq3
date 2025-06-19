@@ -172,8 +172,7 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
     crate::stdlib::memcpy(
         buf as *mut libc::c_void,
         (*S).sFIR.i16_0.as_mut_ptr() as *const libc::c_void,
-        (8 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (8 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* Iterate over blocks of frameSizeIn input samples */
     index_increment_Q16 = (*S).invRatio_Q16;
@@ -202,8 +201,7 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
             buf as *mut libc::c_void,
             &mut *buf.offset((nSamplesIn << 1 as i32) as isize) as *mut opus_int16
                 as *const libc::c_void,
-            (8 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+            (8 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
@@ -211,7 +209,6 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
         (*S).sFIR.i16_0.as_mut_ptr() as *mut libc::c_void,
         &mut *buf.offset((nSamplesIn << 1 as i32) as isize) as *mut opus_int16
             as *const libc::c_void,
-        (8 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (8 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
 }

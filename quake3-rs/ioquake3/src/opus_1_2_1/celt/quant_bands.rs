@@ -780,14 +780,14 @@ pub unsafe extern "C" fn quant_coarse_energy(
     enc_start_state = *enc;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * (*m).nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * (*m).nbEBands) as usize)
+            as usize,
     );
     oldEBands_intra = fresh0.as_mut_ptr() as *mut opus_val16;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((C * (*m).nbEBands) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((C * (*m).nbEBands) as usize)
+            as usize,
     );
     error_intra = fresh1.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memcpy(
@@ -796,8 +796,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         ((C * (*m).nbEBands) as usize)
             .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
             .wrapping_add(
-                (0 as i32 as isize * oldEBands_intra.offset_from(oldEBands) as isize)
-                    as usize,
+                (0 as i32 as isize * oldEBands_intra.offset_from(oldEBands) as isize) as usize,
             ),
     );
     if two_pass != 0 || intra != 0 {
@@ -852,8 +851,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         }
         let mut fresh2 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<u8>() as usize).wrapping_mul(save_bytes as usize)
-                as usize,
+            (::std::mem::size_of::<u8>() as usize).wrapping_mul(save_bytes as usize) as usize,
         );
         intra_bits = fresh2.as_mut_ptr() as *mut u8;
         /* Copy bits from intra bit-stream */
@@ -863,8 +861,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             (nintra_bytes.wrapping_sub(nstart_bytes) as usize)
                 .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * intra_bits.offset_from(intra_buf) as isize)
-                        as usize,
+                    (0 as i32 as isize * intra_bits.offset_from(intra_buf) as isize) as usize,
                 ),
         );
         *enc = enc_start_state;
@@ -898,8 +895,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 (nintra_bytes.wrapping_sub(nstart_bytes) as usize)
                     .wrapping_mul(::std::mem::size_of::<u8>() as usize)
                     .wrapping_add(
-                        (0 as i32 as isize * intra_buf.offset_from(intra_bits) as isize)
-                            as usize,
+                        (0 as i32 as isize * intra_buf.offset_from(intra_bits) as isize) as usize,
                     ),
             );
             crate::stdlib::memcpy(
@@ -918,8 +914,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 ((C * (*m).nbEBands) as usize)
                     .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                     .wrapping_add(
-                        (0 as i32 as isize * error.offset_from(error_intra) as isize)
-                            as usize,
+                        (0 as i32 as isize * error.offset_from(error_intra) as isize) as usize,
                     ),
             );
             intra = 1 as i32
@@ -931,8 +926,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             ((C * (*m).nbEBands) as usize)
                 .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
-                    (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
-                        as usize,
+                    (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize) as usize,
                 ),
         );
         crate::stdlib::memcpy(

@@ -561,9 +561,7 @@ pub unsafe extern "C" fn SV_SendServerCommand(
     // The actual cause of the bug is probably further downstream
     // and should maybe be addressed later, but this certainly
     // fixes the problem for now
-    if crate::stdlib::strlen(message.as_mut_ptr() as *mut libc::c_char)
-        > 1022 as i32 as usize
-    {
+    if crate::stdlib::strlen(message.as_mut_ptr() as *mut libc::c_char) > 1022 as i32 as usize {
         return;
     }
     if !cl.is_null() {

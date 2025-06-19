@@ -2207,11 +2207,7 @@ pub unsafe extern "C" fn crc32(mut crc: usize, mut buf: *const u8, mut len: u32)
 /* ========================================================================= */
 /* ========================================================================= */
 
-unsafe extern "C" fn crc32_little(
-    mut crc: usize,
-    mut buf: *const u8,
-    mut len: u32,
-) -> usize {
+unsafe extern "C" fn crc32_little(mut crc: usize, mut buf: *const u8, mut len: u32) -> usize {
     let mut c: u4 = 0;
     let mut buf4: *const u4 = 0 as *const u4;
     c = crc as u4;
@@ -2313,11 +2309,7 @@ unsafe extern "C" fn crc32_little(
 /* ========================================================================= */
 /* ========================================================================= */
 
-unsafe extern "C" fn crc32_big(
-    mut crc: usize,
-    mut buf: *const u8,
-    mut len: u32,
-) -> usize {
+unsafe extern "C" fn crc32_big(mut crc: usize, mut buf: *const u8, mut len: u32) -> usize {
     let mut c: u4 = 0;
     let mut buf4: *const u4 = 0 as *const u4;
     c = (crc as u4 >> 24 as i32)
@@ -2419,10 +2411,7 @@ unsafe extern "C" fn crc32_big(
 /* dimension of GF(2) vectors (length of CRC) */
 /* ========================================================================= */
 
-unsafe extern "C" fn gf2_matrix_times(
-    mut mat: *mut usize,
-    mut vec: usize,
-) -> usize {
+unsafe extern "C" fn gf2_matrix_times(mut mat: *mut usize, mut vec: usize) -> usize {
     let mut sum: usize = 0;
     sum = 0 as i32 as usize;
     while vec != 0 {
@@ -2436,10 +2425,7 @@ unsafe extern "C" fn gf2_matrix_times(
 }
 /* ========================================================================= */
 
-unsafe extern "C" fn gf2_matrix_square(
-    mut square: *mut usize,
-    mut mat: *mut usize,
-) {
+unsafe extern "C" fn gf2_matrix_square(mut square: *mut usize, mut mat: *mut usize) {
     let mut n: i32 = 0;
     n = 0 as i32;
     while n < 32 as i32 {

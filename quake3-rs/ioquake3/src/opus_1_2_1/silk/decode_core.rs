@@ -545,8 +545,8 @@ pub unsafe extern "C" fn silk_decode_core(
     sLTP_Q15 = fresh1.as_mut_ptr() as *mut opus_int32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as usize)
-            .wrapping_mul((*psDec).subfr_length as usize) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize).wrapping_mul((*psDec).subfr_length as usize)
+            as usize,
     );
     res_Q14 = fresh2.as_mut_ptr() as *mut opus_int32;
     let mut fresh3 = ::std::vec::from_elem(
@@ -590,8 +590,7 @@ pub unsafe extern "C" fn silk_decode_core(
     crate::stdlib::memcpy(
         sLPC_Q14 as *mut libc::c_void,
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     pexc_Q14 = (*psDec).exc_Q14.as_mut_ptr();
     pxq = xq;
@@ -644,8 +643,7 @@ pub unsafe extern "C" fn silk_decode_core(
             crate::stdlib::memset(
                 B_Q14 as *mut libc::c_void,
                 0 as i32,
-                (5 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+                (5 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
             *B_Q14.offset((5 as i32 / 2 as i32) as isize) =
                 (0.25f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64) as opus_int32
@@ -1023,8 +1021,7 @@ pub unsafe extern "C" fn silk_decode_core(
             sLPC_Q14 as *mut libc::c_void,
             &mut *sLPC_Q14.offset((*psDec).subfr_length as isize) as *mut opus_int32
                 as *const libc::c_void,
-            (16 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         pexc_Q14 = pexc_Q14.offset((*psDec).subfr_length as isize);
         pxq = pxq.offset((*psDec).subfr_length as isize);
@@ -1034,7 +1031,6 @@ pub unsafe extern "C" fn silk_decode_core(
     crate::stdlib::memcpy(
         (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
         sLPC_Q14 as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
 }

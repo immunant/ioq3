@@ -85,8 +85,7 @@ pub unsafe extern "C" fn GetMemory(mut size: usize) -> *mut libc::c_void
     }
     memid = ptr as *mut usize;
     *memid = 0x12345678 as isize as usize;
-    return (ptr as *mut libc::c_char)
-        .offset(::std::mem::size_of::<usize>() as usize as isize)
+    return (ptr as *mut libc::c_char).offset(::std::mem::size_of::<usize>() as usize as isize)
         as *mut usize as *mut libc::c_void;
 }
 //allocate a memory block of the given size and clear it
@@ -134,8 +133,7 @@ pub unsafe extern "C" fn GetHunkMemory(mut size: usize) -> *mut libc::c_void
     }
     memid = ptr as *mut usize;
     *memid = 0x87654321 as isize as usize;
-    return (ptr as *mut libc::c_char)
-        .offset(::std::mem::size_of::<usize>() as usize as isize)
+    return (ptr as *mut libc::c_char).offset(::std::mem::size_of::<usize>() as usize as isize)
         as *mut usize as *mut libc::c_void;
 }
 //allocate a memory block of the given size and clear it
@@ -169,8 +167,7 @@ pub unsafe extern "C" fn GetClearedHunkMemory(mut size: usize) -> *mut libc::c_v
 
 pub unsafe extern "C" fn FreeMemory(mut ptr: *mut libc::c_void) {
     let mut memid: *mut usize = 0 as *mut usize;
-    memid = (ptr as *mut libc::c_char)
-        .offset(-(::std::mem::size_of::<usize>() as usize as isize))
+    memid = (ptr as *mut libc::c_char).offset(-(::std::mem::size_of::<usize>() as usize as isize))
         as *mut usize;
     if *memid == 0x12345678 as isize as usize {
         crate::src::botlib::be_interface::botimport

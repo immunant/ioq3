@@ -1676,14 +1676,14 @@ unsafe extern "C" fn encode_multiframe_packet(
     };
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<u8>() as usize)
-            .wrapping_mul((nb_frames * bytes_per_frame) as usize) as usize,
+        (::std::mem::size_of::<u8>() as usize).wrapping_mul((nb_frames * bytes_per_frame) as usize)
+            as usize,
     );
     tmp_data = fresh4.as_mut_ptr() as *mut u8;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<OpusRepacketizer>() as usize)
-            .wrapping_mul(1 as i32 as usize) as usize,
+        (::std::mem::size_of::<OpusRepacketizer>() as usize).wrapping_mul(1 as i32 as usize)
+            as usize,
     );
     rp = fresh5.as_mut_ptr() as *mut OpusRepacketizer;
 
@@ -2502,8 +2502,7 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut fresh7 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul(((total_buffer + frame_size) * (*st).channels) as usize)
-            as usize,
+            .wrapping_mul(((total_buffer + frame_size) * (*st).channels) as usize) as usize,
     );
     pcm_buf = fresh7.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memcpy(
@@ -2930,8 +2929,7 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut fresh9 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul(((*st).channels * (*st).Fs / 400 as i32) as usize)
-            as usize,
+            .wrapping_mul(((*st).channels * (*st).Fs / 400 as i32) as usize) as usize,
     );
     tmp_prefill = fresh9.as_mut_ptr() as *mut opus_val16;
     if (*st).mode != 1000 as i32 && (*st).mode != (*st).prev_mode && (*st).prev_mode > 0 as i32 {
@@ -2960,8 +2958,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 .as_mut_ptr()
                 .offset(((*st).channels * frame_size) as isize) as *mut opus_val16
                 as *const libc::c_void,
-            (((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer))
-                as usize)
+            (((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer)) as usize)
                 .wrapping_mul(::std::mem::size_of::<opus_val16>() as usize)
                 .wrapping_add(
                     (0 as i32 as isize
@@ -3490,8 +3487,8 @@ pub unsafe extern "C" fn opus_encode(
     }
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((frame_size * (*st).channels) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((frame_size * (*st).channels) as usize)
+            as usize,
     );
     in_0 = fresh10.as_mut_ptr() as *mut f32;
     i = 0 as i32;
@@ -4067,9 +4064,7 @@ pub unsafe extern "C" fn opus_encoder_ctl(
                 start as *mut libc::c_void,
                 0 as i32,
                 (::std::mem::size_of::<OpusEncoder>() as usize)
-                    .wrapping_sub(
-                        start.offset_from(st as *mut libc::c_char) as isize as usize
-                    )
+                    .wrapping_sub(start.offset_from(st as *mut libc::c_char) as isize as usize)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
             );
             crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(

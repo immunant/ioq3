@@ -1937,8 +1937,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
     crate::stdlib::memset(
         g_clients.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (64 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<gclient_t>() as usize),
+        (64 as i32 as usize).wrapping_mul(::std::mem::size_of::<gclient_t>() as usize),
     );
     level.clients = g_clients.as_mut_ptr();
     // set client fields on player ents
@@ -2936,8 +2935,7 @@ pub unsafe extern "C" fn G_LogPrintf(mut fmt: *const libc::c_char, mut args: ...
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         string.as_mut_ptr().offset(7 as i32 as isize),
-        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
-            .wrapping_sub(7 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize).wrapping_sub(7 as i32 as usize),
         fmt,
         argptr.as_va_list(),
     );
@@ -4051,8 +4049,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
 }
 unsafe extern "C" fn run_static_initializers() {
     gameCvarTableSize = (::std::mem::size_of::<[cvarTable_t; 46]>() as usize)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
-        as i32
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

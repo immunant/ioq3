@@ -53,8 +53,7 @@ pub unsafe extern "C" fn SND_free(mut v: *mut sndBuffer) {
     let ref mut fresh0 = *(v as *mut *mut sndBuffer);
     *fresh0 = freelist;
     freelist = v;
-    inUse = (inUse as usize)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
+    inUse = (inUse as usize).wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
 }
 #[no_mangle]
 
@@ -63,10 +62,9 @@ pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
     while freelist.is_null() {
         S_FreeOldestSound();
     }
-    inUse = (inUse as usize)
-        .wrapping_sub(::std::mem::size_of::<sndBuffer>() as usize) as i32;
-    totalInUse = (totalInUse as usize)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
+    inUse = (inUse as usize).wrapping_sub(::std::mem::size_of::<sndBuffer>() as usize) as i32;
+    totalInUse =
+        (totalInUse as usize).wrapping_add(::std::mem::size_of::<sndBuffer>() as usize) as i32;
     v = freelist;
     freelist = *(freelist as *mut *mut sndBuffer);
     (*v).next = 0 as *mut sndBuffer_s;
@@ -95,8 +93,7 @@ pub unsafe extern "C" fn SND_setup() {
             .wrapping_mul(4 as i32 as usize),
     ) as *mut i16; //Hunk_Alloc(SND_CHUNK_SIZE * sizeof(short) * 4);
     sfxScratchPointer = 0 as *mut sfx_t;
-    inUse = (scs as usize).wrapping_mul(::std::mem::size_of::<sndBuffer>() as usize)
-        as i32;
+    inUse = (scs as usize).wrapping_mul(::std::mem::size_of::<sndBuffer>() as usize) as i32;
     p = buffer;
     q = p.offset(scs as isize);
     loop {

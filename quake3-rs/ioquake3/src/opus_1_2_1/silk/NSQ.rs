@@ -556,8 +556,8 @@ pub unsafe extern "C" fn silk_NSQ_c(
     sLTP = fresh1.as_mut_ptr() as *mut opus_int16;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as usize)
-            .wrapping_mul((*psEncC).subfr_length as usize) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize).wrapping_mul((*psEncC).subfr_length as usize)
+            as usize,
     );
     x_sc_Q10 = fresh2.as_mut_ptr() as *mut opus_int32;
     /* Set up pointers to start of sub frame */
@@ -955,8 +955,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
         (*NSQ).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
         &mut *(*NSQ).sLPC_Q14.as_mut_ptr().offset(length as isize) as *mut opus_int32
             as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
 }
 /* **********************************************************************

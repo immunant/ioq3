@@ -386,10 +386,8 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
             (*level.clients.offset(n as isize)).ps.persistant[PERS_RANK as i32 as usize],
             (*level.clients.offset(n as isize)).ps.persistant[PERS_SCORE as i32 as usize],
         );
-        msglen =
-            (msglen as usize).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
-        if msglen as usize >= ::std::mem::size_of::<[libc::c_char; 1024]>() as usize
-        {
+        msglen = (msglen as usize).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
+        if msglen as usize >= ::std::mem::size_of::<[libc::c_char; 1024]>() as usize {
             break;
         }
         libc::strcat(msg.as_mut_ptr(), buf.as_mut_ptr());

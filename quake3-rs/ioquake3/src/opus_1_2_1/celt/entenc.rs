@@ -271,8 +271,7 @@ pub unsafe extern "C" fn ec_enc_uint(
     let mut ftb: i32 = 0;
     /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
     _ft = _ft.wrapping_sub(1);
-    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
-        - _ft.leading_zeros() as i32;
+    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32 - _ft.leading_zeros() as i32;
     if ftb > 8 as i32 {
         ftb -= 8 as i32;
         ft = (_ft >> ftb).wrapping_add(1 as i32 as u32);

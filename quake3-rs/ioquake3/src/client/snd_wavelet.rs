@@ -214,40 +214,34 @@ pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: usize, mut isign: i32) {
                 + 0.8365163037378079f64
                     * *b.offset(
                         j.wrapping_add(1 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64
                 + 0.2241438680420134f64
                     * *b.offset(
                         j.wrapping_add(2 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64
                 + -0.1294095225512604f64
                     * *b.offset(
                         j.wrapping_add(3 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64) as f32;
             wksp[i.wrapping_add(nh) as usize] = (-0.1294095225512604f64
                 * *b.offset(j.wrapping_sub(1 as i32 as usize) as isize) as f64
                 - 0.2241438680420134f64
                     * *b.offset(
                         j.wrapping_add(1 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64
                 + 0.8365163037378079f64
                     * *b.offset(
                         j.wrapping_add(2 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64
                 - 0.4829629131445341f64
                     * *b.offset(
                         j.wrapping_add(3 as i32 as usize)
-                            .wrapping_sub(1 as i32 as usize)
-                            as isize,
+                            .wrapping_sub(1 as i32 as usize) as isize,
                     ) as f64) as f32;
             j = j.wrapping_add(2 as i32 as usize);
             i = i.wrapping_add(1)
@@ -257,8 +251,7 @@ pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: usize, mut isign: i32) {
                 n.wrapping_sub(1 as i32 as usize)
                     .wrapping_sub(1 as i32 as usize) as isize,
             ) as f64
-            + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
+            + 0.8365163037378079f64 * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.2241438680420134f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64 * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
             as f32;
@@ -267,24 +260,21 @@ pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: usize, mut isign: i32) {
                 n.wrapping_sub(1 as i32 as usize)
                     .wrapping_sub(1 as i32 as usize) as isize,
             ) as f64
-            - 0.2241438680420134f64
-                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
+            - 0.2241438680420134f64 * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.8365163037378079f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.4829629131445341f64 * *b.offset((2 as i32 - 1 as i32) as isize) as f64)
             as f32
     } else {
         wksp[1 as i32 as usize] = (0.2241438680420134f64
             * *b.offset(nh.wrapping_sub(1 as i32 as usize) as isize) as f64
-            + 0.8365163037378079f64
-                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
+            + 0.8365163037378079f64 * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.4829629131445341f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             + -0.1294095225512604f64
                 * *b.offset(nh1.wrapping_sub(1 as i32 as usize) as isize) as f64)
             as f32;
         wksp[2 as i32 as usize] = (-0.1294095225512604f64
             * *b.offset(nh.wrapping_sub(1 as i32 as usize) as isize) as f64
-            - 0.4829629131445341f64
-                * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
+            - 0.4829629131445341f64 * *b.offset(n.wrapping_sub(1 as i32 as usize) as isize) as f64
             + 0.8365163037378079f64 * *b.offset((1 as i32 - 1 as i32) as isize) as f64
             - 0.2241438680420134f64
                 * *b.offset(nh1.wrapping_sub(1 as i32 as usize) as isize) as f64)
@@ -294,42 +284,32 @@ pub unsafe extern "C" fn daub4(mut b: *mut f32, mut n: usize, mut isign: i32) {
         while i < nh {
             let fresh0 = j;
             j = j.wrapping_add(1);
-            wksp[fresh0 as usize] =
-                (0.2241438680420134f64
-                    * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
-                    + 0.8365163037378079f64
-                        * *b.offset(
-                            i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize
-                        ) as f64
-                    + 0.4829629131445341f64
-                        * *b.offset(
-                            i.wrapping_add(1 as i32 as usize)
-                                .wrapping_sub(1 as i32 as usize)
-                                as isize,
-                        ) as f64
-                    + -0.1294095225512604f64
-                        * *b.offset(
-                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize
-                        ) as f64) as f32;
+            wksp[fresh0 as usize] = (0.2241438680420134f64
+                * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
+                + 0.8365163037378079f64
+                    * *b.offset(i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize) as f64
+                + 0.4829629131445341f64
+                    * *b.offset(
+                        i.wrapping_add(1 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize) as isize,
+                    ) as f64
+                + -0.1294095225512604f64
+                    * *b.offset(i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize)
+                        as f64) as f32;
             let fresh1 = j;
             j = j.wrapping_add(1);
-            wksp[fresh1 as usize] =
-                (-0.1294095225512604f64
-                    * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
-                    - 0.4829629131445341f64
-                        * *b.offset(
-                            i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize
-                        ) as f64
-                    + 0.8365163037378079f64
-                        * *b.offset(
-                            i.wrapping_add(1 as i32 as usize)
-                                .wrapping_sub(1 as i32 as usize)
-                                as isize,
-                        ) as f64
-                    - 0.2241438680420134f64
-                        * *b.offset(
-                            i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize
-                        ) as f64) as f32;
+            wksp[fresh1 as usize] = (-0.1294095225512604f64
+                * *b.offset(i.wrapping_sub(1 as i32 as usize) as isize) as f64
+                - 0.4829629131445341f64
+                    * *b.offset(i.wrapping_add(nh).wrapping_sub(1 as i32 as usize) as isize) as f64
+                + 0.8365163037378079f64
+                    * *b.offset(
+                        i.wrapping_add(1 as i32 as usize)
+                            .wrapping_sub(1 as i32 as usize) as isize,
+                    ) as f64
+                - 0.2241438680420134f64
+                    * *b.offset(i.wrapping_add(nh1).wrapping_sub(1 as i32 as usize) as isize)
+                        as f64) as f32;
             i = i.wrapping_add(1)
         }
     }
@@ -637,15 +617,15 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> byte {
         s = -(s as i32) as i16
     }
     adjusted = ((s as isize)
-        << (16 as i32 as usize).wrapping_sub(
-            (::std::mem::size_of::<i16>() as usize).wrapping_mul(8 as i32 as usize),
-        )) as usize;
+        << (16 as i32 as usize)
+            .wrapping_sub((::std::mem::size_of::<i16>() as usize).wrapping_mul(8 as i32 as usize)))
+        as usize;
     adjusted = adjusted.wrapping_add((128 as isize + 4 as isize) as usize);
     if adjusted > 32767 as i32 as usize {
         adjusted = 32767 as i32 as usize
     }
-    exponent = (numBits[(adjusted >> 7 as i32 & 0xff as i32 as usize) as usize] as i32
-        - 1 as i32) as byte;
+    exponent =
+        (numBits[(adjusted >> 7 as i32 & 0xff as i32 as usize) as usize] as i32 - 1 as i32) as byte;
     mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as usize) as byte;
     return !(sign as i32 | (exponent as i32) << 4 as i32 | mantissa as i32) as byte;
 }

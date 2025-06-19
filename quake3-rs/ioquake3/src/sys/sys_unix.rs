@@ -12755,8 +12755,7 @@ pub unsafe extern "C" fn Sys_Cwd() -> *mut libc::c_char {
     static mut cwd: [libc::c_char; 4096] = [0; 4096];
     let mut result: *mut libc::c_char = crate::stdlib::getcwd(
         cwd.as_mut_ptr(),
-        (::std::mem::size_of::<[libc::c_char; 4096]>() as usize)
-            .wrapping_sub(1 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 4096]>() as usize).wrapping_sub(1 as i32 as usize),
     );
     if result != cwd.as_mut_ptr() {
         return 0 as *mut libc::c_char;
@@ -13039,8 +13038,7 @@ pub unsafe extern "C" fn Sys_ListFiles(
     }
     listCopy = Z_Malloc(
         ((nfiles + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
     ) as *mut *mut libc::c_char;
     i = 0 as i32;
     while i < nfiles {
@@ -13269,11 +13267,8 @@ Sys_AppendToExecBuffer
 
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
     let mut size: size_t = (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
-        .wrapping_sub(
-            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as usize,
-        );
-    let mut length: i32 =
-        crate::stdlib::strlen(text).wrapping_add(1 as i32 as usize) as i32;
+        .wrapping_sub(execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as usize);
+    let mut length: i32 = crate::stdlib::strlen(text).wrapping_add(1 as i32 as usize) as i32;
     if length as usize > size
         || execArgc as usize
             >= (::std::mem::size_of::<[*mut libc::c_char; 16]>() as usize)

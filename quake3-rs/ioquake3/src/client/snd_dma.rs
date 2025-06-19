@@ -788,8 +788,7 @@ pub unsafe extern "C" fn S_Base_BeginRegistration() {
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             '\u{0}' as i32,
-            (::std::mem::size_of::<*mut sfx_t>() as usize)
-                .wrapping_mul(128 as i32 as usize),
+            (::std::mem::size_of::<*mut sfx_t>() as usize).wrapping_mul(128 as i32 as usize),
         );
         S_Base_RegisterSound(
             b"sound/feedback/hit.wav\x00" as *const u8 as *const libc::c_char,
@@ -1151,8 +1150,7 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
     crate::stdlib::memset(
         loop_channels.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (96 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<channel_t>() as usize),
+        (96 as i32 as usize).wrapping_mul(::std::mem::size_of::<channel_t>() as usize),
     );
     numLoopChannels = 0 as i32;
     S_ChannelSetup();
@@ -2347,8 +2345,7 @@ pub unsafe extern "C" fn S_Base_Init(mut si: *mut soundInterface_t) -> qboolean 
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (::std::mem::size_of::<*mut sfx_t>() as usize)
-                .wrapping_mul(128 as i32 as usize),
+            (::std::mem::size_of::<*mut sfx_t>() as usize).wrapping_mul(128 as i32 as usize),
         );
         s_soundtime = 0 as i32;
         s_paintedtime = 0 as i32;

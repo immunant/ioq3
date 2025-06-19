@@ -180,20 +180,10 @@ extern "C" {
     ) -> i32;
 
     #[no_mangle]
-    pub fn fread(
-        _: *mut libc::c_void,
-        _: usize,
-        _: usize,
-        _: *mut FILE,
-    ) -> usize;
+    pub fn fread(_: *mut libc::c_void, _: usize, _: usize, _: *mut FILE) -> usize;
 
     #[no_mangle]
-    pub fn fwrite(
-        _: *const libc::c_void,
-        _: usize,
-        _: usize,
-        _: *mut FILE,
-    ) -> usize;
+    pub fn fwrite(_: *const libc::c_void, _: usize, _: usize, _: *mut FILE) -> usize;
 
     #[no_mangle]
     pub fn ferror(__stream: *mut FILE) -> i32;
@@ -208,18 +198,10 @@ extern "C" {
         __compar: __compar_fn_t,
     );
     #[no_mangle]
-    pub fn memcpy(
-        _: *mut libc::c_void,
-        _: *const libc::c_void,
-        _: usize,
-    ) -> *mut libc::c_void;
+    pub fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memmove(
-        _: *mut libc::c_void,
-        _: *const libc::c_void,
-        _: usize,
-    ) -> *mut libc::c_void;
+    pub fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
@@ -228,11 +210,7 @@ extern "C" {
     pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: usize) -> i32;
 
     #[no_mangle]
-    pub fn strncpy(
-        _: *mut libc::c_char,
-        _: *const libc::c_char,
-        _: usize,
-    ) -> *mut libc::c_char;
+    pub fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: usize) -> *mut libc::c_char;
 
     #[no_mangle]
     pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: usize) -> i32;

@@ -417,8 +417,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
         return qfalse;
     }
     if len as usize
-        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as usize)
-            .wrapping_sub(1 as i32 as usize)
+        >= (::std::mem::size_of::<[libc::c_char; 20000]>() as usize).wrapping_sub(1 as i32 as usize)
     {
         CG_Printf(
             b"File %s too long\n\x00" as *const u8 as *const libc::c_char,

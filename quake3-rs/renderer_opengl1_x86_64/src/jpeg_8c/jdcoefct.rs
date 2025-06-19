@@ -521,8 +521,7 @@ unsafe extern "C" fn smoothing_ok(mut cinfo: j_decompress_ptr) -> boolean {
             cinfo as j_common_ptr,
             1 as i32,
             ((*cinfo).num_components as usize).wrapping_mul(
-                (6 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+                (6 as i32 as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
             ),
         ) as *mut i32
     }
@@ -967,8 +966,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (10 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
+            (10 as i32 as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
         ) as JBLOCKROW;
         i = 0 as i32;
         while i < 10 as i32 {

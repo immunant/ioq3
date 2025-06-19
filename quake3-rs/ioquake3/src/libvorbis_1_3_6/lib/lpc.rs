@@ -70,8 +70,7 @@ pub unsafe extern "C" fn vorbis_lpc_from_data(
 ) -> f32 {
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f64>() as usize)
-            .wrapping_mul((m + 1 as i32) as usize) as usize,
+        (::std::mem::size_of::<f64>() as usize).wrapping_mul((m + 1 as i32) as usize) as usize,
     );
     let mut aut: *mut f64 = fresh0.as_mut_ptr() as *mut f64;
     let mut fresh1 = ::std::vec::from_elem(
@@ -110,8 +109,7 @@ pub unsafe extern "C" fn vorbis_lpc_from_data(
             crate::stdlib::memset(
                 lpc.offset(i as isize) as *mut libc::c_void,
                 0 as i32,
-                ((m - i) as usize)
-                    .wrapping_mul(::std::mem::size_of::<f64>() as usize),
+                ((m - i) as usize).wrapping_mul(::std::mem::size_of::<f64>() as usize),
             );
             break;
         } else {
@@ -178,8 +176,7 @@ pub unsafe extern "C" fn vorbis_lpc_predict(
     let mut y: f32 = 0.;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((m as isize + n) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((m as isize + n) as usize) as usize,
     );
     let mut work: *mut f32 = fresh3.as_mut_ptr() as *mut f32;
     if prime.is_null() {

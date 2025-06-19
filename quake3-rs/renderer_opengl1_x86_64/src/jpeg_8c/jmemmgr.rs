@@ -425,8 +425,7 @@ unsafe extern "C" fn alloc_small(
     /* Time to make a new pool? */
     if hdr_ptr.is_null() {
         /* min_request is what we need now, slop is what will be leftover */
-        min_request =
-            sizeofobject.wrapping_add(::std::mem::size_of::<small_pool_hdr>() as usize);
+        min_request = sizeofobject.wrapping_add(::std::mem::size_of::<small_pool_hdr>() as usize);
         if prev_hdr_ptr.is_null() {
             /* first pool in class? */
             slop = first_pool_slop[pool_id as usize]
@@ -531,9 +530,9 @@ unsafe extern "C" fn alloc_large(
     if hdr_ptr.is_null() {
         out_of_memory(cinfo, 4 as i32);
     }
-    (*mem).total_space_allocated = ((*mem).total_space_allocated as usize).wrapping_add(
-        sizeofobject.wrapping_add(::std::mem::size_of::<large_pool_hdr>() as usize),
-    ) as isize;
+    (*mem).total_space_allocated = ((*mem).total_space_allocated as usize)
+        .wrapping_add(sizeofobject.wrapping_add(::std::mem::size_of::<large_pool_hdr>() as usize))
+        as isize;
     /* Success, initialize the new pool header and add to list */
     (*hdr_ptr).hdr.next = (*mem).large_list[pool_id as usize];
     /* We maintain space counts in each pool header for statistical purposes,
@@ -650,8 +649,7 @@ unsafe extern "C" fn alloc_barray(
     ltemp = (1000000000 as isize as usize)
         .wrapping_sub(::std::mem::size_of::<large_pool_hdr>() as usize)
         .wrapping_div(
-            (blocksperrow as isize as usize)
-                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
+            (blocksperrow as isize as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
         ) as isize;
     if ltemp <= 0 as i32 as isize {
         (*(*cinfo).err).msg_code = JERR_WIDTH_OVERFLOW as i32;
@@ -672,8 +670,7 @@ unsafe extern "C" fn alloc_barray(
     result = alloc_small(
         cinfo,
         pool_id,
-        (numrows as usize)
-            .wrapping_mul(::std::mem::size_of::<JBLOCKROW>() as usize),
+        (numrows as usize).wrapping_mul(::std::mem::size_of::<JBLOCKROW>() as usize),
     ) as JBLOCKARRAY;
     /* Get the rows themselves (large objects) */
     currow = 0 as i32 as JDIMENSION;
@@ -842,8 +839,7 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: j_common_ptr)
                     .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
             ) as isize;
             maximum_space = (maximum_space as usize).wrapping_add(
-                (((*sptr).rows_in_array as isize * (*sptr).samplesperrow as isize)
-                    as usize)
+                (((*sptr).rows_in_array as isize * (*sptr).samplesperrow as isize) as usize)
                     .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
             ) as isize
         }
@@ -1506,8 +1502,7 @@ pub unsafe extern "C" fn jinit_memory_mgr(mut cinfo: j_common_ptr) {
      */
     test_mac = 1000000000 as isize as size_t; /* system-dependent initialization */
     if test_mac as isize != 1000000000 as isize
-        || (1000000000 as isize as usize)
-            .wrapping_rem(::std::mem::size_of::<f64>() as usize)
+        || (1000000000 as isize as usize).wrapping_rem(::std::mem::size_of::<f64>() as usize)
             != 0 as i32 as usize
     {
         (*(*cinfo).err).msg_code = JERR_BAD_ALLOC_CHUNK as i32;

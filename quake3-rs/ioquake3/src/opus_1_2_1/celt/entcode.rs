@@ -21,7 +21,6 @@ pub struct ec_ctx {
     pub rem: i32,
     pub error: i32,
 }
-use ::libc;
 
 pub use crate::opus_types_h::opus_uint32;
 pub use crate::stdlib::__uint32_t;

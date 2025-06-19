@@ -819,8 +819,7 @@ pub unsafe extern "C" fn Cmd_AddCommand(
         return;
     }
     // use a small malloc to avoid zone fragmentation
-    cmd = S_Malloc(::std::mem::size_of::<cmd_function_t>() as usize as i32)
-        as *mut cmd_function_t;
+    cmd = S_Malloc(::std::mem::size_of::<cmd_function_t>() as usize as i32) as *mut cmd_function_t;
     (*cmd).name = CopyString(cmd_name);
     (*cmd).function = function;
     (*cmd).complete = None;

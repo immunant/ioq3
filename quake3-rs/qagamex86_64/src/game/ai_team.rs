@@ -2042,8 +2042,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
                     ::std::mem::size_of::<[libc::c_char; 36]>() as usize,
                 );
                 (*bs).teamleader[(::std::mem::size_of::<[libc::c_char; 36]>() as usize)
-                    .wrapping_sub(1 as i32 as usize)
-                    as usize] = '\u{0}' as i32 as libc::c_char;
+                    .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
                 (*bs).becometeamleader_time = 0 as i32 as f32
             }
             return;

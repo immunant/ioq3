@@ -813,21 +813,17 @@ unsafe extern "C" fn _bisect_forward_serialno(
         ) as *mut ogg_int64_t;
         (*vf).vi = crate::stdlib::realloc(
             (*vf).vi as *mut libc::c_void,
-            ((*vf).links as usize)
-                .wrapping_mul(::std::mem::size_of::<vorbis_info>() as usize),
+            ((*vf).links as usize).wrapping_mul(::std::mem::size_of::<vorbis_info>() as usize),
         ) as *mut vorbis_info;
         (*vf).vc = crate::stdlib::realloc(
             (*vf).vc as *mut libc::c_void,
-            ((*vf).links as usize)
-                .wrapping_mul(::std::mem::size_of::<vorbis_comment>() as usize),
+            ((*vf).links as usize).wrapping_mul(::std::mem::size_of::<vorbis_comment>() as usize),
         ) as *mut vorbis_comment;
         (*vf).serialnos = crate::stdlib::malloc(
-            ((*vf).links as usize)
-                .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+            ((*vf).links as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
         ) as *mut isize;
         (*vf).dataoffsets = crate::stdlib::malloc(
-            ((*vf).links as usize)
-                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
+            ((*vf).links as usize).wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as usize),
         ) as *mut ogg_int64_t;
         (*vf).pcmlengths = crate::stdlib::malloc(
             (((*vf).links * 2 as i32) as usize)
@@ -1442,8 +1438,7 @@ unsafe extern "C" fn _ov_open1(
         crate::stdlib::memcpy(
             (*vf).serialnos.offset(2 as i32 as isize) as *mut libc::c_void,
             serialno_list as *const libc::c_void,
-            (serialno_list_size as usize)
-                .wrapping_mul(::std::mem::size_of::<isize>() as usize),
+            (serialno_list_size as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize),
         );
         (*vf).offsets = crate::stdlib::calloc(
             1 as i32 as usize,
@@ -3394,8 +3389,7 @@ unsafe extern "C" fn _ov_getlap(
                 crate::stdlib::memcpy(
                     (*lappcm.offset(i as isize)).offset(lapcount as isize) as *mut libc::c_void,
                     *pcm.offset(i as isize) as *const libc::c_void,
-                    (::std::mem::size_of::<f32>() as usize)
-                        .wrapping_mul(samples as usize),
+                    (::std::mem::size_of::<f32>() as usize).wrapping_mul(samples as usize),
                 );
                 i += 1
             }
@@ -3438,8 +3432,7 @@ unsafe extern "C" fn _ov_getlap(
                 crate::stdlib::memcpy(
                     (*lappcm.offset(i as isize)).offset(lapcount as isize) as *mut libc::c_void,
                     *pcm.offset(i as isize) as *const libc::c_void,
-                    (::std::mem::size_of::<f32>() as usize)
-                        .wrapping_mul(samples_0 as usize),
+                    (::std::mem::size_of::<f32>() as usize).wrapping_mul(samples_0 as usize),
                 );
                 i += 1
             }
@@ -3493,8 +3486,8 @@ pub unsafe extern "C" fn ov_crosslap(
     hs2 = ov_halfrate_p(vf2);
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut f32>() as usize)
-            .wrapping_mul((*vi1).channels as usize) as usize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul((*vi1).channels as usize)
+            as usize,
     );
     lappcm = fresh8.as_mut_ptr() as *mut *mut f32;
     n1 = vorbis_info_blocksize(vi1 as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs1;
@@ -3505,8 +3498,7 @@ pub unsafe extern "C" fn ov_crosslap(
     while i < (*vi1).channels {
         let mut fresh9 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize)
-                as usize,
+            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize) as usize,
         );
         let ref mut fresh10 = *lappcm.offset(i as isize);
         *fresh10 = fresh9.as_mut_ptr() as *mut f32;
@@ -3571,16 +3563,14 @@ unsafe extern "C" fn _ov_64_seek_lap(
     w1 = vorbis_window(&mut (*vf).vd, 0 as i32);
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(ch1 as usize)
-            as usize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(ch1 as usize) as usize,
     );
     lappcm = fresh11.as_mut_ptr() as *mut *mut f32;
     i = 0 as i32;
     while i < ch1 {
         let mut fresh12 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize)
-                as usize,
+            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize) as usize,
         );
         let ref mut fresh13 = *lappcm.offset(i as isize);
         *fresh13 = fresh12.as_mut_ptr() as *mut f32;
@@ -3702,16 +3692,14 @@ unsafe extern "C" fn _ov_d_seek_lap(
     w1 = vorbis_window(&mut (*vf).vd, 0 as i32);
     let mut fresh14 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(ch1 as usize)
-            as usize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(ch1 as usize) as usize,
     );
     lappcm = fresh14.as_mut_ptr() as *mut *mut f32;
     i = 0 as i32;
     while i < ch1 {
         let mut fresh15 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize)
-                as usize,
+            (::std::mem::size_of::<f32>() as usize).wrapping_mul(n1 as usize) as usize,
         );
         let ref mut fresh16 = *lappcm.offset(i as isize);
         *fresh16 = fresh15.as_mut_ptr() as *mut f32;

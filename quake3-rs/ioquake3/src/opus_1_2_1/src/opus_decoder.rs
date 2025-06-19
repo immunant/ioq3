@@ -688,8 +688,8 @@ unsafe extern "C" fn opus_decode_frame(
     };
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(pcm_silk_size as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(pcm_silk_size as usize)
+            as usize,
     );
     pcm_silk = fresh1.as_mut_ptr() as *mut opus_int16;
     /* SILK processing */
@@ -858,8 +858,8 @@ unsafe extern "C" fn opus_decode_frame(
     };
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul(redundant_audio_size as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(redundant_audio_size as usize)
+            as usize,
     );
     redundant_audio = fresh3.as_mut_ptr() as *mut opus_val16;
     /* 5 ms redundant frame for CELT->SILK*/
@@ -1310,8 +1310,8 @@ pub unsafe extern "C" fn opus_decode(
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((frame_size * (*st).channels) as usize) as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((frame_size * (*st).channels) as usize)
+            as usize,
     );
     out = fresh4.as_mut_ptr() as *mut f32;
     ret = opus_decode_native(

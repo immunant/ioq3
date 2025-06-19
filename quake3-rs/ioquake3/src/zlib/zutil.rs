@@ -51,51 +51,23 @@ pub unsafe extern "C" fn zlibCompileFlags() -> uLong {
     }
     match ::std::mem::size_of::<uLong>() as usize {
         2 => {}
-        4 => {
-            flags = (flags as usize).wrapping_add(((1 as i32) << 2 as i32) as usize)
-                as uLong
-        }
-        8 => {
-            flags = (flags as usize).wrapping_add(((2 as i32) << 2 as i32) as usize)
-                as uLong
-        }
-        _ => {
-            flags = (flags as usize).wrapping_add(((3 as i32) << 2 as i32) as usize)
-                as uLong
-        }
+        4 => flags = (flags as usize).wrapping_add(((1 as i32) << 2 as i32) as usize) as uLong,
+        8 => flags = (flags as usize).wrapping_add(((2 as i32) << 2 as i32) as usize) as uLong,
+        _ => flags = (flags as usize).wrapping_add(((3 as i32) << 2 as i32) as usize) as uLong,
     }
     match ::std::mem::size_of::<voidpf>() as usize {
         2 => {}
-        4 => {
-            flags = (flags as usize).wrapping_add(((1 as i32) << 4 as i32) as usize)
-                as uLong
-        }
-        8 => {
-            flags = (flags as usize).wrapping_add(((2 as i32) << 4 as i32) as usize)
-                as uLong
-        }
-        _ => {
-            flags = (flags as usize).wrapping_add(((3 as i32) << 4 as i32) as usize)
-                as uLong
-        }
+        4 => flags = (flags as usize).wrapping_add(((1 as i32) << 4 as i32) as usize) as uLong,
+        8 => flags = (flags as usize).wrapping_add(((2 as i32) << 4 as i32) as usize) as uLong,
+        _ => flags = (flags as usize).wrapping_add(((3 as i32) << 4 as i32) as usize) as uLong,
     }
     match ::std::mem::size_of::<off_t>() as usize {
         2 => {}
-        4 => {
-            flags = (flags as usize).wrapping_add(((1 as i32) << 6 as i32) as usize)
-                as uLong
-        }
-        8 => {
-            flags = (flags as usize).wrapping_add(((2 as i32) << 6 as i32) as usize)
-                as uLong
-        }
-        _ => {
-            flags = (flags as usize).wrapping_add(((3 as i32) << 6 as i32) as usize)
-                as uLong
-        }
+        4 => flags = (flags as usize).wrapping_add(((1 as i32) << 6 as i32) as usize) as uLong,
+        8 => flags = (flags as usize).wrapping_add(((2 as i32) << 6 as i32) as usize) as uLong,
+        _ => flags = (flags as usize).wrapping_add(((3 as i32) << 6 as i32) as usize) as uLong,
     }
-    flags = (flags as usize).wrapping_add(((1 as isize) << 17 as i32) as usize)
-        as uLong;
+    flags = (flags as usize).wrapping_add(((1 as isize) << 17 as i32) as usize) as uLong;
     return flags;
 }
 /*

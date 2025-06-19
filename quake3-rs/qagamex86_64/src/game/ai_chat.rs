@@ -672,11 +672,10 @@ pub unsafe extern "C" fn BotMapTitle() -> *mut libc::c_char {
             info.as_mut_ptr(),
             b"mapname\x00" as *const u8 as *const libc::c_char,
         ),
-        (::std::mem::size_of::<[libc::c_char; 128]>() as usize)
-            .wrapping_sub(1 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 128]>() as usize).wrapping_sub(1 as i32 as usize),
     );
-    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize)
-        .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;
+    mapname[(::std::mem::size_of::<[libc::c_char; 128]>() as usize).wrapping_sub(1 as i32 as usize)
+        as usize] = '\u{0}' as i32 as libc::c_char;
     return mapname.as_mut_ptr();
 }
 /*

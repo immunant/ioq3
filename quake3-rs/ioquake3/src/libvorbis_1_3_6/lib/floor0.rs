@@ -179,8 +179,7 @@ unsafe extern "C" fn floor0_map_lazy_init(
         accurate */
         let ref mut fresh0 = *(*look).linearmap.offset(W as isize); /* bark numbers represent band edges */
         *fresh0 = crate::stdlib::malloc(
-            ((n + 1 as i32) as usize)
-                .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+            ((n + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32; /* guard against the approximation */
         j = 0 as i32;
         while j < n {
@@ -262,9 +261,9 @@ unsafe extern "C" fn floor0_inverse1(
             vector */
             let mut lsp: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (::std::mem::size_of::<f32>() as usize).wrapping_mul(
-                    ((*look).m as isize + (*b).dim + 1 as i32 as isize) as usize,
-                ) as isize,
+                (::std::mem::size_of::<f32>() as usize)
+                    .wrapping_mul(((*look).m as isize + (*b).dim + 1 as i32 as isize) as usize)
+                    as isize,
             ) as *mut f32;
             if !(vorbis_book_decodev_set(
                 b as *mut codebook,
@@ -319,8 +318,7 @@ unsafe extern "C" fn floor0_inverse2(
     crate::stdlib::memset(
         out as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<f32>() as usize)
-            .wrapping_mul((*look).n[(*vb).W as usize] as usize),
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul((*look).n[(*vb).W as usize] as usize),
     );
     return 0 as i32;
 }

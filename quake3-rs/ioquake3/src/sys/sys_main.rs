@@ -8582,8 +8582,7 @@ unsafe extern "C" fn Sys_WritePIDFile(mut gamedir: *const libc::c_char) -> qbool
         pid = crate::stdlib::fread(
             pidBuffer.as_mut_ptr() as *mut libc::c_void,
             ::std::mem::size_of::<libc::c_char>() as usize,
-            (::std::mem::size_of::<[libc::c_char; 64]>() as usize)
-                .wrapping_sub(1 as i32 as usize),
+            (::std::mem::size_of::<[libc::c_char; 64]>() as usize).wrapping_sub(1 as i32 as usize),
             f,
         ) as i32;
         crate::stdlib::fclose(f);
@@ -8977,9 +8976,7 @@ pub unsafe extern "C" fn Sys_LoadDll(
                     '/' as i32,
                     name,
                 );
-                if (len as usize)
-                    < ::std::mem::size_of::<[libc::c_char; 4096]>() as usize
-                {
+                if (len as usize) < ::std::mem::size_of::<[libc::c_char; 4096]>() as usize {
                     Com_Printf(
                         b"Trying to load \"%s\" from \"%s\"...\n\x00" as *const u8
                             as *const libc::c_char,

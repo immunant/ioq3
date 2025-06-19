@@ -524,16 +524,14 @@ pub unsafe extern "C" fn silk_Decode(
         crate::stdlib::memcpy(
             samplesOut1_tmp[0 as i32 as usize] as *mut libc::c_void,
             (*psDec).sStereo.sMid.as_mut_ptr() as *const libc::c_void,
-            (2 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+            (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
         crate::stdlib::memcpy(
             (*psDec).sStereo.sMid.as_mut_ptr() as *mut libc::c_void,
             &mut *(*samplesOut1_tmp.as_mut_ptr().offset(0 as i32 as isize))
                 .offset(nSamplesOutDec as isize) as *mut opus_int16
                 as *const libc::c_void,
-            (2 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+            (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
         );
     }
     /* Number of output samples */

@@ -289,8 +289,7 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
             crate::stdlib::memcpy(
                 cbk_index as *mut libc::c_void,
                 temp_idx.as_mut_ptr() as *const libc::c_void,
-                (nb_subfr as usize)
-                    .wrapping_mul(::std::mem::size_of::<i8>() as usize),
+                (nb_subfr as usize).wrapping_mul(::std::mem::size_of::<i8>() as usize),
             );
             best_sum_log_gain_Q7 = sum_log_gain_tmp_Q7
         }

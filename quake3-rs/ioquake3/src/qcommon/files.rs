@@ -766,8 +766,7 @@ pub unsafe extern "C" fn FS_SV_FileExists(mut file: *const libc::c_char) -> qboo
         file,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    *testpath
-        .offset(crate::stdlib::strlen(testpath).wrapping_sub(1 as i32 as usize) as isize) =
+    *testpath.offset(crate::stdlib::strlen(testpath).wrapping_sub(1 as i32 as usize) as isize) =
         '\u{0}' as i32 as libc::c_char;
     return FS_FileInPathExists(testpath);
 }
@@ -793,8 +792,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileWrite(mut filename: *const libc::c_char)
         filename,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    *ospath
-        .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
+    *ospath.offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
         '\u{0}' as i32 as libc::c_char;
     f = FS_HandleForFile();
     fsh[f as usize].zipFile = qfalse;
@@ -867,8 +865,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
         b"\x00" as *const u8 as *const libc::c_char,
     );
     // remove trailing slash
-    *ospath
-        .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
+    *ospath.offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
         '\u{0}' as i32 as libc::c_char;
     if (*fs_debug).integer != 0 {
         Com_Printf(
@@ -888,9 +885,9 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 filename,
                 b"\x00" as *const u8 as *const libc::c_char,
             );
-            *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize,
-            ) = '\u{0}' as i32 as libc::c_char;
+            *ospath
+                .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
+                '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 Com_Printf(
                     b"FS_SV_FOpenFileRead (fs_basepath): %s\n\x00" as *const u8
@@ -911,9 +908,9 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 filename,
                 b"\x00" as *const u8 as *const libc::c_char,
             );
-            *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize,
-            ) = '\u{0}' as i32 as libc::c_char;
+            *ospath
+                .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
+                '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 Com_Printf(
                     b"FS_SV_FOpenFileRead (fs_steampath): %s\n\x00" as *const u8
@@ -934,9 +931,9 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 filename,
                 b"\x00" as *const u8 as *const libc::c_char,
             );
-            *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize,
-            ) = '\u{0}' as i32 as libc::c_char;
+            *ospath
+                .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as usize) as isize) =
+                '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 Com_Printf(
                     b"FS_SV_FOpenFileRead (fs_gogpath): %s\n\x00" as *const u8
@@ -991,12 +988,11 @@ pub unsafe extern "C" fn FS_SV_Rename(
         to,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    *from_ospath.offset(
-        crate::stdlib::strlen(from_ospath).wrapping_sub(1 as i32 as usize) as isize,
-    ) = '\u{0}' as i32 as libc::c_char;
-    *to_ospath.offset(
-        crate::stdlib::strlen(to_ospath).wrapping_sub(1 as i32 as usize) as isize,
-    ) = '\u{0}' as i32 as libc::c_char;
+    *from_ospath
+        .offset(crate::stdlib::strlen(from_ospath).wrapping_sub(1 as i32 as usize) as isize) =
+        '\u{0}' as i32 as libc::c_char;
+    *to_ospath.offset(crate::stdlib::strlen(to_ospath).wrapping_sub(1 as i32 as usize) as isize) =
+        '\u{0}' as i32 as libc::c_char;
     if (*fs_debug).integer != 0 {
         Com_Printf(
             b"FS_SV_Rename: %s --> %s\n\x00" as *const u8 as *const libc::c_char,
@@ -2472,8 +2468,7 @@ unsafe extern "C" fn FS_LoadZipFile(
             break;
         }
         len = (len as usize).wrapping_add(
-            crate::stdlib::strlen(filename_inzip.as_mut_ptr())
-                .wrapping_add(1 as i32 as usize),
+            crate::stdlib::strlen(filename_inzip.as_mut_ptr()).wrapping_add(1 as i32 as usize),
         ) as i32;
         unzGoToNextFile(uf);
         i += 1
@@ -2504,12 +2499,9 @@ unsafe extern "C" fn FS_LoadZipFile(
         }
         i <<= 1 as i32
     }
-    pack = Z_Malloc(
-        (::std::mem::size_of::<pack_t>() as usize).wrapping_add(
-            (i as usize)
-                .wrapping_mul(::std::mem::size_of::<*mut fileInPack_t>() as usize),
-        ) as i32,
-    ) as *mut pack_t;
+    pack = Z_Malloc((::std::mem::size_of::<pack_t>() as usize).wrapping_add(
+        (i as usize).wrapping_mul(::std::mem::size_of::<*mut fileInPack_t>() as usize),
+    ) as i32) as *mut pack_t;
     (*pack).hashSize = i;
     (*pack).hashTable = (pack as *mut libc::c_char)
         .offset(::std::mem::size_of::<pack_t>() as usize as isize)
@@ -2576,8 +2568,8 @@ unsafe extern "C" fn FS_LoadZipFile(
             filename_inzip.as_mut_ptr(),
         );
         namePtr = namePtr.offset(
-            crate::stdlib::strlen(filename_inzip.as_mut_ptr())
-                .wrapping_add(1 as i32 as usize) as isize,
+            crate::stdlib::strlen(filename_inzip.as_mut_ptr()).wrapping_add(1 as i32 as usize)
+                as isize,
         );
         // store the file position in the zip
         (*buildBuffer.offset(i as isize)).pos = unzGetOffset(uf);
@@ -2596,8 +2588,7 @@ unsafe extern "C" fn FS_LoadZipFile(
     ) as i32;
     (*pack).pure_checksum = Com_BlockChecksum(
         fs_headerLongs as *const libc::c_void,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul(fs_numHeaderLongs as usize) as i32,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(fs_numHeaderLongs as usize) as i32,
     ) as i32;
     (*pack).checksum = (*pack).checksum;
     (*pack).pure_checksum = (*pack).pure_checksum;
@@ -2846,8 +2837,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
     }
     listCopy = Z_Malloc(
         ((nfiles + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
     ) as *mut *mut libc::c_char;
     i = 0 as i32;
     while i < nfiles {
@@ -2925,8 +2915,8 @@ pub unsafe extern "C" fn FS_GetFileList(
     pFiles = FS_ListFiles(path, extension, &mut nFiles);
     i = 0 as i32;
     while i < nFiles {
-        nLen = crate::stdlib::strlen(*pFiles.offset(i as isize))
-            .wrapping_add(1 as i32 as usize) as i32;
+        nLen = crate::stdlib::strlen(*pFiles.offset(i as isize)).wrapping_add(1 as i32 as usize)
+            as i32;
         if (nTotal + nLen + 1 as i32) < bufsize {
             libc::strcpy(listbuf, *pFiles.offset(i as isize));
             listbuf = listbuf.offset(nLen as isize);
@@ -2976,8 +2966,7 @@ unsafe extern "C" fn Sys_ConcatenateFileLists(
     /* Create new list. */
     cat = Z_Malloc(
         ((totalLength + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
     ) as *mut *mut libc::c_char;
     dst = cat;
     /* Copy over lists. */
@@ -3337,8 +3326,7 @@ pub unsafe extern "C" fn FS_SortFileList(mut filelist: *mut *mut libc::c_char, m
     let mut sortedlist: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     sortedlist = Z_Malloc(
         ((numfiles + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize) as i32,
     ) as *mut *mut libc::c_char;
     let ref mut fresh13 = *sortedlist.offset(0 as i32 as isize);
     *fresh13 = 0 as *mut libc::c_char;
@@ -3366,8 +3354,7 @@ pub unsafe extern "C" fn FS_SortFileList(mut filelist: *mut *mut libc::c_char, m
     crate::stdlib::memcpy(
         filelist as *mut libc::c_void,
         sortedlist as *const libc::c_void,
-        (numfiles as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize),
+        (numfiles as usize).wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as usize),
     );
     Z_Free(sortedlist as *mut libc::c_void);
 }
@@ -3615,8 +3602,8 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
         FS_BuildOSPath(path, dir, b"\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 4097]>() as usize as i32,
     ); // strip the trailing slash
-    curpath[crate::stdlib::strlen(curpath.as_mut_ptr()).wrapping_sub(1 as i32 as usize)
-        as usize] = '\u{0}' as i32 as libc::c_char;
+    curpath[crate::stdlib::strlen(curpath.as_mut_ptr()).wrapping_sub(1 as i32 as usize) as usize] =
+        '\u{0}' as i32 as libc::c_char;
     // Get .pk3 files
     pakfiles = Sys_ListFiles(
         curpath.as_mut_ptr(),
@@ -3720,9 +3707,8 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
                 // add the directory to the search path
                 search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as usize as i32)
                     as *mut searchpath_t; // c:\quake3\baseq3
-                (*search).dir =
-                    Z_Malloc(::std::mem::size_of::<directory_t>() as usize as i32)
-                        as *mut directory_t; // c:\quake3\baseq3\mypak.pk3dir
+                (*search).dir = Z_Malloc(::std::mem::size_of::<directory_t>() as usize as i32)
+                    as *mut directory_t; // c:\quake3\baseq3\mypak.pk3dir
                 Q_strncpyz(
                     (*(*search).dir).path.as_mut_ptr(),
                     curpath.as_mut_ptr(),
@@ -3750,8 +3736,7 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
     //
     // add the directory to the search path
     //
-    search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as usize as i32)
-        as *mut searchpath_t;
+    search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as usize as i32) as *mut searchpath_t;
     (*search).dir =
         Z_Malloc(::std::mem::size_of::<directory_t>() as usize as i32) as *mut directory_t;
     Q_strncpyz(
@@ -3961,8 +3946,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
                             // Make something up with the checksum in it
                             Com_sprintf(
                                 st.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize
-                                    as i32,
+                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                                 b"%s.%08x.pk3\x00" as *const u8 as *const libc::c_char,
                                 fs_serverReferencedPakNames[i as usize],
                                 fs_serverReferencedPaks[i as usize],

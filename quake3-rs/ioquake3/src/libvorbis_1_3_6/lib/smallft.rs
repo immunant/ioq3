@@ -1922,10 +1922,9 @@ pub unsafe extern "C" fn drft_init(
         (3 as i32 * n) as usize,
         ::std::mem::size_of::<f32>() as usize,
     ) as *mut f32;
-    (*l).splitcache = crate::stdlib::calloc(
-        32 as i32 as usize,
-        ::std::mem::size_of::<i32>() as usize,
-    ) as *mut i32;
+    (*l).splitcache =
+        crate::stdlib::calloc(32 as i32 as usize, ::std::mem::size_of::<i32>() as usize)
+            as *mut i32;
     fdrffti(n, (*l).trigcache, (*l).splitcache);
 }
 #[no_mangle]

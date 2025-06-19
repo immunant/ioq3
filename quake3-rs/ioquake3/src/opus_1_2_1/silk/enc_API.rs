@@ -360,8 +360,8 @@ pub unsafe extern "C" fn silk_Encode(
         / ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz * 1000 as i32);
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(nSamplesFromInputMax as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(nSamplesFromInputMax as usize)
+            as usize,
     );
     buf = fresh0.as_mut_ptr() as *mut opus_int16;
     loop {
@@ -842,8 +842,7 @@ pub unsafe extern "C" fn silk_Encode(
                     .inputBuf
                     .as_mut_ptr() as *mut libc::c_void,
                 (*psEnc).sStereo.sMid.as_mut_ptr() as *const libc::c_void,
-                (2 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+                (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
             crate::stdlib::memcpy(
                 (*psEnc).sStereo.sMid.as_mut_ptr() as *mut libc::c_void,
@@ -856,8 +855,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .sCmn
                             .frame_length as isize,
                     ) as *mut opus_int16 as *const libc::c_void,
-                (2 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+                (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
             );
         }
         crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP(

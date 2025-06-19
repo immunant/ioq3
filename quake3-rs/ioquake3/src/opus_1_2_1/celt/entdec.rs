@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod entcode_h {
     /*OPT: ec_window must be at least 32 bits, but if you have fast arithmetic on a
     larger type, you can speed up the decoder by using it here.*/
@@ -272,8 +270,7 @@ pub unsafe extern "C" fn ec_dec_uint(mut _this: *mut ec_dec, mut _ft: opus_uint3
     let mut ftb: i32 = 0;
     /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
     _ft = _ft.wrapping_sub(1);
-    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32
-        - _ft.leading_zeros() as i32;
+    ftb = ::std::mem::size_of::<u32>() as usize as i32 * 8 as i32 - _ft.leading_zeros() as i32;
     if ftb > 8 as i32 {
         let mut t: opus_uint32 = 0;
         ftb -= 8 as i32;

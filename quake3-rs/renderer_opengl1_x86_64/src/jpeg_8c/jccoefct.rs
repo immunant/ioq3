@@ -542,8 +542,7 @@ unsafe extern "C" fn compress_first_pass(
                 thisblockrow = thisblockrow.offset(blocks_across as isize); /* => first dummy block */
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
-                    (ndummy as usize)
-                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
+                    (ndummy as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                 );
                 lastDC = (*thisblockrow.offset(-(1 as i32) as isize))[0 as i32 as usize];
                 bi = 0 as i32;
@@ -569,8 +568,7 @@ unsafe extern "C" fn compress_first_pass(
                 lastblockrow = *buffer.offset((block_row - 1 as i32) as isize);
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
-                    (blocks_across as usize)
-                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
+                    (blocks_across as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
                 );
                 MCUindex = 0 as i32 as JDIMENSION;
                 while MCUindex < MCUs_across {
@@ -766,8 +764,7 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             1 as i32,
-            (10 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
+            (10 as i32 as usize).wrapping_mul(::std::mem::size_of::<JBLOCK>() as usize),
         ) as JBLOCKROW;
         i = 0 as i32;
         while i < 10 as i32 {

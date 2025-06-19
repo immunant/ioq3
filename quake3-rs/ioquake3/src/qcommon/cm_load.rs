@@ -167,17 +167,14 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dshader_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dshader_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dshader_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"CMod_LoadShaders: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dshader_t>() as usize) as i32;
+    count =
+        ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dshader_t>() as usize) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -185,8 +182,7 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
         );
     }
     cm.shaders = Hunk_Alloc(
-        (count as usize).wrapping_mul(::std::mem::size_of::<dshader_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<dshader_t>() as usize) as i32,
         h_high,
     ) as *mut dshader_t;
     cm.numShaders = count;
@@ -220,17 +216,13 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
     let mut count: i32 = 0;
     let mut indexes: *mut i32 = 0 as *mut i32;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dmodel_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dmodel_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dmodel_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"CMod_LoadSubmodels: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dmodel_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dmodel_t>() as usize) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -238,8 +230,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
         );
     }
     cm.cmodels = Hunk_Alloc(
-        (count as usize).wrapping_mul(::std::mem::size_of::<cmodel_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<cmodel_t>() as usize) as i32,
         h_high,
     ) as *mut cmodel_t;
     cm.numSubModels = count;
@@ -299,17 +290,13 @@ pub unsafe extern "C" fn CMod_LoadNodes(mut l: *mut lump_t) {
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dnode_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dnode_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dnode_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dnode_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dnode_t>() as usize) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -317,8 +304,7 @@ pub unsafe extern "C" fn CMod_LoadNodes(mut l: *mut lump_t) {
         );
     }
     cm.nodes = Hunk_Alloc(
-        (count as usize).wrapping_mul(::std::mem::size_of::<cNode_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<cNode_t>() as usize) as i32,
         h_high,
     ) as *mut cNode_t;
     cm.numNodes = count;
@@ -373,20 +359,16 @@ pub unsafe extern "C" fn CMod_LoadBrushes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dbrush_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dbrush_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dbrush_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dbrush_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dbrush_t>() as usize) as i32;
     cm.brushes = Hunk_Alloc(
-        ((1 as i32 + count) as usize)
-            .wrapping_mul(::std::mem::size_of::<cbrush_t>() as usize) as i32,
+        ((1 as i32 + count) as usize).wrapping_mul(::std::mem::size_of::<cbrush_t>() as usize)
+            as i32,
         h_high,
     ) as *mut cbrush_t;
     cm.numBrushes = count;
@@ -423,17 +405,13 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
     let mut in_0: *mut dleaf_t = 0 as *mut dleaf_t;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dleaf_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dleaf_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dleaf_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dleaf_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dleaf_t>() as usize) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -441,8 +419,8 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
         );
     }
     cm.leafs = Hunk_Alloc(
-        ((2 as i32 + count) as usize)
-            .wrapping_mul(::std::mem::size_of::<cLeaf_t>() as usize) as i32,
+        ((2 as i32 + count) as usize).wrapping_mul(::std::mem::size_of::<cLeaf_t>() as usize)
+            as i32,
         h_high,
     ) as *mut cLeaf_t;
     cm.numLeafs = count;
@@ -466,13 +444,12 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
         out = out.offset(1)
     }
     cm.areas = Hunk_Alloc(
-        (cm.numAreas as usize)
-            .wrapping_mul(::std::mem::size_of::<cArea_t>() as usize) as i32,
+        (cm.numAreas as usize).wrapping_mul(::std::mem::size_of::<cArea_t>() as usize) as i32,
         h_high,
     ) as *mut cArea_t;
     cm.areaPortals = Hunk_Alloc(
-        ((cm.numAreas * cm.numAreas) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize) as i32,
+        ((cm.numAreas * cm.numAreas) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
+            as i32,
         h_high,
     ) as *mut i32;
 }
@@ -491,17 +468,13 @@ pub unsafe extern "C" fn CMod_LoadPlanes(mut l: *mut lump_t) {
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dplane_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dplane_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dplane_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dplane_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dplane_t>() as usize) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -509,8 +482,8 @@ pub unsafe extern "C" fn CMod_LoadPlanes(mut l: *mut lump_t) {
         );
     }
     cm.planes = Hunk_Alloc(
-        ((12 as i32 + count) as usize)
-            .wrapping_mul(::std::mem::size_of::<cplane_t>() as usize) as i32,
+        ((12 as i32 + count) as usize).wrapping_mul(::std::mem::size_of::<cplane_t>() as usize)
+            as i32,
         h_high,
     ) as *mut cplane_t;
     cm.numPlanes = count;
@@ -555,19 +528,15 @@ pub unsafe extern "C" fn CMod_LoadLeafBrushes(mut l: *mut lump_t) {
     let mut in_0: *mut i32 = 0 as *mut i32;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
     cm.leafbrushes = Hunk_Alloc(
-        ((count + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize) as i32,
+        ((count + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as i32,
         h_high,
     ) as *mut i32;
     cm.numLeafBrushes = count;
@@ -593,16 +562,13 @@ pub unsafe extern "C" fn CMod_LoadLeafSurfaces(mut l: *mut lump_t) {
     let mut in_0: *mut i32 = 0 as *mut i32;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
     cm.leafsurfaces = Hunk_Alloc(
         (count as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as i32,
         h_high,
@@ -631,20 +597,17 @@ pub unsafe extern "C" fn CMod_LoadBrushSides(mut l: *mut lump_t) {
     let mut count: i32 = 0;
     let mut num: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dbrushside_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dbrushside_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dbrushside_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as usize) as i32;
+    count =
+        ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dbrushside_t>() as usize) as i32;
     cm.brushsides = Hunk_Alloc(
-        ((6 as i32 + count) as usize)
-            .wrapping_mul(::std::mem::size_of::<cbrushside_t>() as usize) as i32,
+        ((6 as i32 + count) as usize).wrapping_mul(::std::mem::size_of::<cbrushside_t>() as usize)
+            as i32,
         h_high,
     ) as *mut cbrushside_t;
     cm.numBrushSides = count;
@@ -726,28 +689,22 @@ pub unsafe extern "C" fn CMod_LoadPatches(mut surfs: *mut lump_t, mut verts: *mu
     let mut height: i32 = 0;
     let mut shaderNum: i32 = 0;
     in_0 = cmod_base.offset((*surfs).fileofs as isize) as *mut libc::c_void as *mut dsurface_t;
-    if ((*surfs).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dsurface_t>() as usize)
-        != 0
-    {
+    if ((*surfs).filelen as usize).wrapping_rem(::std::mem::size_of::<dsurface_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
         );
     }
-    count = ((*surfs).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dsurface_t>() as usize) as i32;
+    count = ((*surfs).filelen as usize).wrapping_div(::std::mem::size_of::<dsurface_t>() as usize)
+        as i32;
     cm.numSurfaces = count;
     cm.surfaces = Hunk_Alloc(
-        (cm.numSurfaces as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut cPatch_t>() as usize) as i32,
+        (cm.numSurfaces as usize).wrapping_mul(::std::mem::size_of::<*mut cPatch_t>() as usize)
+            as i32,
         h_high,
     ) as *mut *mut cPatch_t;
     dv = cmod_base.offset((*verts).fileofs as isize) as *mut libc::c_void as *mut drawVert_t;
-    if ((*verts).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<drawVert_t>() as usize)
-        != 0
-    {
+    if ((*verts).filelen as usize).wrapping_rem(::std::mem::size_of::<drawVert_t>() as usize) != 0 {
         Com_Error(
             ERR_DROP as i32,
             b"MOD_LoadBmodel: funny lump size\x00" as *const u8 as *const libc::c_char,
@@ -759,10 +716,8 @@ pub unsafe extern "C" fn CMod_LoadPatches(mut surfs: *mut lump_t, mut verts: *mu
     while i < count {
         if !((*in_0).surfaceType != MST_PATCH as i32) {
             // FIXME: check for non-colliding patches
-            patch = Hunk_Alloc(
-                ::std::mem::size_of::<cPatch_t>() as usize as i32,
-                h_high,
-            ) as *mut cPatch_t;
+            patch = Hunk_Alloc(::std::mem::size_of::<cPatch_t>() as usize as i32, h_high)
+                as *mut cPatch_t;
             let ref mut fresh0 = *cm.surfaces.offset(i as isize);
             *fresh0 = patch;
             // load the full drawverts onto the stack
@@ -902,10 +857,8 @@ pub unsafe extern "C" fn CM_LoadMap(
         cm.numLeafs = 1 as i32;
         cm.numClusters = 1 as i32;
         cm.numAreas = 1 as i32;
-        cm.cmodels = Hunk_Alloc(
-            ::std::mem::size_of::<cmodel_t>() as usize as i32,
-            h_high,
-        ) as *mut cmodel_t;
+        cm.cmodels =
+            Hunk_Alloc(::std::mem::size_of::<cmodel_t>() as usize as i32, h_high) as *mut cmodel_t;
         *checksum = 0 as i32;
         return;
     }
@@ -926,8 +879,7 @@ pub unsafe extern "C" fn CM_LoadMap(
     header = *(buf.i as *mut dheader_t);
     i = 0 as i32;
     while (i as usize)
-        < (::std::mem::size_of::<dheader_t>() as usize)
-            .wrapping_div(4 as i32 as usize)
+        < (::std::mem::size_of::<dheader_t>() as usize).wrapping_div(4 as i32 as usize)
     {
         *(&mut header as *mut dheader_t as *mut i32).offset(i as isize) =
             *(&mut header as *mut dheader_t as *mut i32).offset(i as isize);

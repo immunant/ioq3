@@ -1037,8 +1037,7 @@ unsafe extern "C" fn quantize_ord_dither(
         /* Initialize output values to 0 so can process components separately */
         jzero_far(
             *output_buf.offset(row as isize) as *mut libc::c_void,
-            (width as usize)
-                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
+            (width as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
         );
         row_index = (*cquantize).row_index;
         ci = 0 as i32;
@@ -1172,8 +1171,7 @@ unsafe extern "C" fn quantize_fs_dither(
         /* Initialize output values to 0 so can process components separately */
         jzero_far(
             *output_buf.offset(row as isize) as *mut libc::c_void,
-            (width as usize)
-                .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
+            (width as usize).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as usize),
         );
         ci = 0 as i32;
         while ci < nc {

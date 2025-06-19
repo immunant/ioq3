@@ -5057,9 +5057,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     hold = hold.wrapping_add((*fresh3 as usize) << bits);
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
-                if hold & 0xffff as i32 as usize
-                    != hold >> 16 as i32 ^ 0xffff as i32 as usize
-                {
+                if hold & 0xffff as i32 as usize != hold >> 16 as i32 ^ 0xffff as i32 as usize {
                     (*strm).msg = b"invalid stored block lengths\x00" as *const u8
                         as *const libc::c_char
                         as *mut libc::c_char;
@@ -5159,9 +5157,8 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     out = out.wrapping_sub(left);
-                    (*strm).total_out = ((*strm).total_out as usize)
-                        .wrapping_add(out as usize)
-                        as uLong;
+                    (*strm).total_out =
+                        ((*strm).total_out as usize).wrapping_add(out as usize) as uLong;
                     (*state).total = (*state).total.wrapping_add(out as usize);
                     if out != 0 {
                         (*state).check = adler32((*state).check, put.offset(-(out as isize)), out);
@@ -5802,10 +5799,8 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     }
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
-    (*strm).total_in =
-        ((*strm).total_in as usize).wrapping_add(in_0 as usize) as uLong;
-    (*strm).total_out =
-        ((*strm).total_out as usize).wrapping_add(out as usize) as uLong;
+    (*strm).total_in = ((*strm).total_in as usize).wrapping_add(in_0 as usize) as uLong;
+    (*strm).total_out = ((*strm).total_out as usize).wrapping_add(out as usize) as uLong;
     (*state).total = (*state).total.wrapping_add(out as usize);
     if (*state).wrap != 0 && out != 0 {
         (*state).check = adler32(
@@ -6005,8 +6000,7 @@ pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
     (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
-    (*strm).total_in =
-        ((*strm).total_in as usize).wrapping_add(len as usize) as uLong;
+    (*strm).total_in = ((*strm).total_in as usize).wrapping_add(len as usize) as uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);

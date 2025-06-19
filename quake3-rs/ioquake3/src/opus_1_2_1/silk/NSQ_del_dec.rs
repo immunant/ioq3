@@ -643,8 +643,7 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
         crate::stdlib::memcpy(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             (*NSQ).sLPC_Q14.as_mut_ptr() as *const libc::c_void,
-            (16 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         crate::stdlib::memcpy(
             (*psDD).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
@@ -692,14 +691,13 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
     sLTP = fresh2.as_mut_ptr() as *mut opus_int16;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as usize)
-            .wrapping_mul((*psEncC).subfr_length as usize) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize).wrapping_mul((*psEncC).subfr_length as usize)
+            as usize,
     );
     x_sc_Q10 = fresh3.as_mut_ptr() as *mut opus_int32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int32>() as usize)
-            .wrapping_mul(40 as i32 as usize) as usize,
+        (::std::mem::size_of::<opus_int32>() as usize).wrapping_mul(40 as i32 as usize) as usize,
     );
     delayedGain_Q10 = fresh4.as_mut_ptr() as *mut opus_int32;
     /* Set up pointers to start of sub frame */
@@ -990,8 +988,7 @@ pub unsafe extern "C" fn silk_NSQ_del_dec_c(
             .as_mut_ptr()
             .offset((*psEncC).subfr_length as isize) as *mut opus_int32
             as *const libc::c_void,
-        (16 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     crate::stdlib::memcpy(
         (*NSQ).sAR2_Q14.as_mut_ptr() as *mut libc::c_void,
@@ -1437,8 +1434,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
                     as *mut opus_int32)
                     .offset(i as isize) as *const libc::c_void,
                 (::std::mem::size_of::<NSQ_del_dec_struct>() as usize).wrapping_sub(
-                    (i as usize)
-                        .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+                    (i as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
                 ),
             );
             crate::stdlib::memcpy(
@@ -1562,8 +1558,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
             (*psDD).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
             &mut *(*psDD).sLPC_Q14.as_mut_ptr().offset(length as isize) as *mut opus_int32
                 as *const libc::c_void,
-            (16 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         k += 1
     }

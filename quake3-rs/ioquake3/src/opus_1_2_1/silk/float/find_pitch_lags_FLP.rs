@@ -164,8 +164,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     crate::stdlib::memcpy(
         Wsig_ptr as *mut libc::c_void,
         x_buf_ptr as *const libc::c_void,
-        (((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
-            as usize)
+        (((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32)) as usize)
             .wrapping_mul(::std::mem::size_of::<f32>() as usize),
     );
     /* Last LA_LTP samples */

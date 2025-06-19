@@ -533,8 +533,8 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     Q_strncpyz(
         targetName.as_mut_ptr(),
         Info_ValueForKey(targetInfo, b"n\x00" as *const u8 as *const libc::c_char),
-        (::std::mem::size_of::<[libc::c_char; 32]>() as usize)
-            .wrapping_sub(2 as i32 as usize) as i32,
+        (::std::mem::size_of::<[libc::c_char; 32]>() as usize).wrapping_sub(2 as i32 as usize)
+            as i32,
     );
     libc::strcat(
         targetName.as_mut_ptr(),
@@ -662,8 +662,8 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
         Q_strncpyz(
             attackerName.as_mut_ptr(),
             Info_ValueForKey(attackerInfo, b"n\x00" as *const u8 as *const libc::c_char),
-            (::std::mem::size_of::<[libc::c_char; 32]>() as usize)
-                .wrapping_sub(2 as i32 as usize) as i32,
+            (::std::mem::size_of::<[libc::c_char; 32]>() as usize).wrapping_sub(2 as i32 as usize)
+                as i32,
         );
         libc::strcat(
             attackerName.as_mut_ptr(),

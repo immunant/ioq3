@@ -691,12 +691,10 @@ pub unsafe extern "C" fn NET_GetPacket(
     let mut fromlen: socklen_t = 0;
     let mut err: i32 = 0;
     if ip_socket != -(1 as i32)
-        && (*fdr).__fds_bits[(ip_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
-            as usize]
+        && (*fdr).__fds_bits
+            [(ip_socket / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32)) as usize]
             & ((1 as usize)
-                << ip_socket
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+                << ip_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask
             != 0 as i32 as isize
     {
@@ -771,8 +769,7 @@ pub unsafe extern "C" fn NET_GetPacket(
             / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as usize]
             & ((1 as usize)
-                << ip6_socket
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+                << ip6_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask
             != 0 as i32 as isize
     {
@@ -1197,12 +1194,7 @@ pub unsafe extern "C" fn NET_IPSocket(
         return newsocket;
     }
     // make it non-blocking
-    if libc::ioctl(
-        newsocket,
-        0x5421u64,
-        &mut _true as *mut ioctlarg_t,
-    ) == -(1 as i32)
-    {
+    if libc::ioctl(newsocket, 0x5421u64, &mut _true as *mut ioctlarg_t) == -(1 as i32) {
         Com_Printf(
             b"WARNING: NET_IPSocket: ioctl FIONBIO: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
@@ -1319,12 +1311,7 @@ pub unsafe extern "C" fn NET_IP6Socket(
         return newsocket;
     }
     // make it non-blocking
-    if libc::ioctl(
-        newsocket,
-        0x5421u64,
-        &mut _true as *mut ioctlarg_t,
-    ) == -(1 as i32)
-    {
+    if libc::ioctl(newsocket, 0x5421u64, &mut _true as *mut ioctlarg_t) == -(1 as i32) {
         Com_Printf(
             b"WARNING: NET_IP6Socket: ioctl FIONBIO: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
@@ -2244,8 +2231,7 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh4, fresh1);
     c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
     if ip_socket != -(1 as i32) {
-        fdr.__fds_bits[(ip_socket
-            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+        fdr.__fds_bits[(ip_socket / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as usize] |= ((1 as usize)
             << ip_socket % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
             as __fd_mask;

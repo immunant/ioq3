@@ -335,8 +335,7 @@ pub unsafe extern "C" fn MField_Draw(
     let mut cursorChar: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
     drawLen = (*edit).widthInChars;
-    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()).wrapping_add(1 as i32 as usize)
-        as i32;
+    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()).wrapping_add(1 as i32 as usize) as i32;
     // guarantee that cursor will be visible
     if len <= drawLen {
         prestep = 0 as i32

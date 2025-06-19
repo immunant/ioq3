@@ -386,8 +386,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         crate::stdlib::memcpy(
             x_windowed.as_mut_ptr().offset(shift as isize) as *mut libc::c_void,
             x_ptr.offset(shift as isize) as *const libc::c_void,
-            (flat_part as usize)
-                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+            (flat_part as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         shift += flat_part;
         crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP(

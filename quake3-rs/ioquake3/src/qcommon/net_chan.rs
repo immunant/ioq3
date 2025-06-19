@@ -615,14 +615,9 @@ unsafe extern "C" fn NET_QueuePacket(
     if offset > 999 as i32 {
         offset = 999 as i32
     }
-    new = S_Malloc(::std::mem::size_of::<packetQueue_t>() as usize as i32)
-        as *mut packetQueue_t;
+    new = S_Malloc(::std::mem::size_of::<packetQueue_t>() as usize as i32) as *mut packetQueue_t;
     (*new).data = S_Malloc(length) as *mut byte;
-    crate::stdlib::memcpy(
-        (*new).data as *mut libc::c_void,
-        data,
-        length as usize,
-    );
+    crate::stdlib::memcpy((*new).data as *mut libc::c_void, data, length as usize);
     (*new).length = length;
     (*new).to = to;
     (*new).release = Sys_Milliseconds() + (offset as f32 / (*com_timescale).value) as i32;
@@ -718,8 +713,7 @@ pub unsafe extern "C" fn NET_OutOfBandPrint(
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         string.as_mut_ptr().offset(4 as i32 as isize),
-        (::std::mem::size_of::<[libc::c_char; 16384]>() as usize)
-            .wrapping_sub(4 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 16384]>() as usize).wrapping_sub(4 as i32 as usize),
         format,
         argptr.as_va_list(),
     );

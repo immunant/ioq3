@@ -1,5 +1,3 @@
-use ::libc;
-
 /* JERROR_H */
 
 /* Informational/debugging messages */
@@ -241,8 +239,7 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+        ((255 as i32 + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*cconvert).Cb_b_tab = Some(
         (*(*cinfo).mem)
@@ -252,8 +249,7 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize),
+        ((255 as i32 + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize),
     ) as *mut i32;
     (*cconvert).Cr_g_tab = Some(
         (*(*cinfo).mem)
@@ -263,8 +259,7 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<INT32>() as usize),
+        ((255 as i32 + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<INT32>() as usize),
     ) as *mut INT32;
     (*cconvert).Cb_g_tab = Some(
         (*(*cinfo).mem)
@@ -274,8 +269,7 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        ((255 as i32 + 1 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<INT32>() as usize),
+        ((255 as i32 + 1 as i32) as usize).wrapping_mul(::std::mem::size_of::<INT32>() as usize),
     ) as *mut INT32;
     i = 0 as i32;
     x = -(128 as i32) as INT32;

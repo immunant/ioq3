@@ -120,11 +120,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
     }
     if snd_inited as u64 == 0 {
         /* shouldn't happen, but just in case... */
-        crate::stdlib::memset(
-            stream as *mut libc::c_void,
-            '\u{0}' as i32,
-            len as usize,
-        ); /* bytes to buffer's end. */
+        crate::stdlib::memset(stream as *mut libc::c_void, '\u{0}' as i32, len as usize); /* bytes to buffer's end. */
         return;
     } else {
         let mut tobufend: i32 = dmasize - pos;
@@ -158,8 +154,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
         let mut i: i32 = 0;
         if dma.isfloat != 0 && dma.samplebits == 32 as i32 {
             let mut ptr: *mut f32 = stream as *mut f32;
-            len = (len as usize).wrapping_div(::std::mem::size_of::<f32>() as usize)
-                as i32;
+            len = (len as usize).wrapping_div(::std::mem::size_of::<f32>() as usize) as i32;
             i = 0 as i32;
             while i < len {
                 *ptr *= sdlMasterGain;
@@ -168,9 +163,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             }
         } else if dma.samplebits == 16 as i32 {
             let mut ptr_0: *mut Sint16 = stream as *mut Sint16;
-            len = (len as usize)
-                .wrapping_div(::std::mem::size_of::<Sint16>() as usize)
-                as i32;
+            len = (len as usize).wrapping_div(::std::mem::size_of::<Sint16>() as usize) as i32;
             i = 0 as i32;
             while i < len {
                 *ptr_0 = (*ptr_0 as f32 * sdlMasterGain) as Sint16;
@@ -179,9 +172,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             }
         } else if dma.samplebits == 8 as i32 {
             let mut ptr_1: *mut Uint8 = stream;
-            len = (len as usize)
-                .wrapping_div(::std::mem::size_of::<Uint8>() as usize)
-                as i32;
+            len = (len as usize).wrapping_div(::std::mem::size_of::<Uint8>() as usize) as i32;
             i = 0 as i32;
             while i < len {
                 *ptr_1 = (*ptr_1 as f32 * sdlMasterGain) as Uint8;
@@ -458,8 +449,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
     dma.submission_chunk = 1 as i32;
     dma.speed = obtained.freq;
     dmasize = dma.samples * (dma.samplebits / 8 as i32);
-    dma.buffer =
-        crate::stdlib::calloc(1 as i32 as usize, dmasize as usize) as *mut byte;
+    dma.buffer = crate::stdlib::calloc(1 as i32 as usize, dmasize as usize) as *mut byte;
     // !!! FIXME: some of these SDL_OpenAudioDevice() values should be cvars.
     s_sdlCapture = crate::src::qcommon::cvar::Cvar_Get(
         b"s_sdlCapture\x00" as *const u8 as *const libc::c_char,

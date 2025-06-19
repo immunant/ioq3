@@ -997,8 +997,7 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
 pub unsafe extern "C" fn AAS_SetupReachabilityHeap() {
     let mut i: i32 = 0; //end for
     reachabilityheap = crate::src::botlib::l_memory::GetClearedMemory(
-        (65536 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<aas_lreachability_t>() as usize),
+        (65536 as i32 as usize).wrapping_mul(::std::mem::size_of::<aas_lreachability_t>() as usize),
     ) as *mut aas_lreachability_t;
     i = 0 as i32;
     while i < 65536 as i32 - 1 as i32 {
@@ -4256,8 +4255,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: 
                 areas.as_mut_ptr(),
                 0 as *mut vec3_t,
                 (::std::mem::size_of::<[i32; 10]>() as usize)
-                    .wrapping_div(::std::mem::size_of::<i32>() as usize)
-                    as i32,
+                    .wrapping_div(::std::mem::size_of::<i32>() as usize) as i32,
             );
             j = 0 as i32;
             while j < numareas {
@@ -8650,10 +8648,10 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 testend.as_mut_ptr(),
                                                 areas.as_mut_ptr(),
                                                 0 as *mut vec3_t,
-                                                (::std::mem::size_of::<[i32; 10]>()
-                                                    as usize)
-                                                    .wrapping_div(::std::mem::size_of::<i32>()
-                                                        as usize)
+                                                (::std::mem::size_of::<[i32; 10]>() as usize)
+                                                    .wrapping_div(
+                                                        ::std::mem::size_of::<i32>() as usize
+                                                    )
                                                     as i32,
                                             );
                                         p = 0 as i32;

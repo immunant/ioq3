@@ -1025,11 +1025,7 @@ pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
         }
         l = o.offset_from(key.as_mut_ptr()) as isize as i32;
         if l < 20 as i32 {
-            crate::stdlib::memset(
-                o as *mut libc::c_void,
-                ' ' as i32,
-                (20 as i32 - l) as usize,
-            );
+            crate::stdlib::memset(o as *mut libc::c_void, ' ' as i32, (20 as i32 - l) as usize);
             key[20 as i32 as usize] = 0 as i32 as libc::c_char
         } else {
             *o = 0 as i32 as libc::c_char
@@ -1087,9 +1083,7 @@ pub unsafe extern "C" fn Com_StringContains(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str1.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1107,9 +1101,7 @@ pub unsafe extern "C" fn Com_StringContains(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str2.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1203,9 +1195,7 @@ pub unsafe extern "C" fn Com_Filter(
                         }
                     } else if ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1222,9 +1212,7 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) >= ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1241,9 +1229,7 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) && ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1260,9 +1246,7 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) <= ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter.offset(2 as i32 as isize) as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1289,9 +1273,7 @@ pub unsafe extern "C" fn Com_Filter(
                         }
                     } else if ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *filter as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1308,9 +1290,7 @@ pub unsafe extern "C" fn Com_Filter(
                         __res
                     }) == ({
                         let mut __res: i32 = 0;
-                        if ::std::mem::size_of::<libc::c_char>() as usize
-                            > 1 as i32 as usize
-                        {
+                        if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                             if 0 != 0 {
                                 let mut __c: i32 = *name as i32;
                                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1351,9 +1331,7 @@ pub unsafe extern "C" fn Com_Filter(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *filter as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1370,9 +1348,7 @@ pub unsafe extern "C" fn Com_Filter(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *name as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1499,9 +1475,8 @@ unsafe extern "C" fn Z_ClearZone(mut zone: *mut memzone_t, mut size: i32) {
     (*block).prev = (*block).next;
     (*block).tag = 0 as i32;
     (*block).id = 0x1d4a11 as i32;
-    (*block).size = (size as usize)
-        .wrapping_sub(::std::mem::size_of::<memzone_t>() as usize)
-        as i32;
+    (*block).size =
+        (size as usize).wrapping_sub(::std::mem::size_of::<memzone_t>() as usize) as i32;
 }
 /*
 ========================
@@ -1540,8 +1515,7 @@ pub unsafe extern "C" fn Z_Free(mut ptr: *mut libc::c_void) {
             b"Z_Free: NULL pointer\x00" as *const u8 as *const libc::c_char,
         );
     }
-    block = (ptr as *mut byte)
-        .offset(-(::std::mem::size_of::<memblock_t>() as usize as isize))
+    block = (ptr as *mut byte).offset(-(::std::mem::size_of::<memblock_t>() as usize as isize))
         as *mut memblock_t;
     if (*block).id != 0x1d4a11 as i32 {
         Com_Error(
@@ -1581,8 +1555,7 @@ pub unsafe extern "C" fn Z_Free(mut ptr: *mut libc::c_void) {
     crate::stdlib::memset(
         ptr,
         0xaa as i32,
-        ((*block).size as usize)
-            .wrapping_sub(::std::mem::size_of::<memblock_t>() as usize),
+        ((*block).size as usize).wrapping_sub(::std::mem::size_of::<memblock_t>() as usize),
     ); // mark as free
     (*block).tag = 0 as i32;
     other = (*block).prev;
@@ -1680,15 +1653,13 @@ pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::
     // scan through the block list looking for the first free block
     // of sufficient size
     //
-    size = (size as usize)
-        .wrapping_add(::std::mem::size_of::<memblock_t>() as usize) as i32
-        as i32; // account for size of block header
+    size = (size as usize).wrapping_add(::std::mem::size_of::<memblock_t>() as usize) as i32 as i32; // account for size of block header
     size += 4 as i32; // space for memory trash tester
     size = ((size as usize)
         .wrapping_add(::std::mem::size_of::<intptr_t>() as usize)
         .wrapping_sub(1 as i32 as usize)
-        & !(::std::mem::size_of::<intptr_t>() as usize)
-            .wrapping_sub(1 as i32 as usize)) as i32; // align to 32/64 bit boundary
+        & !(::std::mem::size_of::<intptr_t>() as usize).wrapping_sub(1 as i32 as usize))
+        as i32; // align to 32/64 bit boundary
     rover = (*zone).rover;
     base = rover;
     start = (*base).prev;
@@ -1836,8 +1807,8 @@ pub unsafe extern "C" fn Z_LogZoneHeap(mut zone: *mut memzone_t, mut name: *mut 
         }
         block = (*block).next
     }
-    allocSize = (numBlocks as usize)
-        .wrapping_mul(::std::mem::size_of::<memblock_t>() as usize) as i32;
+    allocSize =
+        (numBlocks as usize).wrapping_mul(::std::mem::size_of::<memblock_t>() as usize) as i32;
     Com_sprintf(
         buf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 4096]>() as usize as i32,
@@ -2188,8 +2159,8 @@ Com_InitZoneMemory
 
 pub unsafe extern "C" fn Com_InitSmallZoneMemory() {
     s_smallZoneTotal = 512 as i32 * 1024 as i32;
-    smallzone = crate::stdlib::calloc(s_smallZoneTotal as usize, 1 as i32 as usize)
-        as *mut memzone_t;
+    smallzone =
+        crate::stdlib::calloc(s_smallZoneTotal as usize, 1 as i32 as usize) as *mut memzone_t;
     if smallzone.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2220,8 +2191,7 @@ pub unsafe extern "C" fn Com_InitZoneMemory() {
     } else {
         s_zoneTotal = (*cv).integer * 1024 as i32 * 1024 as i32
     }
-    mainzone = crate::stdlib::calloc(s_zoneTotal as usize, 1 as i32 as usize)
-        as *mut memzone_t;
+    mainzone = crate::stdlib::calloc(s_zoneTotal as usize, 1 as i32 as usize) as *mut memzone_t;
     if mainzone.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2411,10 +2381,8 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
     } else {
         s_hunkTotal = (*cv).integer * 1024 as i32 * 1024 as i32
     }
-    s_hunkData = crate::stdlib::calloc(
-        (s_hunkTotal + 31 as i32) as usize,
-        1 as i32 as usize,
-    ) as *mut byte;
+    s_hunkData =
+        crate::stdlib::calloc((s_hunkTotal + 31 as i32) as usize, 1 as i32 as usize) as *mut byte;
     if s_hunkData.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2615,8 +2583,7 @@ pub unsafe extern "C" fn Hunk_AllocateTempMemory(mut size: i32) -> *mut libc::c_
     size = ((size as usize)
         .wrapping_add(::std::mem::size_of::<intptr_t>() as usize)
         .wrapping_sub(1 as i32 as usize)
-        & !(::std::mem::size_of::<intptr_t>() as usize)
-            .wrapping_sub(1 as i32 as usize))
+        & !(::std::mem::size_of::<intptr_t>() as usize).wrapping_sub(1 as i32 as usize))
     .wrapping_add(::std::mem::size_of::<hunkHeader_t>() as usize) as i32;
     if (*hunk_temp).temp + (*hunk_permanent).permanent + size > s_hunkTotal {
         Com_Error(
@@ -3595,8 +3562,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
         &mut *eventQueue.as_mut_ptr().offset(0 as i32 as isize) as *mut sysEvent_t
             as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<sysEvent_t>() as usize),
+        (256 as i32 as usize).wrapping_mul(::std::mem::size_of::<sysEvent_t>() as usize),
     );
     // initialize the weak pseudo-random number generator for use later.
     Com_InitRand();
@@ -4464,9 +4430,7 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
         } else {
             if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = shortestMatch[i as usize] as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -4484,9 +4448,7 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *s.offset(i as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {

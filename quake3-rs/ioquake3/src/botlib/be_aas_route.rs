@@ -830,8 +830,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
         i += 1
     }
     //allocate memory for the area travel times
-    ptr =
-        crate::src::botlib::l_memory::GetClearedMemory(size as usize) as *mut libc::c_char;
+    ptr = crate::src::botlib::l_memory::GetClearedMemory(size as usize) as *mut libc::c_char;
     crate::src::botlib::be_aas_main::aasworld.areatraveltimes = ptr as *mut *mut *mut u16;
     ptr = ptr.offset(
         (crate::src::botlib::be_aas_main::aasworld.numareas as usize)
@@ -854,8 +853,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
         *fresh4 = ptr as *mut *mut u16;
         ptr = ptr.offset(
             ((*settings).numreachableareas as usize)
-                .wrapping_mul(::std::mem::size_of::<*mut u16>() as usize)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<*mut u16>() as usize) as isize,
         );
         l = 0 as i32;
         while l < (*settings).numreachableareas {
@@ -868,10 +866,8 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
                 (((*revreach).numlinks as usize)
                     .wrapping_add(::std::mem::size_of::<isize>() as usize)
                     .wrapping_sub(1 as i32 as usize)
-                    & !(::std::mem::size_of::<isize>() as usize)
-                        .wrapping_sub(1 as i32 as usize))
-                .wrapping_mul(::std::mem::size_of::<u16>() as usize)
-                    as isize,
+                    & !(::std::mem::size_of::<isize>() as usize).wrapping_sub(1 as i32 as usize))
+                .wrapping_mul(::std::mem::size_of::<u16>() as usize) as isize,
             );
             //settings of the area
             //
@@ -1153,24 +1149,18 @@ pub unsafe extern "C" fn AAS_AllocRoutingCache(mut numtraveltimes: i32) -> *mut 
     let mut size: i32 = 0;
     //
     size = (::std::mem::size_of::<aas_routingcache_t>() as usize)
-        .wrapping_add(
-            (numtraveltimes as usize)
-                .wrapping_mul(::std::mem::size_of::<u16>() as usize),
-        )
-        .wrapping_add(
-            (numtraveltimes as usize)
-                .wrapping_mul(::std::mem::size_of::<u8>() as usize),
-        ) as i32;
+        .wrapping_add((numtraveltimes as usize).wrapping_mul(::std::mem::size_of::<u16>() as usize))
+        .wrapping_add((numtraveltimes as usize).wrapping_mul(::std::mem::size_of::<u8>() as usize))
+        as i32;
     //
     routingcachesize += size;
     //
-    cache = crate::src::botlib::l_memory::GetClearedMemory(size as usize)
-        as *mut aas_routingcache_t;
+    cache =
+        crate::src::botlib::l_memory::GetClearedMemory(size as usize) as *mut aas_routingcache_t;
     (*cache).reachabilities = (cache as *mut u8)
         .offset(::std::mem::size_of::<aas_routingcache_t>() as usize as isize)
         .offset(
-            (numtraveltimes as usize)
-                .wrapping_mul(::std::mem::size_of::<u16>() as usize) as isize,
+            (numtraveltimes as usize).wrapping_mul(::std::mem::size_of::<u16>() as usize) as isize,
         );
     (*cache).size = size;
     return cache;
@@ -1258,13 +1248,11 @@ pub unsafe extern "C" fn AAS_InitClusterAreaCache() {
     //for every area in that cluster
     ptr = crate::src::botlib::l_memory::GetClearedMemory(
         (crate::src::botlib::be_aas_main::aasworld.numclusters as usize)
-            .wrapping_mul(
-                ::std::mem::size_of::<*mut *mut aas_routingcache_t>()
-                    as usize,
-            )
-            .wrapping_add((size as usize).wrapping_mul(::std::mem::size_of::<
-                *mut aas_routingcache_t,
-            >() as usize)),
+            .wrapping_mul(::std::mem::size_of::<*mut *mut aas_routingcache_t>() as usize)
+            .wrapping_add(
+                (size as usize)
+                    .wrapping_mul(::std::mem::size_of::<*mut aas_routingcache_t>() as usize),
+            ),
     ) as *mut libc::c_char;
     crate::src::botlib::be_aas_main::aasworld.clusterareacache =
         ptr as *mut *mut *mut aas_routingcache_t;
@@ -1687,8 +1675,7 @@ pub unsafe extern "C" fn AAS_ReadCache(mut fp: fileHandle_t) -> *mut aas_routing
         ::std::mem::size_of::<i32>() as usize as i32,
         fp,
     );
-    cache =
-        crate::src::botlib::l_memory::GetMemory(size as usize) as *mut aas_routingcache_t;
+    cache = crate::src::botlib::l_memory::GetMemory(size as usize) as *mut aas_routingcache_t;
     (*cache).size = size;
     crate::src::botlib::be_interface::botimport
         .FS_Read
@@ -1800,9 +1787,9 @@ pub unsafe extern "C" fn AAS_ReadRouteCache() -> i32 {
     if routecacheheader.clustercrc
         != crate::src::botlib::l_crc::CRC_ProcessString(
             crate::src::botlib::be_aas_main::aasworld.clusters as *mut u8,
-            (::std::mem::size_of::<aas_cluster_t>() as usize).wrapping_mul(
-                crate::src::botlib::be_aas_main::aasworld.numclusters as usize,
-            ) as i32,
+            (::std::mem::size_of::<aas_cluster_t>() as usize)
+                .wrapping_mul(crate::src::botlib::be_aas_main::aasworld.numclusters as usize)
+                as i32,
         ) as i32
     {
         //AAS_Error("route cache dump cluster CRC incorrect\n");
@@ -1916,8 +1903,7 @@ pub unsafe extern "C" fn AAS_InitReachabilityAreas() {
         ) as *mut aas_reachabilityareas_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilityareaindex =
         crate::src::botlib::l_memory::GetClearedMemory(
-            ((crate::src::botlib::be_aas_main::aasworld.reachabilitysize * 32 as i32)
-                as usize)
+            ((crate::src::botlib::be_aas_main::aasworld.reachabilitysize * 32 as i32) as usize)
                 .wrapping_mul(::std::mem::size_of::<i32>() as usize),
         ) as *mut i32;
     numreachareas = 0 as i32;

@@ -2104,8 +2104,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
-                            as isize,
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize) as isize
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 0 as i32, args);
                 } else if Q_stricmp(
@@ -2120,8 +2119,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
-                            as isize,
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize) as isize
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
                 } else if Q_stricmp(
@@ -2136,8 +2134,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args),
                     );
                     *args.offset(
-                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize)
-                            as isize,
+                        crate::stdlib::strlen(args).wrapping_sub(1 as i32 as usize) as isize
                     ) = '\u{0}' as i32 as libc::c_char;
                     trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
                 } else if !(Q_stricmp(
@@ -2355,10 +2352,9 @@ pub unsafe extern "C" fn BotAISetupClient(
         0 as *mut crate::src::game::ai_main::bot_state_t;
     let mut errnum: i32 = 0;
     if botstates[client as usize].is_null() {
-        botstates[client as usize] = G_Alloc(::std::mem::size_of::<
-            crate::src::game::ai_main::bot_state_t,
-        >() as usize as i32)
-            as *mut crate::src::game::ai_main::bot_state_t
+        botstates[client as usize] =
+            G_Alloc(::std::mem::size_of::<crate::src::game::ai_main::bot_state_t>() as usize as i32)
+                as *mut crate::src::game::ai_main::bot_state_t
     }
     bs = botstates[client as usize];
     if bs.is_null() {

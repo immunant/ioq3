@@ -38,28 +38,16 @@ extern "C" {
         _: ::std::ffi::VaList,
     ) -> i32;
     #[no_mangle]
-    pub fn memcpy(
-        _: *mut libc::c_void,
-        _: *const libc::c_void,
-        _: usize,
-    ) -> *mut libc::c_void;
+    pub fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn memmove(
-        _: *mut libc::c_void,
-        _: *const libc::c_void,
-        _: usize,
-    ) -> *mut libc::c_void;
+    pub fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
     pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
     #[no_mangle]
-    pub fn strncpy(
-        _: *mut libc::c_char,
-        _: *const libc::c_char,
-        _: usize,
-    ) -> *mut libc::c_char;
+    pub fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: usize) -> *mut libc::c_char;
 
     #[no_mangle]
     pub fn strlen(_: *const libc::c_char) -> usize;

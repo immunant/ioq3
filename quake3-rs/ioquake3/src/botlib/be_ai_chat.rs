@@ -382,11 +382,10 @@ pub unsafe extern "C" fn InitConsoleMessageHeap() {
         b"max_messages\x00" as *const u8 as *const libc::c_char,
         b"1024\x00" as *const u8 as *const libc::c_char,
     ) as i32; //end for
-    consolemessageheap = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (max_messages as usize).wrapping_mul(::std::mem::size_of::<
-            crate::src::botlib::be_ai_chat::bot_consolemessage_t,
-        >() as usize),
-    ) as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t;
+    consolemessageheap =
+        crate::src::botlib::l_memory::GetClearedHunkMemory((max_messages as usize).wrapping_mul(
+            ::std::mem::size_of::<crate::src::botlib::be_ai_chat::bot_consolemessage_t>() as usize,
+        )) as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_t;
     let ref mut fresh0 = (*consolemessageheap.offset(0 as i32 as isize)).prev;
     *fresh0 = 0 as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_s;
     let ref mut fresh1 = (*consolemessageheap.offset(0 as i32 as isize)).next;
@@ -747,9 +746,7 @@ pub unsafe extern "C" fn StringContains(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str1.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -767,9 +764,7 @@ pub unsafe extern "C" fn StringContains(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str2.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -846,9 +841,7 @@ pub unsafe extern "C" fn StringContainsWord(
                 }
             } else if ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str1.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -866,9 +859,7 @@ pub unsafe extern "C" fn StringContainsWord(
                 __res
             }) != ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str2.offset(j as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1131,8 +1122,7 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                     if pass != 0 && !ptr.is_null() {
                         syn = ptr as *mut bot_synonymlist_t; //end if
                         ptr = ptr
-                            .offset(::std::mem::size_of::<bot_synonymlist_t>() as usize
-                                as isize); //end while
+                            .offset(::std::mem::size_of::<bot_synonymlist_t>() as usize as isize); //end while
                         (*syn).context = context; //end if
                         (*syn).firstsynonym = 0 as *mut bot_synonym_t; //end if
                         (*syn).next = 0 as *mut bot_synonymlist_s; //end if
@@ -1162,9 +1152,7 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                             return 0 as *mut bot_synonymlist_t;
                         }
                         StripDoubleQuotes(token.string.as_mut_ptr());
-                        if crate::stdlib::strlen(token.string.as_mut_ptr())
-                            <= 0 as i32 as usize
-                        {
+                        if crate::stdlib::strlen(token.string.as_mut_ptr()) <= 0 as i32 as usize {
                             SourceError(
                                 source as *mut source_s,
                                 b"empty string\x00" as *const u8 as *const libc::c_char
@@ -1181,14 +1169,12 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                             & !(::std::mem::size_of::<isize>() as usize)
                                 .wrapping_sub(1 as i32 as usize);
                         size = (size as usize).wrapping_add(
-                            (::std::mem::size_of::<bot_synonym_t>() as usize)
-                                .wrapping_add(len),
+                            (::std::mem::size_of::<bot_synonym_t>() as usize).wrapping_add(len),
                         ) as i32;
                         if pass != 0 && !ptr.is_null() {
                             synonym = ptr as *mut bot_synonym_t;
                             ptr = ptr
-                                .offset(::std::mem::size_of::<bot_synonym_t>() as usize
-                                    as isize);
+                                .offset(::std::mem::size_of::<bot_synonym_t>() as usize as isize);
                             (*synonym).string = ptr;
                             ptr = ptr.offset(len as isize);
                             libc::strcpy((*synonym).string, token.string.as_mut_ptr());
@@ -1298,10 +1284,7 @@ pub unsafe extern "C" fn BotLoadSynonyms(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotReplaceSynonyms(
-    mut string: *mut libc::c_char,
-    mut context: usize,
-) {
+pub unsafe extern "C" fn BotReplaceSynonyms(mut string: *mut libc::c_char, mut context: usize) {
     let mut syn: *mut bot_synonymlist_t = 0 as *mut bot_synonymlist_t;
     let mut synonym: *mut bot_synonym_t = 0 as *mut bot_synonym_t;
     syn = synonyms;
@@ -1506,9 +1489,7 @@ pub unsafe extern "C" fn BotLoadChatMessage(
             libc::strcat(ptr, token.string.as_mut_ptr());
         } else if token.type_0 == 3 as i32 && token.subtype & 0x1000 as i32 != 0 {
             //variable string
-            if crate::stdlib::strlen(ptr).wrapping_add(7 as i32 as usize)
-                > 256 as i32 as usize
-            {
+            if crate::stdlib::strlen(ptr).wrapping_add(7 as i32 as usize) > 256 as i32 as usize {
                 SourceError(
                     source as *mut source_s,
                     b"chat message too long\x00" as *const u8 as *const libc::c_char
@@ -1528,9 +1509,7 @@ pub unsafe extern "C" fn BotLoadChatMessage(
             );
         } else if token.type_0 == 4 as i32 {
             //random string
-            if crate::stdlib::strlen(ptr).wrapping_add(7 as i32 as usize)
-                > 256 as i32 as usize
-            {
+            if crate::stdlib::strlen(ptr).wrapping_add(7 as i32 as usize) > 256 as i32 as usize {
                 SourceError(
                     source as *mut source_s,
                     b"chat message too long\x00" as *const u8 as *const libc::c_char
@@ -1698,20 +1677,17 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
                 FreeSource(source as *mut source_s); //end if
                 return 0 as *mut bot_randomlist_t;
             }
-            len = crate::stdlib::strlen(token.string.as_mut_ptr())
-                .wrapping_add(1 as i32 as usize);
+            len = crate::stdlib::strlen(token.string.as_mut_ptr()).wrapping_add(1 as i32 as usize);
             len = len
                 .wrapping_add(::std::mem::size_of::<isize>() as usize)
                 .wrapping_sub(1 as i32 as usize)
-                & !(::std::mem::size_of::<isize>() as usize)
-                    .wrapping_sub(1 as i32 as usize);
+                & !(::std::mem::size_of::<isize>() as usize).wrapping_sub(1 as i32 as usize);
             size = (size as usize).wrapping_add(
                 (::std::mem::size_of::<bot_randomlist_t>() as usize).wrapping_add(len),
             ) as i32;
             if pass != 0 && !ptr.is_null() {
                 random = ptr as *mut bot_randomlist_t;
-                ptr =
-                    ptr.offset(::std::mem::size_of::<bot_randomlist_t>() as usize as isize);
+                ptr = ptr.offset(::std::mem::size_of::<bot_randomlist_t>() as usize as isize);
                 (*random).string = ptr;
                 ptr = ptr.offset(len as isize);
                 libc::strcpy((*random).string, token.string.as_mut_ptr());
@@ -1751,17 +1727,13 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
                 len = len
                     .wrapping_add(::std::mem::size_of::<isize>() as usize)
                     .wrapping_sub(1 as i32 as usize)
-                    & !(::std::mem::size_of::<isize>() as usize)
-                        .wrapping_sub(1 as i32 as usize);
+                    & !(::std::mem::size_of::<isize>() as usize).wrapping_sub(1 as i32 as usize);
                 size = (size as usize).wrapping_add(
-                    (::std::mem::size_of::<bot_randomstring_t>() as usize)
-                        .wrapping_add(len),
+                    (::std::mem::size_of::<bot_randomstring_t>() as usize).wrapping_add(len),
                 ) as i32;
                 if pass != 0 && !ptr.is_null() {
                     randomstring = ptr as *mut bot_randomstring_t;
-                    ptr = ptr.offset(
-                        ::std::mem::size_of::<bot_randomstring_t>() as usize as isize
-                    );
+                    ptr = ptr.offset(::std::mem::size_of::<bot_randomstring_t>() as usize as isize);
                     (*randomstring).string = ptr;
                     ptr = ptr.offset(len as isize);
                     libc::strcpy((*randomstring).string, chatmessagestring.as_mut_ptr());
@@ -2202,8 +2174,7 @@ pub unsafe extern "C" fn BotLoadMatchTemplates(
             matchtemplate =
                 crate::src::botlib::l_memory::GetClearedHunkMemory(::std::mem::size_of::<
                     bot_matchtemplate_t,
-                >()
-                    as usize) as *mut bot_matchtemplate_t;
+                >() as usize) as *mut bot_matchtemplate_t;
             (*matchtemplate).context = context;
             (*matchtemplate).next = 0 as *mut bot_matchtemplate_s;
             //add the match template to the list
@@ -3052,8 +3023,7 @@ pub unsafe extern "C" fn BotLoadReplyChat(mut filename: *mut libc::c_char) -> *m
         {
             key = crate::src::botlib::l_memory::GetClearedHunkMemory(::std::mem::size_of::<
                 bot_replychatkey_t,
-            >()
-                as usize) as *mut bot_replychatkey_t;
+            >() as usize) as *mut bot_replychatkey_t;
             (*key).flags = 0 as i32;
             (*key).string = 0 as *mut libc::c_char;
             (*key).match_0 = 0 as *mut bot_matchpiece_t;
@@ -3164,8 +3134,7 @@ pub unsafe extern "C" fn BotLoadReplyChat(mut filename: *mut libc::c_char) -> *m
                     return 0 as *mut bot_replychat_t;
                 }
                 (*key).string = crate::src::botlib::l_memory::GetClearedHunkMemory(
-                    crate::stdlib::strlen(namebuffer.as_mut_ptr())
-                        .wrapping_add(1 as i32 as usize),
+                    crate::stdlib::strlen(namebuffer.as_mut_ptr()).wrapping_add(1 as i32 as usize),
                 ) as *mut libc::c_char;
                 libc::strcpy((*key).string, namebuffer.as_mut_ptr());
             } else {
@@ -3374,8 +3343,7 @@ pub unsafe extern "C" fn BotLoadInitialChat(
     while pass < 2 as i32 {
         //allocate memory
         if pass != 0 && size != 0 {
-            ptr = crate::src::botlib::l_memory::GetClearedMemory(size as usize)
-                as *mut libc::c_char
+            ptr = crate::src::botlib::l_memory::GetClearedMemory(size as usize) as *mut libc::c_char
         }
         //end if
         PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
@@ -3499,8 +3467,7 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                             (*chat).types = chattype;
                             //
                             ptr = ptr
-                                .offset(::std::mem::size_of::<bot_chattype_t>() as usize
-                                    as isize)
+                                .offset(::std::mem::size_of::<bot_chattype_t>() as usize as isize)
                         }
                         size = (size as usize)
                             .wrapping_add(::std::mem::size_of::<bot_chattype_t>() as usize)
@@ -3530,9 +3497,9 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                                 (*chatmessage).next = (*chattype).firstchatmessage;
                                 (*chattype).firstchatmessage = chatmessage;
                                 //store the chat message
-                                ptr = ptr.offset(::std::mem::size_of::<bot_chatmessage_t>()
-                                    as usize
-                                    as isize);
+                                ptr = ptr
+                                    .offset(::std::mem::size_of::<bot_chatmessage_t>() as usize
+                                        as isize);
                                 (*chatmessage).chatmessage = ptr;
                                 libc::strcpy(
                                     (*chatmessage).chatmessage,
@@ -3822,8 +3789,7 @@ pub unsafe extern "C" fn BotExpandChatMessage(
                             BotReplaceSynonyms(temp.as_mut_ptr(), vcontext);
                         }
                         //
-                        if (len as usize)
-                            .wrapping_add(crate::stdlib::strlen(temp.as_mut_ptr()))
+                        if (len as usize).wrapping_add(crate::stdlib::strlen(temp.as_mut_ptr()))
                             >= 256 as i32 as usize
                         {
                             crate::src::botlib::be_interface::botimport
@@ -3838,8 +3804,7 @@ pub unsafe extern "C" fn BotExpandChatMessage(
                             return qfalse as i32;
                         }
                         libc::strcpy(&mut *outputbuf.offset(len as isize), temp.as_mut_ptr());
-                        len = (len as usize)
-                            .wrapping_add(crate::stdlib::strlen(temp.as_mut_ptr()))
+                        len = (len as usize).wrapping_add(crate::stdlib::strlen(temp.as_mut_ptr()))
                             as i32
                     }
                 }
@@ -4792,8 +4757,7 @@ pub unsafe extern "C" fn BotSetChatName(
     crate::stdlib::strncpy(
         (*cs).name.as_mut_ptr(),
         name,
-        (::std::mem::size_of::<[libc::c_char; 32]>() as usize)
-            .wrapping_sub(1 as i32 as usize),
+        (::std::mem::size_of::<[libc::c_char; 32]>() as usize).wrapping_sub(1 as i32 as usize),
     );
     (*cs).name[(::std::mem::size_of::<[libc::c_char; 32]>() as usize)
         .wrapping_sub(1 as i32 as usize) as usize] = '\u{0}' as i32 as libc::c_char;

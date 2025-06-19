@@ -482,8 +482,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         if (*con_autochat).integer != 0 {
                             Com_sprintf(
                                 text.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize
-                                    as i32,
+                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                                 b"cmd say %s\x00" as *const u8 as *const libc::c_char,
                                 TTY_con.buffer.as_mut_ptr(),
                             );
@@ -491,8 +490,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                             Q_strncpyz(
                                 text.as_mut_ptr(),
                                 TTY_con.buffer.as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize
-                                    as i32,
+                                ::std::mem::size_of::<[libc::c_char; 256]>() as usize as i32,
                             );
                         }
                     } else {
@@ -616,8 +614,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             fdset.__fds_bits[(0 as i32
                 / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as usize] |= ((1 as usize)
-                << 0 as i32
-                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+                << 0 as i32 % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                 as __fd_mask;
             timeout.tv_sec = (0 as i32 as __time_t) as libc::time_t;
             timeout.tv_usec = (0 as i32 as __suseconds_t) as libc::suseconds_t;
@@ -633,8 +630,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     as usize]
                     & ((1 as usize)
                         << 0 as i32
-                            % (8 as i32
-                                * ::std::mem::size_of::<__fd_mask>() as usize as i32))
+                            % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as usize as i32))
                         as __fd_mask
                     != 0 as i32 as isize)
             {
@@ -705,8 +701,7 @@ pub unsafe extern "C" fn CON_Print(mut msg: *const libc::c_char) {
     }
     // Only print prompt when msg ends with a newline, otherwise the console
     //   might get garbled when output does not fit on one line.
-    if *msg.offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as usize) as isize)
-        as i32
+    if *msg.offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as usize) as isize) as i32
         == '\n' as i32
     {
         CON_Show();

@@ -668,8 +668,7 @@ pub unsafe extern "C" fn Con_Dump_f() {
         l += 1
     }
     bufferlen = (con.linewidth as usize).wrapping_add(
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
     ) as i32;
     buffer = Hunk_AllocateTempMemory(bufferlen) as *mut libc::c_char;
     // write the remaining lines
@@ -772,8 +771,7 @@ pub unsafe extern "C" fn Con_CheckResize() {
         crate::stdlib::memcpy(
             tbuf.as_mut_ptr() as *mut libc::c_void,
             con.text.as_mut_ptr() as *const libc::c_void,
-            (32768 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<i16>() as usize),
+            (32768 as i32 as usize).wrapping_mul(::std::mem::size_of::<i16>() as usize),
         );
         i = 0 as i32;
         while i < 32768 as i32 {

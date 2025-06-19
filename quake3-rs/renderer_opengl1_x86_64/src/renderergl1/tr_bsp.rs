@@ -691,8 +691,8 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
         return;
     }
     tr.lightmaps = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (tr.numLightmaps as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut image_t>() as usize) as i32,
+        (tr.numLightmaps as usize).wrapping_mul(::std::mem::size_of::<*mut image_t>() as usize)
+            as i32,
         h_low,
     ) as *mut *mut image_t;
     i = 0 as i32;
@@ -888,14 +888,13 @@ unsafe extern "C" fn ParseFace(
     }
     numIndexes = (*ds).numIndexes;
     // create the srfSurfaceFace_t
-    sfaceSize = (40 as usize).wrapping_add(
-        (::std::mem::size_of::<[f32; 8]>() as usize)
-            .wrapping_mul(numPoints as usize),
-    ) as i32;
+    sfaceSize = (40 as usize)
+        .wrapping_add((::std::mem::size_of::<[f32; 8]>() as usize).wrapping_mul(numPoints as usize))
+        as i32;
     ofsIndexes = sfaceSize;
-    sfaceSize = (sfaceSize as usize).wrapping_add(
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(numIndexes as usize),
-    ) as i32;
+    sfaceSize = (sfaceSize as usize)
+        .wrapping_add((::std::mem::size_of::<i32>() as usize).wrapping_mul(numIndexes as usize))
+        as i32;
     cv = ri.Hunk_Alloc.expect("non-null function pointer")(sfaceSize, h_low)
         as *mut srfSurfaceFace_t;
     (*cv).surfaceType = SF_FACE;
@@ -1084,13 +1083,10 @@ unsafe extern "C" fn ParseTriSurf(
     tri = ri.Hunk_Alloc.expect("non-null function pointer")(
         (::std::mem::size_of::<srfTriangles_t>() as usize)
             .wrapping_add(
-                (numVerts as usize)
-                    .wrapping_mul(::std::mem::size_of::<drawVert_t>() as usize),
+                (numVerts as usize).wrapping_mul(::std::mem::size_of::<drawVert_t>() as usize),
             )
-            .wrapping_add(
-                (numIndexes as usize)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as usize),
-            ) as i32,
+            .wrapping_add((numIndexes as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize))
+            as i32,
         h_low,
     ) as *mut srfTriangles_t;
     (*tri).surfaceType = SF_TRIANGLES;
@@ -3134,23 +3130,17 @@ unsafe extern "C" fn R_LoadSurfaces(
     numTriSurfs = 0 as i32;
     numFlares = 0 as i32;
     in_0 = fileBase.offset((*surfs).fileofs as isize) as *mut libc::c_void as *mut dsurface_t;
-    if ((*surfs).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dsurface_t>() as usize)
-        != 0
-    {
+    if ((*surfs).filelen as usize).wrapping_rem(::std::mem::size_of::<dsurface_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*surfs).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dsurface_t>() as usize) as i32;
+    count = ((*surfs).filelen as usize).wrapping_div(::std::mem::size_of::<dsurface_t>() as usize)
+        as i32;
     dv = fileBase.offset((*verts).fileofs as isize) as *mut libc::c_void as *mut drawVert_t;
-    if ((*verts).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<drawVert_t>() as usize)
-        != 0
-    {
+    if ((*verts).filelen as usize).wrapping_rem(::std::mem::size_of::<drawVert_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
@@ -3158,10 +3148,7 @@ unsafe extern "C" fn R_LoadSurfaces(
         );
     }
     indexes = fileBase.offset((*indexLump).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*indexLump).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<i32>() as usize)
-        != 0
-    {
+    if ((*indexLump).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
@@ -3169,8 +3156,7 @@ unsafe extern "C" fn R_LoadSurfaces(
         );
     }
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (count as usize).wrapping_mul(::std::mem::size_of::<msurface_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<msurface_t>() as usize) as i32,
         h_low,
     ) as *mut msurface_t;
     s_worldData.surfaces = out;
@@ -3231,21 +3217,16 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dmodel_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dmodel_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dmodel_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dmodel_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dmodel_t>() as usize) as i32;
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (count as usize).wrapping_mul(::std::mem::size_of::<bmodel_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<bmodel_t>() as usize) as i32,
         h_low,
     ) as *mut bmodel_t;
     s_worldData.bmodels = out;
@@ -3312,11 +3293,8 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(mut nodeLump: *mut lump_t, mut leafLump
     let mut numNodes: i32 = 0;
     let mut numLeafs: i32 = 0;
     in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void as *mut dnode_t;
-    if ((*nodeLump).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dnode_t>() as usize)
-        != 0
-        || ((*leafLump).filelen as usize)
-            .wrapping_rem(::std::mem::size_of::<dleaf_t>() as usize)
+    if ((*nodeLump).filelen as usize).wrapping_rem(::std::mem::size_of::<dnode_t>() as usize) != 0
+        || ((*leafLump).filelen as usize).wrapping_rem(::std::mem::size_of::<dleaf_t>() as usize)
             != 0
     {
         ri.Error.expect("non-null function pointer")(
@@ -3330,8 +3308,8 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(mut nodeLump: *mut lump_t, mut leafLump
     numLeafs = ((*leafLump).filelen as usize)
         .wrapping_div(::std::mem::size_of::<dleaf_t>() as usize) as i32;
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ((numNodes + numLeafs) as usize)
-            .wrapping_mul(::std::mem::size_of::<mnode_t>() as usize) as i32,
+        ((numNodes + numLeafs) as usize).wrapping_mul(::std::mem::size_of::<mnode_t>() as usize)
+            as i32,
         h_low,
     ) as *mut mnode_t;
     s_worldData.nodes = out;
@@ -3405,21 +3383,17 @@ unsafe extern "C" fn R_LoadShaders(mut l: *mut lump_t) {
     let mut in_0: *mut dshader_t = 0 as *mut dshader_t;
     let mut out: *mut dshader_t = 0 as *mut dshader_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dshader_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dshader_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dshader_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dshader_t>() as usize) as i32;
+    count =
+        ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dshader_t>() as usize) as i32;
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (count as usize).wrapping_mul(::std::mem::size_of::<dshader_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<dshader_t>() as usize) as i32,
         h_low,
     ) as *mut dshader_t;
     s_worldData.shaders = out;
@@ -3449,20 +3423,16 @@ unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut lump_t) {
     let mut in_0: *mut i32 = 0 as *mut i32;
     let mut out: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<i32>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<i32>() as usize) as i32;
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (count as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut msurface_t>() as usize) as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<*mut msurface_t>() as usize) as i32,
         h_low,
     ) as *mut *mut msurface_t;
     s_worldData.marksurfaces = out;
@@ -3489,21 +3459,17 @@ unsafe extern "C" fn R_LoadPlanes(mut l: *mut lump_t) {
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dplane_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dplane_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dplane_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dplane_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dplane_t>() as usize) as i32;
     out = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ((count * 2 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<cplane_t>() as usize) as i32,
+        ((count * 2 as i32) as usize).wrapping_mul(::std::mem::size_of::<cplane_t>() as usize)
+            as i32,
         h_low,
     ) as *mut cplane_t;
     s_worldData.planes = out;
@@ -3562,23 +3528,18 @@ unsafe extern "C" fn R_LoadFogs(
     let mut d: f32 = 0.;
     let mut firstSide: i32 = 0;
     fogs = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dfog_t;
-    if ((*l).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dfog_t>() as usize)
-        != 0
-    {
+    if ((*l).filelen as usize).wrapping_rem(::std::mem::size_of::<dfog_t>() as usize) != 0 {
         ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    count = ((*l).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dfog_t>() as usize) as i32;
+    count = ((*l).filelen as usize).wrapping_div(::std::mem::size_of::<dfog_t>() as usize) as i32;
     // create fog structures for them
     s_worldData.numfogs = count + 1 as i32;
     s_worldData.fogs = ri.Hunk_Alloc.expect("non-null function pointer")(
-        (s_worldData.numfogs as usize)
-            .wrapping_mul(::std::mem::size_of::<fog_t>() as usize) as i32,
+        (s_worldData.numfogs as usize).wrapping_mul(::std::mem::size_of::<fog_t>() as usize) as i32,
         h_low,
     ) as *mut fog_t;
     out = s_worldData.fogs.offset(1 as i32 as isize);
@@ -3587,8 +3548,7 @@ unsafe extern "C" fn R_LoadFogs(
     }
     brushes =
         fileBase.offset((*brushesLump).fileofs as isize) as *mut libc::c_void as *mut dbrush_t;
-    if ((*brushesLump).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dbrush_t>() as usize)
+    if ((*brushesLump).filelen as usize).wrapping_rem(::std::mem::size_of::<dbrush_t>() as usize)
         != 0
     {
         ri.Error.expect("non-null function pointer")(
@@ -3601,8 +3561,7 @@ unsafe extern "C" fn R_LoadFogs(
         .wrapping_div(::std::mem::size_of::<dbrush_t>() as usize) as i32;
     sides =
         fileBase.offset((*sidesLump).fileofs as isize) as *mut libc::c_void as *mut dbrushside_t;
-    if ((*sidesLump).filelen as usize)
-        .wrapping_rem(::std::mem::size_of::<dbrushside_t>() as usize)
+    if ((*sidesLump).filelen as usize).wrapping_rem(::std::mem::size_of::<dbrushside_t>() as usize)
         != 0
     {
         ri.Error.expect("non-null function pointer")(
@@ -3612,8 +3571,7 @@ unsafe extern "C" fn R_LoadFogs(
         );
     }
     sidesCount = ((*sidesLump).filelen as usize)
-        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as usize)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as usize) as i32;
     i = 0 as i32;
     while i < count {
         (*out).originalBrushNumber = (*fogs).brushNum;
@@ -4300,8 +4258,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     // swap all the lumps
     i = 0 as i32;
     while (i as usize)
-        < (::std::mem::size_of::<dheader_t>() as usize)
-            .wrapping_div(4 as i32 as usize)
+        < (::std::mem::size_of::<dheader_t>() as usize).wrapping_div(4 as i32 as usize)
     {
         *(header as *mut i32).offset(i as isize) = *(header as *mut i32).offset(i as isize);
         i += 1

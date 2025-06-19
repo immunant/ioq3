@@ -312,8 +312,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             filt_state.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (2 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         silk_resampler_down2(
             filt_state.as_mut_ptr(),
@@ -333,8 +332,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             filt_state.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (6 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (6 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         silk_resampler_down2_3(
             filt_state.as_mut_ptr(),
@@ -354,8 +352,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     crate::stdlib::memset(
         filt_state.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     silk_resampler_down2(
         filt_state.as_mut_ptr(),

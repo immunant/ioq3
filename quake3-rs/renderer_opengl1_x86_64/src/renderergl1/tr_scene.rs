@@ -405,8 +405,7 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
         crate::stdlib::memcpy(
             (*poly).verts as *mut libc::c_void,
             &*verts.offset((numVerts * j) as isize) as *const polyVert_t as *const libc::c_void,
-            (numVerts as usize)
-                .wrapping_mul(::std::mem::size_of::<polyVert_t>() as usize),
+            (numVerts as usize).wrapping_mul(::std::mem::size_of::<polyVert_t>() as usize),
         );
         if glConfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
             (*(*poly).verts).modulate[0 as i32 as usize] = 255 as i32 as byte;

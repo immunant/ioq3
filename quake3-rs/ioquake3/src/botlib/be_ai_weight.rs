@@ -517,8 +517,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         ); //end if
         fs = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
             crate::src::botlib::be_ai_weight::fuzzyseperator_t,
-        >() as usize)
-            as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
+        >() as usize) as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
         (*fs).index = index;
         (*fs).value = 999999 as i32;
         (*fs).weight = 0 as i32 as f32;

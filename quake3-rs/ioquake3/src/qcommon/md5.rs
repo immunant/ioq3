@@ -709,9 +709,7 @@ pub unsafe extern "C" fn Com_MD5File(
         }
         total += r;
         MD5Update(&mut md5, buffer.as_mut_ptr(), r as u32);
-        if (r as usize) < ::std::mem::size_of::<[byte; 2048]>() as usize
-            || total >= length
-        {
+        if (r as usize) < ::std::mem::size_of::<[byte; 2048]>() as usize || total >= length {
             break;
         }
     }

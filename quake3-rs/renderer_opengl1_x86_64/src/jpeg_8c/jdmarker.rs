@@ -2093,8 +2093,7 @@ unsafe extern "C" fn save_marker(mut cinfo: j_decompress_ptr) -> boolean
             .expect("non-null function pointer")(
                 cinfo as j_common_ptr,
                 1 as i32,
-                (::std::mem::size_of::<jpeg_marker_struct>() as usize)
-                    .wrapping_add(limit as usize),
+                (::std::mem::size_of::<jpeg_marker_struct>() as usize).wrapping_add(limit as usize),
             ) as jpeg_saved_marker_ptr;
             (*cur_marker).next = 0 as jpeg_saved_marker_ptr;
             (*cur_marker).marker = (*cinfo).unread_marker as UINT8;

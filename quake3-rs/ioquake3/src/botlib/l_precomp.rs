@@ -994,8 +994,7 @@ pub unsafe extern "C" fn PC_AddBuiltinDefines(
             ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as usize,
         );
         (*define).name = crate::src::botlib::l_memory::GetMemory(
-            crate::stdlib::strlen(builtin_0[i as usize].string)
-                .wrapping_add(1 as i32 as usize),
+            crate::stdlib::strlen(builtin_0[i as usize].string).wrapping_add(1 as i32 as usize),
         ) as *mut libc::c_char;
         libc::strcpy((*define).name, builtin_0[i as usize].string);
         (*define).flags |= 0x1 as i32;
@@ -4643,16 +4642,14 @@ pub unsafe extern "C" fn PC_SetIncludePath(
     Q_strncpyz(
         (*source).includepath.as_mut_ptr(),
         path,
-        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize)
-            .wrapping_sub(1 as i32 as usize) as i32,
+        (::std::mem::size_of::<[libc::c_char; 1024]>() as usize).wrapping_sub(1 as i32 as usize)
+            as i32,
     );
     len = crate::stdlib::strlen((*source).includepath.as_mut_ptr());
     //add trailing path seperator
     if len > 0 as i32 as usize
-        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32
-            != '\\' as i32
-        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32
-            != '/' as i32
+        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32 != '\\' as i32
+        && (*source).includepath[len.wrapping_sub(1 as i32 as usize) as usize] as i32 != '/' as i32
     {
         libc::strcat(
             (*source).includepath.as_mut_ptr(),

@@ -405,8 +405,7 @@ pub unsafe extern "C" fn jpeg_stdio_src(mut cinfo: j_decompress_ptr, mut infile:
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            (4096 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
+            (4096 as i32 as usize).wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
         ) as *mut JOCTET
     }
     src = (*cinfo).src as my_src_ptr;

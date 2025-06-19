@@ -253,8 +253,7 @@ unsafe extern "C" fn init_destination(mut cinfo: j_compress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (4096 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
+        (4096 as i32 as usize).wrapping_mul(::std::mem::size_of::<JOCTET>() as usize),
     ) as *mut JOCTET;
     (*dest).pub_0.next_output_byte = (*dest).buffer;
     (*dest).pub_0.free_in_buffer = 4096 as i32 as size_t;
@@ -351,8 +350,7 @@ unsafe extern "C" fn empty_mem_output_buffer(mut cinfo: j_compress_ptr) -> boole
 
 unsafe extern "C" fn term_destination(mut cinfo: j_compress_ptr) {
     let mut dest: my_dest_ptr = (*cinfo).dest as my_dest_ptr;
-    let mut datacount: size_t =
-        (4096 as i32 as usize).wrapping_sub((*dest).pub_0.free_in_buffer);
+    let mut datacount: size_t = (4096 as i32 as usize).wrapping_sub((*dest).pub_0.free_in_buffer);
     /* Write any data remaining in the buffer */
     if datacount > 0 as i32 as usize {
         if crate::stdlib::fwrite(

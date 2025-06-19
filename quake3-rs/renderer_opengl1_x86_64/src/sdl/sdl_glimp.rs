@@ -2262,8 +2262,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             (*modes.offset(i as isize)).h,
         );
         if crate::stdlib::strlen(newModeString)
-            < (::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32
-                as usize)
+            < (::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32 as usize)
                 .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
         {
             Q_strcat(
@@ -2284,8 +2283,8 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         i += 1
     }
     if *buf.as_mut_ptr() != 0 {
-        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as i32 as usize)
-            as usize] = 0 as i32 as libc::c_char;
+        buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_sub(1 as i32 as usize) as usize] =
+            0 as i32 as libc::c_char;
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(

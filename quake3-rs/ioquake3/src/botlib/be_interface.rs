@@ -473,8 +473,7 @@ pub unsafe extern "C" fn Export_BotLibSetup() -> i32 {
         &mut botlibglobals as *mut crate::src::botlib::be_interface::botlib_globals_t
             as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::botlib::be_interface::botlib_globals_t>()
-            as usize,
+        ::std::mem::size_of::<crate::src::botlib::be_interface::botlib_globals_t>() as usize,
     );
     //initialize byte swapping (litte endian etc.)
     //	Swap_Init();
@@ -1031,11 +1030,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     );
     (*ai).BotFindMatch = Some(
         BotFindMatch
-            as unsafe extern "C" fn(
-                _: *mut libc::c_char,
-                _: *mut bot_match_t,
-                _: usize,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *mut libc::c_char, _: *mut bot_match_t, _: usize) -> i32,
     );
     (*ai).BotMatchVariable = Some(
         BotMatchVariable
@@ -1048,9 +1043,8 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     );
     (*ai).UnifyWhiteSpaces =
         Some(UnifyWhiteSpaces as unsafe extern "C" fn(_: *mut libc::c_char) -> ());
-    (*ai).BotReplaceSynonyms = Some(
-        BotReplaceSynonyms as unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> (),
-    );
+    (*ai).BotReplaceSynonyms =
+        Some(BotReplaceSynonyms as unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> ());
     (*ai).BotLoadChatFile = Some(
         BotLoadChatFile
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32,

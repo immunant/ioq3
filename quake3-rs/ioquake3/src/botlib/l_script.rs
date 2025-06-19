@@ -696,8 +696,7 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
     if (*script).punctuationtable.is_null() {
         (*script).punctuationtable =
             crate::src::botlib::l_memory::GetMemory((256 as i32 as usize).wrapping_mul(
-                ::std::mem::size_of::<*mut crate::src::botlib::l_script::punctuation_t>()
-                    as usize,
+                ::std::mem::size_of::<*mut crate::src::botlib::l_script::punctuation_t>() as usize,
             )) as *mut *mut crate::src::botlib::l_script::punctuation_t
     }
     crate::stdlib::memset(
@@ -1293,11 +1292,11 @@ pub unsafe extern "C" fn NumberValue(
         while *string != 0 {
             *intvalue <<= 4 as i32; //end else if
             if *string as i32 >= 'a' as i32 && *string as i32 <= 'f' as i32 {
-                *intvalue = (*intvalue)
-                    .wrapping_add((*string as i32 - 'a' as i32 + 10 as i32) as usize)
+                *intvalue =
+                    (*intvalue).wrapping_add((*string as i32 - 'a' as i32 + 10 as i32) as usize)
             } else if *string as i32 >= 'A' as i32 && *string as i32 <= 'F' as i32 {
-                *intvalue = (*intvalue)
-                    .wrapping_add((*string as i32 - 'A' as i32 + 10 as i32) as usize)
+                *intvalue =
+                    (*intvalue).wrapping_add((*string as i32 - 'A' as i32 + 10 as i32) as usize)
             } else {
                 *intvalue = (*intvalue).wrapping_add((*string as i32 - '0' as i32) as usize)
             }
@@ -1310,8 +1309,8 @@ pub unsafe extern "C" fn NumberValue(
         while *string != 0 {
             let fresh10 = string;
             string = string.offset(1);
-            *intvalue = (*intvalue << 3 as i32)
-                .wrapping_add((*fresh10 as i32 - '0' as i32) as usize)
+            *intvalue =
+                (*intvalue << 3 as i32).wrapping_add((*fresh10 as i32 - '0' as i32) as usize)
         }
         *floatvalue = *intvalue as f32
     } else if subtype & 0x400 as i32 != 0 {
@@ -1320,8 +1319,8 @@ pub unsafe extern "C" fn NumberValue(
         while *string != 0 {
             let fresh11 = string;
             string = string.offset(1);
-            *intvalue = (*intvalue << 1 as i32)
-                .wrapping_add((*fresh11 as i32 - '0' as i32) as usize)
+            *intvalue =
+                (*intvalue << 1 as i32).wrapping_add((*fresh11 as i32 - '0' as i32) as usize)
         }
         *floatvalue = *intvalue as f32
     };
@@ -2170,14 +2169,11 @@ pub unsafe extern "C" fn StripDoubleQuotes(mut string: *mut libc::c_char) {
             crate::stdlib::strlen(string),
         ); //end if
     }
-    if *string
-        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize)
-        as i32
+    if *string.offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize) as i32
         == '\"' as i32
     {
-        *string.offset(
-            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize,
-        ) = '\u{0}' as i32 as libc::c_char
+        *string.offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize) =
+            '\u{0}' as i32 as libc::c_char
     };
     //end if
 }
@@ -2199,14 +2195,11 @@ pub unsafe extern "C" fn StripSingleQuotes(mut string: *mut libc::c_char) {
             crate::stdlib::strlen(string),
         ); //end if
     }
-    if *string
-        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize)
-        as i32
+    if *string.offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize) as i32
         == '\'' as i32
     {
-        *string.offset(
-            crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize,
-        ) = '\u{0}' as i32 as libc::c_char
+        *string.offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as usize) as isize) =
+            '\u{0}' as i32 as libc::c_char
     };
     //end if
 }
@@ -2494,9 +2487,8 @@ pub unsafe extern "C" fn LoadScriptFile(
         filename,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
-    (*script).buffer = (buffer as *mut libc::c_char).offset(::std::mem::size_of::<
-        crate::src::botlib::l_script::script_t,
-    >() as usize as isize);
+    (*script).buffer = (buffer as *mut libc::c_char)
+        .offset(::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize as isize);
     *(*script).buffer.offset(length as isize) = 0 as i32 as libc::c_char;
     (*script).length = length;
     //pointer in script buffer
@@ -2558,9 +2550,8 @@ pub unsafe extern "C" fn LoadScriptMemory(
         name,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as usize as i32,
     );
-    (*script).buffer = (buffer as *mut libc::c_char).offset(::std::mem::size_of::<
-        crate::src::botlib::l_script::script_t,
-    >() as usize as isize);
+    (*script).buffer = (buffer as *mut libc::c_char)
+        .offset(::std::mem::size_of::<crate::src::botlib::l_script::script_t>() as usize as isize);
     *(*script).buffer.offset(length as isize) = 0 as i32 as libc::c_char;
     (*script).length = length;
     //pointer in script buffer

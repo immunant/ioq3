@@ -151,15 +151,13 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 B_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (3 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+                (3 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
             );
             crate::stdlib::memcpy(
                 A_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (2 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+                (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
             );
         }
     } else {
@@ -168,16 +166,14 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
             crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
-            (3 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (3 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         crate::stdlib::memcpy(
             A_Q28 as *mut libc::c_void,
             crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
-            (2 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
     };
 }

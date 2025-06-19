@@ -79,16 +79,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         0x564342 as i32 as usize,
         24 as i32,
     );
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        (*c).dim as usize,
-        16 as i32,
-    );
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        (*c).entries as usize,
-        24 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, (*c).dim as usize, 16 as i32);
+    oggpack_write(opb as *mut oggpack_buffer, (*c).entries as usize, 24 as i32);
     /* pack the codewords.  There are two packings; length ordered and
     length random.  Decide between the two now. */
     i = 1 as i32 as isize;
@@ -109,11 +101,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         each length.  The actual codewords are generated
         deterministically */
         let mut count: isize = 0 as i32 as isize; /* ordered */
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            1 as i32 as usize,
-            1 as i32,
-        ); /* 1 to 32 */
+        oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32); /* 1 to 32 */
         oggpack_write(
             opb as *mut oggpack_buffer,
             (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as usize,
@@ -149,11 +137,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     } else {
         /* length random.  Again, we don't code the codeword itself, just
         the length.  This time, though, we have to encode each length */
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            1 as i32,
-        ); /* unordered */
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32); /* unordered */
         /* algortihmic mapping has use for 'unused entries', which we tag
         here.  The algorithmic mapping happens as usual, but the unused
         entry has no codeword. */
@@ -165,11 +149,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             i += 1
         }
         if i == (*c).entries {
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                0 as i32 as usize,
-                1 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
             i = 0 as i32 as isize;
             while i < (*c).entries {
                 oggpack_write(
@@ -180,25 +160,13 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 i += 1
             }
         } else {
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                1 as i32 as usize,
-                1 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
             i = 0 as i32 as isize;
             while i < (*c).entries {
                 if *(*c).lengthlist.offset(i as isize) as i32 == 0 as i32 {
-                    oggpack_write(
-                        opb as *mut oggpack_buffer,
-                        0 as i32 as usize,
-                        1 as i32,
-                    );
+                    oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
                 } else {
-                    oggpack_write(
-                        opb as *mut oggpack_buffer,
-                        1 as i32 as usize,
-                        1 as i32,
-                    );
+                    oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
                     oggpack_write(
                         opb as *mut oggpack_buffer,
                         (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as usize,
@@ -211,11 +179,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     }
     /* is the entry number the desired return value, or do we have a
     mapping? If we have a mapping, what type? */
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        (*c).maptype as usize,
-        4 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, (*c).maptype as usize, 4 as i32);
     match (*c).maptype {
         0 => {}
         1 | 2 => {
@@ -226,16 +190,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 return -(1 as i32);
             }
             /* values that define the dequantization */
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                (*c).q_min as usize,
-                32 as i32,
-            );
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                (*c).q_delta as usize,
-                32 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, (*c).q_min as usize, 32 as i32);
+            oggpack_write(opb as *mut oggpack_buffer, (*c).q_delta as usize, 32 as i32);
             oggpack_write(
                 opb as *mut oggpack_buffer,
                 ((*c).q_quant - 1 as i32) as usize,
@@ -506,9 +462,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
                                                                 as usize)
-                                                                .wrapping_mul(
-                                                                    quantvals as usize,
-                                                                ),
+                                                                .wrapping_mul(quantvals as usize),
                                                         )
                                                             as *mut isize;
                                                         i = 0 as i32 as isize;
@@ -600,9 +554,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
                                                                 as usize)
-                                                                .wrapping_mul(
-                                                                    quantvals as usize,
-                                                                ),
+                                                                .wrapping_mul(quantvals as usize),
                                                         )
                                                             as *mut isize;
                                                         i = 0 as i32 as isize;
@@ -819,9 +771,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
                                                                 as usize)
-                                                                .wrapping_mul(
-                                                                    quantvals as usize,
-                                                                ),
+                                                                .wrapping_mul(quantvals as usize),
                                                         )
                                                             as *mut isize;
                                                         i = 0 as i32 as isize;
@@ -908,9 +858,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         (*s).quantlist = crate::stdlib::malloc(
                                                             (::std::mem::size_of::<isize>()
                                                                 as usize)
-                                                                .wrapping_mul(
-                                                                    quantvals as usize,
-                                                                ),
+                                                                .wrapping_mul(quantvals as usize),
                                                         )
                                                             as *mut isize;
                                                         i = 0 as i32 as isize;
@@ -1093,14 +1041,12 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         let mut step: i32 = (n as isize / (*book).dim) as i32;
         let mut fresh0 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<isize>() as usize).wrapping_mul(step as usize)
-                as usize,
+            (::std::mem::size_of::<isize>() as usize).wrapping_mul(step as usize) as usize,
         );
         let mut entry: *mut isize = fresh0.as_mut_ptr() as *mut isize;
         let mut fresh1 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(step as usize)
-                as usize,
+            (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul(step as usize) as usize,
         );
         let mut t: *mut *mut f32 = fresh1.as_mut_ptr() as *mut *mut f32;
         let mut i: i32 = 0;

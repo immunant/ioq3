@@ -1401,8 +1401,8 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
     bot_maxdebugpolys =
         Cvar_VariableIntegerValue(b"bot_maxdebugpolys\x00" as *const u8 as *const libc::c_char);
     debugpolygons = Z_Malloc(
-        (::std::mem::size_of::<bot_debugpoly_t>() as usize)
-            .wrapping_mul(bot_maxdebugpolys as usize) as i32,
+        (::std::mem::size_of::<bot_debugpoly_t>() as usize).wrapping_mul(bot_maxdebugpolys as usize)
+            as i32,
     ) as *mut bot_debugpoly_t;
     botlib_import.Print =
         Some(BotImport_Print as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: ...) -> ());

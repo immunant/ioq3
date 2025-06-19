@@ -903,13 +903,10 @@ unsafe extern "C" fn SV_WriteVoipToClient(mut cl: *mut client_t, mut msg: *mut m
         // Write as many VoIP packets as we reasonably can...
         i = 0 as i32;
         while i < (*cl).queuedVoipPackets {
-            packet = (*cl).voipPacket
-                [((i + (*cl).queuedVoipIndex) as usize).wrapping_rem(
-                    (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as usize)
-                        .wrapping_div(
-                            ::std::mem::size_of::<*mut voipServerPacket_t>() as usize
-                        ),
-                ) as usize];
+            packet = (*cl).voipPacket[((i + (*cl).queuedVoipIndex) as usize).wrapping_rem(
+                (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as usize)
+                    .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as usize),
+            ) as usize];
             if *(*cl).downloadName.as_mut_ptr() == 0 {
                 totalbytes += (*packet).len;
                 if totalbytes > ((*msg).maxsize - (*msg).cursize) / 2 as i32 {

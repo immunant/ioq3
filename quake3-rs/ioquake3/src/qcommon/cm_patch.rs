@@ -1913,8 +1913,7 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
                 crate::stdlib::memset(
                     facet as *mut libc::c_void,
                     0 as i32,
-                    ::std::mem::size_of::<crate::src::qcommon::cm_patch::facet_t>()
-                        as usize,
+                    ::std::mem::size_of::<crate::src::qcommon::cm_patch::facet_t>() as usize,
                 );
                 (*facet).surfacePlane = gridPlanes[i as usize][j as usize][1 as i32 as usize];
                 (*facet).numBorders = 3 as i32;
@@ -1948,17 +1947,16 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
     (*pf).numPlanes = numPlanes;
     (*pf).numFacets = numFacets;
     (*pf).facets = Hunk_Alloc(
-        (numFacets as usize).wrapping_mul(::std::mem::size_of::<
-            crate::src::qcommon::cm_patch::facet_t,
-        >() as usize) as i32,
+        (numFacets as usize)
+            .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::cm_patch::facet_t>() as usize)
+            as i32,
         h_high,
     ) as *mut crate::src::qcommon::cm_patch::facet_t;
     crate::stdlib::memcpy(
         (*pf).facets as *mut libc::c_void,
         facets.as_mut_ptr() as *const libc::c_void,
-        (numFacets as usize).wrapping_mul(::std::mem::size_of::<
-            crate::src::qcommon::cm_patch::facet_t,
-        >() as usize),
+        (numFacets as usize)
+            .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::cm_patch::facet_t>() as usize),
     );
     (*pf).planes = Hunk_Alloc(
         (numPlanes as usize).wrapping_mul(::std::mem::size_of::<
@@ -2057,8 +2055,7 @@ pub unsafe extern "C" fn CM_GeneratePatchCollide(
     // the approximate surface defined by these points will be
     // collided against
     pf = Hunk_Alloc(
-        ::std::mem::size_of::<crate::src::qcommon::cm_patch::patchCollide_t>() as usize
-            as i32,
+        ::std::mem::size_of::<crate::src::qcommon::cm_patch::patchCollide_t>() as usize as i32,
         h_high,
     ) as *mut crate::src::qcommon::cm_patch::patchCollide_t;
     ClearBounds(

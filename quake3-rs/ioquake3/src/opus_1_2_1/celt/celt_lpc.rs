@@ -266,8 +266,7 @@ pub unsafe extern "C" fn celt_fir_c(
     let mut rnum: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize)
-            as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize) as usize,
     );
     rnum = fresh19.as_mut_ptr() as *mut opus_val16;
     i = 0 as i32;
@@ -322,14 +321,12 @@ pub unsafe extern "C" fn celt_iir(
     let mut y: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize)
-            as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(ord as usize) as usize,
     );
     rden = fresh20.as_mut_ptr() as *mut opus_val16;
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize)
-            .wrapping_mul((N + ord) as usize) as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul((N + ord) as usize) as usize,
     );
     y = fresh21.as_mut_ptr() as *mut opus_val16;
     i = 0 as i32;
@@ -415,8 +412,7 @@ pub unsafe extern "C" fn _celt_autocorr(
     let mut xx: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(n as usize)
-            as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(n as usize) as usize,
     );
     xx = fresh22.as_mut_ptr() as *mut opus_val16;
     if overlap == 0 as i32 {

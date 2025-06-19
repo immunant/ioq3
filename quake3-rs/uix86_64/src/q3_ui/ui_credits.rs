@@ -72,8 +72,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
     // Center text vertically on the screen
     y = ((480 as i32 as f64
         - (::std::mem::size_of::<[*const libc::c_char; 14]>() as usize)
-            .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as usize)
-            as f64
+            .wrapping_div(::std::mem::size_of::<*const libc::c_char>() as usize) as f64
             * (1.42f64 * 27 as i32 as f64 * 0.75f64))
         / 2 as i32 as f64) as i32;
     UI_DrawProportionalString(

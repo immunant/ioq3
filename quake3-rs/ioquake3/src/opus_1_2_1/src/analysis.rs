@@ -705,8 +705,7 @@ unsafe extern "C" fn downmix_and_resample(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val32>() as usize)
-            .wrapping_mul(subframe as usize) as usize,
+        (::std::mem::size_of::<opus_val32>() as usize).wrapping_mul(subframe as usize) as usize,
     );
     tmp = fresh0.as_mut_ptr() as *mut opus_val32;
     downmix.expect("non-null function pointer")(_x, tmp, subframe, offset, c1, c2, C);
@@ -1035,26 +1034,22 @@ unsafe extern "C" fn tonality_analysis(
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as usize)
-            .wrapping_mul(480 as i32 as usize) as usize,
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize).wrapping_mul(480 as i32 as usize) as usize,
     );
     in_0 = fresh4.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>() as usize)
-            .wrapping_mul(480 as i32 as usize) as usize,
+        (::std::mem::size_of::<kiss_fft_cpx>() as usize).wrapping_mul(480 as i32 as usize) as usize,
     );
     out = fresh5.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize)
-            as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize) as usize,
     );
     tonality = fresh6.as_mut_ptr() as *mut f32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize)
-            as usize,
+        (::std::mem::size_of::<f32>() as usize).wrapping_mul(240 as i32 as usize) as usize,
     );
     noisiness = fresh7.as_mut_ptr() as *mut f32;
     i = 0 as i32;

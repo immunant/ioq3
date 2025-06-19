@@ -3821,9 +3821,8 @@ pub unsafe extern "C" fn CL_NextDownload() {
             clc.downloadName.as_mut_ptr(),
             b"\x00" as *const u8 as *const libc::c_char,
         );
-        *zippath.offset(
-            crate::stdlib::strlen(zippath).wrapping_sub(1 as i32 as usize) as isize,
-        ) = '\u{0}' as i32 as libc::c_char;
+        *zippath.offset(crate::stdlib::strlen(zippath).wrapping_sub(1 as i32 as usize) as isize) =
+            '\u{0}' as i32 as libc::c_char;
         if FS_CompareZipChecksum(zippath) as u64 == 0 {
             Com_Error(
                 ERR_DROP as i32,
@@ -6383,8 +6382,8 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(mut from: netadr_t, mut msg: *mut m
         1024 as i32,
     );
     if crate::stdlib::strlen(info.as_mut_ptr()) != 0 {
-        if info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_sub(1 as i32 as usize)
-            as usize] as i32
+        if info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_sub(1 as i32 as usize) as usize]
+            as i32
             != '\n' as i32
         {
             Q_strcat(
@@ -6743,8 +6742,7 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = 0 as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
-            .wrapping_sub(len as usize) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize).wrapping_sub(len as usize) as i32,
         b"%s\x00" as *const u8 as *const libc::c_char,
         s,
     );
@@ -6789,8 +6787,7 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
-            .wrapping_sub(len as usize) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize).wrapping_sub(len as usize) as i32,
         b"\\\x00" as *const u8 as *const libc::c_char,
     );
     if (*serverStatus).print as u64 != 0 {
@@ -6803,8 +6800,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
         len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
         Com_sprintf(
             &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-            (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
-                .wrapping_sub(len as usize) as i32,
+            (::std::mem::size_of::<[libc::c_char; 8192]>() as usize).wrapping_sub(len as usize)
+                as i32,
             b"\\%s\x00" as *const u8 as *const libc::c_char,
             s,
         );
@@ -6840,8 +6837,7 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *m
     len = crate::stdlib::strlen((*serverStatus).string.as_mut_ptr()) as i32;
     Com_sprintf(
         &mut *(*serverStatus).string.as_mut_ptr().offset(len as isize) as *mut libc::c_char,
-        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize)
-            .wrapping_sub(len as usize) as i32,
+        (::std::mem::size_of::<[libc::c_char; 8192]>() as usize).wrapping_sub(len as usize) as i32,
         b"\\\x00" as *const u8 as *const libc::c_char,
     );
     (*serverStatus).time = Com_Milliseconds();

@@ -4013,9 +4013,9 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             numChars = atoi(token);
             text_p = text_p.offset(1);
             if numChars as usize
-                > crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr())
-                    .wrapping_sub(text_p.offset_from(consoleSaveBuffer.as_mut_ptr()) as isize
-                        as usize)
+                > crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr()).wrapping_sub(
+                    text_p.offset_from(consoleSaveBuffer.as_mut_ptr()) as isize as usize,
+                )
             {
                 Com_DPrintf(
                     b"^3WARNING: probable corrupt history\n\x00" as *const u8
@@ -4041,8 +4041,7 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             &mut *historyEditLines
                 .as_mut_ptr()
                 .offset((i + 1 as i32) as isize) as *mut field_t as *const libc::c_void,
-            (numLines as usize)
-                .wrapping_mul(::std::mem::size_of::<field_t>() as usize),
+            (numLines as usize).wrapping_mul(::std::mem::size_of::<field_t>() as usize),
         );
         i = numLines;
         while i < 32 as i32 {

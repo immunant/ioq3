@@ -1142,16 +1142,8 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     buf = Z_Malloc(maxLength) as *mut byte;
     jused = Z_Malloc(jusedSize) as *mut byte;
     code = Z_Malloc((*header).codeLength + 32 as i32) as *mut byte;
-    crate::stdlib::memset(
-        jused as *mut libc::c_void,
-        0 as i32,
-        jusedSize as usize,
-    );
-    crate::stdlib::memset(
-        buf as *mut libc::c_void,
-        0 as i32,
-        maxLength as usize,
-    );
+    crate::stdlib::memset(jused as *mut libc::c_void, 0 as i32, jusedSize as usize);
+    crate::stdlib::memset(buf as *mut libc::c_void, 0 as i32, maxLength as usize);
     // copy code in larger buffer and put some zeros at the end
     // so we can safely look ahead for a few instructions in it
     // without a chance to get false-positive because of some garbage bytes
@@ -1170,15 +1162,15 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
     pc = -(1 as i32); // a bogus value to be printed in out-of-bounds error messages
     i = 0 as i32;
     while i < (*vm).numJumpTableTargets {
-        if (*((*vm).jumpTableTargets.offset(
-            (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
-                as isize,
-        ) as *mut i32))
+        if (*((*vm)
+            .jumpTableTargets
+            .offset((i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize)
+            as *mut i32))
             < 0 as i32
-            || *((*vm).jumpTableTargets.offset(
-                (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
-                    as isize,
-            ) as *mut i32)
+            || *((*vm)
+                .jumpTableTargets
+                .offset((i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize)
+                as *mut i32)
                 >= (*vm).instructionCount
         {
             Z_Free(buf as *mut libc::c_void);
@@ -1191,10 +1183,10 @@ pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader
             );
         }
         *jused.offset(
-            *((*vm).jumpTableTargets.offset(
-                (i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize)
-                    as isize,
-            ) as *mut i32) as isize,
+            *((*vm)
+                .jumpTableTargets
+                .offset((i as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize)
+                as *mut i32) as isize,
         ) = 1 as i32 as byte;
         i += 1
     }

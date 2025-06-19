@@ -1244,9 +1244,7 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
         }
     }
     size = MSG_ReadShort(msg as *mut msg_t);
-    if size < 0 as i32
-        || size as usize > ::std::mem::size_of::<[u8; 16384]>() as usize
-    {
+    if size < 0 as i32 || size as usize > ::std::mem::size_of::<[u8; 16384]>() as usize {
         Com_Error(
             ERR_DROP as i32,
             b"CL_ParseDownload: Invalid size %d for download chunk\x00" as *const u8

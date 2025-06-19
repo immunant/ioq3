@@ -616,20 +616,18 @@ pub unsafe extern "C" fn surround_analysis(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val32>() as usize)
-            .wrapping_mul((frame_size + overlap) as usize) as usize,
+        (::std::mem::size_of::<opus_val32>() as usize).wrapping_mul((frame_size + overlap) as usize)
+            as usize,
     );
     in_0 = fresh0.as_mut_ptr() as *mut opus_val32;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(len as usize)
-            as usize,
+        (::std::mem::size_of::<opus_val16>() as usize).wrapping_mul(len as usize) as usize,
     );
     x = fresh1.as_mut_ptr() as *mut opus_val16;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val32>() as usize)
-            .wrapping_mul(freq_size as usize) as usize,
+        (::std::mem::size_of::<opus_val32>() as usize).wrapping_mul(freq_size as usize) as usize,
     );
     freq = fresh2.as_mut_ptr() as *mut opus_val32;
     channel_pos(channels, pos.as_mut_ptr());
@@ -685,8 +683,7 @@ pub unsafe extern "C" fn surround_analysis(
         crate::stdlib::memset(
             bandE.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (21 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize),
+            (21 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_val32>() as usize),
         );
         frame = 0 as i32;
         while frame < nb_frames {
@@ -1014,8 +1011,7 @@ unsafe extern "C" fn opus_multistream_encoder_init_impl(
         crate::stdlib::memset(
             ms_get_preemph_mem(st) as *mut libc::c_void,
             0 as i32,
-            (channels as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_val32>() as usize),
+            (channels as usize).wrapping_mul(::std::mem::size_of::<opus_val32>() as usize),
         );
         crate::stdlib::memset(
             ms_get_window_mem(st) as *mut libc::c_void,

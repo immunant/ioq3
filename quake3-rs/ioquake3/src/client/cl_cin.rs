@@ -891,8 +891,7 @@ unsafe extern "C" fn yuv_to_rgb24(mut y: isize, mut u: isize, mut v: isize) -> u
     if b > 255 as i32 as isize {
         b = 255 as i32 as isize
     }
-    return ((r | g << 8 as i32 | b << 16 as i32) as usize
-        | (255 as usize) << 24 as i32) as u32;
+    return ((r | g << 8 as i32 | b << 16 as i32) as usize | (255 as usize) << 24 as i32) as u32;
 }
 /* *****************************************************************************
 *

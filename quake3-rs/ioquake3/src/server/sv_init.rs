@@ -508,8 +508,8 @@ unsafe extern "C" fn SV_Startup() {
     }
     SV_BoundMaxClients(1 as i32);
     svs.clients = Z_Malloc(
-        (::std::mem::size_of::<client_t>() as usize)
-            .wrapping_mul((*sv_maxclients).integer as usize) as i32,
+        (::std::mem::size_of::<client_t>() as usize).wrapping_mul((*sv_maxclients).integer as usize)
+            as i32,
     ) as *mut client_t;
     if (*com_dedicated).integer != 0 {
         svs.numSnapshotEntities = (*sv_maxclients).integer * 32 as i32 * 256 as i32
@@ -564,8 +564,7 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
         return;
     }
     oldClients = Hunk_AllocateTempMemory(
-        (count as usize).wrapping_mul(::std::mem::size_of::<client_t>() as usize)
-            as i32,
+        (count as usize).wrapping_mul(::std::mem::size_of::<client_t>() as usize) as i32,
     ) as *mut client_t;
     // copy the clients to hunk memory
     i = 0 as i32;
@@ -585,8 +584,8 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
     Z_Free(svs.clients as *mut libc::c_void);
     // allocate new clients
     svs.clients = Z_Malloc(
-        ((*sv_maxclients).integer as usize)
-            .wrapping_mul(::std::mem::size_of::<client_t>() as usize) as i32,
+        ((*sv_maxclients).integer as usize).wrapping_mul(::std::mem::size_of::<client_t>() as usize)
+            as i32,
     ) as *mut client_t;
     crate::stdlib::memset(
         svs.clients as *mut libc::c_void,

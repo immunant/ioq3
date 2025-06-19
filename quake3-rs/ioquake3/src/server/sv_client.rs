@@ -2193,8 +2193,7 @@ pub unsafe extern "C" fn SV_UserinfoChanged(mut cl: *mut client_t) {
     );
     if crate::stdlib::strlen(val) != 0 {
         i = atoi(val);
-        if i <= 0 as i32 || i > 100 as i32 || crate::stdlib::strlen(val) > 4 as i32 as usize
-        {
+        if i <= 0 as i32 || i > 100 as i32 || crate::stdlib::strlen(val) > 4 as i32 as usize {
             Info_SetValueForKey(
                 (*cl).userinfo.as_mut_ptr(),
                 b"handicap\x00" as *const u8 as *const libc::c_char,

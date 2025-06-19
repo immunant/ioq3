@@ -410,8 +410,8 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
                 } else {
                     chars = crate::stdlib::strlen(token) as i32;
                     sym = Hunk_Alloc(
-                        (::std::mem::size_of::<vmSymbol_t>() as usize)
-                            .wrapping_add(chars as usize) as i32,
+                        (::std::mem::size_of::<vmSymbol_t>() as usize).wrapping_add(chars as usize)
+                            as i32,
                         h_high,
                     ) as *mut vmSymbol_t;
                     *prev = sym;
@@ -547,8 +547,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
         // byte swap the header
         i = 0 as i32;
         while (i as usize)
-            < (::std::mem::size_of::<vmHeader_t>() as usize)
-                .wrapping_div(4 as i32 as usize)
+            < (::std::mem::size_of::<vmHeader_t>() as usize).wrapping_div(4 as i32 as usize)
         {
             *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
             i += 1
@@ -843,8 +842,8 @@ pub unsafe extern "C" fn VM_Create(
     // allocate space for the jump targets, which will be filled in by the compile/prep functions
     (*vm).instructionCount = (*header).instructionCount;
     (*vm).instructionPointers = Hunk_Alloc(
-        ((*vm).instructionCount as usize)
-            .wrapping_mul(::std::mem::size_of::<intptr_t>() as usize) as i32,
+        ((*vm).instructionCount as usize).wrapping_mul(::std::mem::size_of::<intptr_t>() as usize)
+            as i32,
         h_high,
     ) as *mut intptr_t;
     // copy or compile the instructions
@@ -1228,8 +1227,8 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         return;
     }
     sorted = Z_Malloc(
-        ((*vm).numSymbols as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut vmSymbol_t>() as usize) as i32,
+        ((*vm).numSymbols as usize).wrapping_mul(::std::mem::size_of::<*mut vmSymbol_t>() as usize)
+            as i32,
     ) as *mut *mut vmSymbol_t;
     let ref mut fresh1 = *sorted.offset(0 as i32 as isize);
     *fresh1 = (*vm).symbols;
@@ -1404,10 +1403,8 @@ pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: size_t
     let mut dataMask: u32 = (*currentVM).dataMask as u32;
     if dest & dataMask != dest
         || src & dataMask != src
-        || (dest as usize).wrapping_add(n) & dataMask as usize
-            != (dest as usize).wrapping_add(n)
-        || (src as usize).wrapping_add(n) & dataMask as usize
-            != (src as usize).wrapping_add(n)
+        || (dest as usize).wrapping_add(n) & dataMask as usize != (dest as usize).wrapping_add(n)
+        || (src as usize).wrapping_add(n) & dataMask as usize != (src as usize).wrapping_add(n)
     {
         Com_Error(
             ERR_DROP as i32,

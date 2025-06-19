@@ -741,8 +741,7 @@ unsafe extern "C" fn select_colors(mut cinfo: j_decompress_ptr, mut desired_colo
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (desired_colors as usize)
-            .wrapping_mul(::std::mem::size_of::<box_0>() as usize),
+        (desired_colors as usize).wrapping_mul(::std::mem::size_of::<box_0>() as usize),
     ) as boxptr;
     /* Initialize one box containing whole space */
     numboxes = 1 as i32;
@@ -1518,11 +1517,9 @@ unsafe extern "C" fn start_pass_2_quant(mut cinfo: j_decompress_ptr, mut is_pre_
             .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
-            let mut arraysize: size_t = ((*cinfo).output_width.wrapping_add(2 as i32 as u32)
-                as usize)
-                .wrapping_mul(
-                    (3 as i32 as usize)
-                        .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
+            let mut arraysize: size_t =
+                ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as usize).wrapping_mul(
+                    (3 as i32 as usize).wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
                 );
             /* Allocate Floyd-Steinberg workspace if we didn't already. */
             if (*cquantize).fserrors.is_null() {
@@ -1611,8 +1608,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (((1 as i32) << 5 as i32) as usize)
-            .wrapping_mul(::std::mem::size_of::<hist2d>() as usize),
+        (((1 as i32) << 5 as i32) as usize).wrapping_mul(::std::mem::size_of::<hist2d>() as usize),
     ) as hist3d; /* histogram is garbage now */
     i = 0 as i32;
     while i < (1 as i32) << 5 as i32 {
@@ -1695,8 +1691,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
             cinfo as j_common_ptr,
             1 as i32,
             ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as usize).wrapping_mul(
-                (3 as i32 as usize)
-                    .wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
+                (3 as i32 as usize).wrapping_mul(::std::mem::size_of::<FSERROR>() as usize),
             ),
         ) as FSERRPTR;
         /* Might as well create the error-limiting table too. */

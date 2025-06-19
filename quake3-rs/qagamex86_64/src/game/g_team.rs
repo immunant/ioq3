@@ -1714,8 +1714,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
                 (*player).s.powerups,
             );
             j = crate::stdlib::strlen(entry.as_mut_ptr()) as i32;
-            if (stringlength + j) as usize
-                >= ::std::mem::size_of::<[libc::c_char; 8192]>() as usize
+            if (stringlength + j) as usize >= ::std::mem::size_of::<[libc::c_char; 8192]>() as usize
             {
                 break;
             }

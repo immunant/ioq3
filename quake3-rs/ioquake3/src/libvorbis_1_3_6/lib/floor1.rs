@@ -1258,8 +1258,7 @@ pub unsafe extern "C" fn floor1_fit(
         }
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize)
-                as isize,
+            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize) as isize,
         ) as *mut i32;
         *output.offset(0 as i32 as isize) =
             post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), 0 as i32);
@@ -1303,8 +1302,7 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize)
-                as isize,
+            (::std::mem::size_of::<i32>() as usize).wrapping_mul(posts as usize) as isize,
         ) as *mut i32;
         /* overly simpleminded--- look again post 1.2 */
         i = 0 as i32 as isize;
@@ -1442,11 +1440,7 @@ pub unsafe extern "C" fn floor1_encode(
         }
         /* we have everything we need. pack it out */
         /* mark nontrivial floor */
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            1 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
         /* beginning/end post */
         (*look).frames += 1;
         (*look).postbits += (crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -1573,11 +1567,7 @@ pub unsafe extern "C" fn floor1_encode(
         }
         return 1 as i32;
     } else {
-        oggpack_write(
-            opb as *mut oggpack_buffer,
-            0 as i32 as usize,
-            1 as i32,
-        );
+        oggpack_write(opb as *mut oggpack_buffer, 0 as i32 as usize, 1 as i32);
         crate::stdlib::memset(
             ilogmask as *mut libc::c_void,
             0 as i32,
@@ -1605,8 +1595,7 @@ unsafe extern "C" fn floor1_inverse1(
     {
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
-            ((*look).posts as usize)
-                .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
+            ((*look).posts as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
         ) as *mut i32;
         *fit_value.offset(0 as i32 as isize) = oggpack_read(
             &mut (*vb).opb as *mut _ as *mut oggpack_buffer,

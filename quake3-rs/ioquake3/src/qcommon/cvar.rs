@@ -1716,9 +1716,7 @@ pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut vmCvar_t) {
         // variable might have been cleared by a cvar_restart
     }
     (*vmCvar).modificationCount = (*cv).modificationCount;
-    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as i32 as usize)
-        > 256 as i32 as usize
-    {
+    if crate::stdlib::strlen((*cv).string).wrapping_add(1 as i32 as usize) > 256 as i32 as usize {
         Com_Error(
             ERR_DROP as i32,
             b"Cvar_Update: src %s length %u exceeds MAX_CVAR_VALUE_STRING\x00" as *const u8

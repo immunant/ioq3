@@ -1519,8 +1519,7 @@ unsafe extern "C" fn ArenaServers_Remove() {
                         .as_mut_ptr()
                         .offset((i + 1 as i32) as isize)
                         as *mut [libc::c_char; 64] as *const libc::c_void,
-                    ((g_arenaservers.numfavoriteaddresses - i - 1 as i32) * 64 as i32)
-                        as usize,
+                    ((g_arenaservers.numfavoriteaddresses - i - 1 as i32) * 64 as i32) as usize,
                 );
             }
             g_arenaservers.numfavoriteaddresses -= 1;
@@ -1730,16 +1729,14 @@ pub unsafe extern "C" fn ArenaServers_LoadFavorites() {
     crate::stdlib::memcpy(
         templist.as_mut_ptr() as *mut libc::c_void,
         g_favoriteserverlist.as_mut_ptr() as *const libc::c_void,
-        (::std::mem::size_of::<servernode_t>() as usize)
-            .wrapping_mul(16 as i32 as usize),
+        (::std::mem::size_of::<servernode_t>() as usize).wrapping_mul(16 as i32 as usize),
     );
     numtempitems = g_numfavoriteservers;
     // clear the current for sync
     crate::stdlib::memset(
         g_favoriteserverlist.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (::std::mem::size_of::<servernode_t>() as usize)
-            .wrapping_mul(16 as i32 as usize),
+        (::std::mem::size_of::<servernode_t>() as usize).wrapping_mul(16 as i32 as usize),
     );
     g_numfavoriteservers = 0 as i32;
     // resync existing results with new or deleted cvars

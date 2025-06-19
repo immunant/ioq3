@@ -871,8 +871,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         crate::stdlib::memcpy(
             TempGains.as_mut_ptr() as *mut libc::c_void,
             (*psEncCtrl).Gains.as_mut_ptr() as *const libc::c_void,
-            ((*psEnc).sCmn.nb_subfr as usize)
-                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+            ((*psEnc).sCmn.nb_subfr as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
         if (*psEnc).sCmn.nFramesEncoded == 0 as i32
             || (*psEnc).sCmn.LBRR_flags[((*psEnc).sCmn.nFramesEncoded - 1 as i32) as usize]
@@ -918,8 +917,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         crate::stdlib::memcpy(
             (*psEncCtrl).Gains.as_mut_ptr() as *mut libc::c_void,
             TempGains.as_mut_ptr() as *const libc::c_void,
-            ((*psEnc).sCmn.nb_subfr as usize)
-                .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+            ((*psEnc).sCmn.nb_subfr as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
         );
     };
 }

@@ -3034,8 +3034,7 @@ pub mod botlib_h {
             ) -> (),
         >,
         pub UnifyWhiteSpaces: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> ()>,
-        pub BotReplaceSynonyms:
-            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> ()>,
+        pub BotReplaceSynonyms: Option<unsafe extern "C" fn(_: *mut libc::c_char, _: usize) -> ()>,
         pub BotLoadChatFile:
             Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32>,
         pub BotSetChatGender: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
@@ -7205,12 +7204,7 @@ pub mod stdlib {
         ) -> i32;
 
         #[no_mangle]
-        pub fn snprintf(
-            _: *mut libc::c_char,
-            _: usize,
-            _: *const libc::c_char,
-            _: ...
-        ) -> i32;
+        pub fn snprintf(_: *mut libc::c_char, _: usize, _: *const libc::c_char, _: ...) -> i32;
 
         #[no_mangle]
         pub fn vsnprintf(
@@ -7287,18 +7281,11 @@ pub mod stdlib {
             __n: crate::stddef_h::size_t,
         ) -> crate::stddef_h::size_t;
         #[no_mangle]
-        pub fn memcpy(
-            _: *mut libc::c_void,
-            _: *const libc::c_void,
-            _: usize,
-        ) -> *mut libc::c_void;
+        pub fn memcpy(_: *mut libc::c_void, _: *const libc::c_void, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn memmove(
-            _: *mut libc::c_void,
-            _: *const libc::c_void,
-            _: usize,
-        ) -> *mut libc::c_void;
+        pub fn memmove(_: *mut libc::c_void, _: *const libc::c_void, _: usize)
+            -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn memset(_: *mut libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
@@ -7310,18 +7297,12 @@ pub mod stdlib {
         pub fn memchr(_: *const libc::c_void, _: i32, _: usize) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn strncpy(
-            _: *mut libc::c_char,
-            _: *const libc::c_char,
-            _: usize,
-        ) -> *mut libc::c_char;
+        pub fn strncpy(_: *mut libc::c_char, _: *const libc::c_char, _: usize)
+            -> *mut libc::c_char;
 
         #[no_mangle]
-        pub fn strncat(
-            _: *mut libc::c_char,
-            _: *const libc::c_char,
-            _: usize,
-        ) -> *mut libc::c_char;
+        pub fn strncat(_: *mut libc::c_char, _: *const libc::c_char, _: usize)
+            -> *mut libc::c_char;
 
         #[no_mangle]
         pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: usize) -> i32;

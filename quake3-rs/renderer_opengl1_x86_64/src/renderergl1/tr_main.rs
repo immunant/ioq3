@@ -2255,8 +2255,7 @@ unsafe extern "C" fn R_Radix(
     sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32 as *mut u8)
         .offset(byte as isize);
     end = sortKey.offset(
-        (size as usize).wrapping_mul(::std::mem::size_of::<drawSurf_t>() as usize)
-            as isize,
+        (size as usize).wrapping_mul(::std::mem::size_of::<drawSurf_t>() as usize) as isize,
     );
     while sortKey < end {
         count[*sortKey as usize] += 1;

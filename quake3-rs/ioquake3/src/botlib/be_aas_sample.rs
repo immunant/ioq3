@@ -218,8 +218,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         crate::src::botlib::be_aas_main::aasworld.linkheapsize = max_aaslinks;
         crate::src::botlib::be_aas_main::aasworld.linkheap =
             crate::src::botlib::l_memory::GetHunkMemory(
-                (max_aaslinks as usize)
-                    .wrapping_mul(::std::mem::size_of::<aas_link_t>() as usize),
+                (max_aaslinks as usize).wrapping_mul(::std::mem::size_of::<aas_link_t>() as usize),
             ) as *mut aas_link_t
     }
     //link the links on the heap

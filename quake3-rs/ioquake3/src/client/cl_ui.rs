@@ -476,8 +476,7 @@ pub unsafe extern "C" fn LAN_SaveServersToCache() {
         fileOut,
     );
     size = (::std::mem::size_of::<[serverInfo_t; 4096]>() as usize)
-        .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as usize)
-        as i32;
+        .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as usize) as i32;
     FS_Write(
         &mut size as *mut i32 as *const libc::c_void,
         ::std::mem::size_of::<i32>() as usize as i32,

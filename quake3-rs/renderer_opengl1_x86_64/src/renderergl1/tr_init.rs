@@ -1174,11 +1174,7 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     let mut memcount: size_t = 0;
     allbuf = RB_ReadPixels(x, y, width, height, &mut offset, &mut padlen);
     buffer = allbuf.offset(offset as isize).offset(-(18 as i32 as isize));
-    crate::stdlib::memset(
-        buffer as *mut libc::c_void,
-        0 as i32,
-        18 as i32 as usize,
-    );
+    crate::stdlib::memset(buffer as *mut libc::c_void, 0 as i32, 18 as i32 as usize);
     *buffer.offset(2 as i32 as isize) = 2 as i32 as byte;
     *buffer.offset(12 as i32 as isize) = (width & 255 as i32) as byte;
     *buffer.offset(13 as i32 as isize) = (width >> 8 as i32) as byte;
@@ -1448,11 +1444,7 @@ pub unsafe extern "C" fn R_LevelShot() {
         .expect("non-null function pointer")(
         128 as i32 * 128 as i32 * 3 as i32 + 18 as i32
     ) as *mut byte;
-    crate::stdlib::memset(
-        buffer as *mut libc::c_void,
-        0 as i32,
-        18 as i32 as usize,
-    );
+    crate::stdlib::memset(buffer as *mut libc::c_void, 0 as i32, 18 as i32 as usize);
     *buffer.offset(2 as i32 as isize) = 2 as i32 as byte;
     *buffer.offset(12 as i32 as isize) = 128 as i32 as byte;
     *buffer.offset(14 as i32 as isize) = 128 as i32 as byte;
@@ -2763,12 +2755,10 @@ pub unsafe extern "C" fn R_Init() {
     ptr = ri.Hunk_Alloc.expect("non-null function pointer")(
         (::std::mem::size_of::<backEndData_t>() as usize)
             .wrapping_add(
-                (::std::mem::size_of::<srfPoly_t>() as usize)
-                    .wrapping_mul(max_polys as usize),
+                (::std::mem::size_of::<srfPoly_t>() as usize).wrapping_mul(max_polys as usize),
             )
             .wrapping_add(
-                (::std::mem::size_of::<polyVert_t>() as usize)
-                    .wrapping_mul(max_polyverts as usize),
+                (::std::mem::size_of::<polyVert_t>() as usize).wrapping_mul(max_polyverts as usize),
             ) as i32,
         h_low,
     ) as *mut byte;
@@ -2779,8 +2769,7 @@ pub unsafe extern "C" fn R_Init() {
     (*backEndData).polyVerts = (ptr as *mut libc::c_char)
         .offset(::std::mem::size_of::<backEndData_t>() as usize as isize)
         .offset(
-            (::std::mem::size_of::<srfPoly_t>() as usize)
-                .wrapping_mul(max_polys as usize) as isize,
+            (::std::mem::size_of::<srfPoly_t>() as usize).wrapping_mul(max_polys as usize) as isize,
         ) as *mut polyVert_t;
     R_InitNextFrame();
     InitOpenGL();
@@ -3393,8 +3382,7 @@ pub unsafe extern "C" fn GetRefAPI(
 }
 unsafe extern "C" fn run_static_initializers() {
     s_numVidModes = (::std::mem::size_of::<[vidmode_t; 12]>() as usize)
-        .wrapping_div(::std::mem::size_of::<vidmode_t>() as usize)
-        as i32
+        .wrapping_div(::std::mem::size_of::<vidmode_t>() as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

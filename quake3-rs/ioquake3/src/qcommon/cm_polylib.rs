@@ -1255,8 +1255,7 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     crate::stdlib::memcpy(
         hullPoints.as_mut_ptr() as *mut libc::c_void,
         (**hull).p.as_mut_ptr() as *const libc::c_void,
-        (numHullPoints as usize)
-            .wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
+        (numHullPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
     );
     i = 0 as i32;
     while i < (*w).numpoints {
@@ -1342,8 +1341,7 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
                 crate::stdlib::memcpy(
                     hullPoints.as_mut_ptr() as *mut libc::c_void,
                     newHullPoints.as_mut_ptr() as *const libc::c_void,
-                    (numHullPoints as usize)
-                        .wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
+                    (numHullPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
                 );
             }
         }
@@ -1356,7 +1354,6 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     crate::stdlib::memcpy(
         (*w).p.as_mut_ptr() as *mut libc::c_void,
         hullPoints.as_mut_ptr() as *const libc::c_void,
-        (numHullPoints as usize)
-            .wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
+        (numHullPoints as usize).wrapping_mul(::std::mem::size_of::<vec3_t>() as usize),
     );
 }

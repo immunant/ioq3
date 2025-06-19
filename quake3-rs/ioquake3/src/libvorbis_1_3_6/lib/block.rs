@@ -374,12 +374,10 @@ unsafe extern "C" fn _vds_shared_init(
     but the correct size for decode */
     (*v).pcm_storage = (*ci).blocksizes[1 as i32 as usize] as i32;
     (*v).pcm = crate::stdlib::malloc(
-        ((*vi).channels as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as usize),
+        ((*vi).channels as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize),
     ) as *mut *mut f32;
     (*v).pcmret = crate::stdlib::malloc(
-        ((*vi).channels as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as usize),
+        ((*vi).channels as usize).wrapping_mul(::std::mem::size_of::<*mut f32>() as usize),
     ) as *mut *mut f32;
     let mut i_0: i32 = 0;
     i_0 = 0 as i32;
@@ -608,8 +606,7 @@ pub unsafe extern "C" fn vorbis_analysis_buffer(
             let ref mut fresh5 = *(*v).pcm.offset(i as isize);
             *fresh5 = crate::stdlib::realloc(
                 *(*v).pcm.offset(i as isize) as *mut libc::c_void,
-                ((*v).pcm_storage as usize)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+                ((*v).pcm_storage as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
             ) as *mut f32;
             i += 1
         }
@@ -628,14 +625,12 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut vorbis_dsp_state) {
     let mut order: i32 = 16 as i32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (order as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize)
-            as usize,
+        (order as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut lpc: *mut f32 = fresh7.as_mut_ptr() as *mut f32;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        ((*v).pcm_current as usize)
-            .wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
+        ((*v).pcm_current as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
     );
     let mut work: *mut f32 = fresh8.as_mut_ptr() as *mut f32;
     let mut j: isize = 0;
@@ -691,8 +686,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(mut v: *mut vorbis_dsp_state, mut
         let mut i: i32 = 0;
         let mut fresh9 = ::std::vec::from_elem(
             0,
-            (order as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize)
-                as usize,
+            (order as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize) as usize,
         );
         let mut lpc: *mut f32 = fresh9.as_mut_ptr() as *mut f32;
         /* if it wasn't done earlier (very short sample) */
@@ -857,13 +851,11 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     (*vbi).ampmax = (*g).ampmax;
     (*vb).pcm = _vorbis_block_alloc(
         vb,
-        (::std::mem::size_of::<*mut f32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as isize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul((*vi).channels as usize) as isize,
     ) as *mut *mut f32;
     (*vbi).pcmdelay = _vorbis_block_alloc(
         vb,
-        (::std::mem::size_of::<*mut f32>() as usize)
-            .wrapping_mul((*vi).channels as usize) as isize,
+        (::std::mem::size_of::<*mut f32>() as usize).wrapping_mul((*vi).channels as usize) as isize,
     ) as *mut *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -908,8 +900,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
             crate::stdlib::memmove(
                 *(*v).pcm.offset(i as isize) as *mut libc::c_void,
                 (*(*v).pcm.offset(i as isize)).offset(movementW as isize) as *const libc::c_void,
-                ((*v).pcm_current as usize)
-                    .wrapping_mul(::std::mem::size_of::<f32>() as usize),
+                ((*v).pcm_current as usize).wrapping_mul(::std::mem::size_of::<f32>() as usize),
             );
             i += 1
         }

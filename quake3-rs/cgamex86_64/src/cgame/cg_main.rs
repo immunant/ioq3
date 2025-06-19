@@ -4438,8 +4438,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn CG_MouseEvent(mut _x: i32, mut _y: i32) {}
 unsafe extern "C" fn run_static_initializers() {
     cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 83]>() as usize)
-        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize)
-        as i32
+        .wrapping_div(::std::mem::size_of::<cvarTable_t>() as usize) as i32
 }
 #[used]
 #[cfg_attr(target_os = "linux", link_section = ".init_array")]

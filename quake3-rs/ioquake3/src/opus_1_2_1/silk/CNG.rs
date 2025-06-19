@@ -636,8 +636,7 @@ pub unsafe extern "C" fn silk_CNG(
         crate::stdlib::memcpy(
             CNG_sig_Q14 as *mut libc::c_void,
             (*psCNG).CNG_synth_state.as_mut_ptr() as *const libc::c_void,
-            (16 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
         i = 0 as i32;
         while i < length {
@@ -1034,8 +1033,7 @@ pub unsafe extern "C" fn silk_CNG(
         crate::stdlib::memcpy(
             (*psCNG).CNG_synth_state.as_mut_ptr() as *mut libc::c_void,
             &mut *CNG_sig_Q14.offset(length as isize) as *mut opus_int32 as *const libc::c_void,
-            (16 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (16 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
     } else {
         crate::stdlib::memset(

@@ -209,8 +209,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* Take the absolute value of the pulses */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((iter * 16 as i32) as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((iter * 16 as i32) as usize) as usize,
     );
     abs_pulses = fresh0.as_mut_ptr() as *mut i32;
     i = 0 as i32;
@@ -244,14 +243,12 @@ pub unsafe extern "C" fn silk_encode_pulses(
     /* Calc sum pulses per shell code frame */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize) as usize,
     );
     sum_pulses = fresh1.as_mut_ptr() as *mut i32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(iter as usize) as usize,
     );
     nRshifts = fresh2.as_mut_ptr() as *mut i32;
     abs_pulses_ptr = abs_pulses;

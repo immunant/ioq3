@@ -135,11 +135,7 @@ pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggp
         (*info).begin as usize,
         24 as i32,
     );
-    oggpack_write(
-        opb as *mut oggpack_buffer,
-        (*info).end as usize,
-        24 as i32,
-    );
+    oggpack_write(opb as *mut oggpack_buffer, (*info).end as usize, 24 as i32);
     oggpack_write(
         opb as *mut oggpack_buffer,
         ((*info).grouping - 1 as i32) as usize,
@@ -170,11 +166,7 @@ pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggp
                 (*info).secondstages[j as usize] as usize,
                 3 as i32,
             );
-            oggpack_write(
-                opb as *mut oggpack_buffer,
-                1 as i32 as usize,
-                1 as i32,
-            );
+            oggpack_write(opb as *mut oggpack_buffer, 1 as i32 as usize, 1 as i32);
             oggpack_write(
                 opb as *mut oggpack_buffer,
                 ((*info).secondstages[j as usize] >> 3 as i32) as usize,
@@ -400,8 +392,7 @@ pub unsafe extern "C" fn res0_look(
     }
     (*look).stages = maxstage;
     (*look).decodemap = crate::stdlib::malloc(
-        ((*look).partvals as usize)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize),
+        ((*look).partvals as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize),
     ) as *mut *mut i32;
     j = 0 as i32;
     while j < (*look).partvals {
@@ -571,8 +562,7 @@ unsafe extern "C" fn _01class(
     let mut partvals: i32 = n / samples_per_partition;
     let mut partword: *mut *mut isize = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut isize>() as usize)
-            as isize,
+        (ch as usize).wrapping_mul(::std::mem::size_of::<*mut isize>() as usize) as isize,
     ) as *mut *mut isize;
     let mut scale: f32 = (100.0f64 / samples_per_partition as f64) as f32;
     /* we find the partition type for each partition of each
@@ -661,8 +651,7 @@ unsafe extern "C" fn _2class(
     let ref mut fresh7 = *partword.offset(0 as i32 as isize);
     *fresh7 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        (partvals as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize)
-            as isize,
+        (partvals as usize).wrapping_mul(::std::mem::size_of::<isize>() as usize) as isize,
     ) as *mut isize;
     crate::stdlib::memset(
         *partword.offset(0 as i32 as isize) as *mut libc::c_void,
@@ -852,9 +841,7 @@ unsafe extern "C" fn _01inverse(
         let mut partwords: i32 = (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
         let mut fresh8 = ::std::vec::from_elem(
             0,
-            (ch as usize)
-                .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as usize)
-                as usize,
+            (ch as usize).wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as usize) as usize,
         );
         let mut partword: *mut *mut *mut i32 = fresh8.as_mut_ptr() as *mut *mut *mut i32;
         j = 0 as i32 as isize;
@@ -862,8 +849,7 @@ unsafe extern "C" fn _01inverse(
             let ref mut fresh9 = *partword.offset(j as isize);
             *fresh9 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (partwords as usize)
-                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
+                (partwords as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
                     as isize,
             ) as *mut *mut i32;
             j += 1
@@ -1138,8 +1124,7 @@ pub unsafe extern "C" fn res2_forward(
     /* ugly; reallocs for each coupling pass :-( */
     let mut work: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut vorbis_block,
-        ((ch as isize * n) as usize)
-            .wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
+        ((ch as isize * n) as usize).wrapping_mul(::std::mem::size_of::<i32>() as usize) as isize,
     ) as *mut i32;
     i = 0 as i32 as isize;
     while i < ch as isize {
@@ -1209,8 +1194,7 @@ pub unsafe extern "C" fn res2_inverse(
         let mut partword: *mut *mut i32 =
             crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut vorbis_block,
-                (partwords as usize)
-                    .wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
+                (partwords as usize).wrapping_mul(::std::mem::size_of::<*mut i32>() as usize)
                     as isize,
             ) as *mut *mut i32;
         i = 0 as i32 as isize;

@@ -91,8 +91,7 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
     crate::stdlib::memcpy(
         buf as *mut libc::c_void,
         S as *const libc::c_void,
-        (4 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (4 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
     loop
     /* Iterate over blocks of frameSizeIn input samples */
@@ -209,15 +208,13 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
             &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
-            (4 as i32 as usize)
-                .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+            (4 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
     crate::stdlib::memcpy(
         S as *mut libc::c_void,
         &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
-        (4 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
+        (4 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int32>() as usize),
     );
 }

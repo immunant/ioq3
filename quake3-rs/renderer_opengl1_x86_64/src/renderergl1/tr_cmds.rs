@@ -526,8 +526,8 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
     bytes = ((bytes as usize)
         .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as usize)
         .wrapping_sub(1 as i32 as usize)
-        & !(::std::mem::size_of::<*mut libc::c_void>() as usize)
-            .wrapping_sub(1 as i32 as usize)) as i32;
+        & !(::std::mem::size_of::<*mut libc::c_void>() as usize).wrapping_sub(1 as i32 as usize))
+        as i32;
     // always leave room for the end of list command
     if (((*cmdList).used + bytes) as usize)
         .wrapping_add(::std::mem::size_of::<i32>() as usize)
@@ -535,8 +535,7 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
         > 0x40000 as i32 as usize
     {
         if bytes as usize
-            > (0x40000 as i32 as usize)
-                .wrapping_sub(::std::mem::size_of::<i32>() as usize)
+            > (0x40000 as i32 as usize).wrapping_sub(::std::mem::size_of::<i32>() as usize)
         {
             ri.Error.expect("non-null function pointer")(
                 ERR_FATAL as i32,
@@ -811,9 +810,8 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
         }
     }
     if glConfig.stereoEnabled as u64 != 0 {
-        cmd = R_GetCommandBuffer(
-            ::std::mem::size_of::<drawBufferCommand_t>() as usize as i32,
-        ) as *mut drawBufferCommand_t;
+        cmd = R_GetCommandBuffer(::std::mem::size_of::<drawBufferCommand_t>() as usize as i32)
+            as *mut drawBufferCommand_t;
         if cmd.is_null() {
             return;
         }
@@ -854,9 +852,9 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                 if cmd.is_null() {
                     return;
                 }
-                colcmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<colorMaskCommand_t>() as usize as i32
-                ) as *mut colorMaskCommand_t;
+                colcmd =
+                    R_GetCommandBuffer(::std::mem::size_of::<colorMaskCommand_t>() as usize as i32)
+                        as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
                 }
@@ -869,9 +867,9 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                     return;
                 }
                 (*cldcmd).commandId = RC_CLEARDEPTH as i32;
-                colcmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<colorMaskCommand_t>() as usize as i32
-                ) as *mut colorMaskCommand_t;
+                colcmd =
+                    R_GetCommandBuffer(::std::mem::size_of::<colorMaskCommand_t>() as usize as i32)
+                        as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
                 }
@@ -898,9 +896,8 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                     stereoFrame as u32,
                 );
             }
-            cmd = R_GetCommandBuffer(
-                ::std::mem::size_of::<drawBufferCommand_t>() as usize as i32,
-            ) as *mut drawBufferCommand_t;
+            cmd = R_GetCommandBuffer(::std::mem::size_of::<drawBufferCommand_t>() as usize as i32)
+                as *mut drawBufferCommand_t;
             if cmd.is_null() {
                 return;
             }

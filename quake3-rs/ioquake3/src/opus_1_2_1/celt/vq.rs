@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod entcode_h {
     /*OPT: ec_window must be at least 32 bits, but if you have fast arithmetic on a
     larger type, you can speed up the decoder by using it here.*/
@@ -291,8 +289,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
     let mut yy: opus_val16 = 0.;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(N as usize)
-            as usize,
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul(N as usize) as usize,
     );
     y = fresh2.as_mut_ptr() as *mut celt_norm;
     let mut fresh3 = ::std::vec::from_elem(
@@ -464,8 +461,7 @@ pub unsafe extern "C" fn alg_quant(
     /* Covers vectorization by up to 4. */
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize)
-            .wrapping_mul((N + 3 as i32) as usize) as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul((N + 3 as i32) as usize) as usize,
     );
     iy = fresh7.as_mut_ptr() as *mut i32;
     exp_rotation(X, N, 1 as i32, B, K, spread);

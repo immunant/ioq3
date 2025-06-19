@@ -387,8 +387,7 @@ unsafe extern "C" fn deemphasis(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul(N as usize)
-            as usize,
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul(N as usize) as usize,
     );
     scratch = fresh0.as_mut_ptr() as *mut celt_sig;
     coef0 = *coef.offset(0 as i32 as isize);
@@ -469,8 +468,7 @@ unsafe extern "C" fn celt_synthesis(
     N = (*mode).shortMdctSize << LM;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul(N as usize)
-            as usize,
+        (::std::mem::size_of::<celt_sig>() as usize).wrapping_mul(N as usize) as usize,
     );
     freq = fresh1.as_mut_ptr() as *mut celt_sig;
     M = (1 as i32) << LM;
@@ -504,9 +502,7 @@ unsafe extern "C" fn celt_synthesis(
             freq as *const libc::c_void,
             (N as usize)
                 .wrapping_mul(::std::mem::size_of::<celt_sig>() as usize)
-                .wrapping_add(
-                    (0 as i32 as isize * freq2.offset_from(freq) as isize) as usize,
-                ),
+                .wrapping_add((0 as i32 as isize * freq2.offset_from(freq) as isize) as usize),
         );
         b = 0 as i32;
         while b < B {
@@ -796,8 +792,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
         };
         let mut fresh3 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<celt_norm>() as usize)
-                .wrapping_mul((C * N) as usize) as usize,
+            (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize) as usize,
         );
         X = fresh3.as_mut_ptr() as *mut celt_norm;
         /* Energy decay */
@@ -906,8 +901,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
         }
         let mut fresh4 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<opus_val32>() as usize)
-                .wrapping_mul(overlap as usize) as usize,
+            (::std::mem::size_of::<opus_val32>() as usize).wrapping_mul(overlap as usize) as usize,
         );
         etmp = fresh4.as_mut_ptr() as *mut opus_val32;
         let mut fresh5 = ::std::vec::from_elem(
@@ -1424,8 +1418,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     );
     let mut fresh6 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     tf_res = fresh6.as_mut_ptr() as *mut i32;
     tf_decode(start, end, isTransient, tf_res, LM, dec);
@@ -1440,15 +1433,13 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     }
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     cap = fresh7.as_mut_ptr() as *mut i32;
     init_caps(mode as *const OpusCustomMode, cap, LM, C);
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     offsets = fresh8.as_mut_ptr() as *mut i32;
     dynalloc_logp = 6 as i32;
@@ -1508,8 +1499,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     }
     let mut fresh9 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     fine_quant = fresh9.as_mut_ptr() as *mut i32;
     alloc_trim = if tell + ((6 as i32) << 3 as i32) <= total_bits {
@@ -1533,14 +1523,12 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     bits -= anti_collapse_rsv;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     pulses = fresh10.as_mut_ptr() as *mut i32;
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize)
-            as usize,
+        (::std::mem::size_of::<i32>() as usize).wrapping_mul(nbEBands as usize) as usize,
     );
     fine_priority = fresh11.as_mut_ptr() as *mut i32;
     codedBands = crate::src::opus_1_2_1::celt::rate::compute_allocation(
@@ -1595,14 +1583,12 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     /* Decode fixed codebook */
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<u8>() as usize).wrapping_mul((C * nbEBands) as usize)
-            as usize,
+        (::std::mem::size_of::<u8>() as usize).wrapping_mul((C * nbEBands) as usize) as usize,
     ); /* *< Interleaved normalised MDCTs */
     collapse_masks = fresh12.as_mut_ptr() as *mut u8;
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize)
-            as usize,
+        (::std::mem::size_of::<celt_norm>() as usize).wrapping_mul((C * N) as usize) as usize,
     );
     X = fresh13.as_mut_ptr() as *mut celt_norm;
     crate::src::opus_1_2_1::celt::bands::quant_all_bands(
@@ -1940,8 +1926,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
                 0 as i32,
                 ((opus_custom_decoder_get_size((*st).mode, (*st).channels) as isize
                     - (&mut (*st).rng as *mut opus_uint32 as *mut libc::c_char)
-                        .offset_from(st as *mut libc::c_char) as isize)
-                    as usize)
+                        .offset_from(st as *mut libc::c_char) as isize) as usize)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as usize),
             );
             i = 0 as i32;

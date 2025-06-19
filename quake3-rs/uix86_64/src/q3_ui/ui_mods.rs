@@ -266,12 +266,11 @@ unsafe extern "C" fn UI_Mods_ParseInfos(
     let ref mut fresh0 = *s_mods.list.itemnames.offset(s_mods.list.numitems as isize);
     *fresh0 = s_mods.descriptionPtr;
     s_mods.descriptionPtr = s_mods.descriptionPtr.offset(
-        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as i32 as usize)
-            as isize,
+        crate::stdlib::strlen(s_mods.descriptionPtr).wrapping_add(1 as i32 as usize) as isize,
     );
-    s_mods.fs_gamePtr = s_mods.fs_gamePtr.offset(
-        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as usize) as isize,
-    );
+    s_mods.fs_gamePtr = s_mods
+        .fs_gamePtr
+        .offset(crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as usize) as isize);
     s_mods.list.numitems += 1;
 }
 /*

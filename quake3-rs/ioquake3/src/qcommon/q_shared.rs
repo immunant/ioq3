@@ -1327,9 +1327,7 @@ pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> i32 {
             n *= 16 as i32;
             digit = ({
                 let mut __res: i32 = 0;
-                if ::std::mem::size_of::<libc::c_char>() as usize
-                    > 1 as i32 as usize
-                {
+                if ::std::mem::size_of::<libc::c_char>() as usize > 1 as i32 as usize {
                     if 0 != 0 {
                         let mut __c: i32 = *str.offset(i as isize) as i32;
                         __res = if __c < -(128 as i32) || __c > 255 as i32 {

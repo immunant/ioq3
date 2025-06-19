@@ -157,8 +157,7 @@ pub unsafe extern "C" fn opus_head_parse(
             &mut head as *mut OpusHead as *const libc::c_void,
             head.mapping
                 .as_mut_ptr()
-                .offset_from(&mut head as *mut OpusHead as *mut u8) as isize
-                as usize,
+                .offset_from(&mut head as *mut OpusHead as *mut u8) as isize as usize,
         );
     }
     return 0 as i32;
@@ -875,17 +874,15 @@ unsafe extern "C" fn op_extract_jpeg_params(
                     *_height = ((*_buf.offset(offs.wrapping_add(3 as i32 as usize) as isize)
                         as i32)
                         << 8 as i32
-                        | *_buf.offset(offs.wrapping_add(4 as i32 as usize) as isize)
-                            as i32) as opus_uint32;
-                    *_width = ((*_buf.offset(offs.wrapping_add(5 as i32 as usize) as isize)
-                        as i32)
+                        | *_buf.offset(offs.wrapping_add(4 as i32 as usize) as isize) as i32)
+                        as opus_uint32;
+                    *_width = ((*_buf.offset(offs.wrapping_add(5 as i32 as usize) as isize) as i32)
                         << 8 as i32
-                        | *_buf.offset(offs.wrapping_add(6 as i32 as usize) as isize)
-                            as i32) as opus_uint32;
-                    *_depth = (*_buf.offset(offs.wrapping_add(2 as i32 as usize) as isize)
-                        as i32
-                        * *_buf.offset(offs.wrapping_add(7 as i32 as usize) as isize)
-                            as i32) as opus_uint32;
+                        | *_buf.offset(offs.wrapping_add(6 as i32 as usize) as isize) as i32)
+                        as opus_uint32;
+                    *_depth = (*_buf.offset(offs.wrapping_add(2 as i32 as usize) as isize) as i32
+                        * *_buf.offset(offs.wrapping_add(7 as i32 as usize) as isize) as i32)
+                        as opus_uint32;
                     *_colors = 0 as i32 as opus_uint32;
                     *_has_palette = 0 as i32
                 }
@@ -925,9 +922,7 @@ unsafe extern "C" fn op_extract_png_params(
         while _buf_sz.wrapping_sub(offs) >= 12 as i32 as usize {
             let mut chunk_len: ogg_uint32_t = 0;
             chunk_len = op_parse_uint32be(_buf.offset(offs as isize));
-            if chunk_len as usize
-                > _buf_sz.wrapping_sub(offs.wrapping_add(12 as i32 as usize))
-            {
+            if chunk_len as usize > _buf_sz.wrapping_sub(offs.wrapping_add(12 as i32 as usize)) {
                 break;
             }
             if chunk_len == 13 as i32 as u32
@@ -940,8 +935,7 @@ unsafe extern "C" fn op_extract_png_params(
                 let mut color_type: i32 = 0;
                 *_width = op_parse_uint32be(_buf.offset(offs as isize).offset(8 as i32 as isize));
                 *_height = op_parse_uint32be(_buf.offset(offs as isize).offset(12 as i32 as isize));
-                color_type =
-                    *_buf.offset(offs.wrapping_add(17 as i32 as usize) as isize) as i32;
+                color_type = *_buf.offset(offs.wrapping_add(17 as i32 as usize) as isize) as i32;
                 if color_type == 3 as i32 {
                     *_depth = 24 as i32 as opus_uint32;
                     *_has_palette = 1 as i32
@@ -972,8 +966,7 @@ unsafe extern "C" fn op_extract_png_params(
                 *_colors = chunk_len.wrapping_div(3 as i32 as u32);
                 break;
             }
-            offs = (offs as usize)
-                .wrapping_add((12 as i32 as u32).wrapping_add(chunk_len) as usize)
+            offs = (offs as usize).wrapping_add((12 as i32 as u32).wrapping_add(chunk_len) as usize)
                 as size_t
         }
     };
@@ -1059,11 +1052,8 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         while j < 4 as i32 {
             let mut c: u32 = 0;
             let mut d: u32 = 0;
-            c = *_tag.offset(
-                (4 as i32 as usize)
-                    .wrapping_mul(i)
-                    .wrapping_add(j as usize) as isize,
-            ) as u8 as u32;
+            c = *_tag.offset((4 as i32 as usize).wrapping_mul(i).wrapping_add(j as usize) as isize)
+                as u8 as u32;
             if c == '+' as i32 as u32 {
                 d = 62 as i32 as u32
             } else if c == '/' as i32 as u32 {
@@ -1079,10 +1069,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
             } else if c >= 'A' as i32 as u32 && c <= 'Z' as i32 as u32 {
                 d = c.wrapping_sub('A' as i32 as u32)
             } else if c == '=' as i32 as u32
-                && (3 as i32 as usize)
-                    .wrapping_mul(i)
-                    .wrapping_add(j as usize)
-                    > _buf_sz
+                && (3 as i32 as usize).wrapping_mul(i).wrapping_add(j as usize) > _buf_sz
             {
                 d = 0 as i32 as u32
             } else {
@@ -1091,8 +1078,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
             value = value << 6 as i32 | d;
             j += 1
         }
-        *_buf.offset((3 as i32 as usize).wrapping_mul(i) as isize) =
-            (value >> 16 as i32) as u8;
+        *_buf.offset((3 as i32 as usize).wrapping_mul(i) as isize) = (value >> 16 as i32) as u8;
         if (3 as i32 as usize)
             .wrapping_mul(i)
             .wrapping_add(1 as i32 as usize)
@@ -1136,8 +1122,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     crate::stdlib::memcpy(
         mime_type as *mut libc::c_void,
         _buf.offset(i as isize) as *const libc::c_void,
-        (::std::mem::size_of::<libc::c_char>() as usize)
-            .wrapping_mul(mime_type_length as usize),
+        (::std::mem::size_of::<libc::c_char>() as usize).wrapping_mul(mime_type_length as usize),
     );
     *mime_type.offset(mime_type_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).mime_type = mime_type;
@@ -1162,8 +1147,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     crate::stdlib::memcpy(
         description as *mut libc::c_void,
         _buf.offset(i as isize) as *const libc::c_void,
-        (::std::mem::size_of::<libc::c_char>() as usize)
-            .wrapping_mul(description_length as usize),
+        (::std::mem::size_of::<libc::c_char>() as usize).wrapping_mul(description_length as usize),
     );
     *description.offset(description_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).description = description;
@@ -1377,14 +1361,10 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
     if buf_sz < 32 as i32 as usize {
         return -(132 as i32);
     }
-    if *_tag.offset(tag_length.wrapping_sub(1 as i32 as usize) as isize) as i32
-        == '=' as i32
-    {
+    if *_tag.offset(tag_length.wrapping_sub(1 as i32 as usize) as isize) as i32 == '=' as i32 {
         buf_sz = buf_sz.wrapping_sub(1)
     }
-    if *_tag.offset(tag_length.wrapping_sub(2 as i32 as usize) as isize) as i32
-        == '=' as i32
-    {
+    if *_tag.offset(tag_length.wrapping_sub(2 as i32 as usize) as isize) as i32 == '=' as i32 {
         buf_sz = buf_sz.wrapping_sub(1)
     }
     if buf_sz < 32 as i32 as usize {
@@ -1392,8 +1372,7 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
     }
     /*Allocate an extra byte to allow appending a terminating NUL to URL data.*/
     buf = crate::stdlib::malloc(
-        (::std::mem::size_of::<u8>() as usize)
-            .wrapping_mul(buf_sz.wrapping_add(1 as i32 as usize)),
+        (::std::mem::size_of::<u8>() as usize).wrapping_mul(buf_sz.wrapping_add(1 as i32 as usize)),
     ) as *mut u8;
     if buf.is_null() {
         return -(129 as i32);

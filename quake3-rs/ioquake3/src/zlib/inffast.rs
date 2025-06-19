@@ -192,9 +192,10 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                 break;
             } else if op & 64 as i32 as u32 == 0 as i32 as u32 {
                 /* 2nd level length code */
-                this = *lcode.offset((this.val as usize).wrapping_add(
-                    hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32) as usize,
-                ) as isize)
+                this =
+                    *lcode.offset((this.val as usize).wrapping_add(
+                        hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32) as usize,
+                    ) as isize)
             } else if op & 32 as i32 as u32 != 0 {
                 current_block_141 = 5250576585193495047;
                 break;
@@ -240,8 +241,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
                     } else if op & 64 as i32 as u32 == 0 as i32 as u32 {
                         /* 2nd level distance code */
                         this = *dcode.offset((this.val as usize).wrapping_add(
-                            hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32)
-                                as usize,
+                            hold & ((1 as u32) << op).wrapping_sub(1 as i32 as u32) as usize,
                         ) as isize)
                     } else {
                         (*strm).msg = b"invalid distance code\x00" as *const u8

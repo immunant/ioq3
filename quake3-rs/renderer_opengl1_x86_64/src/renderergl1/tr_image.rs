@@ -2643,8 +2643,8 @@ pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhand
     }
     // copy surfaces to skin
     (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
-        ((*skin).numSurfaces as usize)
-            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as usize) as i32,
+        ((*skin).numSurfaces as usize).wrapping_mul(::std::mem::size_of::<skinSurface_t>() as usize)
+            as i32,
         h_low,
     ) as *mut skinSurface_t;
     crate::stdlib::memcpy(

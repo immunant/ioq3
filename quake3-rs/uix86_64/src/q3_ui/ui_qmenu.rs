@@ -997,8 +997,7 @@ unsafe extern "C" fn SpinControl_Init(mut s: *mut menulist_s) {
     let mut l: i32 = 0;
     let mut str: *const libc::c_char = 0 as *const libc::c_char;
     if !(*s).generic.name.is_null() {
-        len =
-            crate::stdlib::strlen((*s).generic.name).wrapping_mul(8 as i32 as usize) as i32
+        len = crate::stdlib::strlen((*s).generic.name).wrapping_mul(8 as i32 as usize) as i32
     } else {
         len = 0 as i32
     }

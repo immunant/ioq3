@@ -280,10 +280,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
             current_block = 1692384543052803397;
         } else {
             (*b).storage = (*b).endbyte + pbytes + 256 as i32 as isize;
-            ret = crate::stdlib::realloc(
-                (*b).buffer as *mut libc::c_void,
-                (*b).storage as usize,
-            );
+            ret = crate::stdlib::realloc((*b).buffer as *mut libc::c_void, (*b).storage as usize);
             if ret.is_null() {
                 current_block = 1692384543052803397;
             } else {
@@ -306,20 +303,12 @@ unsafe extern "C" fn oggpack_writecopy_helper(
         /* unaligned copy.  Do it the hard way. */
         i = 0 as i32;
         while (i as isize) < bytes {
-            w.expect("non-null function pointer")(
-                b,
-                *ptr.offset(i as isize) as usize,
-                8 as i32,
-            );
+            w.expect("non-null function pointer")(b, *ptr.offset(i as isize) as usize, 8 as i32);
             i += 1
         }
     } else {
         /* aligned block copy */
-        crate::stdlib::memmove(
-            (*b).ptr as *mut libc::c_void,
-            source,
-            bytes as usize,
-        );
+        crate::stdlib::memmove((*b).ptr as *mut libc::c_void, source, bytes as usize);
         (*b).ptr = (*b).ptr.offset(bytes as isize);
         (*b).endbyte += bytes;
         *(*b).ptr = 0 as i32 as u8
@@ -352,10 +341,7 @@ pub unsafe extern "C" fn oggpack_writecopy(
         b,
         source,
         bits,
-        Some(
-            oggpack_write
-                as unsafe extern "C" fn(_: *mut oggpack_buffer, _: usize, _: i32) -> (),
-        ),
+        Some(oggpack_write as unsafe extern "C" fn(_: *mut oggpack_buffer, _: usize, _: i32) -> ()),
         0 as i32,
     );
 }
@@ -371,8 +357,7 @@ pub unsafe extern "C" fn oggpackB_writecopy(
         source,
         bits,
         Some(
-            oggpackB_write
-                as unsafe extern "C" fn(_: *mut oggpack_buffer, _: usize, _: i32) -> (),
+            oggpackB_write as unsafe extern "C" fn(_: *mut oggpack_buffer, _: usize, _: i32) -> (),
         ),
         1 as i32,
     );
@@ -460,11 +445,10 @@ pub unsafe extern "C" fn oggpack_look(mut b: *mut oggpack_buffer, mut bits: i32)
     }
     ret = (*(*b).ptr.offset(0 as i32 as isize) as i32 >> (*b).endbit) as usize;
     if bits > 8 as i32 {
-        ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 8 as i32 - (*b).endbit)
-            as usize;
+        ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 8 as i32 - (*b).endbit) as usize;
         if bits > 16 as i32 {
-            ret |= ((*(*b).ptr.offset(2 as i32 as isize) as i32) << 16 as i32 - (*b).endbit)
-                as usize;
+            ret |=
+                ((*(*b).ptr.offset(2 as i32 as isize) as i32) << 16 as i32 - (*b).endbit) as usize;
             if bits > 24 as i32 {
                 ret |= ((*(*b).ptr.offset(3 as i32 as isize) as i32) << 24 as i32 - (*b).endbit)
                     as usize;
@@ -499,17 +483,14 @@ pub unsafe extern "C" fn oggpackB_look(mut b: *mut oggpack_buffer, mut bits: i32
             }
         }
     }
-    ret =
-        ((*(*b).ptr.offset(0 as i32 as isize) as i32) << 24 as i32 + (*b).endbit) as usize;
+    ret = ((*(*b).ptr.offset(0 as i32 as isize) as i32) << 24 as i32 + (*b).endbit) as usize;
     if bits > 8 as i32 {
-        ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 16 as i32 + (*b).endbit)
-            as usize;
+        ret |= ((*(*b).ptr.offset(1 as i32 as isize) as i32) << 16 as i32 + (*b).endbit) as usize;
         if bits > 16 as i32 {
-            ret |= ((*(*b).ptr.offset(2 as i32 as isize) as i32) << 8 as i32 + (*b).endbit)
-                as usize;
+            ret |=
+                ((*(*b).ptr.offset(2 as i32 as isize) as i32) << 8 as i32 + (*b).endbit) as usize;
             if bits > 24 as i32 {
-                ret |=
-                    ((*(*b).ptr.offset(3 as i32 as isize) as i32) << (*b).endbit) as usize;
+                ret |= ((*(*b).ptr.offset(3 as i32 as isize) as i32) << (*b).endbit) as usize;
                 if bits > 32 as i32 && (*b).endbit != 0 {
                     ret |= (*(*b).ptr.offset(4 as i32 as isize) as i32 >> 8 as i32 - (*b).endbit)
                         as usize
@@ -517,9 +498,8 @@ pub unsafe extern "C" fn oggpackB_look(mut b: *mut oggpack_buffer, mut bits: i32
             }
         }
     }
-    return ((ret & 0xffffffff as u32 as usize)
-        >> (m >> 1 as i32)
-        >> (m + 1 as i32 >> 1 as i32)) as isize;
+    return ((ret & 0xffffffff as u32 as usize) >> (m >> 1 as i32) >> (m + 1 as i32 >> 1 as i32))
+        as isize;
 }
 #[no_mangle]
 

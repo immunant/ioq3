@@ -275,38 +275,32 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     crate::stdlib::memcpy(
         mid as *mut libc::c_void,
         (*state).sMid.as_mut_ptr() as *const libc::c_void,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         side as *mut libc::c_void,
         (*state).sSide.as_mut_ptr() as *const libc::c_void,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         (*state).sMid.as_mut_ptr() as *mut libc::c_void,
         &mut *mid.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     crate::stdlib::memcpy(
         (*state).sSide.as_mut_ptr() as *mut libc::c_void,
         &mut *side.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
-        (2 as i32 as usize)
-            .wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
+        (2 as i32 as usize).wrapping_mul(::std::mem::size_of::<opus_int16>() as usize),
     );
     /* LP and HP filter mid signal */
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(frame_length as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(frame_length as usize) as usize,
     );
     LP_mid = fresh1.as_mut_ptr() as *mut opus_int16;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(frame_length as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(frame_length as usize) as usize,
     );
     HP_mid = fresh2.as_mut_ptr() as *mut opus_int16;
     n = 0 as i32;
@@ -338,14 +332,12 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     /* LP and HP filter side signal */
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(frame_length as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(frame_length as usize) as usize,
     );
     LP_side = fresh3.as_mut_ptr() as *mut opus_int16;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_int16>() as usize)
-            .wrapping_mul(frame_length as usize) as usize,
+        (::std::mem::size_of::<opus_int16>() as usize).wrapping_mul(frame_length as usize) as usize,
     );
     HP_side = fresh4.as_mut_ptr() as *mut opus_int16;
     n = 0 as i32;
