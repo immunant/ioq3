@@ -46,7 +46,7 @@ function: basic shared codebook operations
 /* *** pack/unpack helpers ******************************************/
 #[no_mangle]
 
-pub unsafe extern "C" fn ov_ilog(mut v: crate::config_types_h::ogg_uint32_t) -> i32 {
+pub unsafe extern "C" fn ov_ilog(mut v: ogg_uint32_t) -> i32 {
     let mut ret: i32 = 0;
     ret = 0 as i32;
     while v != 0 {
@@ -100,27 +100,27 @@ pub unsafe extern "C" fn _make_words(
     mut l: *mut libc::c_char,
     mut n: isize,
     mut sparsecount: isize,
-) -> *mut crate::config_types_h::ogg_uint32_t {
+) -> *mut ogg_uint32_t {
     let mut i: isize = 0;
     let mut j: isize = 0;
     let mut count: isize = 0 as i32 as isize;
-    let mut marker: [crate::config_types_h::ogg_uint32_t; 33] = [0; 33];
-    let mut r: *mut crate::config_types_h::ogg_uint32_t = crate::stdlib::malloc(
+    let mut marker: [ogg_uint32_t; 33] = [0; 33];
+    let mut r: *mut ogg_uint32_t = malloc(
         ((if sparsecount != 0 { sparsecount } else { n }) as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<crate::config_types_h::ogg_uint32_t>() as libc::c_ulong,
+            ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong,
         ),
     )
-        as *mut crate::config_types_h::ogg_uint32_t;
+        as *mut ogg_uint32_t;
     crate::stdlib::memset(
         marker.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::config_types_h::ogg_uint32_t; 33]>() as libc::c_ulong,
+        ::std::mem::size_of::<[ogg_uint32_t; 33]>() as libc::c_ulong,
     );
     i = 0 as i32 as isize;
     while i < n {
         let mut length: isize = *l.offset(i as isize) as isize;
         if length > 0 as i32 as isize {
-            let mut entry: crate::config_types_h::ogg_uint32_t = marker[length as usize];
+            let mut entry: ogg_uint32_t = marker[length as usize];
             /* when we claim a node for an entry, we also claim the nodes
             below it (pruning off the imagined tree that may have dangled
             from it) as well as blocking the use of any nodes directly
@@ -128,8 +128,8 @@ pub unsafe extern "C" fn _make_words(
             /* update ourself */
             if length < 32 as i32 as isize && entry >> length != 0 {
                 /* error condition; the lengths must specify an overpopulated tree */
-                ::libc::free(r as *mut libc::c_void);
-                return 0 as *mut crate::config_types_h::ogg_uint32_t;
+                free(r as *mut libc::c_void);
+                return 0 as *mut ogg_uint32_t;
             }
             let fresh0 = count;
             count = count + 1;
@@ -181,8 +181,8 @@ pub unsafe extern "C" fn _make_words(
                 & 0xffffffff as libc::c_ulong >> 32 as i32 as isize - i
                 != 0
             {
-                ::libc::free(r as *mut libc::c_void);
-                return 0 as *mut crate::config_types_h::ogg_uint32_t;
+                free(r as *mut libc::c_void);
+                return 0 as *mut ogg_uint32_t;
             }
             i += 1
         }
@@ -192,8 +192,8 @@ pub unsafe extern "C" fn _make_words(
     i = 0 as i32 as isize;
     count = 0 as i32 as isize;
     while i < n {
-        let mut temp: crate::config_types_h::ogg_uint32_t =
-            0 as i32 as crate::config_types_h::ogg_uint32_t;
+        let mut temp: ogg_uint32_t =
+            0 as i32 as ogg_uint32_t;
         j = 0 as i32 as isize;
         while j < *l.offset(i as isize) as isize {
             temp <<= 1 as i32;
@@ -221,7 +221,7 @@ thought of it.  Therefore, we opt on the side of caution */
 #[no_mangle]
 
 pub unsafe extern "C" fn _book_maptype1_quantvals(
-    mut b: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+    mut b: *const static_codebook,
 ) -> isize {
     let mut vals: isize = 0;
     if (*b).entries < 1 as i32 as isize {
@@ -275,7 +275,7 @@ in in an explicit list.  Both value lists must be unpacked */
 #[no_mangle]
 
 pub unsafe extern "C" fn _book_unquantize(
-    mut b: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+    mut b: *const static_codebook,
     mut n: i32,
     mut sparsemap: *mut i32,
 ) -> *mut f32 {
@@ -286,7 +286,7 @@ pub unsafe extern "C" fn _book_unquantize(
         let mut quantvals: i32 = 0;
         let mut mindel: f32 = _float32_unpack((*b).q_min);
         let mut delta: f32 = _float32_unpack((*b).q_delta);
-        let mut r: *mut f32 = crate::stdlib::calloc(
+        let mut r: *mut f32 = calloc(
             (n as isize * (*b).dim) as libc::c_ulong,
             ::std::mem::size_of::<f32>() as libc::c_ulong,
         ) as *mut f32;
@@ -377,64 +377,64 @@ pub unsafe extern "C" fn _book_unquantize(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_staticbook_destroy(
-    mut b: *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+    mut b: *mut static_codebook,
 ) {
     if (*b).allocedp != 0 {
         if !(*b).quantlist.is_null() {
-            ::libc::free((*b).quantlist as *mut libc::c_void);
+            free((*b).quantlist as *mut libc::c_void);
         }
         if !(*b).lengthlist.is_null() {
-            ::libc::free((*b).lengthlist as *mut libc::c_void);
+            free((*b).lengthlist as *mut libc::c_void);
         }
         crate::stdlib::memset(
             b as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::static_codebook>()
+            ::std::mem::size_of::<static_codebook>()
                 as libc::c_ulong,
         );
-        ::libc::free(b as *mut libc::c_void);
+        free(b as *mut libc::c_void);
     };
     /* otherwise, it is in static memory */
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_clear(
-    mut b: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+    mut b: *mut codebook,
 ) {
     /* static book is not cleared; we're likely called on the lookup and
     the static codebook belongs to the info struct */
     if !(*b).valuelist.is_null() {
-        ::libc::free((*b).valuelist as *mut libc::c_void);
+        free((*b).valuelist as *mut libc::c_void);
     }
     if !(*b).codelist.is_null() {
-        ::libc::free((*b).codelist as *mut libc::c_void);
+        free((*b).codelist as *mut libc::c_void);
     }
     if !(*b).dec_index.is_null() {
-        ::libc::free((*b).dec_index as *mut libc::c_void);
+        free((*b).dec_index as *mut libc::c_void);
     }
     if !(*b).dec_codelengths.is_null() {
-        ::libc::free((*b).dec_codelengths as *mut libc::c_void);
+        free((*b).dec_codelengths as *mut libc::c_void);
     }
     if !(*b).dec_firsttable.is_null() {
-        ::libc::free((*b).dec_firsttable as *mut libc::c_void);
+        free((*b).dec_firsttable as *mut libc::c_void);
     }
     crate::stdlib::memset(
         b as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
+        ::std::mem::size_of::<codebook>()
             as libc::c_ulong,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_init_encode(
-    mut c: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-    mut s: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+    mut c: *mut codebook,
+    mut s: *const static_codebook,
 ) -> i32 {
     crate::stdlib::memset(
         c as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
+        ::std::mem::size_of::<codebook>()
             as libc::c_ulong,
     );
     (*c).c = s;
@@ -450,37 +450,37 @@ pub unsafe extern "C" fn vorbis_book_init_encode(
 }
 
 unsafe extern "C" fn bitreverse(
-    mut x: crate::config_types_h::ogg_uint32_t,
-) -> crate::config_types_h::ogg_uint32_t {
+    mut x: ogg_uint32_t,
+) -> ogg_uint32_t {
     x = ((x >> 16 as i32) as libc::c_ulong & 0xffff as libc::c_ulong
         | (x << 16 as i32) as libc::c_ulong & 0xffff0000 as libc::c_ulong)
-        as crate::config_types_h::ogg_uint32_t;
+        as ogg_uint32_t;
     x = ((x >> 8 as i32) as libc::c_ulong & 0xff00ff as libc::c_ulong
         | (x << 8 as i32) as libc::c_ulong & 0xff00ff00 as libc::c_ulong)
-        as crate::config_types_h::ogg_uint32_t;
+        as ogg_uint32_t;
     x = ((x >> 4 as i32) as libc::c_ulong & 0xf0f0f0f as libc::c_ulong
         | (x << 4 as i32) as libc::c_ulong & 0xf0f0f0f0 as libc::c_ulong)
-        as crate::config_types_h::ogg_uint32_t;
+        as ogg_uint32_t;
     x = ((x >> 2 as i32) as libc::c_ulong & 0x33333333 as libc::c_ulong
         | (x << 2 as i32) as libc::c_ulong & 0xcccccccc as libc::c_ulong)
-        as crate::config_types_h::ogg_uint32_t;
+        as ogg_uint32_t;
     return ((x >> 1 as i32) as libc::c_ulong & 0x55555555 as libc::c_ulong
         | (x << 1 as i32) as libc::c_ulong & 0xaaaaaaaa as libc::c_ulong)
-        as crate::config_types_h::ogg_uint32_t;
+        as ogg_uint32_t;
 }
 
 unsafe extern "C" fn sort32a(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    return (**(a as *mut *mut crate::config_types_h::ogg_uint32_t)
-        > **(b as *mut *mut crate::config_types_h::ogg_uint32_t)) as i32
-        - ((**(a as *mut *mut crate::config_types_h::ogg_uint32_t))
-            < **(b as *mut *mut crate::config_types_h::ogg_uint32_t)) as i32;
+    return (**(a as *mut *mut ogg_uint32_t)
+        > **(b as *mut *mut ogg_uint32_t)) as i32
+        - ((**(a as *mut *mut ogg_uint32_t))
+            < **(b as *mut *mut ogg_uint32_t)) as i32;
 }
 /* decode codebook arrangement is more heavily optimized than encode */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_init_decode(
-    mut c: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-    mut s: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+    mut c: *mut codebook,
+    mut s: *const static_codebook,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -490,7 +490,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
     crate::stdlib::memset(
         c as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
+        ::std::mem::size_of::<codebook>()
             as libc::c_ulong,
     );
     /* count actually used entries and find max length */
@@ -515,15 +515,15 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
         Second, we reorder all vectors, including the entry index above,
         by sorted bitreversed codeword to allow treeless decode. */
         /* perform sort */
-        let mut codes: *mut crate::config_types_h::ogg_uint32_t =
+        let mut codes: *mut ogg_uint32_t =
             _make_words((*s).lengthlist, (*s).entries, (*c).used_entries);
         let mut fresh3 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<*mut crate::config_types_h::ogg_uint32_t>() as libc::c_ulong)
+            (::std::mem::size_of::<*mut ogg_uint32_t>() as libc::c_ulong)
                 .wrapping_mul(n as libc::c_ulong) as usize,
         );
-        let mut codep: *mut *mut crate::config_types_h::ogg_uint32_t =
-            fresh3.as_mut_ptr() as *mut *mut crate::config_types_h::ogg_uint32_t;
+        let mut codep: *mut *mut ogg_uint32_t =
+            fresh3.as_mut_ptr() as *mut *mut ogg_uint32_t;
         if codes.is_null() {
             vorbis_book_clear(c);
             return -(1 as i32);
@@ -535,10 +535,10 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 *fresh4 = codes.offset(i as isize);
                 i += 1
             }
-            crate::stdlib::qsort(
+            qsort(
                 codep as *mut libc::c_void,
-                n as crate::stddef_h::size_t,
-                ::std::mem::size_of::<*mut crate::config_types_h::ogg_uint32_t>() as libc::c_ulong,
+                n as size_t,
+                ::std::mem::size_of::<*mut ogg_uint32_t>() as libc::c_ulong,
                 Some(
                     sort32a
                         as unsafe extern "C" fn(
@@ -553,9 +553,9 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                     as usize,
             );
             sortindex = fresh5.as_mut_ptr() as *mut i32;
-            (*c).codelist = crate::stdlib::malloc((n as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<crate::config_types_h::ogg_uint32_t>() as libc::c_ulong,
-            )) as *mut crate::config_types_h::ogg_uint32_t;
+            (*c).codelist = malloc((n as libc::c_ulong).wrapping_mul(
+                ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong,
+            )) as *mut ogg_uint32_t;
             /* the index is a reverse index */
             i = 0 as i32;
             while i < n {
@@ -570,9 +570,9 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                     *codes.offset(i as isize);
                 i += 1
             }
-            ::libc::free(codes as *mut libc::c_void);
+            free(codes as *mut libc::c_void);
             (*c).valuelist = _book_unquantize(s, n, sortindex);
-            (*c).dec_index = crate::stdlib::malloc(
+            (*c).dec_index = malloc(
                 (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
             ) as *mut i32;
             n = 0 as i32;
@@ -587,7 +587,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 }
                 i += 1
             }
-            (*c).dec_codelengths = crate::stdlib::malloc(
+            (*c).dec_codelengths = malloc(
                 (n as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
             ) as *mut libc::c_char;
@@ -613,16 +613,16 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 fastpath table (that always returns entry 0 )in order to use
                 unmodified decode paths. */
                 (*c).dec_firsttablen = 1 as i32; /* this is magic */
-                (*c).dec_firsttable = crate::stdlib::calloc(
+                (*c).dec_firsttable = calloc(
                     2 as i32 as libc::c_ulong,
-                    ::std::mem::size_of::<crate::config_types_h::ogg_uint32_t>() as libc::c_ulong,
-                ) as *mut crate::config_types_h::ogg_uint32_t;
+                    ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong,
+                ) as *mut ogg_uint32_t;
                 let ref mut fresh8 = *(*c).dec_firsttable.offset(1 as i32 as isize);
-                *fresh8 = 1 as i32 as crate::config_types_h::ogg_uint32_t;
+                *fresh8 = 1 as i32 as ogg_uint32_t;
                 *(*c).dec_firsttable.offset(0 as i32 as isize) = *fresh8
             } else {
                 (*c).dec_firsttablen =
-                    ov_ilog((*c).used_entries as crate::config_types_h::ogg_uint32_t) - 4 as i32;
+                    ov_ilog((*c).used_entries as ogg_uint32_t) - 4 as i32;
                 if (*c).dec_firsttablen < 5 as i32 {
                     (*c).dec_firsttablen = 5 as i32
                 }
@@ -630,14 +630,14 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                     (*c).dec_firsttablen = 8 as i32
                 }
                 tabn = (1 as i32) << (*c).dec_firsttablen;
-                (*c).dec_firsttable = crate::stdlib::calloc(
+                (*c).dec_firsttable = calloc(
                     tabn as libc::c_ulong,
-                    ::std::mem::size_of::<crate::config_types_h::ogg_uint32_t>() as libc::c_ulong,
-                ) as *mut crate::config_types_h::ogg_uint32_t;
+                    ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong,
+                ) as *mut ogg_uint32_t;
                 i = 0 as i32;
                 while i < n {
                     if *(*c).dec_codelengths.offset(i as isize) as i32 <= (*c).dec_firsttablen {
-                        let mut orig: crate::config_types_h::ogg_uint32_t =
+                        let mut orig: ogg_uint32_t =
                             bitreverse(*(*c).codelist.offset(i as isize));
                         j = 0 as i32;
                         while j
@@ -649,7 +649,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                                 (orig
                                     | (j << *(*c).dec_codelengths.offset(i as isize) as i32) as u32)
                                     as isize,
-                            ) = (i + 1 as i32) as crate::config_types_h::ogg_uint32_t;
+                            ) = (i + 1 as i32) as ogg_uint32_t;
                             j += 1
                         }
                     }
@@ -657,16 +657,16 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 }
                 /* now fill in 'unused' entries in the firsttable with hi/lo search
                 hints for the non-direct-hits */
-                let mut mask: crate::config_types_h::ogg_uint32_t = ((0xfffffffe as libc::c_ulong)
+                let mut mask: ogg_uint32_t = ((0xfffffffe as libc::c_ulong)
                     << 31 as i32 - (*c).dec_firsttablen)
-                    as crate::config_types_h::ogg_uint32_t;
+                    as ogg_uint32_t;
                 let mut lo: isize = 0 as i32 as isize;
                 let mut hi: isize = 0 as i32 as isize;
                 i = 0 as i32;
                 while i < tabn {
-                    let mut word: crate::config_types_h::ogg_uint32_t = (i
+                    let mut word: ogg_uint32_t = (i
                         << 32 as i32 - (*c).dec_firsttablen)
-                        as crate::config_types_h::ogg_uint32_t;
+                        as ogg_uint32_t;
                     if *(*c).dec_firsttable.offset(bitreverse(word) as isize) == 0 as i32 as u32 {
                         while (lo + 1 as i32 as isize) < n as isize
                             && *(*c).codelist.offset((lo + 1 as i32 as isize) as isize) <= word
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                         }
                         *(*c).dec_firsttable.offset(bitreverse(word) as isize) =
                             (0x80000000 as libc::c_ulong | loval << 15 as i32 | hival)
-                                as crate::config_types_h::ogg_uint32_t
+                                as ogg_uint32_t
                     }
                     i += 1
                 }
@@ -701,7 +701,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_codeword(
-    mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+    mut book: *mut codebook,
     mut entry: i32,
 ) -> isize {
     if !(*book).c.is_null() {
@@ -714,7 +714,7 @@ pub unsafe extern "C" fn vorbis_book_codeword(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_codelen(
-    mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+    mut book: *mut codebook,
     mut entry: i32,
 ) -> isize {
     if !(*book).c.is_null() {

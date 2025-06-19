@@ -47,10 +47,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #[inline]
 
 unsafe extern "C" fn silk_LP_interpolate_filter_taps(
-    mut B_Q28: *mut crate::opus_types_h::opus_int32,
-    mut A_Q28: *mut crate::opus_types_h::opus_int32,
+    mut B_Q28: *mut opus_int32,
+    mut A_Q28: *mut opus_int32,
     ind: i32,
-    fac_Q16: crate::opus_types_h::opus_int32,
+    fac_Q16: opus_int32,
 ) {
     let mut nb: i32 = 0; /* ( fac_Q16 - ( 1 << 16 ) ) is in range of a 16-bit int */
     let mut na: i32 = 0;
@@ -74,8 +74,8 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                                                                 usize][nb as
                                                                            usize])
                                   as i64 *
-                                  fac_Q16 as crate::opus_types_h::opus_int16 as i64 >>
-                                  16 as i32)) as crate::opus_types_h::opus_int32;
+                                  fac_Q16 as opus_int16 as i64 >>
+                                  16 as i32)) as opus_int32;
                     nb += 1
                 }
                 na = 0 as i32;
@@ -93,8 +93,8 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                                                                 usize][na as
                                                                            usize])
                                   as i64 *
-                                  fac_Q16 as crate::opus_types_h::opus_int16 as i64 >>
-                                  16 as i32)) as crate::opus_types_h::opus_int32;
+                                  fac_Q16 as opus_int16 as i64 >>
+                                  16 as i32)) as opus_int32;
                     na += 1
                 }
             } else {
@@ -117,9 +117,9 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                                   as i64 *
                                   (fac_Q16 -
                                        ((1 as i32) <<
-                                            16 as i32)) as crate::opus_types_h::opus_int16
+                                            16 as i32)) as opus_int16
                                       as i64 >>
-                                  16 as i32)) as crate::opus_types_h::opus_int32;
+                                  16 as i32)) as opus_int32;
                     nb += 1
                 }
                 na = 0 as i32;
@@ -140,9 +140,9 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                                   as i64 *
                                   (fac_Q16 -
                                        ((1 as i32) <<
-                                            16 as i32)) as crate::opus_types_h::opus_int16
+                                            16 as i32)) as opus_int16
                                       as i64 >>
-                                  16 as i32)) as crate::opus_types_h::opus_int32;
+                                  16 as i32)) as opus_int32;
                     na += 1
                 }
             }
@@ -152,7 +152,7 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
                 (3 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::opus_types_h::opus_int32,
+                    opus_int32,
                 >() as libc::c_ulong),
             );
             crate::stdlib::memcpy(
@@ -160,7 +160,7 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
                 (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::opus_types_h::opus_int32,
+                    opus_int32,
                 >() as libc::c_ulong),
             );
         }
@@ -171,7 +171,7 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
             (3 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int32,
+                opus_int32,
             >() as libc::c_ulong),
         );
         crate::stdlib::memcpy(
@@ -180,7 +180,7 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
             (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int32,
+                opus_int32,
             >() as libc::c_ulong),
         );
     };
@@ -390,25 +390,25 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LP_variable_cutoff(
-    mut psLP: *mut crate::structs_h::silk_LP_state,
-    mut frame: *mut crate::opus_types_h::opus_int16,
+    mut psLP: *mut silk_LP_state,
+    mut frame: *mut opus_int16,
     frame_length: i32,
 )
 /* I    Frame length                                */
 {
-    let mut B_Q28: [crate::opus_types_h::opus_int32; 3] = [0; 3];
-    let mut A_Q28: [crate::opus_types_h::opus_int32; 2] = [0; 2];
-    let mut fac_Q16: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut B_Q28: [opus_int32; 3] = [0; 3];
+    let mut A_Q28: [opus_int32; 2] = [0; 2];
+    let mut fac_Q16: opus_int32 = 0 as i32;
     let mut ind: i32 = 0 as i32;
     /* Run filter if needed */
     if (*psLP).mode != 0 as i32 {
         /* Calculate index and interpolation factor for interpolation */
         fac_Q16 = (((5120 as i32 / (5 as i32 * 4 as i32) - (*psLP).transition_frame_no)
-            as crate::opus_types_h::opus_uint32)
-            << 16 as i32 - 6 as i32) as crate::opus_types_h::opus_int32;
+            as opus_uint32)
+            << 16 as i32 - 6 as i32) as opus_int32;
         ind = fac_Q16 >> 16 as i32;
-        fac_Q16 -= ((ind as crate::opus_types_h::opus_uint32) << 16 as i32)
-            as crate::opus_types_h::opus_int32;
+        fac_Q16 -= ((ind as opus_uint32) << 16 as i32)
+            as opus_int32;
         /* Interpolate filter coefficients */
         silk_LP_interpolate_filter_taps(B_Q28.as_mut_ptr(), A_Q28.as_mut_ptr(), ind, fac_Q16);
         /* Update transition frame number for next frame */

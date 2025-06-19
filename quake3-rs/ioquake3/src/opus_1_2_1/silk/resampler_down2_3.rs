@@ -69,29 +69,29 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_resampler_down2_3(
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut inLen: crate::opus_types_h::opus_int32,
+    mut S: *mut opus_int32,
+    mut out: *mut opus_int16,
+    mut in_0: *const opus_int16,
+    mut inLen: opus_int32,
 )
 /* I    Number of input samples                                     */
 {
-    let mut nSamplesIn: crate::opus_types_h::opus_int32 = 0;
-    let mut counter: crate::opus_types_h::opus_int32 = 0;
-    let mut res_Q6: crate::opus_types_h::opus_int32 = 0;
-    let mut buf: *mut crate::opus_types_h::opus_int32 = 0 as *mut crate::opus_types_h::opus_int32;
-    let mut buf_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
+    let mut nSamplesIn: opus_int32 = 0;
+    let mut counter: opus_int32 = 0;
+    let mut res_Q6: opus_int32 = 0;
+    let mut buf: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut buf_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul((10 as i32 * 48 as i32 + 4 as i32) as libc::c_ulong) as usize,
     );
-    buf = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    buf = fresh0.as_mut_ptr() as *mut opus_int32;
     /* Copy buffered samples to start of buffer */
     crate::stdlib::memcpy(buf as *mut libc::c_void, S as *const libc::c_void,
            (4 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     loop
     /* Iterate over blocks of frameSizeIn input samples */
@@ -117,22 +117,22 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
             res_Q6 = (*buf_ptr.offset(0 as i32 as isize) as i64
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                     [2 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32;
+                >> 16 as i32) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(1 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [3 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(2 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [5 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(3 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [4 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             /* Scale down, saturate and store in output array */
             let fresh1 = out;
             out = out.offset(1);
@@ -147,33 +147,33 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
                 ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
                 ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             res_Q6 = (*buf_ptr.offset(1 as i32 as isize) as i64
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                     [4 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32;
+                >> 16 as i32) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(2 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [5 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(3 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [3 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             res_Q6 = (res_Q6 as i64
                 + (*buf_ptr.offset(4 as i32 as isize) as i64
                     * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
                         [2 as i32 as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             /* Scale down, saturate and store in output array */
             let fresh2 = out;
             out = out.offset(1);
@@ -188,14 +188,14 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
                 ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
                 ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
             buf_ptr = buf_ptr.offset(3 as i32 as isize);
             counter -= 3 as i32
         }
@@ -207,18 +207,18 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
         /* More iterations to do; copy last part of filtered signal to beginning of buffer */
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
-            &mut *buf.offset(nSamplesIn as isize) as *mut crate::opus_types_h::opus_int32
+            &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32
                 as *const libc::c_void,
             (4 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int32,
+                opus_int32,
             >() as libc::c_ulong),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
     crate::stdlib::memcpy(S as *mut libc::c_void,
-           &mut *buf.offset(nSamplesIn as isize) as *mut crate::opus_types_h::opus_int32 as
+           &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as
                *const libc::c_void,
            (4 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
 }

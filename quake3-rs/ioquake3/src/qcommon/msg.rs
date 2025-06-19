@@ -50,7 +50,7 @@ pub use crate::src::qcommon::q_shared::TR_STATIONARY;
 
 extern "C" {
     #[no_mangle]
-    pub static mut cl_shownet: *mut crate::src::qcommon::q_shared::cvar_t;
+    pub static mut cl_shownet: *mut cvar_t;
 }
 
 #[repr(C)]
@@ -82,52 +82,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-static mut msgHuff: crate::qcommon_h::huffman_t = crate::qcommon_h::huffman_t {
-    compressor: crate::qcommon_h::huff_t {
+static mut msgHuff: huffman_t = huffman_t {
+    compressor: huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        lhead: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        ltail: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        loc: [0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t; 257],
-        freelist: 0 as *const *mut crate::qcommon_h::node_t as *mut *mut crate::qcommon_h::node_t,
-        nodeList: [crate::qcommon_h::node_t {
-            left: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            right: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            parent: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            next: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            prev: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            head: 0 as *const *mut crate::qcommon_h::nodetype
-                as *mut *mut crate::qcommon_h::nodetype,
+        tree: 0 as *const node_t as *mut node_t,
+        lhead: 0 as *const node_t as *mut node_t,
+        ltail: 0 as *const node_t as *mut node_t,
+        loc: [0 as *const node_t as *mut node_t; 257],
+        freelist: 0 as *const *mut node_t as *mut *mut node_t,
+        nodeList: [node_t {
+            left: 0 as *const nodetype as *mut nodetype,
+            right: 0 as *const nodetype as *mut nodetype,
+            parent: 0 as *const nodetype as *mut nodetype,
+            next: 0 as *const nodetype as *mut nodetype,
+            prev: 0 as *const nodetype as *mut nodetype,
+            head: 0 as *const *mut nodetype
+                as *mut *mut nodetype,
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t; 768],
+        nodePtrs: [0 as *const node_t as *mut node_t; 768],
     },
-    decompressor: crate::qcommon_h::huff_t {
+    decompressor: huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        lhead: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        ltail: 0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t,
-        loc: [0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t; 257],
-        freelist: 0 as *const *mut crate::qcommon_h::node_t as *mut *mut crate::qcommon_h::node_t,
-        nodeList: [crate::qcommon_h::node_t {
-            left: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            right: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            parent: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            next: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            prev: 0 as *const crate::qcommon_h::nodetype as *mut crate::qcommon_h::nodetype,
-            head: 0 as *const *mut crate::qcommon_h::nodetype
-                as *mut *mut crate::qcommon_h::nodetype,
+        tree: 0 as *const node_t as *mut node_t,
+        lhead: 0 as *const node_t as *mut node_t,
+        ltail: 0 as *const node_t as *mut node_t,
+        loc: [0 as *const node_t as *mut node_t; 257],
+        freelist: 0 as *const *mut node_t as *mut *mut node_t,
+        nodeList: [node_t {
+            left: 0 as *const nodetype as *mut nodetype,
+            right: 0 as *const nodetype as *mut nodetype,
+            parent: 0 as *const nodetype as *mut nodetype,
+            next: 0 as *const nodetype as *mut nodetype,
+            prev: 0 as *const nodetype as *mut nodetype,
+            head: 0 as *const *mut nodetype
+                as *mut *mut nodetype,
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *const crate::qcommon_h::node_t as *mut crate::qcommon_h::node_t; 768],
+        nodePtrs: [0 as *const node_t as *mut node_t; 768],
     },
 };
 
-static mut msgInit: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+static mut msgInit: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut pcount: [i32; 256] = [0; 256];
@@ -145,8 +145,8 @@ pub static mut oldsize: i32 = 0 as i32;
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_Init(
-    mut buf: *mut crate::qcommon_h::msg_t,
-    mut data: *mut crate::src::qcommon::q_shared::byte,
+    mut buf: *mut msg_t,
+    mut data: *mut byte,
     mut length: i32,
 ) {
     if msgInit as u64 == 0 {
@@ -155,7 +155,7 @@ pub unsafe extern "C" fn MSG_Init(
     crate::stdlib::memset(
         buf as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
     );
     (*buf).data = data;
     (*buf).maxsize = length;
@@ -163,8 +163,8 @@ pub unsafe extern "C" fn MSG_Init(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_InitOOB(
-    mut buf: *mut crate::qcommon_h::msg_t,
-    mut data: *mut crate::src::qcommon::q_shared::byte,
+    mut buf: *mut msg_t,
+    mut data: *mut byte,
     mut length: i32,
 ) {
     if msgInit as u64 == 0 {
@@ -173,38 +173,38 @@ pub unsafe extern "C" fn MSG_InitOOB(
     crate::stdlib::memset(
         buf as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
     );
     (*buf).data = data;
     (*buf).maxsize = length;
-    (*buf).oob = crate::src::qcommon::q_shared::qtrue;
+    (*buf).oob = qtrue;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_Clear(mut buf: *mut crate::qcommon_h::msg_t) {
+pub unsafe extern "C" fn MSG_Clear(mut buf: *mut msg_t) {
     (*buf).cursize = 0 as i32;
-    (*buf).overflowed = crate::src::qcommon::q_shared::qfalse;
+    (*buf).overflowed = qfalse;
     (*buf).bit = 0 as i32;
     //<- in bits
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_Bitstream(mut buf: *mut crate::qcommon_h::msg_t) {
-    (*buf).oob = crate::src::qcommon::q_shared::qfalse;
+pub unsafe extern "C" fn MSG_Bitstream(mut buf: *mut msg_t) {
+    (*buf).oob = qfalse;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_BeginReading(mut msg: *mut crate::qcommon_h::msg_t) {
+pub unsafe extern "C" fn MSG_BeginReading(mut msg: *mut msg_t) {
     (*msg).readcount = 0 as i32;
     (*msg).bit = 0 as i32;
-    (*msg).oob = crate::src::qcommon::q_shared::qfalse;
+    (*msg).oob = qfalse;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_BeginReadingOOB(mut msg: *mut crate::qcommon_h::msg_t) {
+pub unsafe extern "C" fn MSG_BeginReadingOOB(mut msg: *mut msg_t) {
     (*msg).readcount = 0 as i32;
     (*msg).bit = 0 as i32;
-    (*msg).oob = crate::src::qcommon::q_shared::qtrue;
+    (*msg).oob = qtrue;
 }
 // TTimo
 // copy a msg_t in case we need to store it as is for a bit
@@ -213,14 +213,14 @@ pub unsafe extern "C" fn MSG_BeginReadingOOB(mut msg: *mut crate::qcommon_h::msg
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_Copy(
-    mut buf: *mut crate::qcommon_h::msg_t,
-    mut data: *mut crate::src::qcommon::q_shared::byte,
+    mut buf: *mut msg_t,
+    mut data: *mut byte,
     mut length: i32,
-    mut src: *mut crate::qcommon_h::msg_t,
+    mut src: *mut msg_t,
 ) {
     if length < (*src).cursize {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"MSG_Copy: can\'t copy into a smaller msg_t buffer\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -228,7 +228,7 @@ pub unsafe extern "C" fn MSG_Copy(
     crate::stdlib::memcpy(
         buf as *mut libc::c_void,
         src as *const libc::c_void,
-        ::std::mem::size_of::<crate::qcommon_h::msg_t>() as libc::c_ulong,
+        ::std::mem::size_of::<msg_t>() as libc::c_ulong,
     );
     (*buf).data = data;
     crate::stdlib::memcpy(
@@ -248,7 +248,7 @@ bit functions
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteBits(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut value: i32,
     mut bits: i32,
 ) {
@@ -258,8 +258,8 @@ pub unsafe extern "C" fn MSG_WriteBits(
         return;
     }
     if bits == 0 as i32 || bits < -(31 as i32) || bits > 32 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"MSG_WriteBits: bad bits %i\x00" as *const u8 as *const libc::c_char,
             bits,
         );
@@ -269,19 +269,19 @@ pub unsafe extern "C" fn MSG_WriteBits(
     }
     if (*msg).oob as u64 != 0 {
         if (*msg).cursize + (bits >> 3 as i32) > (*msg).maxsize {
-            (*msg).overflowed = crate::src::qcommon::q_shared::qtrue;
+            (*msg).overflowed = qtrue;
             return;
         }
         if bits == 8 as i32 {
             *(*msg).data.offset((*msg).cursize as isize) =
-                value as crate::src::qcommon::q_shared::byte;
+                value as byte;
             (*msg).cursize += 1 as i32;
             (*msg).bit += 8 as i32
         } else if bits == 16 as i32 {
             let mut temp: i16 = value as i16;
             crate::stdlib::memcpy(
                 &mut *(*msg).data.offset((*msg).cursize as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *mut libc::c_void,
                 &mut temp as *mut i16 as *const libc::c_void,
                 2 as i32 as libc::c_ulong,
@@ -291,7 +291,7 @@ pub unsafe extern "C" fn MSG_WriteBits(
         } else if bits == 32 as i32 {
             crate::stdlib::memcpy(
                 &mut *(*msg).data.offset((*msg).cursize as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *mut libc::c_void,
                 &mut value as *mut i32 as *const libc::c_void,
                 4 as i32 as libc::c_ulong,
@@ -299,8 +299,8 @@ pub unsafe extern "C" fn MSG_WriteBits(
             (*msg).cursize += 4 as i32;
             (*msg).bit += 32 as i32
         } else {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"can\'t write %d bits\x00" as *const u8 as *const libc::c_char,
                 bits,
             );
@@ -311,12 +311,12 @@ pub unsafe extern "C" fn MSG_WriteBits(
             let mut nbits: i32 = 0;
             nbits = bits & 7 as i32;
             if (*msg).bit + nbits > (*msg).maxsize << 3 as i32 {
-                (*msg).overflowed = crate::src::qcommon::q_shared::qtrue;
+                (*msg).overflowed = qtrue;
                 return;
             }
             i = 0 as i32;
             while i < nbits {
-                crate::src::qcommon::huffman::Huff_putBit(
+                Huff_putBit(
                     value & 1 as i32,
                     (*msg).data,
                     &mut (*msg).bit,
@@ -329,8 +329,8 @@ pub unsafe extern "C" fn MSG_WriteBits(
         if bits != 0 {
             i = 0 as i32;
             while i < bits {
-                crate::src::qcommon::huffman::Huff_offsetTransmit(
-                    &mut msgHuff.compressor as *mut _ as *mut crate::qcommon_h::huff_t,
+                Huff_offsetTransmit(
+                    &mut msgHuff.compressor as *mut _ as *mut huff_t,
                     value & 0xff as i32,
                     (*msg).data,
                     &mut (*msg).bit,
@@ -338,7 +338,7 @@ pub unsafe extern "C" fn MSG_WriteBits(
                 );
                 value = value >> 8 as i32;
                 if (*msg).bit > (*msg).maxsize << 3 as i32 {
-                    (*msg).overflowed = crate::src::qcommon::q_shared::qtrue;
+                    (*msg).overflowed = qtrue;
                     return;
                 }
                 i += 8 as i32
@@ -349,10 +349,10 @@ pub unsafe extern "C" fn MSG_WriteBits(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut bits: i32) -> i32 {
+pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut msg_t, mut bits: i32) -> i32 {
     let mut value: i32 = 0;
     let mut get: i32 = 0;
-    let mut sgn: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut sgn: qboolean = qfalse;
     let mut i: i32 = 0;
     let mut nbits: i32 = 0;
     //	FILE*	fp;
@@ -362,9 +362,9 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
     value = 0 as i32;
     if bits < 0 as i32 {
         bits = -bits;
-        sgn = crate::src::qcommon::q_shared::qtrue
+        sgn = qtrue
     } else {
-        sgn = crate::src::qcommon::q_shared::qfalse
+        sgn = qfalse
     }
     if (*msg).oob as u64 != 0 {
         if (*msg).readcount + (bits >> 3 as i32) > (*msg).cursize {
@@ -380,7 +380,7 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
             crate::stdlib::memcpy(
                 &mut temp as *mut i16 as *mut libc::c_void,
                 &mut *(*msg).data.offset((*msg).readcount as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *const libc::c_void,
                 2 as i32 as libc::c_ulong,
             );
@@ -391,15 +391,15 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
             crate::stdlib::memcpy(
                 &mut value as *mut i32 as *mut libc::c_void,
                 &mut *(*msg).data.offset((*msg).readcount as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *const libc::c_void,
                 4 as i32 as libc::c_ulong,
             );
             (*msg).readcount += 4 as i32;
             (*msg).bit += 32 as i32
         } else {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"can\'t read %d bits\x00" as *const u8 as *const libc::c_char,
                 bits,
             );
@@ -415,7 +415,7 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
             i = 0 as i32;
             while i < nbits {
                 value |=
-                    crate::src::qcommon::huffman::Huff_getBit((*msg).data, &mut (*msg).bit) << i;
+                    Huff_getBit((*msg).data, &mut (*msg).bit) << i;
                 i += 1
             }
             bits = bits - nbits
@@ -424,8 +424,8 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
             //			fp = fopen("c:\\netchan.bin", "a");
             i = 0 as i32;
             while i < bits {
-                crate::src::qcommon::huffman::Huff_offsetReceive(
-                    msgHuff.decompressor.tree as *mut crate::qcommon_h::nodetype,
+                Huff_offsetReceive(
+                    msgHuff.decompressor.tree as *mut nodetype,
                     &mut get,
                     (*msg).data,
                     &mut (*msg).bit,
@@ -456,18 +456,18 @@ pub unsafe extern "C" fn MSG_ReadBits(mut msg: *mut crate::qcommon_h::msg_t, mut
 //
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteChar(mut sb: *mut crate::qcommon_h::msg_t, mut c: i32) {
+pub unsafe extern "C" fn MSG_WriteChar(mut sb: *mut msg_t, mut c: i32) {
     MSG_WriteBits(sb, c, 8 as i32);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteByte(mut sb: *mut crate::qcommon_h::msg_t, mut c: i32) {
+pub unsafe extern "C" fn MSG_WriteByte(mut sb: *mut msg_t, mut c: i32) {
     MSG_WriteBits(sb, c, 8 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteData(
-    mut buf: *mut crate::qcommon_h::msg_t,
+    mut buf: *mut msg_t,
     mut data: *const libc::c_void,
     mut length: i32,
 ) {
@@ -476,33 +476,33 @@ pub unsafe extern "C" fn MSG_WriteData(
     while i < length {
         MSG_WriteByte(
             buf,
-            *(data as *mut crate::src::qcommon::q_shared::byte).offset(i as isize) as i32,
+            *(data as *mut byte).offset(i as isize) as i32,
         );
         i += 1
     }
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteShort(mut sb: *mut crate::qcommon_h::msg_t, mut c: i32) {
+pub unsafe extern "C" fn MSG_WriteShort(mut sb: *mut msg_t, mut c: i32) {
     MSG_WriteBits(sb, c, 16 as i32);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteLong(mut sb: *mut crate::qcommon_h::msg_t, mut c: i32) {
+pub unsafe extern "C" fn MSG_WriteLong(mut sb: *mut msg_t, mut c: i32) {
     MSG_WriteBits(sb, c, 32 as i32);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteFloat(mut sb: *mut crate::qcommon_h::msg_t, mut f: f32) {
-    let mut dat: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+pub unsafe extern "C" fn MSG_WriteFloat(mut sb: *mut msg_t, mut f: f32) {
+    let mut dat: floatint_t =
+        floatint_t { f: 0. };
     dat.f = f;
     MSG_WriteBits(sb, dat.i, 32 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteString(
-    mut sb: *mut crate::qcommon_h::msg_t,
+    mut sb: *mut msg_t,
     mut s: *const libc::c_char,
 ) {
     if s.is_null() {
@@ -517,7 +517,7 @@ pub unsafe extern "C" fn MSG_WriteString(
         let mut string: [libc::c_char; 1024] = [0; 1024];
         l = crate::stdlib::strlen(s) as i32;
         if l >= 1024 as i32 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"MSG_WriteString: MAX_STRING_CHARS\x00" as *const u8 as *const libc::c_char,
             );
             MSG_WriteData(
@@ -527,7 +527,7 @@ pub unsafe extern "C" fn MSG_WriteString(
             );
             return;
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             string.as_mut_ptr(),
             s,
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -535,7 +535,7 @@ pub unsafe extern "C" fn MSG_WriteString(
         // get rid of 0x80+ and '%' chars, because old clients don't like them
         i = 0 as i32;
         while i < l {
-            if *(string.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte).offset(i as isize)
+            if *(string.as_mut_ptr() as *mut byte).offset(i as isize)
                 as i32
                 > 127 as i32
                 || string[i as usize] as i32 == '%' as i32
@@ -550,7 +550,7 @@ pub unsafe extern "C" fn MSG_WriteString(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteBigString(
-    mut sb: *mut crate::qcommon_h::msg_t,
+    mut sb: *mut msg_t,
     mut s: *const libc::c_char,
 ) {
     if s.is_null() {
@@ -565,7 +565,7 @@ pub unsafe extern "C" fn MSG_WriteBigString(
         let mut string: [libc::c_char; 8192] = [0; 8192];
         l = crate::stdlib::strlen(s) as i32;
         if l >= 8192 as i32 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"MSG_WriteString: BIG_INFO_STRING\x00" as *const u8 as *const libc::c_char,
             );
             MSG_WriteData(
@@ -575,7 +575,7 @@ pub unsafe extern "C" fn MSG_WriteBigString(
             );
             return;
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             string.as_mut_ptr(),
             s,
             ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
@@ -583,7 +583,7 @@ pub unsafe extern "C" fn MSG_WriteBigString(
         // get rid of 0x80+ and '%' chars, because old clients don't like them
         i = 0 as i32;
         while i < l {
-            if *(string.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte).offset(i as isize)
+            if *(string.as_mut_ptr() as *mut byte).offset(i as isize)
                 as i32
                 > 127 as i32
                 || string[i as usize] as i32 == '%' as i32
@@ -597,7 +597,7 @@ pub unsafe extern "C" fn MSG_WriteBigString(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteAngle(mut sb: *mut crate::qcommon_h::msg_t, mut f: f32) {
+pub unsafe extern "C" fn MSG_WriteAngle(mut sb: *mut msg_t, mut f: f32) {
     MSG_WriteByte(
         sb,
         (f * 256 as i32 as f32 / 360 as i32 as f32) as i32 & 255 as i32,
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn MSG_WriteAngle(mut sb: *mut crate::qcommon_h::msg_t, mu
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_WriteAngle16(mut sb: *mut crate::qcommon_h::msg_t, mut f: f32) {
+pub unsafe extern "C" fn MSG_WriteAngle16(mut sb: *mut msg_t, mut f: f32) {
     MSG_WriteShort(
         sb,
         (f * 65536 as i32 as f32 / 360 as i32 as f32) as i32 & 65535 as i32,
@@ -618,7 +618,7 @@ pub unsafe extern "C" fn MSG_WriteAngle16(mut sb: *mut crate::qcommon_h::msg_t, 
 // returns -1 if no more characters are available
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadChar(mut msg: *mut crate::qcommon_h::msg_t) -> i32 {
+pub unsafe extern "C" fn MSG_ReadChar(mut msg: *mut msg_t) -> i32 {
     let mut c: i32 = 0; // use ReadByte so -1 is out of bounds
     c = MSG_ReadBits(msg, 8 as i32) as i8 as i32;
     if (*msg).readcount > (*msg).cursize {
@@ -628,7 +628,7 @@ pub unsafe extern "C" fn MSG_ReadChar(mut msg: *mut crate::qcommon_h::msg_t) -> 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadByte(mut msg: *mut crate::qcommon_h::msg_t) -> i32 {
+pub unsafe extern "C" fn MSG_ReadByte(mut msg: *mut msg_t) -> i32 {
     let mut c: i32 = 0;
     c = MSG_ReadBits(msg, 8 as i32) as u8 as i32;
     if (*msg).readcount > (*msg).cursize {
@@ -638,19 +638,19 @@ pub unsafe extern "C" fn MSG_ReadByte(mut msg: *mut crate::qcommon_h::msg_t) -> 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_LookaheadByte(mut msg: *mut crate::qcommon_h::msg_t) -> i32 {
-    let bloc: i32 = crate::src::qcommon::huffman::Huff_getBloc();
+pub unsafe extern "C" fn MSG_LookaheadByte(mut msg: *mut msg_t) -> i32 {
+    let bloc: i32 = Huff_getBloc();
     let readcount: i32 = (*msg).readcount;
     let bit: i32 = (*msg).bit;
     let mut c: i32 = MSG_ReadByte(msg);
-    crate::src::qcommon::huffman::Huff_setBloc(bloc);
+    Huff_setBloc(bloc);
     (*msg).readcount = readcount;
     (*msg).bit = bit;
     return c;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadShort(mut msg: *mut crate::qcommon_h::msg_t) -> i32 {
+pub unsafe extern "C" fn MSG_ReadShort(mut msg: *mut msg_t) -> i32 {
     let mut c: i32 = 0;
     c = MSG_ReadBits(msg, 16 as i32) as i16 as i32;
     if (*msg).readcount > (*msg).cursize {
@@ -660,7 +660,7 @@ pub unsafe extern "C" fn MSG_ReadShort(mut msg: *mut crate::qcommon_h::msg_t) ->
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadLong(mut msg: *mut crate::qcommon_h::msg_t) -> i32 {
+pub unsafe extern "C" fn MSG_ReadLong(mut msg: *mut msg_t) -> i32 {
     let mut c: i32 = 0;
     c = MSG_ReadBits(msg, 32 as i32);
     if (*msg).readcount > (*msg).cursize {
@@ -670,9 +670,9 @@ pub unsafe extern "C" fn MSG_ReadLong(mut msg: *mut crate::qcommon_h::msg_t) -> 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadFloat(mut msg: *mut crate::qcommon_h::msg_t) -> f32 {
-    let mut dat: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+pub unsafe extern "C" fn MSG_ReadFloat(mut msg: *mut msg_t) -> f32 {
+    let mut dat: floatint_t =
+        floatint_t { f: 0. };
     dat.i = MSG_ReadBits(msg, 32 as i32);
     if (*msg).readcount > (*msg).cursize {
         dat.f = -(1 as i32) as f32
@@ -682,7 +682,7 @@ pub unsafe extern "C" fn MSG_ReadFloat(mut msg: *mut crate::qcommon_h::msg_t) ->
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadString(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
 ) -> *mut libc::c_char {
     static mut string: [libc::c_char; 1024] = [0; 1024];
     let mut l: i32 = 0;
@@ -718,7 +718,7 @@ pub unsafe extern "C" fn MSG_ReadString(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadBigString(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
 ) -> *mut libc::c_char {
     static mut string: [libc::c_char; 8192] = [0; 8192];
     let mut l: i32 = 0;
@@ -754,7 +754,7 @@ pub unsafe extern "C" fn MSG_ReadBigString(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadStringLine(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
 ) -> *mut libc::c_char {
     static mut string: [libc::c_char; 1024] = [0; 1024];
     let mut l: i32 = 0;
@@ -789,21 +789,21 @@ pub unsafe extern "C" fn MSG_ReadStringLine(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MSG_ReadAngle16(mut msg: *mut crate::qcommon_h::msg_t) -> f32 {
+pub unsafe extern "C" fn MSG_ReadAngle16(mut msg: *mut msg_t) -> f32 {
     return (MSG_ReadShort(msg) as f64 * (360.0f64 / 65536 as i32 as f64)) as f32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadData(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut data: *mut libc::c_void,
     mut len: i32,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < len {
-        *(data as *mut crate::src::qcommon::q_shared::byte).offset(i as isize) =
-            MSG_ReadByte(msg) as crate::src::qcommon::q_shared::byte;
+        *(data as *mut byte).offset(i as isize) =
+            MSG_ReadByte(msg) as byte;
         i += 1
     }
 }
@@ -875,7 +875,7 @@ pub static mut kbitmask: [i32; 32] = [
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteDeltaKey(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
     mut oldV: i32,
     mut newV: i32,
@@ -891,7 +891,7 @@ pub unsafe extern "C" fn MSG_WriteDeltaKey(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadDeltaKey(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
     mut oldV: i32,
     mut bits: i32,
@@ -904,13 +904,13 @@ pub unsafe extern "C" fn MSG_ReadDeltaKey(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteDeltaKeyFloat(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
     mut oldV: f32,
     mut newV: f32,
 ) {
-    let mut fi: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut fi: floatint_t =
+        floatint_t { f: 0. };
     if oldV == newV {
         MSG_WriteBits(msg, 0 as i32, 1 as i32);
         return;
@@ -922,13 +922,13 @@ pub unsafe extern "C" fn MSG_WriteDeltaKeyFloat(
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadDeltaKeyFloat(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
     mut oldV: f32,
 ) -> f32 {
     if MSG_ReadBits(msg, 1 as i32) != 0 {
-        let mut fi: crate::src::qcommon::q_shared::floatint_t =
-            crate::src::qcommon::q_shared::floatint_t { f: 0. };
+        let mut fi: floatint_t =
+            floatint_t { f: 0. };
         fi.i = MSG_ReadBits(msg, 32 as i32) ^ key;
         return fi.f;
     }
@@ -949,10 +949,10 @@ MSG_WriteDeltaUsercmdKey
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteDeltaUsercmdKey(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
-    mut from: *mut crate::src::qcommon::q_shared::usercmd_t,
-    mut to: *mut crate::src::qcommon::q_shared::usercmd_t,
+    mut from: *mut usercmd_t,
+    mut to: *mut usercmd_t,
 ) {
     if (*to).serverTime - (*from).serverTime < 256 as i32 {
         MSG_WriteBits(msg, 1 as i32, 1 as i32); // no change
@@ -1035,10 +1035,10 @@ MSG_ReadDeltaUsercmdKey
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadDeltaUsercmdKey(
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut msg: *mut msg_t,
     mut key: i32,
-    mut from: *mut crate::src::qcommon::q_shared::usercmd_t,
-    mut to: *mut crate::src::qcommon::q_shared::usercmd_t,
+    mut from: *mut usercmd_t,
+    mut to: *mut usercmd_t,
 ) {
     if MSG_ReadBits(msg, 1 as i32) != 0 {
         (*to).serverTime = (*from).serverTime + MSG_ReadBits(msg, 8 as i32)
@@ -1067,7 +1067,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaUsercmdKey(
         }
         (*to).buttons = MSG_ReadDeltaKey(msg, key, (*from).buttons, 16 as i32);
         (*to).weapon = MSG_ReadDeltaKey(msg, key, (*from).weapon as i32, 8 as i32)
-            as crate::src::qcommon::q_shared::byte
+            as byte
     } else {
         (*to).angles[0 as i32 as usize] = (*from).angles[0 as i32 as usize];
         (*to).angles[1 as i32 as usize] = (*from).angles[1 as i32 as usize];
@@ -1100,7 +1100,7 @@ pub unsafe extern "C" fn MSG_ReportChangeVectors_f() {
     i = 0 as i32;
     while i < 256 as i32 {
         if pcount[i as usize] != 0 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"%d used %d\n\x00" as *const u8 as *const libc::c_char,
                 i,
                 pcount[i as usize],
@@ -1132,10 +1132,10 @@ identical, under the assumption that the in-order delta code will catch it.
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteDeltaEntity(
-    mut msg: *mut crate::qcommon_h::msg_t,
-    mut from: *mut crate::src::qcommon::q_shared::entityState_s,
-    mut to: *mut crate::src::qcommon::q_shared::entityState_s,
-    mut force: crate::src::qcommon::q_shared::qboolean,
+    mut msg: *mut msg_t,
+    mut from: *mut entityState_s,
+    mut to: *mut entityState_s,
+    mut force: qboolean,
 ) {
     let mut i: i32 = 0;
     let mut lc: i32 = 0;
@@ -1161,8 +1161,8 @@ pub unsafe extern "C" fn MSG_WriteDeltaEntity(
         return;
     }
     if (*to).number < 0 as i32 || (*to).number >= (1 as i32) << 10 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"MSG_WriteDeltaEntity: Bad entity number: %i\x00" as *const u8 as *const libc::c_char,
             (*to).number,
         );
@@ -1172,9 +1172,9 @@ pub unsafe extern "C" fn MSG_WriteDeltaEntity(
     i = 0 as i32;
     field = entityStateFields.as_mut_ptr();
     while i < numFields {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if *fromF != *toF {
             lc = i + 1 as i32
@@ -1202,9 +1202,9 @@ pub unsafe extern "C" fn MSG_WriteDeltaEntity(
     i = 0 as i32;
     field = entityStateFields.as_mut_ptr();
     while i < lc {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if *fromF == *toF {
             MSG_WriteBits(msg, 0 as i32, 1 as i32);
@@ -1259,9 +1259,9 @@ Can go from either a baseline or a previous packet_entity
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadDeltaEntity(
-    mut msg: *mut crate::qcommon_h::msg_t,
-    mut from: *mut crate::src::qcommon::q_shared::entityState_t,
-    mut to: *mut crate::src::qcommon::q_shared::entityState_t,
+    mut msg: *mut msg_t,
+    mut from: *mut entityState_t,
+    mut to: *mut entityState_t,
     mut number: i32,
 ) {
     let mut i: i32 = 0;
@@ -1275,8 +1275,8 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
     let mut startBit: i32 = 0;
     let mut endBit: i32 = 0;
     if number < 0 as i32 || number >= (1 as i32) << 10 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"Bad delta entity number: %i\x00" as *const u8 as *const libc::c_char,
             number,
         );
@@ -1291,13 +1291,13 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         crate::stdlib::memset(
             to as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::qcommon::q_shared::entityState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
         );
         (*to).number = ((1 as i32) << 10 as i32) - 1 as i32;
         if !cl_shownet.is_null()
             && ((*cl_shownet).integer >= 2 as i32 || (*cl_shownet).integer == -(1 as i32))
         {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"%3i: #%-3i remove\n\x00" as *const u8 as *const libc::c_char,
                 (*msg).readcount,
                 number,
@@ -1315,8 +1315,8 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
     lc = MSG_ReadByte(msg);
     if lc > numFields || lc < 0 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"invalid entityState field count\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1326,7 +1326,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         && ((*cl_shownet).integer >= 2 as i32 || (*cl_shownet).integer == -(1 as i32))
     {
         print = 1 as i32;
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%3i: #%-3i \x00" as *const u8 as *const libc::c_char,
             (*msg).readcount,
             (*to).number,
@@ -1338,9 +1338,9 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
     i = 0 as i32;
     field = entityStateFields.as_mut_ptr();
     while i < lc {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if MSG_ReadBits(msg, 1 as i32) == 0 {
             // no change
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
                 trunc -= (1 as i32) << 13 as i32 - 1 as i32;
                 *(toF as *mut f32) = trunc as f32;
                 if print != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"%s:%i \x00" as *const u8 as *const libc::c_char,
                         (*field).name,
                         trunc,
@@ -1366,7 +1366,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
                 // full floating point value
                 *toF = MSG_ReadBits(msg, 32 as i32);
                 if print != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"%s:%f \x00" as *const u8 as *const libc::c_char,
                         (*field).name,
                         *(toF as *mut f32) as f64,
@@ -1379,7 +1379,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
             // integer
             *toF = MSG_ReadBits(msg, (*field).bits);
             if print != 0 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s:%i \x00" as *const u8 as *const libc::c_char,
                     (*field).name,
                     *toF,
@@ -1392,9 +1392,9 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
     i = lc;
     field = &mut *entityStateFields.as_mut_ptr().offset(lc as isize) as *mut netField_t;
     while i < numFields {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         //			pcount[i]++;
         // no change
@@ -1408,7 +1408,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaEntity(
         } else {
             endBit = ((*msg).readcount - 1 as i32) * 8 as i32 + (*msg).bit - 10 as i32
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b" (%i bits)\n\x00" as *const u8 as *const libc::c_char,
             endBit - startBit,
         );
@@ -1439,13 +1439,13 @@ MSG_WriteDeltaPlayerstate
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_WriteDeltaPlayerstate(
-    mut msg: *mut crate::qcommon_h::msg_t,
-    mut from: *mut crate::src::qcommon::q_shared::playerState_s,
-    mut to: *mut crate::src::qcommon::q_shared::playerState_s,
+    mut msg: *mut msg_t,
+    mut from: *mut playerState_s,
+    mut to: *mut playerState_s,
 ) {
     let mut i: i32 = 0; // # of changes
-    let mut dummy: crate::src::qcommon::q_shared::playerState_t =
-        crate::src::qcommon::q_shared::playerState_t {
+    let mut dummy: playerState_t =
+        playerState_t {
             commandTime: 0,
             pm_type: 0,
             bobCycle: 0,
@@ -1506,9 +1506,9 @@ pub unsafe extern "C" fn MSG_WriteDeltaPlayerstate(
     if from.is_null() {
         from = &mut dummy;
         crate::stdlib::memset(
-            &mut dummy as *mut crate::src::qcommon::q_shared::playerState_t as *mut libc::c_void,
+            &mut dummy as *mut playerState_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::qcommon::q_shared::playerState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
         );
     }
     numFields = (::std::mem::size_of::<[netField_t; 48]>() as libc::c_ulong)
@@ -1517,9 +1517,9 @@ pub unsafe extern "C" fn MSG_WriteDeltaPlayerstate(
     i = 0 as i32;
     field = playerStateFields.as_mut_ptr();
     while i < numFields {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if *fromF != *toF {
             lc = i + 1 as i32
@@ -1532,9 +1532,9 @@ pub unsafe extern "C" fn MSG_WriteDeltaPlayerstate(
     i = 0 as i32;
     field = playerStateFields.as_mut_ptr();
     while i < lc {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if *fromF == *toF {
             MSG_WriteBits(msg, 0 as i32, 1 as i32);
@@ -1671,9 +1671,9 @@ MSG_ReadDeltaPlayerstate
 #[no_mangle]
 
 pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
-    mut msg: *mut crate::qcommon_h::msg_t,
-    mut from: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut to: *mut crate::src::qcommon::q_shared::playerState_t,
+    mut msg: *mut msg_t,
+    mut from: *mut playerState_t,
+    mut to: *mut playerState_t,
 ) {
     let mut i: i32 = 0;
     let mut lc: i32 = 0;
@@ -1686,8 +1686,8 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
     let mut fromF: *mut i32 = 0 as *mut i32;
     let mut toF: *mut i32 = 0 as *mut i32;
     let mut trunc: i32 = 0;
-    let mut dummy: crate::src::qcommon::q_shared::playerState_t =
-        crate::src::qcommon::q_shared::playerState_t {
+    let mut dummy: playerState_t =
+        playerState_t {
             commandTime: 0,
             pm_type: 0,
             bobCycle: 0,
@@ -1737,9 +1737,9 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
     if from.is_null() {
         from = &mut dummy;
         crate::stdlib::memset(
-            &mut dummy as *mut crate::src::qcommon::q_shared::playerState_t as *mut libc::c_void,
+            &mut dummy as *mut playerState_t as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::src::qcommon::q_shared::playerState_t>() as libc::c_ulong,
+            ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
         );
     }
     *to = *from;
@@ -1754,7 +1754,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         && ((*cl_shownet).integer >= 2 as i32 || (*cl_shownet).integer == -(2 as i32))
     {
         print = 1 as i32;
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%3i: playerstate \x00" as *const u8 as *const libc::c_char,
             (*msg).readcount,
         );
@@ -1765,17 +1765,17 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         .wrapping_div(::std::mem::size_of::<netField_t>() as libc::c_ulong) as i32;
     lc = MSG_ReadByte(msg);
     if lc > numFields || lc < 0 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"invalid playerState field count\x00" as *const u8 as *const libc::c_char,
         );
     }
     i = 0 as i32;
     field = playerStateFields.as_mut_ptr();
     while i < lc {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         if MSG_ReadBits(msg, 1 as i32) == 0 {
             // no change
@@ -1789,7 +1789,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
                 trunc -= (1 as i32) << 13 as i32 - 1 as i32;
                 *(toF as *mut f32) = trunc as f32;
                 if print != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"%s:%i \x00" as *const u8 as *const libc::c_char,
                         (*field).name,
                         trunc,
@@ -1799,7 +1799,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
                 // full floating point value
                 *toF = MSG_ReadBits(msg, 32 as i32);
                 if print != 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"%s:%f \x00" as *const u8 as *const libc::c_char,
                         (*field).name,
                         *(toF as *mut f32) as f64,
@@ -1810,7 +1810,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
             // integer
             *toF = MSG_ReadBits(msg, (*field).bits);
             if print != 0 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s:%i \x00" as *const u8 as *const libc::c_char,
                     (*field).name,
                     *toF,
@@ -1823,9 +1823,9 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
     i = lc;
     field = &mut *playerStateFields.as_mut_ptr().offset(lc as isize) as *mut netField_t;
     while i < numFields {
-        fromF = (from as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        fromF = (from as *mut byte).offset((*field).offset as isize)
             as *mut i32;
-        toF = (to as *mut crate::src::qcommon::q_shared::byte).offset((*field).offset as isize)
+        toF = (to as *mut byte).offset((*field).offset as isize)
             as *mut i32;
         // no change
         *toF = *fromF;
@@ -1837,7 +1837,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         // parse stats
         if MSG_ReadBits(msg, 1 as i32) != 0 {
             if !cl_shownet.is_null() && (*cl_shownet).integer == 4 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s \x00" as *const u8 as *const libc::c_char,
                     b"PS_STATS\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1854,7 +1854,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         // parse persistant stats
         if MSG_ReadBits(msg, 1 as i32) != 0 {
             if !cl_shownet.is_null() && (*cl_shownet).integer == 4 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s \x00" as *const u8 as *const libc::c_char,
                     b"PS_PERSISTANT\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1871,7 +1871,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         // parse ammo
         if MSG_ReadBits(msg, 1 as i32) != 0 {
             if !cl_shownet.is_null() && (*cl_shownet).integer == 4 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s \x00" as *const u8 as *const libc::c_char,
                     b"PS_AMMO\x00" as *const u8 as *const libc::c_char,
                 );
@@ -1888,7 +1888,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         // parse powerups
         if MSG_ReadBits(msg, 1 as i32) != 0 {
             if !cl_shownet.is_null() && (*cl_shownet).integer == 4 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%s \x00" as *const u8 as *const libc::c_char,
                     b"PS_POWERUPS\x00" as *const u8 as *const libc::c_char,
                 ); // Do update
@@ -1909,7 +1909,7 @@ pub unsafe extern "C" fn MSG_ReadDeltaPlayerstate(
         } else {
             endBit = ((*msg).readcount - 1 as i32) * 8 as i32 + (*msg).bit - 10 as i32
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b" (%i bits)\n\x00" as *const u8 as *const libc::c_char,
             endBit - startBit,
         );
@@ -2180,21 +2180,21 @@ pub static mut msg_hData: [i32; 256] = [
 pub unsafe extern "C" fn MSG_initHuffman() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    msgInit = crate::src::qcommon::q_shared::qtrue;
-    crate::src::qcommon::huffman::Huff_Init(
-        &mut msgHuff as *mut _ as *mut crate::qcommon_h::huffman_t,
+    msgInit = qtrue;
+    Huff_Init(
+        &mut msgHuff as *mut _ as *mut huffman_t,
     );
     i = 0 as i32;
     while i < 256 as i32 {
         j = 0 as i32;
         while j < msg_hData[i as usize] {
-            crate::src::qcommon::huffman::Huff_addRef(
-                &mut msgHuff.compressor as *mut _ as *mut crate::qcommon_h::huff_t,
-                i as crate::src::qcommon::q_shared::byte,
+            Huff_addRef(
+                &mut msgHuff.compressor as *mut _ as *mut huff_t,
+                i as byte,
             );
-            crate::src::qcommon::huffman::Huff_addRef(
-                &mut msgHuff.decompressor as *mut _ as *mut crate::qcommon_h::huff_t,
-                i as crate::src::qcommon::q_shared::byte,
+            Huff_addRef(
+                &mut msgHuff.decompressor as *mut _ as *mut huff_t,
+                i as byte,
             );
             j += 1
             // Do update
@@ -2207,9 +2207,9 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trTime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .pos
-                    .trTime as *mut i32 as crate::stddef_h::size_t as i32,
+                    .trTime as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init
@@ -2217,13 +2217,13 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trBase[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trBase
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2231,13 +2231,13 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trBase[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trBase
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2246,13 +2246,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"pos.trDelta[0]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trDelta
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2261,13 +2261,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"pos.trDelta[1]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trDelta
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2275,13 +2275,13 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trBase[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trBase
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2290,13 +2290,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trBase[1]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trBase
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2305,13 +2305,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"pos.trDelta[2]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .pos
                     .trDelta
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2320,13 +2320,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trBase[0]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trBase
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2334,8 +2334,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"event\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).event
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).event
+                    as *mut i32 as size_t as i32,
                 bits: 10 as i32,
             };
             init
@@ -2343,12 +2343,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles2[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles2
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2356,8 +2356,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eType\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).eType
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).eType
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2365,8 +2365,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"torsoAnim\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).torsoAnim
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).torsoAnim
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2374,8 +2374,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eventParm\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).eventParm
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).eventParm
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2383,8 +2383,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"legsAnim\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).legsAnim
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).legsAnim
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2393,8 +2393,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"groundEntityNum\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
-                    .groundEntityNum as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut entityState_t))
+                    .groundEntityNum as *mut i32 as size_t
                     as i32,
                 bits: 10 as i32,
             };
@@ -2403,10 +2403,10 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pos.trType\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .pos
-                    .trType as *mut crate::src::qcommon::q_shared::trType_t
-                    as crate::stddef_h::size_t as i32,
+                    .trType as *mut trType_t
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2414,8 +2414,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eFlags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).eFlags
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).eFlags
+                    as *mut i32 as size_t as i32,
                 bits: 19 as i32,
             };
             init
@@ -2424,8 +2424,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"otherEntityNum\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
-                    .otherEntityNum as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut entityState_t))
+                    .otherEntityNum as *mut i32 as size_t
                     as i32,
                 bits: 10 as i32,
             };
@@ -2434,8 +2434,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).weapon
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).weapon
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2443,8 +2443,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"clientNum\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).clientNum
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).clientNum
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2452,12 +2452,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2466,9 +2466,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"pos.trDuration\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .pos
-                    .trDuration as *mut i32 as crate::stddef_h::size_t
+                    .trDuration as *mut i32 as size_t
                     as i32,
                 bits: 32 as i32,
             };
@@ -2477,10 +2477,10 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"apos.trType\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .apos
-                    .trType as *mut crate::src::qcommon::q_shared::trType_t
-                    as crate::stddef_h::size_t as i32,
+                    .trType as *mut trType_t
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2488,12 +2488,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2501,12 +2501,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2514,12 +2514,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2527,8 +2527,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"solid\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).solid
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).solid
+                    as *mut i32 as size_t as i32,
                 bits: 24 as i32,
             };
             init
@@ -2536,8 +2536,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"powerups\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).powerups
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).powerups
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -2545,8 +2545,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"modelindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).modelindex
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).modelindex
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2555,8 +2555,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"otherEntityNum2\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
-                    .otherEntityNum2 as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut entityState_t))
+                    .otherEntityNum2 as *mut i32 as size_t
                     as i32,
                 bits: 10 as i32,
             };
@@ -2565,8 +2565,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"loopSound\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).loopSound
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).loopSound
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2574,8 +2574,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"generic1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).generic1
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).generic1
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2583,12 +2583,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin2[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin2
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2596,12 +2596,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin2[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin2
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2609,12 +2609,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin2[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .origin2
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2622,8 +2622,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"modelindex2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).modelindex2
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).modelindex2
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2631,12 +2631,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2644,8 +2644,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"time\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).time
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).time
+                    as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init
@@ -2653,9 +2653,9 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"apos.trTime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .apos
-                    .trTime as *mut i32 as crate::stddef_h::size_t as i32,
+                    .trTime as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init
@@ -2664,9 +2664,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trDuration\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut (*(0 as *mut entityState_t))
                     .apos
-                    .trDuration as *mut i32 as crate::stddef_h::size_t
+                    .trDuration as *mut i32 as size_t
                     as i32,
                 bits: 32 as i32,
             };
@@ -2676,13 +2676,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trBase[2]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trBase
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2691,13 +2691,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trDelta[0]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trDelta
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2706,13 +2706,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trDelta[1]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trDelta
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2721,13 +2721,13 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"apos.trDelta[2]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .apos
                     .trDelta
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2735,8 +2735,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"time2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).time2
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).time2
+                    as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init
@@ -2744,12 +2744,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2757,12 +2757,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles2[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles2
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2770,12 +2770,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"angles2[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
+                offset: &mut *(*(0 as *mut entityState_t))
                     .angles2
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2783,8 +2783,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"constantLight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t))
-                    .constantLight as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut entityState_t))
+                    .constantLight as *mut i32 as size_t
                     as i32,
                 bits: 32 as i32,
             };
@@ -2793,8 +2793,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"frame\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::entityState_t)).frame
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut entityState_t)).frame
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -2804,8 +2804,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"commandTime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).commandTime
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).commandTime
+                    as *mut i32 as size_t as i32,
                 bits: 32 as i32,
             };
             init
@@ -2813,12 +2813,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2826,12 +2826,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2839,8 +2839,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"bobCycle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).bobCycle
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).bobCycle
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2848,12 +2848,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"velocity[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .velocity
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2861,12 +2861,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"velocity[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .velocity
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2874,12 +2874,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"viewangles[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .viewangles
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2887,12 +2887,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"viewangles[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .viewangles
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2900,8 +2900,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"weaponTime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).weaponTime
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).weaponTime
+                    as *mut i32 as size_t as i32,
                 bits: -(16 as i32),
             };
             init
@@ -2909,12 +2909,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"origin[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .origin
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2922,12 +2922,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"velocity[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .velocity
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -2935,8 +2935,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"legsTimer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).legsTimer
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).legsTimer
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2944,8 +2944,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pm_time\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).pm_time
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).pm_time
+                    as *mut i32 as size_t as i32,
                 bits: -(16 as i32),
             };
             init
@@ -2953,8 +2953,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eventSequence\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
-                    .eventSequence as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut playerState_t))
+                    .eventSequence as *mut i32 as size_t
                     as i32,
                 bits: 16 as i32,
             };
@@ -2963,8 +2963,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"torsoAnim\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).torsoAnim
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).torsoAnim
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2972,8 +2972,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"movementDir\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).movementDir
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).movementDir
+                    as *mut i32 as size_t as i32,
                 bits: 4 as i32,
             };
             init
@@ -2981,11 +2981,11 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"events[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .events
                     .as_mut_ptr()
                     .offset(0 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -2993,8 +2993,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"legsAnim\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).legsAnim
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).legsAnim
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3002,11 +3002,11 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"events[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .events
                     .as_mut_ptr()
                     .offset(1 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3014,8 +3014,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pm_flags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).pm_flags
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).pm_flags
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3024,8 +3024,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"groundEntityNum\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
-                    .groundEntityNum as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut playerState_t))
+                    .groundEntityNum as *mut i32 as size_t
                     as i32,
                 bits: 10 as i32,
             };
@@ -3034,8 +3034,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"weaponstate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).weaponstate
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).weaponstate
+                    as *mut i32 as size_t as i32,
                 bits: 4 as i32,
             };
             init
@@ -3043,8 +3043,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eFlags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).eFlags
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).eFlags
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3052,8 +3052,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"externalEvent\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
-                    .externalEvent as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut playerState_t))
+                    .externalEvent as *mut i32 as size_t
                     as i32,
                 bits: 10 as i32,
             };
@@ -3062,8 +3062,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"gravity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).gravity
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).gravity
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3071,8 +3071,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).speed
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).speed
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3081,11 +3081,11 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"delta_angles[1]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .delta_angles
                     .as_mut_ptr()
                     .offset(1 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3094,9 +3094,9 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"externalEventParm\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut (*(0 as *mut playerState_t))
                     .externalEventParm as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3104,8 +3104,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"viewheight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).viewheight
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).viewheight
+                    as *mut i32 as size_t as i32,
                 bits: -(8 as i32),
             };
             init
@@ -3113,8 +3113,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"damageEvent\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).damageEvent
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).damageEvent
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3122,8 +3122,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"damageYaw\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).damageYaw
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).damageYaw
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3131,8 +3131,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"damagePitch\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).damagePitch
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).damagePitch
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3140,8 +3140,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"damageCount\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).damageCount
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).damageCount
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3149,8 +3149,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"generic1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).generic1
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).generic1
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3158,8 +3158,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"pm_type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).pm_type
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).pm_type
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3168,11 +3168,11 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"delta_angles[0]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .delta_angles
                     .as_mut_ptr()
                     .offset(0 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3181,11 +3181,11 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"delta_angles[2]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .delta_angles
                     .as_mut_ptr()
                     .offset(2 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 16 as i32,
             };
             init
@@ -3193,8 +3193,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"torsoTimer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).torsoTimer
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).torsoTimer
+                    as *mut i32 as size_t as i32,
                 bits: 12 as i32,
             };
             init
@@ -3202,11 +3202,11 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eventParms[0]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .eventParms
                     .as_mut_ptr()
                     .offset(0 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3214,11 +3214,11 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"eventParms[1]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .eventParms
                     .as_mut_ptr()
                     .offset(1 as i32 as isize) as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3226,8 +3226,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"clientNum\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).clientNum
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).clientNum
+                    as *mut i32 as size_t as i32,
                 bits: 8 as i32,
             };
             init
@@ -3235,8 +3235,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).weapon
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).weapon
+                    as *mut i32 as size_t as i32,
                 bits: 5 as i32,
             };
             init
@@ -3244,12 +3244,12 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"viewangles[2]\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .viewangles
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -3258,12 +3258,12 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"grapplePoint[0]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .grapplePoint
                     .as_mut_ptr()
                     .offset(0 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -3272,12 +3272,12 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"grapplePoint[1]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .grapplePoint
                     .as_mut_ptr()
                     .offset(1 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -3286,12 +3286,12 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = netField_t {
                 name: b"grapplePoint[2]\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                offset: &mut *(*(0 as *mut crate::src::qcommon::q_shared::playerState_t))
+                offset: &mut *(*(0 as *mut playerState_t))
                     .grapplePoint
                     .as_mut_ptr()
                     .offset(2 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::vec_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec_t
+                    as size_t as i32,
                 bits: 0 as i32,
             };
             init
@@ -3299,8 +3299,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"jumppad_ent\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).jumppad_ent
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).jumppad_ent
+                    as *mut i32 as size_t as i32,
                 bits: 10 as i32,
             };
             init
@@ -3308,8 +3308,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = netField_t {
                 name: b"loopSound\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut crate::src::qcommon::q_shared::playerState_t)).loopSound
-                    as *mut i32 as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut playerState_t)).loopSound
+                    as *mut i32 as size_t as i32,
                 bits: 16 as i32,
             };
             init

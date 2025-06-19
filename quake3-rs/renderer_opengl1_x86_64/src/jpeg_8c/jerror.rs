@@ -481,7 +481,7 @@ pub static mut jpeg_std_message_table: [*const libc::c_char; 128] = [
  * or jpeg_destroy) at some point.
  */
 
-unsafe extern "C" fn error_exit(mut cinfo: crate::jpeglib_h::j_common_ptr) {
+unsafe extern "C" fn error_exit(mut cinfo: j_common_ptr) {
     /* Always display the message */
     Some(
         (*(*cinfo).err)
@@ -490,8 +490,8 @@ unsafe extern "C" fn error_exit(mut cinfo: crate::jpeglib_h::j_common_ptr) {
     )
     .expect("non-null function pointer")(cinfo);
     /* Let the memory manager delete any temp files before we die */
-    crate::src::jpeg_8c::jcomapi::jpeg_destroy(cinfo as *mut crate::jpeglib_h::jpeg_common_struct);
-    ::libc::exit(1 as i32);
+    jpeg_destroy(cinfo as *mut jpeg_common_struct);
+    libc::exit(1 as i32);
 }
 /*
  * Actual output of an error or trace message.
@@ -508,7 +508,7 @@ unsafe extern "C" fn error_exit(mut cinfo: crate::jpeglib_h::j_common_ptr) {
  * not just not use this routine.
  */
 
-unsafe extern "C" fn output_message(mut cinfo: crate::jpeglib_h::j_common_ptr) {
+unsafe extern "C" fn output_message(mut cinfo: j_common_ptr) {
     let mut buffer: [libc::c_char; 200] = [0; 200];
     /* Create the message */
     Some(
@@ -535,8 +535,8 @@ unsafe extern "C" fn output_message(mut cinfo: crate::jpeglib_h::j_common_ptr) {
  * or change the policy about which messages to display.
  */
 
-unsafe extern "C" fn emit_message(mut cinfo: crate::jpeglib_h::j_common_ptr, mut msg_level: i32) {
-    let mut err: *mut crate::jpeglib_h::jpeg_error_mgr = (*cinfo).err;
+unsafe extern "C" fn emit_message(mut cinfo: j_common_ptr, mut msg_level: i32) {
+    let mut err: *mut jpeg_error_mgr = (*cinfo).err;
     if msg_level < 0 as i32 {
         /* It's a warning message.  Since corrupt files may generate many warnings,
          * the policy implemented here is to show only the first warning,
@@ -562,15 +562,15 @@ unsafe extern "C" fn emit_message(mut cinfo: crate::jpeglib_h::j_common_ptr, mut
  */
 
 unsafe extern "C" fn format_message(
-    mut cinfo: crate::jpeglib_h::j_common_ptr,
+    mut cinfo: j_common_ptr,
     mut buffer: *mut libc::c_char,
 ) {
-    let mut err: *mut crate::jpeglib_h::jpeg_error_mgr = (*cinfo).err;
+    let mut err: *mut jpeg_error_mgr = (*cinfo).err;
     let mut msg_code: i32 = (*err).msg_code;
     let mut msgtext: *const libc::c_char = 0 as *const libc::c_char;
     let mut msgptr: *const libc::c_char = 0 as *const libc::c_char;
     let mut ch: libc::c_char = 0;
-    let mut isstring: crate::jmorecfg_h::boolean = 0;
+    let mut isstring: boolean = 0;
     /* Look up message string in proper table */
     if msg_code > 0 as i32 && msg_code <= (*err).last_jpeg_message {
         msgtext = *(*err).jpeg_message_table.offset(msg_code as isize)
@@ -607,9 +607,9 @@ unsafe extern "C" fn format_message(
     }
     /* Format the message into the passed buffer */
     if isstring != 0 {
-        ::libc::sprintf(buffer, msgtext, (*err).msg_parm.s.as_mut_ptr());
+        libc::sprintf(buffer, msgtext, (*err).msg_parm.s.as_mut_ptr());
     } else {
-        ::libc::sprintf(
+        libc::sprintf(
             buffer,
             msgtext,
             (*err).msg_parm.i[0 as i32 as usize],
@@ -631,7 +631,7 @@ unsafe extern "C" fn format_message(
  * this method if it has additional error processing state.
  */
 
-unsafe extern "C" fn reset_error_mgr(mut cinfo: crate::jpeglib_h::j_common_ptr) {
+unsafe extern "C" fn reset_error_mgr(mut cinfo: j_common_ptr) {
     (*(*cinfo).err).num_warnings = 0 as i32 as isize;
     /* trace_level is not reset since it is an application-supplied parameter */
     (*(*cinfo).err).msg_code = 0 as i32;
@@ -661,20 +661,20 @@ unsafe extern "C" fn reset_error_mgr(mut cinfo: crate::jpeglib_h::j_common_ptr) 
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_std_error(
-    mut err: *mut crate::jpeglib_h::jpeg_error_mgr,
-) -> *mut crate::jpeglib_h::jpeg_error_mgr {
+    mut err: *mut jpeg_error_mgr,
+) -> *mut jpeg_error_mgr {
     (*err).error_exit =
-        Some(error_exit as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* default = no tracing */
+        Some(error_exit as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* default = no tracing */
     (*err).emit_message =
-        Some(emit_message as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: i32) -> ()); /* no warnings emitted yet */
+        Some(emit_message as unsafe extern "C" fn(_: j_common_ptr, _: i32) -> ()); /* no warnings emitted yet */
     (*err).output_message =
-        Some(output_message as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
+        Some(output_message as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
     (*err).format_message = Some(
         format_message
-            as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: *mut libc::c_char) -> (),
+            as unsafe extern "C" fn(_: j_common_ptr, _: *mut libc::c_char) -> (),
     );
     (*err).reset_error_mgr =
-        Some(reset_error_mgr as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ());
+        Some(reset_error_mgr as unsafe extern "C" fn(_: j_common_ptr) -> ());
     (*err).trace_level = 0 as i32;
     (*err).num_warnings = 0 as i32 as isize;
     (*err).msg_code = 0 as i32;

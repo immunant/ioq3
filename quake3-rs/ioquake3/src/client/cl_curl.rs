@@ -532,8 +532,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut cl_cURLLib: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut cl_cURLLib: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut qcurl_version: Option<unsafe extern "C" fn() -> *mut libc::c_char> = None;
@@ -545,14 +545,14 @@ pub static mut qcurl_easy_init: Option<unsafe extern "C" fn() -> *mut libc::c_vo
 pub static mut qcurl_easy_setopt: Option<
     unsafe extern "C" fn(
         _: *mut libc::c_void,
-        _: crate::curl_h::CURLoption,
+        _: CURLoption,
         _: ...
-    ) -> crate::curl_h::CURLcode,
+    ) -> CURLcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_easy_perform: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void) -> crate::curl_h::CURLcode,
+    unsafe extern "C" fn(_: *mut libc::c_void) -> CURLcode,
 > = None;
 #[no_mangle]
 
@@ -562,9 +562,9 @@ pub static mut qcurl_easy_cleanup: Option<unsafe extern "C" fn(_: *mut libc::c_v
 pub static mut qcurl_easy_getinfo: Option<
     unsafe extern "C" fn(
         _: *mut libc::c_void,
-        _: crate::curl_h::CURLINFO,
+        _: CURLINFO,
         _: ...
-    ) -> crate::curl_h::CURLcode,
+    ) -> CURLcode,
 > = None;
 #[no_mangle]
 
@@ -577,7 +577,7 @@ pub static mut qcurl_easy_reset: Option<unsafe extern "C" fn(_: *mut libc::c_voi
 #[no_mangle]
 
 pub static mut qcurl_easy_strerror: Option<
-    unsafe extern "C" fn(_: crate::curl_h::CURLcode) -> *const libc::c_char,
+    unsafe extern "C" fn(_: CURLcode) -> *const libc::c_char,
 > = None;
 #[no_mangle]
 
@@ -585,43 +585,43 @@ pub static mut qcurl_multi_init: Option<unsafe extern "C" fn() -> *mut libc::c_v
 #[no_mangle]
 
 pub static mut qcurl_multi_add_handle: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void) -> crate::multi_h::CURLMcode,
+    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void) -> CURLMcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_remove_handle: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void) -> crate::multi_h::CURLMcode,
+    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void) -> CURLMcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_fdset: Option<
     unsafe extern "C" fn(
         _: *mut libc::c_void,
-        _: *mut crate::stdlib::fd_set,
-        _: *mut crate::stdlib::fd_set,
-        _: *mut crate::stdlib::fd_set,
+        _: *mut fd_set,
+        _: *mut fd_set,
+        _: *mut fd_set,
         _: *mut i32,
-    ) -> crate::multi_h::CURLMcode,
+    ) -> CURLMcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_perform: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> crate::multi_h::CURLMcode,
+    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> CURLMcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_cleanup: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void) -> crate::multi_h::CURLMcode,
+    unsafe extern "C" fn(_: *mut libc::c_void) -> CURLMcode,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_info_read: Option<
-    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> *mut crate::multi_h::CURLMsg,
+    unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> *mut CURLMsg,
 > = None;
 #[no_mangle]
 
 pub static mut qcurl_multi_strerror: Option<
-    unsafe extern "C" fn(_: crate::multi_h::CURLMcode) -> *const libc::c_char,
+    unsafe extern "C" fn(_: CURLMcode) -> *const libc::c_char,
 > = None;
 
 static mut cURLLib: *mut libc::c_void = 0 as *const libc::c_void as *mut libc::c_void;
@@ -635,14 +635,14 @@ unsafe extern "C" fn GPA(mut str: *mut libc::c_char) -> *mut libc::c_void {
     let mut rv: *mut libc::c_void = 0 as *mut libc::c_void;
     rv = crate::stdlib::SDL_LoadFunction(cURLLib, str);
     if rv.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Can\'t load symbol %s\n\x00" as *const u8 as *const libc::c_char,
             str,
         );
-        crate::src::client::cl_main::clc.cURLEnabled = crate::src::qcommon::q_shared::qfalse;
+        clc.cURLEnabled = qfalse;
         return 0 as *mut libc::c_void;
     } else {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"Loaded symbol %s (0x%p)\n\x00" as *const u8 as *const libc::c_char,
             str,
             rv,
@@ -658,29 +658,29 @@ CL_cURL_Init
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn CL_cURL_Init() -> qboolean {
     if !cURLLib.is_null() {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Loading \"%s\"...\x00" as *const u8 as *const libc::c_char,
         (*cl_cURLLib).string,
     );
     cURLLib = crate::src::sys::sys_main::Sys_LoadDll(
         (*cl_cURLLib).string,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
     if cURLLib.is_null() {
         // On some linux distributions there is no libcurl.so.3, but only libcurl.so.4. That one works too.
         cURLLib = crate::src::sys::sys_main::Sys_LoadDll(
             b"libcurl.so.3\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if cURLLib.is_null() {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
-    crate::src::client::cl_main::clc.cURLEnabled = crate::src::qcommon::q_shared::qtrue;
+    clc.cURLEnabled = qtrue;
     qcurl_version = ::std::mem::transmute::<
         *mut libc::c_void,
         Option<unsafe extern "C" fn() -> *mut libc::c_char>,
@@ -698,16 +698,16 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
         Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
-                _: crate::curl_h::CURLoption,
+                _: CURLoption,
                 _: ...
-            ) -> crate::curl_h::CURLcode,
+            ) -> CURLcode,
         >,
     >(GPA(
         b"curl_easy_setopt\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
     qcurl_easy_perform = ::std::mem::transmute::<
         *mut libc::c_void,
-        Option<unsafe extern "C" fn(_: *mut libc::c_void) -> crate::curl_h::CURLcode>,
+        Option<unsafe extern "C" fn(_: *mut libc::c_void) -> CURLcode>,
     >(GPA(
         b"curl_easy_perform\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
@@ -722,9 +722,9 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
         Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
-                _: crate::curl_h::CURLINFO,
+                _: CURLINFO,
                 _: ...
-            ) -> crate::curl_h::CURLcode,
+            ) -> CURLcode,
         >,
     >(GPA(
         b"curl_easy_getinfo\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -743,7 +743,7 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
     ));
     qcurl_easy_strerror = ::std::mem::transmute::<
         *mut libc::c_void,
-        Option<unsafe extern "C" fn(_: crate::curl_h::CURLcode) -> *const libc::c_char>,
+        Option<unsafe extern "C" fn(_: CURLcode) -> *const libc::c_char>,
     >(GPA(
         b"curl_easy_strerror\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
@@ -759,7 +759,7 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
                 _: *mut libc::c_void,
-            ) -> crate::multi_h::CURLMcode,
+            ) -> CURLMcode,
         >,
     >(GPA(
         b"curl_multi_add_handle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -770,7 +770,7 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
                 _: *mut libc::c_void,
-            ) -> crate::multi_h::CURLMcode,
+            ) -> CURLMcode,
         >,
     >(GPA(
         b"curl_multi_remove_handle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -780,11 +780,11 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
         Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_void,
-                _: *mut crate::stdlib::fd_set,
-                _: *mut crate::stdlib::fd_set,
-                _: *mut crate::stdlib::fd_set,
+                _: *mut fd_set,
+                _: *mut fd_set,
+                _: *mut fd_set,
                 _: *mut i32,
-            ) -> crate::multi_h::CURLMcode,
+            ) -> CURLMcode,
         >,
     >(GPA(
         b"curl_multi_fdset\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -792,40 +792,40 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
     qcurl_multi_perform = ::std::mem::transmute::<
         *mut libc::c_void,
         Option<
-            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> crate::multi_h::CURLMcode,
+            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> CURLMcode,
         >,
     >(GPA(
         b"curl_multi_perform\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
     qcurl_multi_cleanup = ::std::mem::transmute::<
         *mut libc::c_void,
-        Option<unsafe extern "C" fn(_: *mut libc::c_void) -> crate::multi_h::CURLMcode>,
+        Option<unsafe extern "C" fn(_: *mut libc::c_void) -> CURLMcode>,
     >(GPA(
         b"curl_multi_cleanup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
     qcurl_multi_info_read = ::std::mem::transmute::<
         *mut libc::c_void,
         Option<
-            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> *mut crate::multi_h::CURLMsg,
+            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> *mut CURLMsg,
         >,
     >(GPA(
         b"curl_multi_info_read\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     ));
     qcurl_multi_strerror = ::std::mem::transmute::<
         *mut libc::c_void,
-        Option<unsafe extern "C" fn(_: crate::multi_h::CURLMcode) -> *const libc::c_char>,
+        Option<unsafe extern "C" fn(_: CURLMcode) -> *const libc::c_char>,
     >(GPA(
         b"curl_multi_strerror\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ));
-    if crate::src::client::cl_main::clc.cURLEnabled as u64 == 0 {
+    if clc.cURLEnabled as u64 == 0 {
         CL_cURL_Shutdown();
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"FAIL One or more symbols not found\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    crate::src::qcommon::common::Com_Printf(b"OK\n\x00" as *const u8 as *const libc::c_char);
-    return crate::src::qcommon::q_shared::qtrue;
+    Com_Printf(b"OK\n\x00" as *const u8 as *const libc::c_char);
+    return qtrue;
     /* USE_CURL_DLOPEN */
 }
 /*
@@ -861,41 +861,41 @@ pub unsafe extern "C" fn CL_cURL_Shutdown() {
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_cURL_Cleanup() {
-    if !crate::src::client::cl_main::clc.downloadCURLM.is_null() {
-        let mut result: crate::multi_h::CURLMcode = crate::multi_h::CURLM_OK;
-        if !crate::src::client::cl_main::clc.downloadCURL.is_null() {
+    if !clc.downloadCURLM.is_null() {
+        let mut result: CURLMcode = CURLM_OK;
+        if !clc.downloadCURL.is_null() {
             result = qcurl_multi_remove_handle.expect("non-null function pointer")(
-                crate::src::client::cl_main::clc.downloadCURLM,
-                crate::src::client::cl_main::clc.downloadCURL,
+                clc.downloadCURLM,
+                clc.downloadCURL,
             );
-            if result as i32 != crate::multi_h::CURLM_OK as i32 {
-                crate::src::qcommon::common::Com_DPrintf(
+            if result as i32 != CURLM_OK as i32 {
+                Com_DPrintf(
                     b"qcurl_multi_remove_handle failed: %s\n\x00" as *const u8
                         as *const libc::c_char,
                     qcurl_multi_strerror.expect("non-null function pointer")(result),
                 );
             }
             qcurl_easy_cleanup.expect("non-null function pointer")(
-                crate::src::client::cl_main::clc.downloadCURL,
+                clc.downloadCURL,
             );
         }
         result = qcurl_multi_cleanup.expect("non-null function pointer")(
-            crate::src::client::cl_main::clc.downloadCURLM,
+            clc.downloadCURLM,
         );
-        if result as i32 != crate::multi_h::CURLM_OK as i32 {
-            crate::src::qcommon::common::Com_DPrintf(
+        if result as i32 != CURLM_OK as i32 {
+            Com_DPrintf(
                 b"CL_cURL_Cleanup: qcurl_multi_cleanup failed: %s\n\x00" as *const u8
                     as *const libc::c_char,
                 qcurl_multi_strerror.expect("non-null function pointer")(result),
             );
         }
-        crate::src::client::cl_main::clc.downloadCURLM = 0 as *mut libc::c_void;
-        crate::src::client::cl_main::clc.downloadCURL = 0 as *mut libc::c_void
-    } else if !crate::src::client::cl_main::clc.downloadCURL.is_null() {
+        clc.downloadCURLM = 0 as *mut libc::c_void;
+        clc.downloadCURL = 0 as *mut libc::c_void
+    } else if !clc.downloadCURL.is_null() {
         qcurl_easy_cleanup.expect("non-null function pointer")(
-            crate::src::client::cl_main::clc.downloadCURL,
+            clc.downloadCURL,
         );
-        crate::src::client::cl_main::clc.downloadCURL = 0 as *mut libc::c_void
+        clc.downloadCURL = 0 as *mut libc::c_void
     };
 }
 
@@ -906,29 +906,29 @@ unsafe extern "C" fn CL_cURL_CallbackProgress(
     mut _ultotal: f64,
     mut _ulnow: f64,
 ) -> i32 {
-    crate::src::client::cl_main::clc.downloadSize = dltotal as i32;
-    crate::src::qcommon::cvar::Cvar_SetValue(
+    clc.downloadSize = dltotal as i32;
+    Cvar_SetValue(
         b"cl_downloadSize\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::cl_main::clc.downloadSize as f32,
+        clc.downloadSize as f32,
     );
-    crate::src::client::cl_main::clc.downloadCount = dlnow as i32;
-    crate::src::qcommon::cvar::Cvar_SetValue(
+    clc.downloadCount = dlnow as i32;
+    Cvar_SetValue(
         b"cl_downloadCount\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::cl_main::clc.downloadCount as f32,
+        clc.downloadCount as f32,
     );
     return 0 as i32;
 }
 
 unsafe extern "C" fn CL_cURL_CallbackWrite(
     mut buffer: *mut libc::c_void,
-    mut size: crate::stddef_h::size_t,
-    mut nmemb: crate::stddef_h::size_t,
+    mut size: size_t,
+    mut nmemb: size_t,
     mut stream: *mut libc::c_void,
-) -> crate::stddef_h::size_t {
-    crate::src::qcommon::files::FS_Write(
+) -> size_t {
+    FS_Write(
         buffer,
         size.wrapping_mul(nmemb) as i32,
-        *(stream as *mut crate::src::qcommon::q_shared::fileHandle_t).offset(0 as i32 as isize),
+        *(stream as *mut fileHandle_t).offset(0 as i32 as isize),
     );
     return size.wrapping_mul(nmemb);
 }
@@ -936,10 +936,10 @@ unsafe extern "C" fn CL_cURL_CallbackWrite(
 
 pub unsafe extern "C" fn qcurl_easy_setopt_warn(
     mut curl: *mut libc::c_void,
-    mut option: crate::curl_h::CURLoption,
+    mut option: CURLoption,
     mut args: ...
-) -> crate::curl_h::CURLcode {
-    let mut result: crate::curl_h::CURLcode = crate::curl_h::CURLE_OK;
+) -> CURLcode {
+    let mut result: CURLcode = CURLE_OK;
     let mut argp: ::std::ffi::VaListImpl;
     argp = args.clone();
     if (option as u32) < 10000 as i32 as u32 {
@@ -949,12 +949,12 @@ pub unsafe extern "C" fn qcurl_easy_setopt_warn(
         let mut pointerValue: *mut libc::c_void = argp.as_va_list().arg::<*mut libc::c_void>();
         result = qcurl_easy_setopt.expect("non-null function pointer")(curl, option, pointerValue)
     } else {
-        let mut offsetValue: crate::curlbuild_h::curl_off_t =
-            argp.as_va_list().arg::<crate::curlbuild_h::curl_off_t>();
+        let mut offsetValue: curl_off_t =
+            argp.as_va_list().arg::<curl_off_t>();
         result = qcurl_easy_setopt.expect("non-null function pointer")(curl, option, offsetValue)
     }
-    if result as u32 != crate::curl_h::CURLE_OK as i32 as u32 {
-        crate::src::qcommon::common::Com_DPrintf(
+    if result as u32 != CURLE_OK as i32 as u32 {
+        Com_DPrintf(
             b"qcurl_easy_setopt failed: %s\n\x00" as *const u8 as *const libc::c_char,
             qcurl_easy_strerror.expect("non-null function pointer")(result),
         );
@@ -967,28 +967,28 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
     mut localName: *const libc::c_char,
     mut remoteURL: *const libc::c_char,
 ) {
-    let mut result: crate::multi_h::CURLMcode = crate::multi_h::CURLM_OK;
-    crate::src::client::cl_main::clc.cURLUsed = crate::src::qcommon::q_shared::qtrue;
-    crate::src::qcommon::common::Com_Printf(
+    let mut result: CURLMcode = CURLM_OK;
+    clc.cURLUsed = qtrue;
+    Com_Printf(
         b"URL: %s\n\x00" as *const u8 as *const libc::c_char,
         remoteURL,
     );
-    crate::src::qcommon::common::Com_DPrintf(b"***** CL_cURL_BeginDownload *****\nLocalname: %s\nRemoteURL: %s\n****************************\n\x00"
+    Com_DPrintf(b"***** CL_cURL_BeginDownload *****\nLocalname: %s\nRemoteURL: %s\n****************************\n\x00"
                     as *const u8 as *const libc::c_char, localName,
                 remoteURL);
     CL_cURL_Cleanup();
-    crate::src::qcommon::q_shared::Q_strncpyz(
-        crate::src::client::cl_main::clc.downloadURL.as_mut_ptr(),
+    Q_strncpyz(
+        clc.downloadURL.as_mut_ptr(),
         remoteURL,
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
-        crate::src::client::cl_main::clc.downloadName.as_mut_ptr(),
+    Q_strncpyz(
+        clc.downloadName.as_mut_ptr(),
         localName,
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
-        crate::src::client::cl_main::clc
+    Com_sprintf(
+        clc
             .downloadTempName
             .as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
@@ -996,111 +996,111 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
         localName,
     );
     // Set so UI gets access to it
-    crate::src::qcommon::cvar::Cvar_Set(
+    Cvar_Set(
         b"cl_downloadName\x00" as *const u8 as *const libc::c_char,
         localName,
     ); // Starting new file
-    crate::src::qcommon::cvar::Cvar_Set(
+    Cvar_Set(
         b"cl_downloadSize\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::cvar::Cvar_Set(
+    Cvar_Set(
         b"cl_downloadCount\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::cvar::Cvar_SetValue(
+    Cvar_SetValue(
         b"cl_downloadTime\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::cl_main::cls.realtime as f32,
+        cls.realtime as f32,
     );
-    crate::src::client::cl_main::clc.downloadBlock = 0 as i32;
-    crate::src::client::cl_main::clc.downloadCount = 0 as i32;
-    crate::src::client::cl_main::clc.downloadCURL =
+    clc.downloadBlock = 0 as i32;
+    clc.downloadCount = 0 as i32;
+    clc.downloadCURL =
         qcurl_easy_init.expect("non-null function pointer")();
-    if crate::src::client::cl_main::clc.downloadCURL.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if clc.downloadCURL.is_null() {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_cURL_BeginDownload: qcurl_easy_init() failed\x00" as *const u8
                 as *const libc::c_char,
         );
     }
-    crate::src::client::cl_main::clc.download = crate::src::qcommon::files::FS_SV_FOpenFileWrite(
-        crate::src::client::cl_main::clc
+    clc.download = FS_SV_FOpenFileWrite(
+        clc
             .downloadTempName
             .as_mut_ptr(),
     );
-    if crate::src::client::cl_main::clc.download == 0 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if clc.download == 0 {
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_cURL_BeginDownload: failed to open %s for writing\x00" as *const u8
                 as *const libc::c_char,
-            crate::src::client::cl_main::clc
+            clc
                 .downloadTempName
                 .as_mut_ptr(),
         );
     }
-    if (*crate::src::qcommon::common::com_developer).integer != 0 {
+    if (*com_developer).integer != 0 {
         qcurl_easy_setopt_warn(
-            crate::src::client::cl_main::clc.downloadCURL,
-            crate::curl_h::CURLOPT_VERBOSE,
+            clc.downloadCURL,
+            CURLOPT_VERBOSE,
             1 as i32,
         );
     }
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_URL,
-        crate::src::client::cl_main::clc.downloadURL.as_mut_ptr(),
+        clc.downloadCURL,
+        CURLOPT_URL,
+        clc.downloadURL.as_mut_ptr(),
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_TRANSFERTEXT,
+        clc.downloadCURL,
+        CURLOPT_TRANSFERTEXT,
         0 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_REFERER,
-        crate::src::qcommon::q_shared::va(
+        clc.downloadCURL,
+        CURLOPT_REFERER,
+        va(
             b"ioQ3://%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::qcommon::net_ip::NET_AdrToString(
-                crate::src::client::cl_main::clc.serverAddress as crate::qcommon_h::netadr_t,
+            NET_AdrToString(
+                clc.serverAddress as netadr_t,
             ),
         ),
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_USERAGENT,
-        crate::src::qcommon::q_shared::va(
+        clc.downloadCURL,
+        CURLOPT_USERAGENT,
+        va(
             b"%s %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             b"ioq3 1.36_GIT_d0fe4462-2020-01-10\x00" as *const u8 as *const libc::c_char,
             qcurl_version.expect("non-null function pointer")(),
         ),
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_WRITEFUNCTION,
+        clc.downloadCURL,
+        CURLOPT_WRITEFUNCTION,
         Some(
             CL_cURL_CallbackWrite
                 as unsafe extern "C" fn(
                     _: *mut libc::c_void,
-                    _: crate::stddef_h::size_t,
-                    _: crate::stddef_h::size_t,
+                    _: size_t,
+                    _: size_t,
                     _: *mut libc::c_void,
-                ) -> crate::stddef_h::size_t,
+                ) -> size_t,
         ),
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_WRITEDATA,
-        &mut crate::src::client::cl_main::clc.download
-            as *mut crate::src::qcommon::q_shared::fileHandle_t,
+        clc.downloadCURL,
+        CURLOPT_WRITEDATA,
+        &mut clc.download
+            as *mut fileHandle_t,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_NOPROGRESS,
+        clc.downloadCURL,
+        CURLOPT_NOPROGRESS,
         0 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_PROGRESSFUNCTION,
+        clc.downloadCURL,
+        CURLOPT_PROGRESSFUNCTION,
         Some(
             CL_cURL_CallbackProgress
                 as unsafe extern "C" fn(
@@ -1113,78 +1113,78 @@ pub unsafe extern "C" fn CL_cURL_BeginDownload(
         ),
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_PROGRESSDATA,
+        clc.downloadCURL,
+        CURLOPT_PROGRESSDATA,
         0 as *mut libc::c_void,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_FAILONERROR,
+        clc.downloadCURL,
+        CURLOPT_FAILONERROR,
         1 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_FOLLOWLOCATION,
+        clc.downloadCURL,
+        CURLOPT_FOLLOWLOCATION,
         1 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_MAXREDIRS,
+        clc.downloadCURL,
+        CURLOPT_MAXREDIRS,
         5 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_PROTOCOLS,
+        clc.downloadCURL,
+        CURLOPT_PROTOCOLS,
         (1 as i32) << 0 as i32
             | (1 as i32) << 1 as i32
             | (1 as i32) << 2 as i32
             | (1 as i32) << 3 as i32,
     );
     qcurl_easy_setopt_warn(
-        crate::src::client::cl_main::clc.downloadCURL,
-        crate::curl_h::CURLOPT_BUFFERSIZE,
+        clc.downloadCURL,
+        CURLOPT_BUFFERSIZE,
         524288 as i32,
     );
-    crate::src::client::cl_main::clc.downloadCURLM =
+    clc.downloadCURLM =
         qcurl_multi_init.expect("non-null function pointer")();
-    if crate::src::client::cl_main::clc.downloadCURLM.is_null() {
+    if clc.downloadCURLM.is_null() {
         qcurl_easy_cleanup.expect("non-null function pointer")(
-            crate::src::client::cl_main::clc.downloadCURL,
+            clc.downloadCURL,
         );
-        crate::src::client::cl_main::clc.downloadCURL = 0 as *mut libc::c_void;
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        clc.downloadCURL = 0 as *mut libc::c_void;
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_cURL_BeginDownload: qcurl_multi_init() failed\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     result = qcurl_multi_add_handle.expect("non-null function pointer")(
-        crate::src::client::cl_main::clc.downloadCURLM,
-        crate::src::client::cl_main::clc.downloadCURL,
+        clc.downloadCURLM,
+        clc.downloadCURL,
     );
-    if result as i32 != crate::multi_h::CURLM_OK as i32 {
+    if result as i32 != CURLM_OK as i32 {
         qcurl_easy_cleanup.expect("non-null function pointer")(
-            crate::src::client::cl_main::clc.downloadCURL,
+            clc.downloadCURL,
         );
-        crate::src::client::cl_main::clc.downloadCURL = 0 as *mut libc::c_void;
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        clc.downloadCURL = 0 as *mut libc::c_void;
+        Com_Error(
+            ERR_DROP as i32,
             b"CL_cURL_BeginDownload: qcurl_multi_add_handle() failed: %s\x00" as *const u8
                 as *const libc::c_char,
             qcurl_multi_strerror.expect("non-null function pointer")(result),
         );
     }
-    if crate::src::client::cl_main::clc.sv_allowDownload & 8 as i32 == 0
-        && crate::src::client::cl_main::clc.cURLDisconnected as u64 == 0
+    if clc.sv_allowDownload & 8 as i32 == 0
+        && clc.cURLDisconnected as u64 == 0
     {
-        crate::src::client::cl_main::CL_AddReliableCommand(
+        CL_AddReliableCommand(
             b"disconnect\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
-        crate::src::client::cl_input::CL_WritePacket();
-        crate::src::client::cl_input::CL_WritePacket();
-        crate::src::client::cl_input::CL_WritePacket();
-        crate::src::client::cl_main::clc.cURLDisconnected = crate::src::qcommon::q_shared::qtrue
+        CL_WritePacket();
+        CL_WritePacket();
+        CL_WritePacket();
+        clc.cURLDisconnected = qtrue
     };
 }
 /*
@@ -1211,58 +1211,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_cURL_PerformDownload() {
-    let mut res: crate::multi_h::CURLMcode = crate::multi_h::CURLM_OK;
-    let mut msg: *mut crate::multi_h::CURLMsg = 0 as *mut crate::multi_h::CURLMsg;
+    let mut res: CURLMcode = CURLM_OK;
+    let mut msg: *mut CURLMsg = 0 as *mut CURLMsg;
     let mut c: i32 = 0;
     let mut i: i32 = 0 as i32;
     res = qcurl_multi_perform.expect("non-null function pointer")(
-        crate::src::client::cl_main::clc.downloadCURLM,
+        clc.downloadCURLM,
         &mut c,
     );
-    while res as i32 == crate::multi_h::CURLM_CALL_MULTI_PERFORM as i32 && i < 100 as i32 {
+    while res as i32 == CURLM_CALL_MULTI_PERFORM as i32 && i < 100 as i32 {
         res = qcurl_multi_perform.expect("non-null function pointer")(
-            crate::src::client::cl_main::clc.downloadCURLM,
+            clc.downloadCURLM,
             &mut c,
         );
         i += 1
     }
-    if res as i32 == crate::multi_h::CURLM_CALL_MULTI_PERFORM as i32 {
+    if res as i32 == CURLM_CALL_MULTI_PERFORM as i32 {
         return;
     }
     msg = qcurl_multi_info_read.expect("non-null function pointer")(
-        crate::src::client::cl_main::clc.downloadCURLM,
+        clc.downloadCURLM,
         &mut c,
     );
     if msg.is_null() {
         return;
     }
-    crate::src::qcommon::files::FS_FCloseFile(crate::src::client::cl_main::clc.download);
-    if (*msg).msg as u32 == crate::multi_h::CURLMSG_DONE as i32 as u32
-        && (*msg).data.result as u32 == crate::curl_h::CURLE_OK as i32 as u32
+    FS_FCloseFile(clc.download);
+    if (*msg).msg as u32 == CURLMSG_DONE as i32 as u32
+        && (*msg).data.result as u32 == CURLE_OK as i32 as u32
     {
-        crate::src::qcommon::files::FS_SV_Rename(
-            crate::src::client::cl_main::clc
+        FS_SV_Rename(
+            clc
                 .downloadTempName
                 .as_mut_ptr(),
-            crate::src::client::cl_main::clc.downloadName.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
+            clc.downloadName.as_mut_ptr(),
+            qfalse,
         );
-        crate::src::client::cl_main::clc.downloadRestart = crate::src::qcommon::q_shared::qtrue
+        clc.downloadRestart = qtrue
     } else {
         let mut code: isize = 0;
         qcurl_easy_getinfo.expect("non-null function pointer")(
             (*msg).easy_handle,
-            crate::curl_h::CURLINFO_RESPONSE_CODE,
+            CURLINFO_RESPONSE_CODE,
             &mut code as *mut isize,
         );
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"Download Error: %s Code: %ld URL: %s\x00" as *const u8 as *const libc::c_char,
             qcurl_easy_strerror.expect("non-null function pointer")((*msg).data.result),
             code,
-            crate::src::client::cl_main::clc.downloadURL.as_mut_ptr(),
+            clc.downloadURL.as_mut_ptr(),
         );
     }
-    crate::src::client::cl_main::CL_NextDownload();
+    CL_NextDownload();
 }
 /* USE_CURL */

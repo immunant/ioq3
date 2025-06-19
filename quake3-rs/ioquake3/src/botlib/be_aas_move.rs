@@ -139,12 +139,12 @@ extern "C" {
      *
      *****************************************************************************/
     #[no_mangle]
-    pub static mut botimport: crate::botlib_h::botlib_import_t;
+    pub static mut botimport: botlib_import_t;
 }
 #[no_mangle]
 
-pub static mut aassettings: crate::be_aas_def_h::aas_settings_t =
-    crate::be_aas_def_h::aas_settings_t {
+pub static mut aassettings: aas_settings_t =
+    aas_settings_t {
         phys_gravitydirection: [0.; 3],
         phys_friction: 0.,
         phys_stopspeed: 0.,
@@ -275,17 +275,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_DropToFloor(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) -> i32 {
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut end: vec3_t = [0.; 3];
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -294,7 +294,7 @@ pub unsafe extern "C" fn AAS_DropToFloor(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -313,14 +313,14 @@ pub unsafe extern "C" fn AAS_DropToFloor(
         end.as_mut_ptr(),
         0 as i32,
         1 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     *origin.offset(0 as i32 as isize) = trace.endpos[0 as i32 as usize];
     *origin.offset(1 as i32 as isize) = trace.endpos[1 as i32 as usize];
     *origin.offset(2 as i32 as isize) = trace.endpos[2 as i32 as usize];
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //
 //
@@ -335,11 +335,11 @@ pub unsafe extern "C" fn AAS_DropToFloor(
 
 pub unsafe extern "C" fn AAS_InitSettings() {
     aassettings.phys_gravitydirection[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     aassettings.phys_gravitydirection[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        0 as i32 as vec_t;
     aassettings.phys_gravitydirection[2 as i32 as usize] =
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
+        -(1 as i32) as vec_t;
     aassettings.phys_friction = crate::src::botlib::l_libvar::LibVarValue(
         b"phys_friction\x00" as *const u8 as *const libc::c_char,
         b"6\x00" as *const u8 as *const libc::c_char,
@@ -496,16 +496,16 @@ pub unsafe extern "C" fn AAS_InitSettings() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AgainstLadder(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> i32 {
     let mut areanum: i32 = 0; //end if
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
     let mut side: i32 = 0;
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
+    let mut org: vec3_t = [0.; 3];
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -531,7 +531,7 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
     }
     //if in solid... wrrr shouldn't happen
     if areanum == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if not in a ladder area
     if (*crate::src::botlib::be_aas_main::aasworld
@@ -541,7 +541,7 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
         & 2 as i32
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if a crouch only area
     if (*crate::src::botlib::be_aas_main::aasworld
@@ -551,12 +551,12 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
         & 2 as i32
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t; //end for
+        .offset(areanum as isize) as *mut aas_area_t; //end for
     i = 0 as i32;
     while i < (*area).numfaces {
         facenum = *crate::src::botlib::be_aas_main::aasworld
@@ -565,8 +565,8 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
         side = (facenum < 0 as i32) as i32;
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut aas_face_t;
         //end if
         //if the face isn't a ladder face
         if !((*face).faceflags & 2 as i32 == 0) {
@@ -574,7 +574,7 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset(((*face).planenum ^ side) as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //if the origin is pretty close to the plane
             if crate::stdlib::fabsf(
                 (*plane).normal[0 as i32 as usize] * *origin.offset(0 as i32 as isize)
@@ -584,19 +584,19 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
             ) < 3 as i32 as f32
             {
                 if crate::src::botlib::be_aas_sample::AAS_PointInsideFace(
-                    ::libc::abs(facenum),
+                    libc::abs(facenum),
                     origin,
                     0.1f32,
                 ) as u64
                     != 0
                 {
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
             }
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_AgainstLadder
 //===========================================================================
@@ -609,12 +609,12 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_OnGround(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut presencetype: i32,
     mut passent: i32,
 ) -> i32 {
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -622,13 +622,13 @@ pub unsafe extern "C" fn AAS_OnGround(
         area: 0,
         planenum: 0,
     };
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut end: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     end[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     end[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     end[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -638,31 +638,31 @@ pub unsafe extern "C" fn AAS_OnGround(
         end.as_mut_ptr(),
         presencetype,
         passent,
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     //if in solid
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if nothing hit at all
     if trace.fraction as f64 >= 1.0f64 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if too far from the hit plane
     if *origin.offset(2 as i32 as isize) - trace.endpos[2 as i32 as usize] > 10 as i32 as f32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //check if the plane isn't too steep
     plane = crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(trace.planenum)
-        as *mut crate::aasfile_h::aas_plane_s;
+        as *mut aas_plane_s;
     if (*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
         + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
         + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize]
         < aassettings.phys_maxsteepness
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //the bot is on the ground
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function AAS_OnGround
 //===========================================================================
@@ -675,9 +675,9 @@ pub unsafe extern "C" fn AAS_OnGround(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_Swimming(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> i32 {
-    let mut testorg: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut testorg: vec3_t = [0.; 3];
     testorg[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     testorg[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     testorg[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -686,9 +686,9 @@ pub unsafe extern "C" fn AAS_Swimming(
         & (8 as i32 | 16 as i32 | 32 as i32)
         != 0
     {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_Swimming
 //===========================================================================
@@ -698,57 +698,57 @@ pub unsafe extern "C" fn AAS_Swimming(
 // Changes Globals:		-
 //===========================================================================
 
-static mut VEC_UP: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut VEC_UP: vec3_t = [
+    0 as i32 as vec_t,
+    -(1 as i32) as vec_t,
+    0 as i32 as vec_t,
 ];
 
-static mut MOVEDIR_UP: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    1 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut MOVEDIR_UP: vec3_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    1 as i32 as vec_t,
 ];
 
-static mut VEC_DOWN: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    -(2 as i32) as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
+static mut VEC_DOWN: vec3_t = [
+    0 as i32 as vec_t,
+    -(2 as i32) as vec_t,
+    0 as i32 as vec_t,
 ];
 
-static mut MOVEDIR_DOWN: crate::src::qcommon::q_shared::vec3_t = [
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    0 as i32 as crate::src::qcommon::q_shared::vec_t,
-    -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+static mut MOVEDIR_DOWN: vec3_t = [
+    0 as i32 as vec_t,
+    0 as i32 as vec_t,
+    -(1 as i32) as vec_t,
 ];
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_SetMovedir(
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
-    mut movedir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut angles: *mut vec_t,
+    mut movedir: *mut vec_t,
 ) {
     if VectorCompare(
-        angles as *const crate::src::qcommon::q_shared::vec_t,
-        VEC_UP.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        angles as *const vec_t,
+        VEC_UP.as_mut_ptr() as *const vec_t,
     ) != 0
     {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_UP[0 as i32 as usize]; //end if
         *movedir.offset(1 as i32 as isize) = MOVEDIR_UP[1 as i32 as usize]; //end else if
         *movedir.offset(2 as i32 as isize) = MOVEDIR_UP[2 as i32 as usize]
     } else if VectorCompare(
-        angles as *const crate::src::qcommon::q_shared::vec_t,
-        VEC_DOWN.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        angles as *const vec_t,
+        VEC_DOWN.as_mut_ptr() as *const vec_t,
     ) != 0
     {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_DOWN[0 as i32 as usize];
         *movedir.offset(1 as i32 as isize) = MOVEDIR_DOWN[1 as i32 as usize];
         *movedir.offset(2 as i32 as isize) = MOVEDIR_DOWN[2 as i32 as usize]
     } else {
-        crate::src::qcommon::q_math::AngleVectors(
-            angles as *const crate::src::qcommon::q_shared::vec_t,
+        AngleVectors(
+            angles as *const vec_t,
             movedir,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
         );
     };
     //end else
@@ -763,18 +763,18 @@ pub unsafe extern "C" fn AAS_SetMovedir(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_JumpReachRunStart(
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
-    mut runstart: *mut crate::src::qcommon::q_shared::vec_t,
+    mut reach: *mut aas_reachability_t,
+    mut runstart: *mut vec_t,
 ) {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut hordir: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -791,8 +791,8 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
     //
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*reach).end[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*reach).end[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(hordir.as_mut_ptr());
     //start point
     start[0 as i32 as usize] = (*reach).start[0 as i32 as usize];
     start[1 as i32 as usize] = (*reach).start[1 as i32 as usize];
@@ -808,15 +808,15 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
         -(1 as i32),
         start.as_mut_ptr(),
         2 as i32,
-        crate::src::qcommon::q_shared::qtrue as i32,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+        qtrue as i32,
+        vec3_origin.as_mut_ptr(),
         cmdmove.as_mut_ptr(),
         1 as i32,
         2 as i32,
         0.1f32,
         4 as i32 | 8 as i32 | 16 as i32 | 32 as i32 | 64 as i32,
         0 as i32,
-        crate::src::qcommon::q_shared::qfalse as i32,
+        qfalse as i32,
     );
     *runstart.offset(0 as i32 as isize) = move_0.endpos[0 as i32 as usize];
     *runstart.offset(1 as i32 as isize) = move_0.endpos[1 as i32 as usize];
@@ -840,41 +840,41 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut radiusdamage: f32,
 ) -> f32 {
-    let mut kvel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut viewangles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut kvel: vec3_t = [0.; 3];
+    let mut v: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut viewangles: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut mass: f32 = 0.;
     let mut knockback: f32 = 0.;
     let mut points: f32 = 0.;
-    let mut rocketoffset: crate::src::qcommon::q_shared::vec3_t = [
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut rocketoffset: vec3_t = [
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
+        -(8 as i32) as vec_t,
     ];
-    let mut botmins: crate::src::qcommon::q_shared::vec3_t = [
-        -(16 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(16 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(24 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut botmins: vec3_t = [
+        -(16 as i32) as vec_t,
+        -(16 as i32) as vec_t,
+        -(24 as i32) as vec_t,
     ];
-    let mut botmaxs: crate::src::qcommon::q_shared::vec3_t = [
-        16 as i32 as crate::src::qcommon::q_shared::vec_t,
-        16 as i32 as crate::src::qcommon::q_shared::vec_t,
-        32 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut botmaxs: vec3_t = [
+        16 as i32 as vec_t,
+        16 as i32 as vec_t,
+        32 as i32 as vec_t,
     ];
-    let mut bsptrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut bsptrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -883,7 +883,7 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -892,19 +892,19 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         ent: 0,
     };
     //look down (90 degrees)
-    viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
-    viewangles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    viewangles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    viewangles[0 as i32 as usize] = 90 as i32 as vec_t;
+    viewangles[1 as i32 as usize] = 0 as i32 as vec_t;
+    viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
     //get the start point shooting from
     start[0 as i32 as usize] = *origin.offset(0 as i32 as isize); //view offset Z
     start[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     start[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     start[2 as i32 as usize] += 8 as i32 as f32;
-    crate::src::qcommon::q_math::AngleVectors(
-        viewangles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        viewangles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
     );
     start[0 as i32 as usize] += forward[0 as i32 as usize] * rocketoffset[0 as i32 as usize]
         + right[0 as i32 as usize] * rocketoffset[1 as i32 as usize];
@@ -923,32 +923,32 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     //trace a line to get the impact point
     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         start.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
         end.as_mut_ptr(),
         1 as i32,
         1 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     //calculate the damage the bot will get from the rocket impact
     v[0 as i32 as usize] = botmins[0 as i32 as usize] + botmaxs[0 as i32 as usize];
     v[1 as i32 as usize] = botmins[1 as i32 as usize] + botmaxs[1 as i32 as usize];
     v[2 as i32 as usize] = botmins[2 as i32 as usize] + botmaxs[2 as i32 as usize];
     v[0 as i32 as usize] = (*origin.offset(0 as i32 as isize) as f64
         + v[0 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     v[1 as i32 as usize] = (*origin.offset(1 as i32 as isize) as f64
         + v[1 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     v[2 as i32 as usize] = (*origin.offset(2 as i32 as isize) as f64
         + v[2 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     v[0 as i32 as usize] = bsptrace.endpos[0 as i32 as usize] - v[0 as i32 as usize];
     v[1 as i32 as usize] = bsptrace.endpos[1 as i32 as usize] - v[1 as i32 as usize];
     v[2 as i32 as usize] = bsptrace.endpos[2 as i32 as usize] - v[2 as i32 as usize];
     //
     points = (radiusdamage as f64
         - 0.5f64
-            * VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) as f64)
+            * VectorLength(v.as_mut_ptr() as *const vec_t) as f64)
         as f32;
     if points < 0 as i32 as f32 {
         points = 0 as i32 as f32
@@ -963,17 +963,17 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     dir[0 as i32 as usize] = *origin.offset(0 as i32 as isize) - bsptrace.endpos[0 as i32 as usize];
     dir[1 as i32 as usize] = *origin.offset(1 as i32 as isize) - bsptrace.endpos[1 as i32 as usize];
     dir[2 as i32 as usize] = *origin.offset(2 as i32 as isize) - bsptrace.endpos[2 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
     //damage velocity
     kvel[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
         * (1600.0f64 * knockback as f64 / mass as f64))
-        as crate::src::qcommon::q_shared::vec_t; //the rocket jump hack...
+        as vec_t; //the rocket jump hack...
     kvel[1 as i32 as usize] = (dir[1 as i32 as usize] as f64
         * (1600.0f64 * knockback as f64 / mass as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     kvel[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         * (1600.0f64 * knockback as f64 / mass as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     //rocket impact velocity + jump velocity
     return kvel[2 as i32 as usize] + aassettings.phys_jumpvel;
 }
@@ -987,7 +987,7 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_RocketJumpZVelocity(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> f32 {
     //rocket radius damage is 120 (p_weapon.c: Weapon_RocketLauncher_Fire)
     return AAS_WeaponJumpZVelocity(origin, 120 as i32 as f32);
@@ -1002,7 +1002,7 @@ pub unsafe extern "C" fn AAS_RocketJumpZVelocity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BFGJumpZVelocity(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> f32 {
     //bfg radius damage is 1000 (p_weapon.c: weapon_bfg_fire)
     return AAS_WeaponJumpZVelocity(origin, 120 as i32 as f32);
@@ -1018,9 +1018,9 @@ pub unsafe extern "C" fn AAS_BFGJumpZVelocity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_Accelerate(
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
+    mut velocity: *mut vec_t,
     mut frametime: f32,
-    mut wishdir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut wishdir: *mut vec_t,
     mut wishspeed: f32,
     mut accel: f32,
 ) {
@@ -1058,7 +1058,7 @@ pub unsafe extern "C" fn AAS_Accelerate(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ApplyFriction(
-    mut vel: *mut crate::src::qcommon::q_shared::vec_t,
+    mut vel: *mut vec_t,
     mut friction: f32,
     mut stopspeed: f32,
     mut frametime: f32,
@@ -1095,12 +1095,12 @@ pub unsafe extern "C" fn AAS_ApplyFriction(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ClipToBBox(
-    mut trace: *mut crate::be_aas_h::aas_trace_t,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut trace: *mut aas_trace_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut presencetype: i32,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -1109,12 +1109,12 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
     let mut back: f32 = 0.;
     let mut frac: f32 = 0.;
     let mut planedist: f32 = 0.;
-    let mut bboxmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bboxmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut bboxmins: vec3_t = [0.; 3];
+    let mut bboxmaxs: vec3_t = [0.; 3];
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
     crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox(
         presencetype,
         bboxmins.as_mut_ptr(),
@@ -1136,12 +1136,12 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
         if *start.offset(i as isize) < absmins[i as usize]
             && *end.offset(i as isize) < absmins[i as usize]
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if *start.offset(i as isize) > absmaxs[i as usize]
             && *end.offset(i as isize) > absmaxs[i as usize]
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
@@ -1190,7 +1190,7 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
     }
     //if there was a collision
     if i != 3 as i32 {
-        (*trace).startsolid = crate::src::qcommon::q_shared::qfalse; //end if
+        (*trace).startsolid = qfalse; //end if
         (*trace).fraction = frac;
         (*trace).ent = 0 as i32;
         (*trace).planenum = 0 as i32;
@@ -1202,9 +1202,9 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
             (*trace).endpos[j as usize] = *start.offset(j as isize) + dir[j as usize] * frac;
             j += 1
         }
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_ClipToBBox
 //===========================================================================
@@ -1228,20 +1228,20 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ClientMovementPrediction(
-    mut move_0: *mut crate::be_aas_h::aas_clientmove_s,
+    mut move_0: *mut aas_clientmove_s,
     mut entnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut presencetype: i32,
     mut onground: i32,
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
-    mut cmdmove: *mut crate::src::qcommon::q_shared::vec_t,
+    mut velocity: *mut vec_t,
+    mut cmdmove: *mut vec_t,
     mut cmdframes: i32,
     mut maxframes: i32,
     mut frametime: f32,
     mut stopevent: i32,
     mut stopareanum: i32,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
     mut visualize: i32,
 ) -> i32 {
     let mut phys_friction: f32 = 0.;
@@ -1278,26 +1278,26 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     let mut areanum: i32 = 0;
     let mut areas: [i32; 20] = [0; 20];
     let mut numareas: i32 = 0;
-    let mut points: [crate::src::qcommon::q_shared::vec3_t; 20] = [[0.; 3]; 20];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut feet: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut stepend: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lastorg: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut wishdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut frame_test_vel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut old_frame_test_vel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut left_test_vel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut points: [vec3_t; 20] = [[0.; 3]; 20];
+    let mut org: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut feet: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut stepend: vec3_t = [0.; 3];
+    let mut lastorg: vec3_t = [0.; 3];
+    let mut wishdir: vec3_t = [0.; 3];
+    let mut frame_test_vel: vec3_t = [0.; 3];
+    let mut old_frame_test_vel: vec3_t = [0.; 3];
+    let mut left_test_vel: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut plane2: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -1305,8 +1305,8 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
         area: 0,
         planenum: 0,
     };
-    let mut steptrace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut steptrace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -1336,19 +1336,19 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     crate::stdlib::memset(
         move_0 as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::be_aas_h::aas_clientmove_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_clientmove_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut trace as *mut crate::be_aas_h::aas_trace_t as *mut libc::c_void,
+        &mut trace as *mut aas_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::be_aas_h::aas_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_trace_t>() as libc::c_ulong,
     );
     //start at the current origin
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     org[2 as i32 as usize] =
-        (org[2 as i32 as usize] as f64 + 0.25f64) as crate::src::qcommon::q_shared::vec_t;
+        (org[2 as i32 as usize] as f64 + 0.25f64) as vec_t;
     //velocity to test for the first frame
     frame_test_vel[0 as i32 as usize] = *velocity.offset(0 as i32 as isize) * frametime;
     frame_test_vel[1 as i32 as usize] = *velocity.offset(1 as i32 as isize) * frametime;
@@ -1367,7 +1367,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
         };
         frame_test_vel[2 as i32 as usize] = (frame_test_vel[2 as i32 as usize] as f64
             - gravity as f64 * 0.1f64 * frametime as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         if onground != 0 || swimming != 0 {
             friction = if swimming != 0 {
                 phys_waterfriction
@@ -1395,7 +1395,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize] * frametime;
             frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize] * frametime
         }
-        crouch = crate::src::qcommon::q_shared::qfalse as i32;
+        crouch = qfalse as i32;
         if n < cmdframes {
             //apply command movement
             //end if
@@ -1421,7 +1421,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             if onground != 0 {
                 //end if
                 if *cmdmove.offset(2 as i32 as isize) < -(300 as i32) as f32 {
-                    crouch = crate::src::qcommon::q_shared::qtrue as i32; //end if
+                    crouch = qtrue as i32; //end if
                     maxvel = phys_maxcrouchvelocity
                 }
                 //end else
@@ -1431,7 +1431,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     frame_test_vel[2 as i32 as usize] = (phys_jumpvel as f64
                         - gravity as f64 * 0.1f64 * frametime as f64
                         + 5 as i32 as f64)
-                        as crate::src::qcommon::q_shared::vec_t; //end if
+                        as vec_t; //end if
                     jump_frame = n;
                     //jump velocity minus the gravity for one frame + 5 for safety
                     //jumping so air accelerate
@@ -1445,9 +1445,9 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 accelerate = phys_swimaccelerate
             //ax = 3;
             } else {
-                wishdir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+                wishdir[2 as i32 as usize] = 0 as i32 as vec_t
             }
-            wishspeed = crate::src::qcommon::q_math::VectorNormalize(wishdir.as_mut_ptr());
+            wishspeed = VectorNormalize(wishdir.as_mut_ptr());
             if wishspeed > maxvel {
                 wishspeed = maxvel
             }
@@ -1499,7 +1499,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 end.as_mut_ptr(),
                 presencetype,
                 entnum,
-            ) as crate::be_aas_h::aas_trace_s;
+            ) as aas_trace_s;
             if visualize != 0 {
                 if trace.startsolid as u64 != 0 {
                     botimport.Print.expect("non-null function pointer")(
@@ -1553,7 +1553,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //end if
                     }
@@ -1585,7 +1585,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //NOTE: if not the first frame
                         //end if
@@ -1618,7 +1618,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //end if
                     }
@@ -1649,7 +1649,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //end if
                     }
@@ -1684,7 +1684,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     (*move_0).endcontents = 0 as i32;
                     (*move_0).time = n as f32 * frametime;
                     (*move_0).frames = n;
-                    return crate::src::qcommon::q_shared::qtrue as i32;
+                    return qtrue as i32;
                 }
                 //
                 //end if
@@ -1699,7 +1699,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 //end if
                 //get the plane the bounding box collided with
                 plane = crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(trace.planenum)
-                    as *mut crate::aasfile_h::aas_plane_s;
+                    as *mut aas_plane_s;
                 //end if
                 if stopevent & 1024 as i32 != 0 {
                     if (*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
@@ -1711,7 +1711,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         start[1 as i32 as usize] = org[1 as i32 as usize];
                         start[2 as i32 as usize] = org[2 as i32 as usize];
                         start[2 as i32 as usize] = (start[2 as i32 as usize] as f64 + 0.5f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         if crate::src::botlib::be_aas_sample::AAS_PointAreaNum(start.as_mut_ptr())
                             == stopareanum
                         {
@@ -1731,7 +1731,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //
                         //end if
@@ -1739,7 +1739,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     }
                     //end if
                 }
-                step = crate::src::qcommon::q_shared::qfalse as i32;
+                step = qfalse as i32;
                 if (*plane).normal[2 as i32 as usize] == 0 as i32 as f32
                     && (jump_frame < 0 as i32 || n - jump_frame > 2 as i32)
                 {
@@ -1749,13 +1749,13 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     //check for a step
                     start[0 as i32 as usize] = (org[0 as i32 as usize] as f64
                         + (*plane).normal[0 as i32 as usize] as f64 * -0.25f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     start[1 as i32 as usize] = (org[1 as i32 as usize] as f64
                         + (*plane).normal[1 as i32 as usize] as f64 * -0.25f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     start[2 as i32 as usize] = (org[2 as i32 as usize] as f64
                         + (*plane).normal[2 as i32 as usize] as f64 * -0.25f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     stepend[0 as i32 as usize] = start[0 as i32 as usize];
                     stepend[1 as i32 as usize] = start[1 as i32 as usize];
                     stepend[2 as i32 as usize] = start[2 as i32 as usize];
@@ -1765,12 +1765,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         stepend.as_mut_ptr(),
                         presencetype,
                         entnum,
-                    ) as crate::be_aas_h::aas_trace_s;
+                    ) as aas_trace_s;
                     //end if
                     if steptrace.startsolid as u64 == 0 {
                         plane2 =
                             crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(steptrace.planenum)
-                                as *mut crate::aasfile_h::aas_plane_s;
+                                as *mut aas_plane_s;
                         if (*plane2).normal[0 as i32 as usize] * up[0 as i32 as usize]
                             + (*plane2).normal[1 as i32 as usize] * up[1 as i32 as usize]
                             + (*plane2).normal[2 as i32 as usize] * up[2 as i32 as usize]
@@ -1783,9 +1783,9 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             left_test_vel[2 as i32 as usize] =
                                 end[2 as i32 as usize] - steptrace.endpos[2 as i32 as usize];
                             left_test_vel[2 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             frame_test_vel[2 as i32 as usize] =
-                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                                0 as i32 as vec_t;
                             //
                             //end if
                             //#ifdef AAS_MOVE_DEBUG
@@ -1808,7 +1808,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             }
                             //#endif //AAS_MOVE_DEBUG
                             org[2 as i32 as usize] = steptrace.endpos[2 as i32 as usize];
-                            step = crate::src::qcommon::q_shared::qtrue as i32
+                            step = qtrue as i32
                         }
                     }
                 }
@@ -1873,7 +1873,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize]
                         > phys_maxsteepness
                     {
-                        onground = crate::src::qcommon::q_shared::qtrue as i32
+                        onground = qtrue as i32
                     }
                     if stopevent & 32 as i32 != 0 {
                         delta = 0 as i32 as f32;
@@ -1921,7 +1921,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 (*move_0).endcontents = 0 as i32;
                                 (*move_0).time = n as f32 * frametime;
                                 (*move_0).frames = n;
-                                return crate::src::qcommon::q_shared::qtrue as i32;
+                                return qtrue as i32;
                             }
                         }
                     }
@@ -1929,7 +1929,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             }
             j += 1;
             if j > 20 as i32 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             if !((trace.fraction as f64) < 1.0f64) {
                 break;
@@ -2006,7 +2006,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 (*move_0).endcontents = pc;
                 (*move_0).time = n as f32 * frametime;
                 (*move_0).frames = n;
-                return crate::src::qcommon::q_shared::qtrue as i32;
+                return qtrue as i32;
             }
         }
         onground = AAS_OnGround(org.as_mut_ptr(), presencetype, entnum);
@@ -2029,7 +2029,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 (*move_0).endcontents = 0 as i32;
                 (*move_0).time = n as f32 * frametime;
                 (*move_0).frames = n;
-                return crate::src::qcommon::q_shared::qtrue as i32;
+                return qtrue as i32;
             }
         //get event from pc
         //
@@ -2055,11 +2055,11 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             (*move_0).endcontents = 0 as i32;
             (*move_0).time = n as f32 * frametime;
             (*move_0).frames = n;
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         } else {
             if stopevent & 64 as i32 != 0 {
-                let mut gaptrace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-                    startsolid: crate::src::qcommon::q_shared::qfalse,
+                let mut gaptrace: aas_trace_t = aas_trace_t {
+                    startsolid: qfalse,
                     fraction: 0.,
                     endpos: [0.; 3],
                     ent: 0,
@@ -2079,7 +2079,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     end.as_mut_ptr(),
                     4 as i32,
                     -(1 as i32),
-                ) as crate::be_aas_h::aas_trace_s;
+                ) as aas_trace_s;
                 //end if
                 if gaptrace.startsolid as u64 == 0 {
                     //if solid is found the bot cannot walk any further and will not fall into a gap
@@ -2109,7 +2109,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endcontents = 0 as i32;
                             (*move_0).time = n as f32 * frametime;
                             (*move_0).frames = n;
-                            return crate::src::qcommon::q_shared::qtrue as i32;
+                            return qtrue as i32;
                         }
                         //end if
                     }
@@ -2136,7 +2136,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     (*move_0).time = n as f32 * frametime;
     (*move_0).frames = n;
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function AAS_ClientMovementPrediction
 //===========================================================================
@@ -2148,13 +2148,13 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_PredictClientMovement(
-    mut move_0: *mut crate::be_aas_h::aas_clientmove_s,
+    mut move_0: *mut aas_clientmove_s,
     mut entnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut presencetype: i32,
     mut onground: i32,
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
-    mut cmdmove: *mut crate::src::qcommon::q_shared::vec_t,
+    mut velocity: *mut vec_t,
+    mut cmdmove: *mut vec_t,
     mut cmdframes: i32,
     mut maxframes: i32,
     mut frametime: f32,
@@ -2162,8 +2162,8 @@ pub unsafe extern "C" fn AAS_PredictClientMovement(
     mut stopareanum: i32,
     mut visualize: i32,
 ) -> i32 {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     return AAS_ClientMovementPrediction(
         move_0,
         entnum,
@@ -2192,18 +2192,18 @@ pub unsafe extern "C" fn AAS_PredictClientMovement(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ClientMovementHitBBox(
-    mut move_0: *mut crate::be_aas_h::aas_clientmove_s,
+    mut move_0: *mut aas_clientmove_s,
     mut entnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut presencetype: i32,
     mut onground: i32,
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
-    mut cmdmove: *mut crate::src::qcommon::q_shared::vec_t,
+    mut velocity: *mut vec_t,
+    mut cmdmove: *mut vec_t,
     mut cmdframes: i32,
     mut maxframes: i32,
     mut frametime: f32,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
     mut visualize: i32,
 ) -> i32 {
     return AAS_ClientMovementPrediction(
@@ -2235,17 +2235,17 @@ pub unsafe extern "C" fn AAS_ClientMovementHitBBox(
 
 pub unsafe extern "C" fn AAS_TestMovementPrediction(
     mut entnum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut dir: *mut vec_t,
 ) {
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //SE_LEAVEGROUND);
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut velocity: vec3_t = [0.; 3]; //SE_LEAVEGROUND);
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -2259,24 +2259,24 @@ pub unsafe extern "C" fn AAS_TestMovementPrediction(
         time: 0.,
         frames: 0,
     };
-    velocity[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    velocity[2 as i32 as usize] = 0 as i32 as vec_t;
     velocity[1 as i32 as usize] = velocity[2 as i32 as usize];
     velocity[0 as i32 as usize] = velocity[1 as i32 as usize];
     if AAS_Swimming(origin) == 0 {
-        *dir.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+        *dir.offset(2 as i32 as isize) = 0 as i32 as vec_t
     }
-    crate::src::qcommon::q_math::VectorNormalize(dir);
+    VectorNormalize(dir);
     cmdmove[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 400 as i32 as f32;
     cmdmove[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 400 as i32 as f32;
     cmdmove[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 400 as i32 as f32;
-    cmdmove[2 as i32 as usize] = 224 as i32 as crate::src::qcommon::q_shared::vec_t;
+    cmdmove[2 as i32 as usize] = 224 as i32 as vec_t;
     crate::src::botlib::be_aas_debug::AAS_ClearShownDebugLines();
     AAS_PredictClientMovement(
         &mut move_0,
         entnum,
         origin,
         2 as i32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         velocity.as_mut_ptr(),
         cmdmove.as_mut_ptr(),
         13 as i32,
@@ -2284,7 +2284,7 @@ pub unsafe extern "C" fn AAS_TestMovementPrediction(
         0.1f32,
         1 as i32,
         0 as i32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
     );
     if move_0.stopevent & 2 as i32 != 0 {
         botimport.Print.expect("non-null function pointer")(
@@ -2310,8 +2310,8 @@ pub unsafe extern "C" fn AAS_TestMovementPrediction(
 
 pub unsafe extern "C" fn AAS_HorizontalVelocityForJump(
     mut zvel: f32,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut velocity: *mut f32,
 ) -> i32 {
     let mut phys_gravity: f32 = 0.;
@@ -2320,7 +2320,7 @@ pub unsafe extern "C" fn AAS_HorizontalVelocityForJump(
     let mut height2fall: f32 = 0.;
     let mut t: f32 = 0.;
     let mut top: f32 = 0.;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     phys_gravity = aassettings.phys_gravity;
     phys_maxvelocity = aassettings.phys_maxvelocity;
     //maximum height a player can jump with the given initial z velocity

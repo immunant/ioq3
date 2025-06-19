@@ -198,22 +198,22 @@ pub unsafe extern "C" fn encode_size(mut size: i32, mut data: *mut u8) -> i32 {
 
 unsafe extern "C" fn parse_size(
     mut data: *const u8,
-    mut len: crate::opus_types_h::opus_int32,
-    mut size: *mut crate::opus_types_h::opus_int16,
+    mut len: opus_int32,
+    mut size: *mut opus_int16,
 ) -> i32 {
     if len < 1 as i32 {
-        *size = -(1 as i32) as crate::opus_types_h::opus_int16;
+        *size = -(1 as i32) as opus_int16;
         return -(1 as i32);
     } else if (*data.offset(0 as i32 as isize) as i32) < 252 as i32 {
-        *size = *data.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16;
+        *size = *data.offset(0 as i32 as isize) as opus_int16;
         return 1 as i32;
     } else if len < 2 as i32 {
-        *size = -(1 as i32) as crate::opus_types_h::opus_int16;
+        *size = -(1 as i32) as opus_int16;
         return -(1 as i32);
     } else {
         *size = (4 as i32 * *data.offset(1 as i32 as isize) as i32
             + *data.offset(0 as i32 as isize) as i32)
-            as crate::opus_types_h::opus_int16;
+            as opus_int16;
         return 2 as i32;
     };
 }
@@ -221,7 +221,7 @@ unsafe extern "C" fn parse_size(
 
 pub unsafe extern "C" fn opus_packet_get_samples_per_frame(
     mut data: *const u8,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
 ) -> i32 {
     let mut audiosize: i32 = 0;
     if *data.offset(0 as i32 as isize) as i32 & 0x80 as i32 != 0 {
@@ -290,13 +290,13 @@ for all sensible alignment values. */
 
 pub unsafe extern "C" fn opus_packet_parse_impl(
     mut data: *const u8,
-    mut len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
     mut self_delimited: i32,
     mut out_toc: *mut u8,
     mut frames: *mut *const u8,
-    mut size: *mut crate::opus_types_h::opus_int16,
+    mut size: *mut opus_int16,
     mut payload_offset: *mut i32,
-    mut packet_offset: *mut crate::opus_types_h::opus_int32,
+    mut packet_offset: *mut opus_int32,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut bytes: i32 = 0;
@@ -305,8 +305,8 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
     let mut ch: u8 = 0;
     let mut toc: u8 = 0;
     let mut framesize: i32 = 0;
-    let mut last_size: crate::opus_types_h::opus_int32 = 0;
-    let mut pad: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut last_size: opus_int32 = 0;
+    let mut pad: opus_int32 = 0 as i32;
     let mut data0: *const u8 = data;
     if size.is_null() || len < 0 as i32 {
         return -(1 as i32);
@@ -336,7 +336,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
                 }
                 last_size = len / 2 as i32;
                 /* If last_size doesn't fit in size[0], we'll catch it later */
-                *size.offset(0 as i32 as isize) = last_size as crate::opus_types_h::opus_int16
+                *size.offset(0 as i32 as isize) = last_size as opus_int16
             }
         }
         2 => {
@@ -419,7 +419,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
                 }
                 i = 0 as i32;
                 while i < count - 1 as i32 {
-                    *size.offset(i as isize) = last_size as crate::opus_types_h::opus_int16;
+                    *size.offset(i as isize) = last_size as opus_int16;
                     i += 1
                 }
             }
@@ -459,7 +459,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         if last_size > 1275 as i32 {
             return -(4 as i32);
         }
-        *size.offset((count - 1 as i32) as isize) = last_size as crate::opus_types_h::opus_int16
+        *size.offset((count - 1 as i32) as isize) = last_size as opus_int16
     }
     if !payload_offset.is_null() {
         *payload_offset = data.offset_from(data0) as isize as i32
@@ -474,7 +474,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         i += 1
     }
     if !packet_offset.is_null() {
-        *packet_offset = pad + data.offset_from(data0) as isize as crate::opus_types_h::opus_int32
+        *packet_offset = pad + data.offset_from(data0) as isize as opus_int32
     }
     if !out_toc.is_null() {
         *out_toc = toc
@@ -485,10 +485,10 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
 
 pub unsafe extern "C" fn opus_packet_parse(
     mut data: *const u8,
-    mut len: crate::opus_types_h::opus_int32,
+    mut len: opus_int32,
     mut out_toc: *mut u8,
     mut frames: *mut *const u8,
-    mut size: *mut crate::opus_types_h::opus_int16,
+    mut size: *mut opus_int16,
     mut payload_offset: *mut i32,
 ) -> i32 {
     return opus_packet_parse_impl(
@@ -499,6 +499,6 @@ pub unsafe extern "C" fn opus_packet_parse(
         frames,
         size,
         payload_offset,
-        0 as *mut crate::opus_types_h::opus_int32,
+        0 as *mut opus_int32,
     );
 }

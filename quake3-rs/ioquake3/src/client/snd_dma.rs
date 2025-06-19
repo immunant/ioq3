@@ -268,14 +268,14 @@ pub use crate::tr_types_h::TC_S3TC_ARB;
 
 #[no_mangle]
 
-pub static mut s_backgroundStream: *mut crate::src::client::snd_codec::snd_stream_t = 0
-    as *const crate::src::client::snd_codec::snd_stream_t
-    as *mut crate::src::client::snd_codec::snd_stream_t;
+pub static mut s_backgroundStream: *mut snd_stream_t = 0
+    as *const snd_stream_t
+    as *mut snd_stream_t;
 
 static mut s_backgroundLoop: [libc::c_char; 64] = [0; 64];
 #[no_mangle]
 
-pub static mut s_channels: [crate::snd_local_h::channel_t; 96] = [crate::snd_local_h::channel_t {
+pub static mut s_channels: [channel_t; 96] = [channel_t {
     allocTime: 0,
     startSample: 0,
     entnum: 0,
@@ -286,15 +286,15 @@ pub static mut s_channels: [crate::snd_local_h::channel_t; 96] = [crate::snd_loc
     dopplerScale: 0.,
     oldDopplerScale: 0.,
     origin: [0.; 3],
-    fixed_origin: crate::src::qcommon::q_shared::qfalse,
-    thesfx: 0 as *const crate::snd_local_h::sfx_t as *mut crate::snd_local_h::sfx_t,
-    doppler: crate::src::qcommon::q_shared::qfalse,
-    fullVolume: crate::src::qcommon::q_shared::qfalse,
+    fixed_origin: qfalse,
+    thesfx: 0 as *const sfx_t as *mut sfx_t,
+    doppler: qfalse,
+    fullVolume: qfalse,
 }; 96];
 #[no_mangle]
 
-pub static mut loop_channels: [crate::snd_local_h::channel_t; 96] =
-    [crate::snd_local_h::channel_t {
+pub static mut loop_channels: [channel_t; 96] =
+    [channel_t {
         allocTime: 0,
         startSample: 0,
         entnum: 0,
@@ -305,10 +305,10 @@ pub static mut loop_channels: [crate::snd_local_h::channel_t; 96] =
         dopplerScale: 0.,
         oldDopplerScale: 0.,
         origin: [0.; 3],
-        fixed_origin: crate::src::qcommon::q_shared::qfalse,
-        thesfx: 0 as *const crate::snd_local_h::sfx_t as *mut crate::snd_local_h::sfx_t,
-        doppler: crate::src::qcommon::q_shared::qfalse,
-        fullVolume: crate::src::qcommon::q_shared::qfalse,
+        fixed_origin: qfalse,
+        thesfx: 0 as *const sfx_t as *mut sfx_t,
+        doppler: qfalse,
+        fullVolume: qfalse,
     }; 96];
 #[no_mangle]
 
@@ -316,11 +316,11 @@ pub static mut numLoopChannels: i32 = 0;
 
 static mut s_soundStarted: i32 = 0;
 
-static mut s_soundMuted: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut s_soundMuted: qboolean =
+    qfalse;
 #[no_mangle]
 
-pub static mut dma: crate::snd_local_h::dma_t = crate::snd_local_h::dma_t {
+pub static mut dma: dma_t = dma_t {
     channels: 0,
     samples: 0,
     fullsamples: 0,
@@ -328,15 +328,15 @@ pub static mut dma: crate::snd_local_h::dma_t = crate::snd_local_h::dma_t {
     samplebits: 0,
     isfloat: 0,
     speed: 0,
-    buffer: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    buffer: 0 as *const byte
+        as *mut byte,
 };
 
 static mut listener_number: i32 = 0;
 
-static mut listener_origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+static mut listener_origin: vec3_t = [0.; 3];
 
-static mut listener_axis: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
+static mut listener_axis: [vec3_t; 3] = [[0.; 3]; 3];
 #[no_mangle]
 
 pub static mut s_soundtime: i32 = 0;
@@ -346,86 +346,86 @@ pub static mut s_soundtime: i32 = 0;
 pub static mut s_paintedtime: i32 = 0;
 #[no_mangle]
 
-pub static mut s_knownSfx: [crate::snd_local_h::sfx_t; 4096] = [crate::snd_local_h::sfx_t {
-    soundData: 0 as *const crate::snd_local_h::sndBuffer as *mut crate::snd_local_h::sndBuffer,
-    defaultSound: crate::src::qcommon::q_shared::qfalse,
-    inMemory: crate::src::qcommon::q_shared::qfalse,
-    soundCompressed: crate::src::qcommon::q_shared::qfalse,
+pub static mut s_knownSfx: [sfx_t; 4096] = [sfx_t {
+    soundData: 0 as *const sndBuffer as *mut sndBuffer,
+    defaultSound: qfalse,
+    inMemory: qfalse,
+    soundCompressed: qfalse,
     soundCompressionMethod: 0,
     soundLength: 0,
     soundChannels: 0,
     soundName: [0; 64],
     lastTimeUsed: 0,
-    next: 0 as *const crate::snd_local_h::sfx_s as *mut crate::snd_local_h::sfx_s,
+    next: 0 as *const sfx_s as *mut sfx_s,
 }; 4096];
 #[no_mangle]
 
 pub static mut s_numSfx: i32 = 0 as i32;
 
-static mut sfxHash: [*mut crate::snd_local_h::sfx_t; 128] =
-    [0 as *const crate::snd_local_h::sfx_t as *mut crate::snd_local_h::sfx_t; 128];
+static mut sfxHash: [*mut sfx_t; 128] =
+    [0 as *const sfx_t as *mut sfx_t; 128];
 #[no_mangle]
 
-pub static mut s_testsound: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_testsound: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_show: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_show: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_mixahead: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_mixahead: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_mixPreStep: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_mixPreStep: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut loopSounds: [crate::snd_local_h::loopSound_t; 1024] = [crate::snd_local_h::loopSound_t {
+static mut loopSounds: [loopSound_t; 1024] = [loopSound_t {
     origin: [0.; 3],
     velocity: [0.; 3],
-    sfx: 0 as *const crate::snd_local_h::sfx_t as *mut crate::snd_local_h::sfx_t,
+    sfx: 0 as *const sfx_t as *mut sfx_t,
     mergeFrame: 0,
-    active: crate::src::qcommon::q_shared::qfalse,
-    kill: crate::src::qcommon::q_shared::qfalse,
-    doppler: crate::src::qcommon::q_shared::qfalse,
+    active: qfalse,
+    kill: qfalse,
+    doppler: qfalse,
     dopplerScale: 0.,
     oldDopplerScale: 0.,
     framenum: 0,
 }; 1024];
 
-static mut freelist: *mut crate::snd_local_h::channel_t =
-    0 as *const crate::snd_local_h::channel_t as *mut crate::snd_local_h::channel_t;
+static mut freelist: *mut channel_t =
+    0 as *const channel_t as *mut channel_t;
 #[no_mangle]
 
 pub static mut s_rawend: [i32; 129] = [0; 129];
 #[no_mangle]
 
-pub static mut s_rawsamples: [[crate::snd_local_h::portable_samplepair_t; 16384]; 129] =
-    [[crate::snd_local_h::portable_samplepair_t { left: 0, right: 0 }; 16384]; 129];
+pub static mut s_rawsamples: [[portable_samplepair_t; 16384]; 129] =
+    [[portable_samplepair_t { left: 0, right: 0 }; 16384]; 129];
 // ====================================================================
 // User-setable variables
 // ====================================================================
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_SoundInfo() {
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"----- Sound Info -----\n\x00" as *const u8 as *const libc::c_char,
     );
     if s_soundStarted == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"sound system not started\n\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%5d channels\n\x00" as *const u8 as *const libc::c_char,
             dma.channels,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%5d samples\n\x00" as *const u8 as *const libc::c_char,
             dma.samples,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%5d samplebits (%s)\n\x00" as *const u8 as *const libc::c_char,
             dma.samplebits,
             if dma.isfloat != 0 {
@@ -434,55 +434,55 @@ pub unsafe extern "C" fn S_Base_SoundInfo() {
                 b"int\x00" as *const u8 as *const libc::c_char
             },
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%5d submission_chunk\n\x00" as *const u8 as *const libc::c_char,
             dma.submission_chunk,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%5d speed\n\x00" as *const u8 as *const libc::c_char,
             dma.speed,
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%p dma buffer\n\x00" as *const u8 as *const libc::c_char,
             dma.buffer,
         );
         if !s_backgroundStream.is_null() {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Background file: %s\n\x00" as *const u8 as *const libc::c_char,
                 s_backgroundLoop.as_mut_ptr(),
             );
         } else {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"No background file.\n\x00" as *const u8 as *const libc::c_char,
             );
         }
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"----------------------\n\x00" as *const u8 as *const libc::c_char,
     );
 }
 
 unsafe extern "C" fn S_Base_StartCapture() {
-    crate::src::sdl::sdl_snd::SNDDMA_StartCapture();
+    SNDDMA_StartCapture();
 }
 
 unsafe extern "C" fn S_Base_AvailableCaptureSamples() -> i32 {
-    return crate::src::sdl::sdl_snd::SNDDMA_AvailableCaptureSamples();
+    return SNDDMA_AvailableCaptureSamples();
 }
 
 unsafe extern "C" fn S_Base_Capture(
     mut samples: i32,
-    mut data: *mut crate::src::qcommon::q_shared::byte,
+    mut data: *mut byte,
 ) {
-    crate::src::sdl::sdl_snd::SNDDMA_Capture(samples, data);
+    SNDDMA_Capture(samples, data);
 }
 
 unsafe extern "C" fn S_Base_StopCapture() {
-    crate::src::sdl::sdl_snd::SNDDMA_StopCapture();
+    SNDDMA_StopCapture();
 }
 
 unsafe extern "C" fn S_Base_MasterGain(mut val: f32) {
-    crate::src::sdl::sdl_snd::SNDDMA_MasterGain(val);
+    SNDDMA_MasterGain(val);
 }
 /*
 =================
@@ -493,32 +493,32 @@ S_Base_SoundList
 
 pub unsafe extern "C" fn S_Base_SoundList() {
     let mut i: i32 = 0;
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
     let mut size: i32 = 0;
     let mut total: i32 = 0;
     let mut type_0: [[libc::c_char; 16]; 4] = [[0; 16]; 4];
     let mut mem: [[libc::c_char; 16]; 2] = [[0; 16]; 2];
-    ::libc::strcpy(
+    libc::strcpy(
         type_0[0 as i32 as usize].as_mut_ptr(),
         b"16bit\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         type_0[1 as i32 as usize].as_mut_ptr(),
         b"adpcm\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         type_0[2 as i32 as usize].as_mut_ptr(),
         b"daub4\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         type_0[3 as i32 as usize].as_mut_ptr(),
         b"mulaw\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         mem[0 as i32 as usize].as_mut_ptr(),
         b"paged out\x00" as *const u8 as *const libc::c_char,
     );
-    ::libc::strcpy(
+    libc::strcpy(
         mem[1 as i32 as usize].as_mut_ptr(),
         b"resident \x00" as *const u8 as *const libc::c_char,
     );
@@ -528,7 +528,7 @@ pub unsafe extern "C" fn S_Base_SoundList() {
     while i < s_numSfx {
         size = (*sfx).soundLength;
         total += size;
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%6i[%s] : %s[%s]\n\x00" as *const u8 as *const libc::c_char,
             size,
             type_0[(*sfx).soundCompressionMethod as usize].as_mut_ptr(),
@@ -538,7 +538,7 @@ pub unsafe extern "C" fn S_Base_SoundList() {
         i += 1;
         sfx = sfx.offset(1)
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Total resident: %i\n\x00" as *const u8 as *const libc::c_char,
         total,
     );
@@ -546,34 +546,34 @@ pub unsafe extern "C" fn S_Base_SoundList() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn S_ChannelFree(mut v: *mut crate::snd_local_h::channel_t) {
-    (*v).thesfx = 0 as *mut crate::snd_local_h::sfx_t;
-    let ref mut fresh0 = *(v as *mut *mut crate::snd_local_h::channel_t);
+pub unsafe extern "C" fn S_ChannelFree(mut v: *mut channel_t) {
+    (*v).thesfx = 0 as *mut sfx_t;
+    let ref mut fresh0 = *(v as *mut *mut channel_t);
     *fresh0 = freelist;
     freelist = v;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn S_ChannelMalloc() -> *mut crate::snd_local_h::channel_t {
-    let mut v: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
+pub unsafe extern "C" fn S_ChannelMalloc() -> *mut channel_t {
+    let mut v: *mut channel_t = 0 as *mut channel_t;
     if freelist.is_null() {
-        return 0 as *mut crate::snd_local_h::channel_t;
+        return 0 as *mut channel_t;
     }
     v = freelist;
-    freelist = *(freelist as *mut *mut crate::snd_local_h::channel_t);
-    (*v).allocTime = crate::src::qcommon::common::Com_Milliseconds();
+    freelist = *(freelist as *mut *mut channel_t);
+    (*v).allocTime = Com_Milliseconds();
     return v;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn S_ChannelSetup() {
-    let mut p: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
-    let mut q: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
+    let mut p: *mut channel_t = 0 as *mut channel_t;
+    let mut q: *mut channel_t = 0 as *mut channel_t;
     // clear all the sounds so they don't
     crate::stdlib::memset(
         s_channels.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::snd_local_h::channel_t; 96]>() as libc::c_ulong,
+        ::std::mem::size_of::<[channel_t; 96]>() as libc::c_ulong,
     );
     p = s_channels.as_mut_ptr();
     q = p.offset(96 as i32 as isize);
@@ -582,13 +582,13 @@ pub unsafe extern "C" fn S_ChannelSetup() {
         if !(q > p) {
             break;
         }
-        let ref mut fresh1 = *(q as *mut *mut crate::snd_local_h::channel_t);
+        let ref mut fresh1 = *(q as *mut *mut channel_t);
         *fresh1 = q.offset(-(1 as i32 as isize))
     }
-    let ref mut fresh2 = *(q as *mut *mut crate::snd_local_h::channel_t);
-    *fresh2 = 0 as *mut crate::snd_local_h::channel_t;
+    let ref mut fresh2 = *(q as *mut *mut channel_t);
+    *fresh2 = 0 as *mut channel_t;
     freelist = p.offset(96 as i32 as isize).offset(-(1 as i32 as isize));
-    crate::src::qcommon::common::Com_DPrintf(
+    Com_DPrintf(
         b"Channel memory manager started\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -616,13 +616,13 @@ unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> isize {
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
+                        *(*__ctype_tolower_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = tolower(*name.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_tolower_loc())
+                __res = *(*__ctype_tolower_loc())
                     .offset(*name.offset(i as isize) as i32 as isize)
             }
             __res
@@ -647,42 +647,42 @@ Will allocate a new sfx if it isn't found
 ==================
 */
 
-unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut crate::snd_local_h::sfx_t {
+unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut sfx_t {
     let mut i: i32 = 0;
     let mut hash: i32 = 0;
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
     if name.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Sound name is NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
     if *name.offset(0 as i32 as isize) == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char,
         );
-        return 0 as *mut crate::snd_local_h::sfx_t;
+        return 0 as *mut sfx_t;
     }
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Sound name is too long: %s\n\x00" as *const u8 as *const libc::c_char,
             name,
         );
-        return 0 as *mut crate::snd_local_h::sfx_t;
+        return 0 as *mut sfx_t;
     }
     if *name.offset(0 as i32 as isize) as i32 == '*' as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Tried to load player sound directly: %s\n\x00" as *const u8
                 as *const libc::c_char,
             name,
         );
-        return 0 as *mut crate::snd_local_h::sfx_t;
+        return 0 as *mut sfx_t;
     }
     hash = S_HashSFXName(name) as i32;
     sfx = sfxHash[hash as usize];
     // see if already loaded
     while !sfx.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp((*sfx).soundName.as_mut_ptr(), name) == 0 {
+        if Q_stricmp((*sfx).soundName.as_mut_ptr(), name) == 0 {
             return sfx;
         }
         sfx = (*sfx).next
@@ -697,20 +697,20 @@ unsafe extern "C" fn S_FindName(mut name: *const libc::c_char) -> *mut crate::sn
     }
     if i == s_numSfx {
         if s_numSfx == 4096 as i32 {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            Com_Error(
+                ERR_FATAL as i32,
                 b"S_FindName: out of sfx_t\x00" as *const u8 as *const libc::c_char,
             );
         }
         s_numSfx += 1
     }
-    sfx = &mut *s_knownSfx.as_mut_ptr().offset(i as isize) as *mut crate::snd_local_h::sfx_t;
+    sfx = &mut *s_knownSfx.as_mut_ptr().offset(i as isize) as *mut sfx_t;
     crate::stdlib::memset(
         sfx as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::snd_local_h::sfx_t>() as libc::c_ulong,
+        ::std::mem::size_of::<sfx_t>() as libc::c_ulong,
     );
-    ::libc::strcpy((*sfx).soundName.as_mut_ptr(), name);
+    libc::strcpy((*sfx).soundName.as_mut_ptr(), name);
     (*sfx).next = sfxHash[hash as usize];
     sfxHash[hash as usize] = sfx;
     return sfx;
@@ -722,12 +722,12 @@ S_DefaultSound
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_DefaultSound(mut sfx: *mut crate::snd_local_h::sfx_t) {
+pub unsafe extern "C" fn S_DefaultSound(mut sfx: *mut sfx_t) {
     let mut i: i32 = 0;
     (*sfx).soundLength = 512 as i32;
     (*sfx).soundData =
-        crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
-    (*(*sfx).soundData).next = 0 as *mut crate::snd_local_h::sndBuffer_s;
+        SND_malloc() as *mut sndBuffer_s;
+    (*(*sfx).soundData).next = 0 as *mut sndBuffer_s;
     i = 0 as i32;
     while i < (*sfx).soundLength {
         (*(*sfx).soundData).sndChunk[i as usize] = i as i16;
@@ -747,7 +747,7 @@ are no longer valid.
 
 pub unsafe extern "C" fn S_Base_DisableSounds() {
     S_Base_StopAllSounds();
-    s_soundMuted = crate::src::qcommon::q_shared::qtrue;
+    s_soundMuted = qtrue;
 }
 /*
 ==================
@@ -760,10 +760,10 @@ Creates a default buzz sound if the file can't be loaded
 
 pub unsafe extern "C" fn S_Base_RegisterSound(
     mut name: *const libc::c_char,
-    mut compressed: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
-    compressed = crate::src::qcommon::q_shared::qfalse;
+    mut compressed: qboolean,
+) -> sfxHandle_t {
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    compressed = qfalse;
     if s_soundStarted == 0 {
         return 0 as i32;
     }
@@ -773,7 +773,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
     }
     if !(*sfx).soundData.is_null() {
         if (*sfx).defaultSound as u64 != 0 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"^3WARNING: could not find %s - using default\n\x00" as *const u8
                     as *const libc::c_char,
                 (*sfx).soundName.as_mut_ptr(),
@@ -781,13 +781,13 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
             return 0 as i32;
         }
         return sfx.offset_from(s_knownSfx.as_mut_ptr()) as isize
-            as crate::src::qcommon::q_shared::sfxHandle_t;
+            as sfxHandle_t;
     }
-    (*sfx).inMemory = crate::src::qcommon::q_shared::qfalse;
+    (*sfx).inMemory = qfalse;
     (*sfx).soundCompressed = compressed;
     S_memoryLoad(sfx);
     if (*sfx).defaultSound as u64 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: could not find %s - using default\n\x00" as *const u8
                 as *const libc::c_char,
             (*sfx).soundName.as_mut_ptr(),
@@ -795,7 +795,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
         return 0 as i32;
     }
     return sfx.offset_from(s_knownSfx.as_mut_ptr()) as isize
-        as crate::src::qcommon::q_shared::sfxHandle_t;
+        as sfxHandle_t;
 }
 /*
 =====================
@@ -806,36 +806,36 @@ S_BeginRegistration
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_BeginRegistration() {
-    s_soundMuted = crate::src::qcommon::q_shared::qfalse; // we can play again
+    s_soundMuted = qfalse; // we can play again
     if s_numSfx == 0 as i32 {
-        crate::src::client::snd_mem::SND_setup();
+        SND_setup();
         crate::stdlib::memset(
             s_knownSfx.as_mut_ptr() as *mut libc::c_void,
             '\u{0}' as i32,
-            ::std::mem::size_of::<[crate::snd_local_h::sfx_t; 4096]>() as libc::c_ulong,
+            ::std::mem::size_of::<[sfx_t; 4096]>() as libc::c_ulong,
         );
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             '\u{0}' as i32,
-            (::std::mem::size_of::<*mut crate::snd_local_h::sfx_t>() as libc::c_ulong)
+            (::std::mem::size_of::<*mut sfx_t>() as libc::c_ulong)
                 .wrapping_mul(128 as i32 as libc::c_ulong),
         );
         S_Base_RegisterSound(
             b"sound/feedback/hit.wav\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         // changed to a sound in baseq3
     };
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn S_memoryLoad(mut sfx: *mut crate::snd_local_h::sfx_t) {
+pub unsafe extern "C" fn S_memoryLoad(mut sfx: *mut sfx_t) {
     // load the sound file
-    if crate::src::client::snd_mem::S_LoadSound(sfx as *mut crate::snd_local_h::sfx_s) as u64 == 0 {
+    if S_LoadSound(sfx as *mut sfx_s) as u64 == 0 {
         //		Com_Printf( S_COLOR_YELLOW "WARNING: couldn't load sound: %s\n", sfx->soundName );
-        (*sfx).defaultSound = crate::src::qcommon::q_shared::qtrue
+        (*sfx).defaultSound = qtrue
     }
-    (*sfx).inMemory = crate::src::qcommon::q_shared::qtrue;
+    (*sfx).inMemory = qtrue;
 }
 //=============================================================================
 /*
@@ -848,18 +848,18 @@ Used for spatializing s_channels
 #[no_mangle]
 
 pub unsafe extern "C" fn S_SpatializeOrigin(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut master_vol: i32,
     mut left_vol: *mut i32,
     mut right_vol: *mut i32,
 ) {
-    let mut dot: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut dist: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut lscale: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut rscale: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut scale: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut source_vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dot: vec_t = 0.;
+    let mut dist: vec_t = 0.;
+    let mut lscale: vec_t = 0.;
+    let mut rscale: vec_t = 0.;
+    let mut scale: vec_t = 0.;
+    let mut source_vec: vec3_t = [0.; 3];
+    let mut vec: vec3_t = [0.; 3];
     let dist_mult: f32 = 0.0008f32;
     // calculate stereo separation and distance attenuation
     source_vec[0 as i32 as usize] =
@@ -868,13 +868,13 @@ pub unsafe extern "C" fn S_SpatializeOrigin(
         *origin.offset(1 as i32 as isize) - listener_origin[1 as i32 as usize]; // different attenuation levels
     source_vec[2 as i32 as usize] =
         *origin.offset(2 as i32 as isize) - listener_origin[2 as i32 as usize];
-    dist = crate::src::qcommon::q_math::VectorNormalize(source_vec.as_mut_ptr());
+    dist = VectorNormalize(source_vec.as_mut_ptr());
     dist -= 80 as i32 as f32;
     if dist < 0 as i32 as f32 {
-        dist = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+        dist = 0 as i32 as vec_t
     }
     dist *= dist_mult;
-    crate::src::qcommon::q_math::VectorRotate(
+    VectorRotate(
         source_vec.as_mut_ptr(),
         listener_axis.as_mut_ptr(),
         vec.as_mut_ptr(),
@@ -882,25 +882,25 @@ pub unsafe extern "C" fn S_SpatializeOrigin(
     dot = -vec[1 as i32 as usize];
     if dma.channels == 1 as i32 {
         // no attenuation = no spatialization
-        rscale = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-        lscale = 1.0f64 as crate::src::qcommon::q_shared::vec_t
+        rscale = 1.0f64 as vec_t;
+        lscale = 1.0f64 as vec_t
     } else {
-        rscale = (0.5f64 * (1.0f64 + dot as f64)) as crate::src::qcommon::q_shared::vec_t;
-        lscale = (0.5f64 * (1.0f64 - dot as f64)) as crate::src::qcommon::q_shared::vec_t;
+        rscale = (0.5f64 * (1.0f64 + dot as f64)) as vec_t;
+        lscale = (0.5f64 * (1.0f64 - dot as f64)) as vec_t;
         if rscale < 0 as i32 as f32 {
-            rscale = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            rscale = 0 as i32 as vec_t
         }
         if lscale < 0 as i32 as f32 {
-            lscale = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            lscale = 0 as i32 as vec_t
         }
     }
     // add in distance effect
-    scale = ((1.0f64 - dist as f64) * rscale as f64) as crate::src::qcommon::q_shared::vec_t;
+    scale = ((1.0f64 - dist as f64) * rscale as f64) as vec_t;
     *right_vol = (master_vol as f32 * scale) as i32;
     if *right_vol < 0 as i32 {
         *right_vol = 0 as i32
     }
-    scale = ((1.0f64 - dist as f64) * lscale as f64) as crate::src::qcommon::q_shared::vec_t;
+    scale = ((1.0f64 - dist as f64) * lscale as f64) as vec_t;
     *left_vol = (master_vol as f32 * scale) as i32;
     if *left_vol < 0 as i32 {
         *left_vol = 0 as i32
@@ -919,10 +919,10 @@ Also see S_AL_HearingThroughEntity
 
 unsafe extern "C" fn S_Base_HearingThroughEntity(
     mut entityNum: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut origin: *mut vec_t,
+) -> qboolean {
     let mut distanceSq: f32 = 0.;
-    let mut sorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut sorigin: vec3_t = [0.; 3];
     if !origin.is_null() {
         sorigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
         sorigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -940,17 +940,17 @@ unsafe extern "C" fn S_Base_HearingThroughEntity(
         // compatibility. I don't think there is any way around this, but I'll leave
         // the FIXME just in case anyone has a bright idea.
         distanceSq = DistanceSquared(
-            sorigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            listener_origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            sorigin.as_mut_ptr() as *const vec_t,
+            listener_origin.as_mut_ptr() as *const vec_t,
         );
         if distanceSq > 48.0f32 * 48.0f32 {
             //we're the player
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         } else {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     } else {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }; //we're the player, but third person
        //not the player
 }
@@ -965,61 +965,61 @@ Entchannel 0 will never override a playing sound
 */
 
 unsafe extern "C" fn S_Base_StartSoundEx(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut entityNum: i32,
     mut entchannel: i32,
-    mut sfxHandle: crate::src::qcommon::q_shared::sfxHandle_t,
-    mut localSound: crate::src::qcommon::q_shared::qboolean,
+    mut sfxHandle: sfxHandle_t,
+    mut localSound: qboolean,
 ) {
-    let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
+    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
     let mut i: i32 = 0;
     let mut oldest: i32 = 0;
     let mut chosen: i32 = 0;
     let mut time: i32 = 0;
     let mut inplay: i32 = 0;
     let mut allowed: i32 = 0;
-    let mut fullVolume: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut fullVolume: qboolean =
+        qfalse;
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
     if origin.is_null() && (entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32) {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"S_StartSound: bad entitynum %i\x00" as *const u8 as *const libc::c_char,
             entityNum,
         );
     }
     if sfxHandle < 0 as i32 || sfxHandle >= s_numSfx {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3S_StartSound: handle %i out of range\n\x00" as *const u8 as *const libc::c_char,
             sfxHandle,
         );
         return;
     }
     sfx =
-        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
+        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut sfx_t;
+    if (*sfx).inMemory as u32 == qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*s_show).integer == 1 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%i : %s\n\x00" as *const u8 as *const libc::c_char,
             s_paintedtime,
             (*sfx).soundName.as_mut_ptr(),
         );
     }
-    time = crate::src::qcommon::common::Com_Milliseconds();
+    time = Com_Milliseconds();
     //	Com_Printf("playing %s\n", sfx->soundName);
     // pick a channel to play on
     allowed = 4 as i32;
     if entityNum == listener_number {
         allowed = 8 as i32
     }
-    fullVolume = crate::src::qcommon::q_shared::qfalse;
+    fullVolume = qfalse;
     if localSound as u32 != 0 || S_Base_HearingThroughEntity(entityNum, origin) as u32 != 0 {
-        fullVolume = crate::src::qcommon::q_shared::qtrue
+        fullVolume = qtrue
     }
     ch = s_channels.as_mut_ptr();
     inplay = 0 as i32;
@@ -1051,7 +1051,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
             if (*ch).entnum != listener_number
                 && (*ch).entnum == entityNum
                 && (*ch).allocTime < oldest
-                && (*ch).entchannel != crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32
+                && (*ch).entchannel != CHAN_ANNOUNCER as i32
             {
                 oldest = (*ch).allocTime;
                 chosen = i
@@ -1065,7 +1065,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
             while i < 96 as i32 {
                 if (*ch).entnum != listener_number
                     && (*ch).allocTime < oldest
-                    && (*ch).entchannel != crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32
+                    && (*ch).entchannel != CHAN_ANNOUNCER as i32
                 {
                     oldest = (*ch).allocTime;
                     chosen = i
@@ -1087,7 +1087,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
                     }
                 }
                 if chosen == -(1 as i32) {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"dropping sound\n\x00" as *const u8 as *const libc::c_char,
                     );
                     return;
@@ -1095,16 +1095,16 @@ unsafe extern "C" fn S_Base_StartSoundEx(
             }
         }
         ch = &mut *s_channels.as_mut_ptr().offset(chosen as isize)
-            as *mut crate::snd_local_h::channel_t;
+            as *mut channel_t;
         (*ch).allocTime = (*sfx).lastTimeUsed
     }
     if !origin.is_null() {
         (*ch).origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
         (*ch).origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
         (*ch).origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-        (*ch).fixed_origin = crate::src::qcommon::q_shared::qtrue
+        (*ch).fixed_origin = qtrue
     } else {
-        (*ch).fixed_origin = crate::src::qcommon::q_shared::qfalse
+        (*ch).fixed_origin = qfalse
     }
     (*ch).master_vol = 127 as i32;
     (*ch).entnum = entityNum;
@@ -1113,7 +1113,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
     (*ch).entchannel = entchannel;
     (*ch).leftvol = (*ch).master_vol;
     (*ch).rightvol = (*ch).master_vol;
-    (*ch).doppler = crate::src::qcommon::q_shared::qfalse;
+    (*ch).doppler = qfalse;
     (*ch).fullVolume = fullVolume;
 }
 /*
@@ -1126,17 +1126,17 @@ if origin is NULL, the sound will be dynamically sourced from the entity
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_StartSound(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut entityNum: i32,
     mut entchannel: i32,
-    mut sfxHandle: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut sfxHandle: sfxHandle_t,
 ) {
     S_Base_StartSoundEx(
         origin,
         entityNum,
         entchannel,
         sfxHandle,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
 }
 /*
@@ -1147,14 +1147,14 @@ S_StartLocalSound
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_StartLocalSound(
-    mut sfxHandle: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut sfxHandle: sfxHandle_t,
     mut channelNum: i32,
 ) {
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
     if sfxHandle < 0 as i32 || sfxHandle >= s_numSfx {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3S_StartLocalSound: handle %i out of range\n\x00" as *const u8
                 as *const libc::c_char,
             sfxHandle,
@@ -1162,11 +1162,11 @@ pub unsafe extern "C" fn S_Base_StartLocalSound(
         return;
     }
     S_Base_StartSoundEx(
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
         listener_number,
         channelNum,
         sfxHandle,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
 }
 /*
@@ -1187,13 +1187,13 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
     // stop looping sounds
     crate::stdlib::memset(loopSounds.as_mut_ptr() as *mut libc::c_void, 0 as i32,
            (((1 as i32) << 10 as i32) as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::snd_local_h::loopSound_t>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<loopSound_t>()
                                                 as libc::c_ulong));
     crate::stdlib::memset(
         loop_channels.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         (96 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::snd_local_h::channel_t>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<channel_t>() as libc::c_ulong),
     );
     numLoopChannels = 0 as i32;
     S_ChannelSetup();
@@ -1207,7 +1207,7 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
     } else {
         clear = 0 as i32
     }
-    crate::src::sdl::sdl_snd::SNDDMA_BeginPainting();
+    SNDDMA_BeginPainting();
     if !dma.buffer.is_null() {
         crate::stdlib::memset(
             dma.buffer as *mut libc::c_void,
@@ -1215,7 +1215,7 @@ pub unsafe extern "C" fn S_Base_ClearSoundBuffer() {
             (dma.samples * dma.samplebits / 8 as i32) as libc::c_ulong,
         );
     }
-    crate::src::sdl::sdl_snd::SNDDMA_Submit();
+    SNDDMA_Submit();
 }
 /*
 ==================
@@ -1242,9 +1242,9 @@ continuous looping sounds are added each frame
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_StopLoopingSound(mut entityNum: i32) {
-    loopSounds[entityNum as usize].active = crate::src::qcommon::q_shared::qfalse;
+    loopSounds[entityNum as usize].active = qfalse;
     //	loopSounds[entityNum].sfx = 0;
-    loopSounds[entityNum as usize].kill = crate::src::qcommon::q_shared::qfalse;
+    loopSounds[entityNum as usize].kill = qfalse;
 }
 /*
 ==================
@@ -1255,14 +1255,14 @@ S_ClearLoopingSounds
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_ClearLoopingSounds(
-    mut killall: crate::src::qcommon::q_shared::qboolean,
+    mut killall: qboolean,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < (1 as i32) << 10 as i32 {
         if killall as u32 != 0
             || loopSounds[i as usize].kill as u32
-                == crate::src::qcommon::q_shared::qtrue as i32 as u32
+                == qtrue as i32 as u32
             || !loopSounds[i as usize].sfx.is_null()
                 && (*loopSounds[i as usize].sfx).soundLength == 0 as i32
         {
@@ -1284,16 +1284,16 @@ Include velocity in case I get around to doing doppler...
 
 pub unsafe extern "C" fn S_Base_AddLoopingSound(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *const crate::src::qcommon::q_shared::vec_t,
-    mut sfxHandle: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut origin: *const vec_t,
+    mut velocity: *const vec_t,
+    mut sfxHandle: sfxHandle_t,
 ) {
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
     if sfxHandle < 0 as i32 || sfxHandle >= s_numSfx {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3S_AddLoopingSound: handle %i out of range\n\x00" as *const u8
                 as *const libc::c_char,
             sfxHandle,
@@ -1301,13 +1301,13 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
         return;
     }
     sfx =
-        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
+        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut sfx_t;
+    if (*sfx).inMemory as u32 == qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*sfx).soundLength == 0 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"%s has length 0\x00" as *const u8 as *const libc::c_char,
             (*sfx).soundName.as_mut_ptr(),
         );
@@ -1321,24 +1321,24 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
         *velocity.offset(1 as i32 as isize);
     loopSounds[entityNum as usize].velocity[2 as i32 as usize] =
         *velocity.offset(2 as i32 as isize);
-    loopSounds[entityNum as usize].active = crate::src::qcommon::q_shared::qtrue;
-    loopSounds[entityNum as usize].kill = crate::src::qcommon::q_shared::qtrue;
-    loopSounds[entityNum as usize].doppler = crate::src::qcommon::q_shared::qfalse;
+    loopSounds[entityNum as usize].active = qtrue;
+    loopSounds[entityNum as usize].kill = qtrue;
+    loopSounds[entityNum as usize].doppler = qfalse;
     loopSounds[entityNum as usize].oldDopplerScale = 1.0f64 as f32;
     loopSounds[entityNum as usize].dopplerScale = 1.0f64 as f32;
     loopSounds[entityNum as usize].sfx = sfx;
-    if (*crate::src::client::snd_main::s_doppler).integer != 0
+    if (*s_doppler).integer != 0
         && VectorLengthSquared(velocity) as f64 > 0.0f64
     {
-        let mut out: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut out: vec3_t = [0.; 3];
         let mut lena: f32 = 0.;
         let mut lenb: f32 = 0.;
-        loopSounds[entityNum as usize].doppler = crate::src::qcommon::q_shared::qtrue;
+        loopSounds[entityNum as usize].doppler = qtrue;
         lena = DistanceSquared(
             loopSounds[listener_number as usize].origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
             loopSounds[entityNum as usize].origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
         );
         out[0 as i32 as usize] = loopSounds[entityNum as usize].origin[0 as i32 as usize]
             + loopSounds[entityNum as usize].velocity[0 as i32 as usize];
@@ -1348,11 +1348,11 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
             + loopSounds[entityNum as usize].velocity[2 as i32 as usize];
         lenb = DistanceSquared(
             loopSounds[listener_number as usize].origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            out.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
+            out.as_mut_ptr() as *const vec_t,
         );
         if loopSounds[entityNum as usize].framenum + 1 as i32
-            != crate::src::client::cl_main::cls.framecount
+            != cls.framecount
         {
             loopSounds[entityNum as usize].oldDopplerScale = 1.0f64 as f32
         } else {
@@ -1361,13 +1361,13 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
         }
         loopSounds[entityNum as usize].dopplerScale = lenb / (lena * 100 as i32 as f32);
         if loopSounds[entityNum as usize].dopplerScale as f64 <= 1.0f64 {
-            loopSounds[entityNum as usize].doppler = crate::src::qcommon::q_shared::qfalse
+            loopSounds[entityNum as usize].doppler = qfalse
         // don't bother doing the math
         } else if loopSounds[entityNum as usize].dopplerScale > 50.0f32 {
             loopSounds[entityNum as usize].dopplerScale = 50.0f32
         }
     }
-    loopSounds[entityNum as usize].framenum = crate::src::client::cl_main::cls.framecount;
+    loopSounds[entityNum as usize].framenum = cls.framecount;
 }
 /*
 ==================
@@ -1381,16 +1381,16 @@ Include velocity in case I get around to doing doppler...
 
 pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *const crate::src::qcommon::q_shared::vec_t,
-    mut sfxHandle: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut origin: *const vec_t,
+    mut velocity: *const vec_t,
+    mut sfxHandle: sfxHandle_t,
 ) {
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
     if sfxHandle < 0 as i32 || sfxHandle >= s_numSfx {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3S_AddRealLoopingSound: handle %i out of range\n\x00" as *const u8
                 as *const libc::c_char,
             sfxHandle,
@@ -1398,13 +1398,13 @@ pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
         return;
     }
     sfx =
-        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
+        &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut sfx_t;
+    if (*sfx).inMemory as u32 == qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*sfx).soundLength == 0 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"%s has length 0\x00" as *const u8 as *const libc::c_char,
             (*sfx).soundName.as_mut_ptr(),
         );
@@ -1419,9 +1419,9 @@ pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
     loopSounds[entityNum as usize].velocity[2 as i32 as usize] =
         *velocity.offset(2 as i32 as isize);
     loopSounds[entityNum as usize].sfx = sfx;
-    loopSounds[entityNum as usize].active = crate::src::qcommon::q_shared::qtrue;
-    loopSounds[entityNum as usize].kill = crate::src::qcommon::q_shared::qfalse;
-    loopSounds[entityNum as usize].doppler = crate::src::qcommon::q_shared::qfalse;
+    loopSounds[entityNum as usize].active = qtrue;
+    loopSounds[entityNum as usize].kill = qfalse;
+    loopSounds[entityNum as usize].doppler = qfalse;
 }
 /*
 ==================
@@ -1442,18 +1442,18 @@ pub unsafe extern "C" fn S_AddLoopSounds() {
     let mut right_total: i32 = 0;
     let mut left: i32 = 0;
     let mut right: i32 = 0;
-    let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
-    let mut loop_0: *mut crate::snd_local_h::loopSound_t =
-        0 as *mut crate::snd_local_h::loopSound_t;
-    let mut loop2: *mut crate::snd_local_h::loopSound_t = 0 as *mut crate::snd_local_h::loopSound_t;
+    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut loop_0: *mut loopSound_t =
+        0 as *mut loopSound_t;
+    let mut loop2: *mut loopSound_t = 0 as *mut loopSound_t;
     static mut loopFrame: i32 = 0;
     numLoopChannels = 0 as i32;
-    time = crate::src::qcommon::common::Com_Milliseconds();
+    time = Com_Milliseconds();
     loopFrame += 1;
     i = 0 as i32;
     while i < (1 as i32) << 10 as i32 {
         loop_0 = &mut *loopSounds.as_mut_ptr().offset(i as isize)
-            as *mut crate::snd_local_h::loopSound_t;
+            as *mut loopSound_t;
         if !((*loop_0).active as u64 == 0 || (*loop_0).mergeFrame == loopFrame) {
             if (*loop_0).kill as u64 != 0 {
                 S_SpatializeOrigin(
@@ -1476,7 +1476,7 @@ pub unsafe extern "C" fn S_AddLoopSounds() {
             j = i + 1 as i32;
             while j < (1 as i32) << 10 as i32 {
                 loop2 = &mut *loopSounds.as_mut_ptr().offset(j as isize)
-                    as *mut crate::snd_local_h::loopSound_t;
+                    as *mut loopSound_t;
                 if !((*loop2).active as u64 == 0
                     || (*loop2).doppler as u32 != 0
                     || (*loop2).sfx != (*loop_0).sfx)
@@ -1508,7 +1508,7 @@ pub unsafe extern "C" fn S_AddLoopSounds() {
             if !(left_total == 0 as i32 && right_total == 0 as i32) {
                 // allocate a channel
                 ch = &mut *loop_channels.as_mut_ptr().offset(numLoopChannels as isize)
-                    as *mut crate::snd_local_h::channel_t;
+                    as *mut channel_t;
                 if left_total > 255 as i32 {
                     left_total = 255 as i32
                 }
@@ -1522,7 +1522,7 @@ pub unsafe extern "C" fn S_AddLoopSounds() {
                 (*ch).doppler = (*loop_0).doppler;
                 (*ch).dopplerScale = (*loop_0).dopplerScale;
                 (*ch).oldDopplerScale = (*loop_0).oldDopplerScale;
-                (*ch).fullVolume = crate::src::qcommon::q_shared::qfalse;
+                (*ch).fullVolume = qfalse;
                 numLoopChannels += 1;
                 if numLoopChannels == 96 as i32 {
                     return;
@@ -1548,7 +1548,7 @@ pub unsafe extern "C" fn S_ByteSwapRawSamples(
     mut samples: i32,
     mut width: i32,
     mut s_channels_0: i32,
-    mut data: *const crate::src::qcommon::q_shared::byte,
+    mut data: *const byte,
 ) {
     let mut i: i32 = 0;
     if width != 2 as i32 {
@@ -1581,7 +1581,7 @@ pub unsafe extern "C" fn S_Base_RawSamples(
     mut rate: i32,
     mut width: i32,
     mut s_channels_0: i32,
-    mut data: *const crate::src::qcommon::q_shared::byte,
+    mut data: *const byte,
     mut volume: f32,
     mut entityNum: i32,
 ) {
@@ -1591,8 +1591,8 @@ pub unsafe extern "C" fn S_Base_RawSamples(
     let mut scale: f32 = 0.;
     let mut intVolumeLeft: i32 = 0;
     let mut intVolumeRight: i32 = 0;
-    let mut rawsamples: *mut crate::snd_local_h::portable_samplepair_t =
-        0 as *mut crate::snd_local_h::portable_samplepair_t;
+    let mut rawsamples: *mut portable_samplepair_t =
+        0 as *mut portable_samplepair_t;
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
@@ -1600,7 +1600,7 @@ pub unsafe extern "C" fn S_Base_RawSamples(
         return;
     }
     rawsamples = s_rawsamples[stream as usize].as_mut_ptr();
-    if (*crate::src::client::snd_main::s_muted).integer != 0 {
+    if (*s_muted).integer != 0 {
         intVolumeRight = 0 as i32;
         intVolumeLeft = intVolumeRight
     } else {
@@ -1619,12 +1619,12 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             leftvol = rightvol
         }
         intVolumeLeft =
-            (leftvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value) as i32;
+            (leftvol as f32 * volume * (*s_volume).value) as i32;
         intVolumeRight =
-            (rightvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value) as i32
+            (rightvol as f32 * volume * (*s_volume).value) as i32
     }
     if s_rawend[stream as usize] < s_soundtime {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"S_Base_RawSamples: resetting minimum: %i < %i\n\x00" as *const u8
                 as *const libc::c_char,
             s_rawend[stream as usize],
@@ -1711,18 +1711,18 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             dst = s_rawend[stream as usize] & 16384 as i32 - 1 as i32;
             s_rawend[stream as usize] += 1;
             (*rawsamples.offset(dst as isize)).left =
-                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize) as i32
+                (*(data as *mut byte).offset(src as isize) as i32
                     - 128 as i32)
                     * intVolumeLeft;
             (*rawsamples.offset(dst as isize)).right =
-                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize) as i32
+                (*(data as *mut byte).offset(src as isize) as i32
                     - 128 as i32)
                     * intVolumeRight;
             i += 1
         }
     }
     if s_rawend[stream as usize] > s_soundtime + 16384 as i32 {
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"S_Base_RawSamples: overflowed %i > %i\n\x00" as *const u8 as *const libc::c_char,
             s_rawend[stream as usize],
             s_soundtime,
@@ -1741,11 +1741,11 @@ let the sound system know where an entity currently is
 
 pub unsafe extern "C" fn S_Base_UpdateEntityPosition(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
+    mut origin: *const vec_t,
 ) {
     if entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"S_UpdateEntityPosition: bad entitynum %i\x00" as *const u8 as *const libc::c_char,
             entityNum,
         );
@@ -1765,13 +1765,13 @@ Change the volumes of all the playing sounds for changes in their positions
 
 pub unsafe extern "C" fn S_Base_Respatialize(
     mut entityNum: i32,
-    mut head: *const crate::src::qcommon::q_shared::vec_t,
-    mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut head: *const vec_t,
+    mut axis: *mut vec3_t,
     mut _inwater: i32,
 ) {
     let mut i: i32 = 0;
-    let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ch: *mut channel_t = 0 as *mut channel_t;
+    let mut origin: vec3_t = [0.; 3];
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
@@ -1842,12 +1842,12 @@ Returns qtrue if any new sounds were started since the last mix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_ScanChannelStarts() -> crate::src::qcommon::q_shared::qboolean {
-    let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
+pub unsafe extern "C" fn S_ScanChannelStarts() -> qboolean {
+    let mut ch: *mut channel_t = 0 as *mut channel_t;
     let mut i: i32 = 0;
-    let mut newSamples: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    newSamples = crate::src::qcommon::q_shared::qfalse;
+    let mut newSamples: qboolean =
+        qfalse;
+    newSamples = qfalse;
     ch = s_channels.as_mut_ptr();
     i = 0 as i32;
     while i < 96 as i32 {
@@ -1857,7 +1857,7 @@ pub unsafe extern "C" fn S_ScanChannelStarts() -> crate::src::qcommon::q_shared:
             // into the very first sample
             if (*ch).startSample == 0x7fffffff as i32 {
                 (*ch).startSample = s_paintedtime;
-                newSamples = crate::src::qcommon::q_shared::qtrue
+                newSamples = qtrue
             } else if (*ch).startSample + (*(*ch).thesfx).soundLength <= s_paintedtime {
                 S_ChannelFree(ch);
             }
@@ -1880,7 +1880,7 @@ Called once each time through the main loop
 pub unsafe extern "C" fn S_Base_Update() {
     let mut i: i32 = 0;
     let mut total: i32 = 0;
-    let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;
+    let mut ch: *mut channel_t = 0 as *mut channel_t;
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         //		Com_DPrintf ("not started or muted\n");
         return;
@@ -1894,7 +1894,7 @@ pub unsafe extern "C" fn S_Base_Update() {
         i = 0 as i32;
         while i < 96 as i32 {
             if !(*ch).thesfx.is_null() && ((*ch).leftvol != 0 || (*ch).rightvol != 0) {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"%d %d %s\n\x00" as *const u8 as *const libc::c_char,
                     (*ch).leftvol,
                     (*ch).rightvol,
@@ -1905,7 +1905,7 @@ pub unsafe extern "C" fn S_Base_Update() {
             i += 1;
             ch = ch.offset(1)
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"----(%i)---- painted: %i\n\x00" as *const u8 as *const libc::c_char,
             total,
             s_paintedtime,
@@ -1922,9 +1922,9 @@ pub unsafe extern "C" fn S_GetSoundtime() {
     let mut samplepos: i32 = 0;
     static mut buffers: i32 = 0;
     static mut oldsamplepos: i32 = 0;
-    if crate::src::client::cl_avi::CL_VideoRecording() as u64 != 0 {
-        let mut fps: f32 = if (*crate::src::client::cl_main::cl_aviFrameRate).value < 1000.0f32 {
-            (*crate::src::client::cl_main::cl_aviFrameRate).value
+    if CL_VideoRecording() as u64 != 0 {
+        let mut fps: f32 = if (*cl_aviFrameRate).value < 1000.0f32 {
+            (*cl_aviFrameRate).value
         } else {
             1000.0f32
         };
@@ -1932,15 +1932,15 @@ pub unsafe extern "C" fn S_GetSoundtime() {
             (dma.speed as f32) / fps
         } else {
             1.0f32
-        }) + crate::src::client::cl_main::clc.aviSoundFrameRemainder;
+        }) + clc.aviSoundFrameRemainder;
         let mut msec: i32 = frameDuration as i32;
         s_soundtime += msec;
-        crate::src::client::cl_main::clc.aviSoundFrameRemainder = frameDuration - msec as f32;
+        clc.aviSoundFrameRemainder = frameDuration - msec as f32;
         return;
     }
     // it is possible to miscount buffers if it has wrapped twice between
     // calls to S_Update.  Oh well.
-    samplepos = crate::src::sdl::sdl_snd::SNDDMA_GetDMAPos(); // buffer wrapped
+    samplepos = SNDDMA_GetDMAPos(); // buffer wrapped
     if samplepos < oldsamplepos {
         buffers += 1;
         if s_paintedtime > 0x40000000 as i32 {
@@ -2000,7 +2000,7 @@ pub unsafe extern "C" fn S_Update_() {
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
-    thisTime = crate::src::qcommon::common::Com_Milliseconds() as f32;
+    thisTime = Com_Milliseconds() as f32;
     // Updates s_soundtime
     S_GetSoundtime();
     if s_soundtime == ot {
@@ -2031,9 +2031,9 @@ pub unsafe extern "C" fn S_Update_() {
     if endtime.wrapping_sub(s_soundtime as u32) > dma.fullsamples as u32 {
         endtime = (s_soundtime + dma.fullsamples) as u32
     }
-    crate::src::sdl::sdl_snd::SNDDMA_BeginPainting();
-    crate::src::client::snd_mix::S_PaintChannels(endtime as i32);
-    crate::src::sdl::sdl_snd::SNDDMA_Submit();
+    SNDDMA_BeginPainting();
+    S_PaintChannels(endtime as i32);
+    SNDDMA_Submit();
     lastTime = thisTime;
 }
 /*
@@ -2054,10 +2054,10 @@ pub unsafe extern "C" fn S_Base_StopBackgroundTrack() {
     if s_backgroundStream.is_null() {
         return;
     }
-    crate::src::client::snd_codec::S_CodecCloseStream(
-        s_backgroundStream as *mut crate::src::client::snd_codec::snd_stream_s,
+    S_CodecCloseStream(
+        s_backgroundStream as *mut snd_stream_s,
     );
-    s_backgroundStream = 0 as *mut crate::src::client::snd_codec::snd_stream_t;
+    s_backgroundStream = 0 as *mut snd_stream_t;
     s_rawend[0 as i32 as usize] = 0 as i32;
 }
 /*
@@ -2070,16 +2070,16 @@ unsafe extern "C" fn S_OpenBackgroundStream(mut filename: *const libc::c_char) {
     // close the background track, but DON'T reset s_rawend
     // if restarting the same back ground track
     if !s_backgroundStream.is_null() {
-        crate::src::client::snd_codec::S_CodecCloseStream(
-            s_backgroundStream as *mut crate::src::client::snd_codec::snd_stream_s,
+        S_CodecCloseStream(
+            s_backgroundStream as *mut snd_stream_s,
         );
-        s_backgroundStream = 0 as *mut crate::src::client::snd_codec::snd_stream_t
+        s_backgroundStream = 0 as *mut snd_stream_t
     }
     // Open stream
-    s_backgroundStream = crate::src::client::snd_codec::S_CodecOpenStream(filename)
-        as *mut crate::src::client::snd_codec::snd_stream_s;
+    s_backgroundStream = S_CodecOpenStream(filename)
+        as *mut snd_stream_s;
     if s_backgroundStream.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: couldn\'t open music file %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -2088,7 +2088,7 @@ unsafe extern "C" fn S_OpenBackgroundStream(mut filename: *const libc::c_char) {
     if (*s_backgroundStream).info.channels != 2 as i32
         || (*s_backgroundStream).info.rate != 22050 as i32
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: music file %s is not 22k stereo\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
@@ -2111,7 +2111,7 @@ pub unsafe extern "C" fn S_Base_StartBackgroundTrack(
     if loop_0.is_null() || *loop_0.offset(0 as i32 as isize) == 0 {
         loop_0 = intro
     }
-    crate::src::qcommon::common::Com_DPrintf(
+    Com_DPrintf(
         b"S_StartBackgroundTrack( %s, %s )\n\x00" as *const u8 as *const libc::c_char,
         intro,
         loop_0,
@@ -2120,7 +2120,7 @@ pub unsafe extern "C" fn S_Base_StartBackgroundTrack(
         S_Base_StopBackgroundTrack();
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_backgroundLoop.as_mut_ptr(),
         loop_0,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -2201,14 +2201,14 @@ S_UpdateBackgroundTrack
 pub unsafe extern "C" fn S_UpdateBackgroundTrack() {
     let mut bufferSamples: i32 = 0; // just enough to fit in a mac stack frame
     let mut fileSamples: i32 = 0;
-    let mut raw: [crate::src::qcommon::q_shared::byte; 30000] = [0; 30000];
+    let mut raw: [byte; 30000] = [0; 30000];
     let mut fileBytes: i32 = 0;
     let mut r: i32 = 0;
     if s_backgroundStream.is_null() {
         return;
     }
     // don't bother playing anything if musicvolume is 0
-    if (*crate::src::client::snd_main::s_musicVolume).value <= 0 as i32 as f32 {
+    if (*s_musicVolume).value <= 0 as i32 as f32 {
         return;
     }
     // see how many samples should be copied into the raw buffer
@@ -2226,16 +2226,16 @@ pub unsafe extern "C" fn S_UpdateBackgroundTrack() {
         fileBytes =
             fileSamples * ((*s_backgroundStream).info.width * (*s_backgroundStream).info.channels);
         if fileBytes as libc::c_ulong
-            > ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 30000]>() as libc::c_ulong
+            > ::std::mem::size_of::<[byte; 30000]>() as libc::c_ulong
         {
-            fileBytes = ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 30000]>()
+            fileBytes = ::std::mem::size_of::<[byte; 30000]>()
                 as libc::c_ulong as i32;
             fileSamples =
                 fileBytes / ((*s_backgroundStream).info.width * (*s_backgroundStream).info.channels)
         }
         // Read
-        r = crate::src::client::snd_codec::S_CodecReadStream(
-            s_backgroundStream as *mut crate::src::client::snd_codec::snd_stream_s,
+        r = S_CodecReadStream(
+            s_backgroundStream as *mut snd_stream_s,
             fileBytes,
             raw.as_mut_ptr() as *mut libc::c_void,
         );
@@ -2252,7 +2252,7 @@ pub unsafe extern "C" fn S_UpdateBackgroundTrack() {
                 (*s_backgroundStream).info.width,
                 (*s_backgroundStream).info.channels,
                 raw.as_mut_ptr(),
-                (*crate::src::client::snd_main::s_musicVolume).value,
+                (*s_musicVolume).value,
                 -(1 as i32),
             );
         } else if s_backgroundLoop[0 as i32 as usize] != 0 {
@@ -2278,33 +2278,33 @@ pub unsafe extern "C" fn S_FreeOldestSound() {
     let mut i: i32 = 0;
     let mut oldest: i32 = 0;
     let mut used: i32 = 0;
-    let mut sfx: *mut crate::snd_local_h::sfx_t = 0 as *mut crate::snd_local_h::sfx_t;
-    let mut buffer: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut nbuffer: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    oldest = crate::src::qcommon::common::Com_Milliseconds();
+    let mut sfx: *mut sfx_t = 0 as *mut sfx_t;
+    let mut buffer: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut nbuffer: *mut sndBuffer = 0 as *mut sndBuffer;
+    oldest = Com_Milliseconds();
     used = 0 as i32;
     i = 1 as i32;
     while i < s_numSfx {
-        sfx = &mut *s_knownSfx.as_mut_ptr().offset(i as isize) as *mut crate::snd_local_h::sfx_t;
+        sfx = &mut *s_knownSfx.as_mut_ptr().offset(i as isize) as *mut sfx_t;
         if (*sfx).inMemory as u32 != 0 && (*sfx).lastTimeUsed < oldest {
             used = i;
             oldest = (*sfx).lastTimeUsed
         }
         i += 1
     }
-    sfx = &mut *s_knownSfx.as_mut_ptr().offset(used as isize) as *mut crate::snd_local_h::sfx_t;
-    crate::src::qcommon::common::Com_DPrintf(
+    sfx = &mut *s_knownSfx.as_mut_ptr().offset(used as isize) as *mut sfx_t;
+    Com_DPrintf(
         b"S_FreeOldestSound: freeing sound %s\n\x00" as *const u8 as *const libc::c_char,
         (*sfx).soundName.as_mut_ptr(),
     );
     buffer = (*sfx).soundData;
     while !buffer.is_null() {
         nbuffer = (*buffer).next;
-        crate::src::client::snd_mem::SND_free(buffer as *mut crate::snd_local_h::sndBuffer_s);
+        SND_free(buffer as *mut sndBuffer_s);
         buffer = nbuffer
     }
-    (*sfx).inMemory = crate::src::qcommon::q_shared::qfalse;
-    (*sfx).soundData = 0 as *mut crate::snd_local_h::sndBuffer;
+    (*sfx).inMemory = qfalse;
+    (*sfx).soundData = 0 as *mut sndBuffer;
 }
 // =======================================================================
 // Shutdown sound engine
@@ -2315,11 +2315,11 @@ pub unsafe extern "C" fn S_Base_Shutdown() {
     if s_soundStarted == 0 {
         return;
     }
-    crate::src::sdl::sdl_snd::SNDDMA_Shutdown();
-    crate::src::client::snd_mem::SND_shutdown();
+    SNDDMA_Shutdown();
+    SND_shutdown();
     s_soundStarted = 0 as i32;
     s_numSfx = 0 as i32;
-    crate::src::qcommon::cmd::Cmd_RemoveCommand(b"s_info\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"s_info\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -2390,62 +2390,62 @@ S_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Base_Init(
-    mut si: *mut crate::snd_local_h::soundInterface_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut r: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    mut si: *mut soundInterface_t,
+) -> qboolean {
+    let mut r: qboolean = qfalse;
     if si.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    s_mixahead = crate::src::qcommon::cvar::Cvar_Get(
+    s_mixahead = Cvar_Get(
         b"s_mixahead\x00" as *const u8 as *const libc::c_char,
         b"0.2\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    s_mixPreStep = crate::src::qcommon::cvar::Cvar_Get(
+    ) as *mut cvar_s;
+    s_mixPreStep = Cvar_Get(
         b"s_mixPreStep\x00" as *const u8 as *const libc::c_char,
         b"0.05\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    s_show = crate::src::qcommon::cvar::Cvar_Get(
+    ) as *mut cvar_s;
+    s_show = Cvar_Get(
         b"s_show\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    s_testsound = crate::src::qcommon::cvar::Cvar_Get(
+    ) as *mut cvar_s;
+    s_testsound = Cvar_Get(
         b"s_testsound\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    r = crate::src::sdl::sdl_snd::SNDDMA_Init();
+    ) as *mut cvar_s;
+    r = SNDDMA_Init();
     if r as u64 != 0 {
         s_soundStarted = 1 as i32;
-        s_soundMuted = crate::src::qcommon::q_shared::qtrue;
+        s_soundMuted = qtrue;
         //		s_numSfx = 0;
         crate::stdlib::memset(
             sfxHash.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            (::std::mem::size_of::<*mut crate::snd_local_h::sfx_t>() as libc::c_ulong)
+            (::std::mem::size_of::<*mut sfx_t>() as libc::c_ulong)
                 .wrapping_mul(128 as i32 as libc::c_ulong),
         );
         s_soundtime = 0 as i32;
         s_paintedtime = 0 as i32;
         S_Base_StopAllSounds();
     } else {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     (*si).Shutdown = Some(S_Base_Shutdown as unsafe extern "C" fn() -> ());
     (*si).StartSound = Some(
         S_Base_StartSound
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).StartLocalSound = Some(
         S_Base_StartLocalSound
-            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::sfxHandle_t, _: i32) -> (),
+            as unsafe extern "C" fn(_: sfxHandle_t, _: i32) -> (),
     );
     (*si).StartBackgroundTrack = Some(
         S_Base_StartBackgroundTrack
@@ -2460,7 +2460,7 @@ pub unsafe extern "C" fn S_Base_Init(
                 _: i32,
                 _: i32,
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::byte,
+                _: *const byte,
                 _: f32,
                 _: i32,
             ) -> (),
@@ -2468,24 +2468,24 @@ pub unsafe extern "C" fn S_Base_Init(
     (*si).StopAllSounds = Some(S_Base_StopAllSounds as unsafe extern "C" fn() -> ());
     (*si).ClearLoopingSounds = Some(
         S_Base_ClearLoopingSounds
-            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> (),
+            as unsafe extern "C" fn(_: qboolean) -> (),
     );
     (*si).AddLoopingSound = Some(
         S_Base_AddLoopingSound
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: *const vec_t,
+                _: *const vec_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).AddRealLoopingSound = Some(
         S_Base_AddRealLoopingSound
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: *const vec_t,
+                _: *const vec_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).StopLoopingSound = Some(S_Base_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
@@ -2493,14 +2493,14 @@ pub unsafe extern "C" fn S_Base_Init(
         S_Base_Respatialize
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec3_t,
+                _: *const vec_t,
+                _: *mut vec3_t,
                 _: i32,
             ) -> (),
     );
     (*si).UpdateEntityPosition = Some(
         S_Base_UpdateEntityPosition
-            as unsafe extern "C" fn(_: i32, _: *const crate::src::qcommon::q_shared::vec_t) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const vec_t) -> (),
     );
     (*si).Update = Some(S_Base_Update as unsafe extern "C" fn() -> ());
     (*si).DisableSounds = Some(S_Base_DisableSounds as unsafe extern "C" fn() -> ());
@@ -2509,8 +2509,8 @@ pub unsafe extern "C" fn S_Base_Init(
         S_Base_RegisterSound
             as unsafe extern "C" fn(
                 _: *const libc::c_char,
-                _: crate::src::qcommon::q_shared::qboolean,
-            ) -> crate::src::qcommon::q_shared::sfxHandle_t,
+                _: qboolean,
+            ) -> sfxHandle_t,
     );
     (*si).ClearSoundBuffer = Some(S_Base_ClearSoundBuffer as unsafe extern "C" fn() -> ());
     (*si).SoundInfo = Some(S_Base_SoundInfo as unsafe extern "C" fn() -> ());
@@ -2520,9 +2520,9 @@ pub unsafe extern "C" fn S_Base_Init(
         Some(S_Base_AvailableCaptureSamples as unsafe extern "C" fn() -> i32);
     (*si).Capture = Some(
         S_Base_Capture
-            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut byte) -> (),
     );
     (*si).StopCapture = Some(S_Base_StopCapture as unsafe extern "C" fn() -> ());
     (*si).MasterGain = Some(S_Base_MasterGain as unsafe extern "C" fn(_: f32) -> ());
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }

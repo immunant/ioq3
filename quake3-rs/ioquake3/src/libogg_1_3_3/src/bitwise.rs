@@ -52,11 +52,11 @@ static mut mask8B: [u32; 9] = [
 /* Ogg BITSTREAM PRIMITIVES: bitstream ************************/
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_writeinit(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpack_writeinit(mut b: *mut oggpack_buffer) {
     crate::stdlib::memset(
         b as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::oggpack_buffer>() as libc::c_ulong,
+        ::std::mem::size_of::<oggpack_buffer>() as libc::c_ulong,
     );
     (*b).buffer = crate::stdlib::malloc(256 as i32 as libc::c_ulong) as *mut u8;
     (*b).ptr = (*b).buffer;
@@ -65,12 +65,12 @@ pub unsafe extern "C" fn oggpack_writeinit(mut b: *mut crate::ogg_h::oggpack_buf
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_writeinit(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpackB_writeinit(mut b: *mut oggpack_buffer) {
     oggpack_writeinit(b);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_writecheck(mut b: *mut crate::ogg_h::oggpack_buffer) -> i32 {
+pub unsafe extern "C" fn oggpack_writecheck(mut b: *mut oggpack_buffer) -> i32 {
     if (*b).ptr.is_null() || (*b).storage == 0 {
         return -(1 as i32);
     }
@@ -78,13 +78,13 @@ pub unsafe extern "C" fn oggpack_writecheck(mut b: *mut crate::ogg_h::oggpack_bu
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_writecheck(mut b: *mut crate::ogg_h::oggpack_buffer) -> i32 {
+pub unsafe extern "C" fn oggpackB_writecheck(mut b: *mut oggpack_buffer) -> i32 {
     return oggpack_writecheck(b);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_writetrunc(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: isize,
 ) {
     let mut bytes: isize = bits >> 3 as i32;
@@ -99,7 +99,7 @@ pub unsafe extern "C" fn oggpack_writetrunc(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_writetrunc(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: isize,
 ) {
     let mut bytes: isize = bits >> 3 as i32;
@@ -115,7 +115,7 @@ pub unsafe extern "C" fn oggpackB_writetrunc(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_write(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut value: libc::c_ulong,
     mut bits: i32,
 ) {
@@ -184,7 +184,7 @@ pub unsafe extern "C" fn oggpack_write(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_write(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut value: libc::c_ulong,
     mut bits: i32,
 ) {
@@ -250,7 +250,7 @@ pub unsafe extern "C" fn oggpackB_write(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_writealign(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpack_writealign(mut b: *mut oggpack_buffer) {
     let mut bits: i32 = 8 as i32 - (*b).endbit;
     if bits < 8 as i32 {
         oggpack_write(b, 0 as i32 as libc::c_ulong, bits);
@@ -258,7 +258,7 @@ pub unsafe extern "C" fn oggpack_writealign(mut b: *mut crate::ogg_h::oggpack_bu
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_writealign(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpackB_writealign(mut b: *mut oggpack_buffer) {
     let mut bits: i32 = 8 as i32 - (*b).endbit;
     if bits < 8 as i32 {
         oggpackB_write(b, 0 as i32 as libc::c_ulong, bits);
@@ -266,11 +266,11 @@ pub unsafe extern "C" fn oggpackB_writealign(mut b: *mut crate::ogg_h::oggpack_b
 }
 
 unsafe extern "C" fn oggpack_writecopy_helper(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut source: *mut libc::c_void,
     mut bits: isize,
     mut w: Option<
-        unsafe extern "C" fn(_: *mut crate::ogg_h::oggpack_buffer, _: libc::c_ulong, _: i32) -> (),
+        unsafe extern "C" fn(_: *mut oggpack_buffer, _: libc::c_ulong, _: i32) -> (),
     >,
     mut msb: i32,
 ) {
@@ -352,7 +352,7 @@ unsafe extern "C" fn oggpack_writecopy_helper(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_writecopy(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut source: *mut libc::c_void,
     mut bits: isize,
 ) {
@@ -363,7 +363,7 @@ pub unsafe extern "C" fn oggpack_writecopy(
         Some(
             oggpack_write
                 as unsafe extern "C" fn(
-                    _: *mut crate::ogg_h::oggpack_buffer,
+                    _: *mut oggpack_buffer,
                     _: libc::c_ulong,
                     _: i32,
                 ) -> (),
@@ -374,7 +374,7 @@ pub unsafe extern "C" fn oggpack_writecopy(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_writecopy(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut source: *mut libc::c_void,
     mut bits: isize,
 ) {
@@ -385,7 +385,7 @@ pub unsafe extern "C" fn oggpackB_writecopy(
         Some(
             oggpackB_write
                 as unsafe extern "C" fn(
-                    _: *mut crate::ogg_h::oggpack_buffer,
+                    _: *mut oggpack_buffer,
                     _: libc::c_ulong,
                     _: i32,
                 ) -> (),
@@ -395,7 +395,7 @@ pub unsafe extern "C" fn oggpackB_writecopy(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_reset(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpack_reset(mut b: *mut oggpack_buffer) {
     if (*b).ptr.is_null() {
         return;
     }
@@ -406,37 +406,37 @@ pub unsafe extern "C" fn oggpack_reset(mut b: *mut crate::ogg_h::oggpack_buffer)
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_reset(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpackB_reset(mut b: *mut oggpack_buffer) {
     oggpack_reset(b);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_writeclear(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpack_writeclear(mut b: *mut oggpack_buffer) {
     if !(*b).buffer.is_null() {
-        ::libc::free((*b).buffer as *mut libc::c_void);
+        libc::free((*b).buffer as *mut libc::c_void);
     }
     crate::stdlib::memset(
         b as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::oggpack_buffer>() as libc::c_ulong,
+        ::std::mem::size_of::<oggpack_buffer>() as libc::c_ulong,
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_writeclear(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpackB_writeclear(mut b: *mut oggpack_buffer) {
     oggpack_writeclear(b);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_readinit(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut buf: *mut u8,
     mut bytes: i32,
 ) {
     crate::stdlib::memset(
         b as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::oggpack_buffer>() as libc::c_ulong,
+        ::std::mem::size_of::<oggpack_buffer>() as libc::c_ulong,
     );
     (*b).ptr = buf;
     (*b).buffer = (*b).ptr;
@@ -445,7 +445,7 @@ pub unsafe extern "C" fn oggpack_readinit(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_readinit(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut buf: *mut u8,
     mut bytes: i32,
 ) {
@@ -455,7 +455,7 @@ pub unsafe extern "C" fn oggpackB_readinit(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_look(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: i32,
 ) -> isize {
     let mut ret: libc::c_ulong = 0;
@@ -500,7 +500,7 @@ pub unsafe extern "C" fn oggpack_look(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_look(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: i32,
 ) -> isize {
     let mut ret: libc::c_ulong = 0;
@@ -545,7 +545,7 @@ pub unsafe extern "C" fn oggpackB_look(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpack_look1(mut b: *mut oggpack_buffer) -> isize {
     if (*b).endbyte >= (*b).storage {
         return -(1 as i32) as isize;
     }
@@ -553,7 +553,7 @@ pub unsafe extern "C" fn oggpack_look1(mut b: *mut crate::ogg_h::oggpack_buffer)
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_look1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpackB_look1(mut b: *mut oggpack_buffer) -> isize {
     if (*b).endbyte >= (*b).storage {
         return -(1 as i32) as isize;
     }
@@ -562,7 +562,7 @@ pub unsafe extern "C" fn oggpackB_look1(mut b: *mut crate::ogg_h::oggpack_buffer
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_adv(mut b: *mut crate::ogg_h::oggpack_buffer, mut bits: i32) {
+pub unsafe extern "C" fn oggpack_adv(mut b: *mut oggpack_buffer, mut bits: i32) {
     bits += (*b).endbit;
     if (*b).endbyte > (*b).storage - (bits + 7 as i32 >> 3 as i32) as isize {
         (*b).ptr = 0 as *mut u8;
@@ -578,12 +578,12 @@ pub unsafe extern "C" fn oggpack_adv(mut b: *mut crate::ogg_h::oggpack_buffer, m
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_adv(mut b: *mut crate::ogg_h::oggpack_buffer, mut bits: i32) {
+pub unsafe extern "C" fn oggpackB_adv(mut b: *mut oggpack_buffer, mut bits: i32) {
     oggpack_adv(b, bits);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_adv1(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpack_adv1(mut b: *mut oggpack_buffer) {
     (*b).endbit += 1;
     if (*b).endbit > 7 as i32 {
         (*b).endbit = 0 as i32;
@@ -593,14 +593,14 @@ pub unsafe extern "C" fn oggpack_adv1(mut b: *mut crate::ogg_h::oggpack_buffer) 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_adv1(mut b: *mut crate::ogg_h::oggpack_buffer) {
+pub unsafe extern "C" fn oggpackB_adv1(mut b: *mut oggpack_buffer) {
     oggpack_adv1(b);
 }
 /* bits <= 32 */
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpack_read(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: i32,
 ) -> isize {
     let mut current_block: u64;
@@ -663,7 +663,7 @@ pub unsafe extern "C" fn oggpack_read(
 #[no_mangle]
 
 pub unsafe extern "C" fn oggpackB_read(
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut bits: i32,
 ) -> isize {
     let mut current_block: u64;
@@ -725,7 +725,7 @@ pub unsafe extern "C" fn oggpackB_read(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpack_read1(mut b: *mut oggpack_buffer) -> isize {
     let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
         (*b).ptr = 0 as *mut u8;
@@ -745,7 +745,7 @@ pub unsafe extern "C" fn oggpack_read1(mut b: *mut crate::ogg_h::oggpack_buffer)
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_read1(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpackB_read1(mut b: *mut oggpack_buffer) -> isize {
     let mut ret: isize = 0;
     if (*b).endbyte >= (*b).storage {
         (*b).ptr = 0 as *mut u8;
@@ -766,32 +766,32 @@ pub unsafe extern "C" fn oggpackB_read1(mut b: *mut crate::ogg_h::oggpack_buffer
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpack_bytes(mut b: *mut oggpack_buffer) -> isize {
     return (*b).endbyte + (((*b).endbit + 7 as i32) / 8 as i32) as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpack_bits(mut b: *mut oggpack_buffer) -> isize {
     return (*b).endbyte * 8 as i32 as isize + (*b).endbit as isize;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_bytes(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpackB_bytes(mut b: *mut oggpack_buffer) -> isize {
     return oggpack_bytes(b);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_bits(mut b: *mut crate::ogg_h::oggpack_buffer) -> isize {
+pub unsafe extern "C" fn oggpackB_bits(mut b: *mut oggpack_buffer) -> isize {
     return oggpack_bits(b);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpack_get_buffer(mut b: *mut crate::ogg_h::oggpack_buffer) -> *mut u8 {
+pub unsafe extern "C" fn oggpack_get_buffer(mut b: *mut oggpack_buffer) -> *mut u8 {
     return (*b).buffer;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn oggpackB_get_buffer(mut b: *mut crate::ogg_h::oggpack_buffer) -> *mut u8 {
+pub unsafe extern "C" fn oggpackB_get_buffer(mut b: *mut oggpack_buffer) -> *mut u8 {
     return oggpack_get_buffer(b);
 }
 /* _V_SELFTEST */

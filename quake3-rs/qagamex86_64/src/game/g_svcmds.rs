@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -209,16 +209,16 @@ StringToFilter
 unsafe extern "C" fn StringToFilter(
     mut s: *mut libc::c_char,
     mut f: *mut ipFilter_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut num: [libc::c_char; 128] = [0; 128];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut b: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
-    let mut m: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
+    let mut b: [byte; 4] = [0; 4];
+    let mut m: [byte; 4] = [0; 4];
     i = 0 as i32;
     while i < 4 as i32 {
-        b[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
-        m[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+        b[i as usize] = 0 as i32 as byte;
+        m[i as usize] = 0 as i32 as byte;
         i += 1
     }
     i = 0 as i32;
@@ -233,11 +233,11 @@ unsafe extern "C" fn StringToFilter(
                 }
                 s = s.offset(1)
             } else {
-                crate::src::game::g_main::G_Printf(
+                G_Printf(
                     b"Bad filter address: %s\n\x00" as *const u8 as *const libc::c_char,
                     s,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
         } else {
             j = 0 as i32;
@@ -249,8 +249,8 @@ unsafe extern "C" fn StringToFilter(
                 num[fresh1 as usize] = *fresh0
             }
             num[j as usize] = 0 as i32 as libc::c_char;
-            b[i as usize] = atoi(num.as_mut_ptr()) as crate::src::qcommon::q_shared::byte;
-            m[i as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+            b[i as usize] = atoi(num.as_mut_ptr()) as byte;
+            m[i as usize] = 255 as i32 as byte;
             if *s == 0 {
                 break;
             }
@@ -260,7 +260,7 @@ unsafe extern "C" fn StringToFilter(
     }
     (*f).mask = *(m.as_mut_ptr() as *mut u32);
     (*f).compare = *(b.as_mut_ptr() as *mut u32);
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -269,10 +269,10 @@ UpdateIPBans
 */
 
 unsafe extern "C" fn UpdateIPBans() {
-    let mut b: [crate::src::qcommon::q_shared::byte; 4] =
-        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
-    let mut m: [crate::src::qcommon::q_shared::byte; 4] =
-        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
+    let mut b: [byte; 4] =
+        [0 as i32 as byte, 0, 0, 0];
+    let mut m: [byte; 4] =
+        [0 as i32 as byte, 0, 0, 0];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut iplist_final: [libc::c_char; 256] = [
@@ -609,22 +609,22 @@ unsafe extern "C" fn UpdateIPBans() {
             j = 0 as i32;
             while j < 4 as i32 {
                 if m[j as usize] as i32 != 255 as i32 {
-                    crate::src::qcommon::q_shared::Q_strcat(
+                    Q_strcat(
                         ip.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                         b"*\x00" as *const u8 as *const libc::c_char,
                     );
                 } else {
-                    crate::src::qcommon::q_shared::Q_strcat(
+                    Q_strcat(
                         ip.as_mut_ptr(),
                         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
-                        crate::src::qcommon::q_shared::va(
+                        va(
                             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                             b[j as usize] as i32,
                         ),
                     );
                 }
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     ip.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                     if j < 3 as i32 {
@@ -639,13 +639,13 @@ unsafe extern "C" fn UpdateIPBans() {
                 .wrapping_add(crate::stdlib::strlen(ip.as_mut_ptr()))
                 < 256 as i32 as libc::c_ulong
             {
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     iplist_final.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                     ip.as_mut_ptr(),
                 );
             } else {
-                crate::src::game::g_main::Com_Printf(
+                Com_Printf(
                     b"g_banIPs overflowed at MAX_CVAR_VALUE_STRING\n\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -654,7 +654,7 @@ unsafe extern "C" fn UpdateIPBans() {
         }
         i += 1
     }
-    crate::src::game::g_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"g_banIPs\x00" as *const u8 as *const libc::c_char,
         iplist_final.as_mut_ptr(),
     );
@@ -668,19 +668,19 @@ G_FilterPacket
 
 pub unsafe extern "C" fn G_FilterPacket(
     mut from: *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: i32 = 0;
     let mut in_0: u32 = 0;
-    let mut m: [crate::src::qcommon::q_shared::byte; 4] =
-        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
+    let mut m: [byte; 4] =
+        [0 as i32 as byte, 0, 0, 0];
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     i = 0 as i32;
     p = from;
     while *p as i32 != 0 && i < 4 as i32 {
-        m[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+        m[i as usize] = 0 as i32 as byte;
         while *p as i32 >= '0' as i32 && *p as i32 <= '9' as i32 {
             m[i as usize] = (m[i as usize] as i32 * 10 as i32 + (*p as i32 - '0' as i32))
-                as crate::src::qcommon::q_shared::byte;
+                as byte;
             p = p.offset(1)
         }
         if *p == 0 || *p as i32 == ':' as i32 {
@@ -693,13 +693,13 @@ pub unsafe extern "C" fn G_FilterPacket(
     i = 0 as i32;
     while i < numIPFilters {
         if in_0 & ipFilters[i as usize].mask == ipFilters[i as usize].compare {
-            return (crate::src::game::g_main::g_filterBan.integer != 0 as i32) as i32
-                as crate::src::qcommon::q_shared::qboolean;
+            return (g_filterBan.integer != 0 as i32) as i32
+                as qboolean;
         }
         i += 1
     }
-    return (crate::src::game::g_main::g_filterBan.integer == 0 as i32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    return (g_filterBan.integer == 0 as i32) as i32
+        as qboolean;
 }
 /*
 =================
@@ -718,7 +718,7 @@ unsafe extern "C" fn AddIP(mut str: *mut libc::c_char) {
     }
     if i == numIPFilters {
         if numIPFilters == 1024 as i32 {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"IP filter list is full\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -741,16 +741,16 @@ pub unsafe extern "C" fn G_ProcessIPBans() {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut t: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut str: [libc::c_char; 256] = [0; 256];
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         str.as_mut_ptr(),
-        crate::src::game::g_main::g_banIPs.string.as_mut_ptr(),
+        g_banIPs.string.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
-    s = crate::src::game::g_main::g_banIPs.string.as_mut_ptr();
+    s = g_banIPs.string.as_mut_ptr();
     t = s;
     while *t != 0 {
         /* */
-        s = ::libc::strchr(s, ' ' as i32);
+        s = libc::strchr(s, ' ' as i32);
         if s.is_null() {
             break;
         }
@@ -774,13 +774,13 @@ Svcmd_AddIP_f
 
 pub unsafe extern "C" fn Svcmd_AddIP_f() {
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 2 as i32 {
-        crate::src::game::g_main::G_Printf(
+    if trap_Argc() < 2 as i32 {
+        G_Printf(
             b"Usage: addip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -801,13 +801,13 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
     };
     let mut i: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 2 as i32 {
-        crate::src::game::g_main::G_Printf(
+    if trap_Argc() < 2 as i32 {
+        G_Printf(
             b"Usage: removeip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -819,7 +819,7 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
     while i < numIPFilters {
         if ipFilters[i as usize].mask == f.mask && ipFilters[i as usize].compare == f.compare {
             ipFilters[i as usize].compare = 0xffffffff as u32;
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"Removed.\n\x00" as *const u8 as *const libc::c_char,
             );
             UpdateIPBans();
@@ -827,7 +827,7 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
         }
         i += 1
     }
-    crate::src::game::g_main::G_Printf(
+    G_Printf(
         b"Didn\'t find %s.\n\x00" as *const u8 as *const libc::c_char,
         str.as_mut_ptr(),
     );
@@ -841,87 +841,87 @@ Svcmd_EntityList_f
 
 pub unsafe extern "C" fn Svcmd_EntityList_f() {
     let mut e: i32 = 0;
-    let mut check: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    check = crate::src::game::g_main::g_entities.as_mut_ptr();
+    let mut check: *mut gentity_t = 0 as *mut gentity_t;
+    check = g_entities.as_mut_ptr();
     e = 0 as i32;
-    while e < crate::src::game::g_main::level.num_entities {
+    while e < level.num_entities {
         if !((*check).inuse as u64 == 0) {
-            crate::src::game::g_main::G_Printf(b"%3i:\x00" as *const u8 as *const libc::c_char, e);
+            G_Printf(b"%3i:\x00" as *const u8 as *const libc::c_char, e);
             match (*check).s.eType {
                 0 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_GENERAL          \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 1 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_PLAYER           \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 2 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_ITEM             \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 3 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_MISSILE          \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 4 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_MOVER            \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 5 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_BEAM             \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 6 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_PORTAL           \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 7 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_SPEAKER          \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 8 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_PUSH_TRIGGER     \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 9 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_TELEPORT_TRIGGER \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 10 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_INVISIBLE        \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 11 => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"ET_GRAPPLE          \x00" as *const u8 as *const libc::c_char,
                     );
                 }
                 _ => {
-                    crate::src::game::g_main::G_Printf(
+                    G_Printf(
                         b"%3i                 \x00" as *const u8 as *const libc::c_char,
                         (*check).s.eType,
                     );
                 }
             }
             if !(*check).classname.is_null() {
-                crate::src::game::g_main::G_Printf(
+                G_Printf(
                     b"%s\x00" as *const u8 as *const libc::c_char,
                     (*check).classname,
                 );
             }
-            crate::src::game::g_main::G_Printf(b"\n\x00" as *const u8 as *const libc::c_char);
+            G_Printf(b"\n\x00" as *const u8 as *const libc::c_char);
         }
         e += 1;
         check = check.offset(1)
@@ -931,8 +931,8 @@ pub unsafe extern "C" fn Svcmd_EntityList_f() {
 
 pub unsafe extern "C" fn ClientForString(
     mut s: *const libc::c_char,
-) -> *mut crate::g_local_h::gclient_t {
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+) -> *mut gclient_t {
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut i: i32 = 0;
     let mut idnum: i32 = 0;
     // numeric values are just slot numbers
@@ -940,42 +940,42 @@ pub unsafe extern "C" fn ClientForString(
         && *s.offset(0 as i32 as isize) as i32 <= '9' as i32
     {
         idnum = atoi(s);
-        if idnum < 0 as i32 || idnum >= crate::src::game::g_main::level.maxclients {
-            crate::src::game::g_main::Com_Printf(
+        if idnum < 0 as i32 || idnum >= level.maxclients {
+            Com_Printf(
                 b"Bad client slot: %i\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
             );
-            return 0 as *mut crate::g_local_h::gclient_t;
+            return 0 as *mut gclient_t;
         }
-        cl = &mut *crate::src::game::g_main::level
+        cl = &mut *level
             .clients
-            .offset(idnum as isize) as *mut crate::g_local_h::gclient_s;
-        if (*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32 {
-            crate::src::game::g_main::G_Printf(
+            .offset(idnum as isize) as *mut gclient_s;
+        if (*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32 {
+            G_Printf(
                 b"Client %i is not connected\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
             );
-            return 0 as *mut crate::g_local_h::gclient_t;
+            return 0 as *mut gclient_t;
         }
         return cl;
     }
     // check for a name match
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        cl = &mut *crate::src::game::g_main::level.clients.offset(i as isize)
-            as *mut crate::g_local_h::gclient_s;
-        if !((*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32) {
-            if crate::src::qcommon::q_shared::Q_stricmp((*cl).pers.netname.as_mut_ptr(), s) == 0 {
+    while i < level.maxclients {
+        cl = &mut *level.clients.offset(i as isize)
+            as *mut gclient_s;
+        if !((*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32) {
+            if Q_stricmp((*cl).pers.netname.as_mut_ptr(), s) == 0 {
                 return cl;
             }
         }
         i += 1
     }
-    crate::src::game::g_main::G_Printf(
+    G_Printf(
         b"User %s is not on the server\n\x00" as *const u8 as *const libc::c_char,
         s,
     );
-    return 0 as *mut crate::g_local_h::gclient_t;
+    return 0 as *mut gclient_t;
 }
 /*
 ===================
@@ -987,16 +987,16 @@ forceteam <player> <team>
 #[no_mangle]
 
 pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
-    let mut cl: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
+    let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut str: [libc::c_char; 1024] = [0; 1024];
-    if crate::src::game::g_syscalls::trap_Argc() < 3 as i32 {
-        crate::src::game::g_main::G_Printf(
+    if trap_Argc() < 3 as i32 {
+        G_Printf(
             b"Usage: forceteam <player> <team>\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     // find the player
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         1 as i32,
         str.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1006,16 +1006,16 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
         return;
     }
     // set the team
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         2 as i32,
         str.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::game::g_cmds::SetTeam(
-        &mut *crate::src::game::g_main::g_entities
+    SetTeam(
+        &mut *g_entities
             .as_mut_ptr()
-            .offset(cl.offset_from(crate::src::game::g_main::level.clients) as isize)
-            as *mut _ as *mut crate::g_local_h::gentity_s,
+            .offset(cl.offset_from(level.clients) as isize)
+            as *mut _ as *mut gentity_s,
         str.as_mut_ptr(),
     );
 }
@@ -1230,114 +1230,114 @@ ConsoleCommand
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ConsoleCommand() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn ConsoleCommand() -> qboolean {
     let mut cmd: [libc::c_char; 1024] = [0; 1024];
-    crate::src::game::g_syscalls::trap_Argv(
+    trap_Argv(
         0 as i32,
         cmd.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"entitylist\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         Svcmd_EntityList_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"forceteam\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         Svcmd_ForceTeam_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"game_memory\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::game::g_mem::Svcmd_GameMem_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        Svcmd_GameMem_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"addbot\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::game::g_bot::Svcmd_AddBot_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        Svcmd_AddBot_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"botlist\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::game::g_bot::Svcmd_BotList_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        Svcmd_BotList_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"abort_podium\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::game::g_arenas::Svcmd_AbortPodium_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        Svcmd_AbortPodium_f();
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"addip\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         Svcmd_AddIP_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"removeip\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
         Svcmd_RemoveIP_f();
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         cmd.as_mut_ptr(),
         b"listip\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        crate::src::game::g_syscalls::trap_SendConsoleCommand(
-            crate::src::qcommon::q_shared::EXEC_NOW as i32,
+        trap_SendConsoleCommand(
+            EXEC_NOW as i32,
             b"g_banIPs\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    if crate::src::game::g_main::g_dedicated.integer != 0 {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+    if g_dedicated.integer != 0 {
+        if Q_stricmp(
             cmd.as_mut_ptr(),
             b"say\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            crate::src::game::g_syscalls::trap_SendServerCommand(
+            trap_SendServerCommand(
                 -(1 as i32),
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"print \"server: %s\n\"\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     ConcatArgs(1 as i32),
                 ),
             );
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         // everything else will also be printed as a say command
-        crate::src::game::g_syscalls::trap_SendServerCommand(
+        trap_SendServerCommand(
             -(1 as i32),
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"print \"server: %s\n\"\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 ConcatArgs(0 as i32),
             ),
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }

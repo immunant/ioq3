@@ -160,24 +160,24 @@ pub type src_t = src_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct src_s {
-    pub alSource: crate::al_h::ALuint,
-    pub sfx: crate::src::qcommon::q_shared::sfxHandle_t,
+    pub alSource: ALuint,
+    pub sfx: sfxHandle_t,
     pub lastUsedTime: i32,
-    pub priority: crate::snd_local_h::alSrcPriority_t,
+    pub priority: alSrcPriority_t,
     pub entity: i32,
     pub channel: i32,
-    pub isActive: crate::src::qcommon::q_shared::qboolean,
-    pub isPlaying: crate::src::qcommon::q_shared::qboolean,
-    pub isLocked: crate::src::qcommon::q_shared::qboolean,
-    pub isLooping: crate::src::qcommon::q_shared::qboolean,
-    pub isTracking: crate::src::qcommon::q_shared::qboolean,
-    pub isStream: crate::src::qcommon::q_shared::qboolean,
+    pub isActive: qboolean,
+    pub isPlaying: qboolean,
+    pub isLocked: qboolean,
+    pub isLooping: qboolean,
+    pub isTracking: qboolean,
+    pub isStream: qboolean,
     pub curGain: f32,
     pub scaleGain: f32,
     pub lastTimePos: f32,
     pub lastSampleTime: i32,
-    pub loopSpeakerPos: crate::src::qcommon::q_shared::vec3_t,
-    pub local: crate::src::qcommon::q_shared::qboolean,
+    pub loopSpeakerPos: vec3_t,
+    pub local: qboolean,
 }
 // OpenAL source object
 // Sound effect in use
@@ -205,12 +205,12 @@ pub type alSfx_t = alSfx_s;
 #[derive(Copy, Clone)]
 pub struct alSfx_s {
     pub filename: [libc::c_char; 64],
-    pub buffer: crate::al_h::ALuint,
-    pub info: crate::src::client::snd_codec::snd_info_t,
-    pub isDefault: crate::src::qcommon::q_shared::qboolean,
-    pub isDefaultChecked: crate::src::qcommon::q_shared::qboolean,
-    pub inMemory: crate::src::qcommon::q_shared::qboolean,
-    pub isLocked: crate::src::qcommon::q_shared::qboolean,
+    pub buffer: ALuint,
+    pub info: snd_info_t,
+    pub isDefault: qboolean,
+    pub isDefaultChecked: qboolean,
+    pub inMemory: qboolean,
+    pub isLocked: qboolean,
     pub lastUsedTime: i32,
     pub loopCnt: i32,
     pub loopActiveCnt: i32,
@@ -222,13 +222,13 @@ pub type sentity_t = sentity_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sentity_s {
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
-    pub srcAllocated: crate::src::qcommon::q_shared::qboolean,
+    pub origin: vec3_t,
+    pub srcAllocated: qboolean,
     pub srcIndex: i32,
-    pub loopAddedThisFrame: crate::src::qcommon::q_shared::qboolean,
-    pub loopPriority: crate::snd_local_h::alSrcPriority_t,
-    pub loopSfx: crate::src::qcommon::q_shared::sfxHandle_t,
-    pub startLoopingSound: crate::src::qcommon::q_shared::qboolean,
+    pub loopAddedThisFrame: qboolean,
+    pub loopPriority: alSrcPriority_t,
+    pub loopSfx: sfxHandle_t,
+    pub startLoopingSound: qboolean,
 }
 // OpenAL buffer
 // information for this sound like rate, sample count..
@@ -266,89 +266,89 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // Console variables specific to OpenAL
 #[no_mangle]
 
-pub static mut s_alPrecache: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alPrecache: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alGain: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alGain: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alSources: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alSources: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDopplerFactor: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alDopplerFactor: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDopplerSpeed: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alDopplerSpeed: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alMinDistance: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alMinDistance: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alMaxDistance: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alMaxDistance: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alRolloff: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alRolloff: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alGraceDistance: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alGraceDistance: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDriver: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alDriver: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDevice: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alDevice: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alInputDevice: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alInputDevice: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alAvailableDevices: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alAvailableDevices: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alAvailableInputDevices: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut s_alAvailableInputDevices: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut enumeration_ext: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut enumeration_ext: qboolean =
+    qfalse;
 
-static mut enumeration_all_ext: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut enumeration_all_ext: qboolean =
+    qfalse;
 
-static mut capture_ext: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut capture_ext: qboolean =
+    qfalse;
 /*
 =================
 S_AL_Format
 =================
 */
 
-unsafe extern "C" fn S_AL_Format(mut width: i32, mut channels: i32) -> crate::al_h::ALuint {
-    let mut format: crate::al_h::ALuint = 0x1101 as i32 as crate::al_h::ALuint;
+unsafe extern "C" fn S_AL_Format(mut width: i32, mut channels: i32) -> ALuint {
+    let mut format: ALuint = 0x1101 as i32 as ALuint;
     // Work out format
     if width == 1 as i32 {
         if channels == 1 as i32 {
-            format = 0x1100 as i32 as crate::al_h::ALuint
+            format = 0x1100 as i32 as ALuint
         } else if channels == 2 as i32 {
-            format = 0x1102 as i32 as crate::al_h::ALuint
+            format = 0x1102 as i32 as ALuint
         }
     } else if width == 2 as i32 {
         if channels == 1 as i32 {
-            format = 0x1101 as i32 as crate::al_h::ALuint
+            format = 0x1101 as i32 as ALuint
         } else if channels == 2 as i32 {
-            format = 0x1103 as i32 as crate::al_h::ALuint
+            format = 0x1103 as i32 as ALuint
         }
     }
     return format;
@@ -359,7 +359,7 @@ S_AL_ErrorMsg
 =================
 */
 
-unsafe extern "C" fn S_AL_ErrorMsg(mut error: crate::al_h::ALenum) -> *const libc::c_char {
+unsafe extern "C" fn S_AL_ErrorMsg(mut error: ALenum) -> *const libc::c_char {
     match error {
         0 => return b"No error\x00" as *const u8 as *const libc::c_char,
         40961 => return b"Invalid name\x00" as *const u8 as *const libc::c_char,
@@ -376,26 +376,26 @@ S_AL_ClearError
 =================
 */
 
-unsafe extern "C" fn S_AL_ClearError(mut quiet: crate::src::qcommon::q_shared::qboolean) {
+unsafe extern "C" fn S_AL_ClearError(mut quiet: qboolean) {
     let mut error: i32 = crate::src::client::qal::qalGetError.expect("non-null function pointer")();
     if quiet as u64 != 0 {
         return;
     }
     if error != 0 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: unhandled AL error: %s\n\x00" as *const u8 as *const libc::c_char,
             S_AL_ErrorMsg(error),
         );
     };
 }
 
-static mut alBuffersInitialised: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut alBuffersInitialised: qboolean =
+    qfalse;
 
 static mut knownSfx: [alSfx_t; 4096] = [alSfx_t {
     filename: [0; 64],
     buffer: 0,
-    info: crate::src::client::snd_codec::snd_info_t {
+    info: snd_info_t {
         rate: 0,
         width: 0,
         channels: 0,
@@ -403,19 +403,19 @@ static mut knownSfx: [alSfx_t; 4096] = [alSfx_t {
         size: 0,
         dataofs: 0,
     },
-    isDefault: crate::src::qcommon::q_shared::qfalse,
-    isDefaultChecked: crate::src::qcommon::q_shared::qfalse,
-    inMemory: crate::src::qcommon::q_shared::qfalse,
-    isLocked: crate::src::qcommon::q_shared::qfalse,
+    isDefault: qfalse,
+    isDefaultChecked: qfalse,
+    inMemory: qfalse,
+    isLocked: qfalse,
     lastUsedTime: 0,
     loopCnt: 0,
     loopActiveCnt: 0,
     masterLoopSrc: 0,
 }; 4096];
 
-static mut numSfx: crate::src::qcommon::q_shared::sfxHandle_t = 0 as i32;
+static mut numSfx: sfxHandle_t = 0 as i32;
 
-static mut default_sfx: crate::src::qcommon::q_shared::sfxHandle_t = 0;
+static mut default_sfx: sfxHandle_t = 0;
 /*
 =================
 S_AL_BufferFindFree
@@ -424,7 +424,7 @@ Find a free handle
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferFindFree() -> crate::src::qcommon::q_shared::sfxHandle_t {
+unsafe extern "C" fn S_AL_BufferFindFree() -> sfxHandle_t {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 4096 as i32 {
@@ -438,8 +438,8 @@ unsafe extern "C" fn S_AL_BufferFindFree() -> crate::src::qcommon::q_shared::sfx
         i += 1
     }
     // Shit...
-    crate::src::qcommon::common::Com_Error(
-        crate::src::qcommon::q_shared::ERR_FATAL as i32,
+    Com_Error(
+        ERR_FATAL as i32,
         b"S_AL_BufferFindFree: No free sound handles\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -453,31 +453,31 @@ Find a sound effect if loaded, set up a handle otherwise
 
 unsafe extern "C" fn S_AL_BufferFind(
     mut filename: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
+) -> sfxHandle_t {
     // Look it up in the table
-    let mut sfx: crate::src::qcommon::q_shared::sfxHandle_t = -(1 as i32);
+    let mut sfx: sfxHandle_t = -(1 as i32);
     let mut i: i32 = 0;
     if filename.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Sound name is NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
     if *filename.offset(0 as i32 as isize) == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
     if crate::stdlib::strlen(filename) >= 64 as i32 as libc::c_ulong {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Sound name is too long: %s\n\x00" as *const u8 as *const libc::c_char,
             filename,
         );
         return 0 as i32;
     }
     if *filename.offset(0 as i32 as isize) as i32 == '*' as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3WARNING: Tried to load player sound directly: %s\n\x00" as *const u8
                 as *const libc::c_char,
             filename,
@@ -486,7 +486,7 @@ unsafe extern "C" fn S_AL_BufferFind(
     }
     i = 0 as i32;
     while i < numSfx {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             knownSfx[i as usize].filename.as_mut_ptr(),
             filename,
         ) == 0
@@ -509,7 +509,7 @@ unsafe extern "C" fn S_AL_BufferFind(
             ::std::mem::size_of::<alSfx_t>() as libc::c_ulong,
         );
         (*ptr).masterLoopSrc = -(1 as i32);
-        ::libc::strcpy((*ptr).filename.as_mut_ptr(), filename);
+        libc::strcpy((*ptr).filename.as_mut_ptr(), filename);
     }
     // Return the handle
     return sfx;
@@ -520,19 +520,19 @@ S_AL_BufferUseDefault
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferUseDefault(mut sfx: crate::src::qcommon::q_shared::sfxHandle_t) {
+unsafe extern "C" fn S_AL_BufferUseDefault(mut sfx: sfxHandle_t) {
     if sfx == default_sfx {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Can\'t load default sound effect %s\x00" as *const u8 as *const libc::c_char,
             knownSfx[sfx as usize].filename.as_mut_ptr(),
         );
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"^3WARNING: Using default sound for %s\n\x00" as *const u8 as *const libc::c_char,
         knownSfx[sfx as usize].filename.as_mut_ptr(),
     );
-    knownSfx[sfx as usize].isDefault = crate::src::qcommon::q_shared::qtrue;
+    knownSfx[sfx as usize].isDefault = qtrue;
     knownSfx[sfx as usize].buffer = knownSfx[default_sfx as usize].buffer;
 }
 /*
@@ -541,7 +541,7 @@ S_AL_BufferUnload
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferUnload(mut sfx: crate::src::qcommon::q_shared::sfxHandle_t) {
+unsafe extern "C" fn S_AL_BufferUnload(mut sfx: sfxHandle_t) {
     if knownSfx[sfx as usize].filename[0 as i32 as usize] as i32 == '\u{0}' as i32 {
         return;
     }
@@ -549,18 +549,18 @@ unsafe extern "C" fn S_AL_BufferUnload(mut sfx: crate::src::qcommon::q_shared::s
         return;
     }
     // Delete it
-    S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+    S_AL_ClearError(qfalse);
     crate::src::client::qal::qalDeleteBuffers.expect("non-null function pointer")(
         1 as i32,
         &mut (*knownSfx.as_mut_ptr().offset(sfx as isize)).buffer,
     );
     if crate::src::client::qal::qalGetError.expect("non-null function pointer")() != 0 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^1ERROR: Can\'t delete sound buffer for %s\n\x00" as *const u8 as *const libc::c_char,
             knownSfx[sfx as usize].filename.as_mut_ptr(),
         );
     }
-    knownSfx[sfx as usize].inMemory = crate::src::qcommon::q_shared::qfalse;
+    knownSfx[sfx as usize].inMemory = qfalse;
 }
 /*
 =================
@@ -568,7 +568,7 @@ S_AL_BufferEvict
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferEvict() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn S_AL_BufferEvict() -> qboolean {
     let mut i: i32 = 0;
     let mut oldestBuffer: i32 = -(1 as i32);
     let mut oldestTime: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
@@ -586,9 +586,9 @@ unsafe extern "C" fn S_AL_BufferEvict() -> crate::src::qcommon::q_shared::qboole
     }
     if oldestBuffer >= 0 as i32 {
         S_AL_BufferUnload(oldestBuffer);
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     } else {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     };
 }
 /*
@@ -598,39 +598,39 @@ S_AL_GenBuffers
 */
 
 unsafe extern "C" fn S_AL_GenBuffers(
-    mut numBuffers: crate::al_h::ALsizei,
-    mut buffers: *mut crate::al_h::ALuint,
+    mut numBuffers: ALsizei,
+    mut buffers: *mut ALuint,
     mut name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut error: crate::al_h::ALenum = 0;
-    S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+) -> qboolean {
+    let mut error: ALenum = 0;
+    S_AL_ClearError(qfalse);
     crate::src::client::qal::qalGenBuffers.expect("non-null function pointer")(numBuffers, buffers);
     error = crate::src::client::qal::qalGetError.expect("non-null function pointer")();
     // If we ran out of buffers, start evicting the least recently used sounds
     while error == 0xa003 as i32 {
         if S_AL_BufferEvict() as u64 == 0 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"^1ERROR: Out of audio buffers\n\x00" as *const u8 as *const libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         // Try again
-        S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+        S_AL_ClearError(qfalse);
         crate::src::client::qal::qalGenBuffers.expect("non-null function pointer")(
             numBuffers, buffers,
         );
         error = crate::src::client::qal::qalGetError.expect("non-null function pointer")()
     }
     if error != 0 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^1ERROR: Can\'t create a sound buffer for %s - %s\n\x00" as *const u8
                 as *const libc::c_char,
             name,
             S_AL_ErrorMsg(error),
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -639,14 +639,14 @@ S_AL_BufferLoad
 */
 
 unsafe extern "C" fn S_AL_BufferLoad(
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
-    mut cache: crate::src::qcommon::q_shared::qboolean,
+    mut sfx: sfxHandle_t,
+    mut cache: qboolean,
 ) {
-    let mut error: crate::al_h::ALenum = 0;
-    let mut format: crate::al_h::ALuint = 0;
+    let mut error: ALenum = 0;
+    let mut format: ALuint = 0;
     let mut data: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut info: crate::src::client::snd_codec::snd_info_t =
-        crate::src::client::snd_codec::snd_info_t {
+    let mut info: snd_info_t =
+        snd_info_t {
             rate: 0,
             width: 0,
             channels: 0,
@@ -667,15 +667,15 @@ unsafe extern "C" fn S_AL_BufferLoad(
         return;
     }
     // Try to load
-    data = crate::src::client::snd_codec::S_CodecLoad(
+    data = S_CodecLoad(
         (*curSfx).filename.as_mut_ptr(),
-        &mut info as *mut _ as *mut crate::src::client::snd_codec::snd_info_s,
+        &mut info as *mut _ as *mut snd_info_s,
     );
     if data.is_null() {
         S_AL_BufferUseDefault(sfx);
         return;
     }
-    (*curSfx).isDefaultChecked = crate::src::qcommon::q_shared::qtrue;
+    (*curSfx).isDefaultChecked = qtrue;
     if cache as u64 == 0 {
         // Don't create AL cache
         crate::src::qcommon::common::Hunk_FreeTempMemory(data);
@@ -697,8 +697,8 @@ unsafe extern "C" fn S_AL_BufferLoad(
     // Fill the buffer
     if info.size == 0 as i32 {
         // We have no data to buffer, so buffer silence
-        let mut dummyData: [crate::src::qcommon::q_shared::byte; 2] =
-            [0 as i32 as crate::src::qcommon::q_shared::byte, 0];
+        let mut dummyData: [byte; 2] =
+            [0 as i32 as byte, 0];
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             (*curSfx).buffer,
             0x1101 as i32,
@@ -709,7 +709,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
     } else {
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             (*curSfx).buffer,
-            format as crate::al_h::ALenum,
+            format as ALenum,
             data,
             info.size,
             info.rate,
@@ -725,7 +725,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
             );
             S_AL_BufferUseDefault(sfx);
             crate::src::qcommon::common::Hunk_FreeTempMemory(data);
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"^1ERROR: Out of memory loading %s\n\x00" as *const u8 as *const libc::c_char,
                 (*curSfx).filename.as_mut_ptr(),
             );
@@ -734,7 +734,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
         // Try load it again
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             (*curSfx).buffer,
-            format as crate::al_h::ALenum,
+            format as ALenum,
             data,
             info.size,
             info.rate,
@@ -749,7 +749,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
         );
         S_AL_BufferUseDefault(sfx);
         crate::src::qcommon::common::Hunk_FreeTempMemory(data);
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^1ERROR: Can\'t fill sound buffer for %s - %s\n\x00" as *const u8
                 as *const libc::c_char,
             (*curSfx).filename.as_mut_ptr(),
@@ -761,7 +761,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
     // Free the memory
     crate::src::qcommon::common::Hunk_FreeTempMemory(data);
     // Woo!
-    (*curSfx).inMemory = crate::src::qcommon::q_shared::qtrue;
+    (*curSfx).inMemory = qtrue;
 }
 /*
 =================
@@ -769,12 +769,12 @@ S_AL_BufferUse
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferUse(mut sfx: crate::src::qcommon::q_shared::sfxHandle_t) {
+unsafe extern "C" fn S_AL_BufferUse(mut sfx: sfxHandle_t) {
     if knownSfx[sfx as usize].filename[0 as i32 as usize] as i32 == '\u{0}' as i32 {
         return;
     }
     if knownSfx[sfx as usize].inMemory as u64 == 0 && knownSfx[sfx as usize].isDefault as u64 == 0 {
-        S_AL_BufferLoad(sfx, crate::src::qcommon::q_shared::qtrue);
+        S_AL_BufferLoad(sfx, qtrue);
     }
     knownSfx[sfx as usize].lastUsedTime = crate::src::sys::sys_unix::Sys_Milliseconds();
 }
@@ -784,9 +784,9 @@ S_AL_BufferInit
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferInit() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn S_AL_BufferInit() -> qboolean {
     if alBuffersInitialised as u64 != 0 {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // Clear the hash table, and SFX table
     crate::stdlib::memset(
@@ -799,10 +799,10 @@ unsafe extern "C" fn S_AL_BufferInit() -> crate::src::qcommon::q_shared::qboolea
     default_sfx =
         S_AL_BufferFind(b"sound/feedback/hit.wav\x00" as *const u8 as *const libc::c_char);
     S_AL_BufferUse(default_sfx);
-    knownSfx[default_sfx as usize].isLocked = crate::src::qcommon::q_shared::qtrue;
+    knownSfx[default_sfx as usize].isLocked = qtrue;
     // All done
-    alBuffersInitialised = crate::src::qcommon::q_shared::qtrue;
-    return crate::src::qcommon::q_shared::qtrue;
+    alBuffersInitialised = qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -816,7 +816,7 @@ unsafe extern "C" fn S_AL_BufferShutdown() {
         return;
     }
     // Unlock the default sound effect
-    knownSfx[default_sfx as usize].isLocked = crate::src::qcommon::q_shared::qfalse;
+    knownSfx[default_sfx as usize].isLocked = qfalse;
     // Free all used effects
     i = 0 as i32;
     while i < numSfx {
@@ -826,7 +826,7 @@ unsafe extern "C" fn S_AL_BufferShutdown() {
     // Clear the tables
     numSfx = 0 as i32;
     // All undone
-    alBuffersInitialised = crate::src::qcommon::q_shared::qfalse;
+    alBuffersInitialised = qfalse;
 }
 /*
 =================
@@ -836,13 +836,13 @@ S_AL_RegisterSound
 
 unsafe extern "C" fn S_AL_RegisterSound(
     mut sample: *const libc::c_char,
-    mut _compressed: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
-    let mut sfx: crate::src::qcommon::q_shared::sfxHandle_t = S_AL_BufferFind(sample);
+    mut _compressed: qboolean,
+) -> sfxHandle_t {
+    let mut sfx: sfxHandle_t = S_AL_BufferFind(sample);
     if knownSfx[sfx as usize].inMemory as u64 == 0 && knownSfx[sfx as usize].isDefault as u64 == 0 {
         S_AL_BufferLoad(
             sfx,
-            (*s_alPrecache).integer as crate::src::qcommon::q_shared::qboolean,
+            (*s_alPrecache).integer as qboolean,
         );
     }
     knownSfx[sfx as usize].lastUsedTime = crate::src::qcommon::common::Com_Milliseconds();
@@ -860,8 +860,8 @@ Return's a sfx's buffer
 */
 
 unsafe extern "C" fn S_AL_BufferGet(
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
-) -> crate::al_h::ALuint {
+    mut sfx: sfxHandle_t,
+) -> ALuint {
     return knownSfx[sfx as usize].buffer;
 }
 
@@ -869,42 +869,42 @@ static mut srcList: [src_t; 128] = [src_t {
     alSource: 0,
     sfx: 0,
     lastUsedTime: 0,
-    priority: crate::snd_local_h::SRCPRI_AMBIENT,
+    priority: SRCPRI_AMBIENT,
     entity: 0,
     channel: 0,
-    isActive: crate::src::qcommon::q_shared::qfalse,
-    isPlaying: crate::src::qcommon::q_shared::qfalse,
-    isLocked: crate::src::qcommon::q_shared::qfalse,
-    isLooping: crate::src::qcommon::q_shared::qfalse,
-    isTracking: crate::src::qcommon::q_shared::qfalse,
-    isStream: crate::src::qcommon::q_shared::qfalse,
+    isActive: qfalse,
+    isPlaying: qfalse,
+    isLocked: qfalse,
+    isLooping: qfalse,
+    isTracking: qfalse,
+    isStream: qfalse,
     curGain: 0.,
     scaleGain: 0.,
     lastTimePos: 0.,
     lastSampleTime: 0,
     loopSpeakerPos: [0.; 3],
-    local: crate::src::qcommon::q_shared::qfalse,
+    local: qfalse,
 }; 128];
 
 static mut srcCount: i32 = 0 as i32;
 
 static mut srcActiveCnt: i32 = 0 as i32;
 
-static mut alSourcesInitialised: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut alSourcesInitialised: qboolean =
+    qfalse;
 
 static mut lastListenerNumber: i32 = -(1 as i32);
 
-static mut lastListenerOrigin: crate::src::qcommon::q_shared::vec3_t = [0.0f32, 0.0f32, 0.0f32];
+static mut lastListenerOrigin: vec3_t = [0.0f32, 0.0f32, 0.0f32];
 
 static mut entityList: [sentity_t; 1024] = [sentity_t {
     origin: [0.; 3],
-    srcAllocated: crate::src::qcommon::q_shared::qfalse,
+    srcAllocated: qfalse,
     srcIndex: 0,
-    loopAddedThisFrame: crate::src::qcommon::q_shared::qfalse,
-    loopPriority: crate::snd_local_h::SRCPRI_AMBIENT,
+    loopAddedThisFrame: qfalse,
+    loopPriority: SRCPRI_AMBIENT,
     loopSfx: 0,
-    startLoopingSound: crate::src::qcommon::q_shared::qfalse,
+    startLoopingSound: qfalse,
 }; 1024];
 /*
 =================
@@ -913,19 +913,19 @@ S_AL_SanitiseVector
 */
 
 unsafe extern "C" fn _S_AL_SanitiseVector(
-    mut v: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v: *mut vec_t,
     mut line: i32,
 ) {
-    if crate::src::qcommon::q_math::Q_isnan(*v.offset(0 as i32 as isize)) != 0
-        || crate::src::qcommon::q_math::Q_isnan(*v.offset(1 as i32 as isize)) != 0
-        || crate::src::qcommon::q_math::Q_isnan(*v.offset(2 as i32 as isize)) != 0
+    if Q_isnan(*v.offset(0 as i32 as isize)) != 0
+        || Q_isnan(*v.offset(1 as i32 as isize)) != 0
+        || Q_isnan(*v.offset(2 as i32 as isize)) != 0
     {
         crate::src::qcommon::common::Com_DPrintf(b"^3WARNING: vector with one or more NaN components being passed to OpenAL at %s:%d -- zeroing\n\x00"
                         as *const u8 as *const libc::c_char,
                     b"code/client/snd_openal.c\x00" as *const u8 as
                         *const libc::c_char, line);
         let ref mut fresh0 = *v.offset(2 as i32 as isize);
-        *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *fresh0 = 0 as i32 as vec_t;
         let ref mut fresh1 = *v.offset(1 as i32 as isize);
         *fresh1 = *fresh0;
         *v.offset(0 as i32 as isize) = *fresh1
@@ -938,8 +938,8 @@ Set gain to 0 if muted, otherwise set it to given value.
 =================
 */
 
-unsafe extern "C" fn S_AL_Gain(mut source: crate::al_h::ALuint, mut gainval: f32) {
-    if (*crate::src::client::snd_main::s_muted).integer != 0 {
+unsafe extern "C" fn S_AL_Gain(mut source: ALuint, mut gainval: f32) {
+    if (*s_muted).integer != 0 {
         crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
             source,
             0x100a as i32,
@@ -962,13 +962,13 @@ Adapt the gain if necessary to get a quicker fadeout when the source is too far 
 
 unsafe extern "C" fn S_AL_ScaleGain(
     mut chksrc: *mut src_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) {
     let mut distance: f32 = 0.;
     if (*chksrc).local as u64 == 0 {
         distance = Distance(
-            origin as *const crate::src::qcommon::q_shared::vec_t,
-            lastListenerOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            origin as *const vec_t,
+            lastListenerOrigin.as_mut_ptr() as *const vec_t,
         )
     }
     // If we exceed a certain distance, scale the gain linearly until the sound
@@ -1003,7 +1003,7 @@ Also see S_Base_HearingThroughEntity
 
 unsafe extern "C" fn S_AL_HearingThroughEntity(
     mut entityNum: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut distanceSq: f32 = 0.;
     if lastListenerNumber == entityNum {
         // This is an outrageous hack to detect
@@ -1014,17 +1014,17 @@ unsafe extern "C" fn S_AL_HearingThroughEntity(
         // the FIXME just in case anyone has a bright idea.
         distanceSq = DistanceSquared(
             entityList[entityNum as usize].origin.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
-            lastListenerOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
+            lastListenerOrigin.as_mut_ptr() as *const vec_t,
         );
         if distanceSq > 48.0f32 * 48.0f32 {
             //we're the player
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         } else {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     } else {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }; //we're the player, but third person
        //not the player
 }
@@ -1034,7 +1034,7 @@ S_AL_SrcInit
 =================
 */
 
-unsafe extern "C" fn S_AL_SrcInit() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn S_AL_SrcInit() -> qboolean {
     let mut i: i32 = 0;
     let mut limit: i32 = 0;
     // Clear the sources data structure
@@ -1052,7 +1052,7 @@ unsafe extern "C" fn S_AL_SrcInit() -> crate::src::qcommon::q_shared::qboolean {
     } else if limit < 16 as i32 {
         limit = 16 as i32
     }
-    S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+    S_AL_ClearError(qfalse);
     // Allocate as many sources as possible
     i = 0 as i32;
     while i < limit {
@@ -1067,12 +1067,12 @@ unsafe extern "C" fn S_AL_SrcInit() -> crate::src::qcommon::q_shared::qboolean {
         i += 1
     }
     // All done. Print this for informational purposes
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Allocated %d sources.\n\x00" as *const u8 as *const libc::c_char,
         srcCount,
     );
-    alSourcesInitialised = crate::src::qcommon::q_shared::qtrue;
-    return crate::src::qcommon::q_shared::qtrue;
+    alSourcesInitialised = qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -1098,7 +1098,7 @@ unsafe extern "C" fn S_AL_SrcShutdown() {
         }
         if (*curSource).entity > 0 as i32 {
             entityList[(*curSource).entity as usize].srcAllocated =
-                crate::src::qcommon::q_shared::qfalse
+                qfalse
         }
         crate::src::client::qal::qalSourceStop.expect("non-null function pointer")(
             srcList[i as usize].alSource,
@@ -1114,7 +1114,7 @@ unsafe extern "C" fn S_AL_SrcShutdown() {
         0 as i32,
         ::std::mem::size_of::<[src_t; 128]>() as libc::c_ulong,
     );
-    alSourcesInitialised = crate::src::qcommon::q_shared::qfalse;
+    alSourcesInitialised = qfalse;
 }
 /*
 =================
@@ -1123,12 +1123,12 @@ S_AL_SrcSetup
 */
 
 unsafe extern "C" fn S_AL_SrcSetup(
-    mut src: crate::snd_local_h::srcHandle_t,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
-    mut priority: crate::snd_local_h::alSrcPriority_t,
+    mut src: srcHandle_t,
+    mut sfx: sfxHandle_t,
+    mut priority: alSrcPriority_t,
     mut entity: i32,
     mut channel: i32,
-    mut local: crate::src::qcommon::q_shared::qboolean,
+    mut local: qboolean,
 ) {
     let mut curSource: *mut src_t = 0 as *mut src_t;
     // Set up src struct
@@ -1138,12 +1138,12 @@ unsafe extern "C" fn S_AL_SrcSetup(
     (*curSource).priority = priority;
     (*curSource).entity = entity;
     (*curSource).channel = channel;
-    (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).isLocked = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).isLooping = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).isTracking = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).isStream = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).curGain = (*s_alGain).value * (*crate::src::client::snd_main::s_volume).value;
+    (*curSource).isPlaying = qfalse;
+    (*curSource).isLocked = qfalse;
+    (*curSource).isLooping = qfalse;
+    (*curSource).isTracking = qfalse;
+    (*curSource).isStream = qfalse;
+    (*curSource).curGain = (*s_alGain).value * (*s_volume).value;
     (*curSource).scaleGain = (*curSource).curGain;
     (*curSource).local = local;
     // Set up OpenAL source
@@ -1153,7 +1153,7 @@ unsafe extern "C" fn S_AL_SrcSetup(
         crate::src::client::qal::qalSourcei.expect("non-null function pointer")(
             (*curSource).alSource,
             0x1009 as i32,
-            S_AL_BufferGet(sfx) as crate::al_h::ALint,
+            S_AL_BufferGet(sfx) as ALint,
         );
     }
     crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
@@ -1165,12 +1165,12 @@ unsafe extern "C" fn S_AL_SrcSetup(
     crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
         (*curSource).alSource,
         0x1004 as i32,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+        vec3_origin.as_mut_ptr(),
     );
     crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
         (*curSource).alSource,
         0x1006 as i32,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+        vec3_origin.as_mut_ptr(),
     );
     crate::src::client::qal::qalSourcei.expect("non-null function pointer")(
         (*curSource).alSource,
@@ -1213,9 +1213,9 @@ Remove given source as loop master if it is the master and hand off master statu
 =================
 */
 
-unsafe extern "C" fn S_AL_SaveLoopPos(mut dest: *mut src_t, mut alSource: crate::al_h::ALuint) {
+unsafe extern "C" fn S_AL_SaveLoopPos(mut dest: *mut src_t, mut alSource: ALuint) {
     let mut error: i32 = 0;
-    S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+    S_AL_ClearError(qfalse);
     crate::src::client::qal::qalGetSourcef.expect("non-null function pointer")(
         alSource,
         0x1024 as i32,
@@ -1225,7 +1225,7 @@ unsafe extern "C" fn S_AL_SaveLoopPos(mut dest: *mut src_t, mut alSource: crate:
     if error != 0 as i32 {
         // Old OpenAL implementations don't support AL_SEC_OFFSET
         if error != 0xa002 as i32 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"^3WARNING: Could not get time offset for alSource %d: %s\n\x00" as *const u8
                     as *const libc::c_char,
                 alSource,
@@ -1246,7 +1246,7 @@ Remove given source as loop master if it is the master and hand off master statu
 
 unsafe extern "C" fn S_AL_NewLoopMaster(
     mut rmSource: *mut src_t,
-    mut iskilled: crate::src::qcommon::q_shared::qboolean,
+    mut iskilled: qboolean,
 ) {
     let mut index: i32 = 0;
     let mut curSource: *mut src_t = 0 as *mut src_t;
@@ -1259,7 +1259,7 @@ unsafe extern "C" fn S_AL_NewLoopMaster(
         (*curSfx).loopCnt -= 1
     }
     if (*curSfx).loopCnt != 0 {
-        if (*rmSource).priority as u32 == crate::snd_local_h::SRCPRI_ENTITY as i32 as u32 {
+        if (*rmSource).priority as u32 == SRCPRI_ENTITY as i32 as u32 {
             if iskilled as u64 == 0 && (*rmSource).isPlaying as u32 != 0 {
                 // only sync ambient loops...
                 // It makes more sense to have sounds for weapons/projectiles unsynced
@@ -1283,7 +1283,7 @@ unsafe extern "C" fn S_AL_NewLoopMaster(
                         && (*curSource).isActive as u32 != 0
                         && (*curSource).isLooping as u32 != 0
                         && (*curSource).priority as u32
-                            == crate::snd_local_h::SRCPRI_AMBIENT as i32 as u32
+                            == SRCPRI_AMBIENT as i32 as u32
                     {
                         if (*curSource).isPlaying as u64 != 0 {
                             (*curSfx).masterLoopSrc = index;
@@ -1329,7 +1329,7 @@ S_AL_SrcKill
 =================
 */
 
-unsafe extern "C" fn S_AL_SrcKill(mut src: crate::snd_local_h::srcHandle_t) {
+unsafe extern "C" fn S_AL_SrcKill(mut src: srcHandle_t) {
     let mut curSource: *mut src_t = &mut *srcList.as_mut_ptr().offset(src as isize) as *mut src_t;
     // I'm not touching it. Unlock it first.
     if (*curSource).isLocked as u64 != 0 {
@@ -1337,24 +1337,24 @@ unsafe extern "C" fn S_AL_SrcKill(mut src: crate::snd_local_h::srcHandle_t) {
     }
     // Remove the entity association and loop master status
     if (*curSource).isLooping as u64 != 0 {
-        (*curSource).isLooping = crate::src::qcommon::q_shared::qfalse;
+        (*curSource).isLooping = qfalse;
         if (*curSource).entity != -(1 as i32) {
             let mut curEnt: *mut sentity_t =
                 &mut *entityList.as_mut_ptr().offset((*curSource).entity as isize)
                     as *mut sentity_t;
-            (*curEnt).srcAllocated = crate::src::qcommon::q_shared::qfalse;
+            (*curEnt).srcAllocated = qfalse;
             (*curEnt).srcIndex = -(1 as i32);
-            (*curEnt).loopAddedThisFrame = crate::src::qcommon::q_shared::qfalse;
-            (*curEnt).startLoopingSound = crate::src::qcommon::q_shared::qfalse
+            (*curEnt).loopAddedThisFrame = qfalse;
+            (*curEnt).startLoopingSound = qfalse
         }
-        S_AL_NewLoopMaster(curSource, crate::src::qcommon::q_shared::qtrue);
+        S_AL_NewLoopMaster(curSource, qtrue);
     }
     // Stop it if it's playing
     if (*curSource).isPlaying as u64 != 0 {
         crate::src::client::qal::qalSourceStop.expect("non-null function pointer")(
             (*curSource).alSource,
         );
-        (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse
+        (*curSource).isPlaying = qfalse
     }
     // Detach any buffers
     crate::src::client::qal::qalSourcei.expect("non-null function pointer")(
@@ -1364,16 +1364,16 @@ unsafe extern "C" fn S_AL_SrcKill(mut src: crate::snd_local_h::srcHandle_t) {
     );
     (*curSource).sfx = 0 as i32;
     (*curSource).lastUsedTime = 0 as i32;
-    (*curSource).priority = crate::snd_local_h::SRCPRI_AMBIENT;
+    (*curSource).priority = SRCPRI_AMBIENT;
     (*curSource).entity = -(1 as i32);
     (*curSource).channel = -(1 as i32);
     if (*curSource).isActive as u64 != 0 {
-        (*curSource).isActive = crate::src::qcommon::q_shared::qfalse;
+        (*curSource).isActive = qfalse;
         srcActiveCnt -= 1
     }
-    (*curSource).isLocked = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).isTracking = crate::src::qcommon::q_shared::qfalse;
-    (*curSource).local = crate::src::qcommon::q_shared::qfalse;
+    (*curSource).isLocked = qfalse;
+    (*curSource).isTracking = qfalse;
+    (*curSource).local = qfalse;
 }
 /*
 =================
@@ -1382,18 +1382,18 @@ S_AL_SrcAlloc
 */
 
 unsafe extern "C" fn S_AL_SrcAlloc(
-    mut priority: crate::snd_local_h::alSrcPriority_t,
+    mut priority: alSrcPriority_t,
     mut _entnum: i32,
     mut _channel: i32,
-) -> crate::snd_local_h::srcHandle_t {
+) -> srcHandle_t {
     let mut i: i32 = 0;
     let mut empty: i32 = -(1 as i32);
     let mut weakest: i32 = -(1 as i32);
     let mut weakest_time: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
     let mut weakest_pri: i32 = 999 as i32;
     let mut weakest_gain: f32 = 1000.0f64 as f32;
-    let mut weakest_isplaying: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qtrue;
+    let mut weakest_isplaying: qboolean =
+        qtrue;
     let mut weakest_numloops: i32 = 0 as i32;
     let mut curSource: *mut src_t = 0 as *mut src_t;
     i = 0 as i32;
@@ -1425,7 +1425,7 @@ unsafe extern "C" fn S_AL_SrcAlloc(
                     weakest = i
                 }
             } else {
-                weakest_isplaying = crate::src::qcommon::q_shared::qfalse;
+                weakest_isplaying = qfalse;
                 if weakest < 0 as i32
                     || knownSfx[(*curSource).sfx as usize].loopCnt > weakest_numloops
                     || ((*curSource).priority as u32) < weakest_pri as u32
@@ -1447,7 +1447,7 @@ unsafe extern "C" fn S_AL_SrcAlloc(
     }
     if empty >= 0 as i32 {
         S_AL_SrcKill(empty);
-        srcList[empty as usize].isActive = crate::src::qcommon::q_shared::qtrue;
+        srcList[empty as usize].isActive = qtrue;
         srcActiveCnt += 1
     }
     return empty;
@@ -1468,8 +1468,8 @@ Locked sources will not be automatically reallocated or managed
 =================
 */
 
-unsafe extern "C" fn S_AL_SrcLock(mut src: crate::snd_local_h::srcHandle_t) {
-    srcList[src as usize].isLocked = crate::src::qcommon::q_shared::qtrue;
+unsafe extern "C" fn S_AL_SrcLock(mut src: srcHandle_t) {
+    srcList[src as usize].isLocked = qtrue;
 }
 /*
 =================
@@ -1479,8 +1479,8 @@ Once unlocked, the source may be reallocated again
 =================
 */
 
-unsafe extern "C" fn S_AL_SrcUnlock(mut src: crate::snd_local_h::srcHandle_t) {
-    srcList[src as usize].isLocked = crate::src::qcommon::q_shared::qfalse;
+unsafe extern "C" fn S_AL_SrcUnlock(mut src: srcHandle_t) {
+    srcList[src as usize].isLocked = qfalse;
 }
 /*
 =================
@@ -1490,16 +1490,16 @@ S_AL_UpdateEntityPosition
 
 unsafe extern "C" fn S_AL_UpdateEntityPosition(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
+    mut origin: *const vec_t,
 ) {
-    let mut sanOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut sanOrigin: vec3_t = [0.; 3];
     sanOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     sanOrigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     sanOrigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     _S_AL_SanitiseVector(sanOrigin.as_mut_ptr(), 1175 as i32);
     if entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"S_UpdateEntityPosition: bad entitynum %i\x00" as *const u8 as *const libc::c_char,
             entityNum,
         );
@@ -1518,24 +1518,24 @@ Necessary for i.g. Western Quake3 mod which is buggy.
 
 unsafe extern "C" fn S_AL_CheckInput(
     mut entityNum: i32,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut sfx: sfxHandle_t,
+) -> qboolean {
     if entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"ERROR: S_AL_CheckInput: bad entitynum %i\x00" as *const u8 as *const libc::c_char,
             entityNum,
         );
     }
     if sfx < 0 as i32 || sfx >= numSfx {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^1ERROR: S_AL_CheckInput: handle %i out of range\n\x00" as *const u8
                 as *const libc::c_char,
             sfx,
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 =================
@@ -1546,15 +1546,15 @@ Play a local (non-spatialized) sound effect
 */
 
 unsafe extern "C" fn S_AL_StartLocalSound(
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut sfx: sfxHandle_t,
     mut channel: i32,
 ) {
-    let mut src: crate::snd_local_h::srcHandle_t = 0;
+    let mut src: srcHandle_t = 0;
     if S_AL_CheckInput(0 as i32, sfx) as u64 != 0 {
         return;
     }
     // Try to grab a source
-    src = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_LOCAL, -(1 as i32), channel);
+    src = S_AL_SrcAlloc(SRCPRI_LOCAL, -(1 as i32), channel);
     if src == -(1 as i32) {
         return;
     }
@@ -1562,13 +1562,13 @@ unsafe extern "C" fn S_AL_StartLocalSound(
     S_AL_SrcSetup(
         src,
         sfx,
-        crate::snd_local_h::SRCPRI_LOCAL,
+        SRCPRI_LOCAL,
         -(1 as i32),
         channel,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
     // Start it playing
-    srcList[src as usize].isPlaying = crate::src::qcommon::q_shared::qtrue;
+    srcList[src as usize].isPlaying = qtrue;
     crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(
         srcList[src as usize].alSource,
     );
@@ -1582,13 +1582,13 @@ Play a one-shot sound effect
 */
 
 unsafe extern "C" fn S_AL_StartSound(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut entnum: i32,
     mut entchannel: i32,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut sfx: sfxHandle_t,
 ) {
-    let mut sorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut src: crate::snd_local_h::srcHandle_t = 0;
+    let mut sorigin: vec3_t = [0.; 3];
+    let mut src: srcHandle_t = 0;
     let mut curSource: *mut src_t = 0 as *mut src_t;
     if !origin.is_null() {
         if S_AL_CheckInput(0 as i32, sfx) as u64 != 0 {
@@ -1612,8 +1612,8 @@ unsafe extern "C" fn S_AL_StartSound(
     _S_AL_SanitiseVector(sorigin.as_mut_ptr(), 1265 as i32);
     if srcActiveCnt > 5 as i32 * srcCount / 3 as i32
         && DistanceSquared(
-            sorigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            lastListenerOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            sorigin.as_mut_ptr() as *const vec_t,
+            lastListenerOrigin.as_mut_ptr() as *const vec_t,
         ) >= ((*s_alMaxDistance).value + (*s_alGraceDistance).value)
             * ((*s_alMaxDistance).value + (*s_alGraceDistance).value)
     {
@@ -1621,21 +1621,21 @@ unsafe extern "C" fn S_AL_StartSound(
         return;
     }
     // Try to grab a source
-    src = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_ONESHOT, entnum, entchannel);
+    src = S_AL_SrcAlloc(SRCPRI_ONESHOT, entnum, entchannel);
     if src == -(1 as i32) {
         return;
     }
     S_AL_SrcSetup(
         src,
         sfx,
-        crate::snd_local_h::SRCPRI_ONESHOT,
+        SRCPRI_ONESHOT,
         entnum,
         entchannel,
-        crate::src::qcommon::q_shared::qfalse,
+        qfalse,
     );
     curSource = &mut *srcList.as_mut_ptr().offset(src as isize) as *mut src_t;
     if origin.is_null() {
-        (*curSource).isTracking = crate::src::qcommon::q_shared::qtrue
+        (*curSource).isTracking = qtrue
     }
     crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
         (*curSource).alSource,
@@ -1644,7 +1644,7 @@ unsafe extern "C" fn S_AL_StartSound(
     );
     S_AL_ScaleGain(curSource, sorigin.as_mut_ptr());
     // Start it playing
-    (*curSource).isPlaying = crate::src::qcommon::q_shared::qtrue;
+    (*curSource).isPlaying = qtrue;
     crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(
         (*curSource).alSource,
     );
@@ -1656,14 +1656,14 @@ S_AL_ClearLoopingSounds
 */
 
 unsafe extern "C" fn S_AL_ClearLoopingSounds(
-    mut _killall: crate::src::qcommon::q_shared::qboolean,
+    mut _killall: qboolean,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < srcCount {
         if srcList[i as usize].isLooping as u32 != 0 && srcList[i as usize].entity != -(1 as i32) {
             entityList[srcList[i as usize].entity as usize].loopAddedThisFrame =
-                crate::src::qcommon::q_shared::qfalse
+                qfalse
         }
         i += 1
     }
@@ -1675,18 +1675,18 @@ S_AL_SrcLoop
 */
 
 unsafe extern "C" fn S_AL_SrcLoop(
-    mut priority: crate::snd_local_h::alSrcPriority_t,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *const crate::src::qcommon::q_shared::vec_t,
+    mut priority: alSrcPriority_t,
+    mut sfx: sfxHandle_t,
+    mut origin: *const vec_t,
+    mut velocity: *const vec_t,
     mut entityNum: i32,
 ) {
     let mut src: i32 = 0;
     let mut sent: *mut sentity_t =
         &mut *entityList.as_mut_ptr().offset(entityNum as isize) as *mut sentity_t;
     let mut curSource: *mut src_t = 0 as *mut src_t;
-    let mut sorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut svelocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut sorigin: vec3_t = [0.; 3];
+    let mut svelocity: vec3_t = [0.; 3];
     if S_AL_CheckInput(entityNum, sfx) as u64 != 0 {
         return;
     }
@@ -1704,28 +1704,28 @@ unsafe extern "C" fn S_AL_SrcLoop(
             return;
         }
         curSource = &mut *srcList.as_mut_ptr().offset(src as isize) as *mut src_t;
-        (*sent).startLoopingSound = crate::src::qcommon::q_shared::qtrue;
+        (*sent).startLoopingSound = qtrue;
         (*curSource).lastTimePos = -1.0f64 as f32;
         (*curSource).lastSampleTime = crate::src::sys::sys_unix::Sys_Milliseconds()
     } else {
         src = (*sent).srcIndex;
         curSource = &mut *srcList.as_mut_ptr().offset(src as isize) as *mut src_t
     }
-    (*sent).srcAllocated = crate::src::qcommon::q_shared::qtrue;
+    (*sent).srcAllocated = qtrue;
     (*sent).srcIndex = src;
     (*sent).loopPriority = priority;
     (*sent).loopSfx = sfx;
     // If this is not set then the looping sound is stopped.
-    (*sent).loopAddedThisFrame = crate::src::qcommon::q_shared::qtrue;
+    (*sent).loopAddedThisFrame = qtrue;
     // UGH
     // These lines should be called via S_AL_SrcSetup, but we
     // can't call that yet as it buffers sfxes that may change
     // with subsequent calls to S_AL_SrcLoop
     (*curSource).entity = entityNum;
-    (*curSource).isLooping = crate::src::qcommon::q_shared::qtrue;
+    (*curSource).isLooping = qtrue;
     if S_AL_HearingThroughEntity(entityNum) as u64 != 0 {
-        (*curSource).local = crate::src::qcommon::q_shared::qtrue;
-        sorigin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*curSource).local = qtrue;
+        sorigin[2 as i32 as usize] = 0 as i32 as vec_t;
         sorigin[1 as i32 as usize] = sorigin[2 as i32 as usize];
         sorigin[0 as i32 as usize] = sorigin[1 as i32 as usize];
         crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
@@ -1736,10 +1736,10 @@ unsafe extern "C" fn S_AL_SrcLoop(
         crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
             (*curSource).alSource,
             0x1006 as i32,
-            crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+            vec3_origin.as_mut_ptr(),
         );
     } else {
-        (*curSource).local = crate::src::qcommon::q_shared::qfalse;
+        (*curSource).local = qfalse;
         if !origin.is_null() {
             sorigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
             sorigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -1759,19 +1759,19 @@ unsafe extern "C" fn S_AL_SrcLoop(
             svelocity[2 as i32 as usize] = *velocity.offset(2 as i32 as isize);
             _S_AL_SanitiseVector(svelocity.as_mut_ptr(), 1393 as i32);
         } else {
-            svelocity[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            svelocity[2 as i32 as usize] = 0 as i32 as vec_t;
             svelocity[1 as i32 as usize] = svelocity[2 as i32 as usize];
             svelocity[0 as i32 as usize] = svelocity[1 as i32 as usize]
         }
         crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
             (*curSource).alSource,
             0x1004 as i32,
-            sorigin.as_mut_ptr() as *mut crate::al_h::ALfloat,
+            sorigin.as_mut_ptr() as *mut ALfloat,
         );
         crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
             (*curSource).alSource,
             0x1006 as i32,
-            svelocity.as_mut_ptr() as *mut crate::al_h::ALfloat,
+            svelocity.as_mut_ptr() as *mut ALfloat,
         );
     };
 }
@@ -1783,12 +1783,12 @@ S_AL_AddLoopingSound
 
 unsafe extern "C" fn S_AL_AddLoopingSound(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *const crate::src::qcommon::q_shared::vec_t,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut origin: *const vec_t,
+    mut velocity: *const vec_t,
+    mut sfx: sfxHandle_t,
 ) {
     S_AL_SrcLoop(
-        crate::snd_local_h::SRCPRI_ENTITY,
+        SRCPRI_ENTITY,
         sfx,
         origin,
         velocity,
@@ -1803,12 +1803,12 @@ S_AL_AddRealLoopingSound
 
 unsafe extern "C" fn S_AL_AddRealLoopingSound(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *const crate::src::qcommon::q_shared::vec_t,
-    mut sfx: crate::src::qcommon::q_shared::sfxHandle_t,
+    mut origin: *const vec_t,
+    mut velocity: *const vec_t,
+    mut sfx: sfxHandle_t,
 ) {
     S_AL_SrcLoop(
-        crate::snd_local_h::SRCPRI_AMBIENT,
+        SRCPRI_AMBIENT,
         sfx,
         origin,
         velocity,
@@ -1837,7 +1837,7 @@ Update state (move things around, manage sources, and so on)
 unsafe extern "C" fn S_AL_SrcUpdate() {
     let mut i: i32 = 0;
     let mut entityNum: i32 = 0;
-    let mut state: crate::al_h::ALint = 0;
+    let mut state: ALint = 0;
     let mut curSource: *mut src_t = 0 as *mut src_t;
     let mut current_block_85: u64;
     i = 0 as i32;
@@ -1848,10 +1848,10 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
             if !((*curSource).isActive as u64 == 0) {
                 // Update source parameters
                 if (*s_alGain).modified as u32 != 0
-                    || (*crate::src::client::snd_main::s_volume).modified as u32 != 0
+                    || (*s_volume).modified as u32 != 0
                 {
                     (*curSource).curGain =
-                        (*s_alGain).value * (*crate::src::client::snd_main::s_volume).value
+                        (*s_alGain).value * (*s_volume).value
                 }
                 if (*s_alRolloff).modified as u32 != 0 && (*curSource).local as u64 == 0 {
                     crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
@@ -1878,8 +1878,8 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                             && (*sent).startLoopingSound as u64 == 0
                             && (*curSource).sfx != (*sent).loopSfx
                         {
-                            S_AL_NewLoopMaster(curSource, crate::src::qcommon::q_shared::qtrue);
-                            (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse;
+                            S_AL_NewLoopMaster(curSource, qtrue);
+                            (*curSource).isPlaying = qfalse;
                             crate::src::client::qal::qalSourceStop
                                 .expect("non-null function pointer")(
                                 (*curSource).alSource
@@ -1889,7 +1889,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                 0x1009 as i32,
                                 0 as i32,
                             );
-                            (*sent).startLoopingSound = crate::src::qcommon::q_shared::qtrue
+                            (*sent).startLoopingSound = qtrue
                         }
                         // The sound hasn't been started yet
                         if (*sent).startLoopingSound as u64 != 0 {
@@ -1901,9 +1901,9 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                 -(1 as i32),
                                 (*curSource).local,
                             );
-                            (*curSource).isLooping = crate::src::qcommon::q_shared::qtrue;
+                            (*curSource).isLooping = qtrue;
                             knownSfx[(*curSource).sfx as usize].loopCnt += 1;
-                            (*sent).startLoopingSound = crate::src::qcommon::q_shared::qfalse
+                            (*sent).startLoopingSound = qfalse
                         }
                         curSfx = &mut *knownSfx.as_mut_ptr().offset((*curSource).sfx as isize)
                             as *mut alSfx_t;
@@ -1913,13 +1913,13 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                 // Sound is mute, stop playback until we are in range again
                                 S_AL_NewLoopMaster(
                                     curSource,
-                                    crate::src::qcommon::q_shared::qfalse,
+                                    qfalse,
                                 );
                                 crate::src::client::qal::qalSourceStop
                                     .expect("non-null function pointer")(
                                     (*curSource).alSource
                                 );
-                                (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse
+                                (*curSource).isPlaying = qfalse
                             } else if (*curSfx).loopActiveCnt == 0
                                 && (*curSfx).masterLoopSrc < 0 as i32
                             {
@@ -1933,13 +1933,13 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                     0x1007 as i32,
                                     1 as i32,
                                 );
-                                (*curSource).isPlaying = crate::src::qcommon::q_shared::qtrue;
+                                (*curSource).isPlaying = qtrue;
                                 crate::src::client::qal::qalSourcePlay
                                     .expect("non-null function pointer")(
                                     (*curSource).alSource
                                 );
                                 if (*curSource).priority as u32
-                                    == crate::snd_local_h::SRCPRI_AMBIENT as i32 as u32
+                                    == SRCPRI_AMBIENT as i32 as u32
                                 {
                                     // If there are other ambient looping sources with the same sound,
                                     // make sure the sound of these sources are in sync.
@@ -1947,7 +1947,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                         let mut offset: i32 = 0;
                                         let mut error: i32 = 0;
                                         // we already have a master loop playing, get buffer position.
-                                        S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+                                        S_AL_ClearError(qfalse);
                                         crate::src::client::qal::qalGetSourcei
                                             .expect("non-null function pointer")(
                                             srcList[(*curSfx).masterLoopSrc as usize].alSource,
@@ -1959,7 +1959,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                         );
                                         if error != 0 as i32 {
                                             if error != 0xa002 as i32 {
-                                                crate::src::qcommon::common::Com_Printf(b"^3WARNING: Cannot get sample offset from source %d: %s\n\x00"
+                                                Com_Printf(b"^3WARNING: Cannot get sample offset from source %d: %s\n\x00"
                                                                as *const u8 as
                                                                *const libc::c_char,
                                                            i,
@@ -2057,15 +2057,15 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                             }
                         }
                     } else if (*curSource).priority as u32
-                        == crate::snd_local_h::SRCPRI_AMBIENT as i32 as u32
+                        == SRCPRI_AMBIENT as i32 as u32
                     {
                         if (*curSource).isPlaying as u64 != 0 {
-                            S_AL_NewLoopMaster(curSource, crate::src::qcommon::q_shared::qfalse);
+                            S_AL_NewLoopMaster(curSource, qfalse);
                             crate::src::client::qal::qalSourceStop
                                 .expect("non-null function pointer")(
                                 (*curSource).alSource
                             );
-                            (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse
+                            (*curSource).isPlaying = qfalse
                         }
                     } else {
                         S_AL_SrcKill(i);
@@ -2079,7 +2079,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                             &mut state,
                         );
                         if state == 0x1014 as i32 {
-                            (*curSource).isPlaying = crate::src::qcommon::q_shared::qfalse;
+                            (*curSource).isPlaying = qfalse;
                             S_AL_SrcKill(i);
                             current_block_85 = 12675440807659640239;
                         } else {
@@ -2139,18 +2139,18 @@ S_AL_SrcGet
 =================
 */
 
-unsafe extern "C" fn S_AL_SrcGet(mut src: crate::snd_local_h::srcHandle_t) -> crate::al_h::ALuint {
+unsafe extern "C" fn S_AL_SrcGet(mut src: srcHandle_t) -> ALuint {
     return srcList[src as usize].alSource;
 }
 
-static mut streamSourceHandles: [crate::snd_local_h::srcHandle_t; 129] = [0; 129];
+static mut streamSourceHandles: [srcHandle_t; 129] = [0; 129];
 
-static mut streamPlaying: [crate::src::qcommon::q_shared::qboolean; 129] =
-    [crate::src::qcommon::q_shared::qfalse; 129];
+static mut streamPlaying: [qboolean; 129] =
+    [qfalse; 129];
 
-static mut streamSources: [crate::al_h::ALuint; 129] = [0; 129];
+static mut streamSources: [ALuint; 129] = [0; 129];
 
-static mut streamBuffers: [[crate::al_h::ALuint; 20]; 129] = [[0; 20]; 129];
+static mut streamBuffers: [[ALuint; 20]; 129] = [[0; 20]; 129];
 
 static mut streamNumBuffers: [i32; 129] = [0; 129];
 
@@ -2162,33 +2162,33 @@ S_AL_AllocateStreamChannel
 */
 
 unsafe extern "C" fn S_AL_AllocateStreamChannel(mut stream: i32, mut entityNum: i32) {
-    let mut cursrc: crate::snd_local_h::srcHandle_t = 0;
-    let mut alsrc: crate::al_h::ALuint = 0;
+    let mut cursrc: srcHandle_t = 0;
+    let mut alsrc: ALuint = 0;
     if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     if entityNum >= 0 as i32 {
         // This is a stream that tracks an entity
         // Allocate a streamSource at normal priority
-        cursrc = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_ENTITY, entityNum, 0 as i32);
+        cursrc = S_AL_SrcAlloc(SRCPRI_ENTITY, entityNum, 0 as i32);
         if cursrc < 0 as i32 {
             return;
         }
         S_AL_SrcSetup(
             cursrc,
             -(1 as i32),
-            crate::snd_local_h::SRCPRI_ENTITY,
+            SRCPRI_ENTITY,
             entityNum,
             0 as i32,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         alsrc = S_AL_SrcGet(cursrc);
-        srcList[cursrc as usize].isTracking = crate::src::qcommon::q_shared::qtrue;
-        srcList[cursrc as usize].isStream = crate::src::qcommon::q_shared::qtrue
+        srcList[cursrc as usize].isTracking = qtrue;
+        srcList[cursrc as usize].isStream = qtrue
     } else {
         // Unspatialized stream source
         // Allocate a streamSource at high priority
-        cursrc = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_STREAM, -(2 as i32), 0 as i32);
+        cursrc = S_AL_SrcAlloc(SRCPRI_STREAM, -(2 as i32), 0 as i32);
         if cursrc < 0 as i32 {
             return;
         }
@@ -2212,28 +2212,28 @@ unsafe extern "C" fn S_AL_AllocateStreamChannel(mut stream: i32, mut entityNum: 
         crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
             alsrc,
             0x1004 as i32,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
         );
         crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
             alsrc,
             0x1006 as i32,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
         );
         crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
             alsrc,
             0x1005 as i32,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
-            0.0f64 as crate::al_h::ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
+            0.0f64 as ALfloat,
         );
         crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
             alsrc,
             0x1021 as i32,
-            0.0f64 as crate::al_h::ALfloat,
+            0.0f64 as ALfloat,
         );
         crate::src::client::qal::qalSourcei.expect("non-null function pointer")(
             alsrc,
@@ -2273,7 +2273,7 @@ unsafe extern "C" fn S_AL_FreeStreamChannel(mut stream: i32) {
     // Release the output streamSource
     S_AL_SrcUnlock(streamSourceHandles[stream as usize]);
     S_AL_SrcKill(streamSourceHandles[stream as usize]);
-    streamSources[stream as usize] = 0 as i32 as crate::al_h::ALuint;
+    streamSources[stream as usize] = 0 as i32 as ALuint;
     streamSourceHandles[stream as usize] = -(1 as i32);
 }
 /*
@@ -2288,13 +2288,13 @@ unsafe extern "C" fn S_AL_RawSamples(
     mut rate: i32,
     mut width: i32,
     mut channels: i32,
-    mut data: *const crate::src::qcommon::q_shared::byte,
+    mut data: *const byte,
     mut volume: f32,
     mut entityNum: i32,
 ) {
     let mut numBuffers: i32 = 0;
-    let mut buffer: crate::al_h::ALuint = 0;
-    let mut format: crate::al_h::ALuint = 0;
+    let mut buffer: ALuint = 0;
+    let mut format: ALuint = 0;
     if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
@@ -2304,7 +2304,7 @@ unsafe extern "C" fn S_AL_RawSamples(
         S_AL_AllocateStreamChannel(stream, entityNum);
         // Failed?
         if streamSourceHandles[stream as usize] == -(1 as i32) {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"^1ERROR: Can\'t allocate streaming streamSource\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -2325,7 +2325,7 @@ unsafe extern "C" fn S_AL_RawSamples(
     }
     // Allocate a new AL buffer if needed
     if numBuffers == streamNumBuffers[stream as usize] {
-        let mut oldBuffers: [crate::al_h::ALuint; 20] = [0; 20];
+        let mut oldBuffers: [ALuint; 20] = [0; 20];
         let mut i: i32 = 0;
         if S_AL_GenBuffers(
             1 as i32,
@@ -2339,8 +2339,8 @@ unsafe extern "C" fn S_AL_RawSamples(
         crate::stdlib::memcpy(
             oldBuffers.as_mut_ptr() as *mut libc::c_void,
             &mut *streamBuffers.as_mut_ptr().offset(stream as isize)
-                as *mut [crate::al_h::ALuint; 20] as *const libc::c_void,
-            ::std::mem::size_of::<[crate::al_h::ALuint; 20]>() as libc::c_ulong,
+                as *mut [ALuint; 20] as *const libc::c_void,
+            ::std::mem::size_of::<[ALuint; 20]>() as libc::c_ulong,
         );
         // Reorder buffer array in order of oldest to newest
         i = 0 as i32;
@@ -2362,7 +2362,7 @@ unsafe extern "C" fn S_AL_RawSamples(
     // Fill buffer
     crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
         buffer,
-        format as crate::al_h::ALenum,
+        format as ALenum,
         data as *mut libc::c_void,
         samples * width * channels,
         rate,
@@ -2377,7 +2377,7 @@ unsafe extern "C" fn S_AL_RawSamples(
         // Volume
         S_AL_Gain(
             streamSources[stream as usize],
-            volume * (*crate::src::client::snd_main::s_volume).value * (*s_alGain).value,
+            volume * (*s_volume).value * (*s_alGain).value,
         );
     }
     // Start stream
@@ -2385,7 +2385,7 @@ unsafe extern "C" fn S_AL_RawSamples(
         crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(
             streamSources[stream as usize],
         );
-        streamPlaying[stream as usize] = crate::src::qcommon::q_shared::qtrue
+        streamPlaying[stream as usize] = qtrue
     };
 }
 /*
@@ -2396,7 +2396,7 @@ S_AL_StreamUpdate
 
 unsafe extern "C" fn S_AL_StreamUpdate(mut stream: i32) {
     let mut numBuffers: i32 = 0;
-    let mut state: crate::al_h::ALint = 0;
+    let mut state: ALint = 0;
     if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
@@ -2415,7 +2415,7 @@ unsafe extern "C" fn S_AL_StreamUpdate(mut stream: i32) {
         if !(fresh2 != 0) {
             break;
         }
-        let mut buffer: crate::al_h::ALuint = 0;
+        let mut buffer: ALuint = 0;
         crate::src::client::qal::qalSourceUnqueueBuffers.expect("non-null function pointer")(
             streamSources[stream as usize],
             1 as i32,
@@ -2434,7 +2434,7 @@ unsafe extern "C" fn S_AL_StreamUpdate(mut stream: i32) {
         &mut state,
     );
     if state == 0x1014 as i32 {
-        streamPlaying[stream as usize] = crate::src::qcommon::q_shared::qfalse;
+        streamPlaying[stream as usize] = qfalse;
         // If there are no buffers queued up, release the streamSource
         if numBuffers == 0 {
             S_AL_FreeStreamChannel(stream);
@@ -2444,7 +2444,7 @@ unsafe extern "C" fn S_AL_StreamUpdate(mut stream: i32) {
         crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(
             streamSources[stream as usize],
         );
-        streamPlaying[stream as usize] = crate::src::qcommon::q_shared::qtrue
+        streamPlaying[stream as usize] = qtrue
     };
 }
 /*
@@ -2460,33 +2460,33 @@ unsafe extern "C" fn S_AL_StreamDie(mut stream: i32) {
     if streamSourceHandles[stream as usize] == -(1 as i32) {
         return;
     }
-    streamPlaying[stream as usize] = crate::src::qcommon::q_shared::qfalse;
+    streamPlaying[stream as usize] = qfalse;
     crate::src::client::qal::qalSourceStop.expect("non-null function pointer")(
         streamSources[stream as usize],
     );
     S_AL_FreeStreamChannel(stream);
 }
 
-static mut musicPlaying: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut musicPlaying: qboolean =
+    qfalse;
 
-static mut musicSourceHandle: crate::snd_local_h::srcHandle_t = -(1 as i32);
+static mut musicSourceHandle: srcHandle_t = -(1 as i32);
 
-static mut musicSource: crate::al_h::ALuint = 0;
+static mut musicSource: ALuint = 0;
 
-static mut musicBuffers: [crate::al_h::ALuint; 4] = [0; 4];
+static mut musicBuffers: [ALuint; 4] = [0; 4];
 
-static mut mus_stream: *mut crate::src::client::snd_codec::snd_stream_t = 0
-    as *const crate::src::client::snd_codec::snd_stream_t
-    as *mut crate::src::client::snd_codec::snd_stream_t;
+static mut mus_stream: *mut snd_stream_t = 0
+    as *const snd_stream_t
+    as *mut snd_stream_t;
 
-static mut intro_stream: *mut crate::src::client::snd_codec::snd_stream_t = 0
-    as *const crate::src::client::snd_codec::snd_stream_t
-    as *mut crate::src::client::snd_codec::snd_stream_t;
+static mut intro_stream: *mut snd_stream_t = 0
+    as *const snd_stream_t
+    as *mut snd_stream_t;
 
 static mut s_backgroundLoop: [libc::c_char; 64] = [0; 64];
 
-static mut decode_buffer: [crate::src::qcommon::q_shared::byte; 4096] = [0; 4096];
+static mut decode_buffer: [byte; 4096] = [0; 4096];
 /*
 =================
 S_AL_MusicSourceGet
@@ -2495,7 +2495,7 @@ S_AL_MusicSourceGet
 
 unsafe extern "C" fn S_AL_MusicSourceGet() {
     // Allocate a musicSource at high priority
-    musicSourceHandle = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_STREAM, -(2 as i32), 0 as i32);
+    musicSourceHandle = S_AL_SrcAlloc(SRCPRI_STREAM, -(2 as i32), 0 as i32);
     if musicSourceHandle == -(1 as i32) {
         return;
     }
@@ -2509,28 +2509,28 @@ unsafe extern "C" fn S_AL_MusicSourceGet() {
     crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
         musicSource,
         0x1004 as i32,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
     );
     crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
         musicSource,
         0x1006 as i32,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
     );
     crate::src::client::qal::qalSource3f.expect("non-null function pointer")(
         musicSource,
         0x1005 as i32,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
-        0.0f64 as crate::al_h::ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
+        0.0f64 as ALfloat,
     );
     crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
         musicSource,
         0x1021 as i32,
-        0.0f64 as crate::al_h::ALfloat,
+        0.0f64 as ALfloat,
     );
     crate::src::client::qal::qalSourcei.expect("non-null function pointer")(
         musicSource,
@@ -2548,7 +2548,7 @@ unsafe extern "C" fn S_AL_MusicSourceFree() {
     // Release the output musicSource
     S_AL_SrcUnlock(musicSourceHandle);
     S_AL_SrcKill(musicSourceHandle);
-    musicSource = 0 as i32 as crate::al_h::ALuint;
+    musicSource = 0 as i32 as ALuint;
     musicSourceHandle = -(1 as i32);
 }
 /*
@@ -2559,16 +2559,16 @@ S_AL_CloseMusicFiles
 
 unsafe extern "C" fn S_AL_CloseMusicFiles() {
     if !intro_stream.is_null() {
-        crate::src::client::snd_codec::S_CodecCloseStream(
-            intro_stream as *mut crate::src::client::snd_codec::snd_stream_s,
+        S_CodecCloseStream(
+            intro_stream as *mut snd_stream_s,
         );
-        intro_stream = 0 as *mut crate::src::client::snd_codec::snd_stream_t
+        intro_stream = 0 as *mut snd_stream_t
     }
     if !mus_stream.is_null() {
-        crate::src::client::snd_codec::S_CodecCloseStream(
-            mus_stream as *mut crate::src::client::snd_codec::snd_stream_s,
+        S_CodecCloseStream(
+            mus_stream as *mut snd_stream_s,
         );
-        mus_stream = 0 as *mut crate::src::client::snd_codec::snd_stream_t
+        mus_stream = 0 as *mut snd_stream_t
     };
 }
 /*
@@ -2598,7 +2598,7 @@ unsafe extern "C" fn S_AL_StopBackgroundTrack() {
     S_AL_MusicSourceFree();
     // Unload the stream
     S_AL_CloseMusicFiles();
-    musicPlaying = crate::src::qcommon::q_shared::qfalse;
+    musicPlaying = qfalse;
 }
 /*
 =================
@@ -2606,13 +2606,13 @@ S_AL_MusicProcess
 =================
 */
 
-unsafe extern "C" fn S_AL_MusicProcess(mut b: crate::al_h::ALuint) {
-    let mut error: crate::al_h::ALenum = 0;
+unsafe extern "C" fn S_AL_MusicProcess(mut b: ALuint) {
+    let mut error: ALenum = 0;
     let mut l: i32 = 0;
-    let mut format: crate::al_h::ALuint = 0;
-    let mut curstream: *mut crate::src::client::snd_codec::snd_stream_t =
-        0 as *mut crate::src::client::snd_codec::snd_stream_t;
-    S_AL_ClearError(crate::src::qcommon::q_shared::qfalse);
+    let mut format: ALuint = 0;
+    let mut curstream: *mut snd_stream_t =
+        0 as *mut snd_stream_t;
+    S_AL_ClearError(qfalse);
     if !intro_stream.is_null() {
         curstream = intro_stream
     } else {
@@ -2621,32 +2621,32 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: crate::al_h::ALuint) {
     if curstream.is_null() {
         return;
     }
-    l = crate::src::client::snd_codec::S_CodecReadStream(
-        curstream as *mut crate::src::client::snd_codec::snd_stream_s,
+    l = S_CodecReadStream(
+        curstream as *mut snd_stream_s,
         4096 as i32,
         decode_buffer.as_mut_ptr() as *mut libc::c_void,
     );
     // Run out data to read, start at the beginning again
     if l == 0 as i32 {
-        crate::src::client::snd_codec::S_CodecCloseStream(
-            curstream as *mut crate::src::client::snd_codec::snd_stream_s,
+        S_CodecCloseStream(
+            curstream as *mut snd_stream_s,
         );
         // the intro stream just finished playing so we don't need to reopen
         // the music stream.
         if !intro_stream.is_null() {
-            intro_stream = 0 as *mut crate::src::client::snd_codec::snd_stream_t
+            intro_stream = 0 as *mut snd_stream_t
         } else {
             mus_stream =
-                crate::src::client::snd_codec::S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
-                    as *mut crate::src::client::snd_codec::snd_stream_s
+                S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
+                    as *mut snd_stream_s
         }
         curstream = mus_stream;
         if curstream.is_null() {
             S_AL_StopBackgroundTrack();
             return;
         }
-        l = crate::src::client::snd_codec::S_CodecReadStream(
-            curstream as *mut crate::src::client::snd_codec::snd_stream_s,
+        l = S_CodecReadStream(
+            curstream as *mut snd_stream_s,
             4096 as i32,
             decode_buffer.as_mut_ptr() as *mut libc::c_void,
         )
@@ -2654,8 +2654,8 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: crate::al_h::ALuint) {
     format = S_AL_Format((*curstream).info.width, (*curstream).info.channels);
     if l == 0 as i32 {
         // We have no data to buffer, so buffer silence
-        let mut dummyData: [crate::src::qcommon::q_shared::byte; 2] =
-            [0 as i32 as crate::src::qcommon::q_shared::byte, 0];
+        let mut dummyData: [byte; 2] =
+            [0 as i32 as byte, 0];
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             b,
             0x1101 as i32,
@@ -2666,7 +2666,7 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: crate::al_h::ALuint) {
     } else {
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             b,
-            format as crate::al_h::ALenum,
+            format as ALenum,
             decode_buffer.as_mut_ptr() as *const libc::c_void,
             l,
             (*curstream).info.rate,
@@ -2675,7 +2675,7 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: crate::al_h::ALuint) {
     error = crate::src::client::qal::qalGetError.expect("non-null function pointer")();
     if error != 0 as i32 {
         S_AL_StopBackgroundTrack();
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^1ERROR: while buffering data for music stream - %s\n\x00" as *const u8
                 as *const libc::c_char,
             S_AL_ErrorMsg(error),
@@ -2694,7 +2694,7 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     mut loop_0: *const libc::c_char,
 ) {
     let mut i: i32 = 0;
-    let mut issame: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+    let mut issame: qboolean = qfalse;
     // Stop any existing music that might be playing
     S_AL_StopBackgroundTrack();
     if (intro.is_null() || *intro == 0) && (loop_0.is_null() || *loop_0 == 0) {
@@ -2707,14 +2707,14 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     }
     if loop_0.is_null() || *loop_0 == 0 {
         loop_0 = intro;
-        issame = crate::src::qcommon::q_shared::qtrue
-    } else if !intro.is_null() && *intro as i32 != 0 && ::libc::strcmp(intro, loop_0) == 0 {
-        issame = crate::src::qcommon::q_shared::qtrue
+        issame = qtrue
+    } else if !intro.is_null() && *intro as i32 != 0 && libc::strcmp(intro, loop_0) == 0 {
+        issame = qtrue
     } else {
-        issame = crate::src::qcommon::q_shared::qfalse
+        issame = qfalse
     }
     // Copy the loop over
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_backgroundLoop.as_mut_ptr(),
         loop_0,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -2722,13 +2722,13 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     if issame as u64 == 0 {
         // Open the intro and don't mind whether it succeeds.
         // The important part is the loop.
-        intro_stream = crate::src::client::snd_codec::S_CodecOpenStream(intro)
-            as *mut crate::src::client::snd_codec::snd_stream_s
+        intro_stream = S_CodecOpenStream(intro)
+            as *mut snd_stream_s
     } else {
-        intro_stream = 0 as *mut crate::src::client::snd_codec::snd_stream_t
+        intro_stream = 0 as *mut snd_stream_t
     }
-    mus_stream = crate::src::client::snd_codec::S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
-        as *mut crate::src::client::snd_codec::snd_stream_s;
+    mus_stream = S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
+        as *mut snd_stream_s;
     if mus_stream.is_null() {
         S_AL_CloseMusicFiles();
         S_AL_MusicSourceFree();
@@ -2758,11 +2758,11 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     // Set the initial gain property
     S_AL_Gain(
         musicSource,
-        (*s_alGain).value * (*crate::src::client::snd_main::s_musicVolume).value,
+        (*s_alGain).value * (*s_musicVolume).value,
     );
     // Start playing
     crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(musicSource);
-    musicPlaying = crate::src::qcommon::q_shared::qtrue;
+    musicPlaying = qtrue;
 }
 /*
 =================
@@ -2772,7 +2772,7 @@ S_AL_MusicUpdate
 
 unsafe extern "C" fn S_AL_MusicUpdate() {
     let mut numBuffers: i32 = 0;
-    let mut state: crate::al_h::ALint = 0;
+    let mut state: ALint = 0;
     if musicPlaying as u64 == 0 {
         return;
     }
@@ -2787,7 +2787,7 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
         if !(fresh3 != 0) {
             break;
         }
-        let mut b: crate::al_h::ALuint = 0;
+        let mut b: ALuint = 0;
         crate::src::client::qal::qalSourceUnqueueBuffers.expect("non-null function pointer")(
             musicSource,
             1 as i32,
@@ -2822,23 +2822,23 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
     // Set the gain property
     S_AL_Gain(
         musicSource,
-        (*s_alGain).value * (*crate::src::client::snd_main::s_musicVolume).value,
+        (*s_alGain).value * (*s_musicVolume).value,
     );
 }
 //===========================================================================
 // Local state variables
 
-static mut alDevice: *mut crate::alc_h::ALCdevice =
-    0 as *const crate::alc_h::ALCdevice as *mut crate::alc_h::ALCdevice;
+static mut alDevice: *mut ALCdevice =
+    0 as *const ALCdevice as *mut ALCdevice;
 
-static mut alContext: *mut crate::alc_h::ALCcontext =
-    0 as *const crate::alc_h::ALCcontext as *mut crate::alc_h::ALCcontext;
+static mut alContext: *mut ALCcontext =
+    0 as *const ALCcontext as *mut ALCcontext;
 
-static mut alCaptureDevice: *mut crate::alc_h::ALCdevice =
-    0 as *const crate::alc_h::ALCdevice as *mut crate::alc_h::ALCdevice;
+static mut alCaptureDevice: *mut ALCdevice =
+    0 as *const ALCdevice as *mut ALCdevice;
 
-static mut s_alCapture: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut s_alCapture: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 /*
 =================
 S_AL_StopAllSounds
@@ -2863,12 +2863,12 @@ S_AL_Respatialize
 
 unsafe extern "C" fn S_AL_Respatialize(
     mut entityNum: i32,
-    mut origin: *const crate::src::qcommon::q_shared::vec_t,
-    mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut origin: *const vec_t,
+    mut axis: *mut vec3_t,
     mut _inwater: i32,
 ) {
     let mut orientation: [f32; 6] = [0.; 6];
-    let mut sorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut sorigin: vec3_t = [0.; 3];
     sorigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     sorigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     sorigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -2889,11 +2889,11 @@ unsafe extern "C" fn S_AL_Respatialize(
     // Set OpenAL listener paramaters
     crate::src::client::qal::qalListenerfv.expect("non-null function pointer")(
         0x1004 as i32,
-        sorigin.as_mut_ptr() as *mut crate::al_h::ALfloat,
+        sorigin.as_mut_ptr() as *mut ALfloat,
     );
     crate::src::client::qal::qalListenerfv.expect("non-null function pointer")(
         0x1006 as i32,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr(),
+        vec3_origin.as_mut_ptr(),
     );
     crate::src::client::qal::qalListenerfv.expect("non-null function pointer")(
         0x100f as i32,
@@ -2908,7 +2908,7 @@ S_AL_Update
 
 unsafe extern "C" fn S_AL_Update() {
     let mut i: i32 = 0;
-    if (*crate::src::client::snd_main::s_muted).modified as u64 != 0 {
+    if (*s_muted).modified as u64 != 0 {
         // muted state changed. Let S_AL_Gain turn up all sources again.
         i = 0 as i32;
         while i < srcCount {
@@ -2917,7 +2917,7 @@ unsafe extern "C" fn S_AL_Update() {
             }
             i += 1
         }
-        (*crate::src::client::snd_main::s_muted).modified = crate::src::qcommon::q_shared::qfalse
+        (*s_muted).modified = qfalse
     }
     // Update SFX channels
     S_AL_SrcUpdate();
@@ -2929,33 +2929,33 @@ unsafe extern "C" fn S_AL_Update() {
     }
     S_AL_MusicUpdate();
     // Doppler
-    if (*crate::src::client::snd_main::s_doppler).modified as u64 != 0 {
-        (*s_alDopplerFactor).modified = crate::src::qcommon::q_shared::qtrue;
-        (*crate::src::client::snd_main::s_doppler).modified = crate::src::qcommon::q_shared::qfalse
+    if (*s_doppler).modified as u64 != 0 {
+        (*s_alDopplerFactor).modified = qtrue;
+        (*s_doppler).modified = qfalse
     }
     // Doppler parameters
     if (*s_alDopplerFactor).modified as u64 != 0 {
-        if (*crate::src::client::snd_main::s_doppler).integer != 0 {
+        if (*s_doppler).integer != 0 {
             crate::src::client::qal::qalDopplerFactor.expect("non-null function pointer")(
                 (*s_alDopplerFactor).value,
             );
         } else {
             crate::src::client::qal::qalDopplerFactor.expect("non-null function pointer")(0.0f32);
         }
-        (*s_alDopplerFactor).modified = crate::src::qcommon::q_shared::qfalse
+        (*s_alDopplerFactor).modified = qfalse
     }
     if (*s_alDopplerSpeed).modified as u64 != 0 {
         crate::src::client::qal::qalSpeedOfSound.expect("non-null function pointer")(
             (*s_alDopplerSpeed).value,
         );
-        (*s_alDopplerSpeed).modified = crate::src::qcommon::q_shared::qfalse
+        (*s_alDopplerSpeed).modified = qfalse
     }
     // Clear the modified flags on the other cvars
-    (*s_alGain).modified = crate::src::qcommon::q_shared::qfalse;
-    (*crate::src::client::snd_main::s_volume).modified = crate::src::qcommon::q_shared::qfalse;
-    (*crate::src::client::snd_main::s_musicVolume).modified = crate::src::qcommon::q_shared::qfalse;
-    (*s_alMinDistance).modified = crate::src::qcommon::q_shared::qfalse;
-    (*s_alRolloff).modified = crate::src::qcommon::q_shared::qfalse;
+    (*s_alGain).modified = qfalse;
+    (*s_volume).modified = qfalse;
+    (*s_musicVolume).modified = qfalse;
+    (*s_alMinDistance).modified = qfalse;
+    (*s_alRolloff).modified = qfalse;
 }
 /*
 =================
@@ -3003,11 +3003,11 @@ unsafe extern "C" fn S_AL_StartCapture() {
 unsafe extern "C" fn S_AL_AvailableCaptureSamples() -> i32 {
     let mut retval: i32 = 0 as i32;
     if !alCaptureDevice.is_null() {
-        let mut samples: crate::al_h::ALint = 0 as i32;
+        let mut samples: ALint = 0 as i32;
         crate::src::client::qal::qalcGetIntegerv.expect("non-null function pointer")(
             alCaptureDevice,
             0x312 as i32,
-            ::std::mem::size_of::<crate::al_h::ALint>() as libc::c_ulong as crate::alc_h::ALCsizei,
+            ::std::mem::size_of::<ALint>() as libc::c_ulong as ALCsizei,
             &mut samples,
         );
         retval = samples
@@ -3017,7 +3017,7 @@ unsafe extern "C" fn S_AL_AvailableCaptureSamples() -> i32 {
 
 unsafe extern "C" fn S_AL_Capture(
     mut samples: i32,
-    mut data: *mut crate::src::qcommon::q_shared::byte,
+    mut data: *mut byte,
 ) {
     if !alCaptureDevice.is_null() {
         crate::src::client::qal::qalcCaptureSamples.expect("non-null function pointer")(
@@ -3048,26 +3048,26 @@ S_AL_SoundInfo
 */
 
 unsafe extern "C" fn S_AL_SoundInfo() {
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"OpenAL info:\n\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"  Vendor:         %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb001 as i32),
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"  Version:        %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb002 as i32),
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"  Renderer:       %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb003 as i32),
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"  AL Extensions:  %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb004 as i32),
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"  ALC Extensions: %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
             alDevice,
@@ -3075,7 +3075,7 @@ unsafe extern "C" fn S_AL_SoundInfo() {
         ),
     );
     if enumeration_all_ext as u64 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"  Device:         %s\n\x00" as *const u8 as *const libc::c_char,
             crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
                 alDevice,
@@ -3083,7 +3083,7 @@ unsafe extern "C" fn S_AL_SoundInfo() {
             ),
         );
     } else if enumeration_ext as u64 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"  Device:         %s\n\x00" as *const u8 as *const libc::c_char,
             crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
                 alDevice,
@@ -3092,20 +3092,20 @@ unsafe extern "C" fn S_AL_SoundInfo() {
         );
     }
     if enumeration_all_ext as u32 != 0 || enumeration_ext as u32 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"  Available Devices:\n%s\x00" as *const u8 as *const libc::c_char,
             (*s_alAvailableDevices).string,
         );
     }
     if capture_ext as u64 != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"  Input Device:   %s\n\x00" as *const u8 as *const libc::c_char,
             crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
                 alCaptureDevice,
                 0x310 as i32,
             ),
         );
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"  Available Input Devices:\n%s\x00" as *const u8 as *const libc::c_char,
             (*s_alAvailableInputDevices).string,
         );
@@ -3137,16 +3137,16 @@ unsafe extern "C" fn S_AL_Shutdown() {
         crate::src::client::qal::qalcCaptureCloseDevice.expect("non-null function pointer")(
             alCaptureDevice,
         );
-        alCaptureDevice = 0 as *mut crate::alc_h::ALCdevice;
-        crate::src::qcommon::common::Com_Printf(
+        alCaptureDevice = 0 as *mut ALCdevice;
+        Com_Printf(
             b"OpenAL capture device closed.\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     i = 0 as i32;
     while i < 64 as i32 * 2 as i32 + 1 as i32 {
         streamSourceHandles[i as usize] = -(1 as i32);
-        streamPlaying[i as usize] = crate::src::qcommon::q_shared::qfalse;
-        streamSources[i as usize] = 0 as i32 as crate::al_h::ALuint;
+        streamPlaying[i as usize] = qfalse;
+        streamSources[i as usize] = 0 as i32 as ALuint;
         i += 1
     }
     crate::src::client::qal::QAL_Shutdown();
@@ -3226,19 +3226,19 @@ S_AL_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AL_Init(
-    mut si: *mut crate::snd_local_h::soundInterface_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut si: *mut soundInterface_t,
+) -> qboolean {
     let mut device: *const libc::c_char = 0 as *const libc::c_char;
     let mut inputdevice: *const libc::c_char = 0 as *const libc::c_char;
     let mut i: i32 = 0;
     if si.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     i = 0 as i32;
     while i < 64 as i32 * 2 as i32 + 1 as i32 {
         streamSourceHandles[i as usize] = -(1 as i32);
-        streamPlaying[i as usize] = crate::src::qcommon::q_shared::qfalse;
-        streamSources[i as usize] = 0 as i32 as crate::al_h::ALuint;
+        streamPlaying[i as usize] = qfalse;
+        streamSources[i as usize] = 0 as i32 as ALuint;
         streamNumBuffers[i as usize] = 0 as i32;
         streamBufIndex[i as usize] = 0 as i32;
         i += 1
@@ -3248,69 +3248,69 @@ pub unsafe extern "C" fn S_AL_Init(
         b"s_alPrecache\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alGain = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alGain\x00" as *const u8 as *const libc::c_char,
         b"1.0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alSources = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alSources\x00" as *const u8 as *const libc::c_char,
         b"96\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alDopplerFactor = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alDopplerFactor\x00" as *const u8 as *const libc::c_char,
         b"1.0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alDopplerSpeed = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alDopplerSpeed\x00" as *const u8 as *const libc::c_char,
         b"9000\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alMinDistance = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alMinDistance\x00" as *const u8 as *const libc::c_char,
         b"120\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alMaxDistance = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alMaxDistance\x00" as *const u8 as *const libc::c_char,
         b"1024\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alRolloff = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alRolloff\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alGraceDistance = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alGraceDistance\x00" as *const u8 as *const libc::c_char,
         b"512\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alDriver = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alDriver\x00" as *const u8 as *const libc::c_char,
         b"libopenal.so.1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32 | 0x2000 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alInputDevice = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alInputDevice\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     s_alDevice = crate::src::qcommon::cvar::Cvar_Get(
         b"s_alDevice\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     // Load QAL
     if crate::src::client::qal::QAL_Init((*s_alDriver).string) as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Failed to load library: \"%s\".\n\x00" as *const u8 as *const libc::c_char,
             (*s_alDriver).string,
         );
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             (*s_alDriver).string,
             b"libopenal.so.1\x00" as *const u8 as *const libc::c_char,
         ) == 0
@@ -3319,7 +3319,7 @@ pub unsafe extern "C" fn S_AL_Init(
             ) as u64
                 == 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     device = (*s_alDevice).string;
@@ -3333,14 +3333,14 @@ pub unsafe extern "C" fn S_AL_Init(
     // Device enumeration support
     enumeration_all_ext = crate::src::client::qal::qalcIsExtensionPresent
         .expect("non-null function pointer")(
-        0 as *mut crate::alc_h::ALCdevice,
+        0 as *mut ALCdevice,
         b"ALC_ENUMERATE_ALL_EXT\x00" as *const u8 as *const libc::c_char,
-    ) as crate::src::qcommon::q_shared::qboolean;
+    ) as qboolean;
     enumeration_ext = crate::src::client::qal::qalcIsExtensionPresent
         .expect("non-null function pointer")(
-        0 as *mut crate::alc_h::ALCdevice,
+        0 as *mut ALCdevice,
         b"ALC_ENUMERATION_EXT\x00" as *const u8 as *const libc::c_char,
-    ) as crate::src::qcommon::q_shared::qboolean;
+    ) as qboolean;
     if enumeration_ext as u32 != 0 || enumeration_all_ext as u32 != 0 {
         let mut devicenames: [libc::c_char; 16384] =
             *::std::mem::transmute::<&[u8; 16384],
@@ -3350,16 +3350,16 @@ pub unsafe extern "C" fn S_AL_Init(
         // get all available devices + the default device name.
         if enumeration_all_ext as u64 != 0 {
             devicelist = crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
-                0 as *mut crate::alc_h::ALCdevice,
+                0 as *mut ALCdevice,
                 0x1013 as i32,
             )
         } else {
             // We don't have ALC_ENUMERATE_ALL_EXT but normal enumeration.
             devicelist = crate::src::client::qal::qalcGetString.expect("non-null function pointer")(
-                0 as *mut crate::alc_h::ALCdevice,
+                0 as *mut ALCdevice,
                 0x1005 as i32,
             );
-            enumeration_ext = crate::src::qcommon::q_shared::qtrue
+            enumeration_ext = qtrue
         }
         // dump a list of available devices to a cvar for the user to see.
         if !devicelist.is_null() {
@@ -3368,12 +3368,12 @@ pub unsafe extern "C" fn S_AL_Init(
                 if !(curlen != 0) {
                     break;
                 }
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     devicenames.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
                     devicelist,
                 );
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     devicenames.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
                     b"\n\x00" as *const u8 as *const libc::c_char,
@@ -3385,38 +3385,38 @@ pub unsafe extern "C" fn S_AL_Init(
             b"s_alAvailableDevices\x00" as *const u8 as *const libc::c_char,
             devicenames.as_mut_ptr(),
             0x40 as i32 | 0x400 as i32,
-        ) as *mut crate::src::qcommon::q_shared::cvar_s
+        ) as *mut cvar_s
     }
     alDevice = crate::src::client::qal::qalcOpenDevice.expect("non-null function pointer")(device);
     if alDevice.is_null() && !device.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Failed to open OpenAL device \'%s\', trying default.\n\x00" as *const u8
                 as *const libc::c_char,
             device,
         );
         alDevice = crate::src::client::qal::qalcOpenDevice.expect("non-null function pointer")(
-            0 as *const crate::alc_h::ALCchar,
+            0 as *const ALCchar,
         )
     }
     if alDevice.is_null() {
         crate::src::client::qal::QAL_Shutdown();
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Failed to open OpenAL device.\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // Create OpenAL context
     alContext = crate::src::client::qal::qalcCreateContext.expect("non-null function pointer")(
         alDevice,
-        0 as *const crate::alc_h::ALCint,
+        0 as *const ALCint,
     );
     if alContext.is_null() {
         crate::src::client::qal::QAL_Shutdown();
         crate::src::client::qal::qalcCloseDevice.expect("non-null function pointer")(alDevice);
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Failed to create OpenAL context.\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     crate::src::client::qal::qalcMakeContextCurrent.expect("non-null function pointer")(alContext);
     // Initialize sources, buffers, music
@@ -3437,23 +3437,23 @@ pub unsafe extern "C" fn S_AL_Init(
         b"s_alCapture\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     if (*s_alCapture).integer == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"OpenAL capture support disabled by user (\'+set s_alCapture 1\' to enable)\n\x00"
                 as *const u8 as *const libc::c_char,
         );
     } else if (*crate::src::client::cl_main::cl_useMumble).integer != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"OpenAL capture support disabled for Mumble support\n\x00" as *const u8
                 as *const libc::c_char,
         );
     } else if crate::src::client::qal::qalcIsExtensionPresent.expect("non-null function pointer")(
-        0 as *mut crate::alc_h::ALCdevice,
+        0 as *mut ALCdevice,
         b"ALC_EXT_capture\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"No ALC_EXT_capture support, can\'t record audio.\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -3464,15 +3464,15 @@ pub unsafe extern "C" fn S_AL_Init(
         let mut inputdevicelist: *const libc::c_char = 0 as *const libc::c_char;
         let mut defaultinputdevice: *const libc::c_char = 0 as *const libc::c_char;
         let mut curlen_0: i32 = 0;
-        capture_ext = crate::src::qcommon::q_shared::qtrue;
+        capture_ext = qtrue;
         // get all available input devices + the default input device name.
         inputdevicelist = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            0 as *mut crate::alc_h::ALCdevice, 0x310 as i32
+            0 as *mut ALCdevice, 0x310 as i32
         );
         defaultinputdevice = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            0 as *mut crate::alc_h::ALCdevice, 0x311 as i32
+            0 as *mut ALCdevice, 0x311 as i32
         );
         // dump a list of available devices to a cvar for the user to see.
         if !inputdevicelist.is_null() {
@@ -3481,12 +3481,12 @@ pub unsafe extern "C" fn S_AL_Init(
                 if !(curlen_0 != 0) {
                     break;
                 }
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     inputdevicenames.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
                     inputdevicelist,
                 );
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     inputdevicenames.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 16384]>() as libc::c_ulong as i32,
                     b"\n\x00" as *const u8 as *const libc::c_char,
@@ -3498,8 +3498,8 @@ pub unsafe extern "C" fn S_AL_Init(
             b"s_alAvailableInputDevices\x00" as *const u8 as *const libc::c_char,
             inputdevicenames.as_mut_ptr(),
             0x40 as i32 | 0x400 as i32,
-        ) as *mut crate::src::qcommon::q_shared::cvar_s;
-        crate::src::qcommon::common::Com_Printf(
+        ) as *mut cvar_s;
+        Com_Printf(
             b"OpenAL default capture device is \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             if !defaultinputdevice.is_null() {
                 defaultinputdevice
@@ -3510,25 +3510,25 @@ pub unsafe extern "C" fn S_AL_Init(
         alCaptureDevice = crate::src::client::qal::qalcCaptureOpenDevice
             .expect("non-null function pointer")(
             inputdevice,
-            48000 as i32 as crate::alc_h::ALCuint,
+            48000 as i32 as ALCuint,
             0x1101 as i32,
             20 as i32 * 48 as i32 * 3 as i32 * 4 as i32,
         );
         if alCaptureDevice.is_null() && !inputdevice.is_null() {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Failed to open OpenAL Input device \'%s\', trying default.\n\x00" as *const u8
                     as *const libc::c_char,
                 inputdevice,
             );
             alCaptureDevice = crate::src::client::qal::qalcCaptureOpenDevice
                 .expect("non-null function pointer")(
-                0 as *const crate::alc_h::ALCchar,
-                48000 as i32 as crate::alc_h::ALCuint,
+                0 as *const ALCchar,
+                48000 as i32 as ALCuint,
                 0x1101 as i32,
                 20 as i32 * 48 as i32 * 3 as i32 * 4 as i32,
             )
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"OpenAL capture device %s.\n\x00" as *const u8 as *const libc::c_char,
             if alCaptureDevice.is_null() {
                 b"failed to open\x00" as *const u8 as *const libc::c_char
@@ -3541,15 +3541,15 @@ pub unsafe extern "C" fn S_AL_Init(
     (*si).StartSound = Some(
         S_AL_StartSound
             as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
+                _: *mut vec_t,
                 _: i32,
                 _: i32,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).StartLocalSound = Some(
         S_AL_StartLocalSound
-            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::sfxHandle_t, _: i32) -> (),
+            as unsafe extern "C" fn(_: sfxHandle_t, _: i32) -> (),
     );
     (*si).StartBackgroundTrack = Some(
         S_AL_StartBackgroundTrack
@@ -3564,7 +3564,7 @@ pub unsafe extern "C" fn S_AL_Init(
                 _: i32,
                 _: i32,
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::byte,
+                _: *const byte,
                 _: f32,
                 _: i32,
             ) -> (),
@@ -3572,24 +3572,24 @@ pub unsafe extern "C" fn S_AL_Init(
     (*si).StopAllSounds = Some(S_AL_StopAllSounds as unsafe extern "C" fn() -> ());
     (*si).ClearLoopingSounds = Some(
         S_AL_ClearLoopingSounds
-            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> (),
+            as unsafe extern "C" fn(_: qboolean) -> (),
     );
     (*si).AddLoopingSound = Some(
         S_AL_AddLoopingSound
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: *const vec_t,
+                _: *const vec_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).AddRealLoopingSound = Some(
         S_AL_AddRealLoopingSound
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
+                _: *const vec_t,
+                _: *const vec_t,
+                _: sfxHandle_t,
             ) -> (),
     );
     (*si).StopLoopingSound = Some(S_AL_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
@@ -3597,14 +3597,14 @@ pub unsafe extern "C" fn S_AL_Init(
         S_AL_Respatialize
             as unsafe extern "C" fn(
                 _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: *mut crate::src::qcommon::q_shared::vec3_t,
+                _: *const vec_t,
+                _: *mut vec3_t,
                 _: i32,
             ) -> (),
     );
     (*si).UpdateEntityPosition = Some(
         S_AL_UpdateEntityPosition
-            as unsafe extern "C" fn(_: i32, _: *const crate::src::qcommon::q_shared::vec_t) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const vec_t) -> (),
     );
     (*si).Update = Some(S_AL_Update as unsafe extern "C" fn() -> ());
     (*si).DisableSounds = Some(S_AL_DisableSounds as unsafe extern "C" fn() -> ());
@@ -3613,8 +3613,8 @@ pub unsafe extern "C" fn S_AL_Init(
         S_AL_RegisterSound
             as unsafe extern "C" fn(
                 _: *const libc::c_char,
-                _: crate::src::qcommon::q_shared::qboolean,
-            ) -> crate::src::qcommon::q_shared::sfxHandle_t,
+                _: qboolean,
+            ) -> sfxHandle_t,
     );
     (*si).ClearSoundBuffer = Some(S_AL_ClearSoundBuffer as unsafe extern "C" fn() -> ());
     (*si).SoundInfo = Some(S_AL_SoundInfo as unsafe extern "C" fn() -> ());
@@ -3624,9 +3624,9 @@ pub unsafe extern "C" fn S_AL_Init(
         Some(S_AL_AvailableCaptureSamples as unsafe extern "C" fn() -> i32);
     (*si).Capture = Some(
         S_AL_Capture
-            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut byte) -> (),
     );
     (*si).StopCapture = Some(S_AL_StopCapture as unsafe extern "C" fn() -> ());
     (*si).MasterGain = Some(S_AL_MasterGain as unsafe extern "C" fn(_: f32) -> ());
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }

@@ -141,12 +141,12 @@ pub unsafe extern "C" fn jround_up(mut a: isize, mut b: isize) -> isize
 #[no_mangle]
 
 pub unsafe extern "C" fn jcopy_sample_rows(
-    mut input_array: crate::jpeglib_h::JSAMPARRAY,
+    mut input_array: JSAMPARRAY,
     mut source_row: i32,
-    mut output_array: crate::jpeglib_h::JSAMPARRAY,
+    mut output_array: JSAMPARRAY,
     mut dest_row: i32,
     mut num_rows: i32,
-    mut num_cols: crate::jmorecfg_h::JDIMENSION,
+    mut num_cols: JDIMENSION,
 )
 /* Copy some rows of samples from one place to another.
  * num_rows rows are copied from input_array[source_row++]
@@ -154,10 +154,10 @@ pub unsafe extern "C" fn jcopy_sample_rows(
  * The source and destination arrays must be at least as wide as num_cols.
  */
 {
-    let mut inptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut count: crate::stddef_h::size_t = (num_cols as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong);
+    let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut count: size_t = (num_cols as libc::c_ulong)
+        .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong);
     let mut row: i32 = 0;
     input_array = input_array.offset(source_row as isize);
     output_array = output_array.offset(dest_row as isize);
@@ -180,9 +180,9 @@ pub unsafe extern "C" fn jcopy_sample_rows(
 #[no_mangle]
 
 pub unsafe extern "C" fn jcopy_block_row(
-    mut input_row: crate::jpeglib_h::JBLOCKROW,
-    mut output_row: crate::jpeglib_h::JBLOCKROW,
-    mut num_blocks: crate::jmorecfg_h::JDIMENSION,
+    mut input_row: JBLOCKROW,
+    mut output_row: JBLOCKROW,
+    mut num_blocks: JDIMENSION,
 )
 /* Copy a row of coefficient blocks from one place to another. */
 {
@@ -191,7 +191,7 @@ pub unsafe extern "C" fn jcopy_block_row(
         input_row as *const libc::c_void,
         (num_blocks as libc::c_ulong).wrapping_mul(
             (64 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JCOEF>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<JCOEF>() as libc::c_ulong),
         ),
     );
 }
@@ -199,7 +199,7 @@ pub unsafe extern "C" fn jcopy_block_row(
 
 pub unsafe extern "C" fn jzero_far(
     mut target: *mut libc::c_void,
-    mut bytestozero: crate::stddef_h::size_t,
+    mut bytestozero: size_t,
 )
 /* Zero out a chunk of FAR memory. */
 /* This might be sample-array data, block-array data, or alloc_large data. */

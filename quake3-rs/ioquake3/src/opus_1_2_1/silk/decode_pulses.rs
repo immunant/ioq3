@@ -328,8 +328,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_decode_pulses(
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut pulses: *mut crate::opus_types_h::opus_int16,
+    mut psRangeDec: *mut ec_dec,
+    mut pulses: *mut opus_int16,
     signalType: i32,
     quantOffsetType: i32,
     frame_length: i32,
@@ -345,14 +345,14 @@ pub unsafe extern "C" fn silk_decode_pulses(
     let mut RateLevelIndex: i32 = 0;
     let mut sum_pulses: [i32; 20] = [0; 20];
     let mut nLshifts: [i32; 20] = [0; 20];
-    let mut pulses_ptr: *mut crate::opus_types_h::opus_int16 =
-        0 as *mut crate::opus_types_h::opus_int16;
+    let mut pulses_ptr: *mut opus_int16 =
+        0 as *mut opus_int16;
     let mut cdf_ptr: *const u8 = 0 as *const u8;
     /* ********************/
     /* Decode rate level */
     /* ********************/
     RateLevelIndex = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-        psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeDec as *mut ec_ctx,
         crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF
             [(signalType >> 1 as i32) as usize]
             .as_ptr(),
@@ -374,7 +374,7 @@ pub unsafe extern "C" fn silk_decode_pulses(
     while i < iter {
         nLshifts[i as usize] = 0 as i32;
         sum_pulses[i as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            psRangeDec as *mut ec_ctx,
             cdf_ptr,
             8 as i32 as u32,
         );
@@ -383,7 +383,7 @@ pub unsafe extern "C" fn silk_decode_pulses(
             nLshifts[i as usize] += 1;
             /* When we've already got 10 LSBs, we shift the table to not allow (SILK_MAX_PULSES + 1) */
             sum_pulses[i as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeDec as *mut ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF
                     [(10 as i32 - 1 as i32) as usize]
                     .as_ptr()
@@ -401,23 +401,23 @@ pub unsafe extern "C" fn silk_decode_pulses(
         if sum_pulses[i as usize] > 0 as i32 {
             crate::src::opus_1_2_1::silk::shell_coder::silk_shell_decoder(
                 &mut *pulses.offset(
-                    (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                        * 16 as i32 as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32) as isize,
+                    (i as opus_int16 as opus_int32
+                        * 16 as i32 as opus_int16
+                            as opus_int32) as isize,
                 ),
-                psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeDec as *mut ec_ctx,
                 sum_pulses[i as usize],
             );
         } else {
             crate::stdlib::memset(
                 &mut *pulses.offset(
-                    (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                        * 16 as i32 as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32) as isize,
-                ) as *mut crate::opus_types_h::opus_int16 as *mut libc::c_void,
+                    (i as opus_int16 as opus_int32
+                        * 16 as i32 as opus_int16
+                            as opus_int32) as isize,
+                ) as *mut opus_int16 as *mut libc::c_void,
                 0 as i32,
                 (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::opus_types_h::opus_int16,
+                    opus_int16,
                 >() as libc::c_ulong),
             );
         }
@@ -431,25 +431,25 @@ pub unsafe extern "C" fn silk_decode_pulses(
         if nLshifts[i as usize] > 0 as i32 {
             nLS = nLshifts[i as usize];
             pulses_ptr = &mut *pulses.offset(
-                (i as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * 16 as i32 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32) as isize,
-            ) as *mut crate::opus_types_h::opus_int16;
+                (i as opus_int16 as opus_int32
+                    * 16 as i32 as opus_int16
+                        as opus_int32) as isize,
+            ) as *mut opus_int16;
             k = 0 as i32;
             while k < 16 as i32 {
                 abs_q = *pulses_ptr.offset(k as isize) as i32;
                 j = 0 as i32;
                 while j < nLS {
-                    abs_q = ((abs_q as crate::opus_types_h::opus_uint32) << 1 as i32)
-                        as crate::opus_types_h::opus_int32;
+                    abs_q = ((abs_q as opus_uint32) << 1 as i32)
+                        as opus_int32;
                     abs_q += crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                        psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        psRangeDec as *mut ec_ctx,
                         crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),
                         8 as i32 as u32,
                     );
                     j += 1
                 }
-                *pulses_ptr.offset(k as isize) = abs_q as crate::opus_types_h::opus_int16;
+                *pulses_ptr.offset(k as isize) = abs_q as opus_int16;
                 k += 1
             }
             /* Mark the number of pulses non-zero for sign decoding. */
@@ -461,7 +461,7 @@ pub unsafe extern "C" fn silk_decode_pulses(
     /* Decode and add signs to pulse signal */
     /* ***************************************/
     crate::src::opus_1_2_1::silk::code_signs::silk_decode_signs(
-        psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeDec as *mut ec_ctx,
         pulses,
         frame_length,
         signalType,

@@ -188,26 +188,26 @@ pub static mut numclusterareas: i32 = 0;
 pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: i32) {
     let mut i: i32 = 0;
     let mut otherareanum: i32 = 0;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
     //add the current area to the areas of the current cluster
     *clusterareas.offset(numclusterareas as isize) = areanum;
     numclusterareas += 1;
     //remove the area from the mid range areas
-    (*midrangeareas.offset(areanum as isize)).valid = crate::src::qcommon::q_shared::qfalse as i32;
+    (*midrangeareas.offset(areanum as isize)).valid = qfalse as i32;
     //flood to other areas through the faces of this area
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(areanum as isize) as *mut aas_area_t;
     i = 0 as i32;
     while i < (*area).numfaces {
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
                 *crate::src::botlib::be_aas_main::aasworld
                     .faceindex
                     .offset(((*area).firstface + i) as isize),
-            ) as isize) as *mut crate::aasfile_h::aas_face_t;
+            ) as isize) as *mut aas_face_t;
         //get the area at the other side of the face
         if (*face).frontarea == areanum {
             otherareanum = (*face).backarea
@@ -238,12 +238,12 @@ pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
     mut startareanum: i32,
-    mut _goal: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _goal: *mut vec_t,
     mut goalareanum: i32,
     mut travelflags: i32,
-    mut altroutegoals: *mut crate::be_aas_h::aas_altroutegoal_t,
+    mut altroutegoals: *mut aas_altroutegoal_t,
     mut maxaltroutegoals: i32,
     mut type_0: i32,
 ) -> i32 {
@@ -257,8 +257,8 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
     let mut goaltraveltime: i32 = 0;
     let mut dist: f32 = 0.;
     let mut bestdist: f32 = 0.;
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     if startareanum == 0 || goalareanum == 0 {
         return 0 as i32;
     }
@@ -332,7 +332,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                             goaltime =
                                 crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea(
                                     i,
-                                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                                    0 as *mut vec_t,
                                     goalareanum,
                                     travelflags,
                                 );
@@ -341,7 +341,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                                 if !(goaltime as f32 > 0.8f64 as f32 * goaltraveltime as f32) {
                                     //this is a mid range area
                                     (*midrangeareas.offset(i as isize)).valid =
-                                        crate::src::qcommon::q_shared::qtrue as i32;
+                                        qtrue as i32;
                                     (*midrangeareas.offset(i as isize)).starttime =
                                         starttime as u16;
                                     (*midrangeareas.offset(i as isize)).goaltime = goaltime as u16;
@@ -372,7 +372,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
             AAS_AltRoutingFloodCluster_r(i);
             //now we've got a cluster with areas through which an alternative route could go
             //get the 'center' of the cluster
-            mid[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t; //end for
+            mid[2 as i32 as usize] = 0 as i32 as vec_t; //end for
             mid[1 as i32 as usize] = mid[2 as i32 as usize];
             mid[0 as i32 as usize] = mid[1 as i32 as usize];
             j = 0 as i32;
@@ -396,13 +396,13 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
             }
             mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64
                 * (1.0f64 / numclusterareas as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64
                 * (1.0f64 / numclusterareas as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64
                 * (1.0f64 / numclusterareas as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             //get the area closest to the center of the cluster
             bestdist = 999999 as i32 as f32; //end for
             bestareanum = 0 as i32;
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                         .offset(*clusterareas.offset(j as isize) as isize))
                     .center[2 as i32 as usize];
                 dist =
-                    VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+                    VectorLength(dir.as_mut_ptr() as *const vec_t);
                 if dist < bestdist {
                     bestdist = dist;
                     bestareanum = *clusterareas.offset(j as isize)

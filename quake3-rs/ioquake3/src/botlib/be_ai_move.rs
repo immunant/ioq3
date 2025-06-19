@@ -72,7 +72,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -165,19 +165,19 @@ pub type bot_movestate_t = bot_movestate_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_movestate_s {
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
-    pub velocity: crate::src::qcommon::q_shared::vec3_t,
-    pub viewoffset: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
+    pub velocity: vec3_t,
+    pub viewoffset: vec3_t,
     pub entitynum: i32,
     pub client: i32,
     pub thinktime: f32,
     pub presencetype: i32,
-    pub viewangles: crate::src::qcommon::q_shared::vec3_t,
+    pub viewangles: vec3_t,
     pub areanum: i32,
     pub lastareanum: i32,
     pub lastgoalareanum: i32,
     pub lastreachnum: i32,
-    pub lastorigin: crate::src::qcommon::q_shared::vec3_t,
+    pub lastorigin: vec3_t,
     pub reachareanum: i32,
     pub moveflags: i32,
     pub jumpreach: i32,
@@ -192,54 +192,54 @@ pub struct bot_movestate_s {
 }
 #[no_mangle]
 
-pub static mut sv_maxstep: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut sv_maxstep: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut sv_maxbarrier: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut sv_maxbarrier: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut sv_gravity: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut sv_gravity: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_rocketlauncher: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut weapindex_rocketlauncher: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_bfg10k: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut weapindex_bfg10k: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_grapple: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut weapindex_grapple: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut entitytypemissile: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut entitytypemissile: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut offhandgrapple: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut offhandgrapple: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut cmd_grappleoff: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut cmd_grappleoff: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 #[no_mangle]
 
-pub static mut cmd_grappleon: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut cmd_grappleon: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 //input vars (all set outside the movement code)
 //origin of the bot
 //velocity of the bot
@@ -454,7 +454,7 @@ pub unsafe extern "C" fn AngleDiff(mut ang1: f32, mut ang2: f32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> i32 {
     let mut firstareanum: i32 = 0; //end if
     let mut j: i32 = 0; //end for
@@ -467,9 +467,9 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
     let mut bestareanum: i32 = 0;
     let mut dist: f32 = 0.;
     let mut bestdist: f32 = 0.;
-    let mut points: [crate::src::qcommon::q_shared::vec3_t; 10] = [[0.; 3]; 10];
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut points: [vec3_t; 10] = [[0.; 3]; 10];
+    let mut v: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
     firstareanum = 0 as i32;
     areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(origin);
     if areanum != 0 {
@@ -530,7 +530,7 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
                         v[2 as i32 as usize] = points[j as usize][2 as i32 as usize]
                             - *origin.offset(2 as i32 as isize);
                         dist = VectorLength(
-                            v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                            v.as_mut_ptr() as *const vec_t
                         );
                         if dist < bestdist {
                             bestareanum = areas[j as usize];
@@ -566,14 +566,14 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotReachabilityArea(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut client: i32,
 ) -> i32 {
     let mut modelnum: i32 = 0;
     let mut modeltype: i32 = 0;
     let mut reachnum: i32 = 0;
     let mut areanum: i32 = 0;
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -582,21 +582,21 @@ pub unsafe extern "C" fn BotReachabilityArea(
         traveltype: 0,
         traveltime: 0,
     };
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut org: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut bsptrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut bsptrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn BotReachabilityArea(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -613,8 +613,8 @@ pub unsafe extern "C" fn BotReachabilityArea(
         contents: 0,
         ent: 0,
     };
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -641,7 +641,7 @@ pub unsafe extern "C" fn BotReachabilityArea(
         end.as_mut_ptr(),
         client,
         1 as i32 | 0x10000 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     if bsptrace.startsolid as u64 == 0
         && bsptrace.fraction < 1 as i32 as f32
         && bsptrace.ent != ((1 as i32) << 10 as i32) - 1 as i32
@@ -660,7 +660,7 @@ pub unsafe extern "C" fn BotReachabilityArea(
             if reachnum != 0 {
                 crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                     reachnum,
-                    &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                    &mut reach as *mut _ as *mut aas_reachability_s,
                 ); //end else if
                 return reach.areanum;
             }
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn BotReachabilityArea(
             end.as_mut_ptr(),
             4 as i32,
             -(1 as i32),
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         if trace.startsolid as u64 == 0 {
             org[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
             org[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
@@ -787,38 +787,38 @@ int BotReachabilityArea(vec3_t origin, int testground)
 #[no_mangle]
 
 pub unsafe extern "C" fn BotOnMover(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut entnum: i32,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut modelnum: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut modelorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut modelorigin: vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut boxmins: crate::src::qcommon::q_shared::vec3_t = [
-        -(16 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(16 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut boxmins: vec3_t = [
+        -(16 as i32) as vec_t,
+        -(16 as i32) as vec_t,
+        -(8 as i32) as vec_t,
     ];
-    let mut boxmaxs: crate::src::qcommon::q_shared::vec3_t = [
-        16 as i32 as crate::src::qcommon::q_shared::vec_t,
-        16 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut boxmaxs: vec3_t = [
+        16 as i32 as vec_t,
+        16 as i32 as vec_t,
+        8 as i32 as vec_t,
     ];
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -827,7 +827,7 @@ pub unsafe extern "C" fn BotOnMover(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -842,7 +842,7 @@ pub unsafe extern "C" fn BotOnMover(
         angles.as_mut_ptr(),
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
     );
     //
     if crate::src::botlib::be_aas_entity::AAS_OriginOfMoverWithModelNum(
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn BotOnMover(
                 as *mut libc::c_char,
             modelnum,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     i = 0 as i32; //end for
@@ -866,12 +866,12 @@ pub unsafe extern "C" fn BotOnMover(
         if *origin.offset(i as isize)
             > modelorigin[i as usize] + maxs[i as usize] + 16 as i32 as f32
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if *origin.offset(i as isize)
             < modelorigin[i as usize] + mins[i as usize] - 16 as i32 as f32
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
@@ -892,17 +892,17 @@ pub unsafe extern "C" fn BotOnMover(
         end.as_mut_ptr(),
         entnum,
         1 as i32 | 0x10000 as i32,
-    ) as crate::botlib_h::bsp_trace_s; //end if
+    ) as bsp_trace_s; //end if
     if trace.startsolid as u64 == 0 && trace.allsolid as u64 == 0 {
         //NOTE: the reachability face number is the model number of the elevator
         if trace.ent != ((1 as i32) << 10 as i32) - 1 as i32
             && crate::src::botlib::be_aas_entity::AAS_EntityModelNum(trace.ent) == modelnum
         {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         //end if
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function BotOnMover
 //===========================================================================
@@ -913,15 +913,15 @@ pub unsafe extern "C" fn BotOnMover(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn MoverDown(mut reach: *mut crate::aasfile_h::aas_reachability_t) -> i32 {
+pub unsafe extern "C" fn MoverDown(mut reach: *mut aas_reachability_t) -> i32 {
     let mut modelnum: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
     modelnum = (*reach).facenum & 0xffff as i32;
     //get some bsp model info
@@ -946,13 +946,13 @@ pub unsafe extern "C" fn MoverDown(mut reach: *mut crate::aasfile_h::aas_reachab
                 as *mut libc::c_char,
             modelnum,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the top of the plat is below the reachability start point
     if origin[2 as i32 as usize] + maxs[2 as i32 as usize] < (*reach).start[2 as i32 as usize] {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //must be called every map change
 //end of the function MoverDown
@@ -1005,25 +1005,25 @@ pub unsafe extern "C" fn BotSetBrushModelTypes() {
                             as *const libc::c_char as *mut libc::c_char,
                         classname.as_mut_ptr(),
                     );
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     classname.as_mut_ptr(),
                     b"func_bobbing\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     modeltypes[modelnum as usize] = 2 as i32
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     classname.as_mut_ptr(),
                     b"func_plat\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     modeltypes[modelnum as usize] = 1 as i32
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     classname.as_mut_ptr(),
                     b"func_door\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     modeltypes[modelnum as usize] = 3 as i32
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     classname.as_mut_ptr(),
                     b"func_static\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -1046,20 +1046,20 @@ pub unsafe extern "C" fn BotSetBrushModelTypes() {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3]; //end if
+    let mut maxs: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -1068,7 +1068,7 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -1094,7 +1094,7 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
         end.as_mut_ptr(),
         (*ms).entitynum,
         1 as i32 | 0x10000 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     if trace.startsolid as u64 == 0
         && (trace.ent != ((1 as i32) << 10 as i32) - 2 as i32
             && trace.ent != ((1 as i32) << 10 as i32) - 1 as i32)
@@ -1113,24 +1113,24 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn BotValidTravel(
-    mut _origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut _origin: *mut vec_t,
+    mut reach: *mut aas_reachability_t,
     mut travelflags: i32,
 ) -> i32 {
     //if the reachability uses an unwanted travel type
     if crate::src::botlib::be_aas_route::AAS_TravelFlagForType((*reach).traveltype) & !travelflags
         != 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //don't go into areas with bad travel types
     if crate::src::botlib::be_aas_route::AAS_AreaContentsTravelFlags((*reach).areanum)
         & !travelflags
         != 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function BotValidTravel
 //===========================================================================
@@ -1187,12 +1187,12 @@ pub unsafe extern "C" fn BotAddToAvoidReach(
 #[no_mangle]
 
 pub unsafe extern "C" fn DistanceFromLineSquared(
-    mut p: *mut crate::src::qcommon::q_shared::vec_t,
-    mut lp1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut lp2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p: *mut vec_t,
+    mut lp1: *mut vec_t,
+    mut lp2: *mut vec_t,
 ) -> f32 {
-    let mut proj: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut proj: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut j: i32 = 0;
     crate::src::botlib::be_aas_main::AAS_ProjectPointOntoVector(p, lp1, lp2, proj.as_mut_ptr());
     j = 0 as i32;
@@ -1217,12 +1217,12 @@ pub unsafe extern "C" fn DistanceFromLineSquared(
             dir[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
             dir[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
         }
-        return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        return VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
     }
     dir[0 as i32 as usize] = *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
     dir[1 as i32 as usize] = *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
     dir[2 as i32 as usize] = *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
-    return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
 }
 //end of the function DistanceFromLineSquared
 //===========================================================================
@@ -1234,14 +1234,14 @@ pub unsafe extern "C" fn DistanceFromLineSquared(
 #[no_mangle]
 
 pub unsafe extern "C" fn VectorDistanceSquared(
-    mut p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p1: *mut vec_t,
+    mut p2: *mut vec_t,
 ) -> f32 {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
-    return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    return VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
 }
 //end of the function VectorDistanceSquared
 //===========================================================================
@@ -1253,8 +1253,8 @@ pub unsafe extern "C" fn VectorDistanceSquared(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotAvoidSpots(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut origin: *mut vec_t,
+    mut reach: *mut aas_reachability_t,
     mut avoidspots: *mut crate::src::botlib::be_ai_move::bot_avoidspot_t,
     mut numavoidspots: i32,
 ) -> i32 {
@@ -1264,22 +1264,22 @@ pub unsafe extern "C" fn BotAvoidSpots(
     let mut squareddist: f32 = 0.;
     let mut squaredradius: f32 = 0.;
     match (*reach).traveltype & 0xffffff as i32 {
-        2 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        3 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        4 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        6 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        7 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        5 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        8 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        9 => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
-        10 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        11 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        14 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        12 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        13 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        18 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        19 => checkbetween = crate::src::qcommon::q_shared::qfalse as i32,
-        _ => checkbetween = crate::src::qcommon::q_shared::qtrue as i32,
+        2 => checkbetween = qtrue as i32,
+        3 => checkbetween = qtrue as i32,
+        4 => checkbetween = qtrue as i32,
+        6 => checkbetween = qtrue as i32,
+        7 => checkbetween = qfalse as i32,
+        5 => checkbetween = qfalse as i32,
+        8 => checkbetween = qtrue as i32,
+        9 => checkbetween = qtrue as i32,
+        10 => checkbetween = qfalse as i32,
+        11 => checkbetween = qfalse as i32,
+        14 => checkbetween = qfalse as i32,
+        12 => checkbetween = qfalse as i32,
+        13 => checkbetween = qfalse as i32,
+        18 => checkbetween = qfalse as i32,
+        19 => checkbetween = qfalse as i32,
+        _ => checkbetween = qtrue as i32,
     }
     type_0 = 0 as i32;
     i = 0 as i32;
@@ -1349,7 +1349,7 @@ pub unsafe extern "C" fn BotAvoidSpots(
 
 pub unsafe extern "C" fn BotAddAvoidSpot(
     mut movestate: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut radius: f32,
     mut type_0: i32,
 ) {
@@ -1385,14 +1385,14 @@ pub unsafe extern "C" fn BotAddAvoidSpot(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGetReachabilityToGoal(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut areanum: i32,
     mut lastgoalareanum: i32,
     mut lastareanum: i32,
     mut avoidreach: *mut i32,
     mut avoidreachtimes: *mut f32,
     mut avoidreachtries: *mut i32,
-    mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+    mut goal: *mut bot_goal_t,
     mut travelflags: i32,
     mut avoidspots: *mut crate::src::botlib::be_ai_move::bot_avoidspot_s,
     mut numavoidspots: i32,
@@ -1403,7 +1403,7 @@ pub unsafe extern "C" fn BotGetReachabilityToGoal(
     let mut besttime: i32 = 0;
     let mut bestreachnum: i32 = 0;
     let mut reachnum: i32 = 0;
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -1446,7 +1446,7 @@ pub unsafe extern "C" fn BotGetReachabilityToGoal(
             //get the reachability from the number
             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                 reachnum,
-                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                &mut reach as *mut _ as *mut aas_reachability_s,
             );
             //NOTE: do not go back to the previous area if the goal didn't change
             //NOTE: is this actually avoidance of local routing minima between two areas???
@@ -1497,24 +1497,24 @@ pub unsafe extern "C" fn BotGetReachabilityToGoal(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotAddToTarget(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut maxdist: f32,
     mut dist: *mut f32,
-    mut target: *mut crate::src::qcommon::q_shared::vec_t,
+    mut target: *mut vec_t,
 ) -> i32 {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
+    let mut dir: vec3_t = [0.; 3]; //end if
     let mut curdist: f32 = 0.;
     dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-    curdist = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    curdist = VectorNormalize(dir.as_mut_ptr());
     if *dist + curdist < maxdist {
         *target.offset(0 as i32 as isize) = *end.offset(0 as i32 as isize);
         *target.offset(1 as i32 as isize) = *end.offset(1 as i32 as isize);
         *target.offset(2 as i32 as isize) = *end.offset(2 as i32 as isize);
         *dist += curdist;
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     } else {
         *target.offset(0 as i32 as isize) =
             *start.offset(0 as i32 as isize) + dir[0 as i32 as usize] * (maxdist - *dist);
@@ -1523,7 +1523,7 @@ pub unsafe extern "C" fn BotAddToTarget(
         *target.offset(2 as i32 as isize) =
             *start.offset(2 as i32 as isize) + dir[2 as i32 as usize] * (maxdist - *dist);
         *dist = maxdist;
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     };
     //end else
 }
@@ -1533,12 +1533,12 @@ pub unsafe extern "C" fn BotAddToTarget(
 
 pub unsafe extern "C" fn BotMovementViewTarget(
     mut movestate: i32,
-    mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+    mut goal: *mut bot_goal_t,
     mut travelflags: i32,
     mut lookahead: f32,
-    mut target: *mut crate::src::qcommon::q_shared::vec_t,
+    mut target: *mut vec_t,
 ) -> i32 {
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -1550,15 +1550,15 @@ pub unsafe extern "C" fn BotMovementViewTarget(
     let mut reachnum: i32 = 0;
     let mut lastareanum: i32 = 0;
     let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the bot has no goal or no last reachability
     if (*ms).lastreachnum == 0 || goal.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     reachnum = (*ms).lastreachnum;
     end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize];
@@ -1570,7 +1570,7 @@ pub unsafe extern "C" fn BotMovementViewTarget(
     while reachnum != 0 && dist < lookahead {
         crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
             reachnum,
-            &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+            &mut reach as *mut _ as *mut aas_reachability_s,
         ); //end while
         if BotAddToTarget(
             end.as_mut_ptr(),
@@ -1580,16 +1580,16 @@ pub unsafe extern "C" fn BotMovementViewTarget(
             target,
         ) != 0
         {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if reach.traveltype & 0xffffff as i32 == 10 as i32 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if reach.traveltype & 0xffffff as i32 == 12 as i32 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if reach.traveltype & 0xffffff as i32 == 13 as i32 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if reach.traveltype & 0xffffff as i32 != 18 as i32
             && reach.traveltype & 0xffffff as i32 != 11 as i32
@@ -1603,7 +1603,7 @@ pub unsafe extern "C" fn BotMovementViewTarget(
                 target,
             ) != 0
             {
-                return crate::src::qcommon::q_shared::qtrue as i32;
+                return qtrue as i32;
             }
         }
         reachnum = BotGetReachabilityToGoal(
@@ -1632,10 +1632,10 @@ pub unsafe extern "C" fn BotMovementViewTarget(
                 &mut dist,
                 target,
             );
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //never look beyond teleporters
 //never look beyond the weapon jump point
@@ -1653,15 +1653,15 @@ pub unsafe extern "C" fn BotMovementViewTarget(
 
 pub unsafe extern "C" fn BotVisible(
     mut ent: i32,
-    mut eye: *mut crate::src::qcommon::q_shared::vec_t,
-    mut target: *mut crate::src::qcommon::q_shared::vec_t,
+    mut eye: *mut vec_t,
+    mut target: *mut vec_t,
 ) -> i32 {
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -1670,7 +1670,7 @@ pub unsafe extern "C" fn BotVisible(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -1680,16 +1680,16 @@ pub unsafe extern "C" fn BotVisible(
     };
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         eye,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
         target,
         ent,
         1 as i32 | 0x10000 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     if trace.fraction >= 1 as i32 as f32 {
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //predict the position of a player based on movement towards a goal
 //end of the function BotVisible
@@ -1702,13 +1702,13 @@ pub unsafe extern "C" fn BotVisible(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotPredictVisiblePosition(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut areanum: i32,
-    mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+    mut goal: *mut bot_goal_t,
     mut travelflags: i32,
-    mut target: *mut crate::src::qcommon::q_shared::vec_t,
+    mut target: *mut vec_t,
 ) -> i32 {
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -1724,18 +1724,18 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
     let mut avoidreach: [i32; 1] = [0; 1];
     let mut avoidreachtimes: [f32; 1] = [0.; 1];
     let mut avoidreachtries: [i32; 1] = [0; 1];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
     //if the bot has no goal or no last reachability
     if goal.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the areanum is not valid
     if areanum == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if the goal areanum is not valid
     if (*goal).areanum == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::stdlib::memset(
         avoidreach.as_mut_ptr() as *mut libc::c_void,
@@ -1766,11 +1766,11 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
             0 as *mut i32,
         );
         if reachnum == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
             reachnum,
-            &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+            &mut reach as *mut _ as *mut aas_reachability_s,
         );
         //
         if BotVisible(
@@ -1782,7 +1782,7 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
             *target.offset(0 as i32 as isize) = reach.start[0 as i32 as usize];
             *target.offset(1 as i32 as isize) = reach.start[1 as i32 as usize];
             *target.offset(2 as i32 as isize) = reach.start[2 as i32 as usize];
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if BotVisible(
             (*goal).entitynum,
@@ -1793,13 +1793,13 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
             *target.offset(0 as i32 as isize) = reach.end[0 as i32 as usize];
             *target.offset(1 as i32 as isize) = reach.end[1 as i32 as usize];
             *target.offset(2 as i32 as isize) = reach.end[2 as i32 as usize];
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         if reach.areanum == (*goal).areanum {
             *target.offset(0 as i32 as isize) = reach.end[0 as i32 as usize];
             *target.offset(1 as i32 as isize) = reach.end[1 as i32 as usize];
             *target.offset(2 as i32 as isize) = reach.end[2 as i32 as usize];
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         lastareanum = areanum;
         areanum = reach.areanum;
@@ -1816,7 +1816,7 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
     //end if
     //
     //
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function BotPredictVisiblePosition
 //===========================================================================
@@ -1828,18 +1828,18 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
 #[no_mangle]
 
 pub unsafe extern "C" fn MoverBottomCenter(
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
-    mut bottomcenter: *mut crate::src::qcommon::q_shared::vec_t,
+    mut reach: *mut aas_reachability_t,
+    mut bottomcenter: *mut vec_t,
 ) {
     let mut modelnum: i32 = 0;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mids: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut mids: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
     modelnum = (*reach).facenum & 0xffff as i32;
     //get some bsp model info
@@ -1871,13 +1871,13 @@ pub unsafe extern "C" fn MoverBottomCenter(
     mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     *bottomcenter.offset(0 as i32 as isize) = (origin[0 as i32 as usize] as f64
         + mids[0 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     *bottomcenter.offset(1 as i32 as isize) = (origin[1 as i32 as usize] as f64
         + mids[1 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     *bottomcenter.offset(2 as i32 as isize) = (origin[2 as i32 as usize] as f64
         + mids[2 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     *bottomcenter.offset(2 as i32 as isize) = (*reach).start[2 as i32 as usize];
 }
 //end of the function MoverBottomCenter
@@ -1890,16 +1890,16 @@ pub unsafe extern "C" fn MoverBottomCenter(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGapDistance(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut hordir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut hordir: *mut vec_t,
     mut entnum: i32,
 ) -> f32 {
     let mut dist: i32 = 0;
     let mut startz: f32 = 0.;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -1922,7 +1922,7 @@ pub unsafe extern "C" fn BotGapDistance(
         end.as_mut_ptr(),
         4 as i32,
         entnum,
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     if trace.fraction >= 1 as i32 as f32 {
         return 1 as i32 as f32;
     }
@@ -1946,7 +1946,7 @@ pub unsafe extern "C" fn BotGapDistance(
             end.as_mut_ptr(),
             4 as i32,
             entnum,
-        ) as crate::be_aas_h::aas_trace_s;
+        ) as aas_trace_s;
         //end if
         //if solid is found the bot can't walk any further and fall into a gap
         if trace.startsolid as u64 == 0 {
@@ -1983,14 +1983,14 @@ pub unsafe extern "C" fn BotGapDistance(
 
 pub unsafe extern "C" fn BotCheckBarrierJump(
     mut ms: *mut bot_movestate_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
     mut speed: f32,
 ) -> i32 {
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut start: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -2008,29 +2008,29 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
         end.as_mut_ptr(),
         2 as i32,
         (*ms).entitynum,
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     //this shouldn't happen... but we check anyway
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if very low ceiling it isn't possible to jump up to a barrier
     if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize] < (*sv_maxstep).value {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     hordir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
     hordir[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(hordir.as_mut_ptr());
     end[0 as i32 as usize] = ((*ms).origin[0 as i32 as usize] as f64
         + hordir[0 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     end[1 as i32 as usize] = ((*ms).origin[1 as i32 as usize] as f64
         + hordir[1 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     end[2 as i32 as usize] = ((*ms).origin[2 as i32 as usize] as f64
         + hordir[2 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     start[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     start[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
     start[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
@@ -2041,10 +2041,10 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
         end.as_mut_ptr(),
         2 as i32,
         (*ms).entitynum,
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     //again this shouldn't happen
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     start[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
@@ -2060,25 +2060,25 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
         end.as_mut_ptr(),
         2 as i32,
         (*ms).entitynum,
-    ) as crate::be_aas_h::aas_trace_s;
+    ) as aas_trace_s;
     //if solid
     if trace.startsolid as u64 != 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if no obstacle at all
     if trace.fraction as f64 >= 1.0f64 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if less than the maximum step height
     if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize] < (*sv_maxstep).value {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     crate::src::botlib::be_ea::EA_Jump((*ms).client);
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     (*ms).moveflags |= 1 as i32;
     //there is a barrier
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function BotCheckBarrierJump
 //===========================================================================
@@ -2091,17 +2091,17 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
 
 pub unsafe extern "C" fn BotSwimInDirection(
     mut ms: *mut bot_movestate_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
     mut speed: f32,
     mut _type_0: i32,
 ) -> i32 {
-    let mut normdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut normdir: vec3_t = [0.; 3];
     normdir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
     normdir[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
     normdir[2 as i32 as usize] = *dir.offset(2 as i32 as isize);
-    crate::src::qcommon::q_math::VectorNormalize(normdir.as_mut_ptr());
+    VectorNormalize(normdir.as_mut_ptr());
     crate::src::botlib::be_ea::EA_Move((*ms).client, normdir.as_mut_ptr(), speed);
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function BotSwimInDirection
 //===========================================================================
@@ -2114,25 +2114,25 @@ pub unsafe extern "C" fn BotSwimInDirection(
 
 pub unsafe extern "C" fn BotWalkInDirection(
     mut ms: *mut bot_movestate_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
     mut speed: f32,
     mut type_0: i32,
 ) -> i32 {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cmdmove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut velocity: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut tmpdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut cmdmove: vec3_t = [0.; 3];
+    let mut velocity: vec3_t = [0.; 3];
+    let mut tmpdir: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
     let mut presencetype: i32 = 0;
     let mut maxframes: i32 = 0;
     let mut cmdframes: i32 = 0;
     let mut stopevent: i32 = 0;
-    let mut move_0: crate::be_aas_h::aas_clientmove_t = crate::be_aas_h::aas_clientmove_t {
+    let mut move_0: aas_clientmove_t = aas_clientmove_t {
         endpos: [0.; 3],
         endarea: 0,
         velocity: [0.; 3],
-        trace: crate::be_aas_h::aas_trace_t {
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+        trace: aas_trace_t {
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
             ent: 0,
@@ -2158,7 +2158,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
     //if the bot is on the ground
     if (*ms).moveflags & 2 as i32 != 0 {
         if BotCheckBarrierJump(ms, dir, speed) != 0 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         } //end if
           //if there is a barrier the bot can jump on
           //remove barrier jump flag
@@ -2172,8 +2172,8 @@ pub unsafe extern "C" fn BotWalkInDirection(
         //horizontal direction
         hordir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
         hordir[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         //if the bot is not supposed to jump
         if type_0 & 4 as i32 == 0 {
             //end if
@@ -2197,7 +2197,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
         //
         if type_0 & 4 as i32 != 0 {
             //end else
-            cmdmove[2 as i32 as usize] = 400 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
+            cmdmove[2 as i32 as usize] = 400 as i32 as vec_t; //end if
             maxframes = (3 as i32 as f64 / 0.1f64) as i32;
             cmdframes = 1 as i32;
             stopevent = 1 as i32 | 32 as i32 | 4 as i32 | 8 as i32 | 16 as i32
@@ -2213,13 +2213,13 @@ pub unsafe extern "C" fn BotWalkInDirection(
         origin[1 as i32 as usize] = (*ms).origin[1 as i32 as usize];
         origin[2 as i32 as usize] = (*ms).origin[2 as i32 as usize];
         origin[2 as i32 as usize] =
-            (origin[2 as i32 as usize] as f64 + 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (origin[2 as i32 as usize] as f64 + 0.5f64) as vec_t;
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
-            &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
+            &mut move_0 as *mut _ as *mut aas_clientmove_s,
             (*ms).entitynum,
             origin.as_mut_ptr(),
             presencetype,
-            crate::src::qcommon::q_shared::qtrue as i32,
+            qtrue as i32,
             velocity.as_mut_ptr(),
             cmdmove.as_mut_ptr(),
             cmdframes,
@@ -2227,13 +2227,13 @@ pub unsafe extern "C" fn BotWalkInDirection(
             0.1f32,
             stopevent,
             0 as i32,
-            crate::src::qcommon::q_shared::qfalse as i32,
+            qfalse as i32,
         );
         //if prediction time wasn't enough to fully predict the movement
         if move_0.frames >= maxframes && type_0 & 4 as i32 != 0 {
             //end if
             //botimport.Print(PRT_MESSAGE, "client %d: max prediction frames\n", ms->client);
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //don't enter slime or lava and don't fall from too high
         if move_0.stopevent & (8 as i32 | 16 as i32 | 32 as i32) != 0 {
@@ -2242,14 +2242,14 @@ pub unsafe extern "C" fn BotWalkInDirection(
             //if (move.stopevent & SE_ENTERSLIME) botimport.Print(PRT_MESSAGE, "slime\n");
             //if (move.stopevent & SE_ENTERLAVA) botimport.Print(PRT_MESSAGE, "lava\n");
             //if (move.stopevent & SE_HITGROUNDDAMAGE) botimport.Print(PRT_MESSAGE, "hitground\n");
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //if ground was hit
         if move_0.stopevent & 1 as i32 != 0 {
             //end if
             //check for nearby gap
-            crate::src::qcommon::q_math::VectorNormalize2(
-                move_0.velocity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            VectorNormalize2(
+                move_0.velocity.as_mut_ptr() as *const vec_t,
                 tmpdir.as_mut_ptr(),
             );
             dist = BotGapDistance(
@@ -2258,7 +2258,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
                 (*ms).entitynum,
             );
             if dist > 0 as i32 as f32 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
             //
             dist = BotGapDistance(
@@ -2267,7 +2267,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
                 (*ms).entitynum,
             );
             if dist > 0 as i32 as f32 {
-                return crate::src::qcommon::q_shared::qfalse as i32;
+                return qfalse as i32;
             }
         }
         //get horizontal movement
@@ -2275,14 +2275,14 @@ pub unsafe extern "C" fn BotWalkInDirection(
             move_0.endpos[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         tmpdir[1 as i32 as usize] =
             move_0.endpos[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        tmpdir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tmpdir[2 as i32 as usize] = 0 as i32 as vec_t;
         //
         //AAS_DrawCross(move.endpos, 4, LINECOLOR_BLUE);
         //the bot is blocked by something
-        if (VectorLength(tmpdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) as f64)
+        if (VectorLength(tmpdir.as_mut_ptr() as *const vec_t) as f64)
             < (speed * (*ms).thinktime) as f64 * 0.5f64
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //perform the movement
         if type_0 & 4 as i32 != 0 {
@@ -2293,7 +2293,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
         }
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
         //movement was succesfull
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     } else {
         if (*ms).moveflags & 1 as i32 != 0 {
             //end if
@@ -2304,7 +2304,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
             //end if
         }
         //FIXME: do air control to avoid hazards
-        return crate::src::qcommon::q_shared::qtrue as i32;
+        return qtrue as i32;
     };
     //end else
 }
@@ -2320,14 +2320,14 @@ pub unsafe extern "C" fn BotWalkInDirection(
 
 pub unsafe extern "C" fn BotMoveInDirection(
     mut movestate: i32,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
     mut speed: f32,
     mut type_0: i32,
 ) -> i32 {
     let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
     ms = BotMoveStateFromHandle(movestate);
     if ms.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //if swimming
     if crate::src::botlib::be_aas_move::AAS_Swimming((*ms).origin.as_mut_ptr()) != 0 {
@@ -2347,11 +2347,11 @@ pub unsafe extern "C" fn BotMoveInDirection(
 #[no_mangle]
 
 pub unsafe extern "C" fn Intersection(
-    mut p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p3: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p4: *mut crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut p1: *mut vec_t,
+    mut p2: *mut vec_t,
+    mut p3: *mut vec_t,
+    mut p4: *mut vec_t,
+    mut out: *mut vec_t,
 ) -> i32 {
     let mut x1: f32 = 0.; //end if
     let mut dx1: f32 = 0.;
@@ -2369,12 +2369,12 @@ pub unsafe extern "C" fn Intersection(
         x1 = *p1.offset(1 as i32 as isize) * dx1 - *p1.offset(0 as i32 as isize) * dy1;
         x2 = *p3.offset(1 as i32 as isize) * dx2 - *p3.offset(0 as i32 as isize) * dy2;
         *out.offset(0 as i32 as isize) =
-            ((dx1 * x2 - dx2 * x1) / d) as i32 as crate::src::qcommon::q_shared::vec_t;
+            ((dx1 * x2 - dx2 * x1) / d) as i32 as vec_t;
         *out.offset(1 as i32 as isize) =
-            ((dy1 * x2 - dy2 * x1) / d) as i32 as crate::src::qcommon::q_shared::vec_t;
-        return crate::src::qcommon::q_shared::qtrue as i32;
+            ((dy1 * x2 - dy2 * x1) / d) as i32 as vec_t;
+        return qtrue as i32;
     } else {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     };
     //end else
 }
@@ -2389,24 +2389,24 @@ pub unsafe extern "C" fn Intersection(
 
 pub unsafe extern "C" fn BotCheckBlocked(
     mut ms: *mut bot_movestate_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut dir: *mut vec_t,
     mut checkbottom: i32,
     mut result: *mut crate::src::botlib::be_ai_move::bot_moveresult_t,
 ) {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2415,7 +2415,7 @@ pub unsafe extern "C" fn BotCheckBlocked(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -2454,13 +2454,13 @@ pub unsafe extern "C" fn BotCheckBlocked(
         end.as_mut_ptr(),
         (*ms).entitynum,
         1 as i32 | 0x10000 as i32 | 0x2000000 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     //if not started in solid and not hitting the world entity
     if trace.startsolid as u64 == 0
         && (trace.ent != ((1 as i32) << 10 as i32) - 2 as i32
             && trace.ent != ((1 as i32) << 10 as i32) - 1 as i32)
     {
-        (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+        (*result).blocked = qtrue as i32;
         (*result).blockentity = trace.ent
     //DEBUG
     } else if checkbottom != 0
@@ -2486,12 +2486,12 @@ pub unsafe extern "C" fn BotCheckBlocked(
             end.as_mut_ptr(),
             (*ms).entitynum,
             1 as i32 | 0x10000 as i32,
-        ) as crate::botlib_h::bsp_trace_s;
+        ) as bsp_trace_s;
         if trace.startsolid as u64 == 0
             && (trace.ent != ((1 as i32) << 10 as i32) - 2 as i32
                 && trace.ent != ((1 as i32) << 10 as i32) - 1 as i32)
         {
-            (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+            (*result).blocked = qtrue as i32;
             (*result).blockentity = trace.ent;
             (*result).flags |= 32 as i32
             //end if
@@ -2511,11 +2511,11 @@ pub unsafe extern "C" fn BotCheckBlocked(
 
 pub unsafe extern "C" fn BotTravel_Walk(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -2526,14 +2526,14 @@ pub unsafe extern "C" fn BotTravel_Walk(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2541,13 +2541,13 @@ pub unsafe extern "C" fn BotTravel_Walk(
     //first walk straight to the reachability start
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //
@@ -2558,8 +2558,8 @@ pub unsafe extern "C" fn BotTravel_Walk(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr())
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        dist = VectorNormalize(hordir.as_mut_ptr())
     }
     //if going towards a crouch area
     if crate::src::botlib::be_aas_sample::AAS_AreaPresenceType((*reach).areanum) & 2 as i32 == 0 {
@@ -2608,9 +2608,9 @@ pub unsafe extern "C" fn BotTravel_Walk(
 
 pub unsafe extern "C" fn BotFinishTravel_Walk(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -2623,14 +2623,14 @@ pub unsafe extern "C" fn BotFinishTravel_Walk(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2649,8 +2649,8 @@ pub unsafe extern "C" fn BotFinishTravel_Walk(
     //go straight to the reachability end
     hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     if dist > 100 as i32 as f32 {
         dist = 100 as i32 as f32
@@ -2675,10 +2675,10 @@ pub unsafe extern "C" fn BotFinishTravel_Walk(
 
 pub unsafe extern "C" fn BotTravel_Crouch(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut speed: f32 = 0.;
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -2689,14 +2689,14 @@ pub unsafe extern "C" fn BotTravel_Crouch(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2706,13 +2706,13 @@ pub unsafe extern "C" fn BotTravel_Crouch(
     //walk straight to reachability end
     hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(hordir.as_mut_ptr());
     //
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary actions
@@ -2736,11 +2736,11 @@ pub unsafe extern "C" fn BotTravel_Crouch(
 
 pub unsafe extern "C" fn BotTravel_BarrierJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -2751,14 +2751,14 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2766,13 +2766,13 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
     //walk straight to reachability start
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //if pretty close to the barrier
@@ -2803,9 +2803,9 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
 
 pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -2816,14 +2816,14 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2834,12 +2834,12 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
         //
         BotCheckBlocked(
             ms,
             hordir.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qtrue as i32,
+            qtrue as i32,
             &mut result,
         );
         //
@@ -2862,9 +2862,9 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
 
 pub unsafe extern "C" fn BotTravel_Swim(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -2875,14 +2875,14 @@ pub unsafe extern "C" fn BotTravel_Swim(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2891,12 +2891,12 @@ pub unsafe extern "C" fn BotTravel_Swim(
     dir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     dir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
     //
     BotCheckBlocked(
         ms,
         dir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary actions
@@ -2905,8 +2905,8 @@ pub unsafe extern "C" fn BotTravel_Swim(
     result.movedir[0 as i32 as usize] = dir[0 as i32 as usize];
     result.movedir[1 as i32 as usize] = dir[1 as i32 as usize];
     result.movedir[2 as i32 as usize] = dir[2 as i32 as usize];
-    crate::src::qcommon::q_math::vectoangles(
-        dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        dir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     result.flags |= 2 as i32;
@@ -2924,10 +2924,10 @@ pub unsafe extern "C" fn BotTravel_Swim(
 
 pub unsafe extern "C" fn BotTravel_WaterJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -2939,14 +2939,14 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -2958,17 +2958,17 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
     hordir[0 as i32 as usize] = dir[0 as i32 as usize];
     hordir[1 as i32 as usize] = dir[1 as i32 as usize];
     hordir[2 as i32 as usize] = dir[2 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (15 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 40 as i32 as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     //botimport.Print(PRT_MESSAGE, "BotTravel_WaterJump: dir[2] = %f\n", dir[2]);
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //elemantary actions
     //EA_Move(ms->client, dir, 400);
     crate::src::botlib::be_ea::EA_MoveForward((*ms).client);
@@ -2977,8 +2977,8 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
         crate::src::botlib::be_ea::EA_MoveUp((*ms).client);
     }
     //set the ideal view angles
-    crate::src::qcommon::q_math::vectoangles(
-        dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        dir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     result.flags |= 1 as i32;
@@ -3000,10 +3000,10 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
 
 pub unsafe extern "C" fn BotFinishTravel_WaterJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut pnt: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut pnt: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -3014,14 +3014,14 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3049,26 +3049,26 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
     dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     dir[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 10 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     dir[1 as i32 as usize] = (dir[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 10 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (70 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 10 as i32 as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     //elemantary actions
     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), 400 as i32 as f32);
     //set the ideal view angles
-    crate::src::qcommon::q_math::vectoangles(
-        dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        dir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     result.flags |= 1 as i32;
@@ -3090,10 +3090,10 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
 
 pub unsafe extern "C" fn BotTravel_WalkOffLedge(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut reachhordist: f32 = 0.;
@@ -3107,14 +3107,14 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3123,32 +3123,32 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
     dir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     dir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
     BotCheckBlocked(
         ms,
         dir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //if the reachability start and end are practically above each other
     dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
     dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
-    dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    reachhordist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    dir[2 as i32 as usize] = 0 as i32 as vec_t;
+    reachhordist = VectorLength(dir.as_mut_ptr() as *const vec_t);
     //walk straight to the reachability start
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //if pretty close to the start focus on the reachability end
     if dist < 48 as i32 as f32 {
         hordir[0 as i32 as usize] =
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr()); //end else
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr()); //end else
                                                                            //end if
         if reachhordist < 20 as i32 as f32 {
             //
@@ -3176,7 +3176,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary action
@@ -3197,30 +3197,30 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotAirControl(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut velocity: *mut crate::src::qcommon::q_shared::vec_t,
-    mut goal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut velocity: *mut vec_t,
+    mut goal: *mut vec_t,
+    mut dir: *mut vec_t,
     mut speed: *mut f32,
 ) -> i32 {
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end for
-    let mut vel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3]; //end for
+    let mut vel: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut i: i32 = 0;
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     vel[0 as i32 as usize] = (*velocity.offset(0 as i32 as isize) as f64 * 0.1f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     vel[1 as i32 as usize] = (*velocity.offset(1 as i32 as isize) as f64 * 0.1f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     vel[2 as i32 as usize] = (*velocity.offset(2 as i32 as isize) as f64 * 0.1f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     i = 0 as i32;
     while i < 50 as i32 {
         vel[2 as i32 as usize] = (vel[2 as i32 as usize] as f64
             - (*sv_gravity).value as f64 * 0.01f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         //end else
         if vel[2 as i32 as usize] < 0 as i32 as f32
             && org[2 as i32 as usize] + vel[2 as i32 as usize] < *goal.offset(2 as i32 as isize)
@@ -3244,12 +3244,12 @@ pub unsafe extern "C" fn BotAirControl(
                 *goal.offset(1 as i32 as isize) - org[1 as i32 as usize];
             *dir.offset(2 as i32 as isize) =
                 *goal.offset(2 as i32 as isize) - org[2 as i32 as usize];
-            dist = crate::src::qcommon::q_math::VectorNormalize(dir);
+            dist = VectorNormalize(dir);
             if dist > 32 as i32 as f32 {
                 dist = 32 as i32 as f32
             }
             *speed = 400 as i32 as f32 - (400 as i32 as f32 - 13 as i32 as f32 * dist);
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         } else {
             org[0 as i32 as usize] = org[0 as i32 as usize] + vel[0 as i32 as usize];
             org[1 as i32 as usize] = org[1 as i32 as usize] + vel[1 as i32 as usize];
@@ -3257,11 +3257,11 @@ pub unsafe extern "C" fn BotAirControl(
         }
         i += 1
     }
-    *dir.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    *dir.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    *dir.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *dir.offset(0 as i32 as isize) = 0 as i32 as vec_t;
+    *dir.offset(1 as i32 as isize) = 0 as i32 as vec_t;
+    *dir.offset(2 as i32 as isize) = 0 as i32 as vec_t;
     *speed = 400 as i32 as f32;
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function BotAirControl
 //===========================================================================
@@ -3274,12 +3274,12 @@ pub unsafe extern "C" fn BotAirControl(
 
 pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut v: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -3292,14 +3292,14 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3311,15 +3311,15 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
     BotCheckBlocked(
         ms,
         dir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //
     v[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     v[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     v[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-    v[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
+    v[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(v.as_mut_ptr());
     if dist > 16 as i32 as f32 {
         end[0 as i32 as usize] =
             (*reach).end[0 as i32 as usize] + v[0 as i32 as usize] * 16 as i32 as f32;
@@ -3346,7 +3346,7 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
         hordir[0 as i32 as usize] = dir[0 as i32 as usize];
         hordir[1 as i32 as usize] = dir[1 as i32 as usize];
         hordir[2 as i32 as usize] = dir[2 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
         //
         speed = 400 as i32 as f32
     }
@@ -3490,14 +3490,14 @@ bot_moveresult_t BotTravel_Jump(bot_movestate_t *ms, aas_reachability_t *reach)
 
 pub unsafe extern "C" fn BotTravel_Jump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut runstart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut dir1: vec3_t = [0.; 3];
+    let mut dir2: vec3_t = [0.; 3];
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut runstart: vec3_t = [0.; 3];
     //	vec3_t runstart, dir1, dir2, hordir;
     let mut gapdist: i32 = 0;
     let mut dist1: f32 = 0.;
@@ -3513,28 +3513,28 @@ pub unsafe extern "C" fn BotTravel_Jump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
     };
     //
     crate::src::botlib::be_aas_move::AAS_JumpReachRunStart(
-        reach as *mut crate::aasfile_h::aas_reachability_s,
+        reach as *mut aas_reachability_s,
         runstart.as_mut_ptr(),
     );
     //*
     hordir[0 as i32 as usize] = runstart[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
     hordir[1 as i32 as usize] = runstart[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(hordir.as_mut_ptr());
     //
     start[0 as i32 as usize] = (*reach).start[0 as i32 as usize];
     start[1 as i32 as usize] = (*reach).start[1 as i32 as usize];
@@ -3575,13 +3575,13 @@ pub unsafe extern "C" fn BotTravel_Jump(
     dir1[0 as i32 as usize] = (*ms).origin[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
     dir1[1 as i32 as usize] = (*ms).origin[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
     dir1[2 as i32 as usize] = (*ms).origin[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
-    dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
+    dir1[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist1 = VectorNormalize(dir1.as_mut_ptr());
     dir2[0 as i32 as usize] = (*ms).origin[0 as i32 as usize] - runstart[0 as i32 as usize];
     dir2[1 as i32 as usize] = (*ms).origin[1 as i32 as usize] - runstart[1 as i32 as usize];
     dir2[2 as i32 as usize] = (*ms).origin[2 as i32 as usize] - runstart[2 as i32 as usize];
-    dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
+    dir2[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist2 = VectorNormalize(dir2.as_mut_ptr());
     //if just before the reachability start
     if ((dir1[0 as i32 as usize] * dir2[0 as i32 as usize]
         + dir1[1 as i32 as usize] * dir2[1 as i32 as usize]
@@ -3594,8 +3594,8 @@ pub unsafe extern "C" fn BotTravel_Jump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         //		botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
         if dist1 < 24 as i32 as f32 {
@@ -3610,8 +3610,8 @@ pub unsafe extern "C" fn BotTravel_Jump(
         //		botimport.Print(PRT_MESSAGE, "going towards run start point\n");
         hordir[0 as i32 as usize] = runstart[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] = runstart[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         //
         if dist2 > 80 as i32 as f32 {
             dist2 = 80 as i32 as f32
@@ -3636,10 +3636,10 @@ pub unsafe extern "C" fn BotTravel_Jump(
 
 pub unsafe extern "C" fn BotFinishTravel_Jump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut hordir2: vec3_t = [0.; 3];
     let mut speed: f32 = 0.;
     let mut dist: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -3652,14 +3652,14 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3671,15 +3671,15 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
     //go straight to the reachability end
     hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     hordir2[0 as i32 as usize] =
         (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
     hordir2[1 as i32 as usize] =
         (*reach).end[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
-    hordir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::VectorNormalize(hordir2.as_mut_ptr());
+    hordir2[2 as i32 as usize] = 0 as i32 as vec_t;
+    VectorNormalize(hordir2.as_mut_ptr());
     //
     if ((hordir[0 as i32 as usize] * hordir2[0 as i32 as usize]
         + hordir[1 as i32 as usize] * hordir2[1 as i32 as usize]
@@ -3710,15 +3710,15 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
 
 pub unsafe extern "C" fn BotTravel_Ladder(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     //float dist, speed;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //, hordir;
-    let mut viewdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut dir: vec3_t = [0.; 3]; //, hordir;
+    let mut viewdir: vec3_t = [0.; 3];
+    let mut origin: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
     //	vec3_t up = {0, 0, 1};
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -3731,14 +3731,14 @@ pub unsafe extern "C" fn BotTravel_Ladder(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3750,12 +3750,12 @@ pub unsafe extern "C" fn BotTravel_Ladder(
     dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
     dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
     viewdir[0 as i32 as usize] = dir[0 as i32 as usize];
     viewdir[1 as i32 as usize] = dir[1 as i32 as usize];
     viewdir[2 as i32 as usize] = 3 as i32 as f32 * dir[2 as i32 as usize];
-    crate::src::qcommon::q_math::vectoangles(
-        viewdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        viewdir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     crate::src::botlib::be_ea::EA_Move((*ms).client, origin.as_mut_ptr(), 0 as i32 as f32);
@@ -3800,9 +3800,9 @@ pub unsafe extern "C" fn BotTravel_Ladder(
 
 pub unsafe extern "C" fn BotTravel_Teleport(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -3814,14 +3814,14 @@ pub unsafe extern "C" fn BotTravel_Teleport(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3835,14 +3835,14 @@ pub unsafe extern "C" fn BotTravel_Teleport(
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     if (*ms).moveflags & 4 as i32 == 0 {
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t
     }
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     if dist < 30 as i32 as f32 {
@@ -3869,13 +3869,13 @@ pub unsafe extern "C" fn BotTravel_Teleport(
 
 pub unsafe extern "C" fn BotTravel_Elevator(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottomcenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut dir1: vec3_t = [0.; 3];
+    let mut dir2: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut bottomcenter: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut dist1: f32 = 0.;
     let mut dist2: f32 = 0.;
@@ -3890,14 +3890,14 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -3916,8 +3916,8 @@ pub unsafe extern "C" fn BotTravel_Elevator(
                 (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+            VectorNormalize(hordir.as_mut_ptr());
             //DEBUG_ELEVATOR
             //move to the end point
             if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32) == 0 {
@@ -3939,8 +3939,8 @@ pub unsafe extern "C" fn BotTravel_Elevator(
                 bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+            dist = VectorNormalize(hordir.as_mut_ptr());
             //end if
             if dist > 10 as i32 as f32 {
                 //
@@ -3964,7 +3964,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-        dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        dist = VectorLength(dir.as_mut_ptr() as *const vec_t);
         if dist < 64 as i32 as f32 {
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
@@ -3998,9 +3998,9 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         dir1[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir1[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
+        dist1 = VectorNormalize(dir1.as_mut_ptr());
         //if the elevator isn't down
         if MoverDown(reach) == 0 {
             //end if
@@ -4013,7 +4013,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             BotCheckBlocked(
                 ms,
                 dir.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
                 &mut result,
             );
             //
@@ -4048,9 +4048,9 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         dir2[1 as i32 as usize] = bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         dir2[2 as i32 as usize] = bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir2[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
+        dist2 = VectorNormalize(dir2.as_mut_ptr());
         //if very close to the reachability start or
         //closer to the elevator center or
         //between reachability start and elevator center
@@ -4079,7 +4079,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         BotCheckBlocked(
             ms,
             dir.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse as i32,
+            qfalse as i32,
             &mut result,
         );
         //
@@ -4115,11 +4115,11 @@ pub unsafe extern "C" fn BotTravel_Elevator(
 
 pub unsafe extern "C" fn BotFinishTravel_Elevator(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut bottomcenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottomdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut topdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut bottomcenter: vec3_t = [0.; 3];
+    let mut bottomdir: vec3_t = [0.; 3];
+    let mut topdir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -4130,14 +4130,14 @@ pub unsafe extern "C" fn BotFinishTravel_Elevator(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -4159,10 +4159,10 @@ pub unsafe extern "C" fn BotFinishTravel_Elevator(
         < crate::stdlib::fabs(topdir[2 as i32 as usize] as f64)
     {
         //end else
-        crate::src::qcommon::q_math::VectorNormalize(bottomdir.as_mut_ptr()); //end if
+        VectorNormalize(bottomdir.as_mut_ptr()); //end if
         crate::src::botlib::be_ea::EA_Move((*ms).client, bottomdir.as_mut_ptr(), 300 as i32 as f32);
     } else {
-        crate::src::qcommon::q_math::VectorNormalize(topdir.as_mut_ptr());
+        VectorNormalize(topdir.as_mut_ptr());
         crate::src::botlib::be_ea::EA_Move((*ms).client, topdir.as_mut_ptr(), 300 as i32 as f32);
     }
     return result;
@@ -4177,20 +4177,20 @@ pub unsafe extern "C" fn BotFinishTravel_Elevator(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotFuncBobStartEnd(
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut reach: *mut aas_reachability_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
+    mut origin: *mut vec_t,
 ) {
     let mut spawnflags: i32 = 0; //end if
     let mut modelnum: i32 = 0; //end if
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
     let mut num0: i32 = 0;
     let mut num1: i32 = 0;
@@ -4204,12 +4204,12 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
                 as *mut libc::c_char,
             modelnum,
         );
-        *start.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *start.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *start.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(0 as i32 as isize) = 0 as i32 as vec_t;
+        *start.offset(1 as i32 as isize) = 0 as i32 as vec_t;
+        *start.offset(2 as i32 as isize) = 0 as i32 as vec_t;
+        *end.offset(0 as i32 as isize) = 0 as i32 as vec_t;
+        *end.offset(1 as i32 as isize) = 0 as i32 as vec_t;
+        *end.offset(2 as i32 as isize) = 0 as i32 as vec_t;
         return;
     }
     crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -4217,17 +4217,17 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
         angles.as_mut_ptr(),
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
     );
     mid[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
     mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
     mid[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     mid[0 as i32 as usize] =
-        (mid[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (mid[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     mid[1 as i32 as usize] =
-        (mid[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (mid[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
     mid[2 as i32 as usize] =
-        (mid[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (mid[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     *start.offset(0 as i32 as isize) = mid[0 as i32 as usize];
     *start.offset(1 as i32 as isize) = mid[1 as i32 as usize];
     *start.offset(2 as i32 as isize) = mid[2 as i32 as usize];
@@ -4244,24 +4244,24 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
         num1 = (num1 as u32 | 0xffff0000 as u32) as i32
     }
     if spawnflags & 1 as i32 != 0 {
-        *start.offset(0 as i32 as isize) = num0 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(0 as i32 as isize) = num1 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(0 as i32 as isize) = num0 as vec_t;
+        *end.offset(0 as i32 as isize) = num1 as vec_t;
         //
         let ref mut fresh0 = *origin.offset(0 as i32 as isize); //end else if
         *fresh0 += mid[0 as i32 as usize];
         *origin.offset(1 as i32 as isize) = mid[1 as i32 as usize];
         *origin.offset(2 as i32 as isize) = mid[2 as i32 as usize]
     } else if spawnflags & 2 as i32 != 0 {
-        *start.offset(1 as i32 as isize) = num0 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(1 as i32 as isize) = num1 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(1 as i32 as isize) = num0 as vec_t;
+        *end.offset(1 as i32 as isize) = num1 as vec_t;
         //
         *origin.offset(0 as i32 as isize) = mid[0 as i32 as usize];
         let ref mut fresh1 = *origin.offset(1 as i32 as isize);
         *fresh1 += mid[1 as i32 as usize];
         *origin.offset(2 as i32 as isize) = mid[2 as i32 as usize]
     } else {
-        *start.offset(2 as i32 as isize) = num0 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(2 as i32 as isize) = num1 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(2 as i32 as isize) = num0 as vec_t;
+        *end.offset(2 as i32 as isize) = num1 as vec_t;
         //
         *origin.offset(0 as i32 as isize) = mid[0 as i32 as usize];
         *origin.offset(1 as i32 as isize) = mid[1 as i32 as usize];
@@ -4281,16 +4281,16 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
 
 pub unsafe extern "C" fn BotTravel_FuncBobbing(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottomcenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bob_start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bob_end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bob_origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut dir1: vec3_t = [0.; 3];
+    let mut dir2: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut bottomcenter: vec3_t = [0.; 3];
+    let mut bob_start: vec3_t = [0.; 3];
+    let mut bob_end: vec3_t = [0.; 3];
+    let mut bob_origin: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut dist1: f32 = 0.;
     let mut dist2: f32 = 0.;
@@ -4305,14 +4305,14 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -4331,7 +4331,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
         dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
         dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
-        if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+        if VectorLength(dir.as_mut_ptr() as *const vec_t)
             < 24 as i32 as f32
         {
             //end else
@@ -4341,8 +4341,8 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
                 (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+            VectorNormalize(hordir.as_mut_ptr());
             //move to the end point
             if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32) == 0 {
                 crate::src::botlib::be_ea::EA_Move(
@@ -4363,8 +4363,8 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
                 bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+            dist = VectorNormalize(hordir.as_mut_ptr());
             //end if
             if dist > 10 as i32 as f32 {
                 //
@@ -4385,7 +4385,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-        dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        dist = VectorLength(dir.as_mut_ptr() as *const vec_t);
         if dist < 64 as i32 as f32 {
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
@@ -4419,14 +4419,14 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir1[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir1[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
+        dist1 = VectorNormalize(dir1.as_mut_ptr());
         //if func_bobbing is Not its start position
         dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_start[0 as i32 as usize]; //end if
         dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_start[1 as i32 as usize];
         dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_start[2 as i32 as usize];
-        if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+        if VectorLength(dir.as_mut_ptr() as *const vec_t)
             > 16 as i32 as f32
         {
             dist = dist1;
@@ -4437,7 +4437,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
             BotCheckBlocked(
                 ms,
                 dir.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
                 &mut result,
             );
             //
@@ -4472,9 +4472,9 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir2[1 as i32 as usize] = bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         dir2[2 as i32 as usize] = bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir2[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
+        dist2 = VectorNormalize(dir2.as_mut_ptr());
         //if very close to the reachability start or
         //closer to the elevator center or
         //between reachability start and func_bobbing center
@@ -4501,7 +4501,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         BotCheckBlocked(
             ms,
             dir.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse as i32,
+            qfalse as i32,
             &mut result,
         );
         //
@@ -4537,14 +4537,14 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
 
 pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut bob_origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bob_start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bob_end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut bottomcenter: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut bob_origin: vec3_t = [0.; 3];
+    let mut bob_start: vec3_t = [0.; 3];
+    let mut bob_end: vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
+    let mut bottomcenter: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -4555,14 +4555,14 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -4580,7 +4580,7 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
     dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
     dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
     dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
-    dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    dist = VectorLength(dir.as_mut_ptr() as *const vec_t);
     //if the func_bobbing is near the end
     if dist < 16 as i32 as f32 {
         //end else
@@ -4591,9 +4591,9 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
         hordir[2 as i32 as usize] =
             (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        dist = VectorNormalize(hordir.as_mut_ptr());
         //
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
@@ -4619,9 +4619,9 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
         hordir[2 as i32 as usize] =
             bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            hordir[2 as i32 as usize] = 0 as i32 as vec_t
         }
-        dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        dist = VectorNormalize(hordir.as_mut_ptr());
         //end if
         if dist > 5 as i32 as f32 {
             //
@@ -4653,10 +4653,10 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
 
 pub unsafe extern "C" fn GrappleState(
     mut ms: *mut bot_movestate_t,
-    mut _reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut _reach: *mut aas_reachability_t,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {
+    let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
         flags: 0,
@@ -4693,7 +4693,7 @@ pub unsafe extern "C" fn GrappleState(
         {
             crate::src::botlib::be_aas_entity::AAS_EntityInfo(
                 i,
-                &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
+                &mut entinfo as *mut _ as *mut aas_entityinfo_s,
             );
             if entinfo.weapon == (*weapindex_grapple).value as i32 {
                 return 1 as i32;
@@ -4716,7 +4716,7 @@ pub unsafe extern "C" fn GrappleState(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotResetGrapple(mut ms: *mut bot_movestate_t) {
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -4727,7 +4727,7 @@ pub unsafe extern "C" fn BotResetGrapple(mut ms: *mut bot_movestate_t) {
     };
     crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
         (*ms).lastreachnum,
-        &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+        &mut reach as *mut _ as *mut aas_reachability_s,
     );
     //if not using the grapple hook reachability anymore
     if reach.traveltype & 0xffffff as i32 != 14 as i32 {
@@ -4754,7 +4754,7 @@ pub unsafe extern "C" fn BotResetGrapple(mut ms: *mut bot_movestate_t) {
 
 pub unsafe extern "C" fn BotTravel_Grapple(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -4766,31 +4766,31 @@ pub unsafe extern "C" fn BotTravel_Grapple(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
     };
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut viewdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
+    let mut viewdir: vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3];
     let mut state: i32 = 0;
     let mut areanum: i32 = 0;
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -4799,7 +4799,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -4832,8 +4832,8 @@ pub unsafe extern "C" fn BotTravel_Grapple(
         dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        dir[2 as i32 as usize] = 0 as i32 as vec_t;
+        dist = VectorLength(dir.as_mut_ptr() as *const vec_t);
         //if very close to the grapple end or the grappled is hooked and
         //the bot doesn't get any closer
         if state != 0 && dist < 48 as i32 as f32 {
@@ -4889,7 +4889,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
         dir[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir[2 as i32 as usize] = 0 as i32 as vec_t
         }
         org[0 as i32 as usize] =
             (*ms).origin[0 as i32 as usize] + (*ms).viewoffset[0 as i32 as usize];
@@ -4901,9 +4901,9 @@ pub unsafe extern "C" fn BotTravel_Grapple(
         viewdir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - org[1 as i32 as usize];
         viewdir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - org[2 as i32 as usize];
         //
-        dist = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-        crate::src::qcommon::q_math::vectoangles(
-            viewdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        dist = VectorNormalize(dir.as_mut_ptr());
+        vectoangles(
+            viewdir.as_mut_ptr() as *const vec_t,
             result.ideal_viewangles.as_mut_ptr(),
         );
         result.flags |= 1 as i32;
@@ -4929,12 +4929,12 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 (*ms).origin[2 as i32 as usize] + (*ms).viewoffset[2 as i32 as usize];
             trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
                 org.as_mut_ptr(),
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+                0 as *mut vec_t,
+                0 as *mut vec_t,
                 (*reach).end.as_mut_ptr(),
                 (*ms).entitynum,
                 1 as i32,
-            ) as crate::botlib_h::bsp_trace_s;
+            ) as bsp_trace_s;
             dir[0 as i32 as usize] =
                 (*reach).end[0 as i32 as usize] - trace.endpos[0 as i32 as usize];
             dir[1 as i32 as usize] =
@@ -4943,10 +4943,10 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 (*reach).end[2 as i32 as usize] - trace.endpos[2 as i32 as usize];
             //DEBUG_GRAPPLE
             //check if the grapple missile path is clear
-            if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+            if VectorLength(dir.as_mut_ptr() as *const vec_t)
                 > 16 as i32 as f32
             {
-                result.failure = crate::src::qcommon::q_shared::qtrue as i32; //end if
+                result.failure = qtrue as i32; //end if
                 return result;
             }
             //activate the grapple
@@ -4969,7 +4969,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
             BotCheckBlocked(
                 ms,
                 dir.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qtrue as i32,
+                qtrue as i32,
                 &mut result,
             );
             //elemantary action move in direction
@@ -4997,9 +4997,9 @@ pub unsafe extern "C" fn BotTravel_Grapple(
 
 pub unsafe extern "C" fn BotTravel_RocketJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -5012,14 +5012,14 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -5028,16 +5028,16 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
     //
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     //
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //look in the movement direction
-    crate::src::qcommon::q_math::vectoangles(
-        hordir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        hordir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as vec_t;
     //
     if dist < 5 as i32 as f32
         && crate::stdlib::fabs(AngleDiff(
@@ -5056,8 +5056,8 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         //botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
         crate::src::botlib::be_ea::EA_Jump((*ms).client);
@@ -5073,12 +5073,12 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     //look in the movement direction
-    crate::src::qcommon::q_math::vectoangles(
-        hordir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        hordir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as vec_t;
     //set the view angles directly
     crate::src::botlib::be_ea::EA_View((*ms).client, result.ideal_viewangles.as_mut_ptr());
     //view is important for the movement
@@ -5109,9 +5109,9 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
 
 pub unsafe extern "C" fn BotTravel_BFGJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
@@ -5124,14 +5124,14 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -5140,9 +5140,9 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
     //
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     //
-    dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+    dist = VectorNormalize(hordir.as_mut_ptr());
     //
     if dist < 5 as i32 as f32
         && crate::stdlib::fabs(AngleDiff(
@@ -5161,8 +5161,8 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         //botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
         crate::src::botlib::be_ea::EA_Jump((*ms).client);
@@ -5178,12 +5178,12 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     //look in the movement direction
-    crate::src::qcommon::q_math::vectoangles(
-        hordir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    vectoangles(
+        hordir.as_mut_ptr() as *const vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as vec_t;
     //set the view angles directly
     crate::src::botlib::be_ea::EA_View((*ms).client, result.ideal_viewangles.as_mut_ptr());
     //view is important for the movement
@@ -5211,9 +5211,9 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
 
 pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut speed: f32 = 0.;
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -5225,14 +5225,14 @@ pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -5268,8 +5268,8 @@ pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         hordir[2 as i32 as usize] =
             (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         speed = 400 as i32 as f32
     }
     //
@@ -5291,9 +5291,9 @@ pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
 
 pub unsafe extern "C" fn BotTravel_JumpPad(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -5304,14 +5304,14 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -5319,12 +5319,12 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
     //first walk straight to the reachability start
     hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     //
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary action move in direction
@@ -5346,10 +5346,10 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
 
 pub unsafe extern "C" fn BotFinishTravel_JumpPad(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut speed: f32 = 0.; //end if
-    let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hordir: vec3_t = [0.; 3];
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
             failure: 0 as i32,
@@ -5360,14 +5360,14 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
@@ -5384,14 +5384,14 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
+        hordir[2 as i32 as usize] = 0 as i32 as vec_t;
+        VectorNormalize(hordir.as_mut_ptr());
         speed = 400 as i32 as f32
     }
     BotCheckBlocked(
         ms,
         hordir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary action move in direction
@@ -5413,7 +5413,7 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotReachabilityTime(
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut reach: *mut aas_reachability_t,
 ) -> i32 {
     match (*reach).traveltype & 0xffffff as i32 {
         2 => {
@@ -5459,7 +5459,7 @@ pub unsafe extern "C" fn BotReachabilityTime(
 
 pub unsafe extern "C" fn BotMoveInGoalArea(
     mut ms: *mut bot_movestate_t,
-    mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+    mut goal: *mut bot_goal_t,
 ) -> crate::src::botlib::be_ai_move::bot_moveresult_t {
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -5471,19 +5471,19 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
             flags: 0 as i32,
             weapon: 0 as i32,
             movedir: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             ideal_viewangles: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
         };
         init
     };
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut speed: f32 = 0.;
     //DEBUG
@@ -5495,11 +5495,11 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
             (*goal).origin[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         result.traveltype = 8 as i32
     } else {
-        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        dir[2 as i32 as usize] = 0 as i32 as vec_t;
         result.traveltype = 2 as i32
     }
     //
-    dist = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    dist = VectorNormalize(dir.as_mut_ptr());
     if dist > 100 as i32 as f32 {
         dist = 100 as i32 as f32
     }
@@ -5511,7 +5511,7 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
     BotCheckBlocked(
         ms,
         dir.as_mut_ptr(),
-        crate::src::qcommon::q_shared::qtrue as i32,
+        qtrue as i32,
         &mut result,
     );
     //elemantary action move in direction
@@ -5521,8 +5521,8 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
     result.movedir[2 as i32 as usize] = dir[2 as i32 as usize];
     //
     if (*ms).moveflags & 4 as i32 != 0 {
-        crate::src::qcommon::q_math::vectoangles(
-            dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vectoangles(
+            dir.as_mut_ptr() as *const vec_t,
             result.ideal_viewangles.as_mut_ptr(),
         ); //end if
         result.flags |= 2 as i32
@@ -5552,7 +5552,7 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
 pub unsafe extern "C" fn BotMoveToGoal(
     mut result: *mut crate::src::botlib::be_ai_move::bot_moveresult_t,
     mut movestate: i32,
-    mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
+    mut goal: *mut bot_goal_t,
     mut travelflags: i32,
 ) {
     let mut reachnum: i32 = 0;
@@ -5560,7 +5560,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
     let mut foundjumppad: i32 = 0;
     let mut ent: i32 = 0;
     let mut resultflags: i32 = 0;
-    let mut reach: crate::aasfile_h::aas_reachability_t = crate::aasfile_h::aas_reachability_t {
+    let mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
         edgenum: 0,
@@ -5569,8 +5569,8 @@ pub unsafe extern "C" fn BotMoveToGoal(
         traveltype: 0,
         traveltime: 0,
     };
-    let mut lastreach: crate::aasfile_h::aas_reachability_t =
-        crate::aasfile_h::aas_reachability_t {
+    let mut lastreach: aas_reachability_t =
+        aas_reachability_t {
             areanum: 0,
             facenum: 0,
             edgenum: 0,
@@ -5583,9 +5583,9 @@ pub unsafe extern "C" fn BotMoveToGoal(
     //vec3_t mins, maxs, up = {0, 0, 1};
     //bsp_trace_t trace;
     //static int debugline;
-    (*result).failure = crate::src::qcommon::q_shared::qfalse as i32;
+    (*result).failure = qfalse as i32;
     (*result).type_0 = 0 as i32;
-    (*result).blocked = crate::src::qcommon::q_shared::qfalse as i32;
+    (*result).blocked = qfalse as i32;
     (*result).blockentity = 0 as i32;
     (*result).traveltype = 0 as i32;
     (*result).flags = 0 as i32;
@@ -5601,7 +5601,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
     if goal.is_null() {
         //end if
         //DEBUG
-        (*result).failure = crate::src::qcommon::q_shared::qtrue as i32;
+        (*result).failure = qtrue as i32;
         return;
     }
     //botimport.Print(PRT_MESSAGE, "numavoidreach = %d\n", ms->numavoidreach);
@@ -5632,7 +5632,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                     //end else
                     crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                         (*ms).lastreachnum,
-                        &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                        &mut reach as *mut _ as *mut aas_reachability_s,
                     ); //end if
                        //if the bot is Not using the elevator
                     if reach.traveltype & 0xffffff as i32 != 11 as i32
@@ -5646,7 +5646,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                             //end else
                             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                                 reachnum,
-                                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                                &mut reach as *mut _ as *mut aas_reachability_s,
                             ); //end if
                             (*ms).lastreachnum = reachnum;
                             (*ms).reachability_time = crate::src::botlib::be_aas_main::AAS_Time()
@@ -5665,7 +5665,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                                     (*ms).client,
                                 ); //end if
                             } //end if
-                            (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+                            (*result).blocked = qtrue as i32;
                             (*result).blockentity = ent;
                             (*result).flags |= 32 as i32;
                             return;
@@ -5675,7 +5675,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                 } else if modeltype == 2 as i32 {
                     crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                         (*ms).lastreachnum,
-                        &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                        &mut reach as *mut _ as *mut aas_reachability_s,
                     );
                     //if the bot is Not using the func bobbing
                     if reach.traveltype & 0xffffff as i32 != 19 as i32
@@ -5689,7 +5689,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                             //end else
                             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                                 reachnum,
-                                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                                &mut reach as *mut _ as *mut aas_reachability_s,
                             ); //end if
                             (*ms).lastreachnum = reachnum;
                             (*ms).reachability_time = crate::src::botlib::be_aas_main::AAS_Time()
@@ -5708,7 +5708,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                                     (*ms).client,
                                 ); //end if
                             }
-                            (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+                            (*result).blocked = qtrue as i32;
                             (*result).blockentity = ent;
                             (*result).flags |= 32 as i32;
                             return;
@@ -5720,13 +5720,13 @@ pub unsafe extern "C" fn BotMoveToGoal(
                     (*ms).areanum = BotFuzzyPointReachabilityArea((*ms).origin.as_mut_ptr());
                     //end if
                     if crate::src::botlib::be_aas_reach::AAS_AreaReachability((*ms).areanum) == 0 {
-                        (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+                        (*result).blocked = qtrue as i32;
                         (*result).blockentity = ent;
                         (*result).flags |= 32 as i32;
                         return;
                     }
                 } else {
-                    (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+                    (*result).blocked = qtrue as i32;
                     (*result).blockentity = ent;
                     (*result).flags |= 32 as i32;
                     return;
@@ -5750,14 +5750,14 @@ pub unsafe extern "C" fn BotMoveToGoal(
         //
         crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
             (*ms).lastreachnum,
-            &mut lastreach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+            &mut lastreach as *mut _ as *mut aas_reachability_s,
         );
         //end else
         //DEBUG
         (*ms).areanum = BotFuzzyPointReachabilityArea((*ms).origin.as_mut_ptr());
         if (*ms).areanum == 0 {
-            (*result).failure = crate::src::qcommon::q_shared::qtrue as i32;
-            (*result).blocked = crate::src::qcommon::q_shared::qtrue as i32;
+            (*result).failure = qtrue as i32;
+            (*result).blocked = qtrue as i32;
             (*result).blockentity = 0 as i32;
             (*result).type_0 = 8 as i32;
             return;
@@ -5770,7 +5770,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
         if reachnum != 0 {
             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                 reachnum,
-                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                &mut reach as *mut _ as *mut aas_reachability_s,
             );
             //reachability area the bot is in
             //ms->areanum = BotReachabilityArea(ms->origin, ((lastreach.traveltype & TRAVELTYPE_MASK) != TRAVEL_ELEVATOR));
@@ -5851,7 +5851,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             if reachnum != 0 {
                 crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                     reachnum,
-                    &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                    &mut reach as *mut _ as *mut aas_reachability_s,
                 );
                 //get a new reachability leading towards the goal
                 //the area number the reachability starts in
@@ -5876,7 +5876,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             //if the bot has a reachability
             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                 reachnum,
-                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                &mut reach as *mut _ as *mut aas_reachability_s,
             ); //end if
             (*result).traveltype = reach.traveltype;
             //get the reachability from the number
@@ -5917,21 +5917,21 @@ pub unsafe extern "C" fn BotMoveToGoal(
             (*result).traveltype = reach.traveltype;
             (*result).flags |= resultflags
         } else {
-            (*result).failure = crate::src::qcommon::q_shared::qtrue as i32;
+            (*result).failure = qtrue as i32;
             (*result).flags |= resultflags;
             crate::stdlib::memset(
-                &mut reach as *mut crate::aasfile_h::aas_reachability_t as *mut libc::c_void,
+                &mut reach as *mut aas_reachability_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<crate::aasfile_h::aas_reachability_t>() as libc::c_ulong,
+                ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
             );
         }
     } else {
         let mut i: i32 = 0;
         let mut numareas: i32 = 0;
         let mut areas: [i32; 16] = [0; 16];
-        let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut end: vec3_t = [0.; 3];
         //end if
-        foundjumppad = crate::src::qcommon::q_shared::qfalse as i32;
+        foundjumppad = qfalse as i32;
         end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
             + (*ms).velocity[0 as i32 as usize] * (-(2 as i32) as f32 * (*ms).thinktime);
         end[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
@@ -5942,7 +5942,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             (*ms).origin.as_mut_ptr(),
             end.as_mut_ptr(),
             areas.as_mut_ptr(),
-            0 as *mut crate::src::qcommon::q_shared::vec3_t,
+            0 as *mut vec3_t,
             16 as i32,
         );
         i = numareas - 1 as i32;
@@ -5951,7 +5951,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                 //special handling of jump pads when the bot uses a jump pad without knowing it
                 //end for
                 //botimport.Print(PRT_MESSAGE, "client %d used a jumppad without knowing, area %d\n", ms->client, areas[i]);
-                foundjumppad = crate::src::qcommon::q_shared::qtrue as i32;
+                foundjumppad = qtrue as i32;
                 lastreachnum = BotGetReachabilityToGoal(
                     end.as_mut_ptr(),
                     areas[i as usize],
@@ -5980,7 +5980,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                         //get the reachability from the number
                         crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                             lastreachnum,
-                            &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                            &mut reach as *mut _ as *mut aas_reachability_s,
                         );
                         if reach.traveltype & 0xffffff as i32 == 18 as i32 {
                             (*ms).lastreachnum = lastreachnum;
@@ -6020,7 +6020,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             //botimport.Print(PRT_MESSAGE, "%s: NOT onground, swimming or against ladder\n", ClientName(ms->entitynum-1));
             crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                 (*ms).lastreachnum,
-                &mut reach as *mut _ as *mut crate::aasfile_h::aas_reachability_s,
+                &mut reach as *mut _ as *mut aas_reachability_s,
             );
             (*result).traveltype = reach.traveltype;
             //DEBUG
@@ -6172,46 +6172,46 @@ pub unsafe extern "C" fn BotResetMoveState(mut movestate: i32) {
 
 pub unsafe extern "C" fn BotSetupMoveAI() -> i32 {
     BotSetBrushModelTypes();
-    sv_maxstep = crate::src::botlib::l_libvar::LibVar(
+    sv_maxstep = LibVar(
         b"sv_step\x00" as *const u8 as *const libc::c_char,
         b"18\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    sv_maxbarrier = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    sv_maxbarrier = LibVar(
         b"sv_maxbarrier\x00" as *const u8 as *const libc::c_char,
         b"32\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    sv_gravity = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    sv_gravity = LibVar(
         b"sv_gravity\x00" as *const u8 as *const libc::c_char,
         b"800\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    weapindex_rocketlauncher = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    weapindex_rocketlauncher = LibVar(
         b"weapindex_rocketlauncher\x00" as *const u8 as *const libc::c_char,
         b"5\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    weapindex_bfg10k = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    weapindex_bfg10k = LibVar(
         b"weapindex_bfg10k\x00" as *const u8 as *const libc::c_char,
         b"9\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    weapindex_grapple = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    weapindex_grapple = LibVar(
         b"weapindex_grapple\x00" as *const u8 as *const libc::c_char,
         b"10\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    entitytypemissile = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    entitytypemissile = LibVar(
         b"entitytypemissile\x00" as *const u8 as *const libc::c_char,
         b"3\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    offhandgrapple = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    offhandgrapple = LibVar(
         b"offhandgrapple\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    cmd_grappleon = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    cmd_grappleon = LibVar(
         b"cmd_grappleon\x00" as *const u8 as *const libc::c_char,
         b"grappleon\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
-    cmd_grappleoff = crate::src::botlib::l_libvar::LibVar(
+    ) as *mut libvar_s;
+    cmd_grappleoff = LibVar(
         b"cmd_grappleoff\x00" as *const u8 as *const libc::c_char,
         b"grappleoff\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
+    ) as *mut libvar_s;
     return 0 as i32;
 }
 //shutdown movement AI

@@ -46,7 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_encode_signs(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     mut pulses: *const i8,
     mut length: i32,
     signalType: i32,
@@ -63,11 +63,11 @@ pub unsafe extern "C" fn silk_encode_signs(
     let mut icdf_ptr: *const u8 = 0 as *const u8;
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
-    i = 7 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+    i = 7 as i32 as opus_int16 as opus_int32
         * (quantOffsetType
-            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as i32)
-                as crate::opus_types_h::opus_int32) as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32;
+            + ((signalType as opus_uint32) << 1 as i32)
+                as opus_int32) as opus_int16
+            as opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
         .offset(i as isize) as *const u8;
@@ -85,7 +85,7 @@ pub unsafe extern "C" fn silk_encode_signs(
             while j < 16 as i32 {
                 if *q_ptr.offset(j as isize) as i32 != 0 as i32 {
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        psRangeEnc as *mut ec_ctx,
                         (*q_ptr.offset(j as isize) as i32 >> 15 as i32) + 1 as i32,
                         icdf.as_mut_ptr(),
                         8 as i32 as u32,
@@ -177,8 +177,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_decode_signs(
-    mut psRangeDec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
-    mut pulses: *mut crate::opus_types_h::opus_int16,
+    mut psRangeDec: *mut ec_dec,
+    mut pulses: *mut opus_int16,
     mut length: i32,
     signalType: i32,
     quantOffsetType: i32,
@@ -190,15 +190,15 @@ pub unsafe extern "C" fn silk_decode_signs(
     let mut j: i32 = 0;
     let mut p: i32 = 0;
     let mut icdf: [u8; 2] = [0; 2];
-    let mut q_ptr: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
+    let mut q_ptr: *mut opus_int16 = 0 as *mut opus_int16;
     let mut icdf_ptr: *const u8 = 0 as *const u8;
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
-    i = 7 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+    i = 7 as i32 as opus_int16 as opus_int32
         * (quantOffsetType
-            + ((signalType as crate::opus_types_h::opus_uint32) << 1 as i32)
-                as crate::opus_types_h::opus_int32) as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32;
+            + ((signalType as opus_uint32) << 1 as i32)
+                as opus_int32) as opus_int16
+            as opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
         .offset(i as isize) as *const u8;
@@ -220,14 +220,14 @@ pub unsafe extern "C" fn silk_decode_signs(
                     let ref mut fresh0 = *q_ptr.offset(j as isize);
                     *fresh0 = (*fresh0 as i32
                         * (((crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                            psRangeDec as *mut ec_ctx,
                             icdf.as_mut_ptr(),
                             8 as i32 as u32,
-                        ) as crate::opus_types_h::opus_uint32)
+                        ) as opus_uint32)
                             << 1 as i32)
-                            as crate::opus_types_h::opus_int32
+                            as opus_int32
                             - 1 as i32))
-                        as crate::opus_types_h::opus_int16
+                        as opus_int16
                 }
                 j += 1
             }

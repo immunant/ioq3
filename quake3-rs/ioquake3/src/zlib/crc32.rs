@@ -2125,7 +2125,7 @@ pub type u4 = u32;
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn get_crc_table() -> *const crate::zconf_h::uLongf {
+pub unsafe extern "C" fn get_crc_table() -> *const uLongf {
     /* DYNAMIC_CRC_TABLE */
     return crc_table.as_ptr() as *const libc::c_ulong;
 }
@@ -2137,13 +2137,13 @@ pub unsafe extern "C" fn crc32(
     mut crc: libc::c_ulong,
     mut buf: *const u8,
     mut len: u32,
-) -> crate::zconf_h::uLong {
+) -> uLong {
     if buf.is_null() {
         return 0 as libc::c_ulong;
     }
     /* DYNAMIC_CRC_TABLE */
     if ::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong
-        == ::std::mem::size_of::<crate::stddef_h::ptrdiff_t>() as libc::c_ulong
+        == ::std::mem::size_of::<ptrdiff_t>() as libc::c_ulong
     {
         let mut endian: u4 = 0;
         endian = 1 as i32 as u4;
@@ -2220,7 +2220,7 @@ unsafe extern "C" fn crc32_little(
     let mut buf4: *const u4 = 0 as *const u4;
     c = crc as u4;
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as isize != 0 {
+    while len != 0 && buf as ptrdiff_t & 3 as i32 as isize != 0 {
         let fresh9 = buf;
         buf = buf.offset(1);
         c = (crc_table[0 as i32 as usize][((c ^ *fresh9 as u32) & 0xff as i32 as u32) as usize]
@@ -2329,7 +2329,7 @@ unsafe extern "C" fn crc32_big(
         .wrapping_add((crc as u4 & 0xff00 as i32 as u32) << 8 as i32)
         .wrapping_add((crc as u4 & 0xff as i32 as u32) << 24 as i32);
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as isize != 0 {
+    while len != 0 && buf as ptrdiff_t & 3 as i32 as isize != 0 {
         let fresh20 = buf;
         buf = buf.offset(1);
         c = (crc_table[4 as i32 as usize][(c >> 24 as i32 ^ *fresh20 as u32) as usize]
@@ -3089,10 +3089,10 @@ end of file, -1 for error). */
 #[no_mangle]
 
 pub unsafe extern "C" fn crc32_combine(
-    mut crc1: crate::zconf_h::uLong,
-    mut crc2: crate::zconf_h::uLong,
-    mut len2: crate::stdlib::off_t,
-) -> crate::zconf_h::uLong {
+    mut crc1: uLong,
+    mut crc2: uLong,
+    mut len2: off_t,
+) -> uLong {
     let mut n: i32 = 0; /* even-power-of-two zeros operator */
     let mut row: libc::c_ulong = 0; /* odd-power-of-two zeros operator */
     let mut even: [libc::c_ulong; 32] = [0; 32];

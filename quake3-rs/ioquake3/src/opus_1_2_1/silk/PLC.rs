@@ -301,44 +301,44 @@ pub use crate::src::opus_1_2_1::silk::PLC::SigProc_FIX_h::silk_max_int;
 pub use crate::src::opus_1_2_1::silk::PLC::SigProc_FIX_h::silk_min_32;
 pub use crate::src::opus_1_2_1::silk::PLC::SigProc_FIX_h::silk_min_int;
 
-static mut HARM_ATT_Q15: [crate::opus_types_h::opus_int16; 2] = [
-    32440 as i32 as crate::opus_types_h::opus_int16,
-    31130 as i32 as crate::opus_types_h::opus_int16,
+static mut HARM_ATT_Q15: [opus_int16; 2] = [
+    32440 as i32 as opus_int16,
+    31130 as i32 as opus_int16,
 ];
 /* 0.99, 0.95 */
 
-static mut PLC_RAND_ATTENUATE_V_Q15: [crate::opus_types_h::opus_int16; 2] = [
-    31130 as i32 as crate::opus_types_h::opus_int16,
-    26214 as i32 as crate::opus_types_h::opus_int16,
+static mut PLC_RAND_ATTENUATE_V_Q15: [opus_int16; 2] = [
+    31130 as i32 as opus_int16,
+    26214 as i32 as opus_int16,
 ];
 /* 0.95, 0.8 */
 
-static mut PLC_RAND_ATTENUATE_UV_Q15: [crate::opus_types_h::opus_int16; 2] = [
-    32440 as i32 as crate::opus_types_h::opus_int16,
-    29491 as i32 as crate::opus_types_h::opus_int16,
+static mut PLC_RAND_ATTENUATE_UV_Q15: [opus_int16; 2] = [
+    32440 as i32 as opus_int16,
+    29491 as i32 as opus_int16,
 ];
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_PLC_Reset(mut psDec: *mut crate::structs_h::silk_decoder_state)
+pub unsafe extern "C" fn silk_PLC_Reset(mut psDec: *mut silk_decoder_state)
 /* I/O Decoder state        */
 {
-    (*psDec).sPLC.pitchL_Q8 = (((*psDec).frame_length as crate::opus_types_h::opus_uint32)
-        << 8 as i32 - 1 as i32) as crate::opus_types_h::opus_int32;
+    (*psDec).sPLC.pitchL_Q8 = (((*psDec).frame_length as opus_uint32)
+        << 8 as i32 - 1 as i32) as opus_int32;
     (*psDec).sPLC.prevGain_Q16[0 as i32 as usize] =
         ((1 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
     (*psDec).sPLC.prevGain_Q16[1 as i32 as usize] =
         ((1 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
     (*psDec).sPLC.subfr_length = 20 as i32;
     (*psDec).sPLC.nb_subfr = 2 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_PLC(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut psDecCtrl: *mut crate::structs_h::silk_decoder_control,
-    mut frame: *mut crate::opus_types_h::opus_int16,
+    mut psDec: *mut silk_decoder_state,
+    mut psDecCtrl: *mut silk_decoder_control,
+    mut frame: *mut opus_int16,
     mut lost: i32,
     mut arch: i32,
 )
@@ -369,17 +369,17 @@ pub unsafe extern "C" fn silk_PLC(
 #[inline]
 
 unsafe extern "C" fn silk_PLC_update(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut psDecCtrl: *mut crate::structs_h::silk_decoder_control,
+    mut psDec: *mut silk_decoder_state,
+    mut psDecCtrl: *mut silk_decoder_control,
 )
 /* I/O Decoder control      */
 {
-    let mut LTP_Gain_Q14: crate::opus_types_h::opus_int32 = 0;
-    let mut temp_LTP_Gain_Q14: crate::opus_types_h::opus_int32 = 0;
+    let mut LTP_Gain_Q14: opus_int32 = 0;
+    let mut temp_LTP_Gain_Q14: opus_int32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut psPLC: *mut crate::structs_h::silk_PLC_struct =
-        0 as *mut crate::structs_h::silk_PLC_struct;
+    let mut psPLC: *mut silk_PLC_struct =
+        0 as *mut silk_PLC_struct;
     psPLC = &mut (*psDec).sPLC;
     /* Update parameters used in case of packet loss */
     (*psDec).prevSignalType = (*psDec).indices.signalType as i32;
@@ -406,21 +406,21 @@ unsafe extern "C" fn silk_PLC_update(
                 crate::stdlib::memcpy(
                     (*psPLC).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
                     &mut *(*psDecCtrl).LTPCoef_Q14.as_mut_ptr().offset(
-                        (((*psDec).nb_subfr - 1 as i32 - j) as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32
-                            * 5 as i32 as crate::opus_types_h::opus_int16
-                                as crate::opus_types_h::opus_int32)
+                        (((*psDec).nb_subfr - 1 as i32 - j) as opus_int16
+                            as opus_int32
+                            * 5 as i32 as opus_int16
+                                as opus_int32)
                             as isize,
-                    ) as *mut crate::opus_types_h::opus_int16
+                    ) as *mut opus_int16
                         as *const libc::c_void,
                     (5 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                        .wrapping_mul(::std::mem::size_of::<opus_int16>()
                             as libc::c_ulong),
                 );
                 (*psPLC).pitchL_Q8 =
                     (((*psDecCtrl).pitchL[((*psDec).nb_subfr - 1 as i32 - j) as usize]
-                        as crate::opus_types_h::opus_uint32)
-                        << 8 as i32) as crate::opus_types_h::opus_int32
+                        as opus_uint32)
+                        << 8 as i32) as opus_int32
             }
             j += 1
         }
@@ -428,17 +428,17 @@ unsafe extern "C" fn silk_PLC_update(
             (*psPLC).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
             (5 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int16,
+                opus_int16,
             >() as libc::c_ulong),
         );
         (*psPLC).LTPCoef_Q14[(5 as i32 / 2 as i32) as usize] =
-            LTP_Gain_Q14 as crate::opus_types_h::opus_int16;
+            LTP_Gain_Q14 as opus_int16;
         /* Limit LT coefs */
         if LTP_Gain_Q14 < 11469 as i32 {
             let mut scale_Q10: i32 = 0;
-            let mut tmp: crate::opus_types_h::opus_int32 = 0;
-            tmp = ((11469 as i32 as crate::opus_types_h::opus_uint32) << 10 as i32)
-                as crate::opus_types_h::opus_int32;
+            let mut tmp: opus_int32 = 0;
+            tmp = ((11469 as i32 as opus_uint32) << 10 as i32)
+                as opus_int32;
             scale_Q10 = tmp
                 / (if LTP_Gain_Q14 > 1 as i32 {
                     LTP_Gain_Q14
@@ -448,17 +448,17 @@ unsafe extern "C" fn silk_PLC_update(
             i = 0 as i32;
             while i < 5 as i32 {
                 (*psPLC).LTPCoef_Q14[i as usize] =
-                    ((*psPLC).LTPCoef_Q14[i as usize] as crate::opus_types_h::opus_int32
-                        * scale_Q10 as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32
-                        >> 10 as i32) as crate::opus_types_h::opus_int16;
+                    ((*psPLC).LTPCoef_Q14[i as usize] as opus_int32
+                        * scale_Q10 as opus_int16
+                            as opus_int32
+                        >> 10 as i32) as opus_int16;
                 i += 1
             }
         } else if LTP_Gain_Q14 > 15565 as i32 {
             let mut scale_Q14: i32 = 0;
-            let mut tmp_0: crate::opus_types_h::opus_int32 = 0;
-            tmp_0 = ((15565 as i32 as crate::opus_types_h::opus_uint32) << 14 as i32)
-                as crate::opus_types_h::opus_int32;
+            let mut tmp_0: opus_int32 = 0;
+            tmp_0 = ((15565 as i32 as opus_uint32) << 14 as i32)
+                as opus_int32;
             scale_Q14 = tmp_0
                 / (if LTP_Gain_Q14 > 1 as i32 {
                     LTP_Gain_Q14
@@ -468,24 +468,24 @@ unsafe extern "C" fn silk_PLC_update(
             i = 0 as i32;
             while i < 5 as i32 {
                 (*psPLC).LTPCoef_Q14[i as usize] =
-                    ((*psPLC).LTPCoef_Q14[i as usize] as crate::opus_types_h::opus_int32
-                        * scale_Q14 as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32
-                        >> 14 as i32) as crate::opus_types_h::opus_int16;
+                    ((*psPLC).LTPCoef_Q14[i as usize] as opus_int32
+                        * scale_Q14 as opus_int16
+                            as opus_int32
+                        >> 14 as i32) as opus_int16;
                 i += 1
             }
         }
     } else {
-        (*psPLC).pitchL_Q8 = ((((*psDec).fs_kHz as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
-            * 18 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
-            as crate::opus_types_h::opus_uint32)
-            << 8 as i32) as crate::opus_types_h::opus_int32;
+        (*psPLC).pitchL_Q8 = ((((*psDec).fs_kHz as opus_int16
+            as opus_int32
+            * 18 as i32 as opus_int16 as opus_int32)
+            as opus_uint32)
+            << 8 as i32) as opus_int32;
         crate::stdlib::memset(
             (*psPLC).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
             (5 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int16,
+                opus_int16,
             >() as libc::c_ulong),
         );
     }
@@ -494,9 +494,9 @@ unsafe extern "C" fn silk_PLC_update(
            (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr()
                as *const libc::c_void,
            ((*psDec).LPC_order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
-    (*psPLC).prevLTP_scale_Q14 = (*psDecCtrl).LTP_scale_Q14 as crate::opus_types_h::opus_int16;
+    (*psPLC).prevLTP_scale_Q14 = (*psDecCtrl).LTP_scale_Q14 as opus_int16;
     /* Save last two gains */
     crate::stdlib::memcpy((*psPLC).prevGain_Q16.as_mut_ptr() as *mut libc::c_void,
            &mut *(*psDecCtrl).Gains_Q16.as_mut_ptr().offset(((*psDec).nb_subfr
@@ -504,9 +504,9 @@ unsafe extern "C" fn silk_PLC_update(
                                                                  2 as
                                                                      i32)
                                                                 as isize) as
-               *mut crate::opus_types_h::opus_int32 as *const libc::c_void,
+               *mut opus_int32 as *const libc::c_void,
            (2 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     (*psPLC).subfr_length = (*psDec).subfr_length;
     (*psPLC).nb_subfr = (*psDec).nb_subfr;
@@ -514,27 +514,27 @@ unsafe extern "C" fn silk_PLC_update(
 #[inline]
 
 unsafe extern "C" fn silk_PLC_energy(
-    mut energy1: *mut crate::opus_types_h::opus_int32,
+    mut energy1: *mut opus_int32,
     mut shift1: *mut i32,
-    mut energy2: *mut crate::opus_types_h::opus_int32,
+    mut energy2: *mut opus_int32,
     mut shift2: *mut i32,
-    mut exc_Q14: *const crate::opus_types_h::opus_int32,
-    mut prevGain_Q10: *const crate::opus_types_h::opus_int32,
+    mut exc_Q14: *const opus_int32,
+    mut prevGain_Q10: *const opus_int32,
     mut subfr_length: i32,
     mut nb_subfr: i32,
 ) {
     let mut i: i32 = 0;
     let mut k: i32 = 0;
-    let mut exc_buf: *mut crate::opus_types_h::opus_int16 =
-        0 as *mut crate::opus_types_h::opus_int16;
-    let mut exc_buf_ptr: *mut crate::opus_types_h::opus_int16 =
-        0 as *mut crate::opus_types_h::opus_int16;
+    let mut exc_buf: *mut opus_int16 =
+        0 as *mut opus_int16;
+    let mut exc_buf_ptr: *mut opus_int16 =
+        0 as *mut opus_int16;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul((2 as i32 * subfr_length) as libc::c_ulong) as usize,
     );
-    exc_buf = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    exc_buf = fresh0.as_mut_ptr() as *mut opus_int16;
     /* Find random noise component */
     /* Scale previous excitation signal */
     exc_buf_ptr = exc_buf;
@@ -545,7 +545,7 @@ unsafe extern "C" fn silk_PLC_energy(
             *exc_buf_ptr.offset(i as isize) =
                 if (*exc_Q14.offset((i + (k + nb_subfr - 2 as i32) * subfr_length) as isize) as i64
                     * *prevGain_Q10.offset(k as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32
                     > 0x7fff as i32
                 {
@@ -553,31 +553,31 @@ unsafe extern "C" fn silk_PLC_energy(
                 } else if ((*exc_Q14.offset((i + (k + nb_subfr - 2 as i32) * subfr_length) as isize)
                     as i64
                     * *prevGain_Q10.offset(k as isize) as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32)
-                    < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                    < 0x8000 as i32 as opus_int16 as i32
                 {
-                    0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                    0x8000 as i32 as opus_int16 as i32
                 } else {
                     ((*exc_Q14.offset((i + (k + nb_subfr - 2 as i32) * subfr_length) as isize)
                         as i64
                         * *prevGain_Q10.offset(k as isize) as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32)
+                        >> 16 as i32) as opus_int32)
                         >> 8 as i32
-                } as crate::opus_types_h::opus_int16;
+                } as opus_int16;
             i += 1
         }
         exc_buf_ptr = exc_buf_ptr.offset(subfr_length as isize);
         k += 1
     }
     /* Find the subframe with lowest energy of the last two and use that as random noise generator */
-    crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+    silk_sum_sqr_shift(
         energy1,
         shift1,
         exc_buf,
         subfr_length,
     );
-    crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+    silk_sum_sqr_shift(
         energy2,
         shift2,
         &mut *exc_buf.offset(subfr_length as isize),
@@ -587,9 +587,9 @@ unsafe extern "C" fn silk_PLC_energy(
 #[inline]
 
 unsafe extern "C" fn silk_PLC_conceal(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut psDecCtrl: *mut crate::structs_h::silk_decoder_control,
-    mut frame: *mut crate::opus_types_h::opus_int16,
+    mut psDec: *mut silk_decoder_state,
+    mut psDecCtrl: *mut silk_decoder_control,
+    mut frame: *mut opus_int16,
     mut arch: i32,
 )
 /* I Run-time architecture  */
@@ -602,48 +602,48 @@ unsafe extern "C" fn silk_PLC_conceal(
     let mut sLTP_buf_idx: i32 = 0;
     let mut shift1: i32 = 0;
     let mut shift2: i32 = 0;
-    let mut rand_seed: crate::opus_types_h::opus_int32 = 0;
-    let mut harm_Gain_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut rand_Gain_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut inv_gain_Q30: crate::opus_types_h::opus_int32 = 0;
-    let mut energy1: crate::opus_types_h::opus_int32 = 0;
-    let mut energy2: crate::opus_types_h::opus_int32 = 0;
-    let mut rand_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut pred_lag_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut LPC_pred_Q10: crate::opus_types_h::opus_int32 = 0;
-    let mut LTP_pred_Q12: crate::opus_types_h::opus_int32 = 0;
-    let mut rand_scale_Q14: crate::opus_types_h::opus_int16 = 0;
-    let mut B_Q14: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut sLPC_Q14_ptr: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut A_Q12: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut sLTP: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut sLTP_Q14: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut psPLC: *mut crate::structs_h::silk_PLC_struct = &mut (*psDec).sPLC;
-    let mut prevGain_Q10: [crate::opus_types_h::opus_int32; 2] = [0; 2];
+    let mut rand_seed: opus_int32 = 0;
+    let mut harm_Gain_Q15: opus_int32 = 0;
+    let mut rand_Gain_Q15: opus_int32 = 0;
+    let mut inv_gain_Q30: opus_int32 = 0;
+    let mut energy1: opus_int32 = 0;
+    let mut energy2: opus_int32 = 0;
+    let mut rand_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut pred_lag_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut LPC_pred_Q10: opus_int32 = 0;
+    let mut LTP_pred_Q12: opus_int32 = 0;
+    let mut rand_scale_Q14: opus_int16 = 0;
+    let mut B_Q14: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut sLPC_Q14_ptr: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut A_Q12: [opus_int16; 16] = [0; 16];
+    let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut sLTP_Q14: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut psPLC: *mut silk_PLC_struct = &mut (*psDec).sPLC;
+    let mut prevGain_Q10: [opus_int32; 2] = [0; 2];
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul(((*psDec).ltp_mem_length + (*psDec).frame_length) as libc::c_ulong)
             as usize,
     );
-    sLTP_Q14 = fresh1.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    sLTP_Q14 = fresh1.as_mut_ptr() as *mut opus_int32;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul((*psDec).ltp_mem_length as libc::c_ulong) as usize,
     );
-    sLTP = fresh2.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    sLTP = fresh2.as_mut_ptr() as *mut opus_int16;
     prevGain_Q10[0 as i32 as usize] = (*psPLC).prevGain_Q16[0 as i32 as usize] >> 6 as i32;
     prevGain_Q10[1 as i32 as usize] = (*psPLC).prevGain_Q16[1 as i32 as usize] >> 6 as i32;
     if (*psDec).first_frame_after_reset != 0 {
         crate::stdlib::memset(
             (*psPLC).prevLPC_Q12.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 16]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 16]>() as libc::c_ulong,
         );
     }
     silk_PLC_energy(
@@ -662,77 +662,77 @@ unsafe extern "C" fn silk_PLC_conceal(
             as unsafe extern "C" fn(_: i32, _: i32) -> i32)(
             0 as i32,
             ((*psPLC).nb_subfr - 1 as i32) * (*psPLC).subfr_length - 128 as i32,
-        ) as isize) as *mut crate::opus_types_h::opus_int32
+        ) as isize) as *mut opus_int32
     } else {
         /* Second sub-frame has lowest energy */
         rand_ptr = &mut *(*psDec).exc_Q14.as_mut_ptr().offset((silk_max_int
             as unsafe extern "C" fn(_: i32, _: i32) -> i32)(
             0 as i32,
             (*psPLC).nb_subfr * (*psPLC).subfr_length - 128 as i32,
-        ) as isize) as *mut crate::opus_types_h::opus_int32
+        ) as isize) as *mut opus_int32
     }
     /* Set up Gain to random noise component */
     B_Q14 = (*psPLC).LTPCoef_Q14.as_mut_ptr();
     rand_scale_Q14 = (*psPLC).randScale_Q14;
     /* Set up attenuation gains */
     harm_Gain_Q15 = HARM_ATT_Q15[silk_min_int(2 as i32 - 1 as i32, (*psDec).lossCnt) as usize]
-        as crate::opus_types_h::opus_int32;
+        as opus_int32;
     if (*psDec).prevSignalType == 2 as i32 {
         rand_Gain_Q15 = PLC_RAND_ATTENUATE_V_Q15
             [silk_min_int(2 as i32 - 1 as i32, (*psDec).lossCnt) as usize]
-            as crate::opus_types_h::opus_int32
+            as opus_int32
     } else {
         rand_Gain_Q15 = PLC_RAND_ATTENUATE_UV_Q15
             [silk_min_int(2 as i32 - 1 as i32, (*psDec).lossCnt) as usize]
-            as crate::opus_types_h::opus_int32
+            as opus_int32
     }
     /* LPC concealment. Apply BWE to previous LPC */
-    crate::src::opus_1_2_1::silk::bwexpander::silk_bwexpander(
+    silk_bwexpander(
         (*psPLC).prevLPC_Q12.as_mut_ptr(),
         (*psDec).LPC_order,
         (0.99f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32,
+            as opus_int32,
     );
     /* Preload LPC coeficients to array on stack. Gives small performance gain */
     crate::stdlib::memcpy(A_Q12.as_mut_ptr() as *mut libc::c_void,
            (*psPLC).prevLPC_Q12.as_mut_ptr() as *const libc::c_void,
            ((*psDec).LPC_order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
     /* First Lost frame */
     if (*psDec).lossCnt == 0 as i32 {
-        rand_scale_Q14 = ((1 as i32) << 14 as i32) as crate::opus_types_h::opus_int16;
+        rand_scale_Q14 = ((1 as i32) << 14 as i32) as opus_int16;
         /* Reduce random noise Gain for voiced frames */
         if (*psDec).prevSignalType == 2 as i32 {
             i = 0 as i32; /* 0.2 */
             while i < 5 as i32 {
                 rand_scale_Q14 = (rand_scale_Q14 as i32 - *B_Q14.offset(i as isize) as i32)
-                    as crate::opus_types_h::opus_int16;
+                    as opus_int16;
                 i += 1
             }
             rand_scale_Q14 = silk_max_16(
-                3277 as i32 as crate::opus_types_h::opus_int16,
+                3277 as i32 as opus_int16,
                 rand_scale_Q14,
             );
-            rand_scale_Q14 = (rand_scale_Q14 as crate::opus_types_h::opus_int32
-                * (*psPLC).prevLTP_scale_Q14 as crate::opus_types_h::opus_int32
-                >> 14 as i32) as crate::opus_types_h::opus_int16
+            rand_scale_Q14 = (rand_scale_Q14 as opus_int32
+                * (*psPLC).prevLTP_scale_Q14 as opus_int32
+                >> 14 as i32) as opus_int16
         } else {
             /* Reduce random noise for unvoiced frames with high LPC gain */
-            let mut invGain_Q30: crate::opus_types_h::opus_int32 = 0;
-            let mut down_scale_Q30: crate::opus_types_h::opus_int32 = 0;
+            let mut invGain_Q30: opus_int32 = 0;
+            let mut down_scale_Q30: opus_int32 = 0;
             invGain_Q30 =
-                crate::src::opus_1_2_1::silk::LPC_inv_pred_gain::silk_LPC_inverse_pred_gain_c(
+                silk_LPC_inverse_pred_gain_c(
                     (*psPLC).prevLPC_Q12.as_mut_ptr(),
                     (*psDec).LPC_order,
                 );
             down_scale_Q30 = silk_min_32((1 as i32) << 30 as i32 >> 3 as i32, invGain_Q30);
             down_scale_Q30 = silk_max_32((1 as i32) << 30 as i32 >> 8 as i32, down_scale_Q30);
-            down_scale_Q30 = ((down_scale_Q30 as crate::opus_types_h::opus_uint32) << 3 as i32)
-                as crate::opus_types_h::opus_int32;
+            down_scale_Q30 = ((down_scale_Q30 as opus_uint32) << 3 as i32)
+                as opus_int32;
             rand_Gain_Q15 = (down_scale_Q30 as i64
-                * rand_Gain_Q15 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * rand_Gain_Q15 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
                 >> 14 as i32
         }
     }
@@ -745,7 +745,7 @@ unsafe extern "C" fn silk_PLC_conceal(
     sLTP_buf_idx = (*psDec).ltp_mem_length;
     /* Rewhiten LTP state */
     idx = (*psDec).ltp_mem_length - lag - (*psDec).LPC_order - 5 as i32 / 2 as i32;
-    crate::src::opus_1_2_1::silk::LPC_analysis_filter::silk_LPC_analysis_filter(
+    silk_LPC_analysis_filter(
         &mut *sLTP.offset(idx as isize),
         &mut *(*psDec).outBuf.as_mut_ptr().offset(idx as isize),
         A_Q12.as_mut_ptr(),
@@ -763,7 +763,7 @@ unsafe extern "C" fn silk_PLC_conceal(
     i = idx + (*psDec).LPC_order;
     while i < (*psDec).ltp_mem_length {
         *sLTP_Q14.offset(i as isize) = (inv_gain_Q30 as i64 * *sLTP.offset(i as isize) as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            >> 16 as i32) as opus_int32;
         i += 1
     }
     /* **************************/
@@ -773,7 +773,7 @@ unsafe extern "C" fn silk_PLC_conceal(
     while k < (*psDec).nb_subfr {
         /* Set up pointer */
         pred_lag_ptr = &mut *sLTP_Q14.offset((sLTP_buf_idx - lag + 5 as i32 / 2 as i32) as isize)
-            as *mut crate::opus_types_h::opus_int32;
+            as *mut opus_int32;
         i = 0 as i32;
         while i < (*psDec).subfr_length {
             /* Unrolled loop */
@@ -782,67 +782,67 @@ unsafe extern "C" fn silk_PLC_conceal(
             LTP_pred_Q12 = (LTP_pred_Q12 as i64
                 + (*pred_lag_ptr.offset(0 as i32 as isize) as i64
                     * *B_Q14.offset(0 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q12 = (LTP_pred_Q12 as i64
                 + (*pred_lag_ptr.offset(-(1 as i32) as isize) as i64
                     * *B_Q14.offset(1 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q12 = (LTP_pred_Q12 as i64
                 + (*pred_lag_ptr.offset(-(2 as i32) as isize) as i64
                     * *B_Q14.offset(2 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q12 = (LTP_pred_Q12 as i64
                 + (*pred_lag_ptr.offset(-(3 as i32) as isize) as i64
                     * *B_Q14.offset(3 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             LTP_pred_Q12 = (LTP_pred_Q12 as i64
                 + (*pred_lag_ptr.offset(-(4 as i32) as isize) as i64
                     * *B_Q14.offset(4 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             pred_lag_ptr = pred_lag_ptr.offset(1);
             /* Generate LPC excitation */
-            rand_seed = (907633515 as i32 as crate::opus_types_h::opus_uint32).wrapping_add(
-                (rand_seed as crate::opus_types_h::opus_uint32)
-                    .wrapping_mul(196314165 as i32 as crate::opus_types_h::opus_uint32),
-            ) as crate::opus_types_h::opus_int32;
+            rand_seed = (907633515 as i32 as opus_uint32).wrapping_add(
+                (rand_seed as opus_uint32)
+                    .wrapping_mul(196314165 as i32 as opus_uint32),
+            ) as opus_int32;
             idx = rand_seed >> 25 as i32 & 128 as i32 - 1 as i32;
             *sLTP_Q14.offset(sLTP_buf_idx as isize) = (((LTP_pred_Q12 as i64
                 + (*rand_ptr.offset(idx as isize) as i64 * rand_scale_Q14 as i64 >> 16 as i32))
-                as crate::opus_types_h::opus_int32
-                as crate::opus_types_h::opus_uint32)
+                as opus_int32
+                as opus_uint32)
                 << 2 as i32)
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
             sLTP_buf_idx += 1;
             i += 1
         }
         /* Gradually reduce LTP gain */
         j = 0 as i32;
         while j < 5 as i32 {
-            *B_Q14.offset(j as isize) = (harm_Gain_Q15 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * *B_Q14.offset(j as isize) as crate::opus_types_h::opus_int32
+            *B_Q14.offset(j as isize) = (harm_Gain_Q15 as opus_int16
+                as opus_int32
+                * *B_Q14.offset(j as isize) as opus_int32
                 >> 15 as i32)
-                as crate::opus_types_h::opus_int16;
+                as opus_int16;
             j += 1
         }
         if (*psDec).indices.signalType as i32 != 0 as i32 {
             /* Gradually reduce excitation gain */
-            rand_scale_Q14 = (rand_scale_Q14 as crate::opus_types_h::opus_int32
-                * rand_Gain_Q15 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
-                >> 15 as i32) as crate::opus_types_h::opus_int16
+            rand_scale_Q14 = (rand_scale_Q14 as opus_int32
+                * rand_Gain_Q15 as opus_int16
+                    as opus_int32
+                >> 15 as i32) as opus_int16
         }
         /* Slowly increase pitch lag */
         (*psPLC).pitchL_Q8 = ((*psPLC).pitchL_Q8 as i64
-            + ((*psPLC).pitchL_Q8 as i64 * 655 as i32 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+            + ((*psPLC).pitchL_Q8 as i64 * 655 as i32 as opus_int16 as i64
+                >> 16 as i32)) as opus_int32;
         (*psPLC).pitchL_Q8 = silk_min_32(
             (*psPLC).pitchL_Q8,
-            (((18 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * (*psDec).fs_kHz as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32)
-                << 8 as i32) as crate::opus_types_h::opus_int32,
+            (((18 as i32 as opus_int16 as opus_int32
+                * (*psDec).fs_kHz as opus_int16
+                    as opus_int32)
+                as opus_uint32)
+                << 8 as i32) as opus_int32,
         );
         lag = if 8 as i32 == 1 as i32 {
             ((*psPLC).pitchL_Q8 >> 1 as i32) + ((*psPLC).pitchL_Q8 & 1 as i32)
@@ -855,12 +855,12 @@ unsafe extern "C" fn silk_PLC_conceal(
     /* LPC synthesis filtering */
     /* **************************/
     sLPC_Q14_ptr = &mut *sLTP_Q14.offset(((*psDec).ltp_mem_length - 16 as i32) as isize)
-        as *mut crate::opus_types_h::opus_int32;
+        as *mut opus_int32;
     /* Copy LPC state */
     crate::stdlib::memcpy(sLPC_Q14_ptr as *mut libc::c_void,
            (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
            (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     /* check that unrolling works */
     i = 0 as i32;
@@ -871,63 +871,63 @@ unsafe extern "C" fn silk_PLC_conceal(
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 1 as i32) as isize) as i64
                 * A_Q12[0 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 2 as i32) as isize) as i64
                 * A_Q12[1 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 3 as i32) as isize) as i64
                 * A_Q12[2 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 4 as i32) as isize) as i64
                 * A_Q12[3 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 5 as i32) as isize) as i64
                 * A_Q12[4 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 6 as i32) as isize) as i64
                 * A_Q12[5 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 7 as i32) as isize) as i64
                 * A_Q12[6 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 8 as i32) as isize) as i64
                 * A_Q12[7 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 9 as i32) as isize) as i64
                 * A_Q12[8 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         LPC_pred_Q10 = (LPC_pred_Q10 as i64
             + (*sLPC_Q14_ptr.offset((16 as i32 + i - 10 as i32) as isize) as i64
                 * A_Q12[9 as i32 as usize] as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as opus_int32;
         j = 10 as i32;
         while j < (*psDec).LPC_order {
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
                 + (*sLPC_Q14_ptr.offset((16 as i32 + i - j - 1 as i32) as isize) as i64
                     * A_Q12[j as usize] as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as opus_int32;
             j += 1
         }
         /* Add prediction to LPC excitation */
         *sLPC_Q14_ptr.offset((16 as i32 + i) as isize) = if (*sLPC_Q14_ptr
             .offset((16 as i32 + i) as isize)
-            as crate::opus_types_h::opus_uint32)
+            as opus_uint32)
             .wrapping_add(
-                (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                     > 0x7fffffff as i32 >> 4 as i32
                 {
                     (if LPC_pred_Q10
-                        > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                        > 0x80000000 as u32 as opus_int32 >> 4 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                        (0x80000000 as u32 as opus_int32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
@@ -940,28 +940,28 @@ unsafe extern "C" fn silk_PLC_conceal(
                         (0x7fffffff as i32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10
-                            < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                            < 0x80000000 as u32 as opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                            (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             LPC_pred_Q10
                         })
                     })
-                }) as crate::opus_types_h::opus_uint32)
-                    << 4 as i32) as crate::opus_types_h::opus_int32
-                    as crate::opus_types_h::opus_uint32,
+                }) as opus_uint32)
+                    << 4 as i32) as opus_int32
+                    as opus_uint32,
             )
             & 0x80000000 as u32
             == 0 as i32 as u32
         {
             if (*sLPC_Q14_ptr.offset((16 as i32 + i) as isize)
-                & (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                & (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                     > 0x7fffffff as i32 >> 4 as i32
                 {
                     (if LPC_pred_Q10
-                        > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                        > 0x80000000 as u32 as opus_int32 >> 4 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                        (0x80000000 as u32 as opus_int32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
@@ -974,28 +974,28 @@ unsafe extern "C" fn silk_PLC_conceal(
                         (0x7fffffff as i32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10
-                            < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                            < 0x80000000 as u32 as opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                            (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             LPC_pred_Q10
                         })
                     })
-                }) as crate::opus_types_h::opus_uint32)
-                    << 4 as i32) as crate::opus_types_h::opus_int32) as u32
+                }) as opus_uint32)
+                    << 4 as i32) as opus_int32) as u32
                 & 0x80000000 as u32
                 != 0 as i32 as u32
             {
-                0x80000000 as u32 as crate::opus_types_h::opus_int32
+                0x80000000 as u32 as opus_int32
             } else {
                 (*sLPC_Q14_ptr.offset((16 as i32 + i) as isize))
-                    + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                    + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
                         (if LPC_pred_Q10
-                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                            > 0x80000000 as u32 as opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                            (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                                 (0x7fffffff as i32) >> 4 as i32
@@ -1008,23 +1008,23 @@ unsafe extern "C" fn silk_PLC_conceal(
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10
-                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                                < 0x80000000 as u32 as opus_int32 >> 4 as i32
                             {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                                (0x80000000 as u32 as opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
                         })
-                    }) as crate::opus_types_h::opus_uint32)
-                        << 4 as i32) as crate::opus_types_h::opus_int32
+                    }) as opus_uint32)
+                        << 4 as i32) as opus_int32
             }
         } else if (*sLPC_Q14_ptr.offset((16 as i32 + i) as isize)
-            | (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+            | (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                 > 0x7fffffff as i32 >> 4 as i32
             {
-                (if LPC_pred_Q10 > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32
                 {
-                    (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                    (0x80000000 as u32 as opus_int32) >> 4 as i32
                 } else {
                     (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                         (0x7fffffff as i32) >> 4 as i32
@@ -1037,28 +1037,28 @@ unsafe extern "C" fn silk_PLC_conceal(
                     (0x7fffffff as i32) >> 4 as i32
                 } else {
                     (if LPC_pred_Q10
-                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                        < 0x80000000 as u32 as opus_int32 >> 4 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                        (0x80000000 as u32 as opus_int32) >> 4 as i32
                     } else {
                         LPC_pred_Q10
                     })
                 })
-            }) as crate::opus_types_h::opus_uint32)
-                << 4 as i32) as crate::opus_types_h::opus_int32) as u32
+            }) as opus_uint32)
+                << 4 as i32) as opus_int32) as u32
             & 0x80000000 as u32
             == 0 as i32 as u32
         {
             0x7fffffff as i32
         } else {
             (*sLPC_Q14_ptr.offset((16 as i32 + i) as isize))
-                + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                     > 0x7fffffff as i32 >> 4 as i32
                 {
                     (if LPC_pred_Q10
-                        > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                        > 0x80000000 as u32 as opus_int32 >> 4 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                        (0x80000000 as u32 as opus_int32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
@@ -1071,30 +1071,30 @@ unsafe extern "C" fn silk_PLC_conceal(
                         (0x7fffffff as i32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10
-                            < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
+                            < 0x80000000 as u32 as opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
+                            (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             LPC_pred_Q10
                         })
                     })
-                }) as crate::opus_types_h::opus_uint32)
-                    << 4 as i32) as crate::opus_types_h::opus_int32
+                }) as opus_uint32)
+                    << 4 as i32) as opus_int32
         };
         /* Scale with Gain */
         *frame.offset(i as isize) = if (if (if 8 as i32 == 1 as i32 {
             ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -1105,37 +1105,37 @@ unsafe extern "C" fn silk_PLC_conceal(
             (if (if 8 as i32 == 1 as i32 {
                 ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else {
                 (if 8 as i32 == 1 as i32 {
                     ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         >> 1 as i32)
                         + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                             * prevGain_Q10[1 as i32 as usize] as i64
                             >> 16 as i32)
-                            as crate::opus_types_h::opus_int32
+                            as opus_int32
                             & 1 as i32)
                 } else {
                     (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         >> 8 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
@@ -1147,16 +1147,16 @@ unsafe extern "C" fn silk_PLC_conceal(
         } else if (if (if 8 as i32 == 1 as i32 {
             ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -1167,58 +1167,58 @@ unsafe extern "C" fn silk_PLC_conceal(
             (if (if 8 as i32 == 1 as i32 {
                 ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     >> 8 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
-            }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            }) < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else {
                 (if 8 as i32 == 1 as i32 {
                     ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         >> 1 as i32)
                         + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                             * prevGain_Q10[1 as i32 as usize] as i64
                             >> 16 as i32)
-                            as crate::opus_types_h::opus_int32
+                            as opus_int32
                             & 1 as i32)
                 } else {
                     (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                         * prevGain_Q10[1 as i32 as usize] as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        >> 16 as i32) as opus_int32
                         >> 8 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
                 })
             })
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if (if 8 as i32 == 1 as i32 {
             ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -1228,47 +1228,47 @@ unsafe extern "C" fn silk_PLC_conceal(
         } else if (if 8 as i32 == 1 as i32 {
             ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 8 as i32 == 1 as i32 {
             ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                     * prevGain_Q10[1 as i32 as usize] as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((*sLPC_Q14_ptr.offset((16 as i32 + i) as isize) as i64
                 * prevGain_Q10[1 as i32 as usize] as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                >> 16 as i32) as opus_int32
                 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         i += 1
     }
     /* Save LPC state */
     crate::stdlib::memcpy((*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
            &mut *sLPC_Q14_ptr.offset((*psDec).frame_length as isize) as
-               *mut crate::opus_types_h::opus_int32 as *const libc::c_void,
+               *mut opus_int32 as *const libc::c_void,
            (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     /* *************************************/
     /* Update states                      */
@@ -1322,34 +1322,34 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_PLC_glue_frames(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
-    mut frame: *mut crate::opus_types_h::opus_int16,
+    mut psDec: *mut silk_decoder_state,
+    mut frame: *mut opus_int16,
     mut length: i32,
 )
 /* I length of signal       */
 {
     let mut i: i32 = 0;
     let mut energy_shift: i32 = 0;
-    let mut energy: crate::opus_types_h::opus_int32 = 0;
-    let mut psPLC: *mut crate::structs_h::silk_PLC_struct =
-        0 as *mut crate::structs_h::silk_PLC_struct;
+    let mut energy: opus_int32 = 0;
+    let mut psPLC: *mut silk_PLC_struct =
+        0 as *mut silk_PLC_struct;
     psPLC = &mut (*psDec).sPLC;
     if (*psDec).lossCnt != 0 {
         /* Calculate energy in concealed residual */
-        crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+        silk_sum_sqr_shift(
             &mut (*psPLC).conc_energy,
             &mut (*psPLC).conc_energy_shift,
-            frame as *const crate::opus_types_h::opus_int16,
+            frame as *const opus_int16,
             length,
         );
         (*psPLC).last_frame_lost = 1 as i32
     } else {
         if (*psDec).sPLC.last_frame_lost != 0 {
             /* Calculate residual in decoded signal if last frame was lost */
-            crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+            silk_sum_sqr_shift(
                 &mut energy,
                 &mut energy_shift,
-                frame as *const crate::opus_types_h::opus_int16,
+                frame as *const opus_int16,
                 length,
             );
             /* Normalize energies */
@@ -1361,30 +1361,30 @@ pub unsafe extern "C" fn silk_PLC_glue_frames(
             }
             /* Fade in the energy difference */
             if energy > (*psPLC).conc_energy {
-                let mut frac_Q24: crate::opus_types_h::opus_int32 = 0;
-                let mut LZ: crate::opus_types_h::opus_int32 = 0;
-                let mut gain_Q16: crate::opus_types_h::opus_int32 = 0;
-                let mut slope_Q16: crate::opus_types_h::opus_int32 = 0;
+                let mut frac_Q24: opus_int32 = 0;
+                let mut LZ: opus_int32 = 0;
+                let mut gain_Q16: opus_int32 = 0;
+                let mut slope_Q16: opus_int32 = 0;
                 LZ = silk_CLZ32((*psPLC).conc_energy);
                 LZ = LZ - 1 as i32;
-                (*psPLC).conc_energy = (((*psPLC).conc_energy as crate::opus_types_h::opus_uint32)
+                (*psPLC).conc_energy = (((*psPLC).conc_energy as opus_uint32)
                     << LZ)
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
                 energy = energy >> silk_max_32(24 as i32 - LZ, 0 as i32);
                 frac_Q24 =
                     (*psPLC).conc_energy / (if energy > 1 as i32 { energy } else { 1 as i32 });
-                gain_Q16 = ((silk_SQRT_APPROX(frac_Q24) as crate::opus_types_h::opus_uint32)
-                    << 4 as i32) as crate::opus_types_h::opus_int32;
+                gain_Q16 = ((silk_SQRT_APPROX(frac_Q24) as opus_uint32)
+                    << 4 as i32) as opus_int32;
                 slope_Q16 = (((1 as i32) << 16 as i32) - gain_Q16) / length;
                 /* Make slope 4x steeper to avoid missing onsets after DTX */
-                slope_Q16 = ((slope_Q16 as crate::opus_types_h::opus_uint32) << 2 as i32)
-                    as crate::opus_types_h::opus_int32;
+                slope_Q16 = ((slope_Q16 as opus_uint32) << 2 as i32)
+                    as opus_int32;
                 i = 0 as i32;
                 while i < length {
                     *frame.offset(i as isize) = (gain_Q16 as i64 * *frame.offset(i as isize) as i64
                         >> 16 as i32)
-                        as crate::opus_types_h::opus_int32
-                        as crate::opus_types_h::opus_int16;
+                        as opus_int32
+                        as opus_int16;
                     gain_Q16 += slope_Q16;
                     if gain_Q16 > (1 as i32) << 16 as i32 {
                         break;

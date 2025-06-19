@@ -123,7 +123,7 @@ pub use crate::zlib_h::z_stream_s;
 pub use crate::zlib_h::z_streamp;
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateReset(mut strm: crate::zlib_h::z_streamp) -> i32 {
+pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state; /* to support ill-conceived Java test suite */
     if strm.is_null() || (*strm).state.is_null() {
@@ -134,12 +134,12 @@ pub unsafe extern "C" fn inflateReset(mut strm: crate::zlib_h::z_streamp) -> i32
     (*strm).total_out = (*state).total;
     (*strm).total_in = (*strm).total_out;
     (*strm).msg = 0 as *mut libc::c_char;
-    (*strm).adler = 1 as i32 as crate::zconf_h::uLong;
+    (*strm).adler = 1 as i32 as uLong;
     (*state).mode = crate::src::zlib::inflate::HEAD;
     (*state).last = 0 as i32;
     (*state).havedict = 0 as i32;
     (*state).dmax = 32768 as u32;
-    (*state).head = 0 as crate::zlib_h::gz_headerp;
+    (*state).head = 0 as gz_headerp;
     (*state).wsize = 0 as i32 as u32;
     (*state).whave = 0 as i32 as u32;
     (*state).write = 0 as i32 as u32;
@@ -153,7 +153,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: crate::zlib_h::z_streamp) -> i32
 #[no_mangle]
 
 pub unsafe extern "C" fn inflatePrime(
-    mut strm: crate::zlib_h::z_streamp,
+    mut strm: z_streamp,
     mut bits: i32,
     mut value: i32,
 ) -> i32 {
@@ -176,7 +176,7 @@ pub unsafe extern "C" fn inflatePrime(
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateInit2_(
-    mut strm: crate::zlib_h::z_streamp,
+    mut strm: z_streamp,
     mut windowBits: i32,
     mut version: *const libc::c_char,
     mut stream_size: i32,
@@ -187,7 +187,7 @@ pub unsafe extern "C" fn inflateInit2_(
         || *version.offset(0 as i32 as isize) as i32
             != (*::std::mem::transmute::<&[u8; 6], &[libc::c_char; 6]>(b"1.2.3\x00"))
                 [0 as i32 as usize] as i32
-        || stream_size != ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong as i32
+        || stream_size != ::std::mem::size_of::<z_stream>() as libc::c_ulong as i32
     {
         return -(6 as i32);
     }
@@ -199,30 +199,30 @@ pub unsafe extern "C" fn inflateInit2_(
         (*strm).zalloc = Some(
             crate::src::zlib::zutil::zcalloc
                 as unsafe extern "C" fn(
-                    _: crate::zconf_h::voidpf,
+                    _: voidpf,
                     _: u32,
                     _: u32,
-                ) -> crate::zconf_h::voidpf,
+                ) -> voidpf,
         );
-        (*strm).opaque = 0 as crate::zconf_h::voidpf
+        (*strm).opaque = 0 as voidpf
     }
     if (*strm).zfree.is_none() {
         (*strm).zfree = Some(
             crate::src::zlib::zutil::zcfree
-                as unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> (),
+                as unsafe extern "C" fn(_: voidpf, _: voidpf) -> (),
         )
     }
     state = Some((*strm).zalloc.expect("non-null function pointer"))
         .expect("non-null function pointer")(
         (*strm).opaque,
-        1 as i32 as crate::zconf_h::uInt,
+        1 as i32 as uInt,
         ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
-            as crate::zconf_h::uInt,
+            as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if state.is_null() {
         return -(4 as i32);
     }
-    (*strm).state = state as *mut crate::zlib_h::internal_state;
+    (*strm).state = state as *mut internal_state;
     if windowBits < 0 as i32 {
         (*state).wrap = 0 as i32;
         windowBits = -windowBits
@@ -232,9 +232,9 @@ pub unsafe extern "C" fn inflateInit2_(
     if windowBits < 8 as i32 || windowBits > 15 as i32 {
         Some((*strm).zfree.expect("non-null function pointer")).expect("non-null function pointer")(
             (*strm).opaque,
-            state as crate::zconf_h::voidpf,
+            state as voidpf,
         );
-        (*strm).state = 0 as *mut crate::zlib_h::internal_state;
+        (*strm).state = 0 as *mut internal_state;
         return -(2 as i32);
     }
     (*state).wbits = windowBits as u32;
@@ -244,7 +244,7 @@ pub unsafe extern "C" fn inflateInit2_(
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateInit_(
-    mut strm: crate::zlib_h::z_streamp,
+    mut strm: z_streamp,
     mut version: *const libc::c_char,
     mut stream_size: i32,
 ) -> i32 {
@@ -350,9 +350,9 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
       is part of the implementation of the compression library and
       is subject to change. Applications should only use zlib.h.
     */
-    static mut lenfix: [crate::src::zlib::inftrees::code; 512] = [
+    static mut lenfix: [code; 512] = [
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 96 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -360,7 +360,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 80 as i32 as u16,
@@ -368,7 +368,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 16 as i32 as u16,
@@ -376,7 +376,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 115 as i32 as u16,
@@ -384,7 +384,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -392,7 +392,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 112 as i32 as u16,
@@ -400,7 +400,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 48 as i32 as u16,
@@ -408,7 +408,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 192 as i32 as u16,
@@ -416,7 +416,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -424,7 +424,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 96 as i32 as u16,
@@ -432,7 +432,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 32 as i32 as u16,
@@ -440,7 +440,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 160 as i32 as u16,
@@ -448,7 +448,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -456,7 +456,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 128 as i32 as u16,
@@ -464,7 +464,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 64 as i32 as u16,
@@ -472,7 +472,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 224 as i32 as u16,
@@ -480,7 +480,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -488,7 +488,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 88 as i32 as u16,
@@ -496,7 +496,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 24 as i32 as u16,
@@ -504,7 +504,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 144 as i32 as u16,
@@ -512,7 +512,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -520,7 +520,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 120 as i32 as u16,
@@ -528,7 +528,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 56 as i32 as u16,
@@ -536,7 +536,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 208 as i32 as u16,
@@ -544,7 +544,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -552,7 +552,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 104 as i32 as u16,
@@ -560,7 +560,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 40 as i32 as u16,
@@ -568,7 +568,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 176 as i32 as u16,
@@ -576,7 +576,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -584,7 +584,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 136 as i32 as u16,
@@ -592,7 +592,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 72 as i32 as u16,
@@ -600,7 +600,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 240 as i32 as u16,
@@ -608,7 +608,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -616,7 +616,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 84 as i32 as u16,
@@ -624,7 +624,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 20 as i32 as u16,
@@ -632,7 +632,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 227 as i32 as u16,
@@ -640,7 +640,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -648,7 +648,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 116 as i32 as u16,
@@ -656,7 +656,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 52 as i32 as u16,
@@ -664,7 +664,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 200 as i32 as u16,
@@ -672,7 +672,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -680,7 +680,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 100 as i32 as u16,
@@ -688,7 +688,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 36 as i32 as u16,
@@ -696,7 +696,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 168 as i32 as u16,
@@ -704,7 +704,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -712,7 +712,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 132 as i32 as u16,
@@ -720,7 +720,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 68 as i32 as u16,
@@ -728,7 +728,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 232 as i32 as u16,
@@ -736,7 +736,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -744,7 +744,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 92 as i32 as u16,
@@ -752,7 +752,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 28 as i32 as u16,
@@ -760,7 +760,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 152 as i32 as u16,
@@ -768,7 +768,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -776,7 +776,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 124 as i32 as u16,
@@ -784,7 +784,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 60 as i32 as u16,
@@ -792,7 +792,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 216 as i32 as u16,
@@ -800,7 +800,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -808,7 +808,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 108 as i32 as u16,
@@ -816,7 +816,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 44 as i32 as u16,
@@ -824,7 +824,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 184 as i32 as u16,
@@ -832,7 +832,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 12 as i32 as u16,
@@ -840,7 +840,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 140 as i32 as u16,
@@ -848,7 +848,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 76 as i32 as u16,
@@ -856,7 +856,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 248 as i32 as u16,
@@ -864,7 +864,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -872,7 +872,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 82 as i32 as u16,
@@ -880,7 +880,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 18 as i32 as u16,
@@ -888,7 +888,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 163 as i32 as u16,
@@ -896,7 +896,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -904,7 +904,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 114 as i32 as u16,
@@ -912,7 +912,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 50 as i32 as u16,
@@ -920,7 +920,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 196 as i32 as u16,
@@ -928,7 +928,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -936,7 +936,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 98 as i32 as u16,
@@ -944,7 +944,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 34 as i32 as u16,
@@ -952,7 +952,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 164 as i32 as u16,
@@ -960,7 +960,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 2 as i32 as u16,
@@ -968,7 +968,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 130 as i32 as u16,
@@ -976,7 +976,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 66 as i32 as u16,
@@ -984,7 +984,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 228 as i32 as u16,
@@ -992,7 +992,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -1000,7 +1000,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 90 as i32 as u16,
@@ -1008,7 +1008,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 26 as i32 as u16,
@@ -1016,7 +1016,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 148 as i32 as u16,
@@ -1024,7 +1024,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -1032,7 +1032,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 122 as i32 as u16,
@@ -1040,7 +1040,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 58 as i32 as u16,
@@ -1048,7 +1048,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 212 as i32 as u16,
@@ -1056,7 +1056,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -1064,7 +1064,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 106 as i32 as u16,
@@ -1072,7 +1072,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 42 as i32 as u16,
@@ -1080,7 +1080,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 180 as i32 as u16,
@@ -1088,7 +1088,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -1096,7 +1096,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 138 as i32 as u16,
@@ -1104,7 +1104,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 74 as i32 as u16,
@@ -1112,7 +1112,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 244 as i32 as u16,
@@ -1120,7 +1120,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -1128,7 +1128,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 86 as i32 as u16,
@@ -1136,7 +1136,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 22 as i32 as u16,
@@ -1144,7 +1144,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -1152,7 +1152,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -1160,7 +1160,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 118 as i32 as u16,
@@ -1168,7 +1168,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 54 as i32 as u16,
@@ -1176,7 +1176,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 204 as i32 as u16,
@@ -1184,7 +1184,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -1192,7 +1192,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 102 as i32 as u16,
@@ -1200,7 +1200,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 38 as i32 as u16,
@@ -1208,7 +1208,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 172 as i32 as u16,
@@ -1216,7 +1216,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -1224,7 +1224,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 134 as i32 as u16,
@@ -1232,7 +1232,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 70 as i32 as u16,
@@ -1240,7 +1240,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 236 as i32 as u16,
@@ -1248,7 +1248,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -1256,7 +1256,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 94 as i32 as u16,
@@ -1264,7 +1264,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 30 as i32 as u16,
@@ -1272,7 +1272,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 156 as i32 as u16,
@@ -1280,7 +1280,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -1288,7 +1288,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 126 as i32 as u16,
@@ -1296,7 +1296,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 62 as i32 as u16,
@@ -1304,7 +1304,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 220 as i32 as u16,
@@ -1312,7 +1312,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -1320,7 +1320,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 110 as i32 as u16,
@@ -1328,7 +1328,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 46 as i32 as u16,
@@ -1336,7 +1336,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 188 as i32 as u16,
@@ -1344,7 +1344,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 14 as i32 as u16,
@@ -1352,7 +1352,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 142 as i32 as u16,
@@ -1360,7 +1360,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 78 as i32 as u16,
@@ -1368,7 +1368,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 252 as i32 as u16,
@@ -1376,7 +1376,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 96 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -1384,7 +1384,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 81 as i32 as u16,
@@ -1392,7 +1392,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -1400,7 +1400,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 131 as i32 as u16,
@@ -1408,7 +1408,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -1416,7 +1416,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 113 as i32 as u16,
@@ -1424,7 +1424,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 49 as i32 as u16,
@@ -1432,7 +1432,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 194 as i32 as u16,
@@ -1440,7 +1440,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -1448,7 +1448,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 97 as i32 as u16,
@@ -1456,7 +1456,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 33 as i32 as u16,
@@ -1464,7 +1464,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 162 as i32 as u16,
@@ -1472,7 +1472,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 1 as i32 as u16,
@@ -1480,7 +1480,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 129 as i32 as u16,
@@ -1488,7 +1488,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 65 as i32 as u16,
@@ -1496,7 +1496,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 226 as i32 as u16,
@@ -1504,7 +1504,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -1512,7 +1512,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 89 as i32 as u16,
@@ -1520,7 +1520,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 25 as i32 as u16,
@@ -1528,7 +1528,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 146 as i32 as u16,
@@ -1536,7 +1536,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -1544,7 +1544,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 121 as i32 as u16,
@@ -1552,7 +1552,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 57 as i32 as u16,
@@ -1560,7 +1560,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 210 as i32 as u16,
@@ -1568,7 +1568,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -1576,7 +1576,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 105 as i32 as u16,
@@ -1584,7 +1584,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 41 as i32 as u16,
@@ -1592,7 +1592,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 178 as i32 as u16,
@@ -1600,7 +1600,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -1608,7 +1608,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 137 as i32 as u16,
@@ -1616,7 +1616,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 73 as i32 as u16,
@@ -1624,7 +1624,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 242 as i32 as u16,
@@ -1632,7 +1632,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -1640,7 +1640,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 85 as i32 as u16,
@@ -1648,7 +1648,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 21 as i32 as u16,
@@ -1656,7 +1656,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 258 as i32 as u16,
@@ -1664,7 +1664,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -1672,7 +1672,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 117 as i32 as u16,
@@ -1680,7 +1680,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 53 as i32 as u16,
@@ -1688,7 +1688,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 202 as i32 as u16,
@@ -1696,7 +1696,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -1704,7 +1704,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 101 as i32 as u16,
@@ -1712,7 +1712,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 37 as i32 as u16,
@@ -1720,7 +1720,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 170 as i32 as u16,
@@ -1728,7 +1728,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -1736,7 +1736,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 133 as i32 as u16,
@@ -1744,7 +1744,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 69 as i32 as u16,
@@ -1752,7 +1752,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 234 as i32 as u16,
@@ -1760,7 +1760,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -1768,7 +1768,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 93 as i32 as u16,
@@ -1776,7 +1776,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 29 as i32 as u16,
@@ -1784,7 +1784,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 154 as i32 as u16,
@@ -1792,7 +1792,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -1800,7 +1800,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 125 as i32 as u16,
@@ -1808,7 +1808,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 61 as i32 as u16,
@@ -1816,7 +1816,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 218 as i32 as u16,
@@ -1824,7 +1824,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -1832,7 +1832,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 109 as i32 as u16,
@@ -1840,7 +1840,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 45 as i32 as u16,
@@ -1848,7 +1848,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 186 as i32 as u16,
@@ -1856,7 +1856,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -1864,7 +1864,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 141 as i32 as u16,
@@ -1872,7 +1872,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 77 as i32 as u16,
@@ -1880,7 +1880,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 250 as i32 as u16,
@@ -1888,7 +1888,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -1896,7 +1896,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -1904,7 +1904,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -1912,7 +1912,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 195 as i32 as u16,
@@ -1920,7 +1920,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -1928,7 +1928,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 115 as i32 as u16,
@@ -1936,7 +1936,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -1944,7 +1944,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 198 as i32 as u16,
@@ -1952,7 +1952,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -1960,7 +1960,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -1968,7 +1968,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -1976,7 +1976,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 166 as i32 as u16,
@@ -1984,7 +1984,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -1992,7 +1992,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 131 as i32 as u16,
@@ -2000,7 +2000,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -2008,7 +2008,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 230 as i32 as u16,
@@ -2016,7 +2016,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -2024,7 +2024,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 91 as i32 as u16,
@@ -2032,7 +2032,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -2040,7 +2040,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 150 as i32 as u16,
@@ -2048,7 +2048,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -2056,7 +2056,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 123 as i32 as u16,
@@ -2064,7 +2064,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -2072,7 +2072,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 214 as i32 as u16,
@@ -2080,7 +2080,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -2088,7 +2088,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 107 as i32 as u16,
@@ -2096,7 +2096,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -2104,7 +2104,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 182 as i32 as u16,
@@ -2112,7 +2112,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -2120,7 +2120,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 139 as i32 as u16,
@@ -2128,7 +2128,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 75 as i32 as u16,
@@ -2136,7 +2136,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 246 as i32 as u16,
@@ -2144,7 +2144,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -2152,7 +2152,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 87 as i32 as u16,
@@ -2160,7 +2160,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -2168,7 +2168,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -2176,7 +2176,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -2184,7 +2184,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 119 as i32 as u16,
@@ -2192,7 +2192,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 55 as i32 as u16,
@@ -2200,7 +2200,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 206 as i32 as u16,
@@ -2208,7 +2208,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -2216,7 +2216,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 103 as i32 as u16,
@@ -2224,7 +2224,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 39 as i32 as u16,
@@ -2232,7 +2232,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 174 as i32 as u16,
@@ -2240,7 +2240,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -2248,7 +2248,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 135 as i32 as u16,
@@ -2256,7 +2256,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 71 as i32 as u16,
@@ -2264,7 +2264,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 238 as i32 as u16,
@@ -2272,7 +2272,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -2280,7 +2280,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 95 as i32 as u16,
@@ -2288,7 +2288,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -2296,7 +2296,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 158 as i32 as u16,
@@ -2304,7 +2304,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -2312,7 +2312,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 127 as i32 as u16,
@@ -2320,7 +2320,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 63 as i32 as u16,
@@ -2328,7 +2328,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 222 as i32 as u16,
@@ -2336,7 +2336,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -2344,7 +2344,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 111 as i32 as u16,
@@ -2352,7 +2352,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 47 as i32 as u16,
@@ -2360,7 +2360,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 190 as i32 as u16,
@@ -2368,7 +2368,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -2376,7 +2376,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 143 as i32 as u16,
@@ -2384,7 +2384,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 79 as i32 as u16,
@@ -2392,7 +2392,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 254 as i32 as u16,
@@ -2400,7 +2400,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 96 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -2408,7 +2408,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 80 as i32 as u16,
@@ -2416,7 +2416,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 16 as i32 as u16,
@@ -2424,7 +2424,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 115 as i32 as u16,
@@ -2432,7 +2432,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -2440,7 +2440,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 112 as i32 as u16,
@@ -2448,7 +2448,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 48 as i32 as u16,
@@ -2456,7 +2456,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 193 as i32 as u16,
@@ -2464,7 +2464,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -2472,7 +2472,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 96 as i32 as u16,
@@ -2480,7 +2480,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 32 as i32 as u16,
@@ -2488,7 +2488,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 161 as i32 as u16,
@@ -2496,7 +2496,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -2504,7 +2504,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 128 as i32 as u16,
@@ -2512,7 +2512,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 64 as i32 as u16,
@@ -2520,7 +2520,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 225 as i32 as u16,
@@ -2528,7 +2528,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -2536,7 +2536,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 88 as i32 as u16,
@@ -2544,7 +2544,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 24 as i32 as u16,
@@ -2552,7 +2552,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 145 as i32 as u16,
@@ -2560,7 +2560,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -2568,7 +2568,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 120 as i32 as u16,
@@ -2576,7 +2576,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 56 as i32 as u16,
@@ -2584,7 +2584,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 209 as i32 as u16,
@@ -2592,7 +2592,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -2600,7 +2600,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 104 as i32 as u16,
@@ -2608,7 +2608,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 40 as i32 as u16,
@@ -2616,7 +2616,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 177 as i32 as u16,
@@ -2624,7 +2624,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -2632,7 +2632,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 136 as i32 as u16,
@@ -2640,7 +2640,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 72 as i32 as u16,
@@ -2648,7 +2648,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 241 as i32 as u16,
@@ -2656,7 +2656,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -2664,7 +2664,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 84 as i32 as u16,
@@ -2672,7 +2672,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 20 as i32 as u16,
@@ -2680,7 +2680,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 227 as i32 as u16,
@@ -2688,7 +2688,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -2696,7 +2696,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 116 as i32 as u16,
@@ -2704,7 +2704,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 52 as i32 as u16,
@@ -2712,7 +2712,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 201 as i32 as u16,
@@ -2720,7 +2720,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -2728,7 +2728,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 100 as i32 as u16,
@@ -2736,7 +2736,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 36 as i32 as u16,
@@ -2744,7 +2744,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 169 as i32 as u16,
@@ -2752,7 +2752,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -2760,7 +2760,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 132 as i32 as u16,
@@ -2768,7 +2768,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 68 as i32 as u16,
@@ -2776,7 +2776,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 233 as i32 as u16,
@@ -2784,7 +2784,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -2792,7 +2792,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 92 as i32 as u16,
@@ -2800,7 +2800,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 28 as i32 as u16,
@@ -2808,7 +2808,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 153 as i32 as u16,
@@ -2816,7 +2816,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -2824,7 +2824,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 124 as i32 as u16,
@@ -2832,7 +2832,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 60 as i32 as u16,
@@ -2840,7 +2840,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 217 as i32 as u16,
@@ -2848,7 +2848,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -2856,7 +2856,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 108 as i32 as u16,
@@ -2864,7 +2864,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 44 as i32 as u16,
@@ -2872,7 +2872,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 185 as i32 as u16,
@@ -2880,7 +2880,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 12 as i32 as u16,
@@ -2888,7 +2888,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 140 as i32 as u16,
@@ -2896,7 +2896,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 76 as i32 as u16,
@@ -2904,7 +2904,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 249 as i32 as u16,
@@ -2912,7 +2912,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -2920,7 +2920,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 82 as i32 as u16,
@@ -2928,7 +2928,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 18 as i32 as u16,
@@ -2936,7 +2936,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 163 as i32 as u16,
@@ -2944,7 +2944,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -2952,7 +2952,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 114 as i32 as u16,
@@ -2960,7 +2960,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 50 as i32 as u16,
@@ -2968,7 +2968,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 197 as i32 as u16,
@@ -2976,7 +2976,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -2984,7 +2984,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 98 as i32 as u16,
@@ -2992,7 +2992,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 34 as i32 as u16,
@@ -3000,7 +3000,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 165 as i32 as u16,
@@ -3008,7 +3008,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 2 as i32 as u16,
@@ -3016,7 +3016,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 130 as i32 as u16,
@@ -3024,7 +3024,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 66 as i32 as u16,
@@ -3032,7 +3032,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 229 as i32 as u16,
@@ -3040,7 +3040,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -3048,7 +3048,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 90 as i32 as u16,
@@ -3056,7 +3056,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 26 as i32 as u16,
@@ -3064,7 +3064,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 149 as i32 as u16,
@@ -3072,7 +3072,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -3080,7 +3080,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 122 as i32 as u16,
@@ -3088,7 +3088,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 58 as i32 as u16,
@@ -3096,7 +3096,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 213 as i32 as u16,
@@ -3104,7 +3104,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -3112,7 +3112,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 106 as i32 as u16,
@@ -3120,7 +3120,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 42 as i32 as u16,
@@ -3128,7 +3128,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 181 as i32 as u16,
@@ -3136,7 +3136,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -3144,7 +3144,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 138 as i32 as u16,
@@ -3152,7 +3152,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 74 as i32 as u16,
@@ -3160,7 +3160,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 245 as i32 as u16,
@@ -3168,7 +3168,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -3176,7 +3176,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 86 as i32 as u16,
@@ -3184,7 +3184,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 22 as i32 as u16,
@@ -3192,7 +3192,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -3200,7 +3200,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -3208,7 +3208,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 118 as i32 as u16,
@@ -3216,7 +3216,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 54 as i32 as u16,
@@ -3224,7 +3224,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 205 as i32 as u16,
@@ -3232,7 +3232,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -3240,7 +3240,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 102 as i32 as u16,
@@ -3248,7 +3248,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 38 as i32 as u16,
@@ -3256,7 +3256,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 173 as i32 as u16,
@@ -3264,7 +3264,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -3272,7 +3272,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 134 as i32 as u16,
@@ -3280,7 +3280,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 70 as i32 as u16,
@@ -3288,7 +3288,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 237 as i32 as u16,
@@ -3296,7 +3296,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -3304,7 +3304,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 94 as i32 as u16,
@@ -3312,7 +3312,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 30 as i32 as u16,
@@ -3320,7 +3320,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 157 as i32 as u16,
@@ -3328,7 +3328,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -3336,7 +3336,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 126 as i32 as u16,
@@ -3344,7 +3344,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 62 as i32 as u16,
@@ -3352,7 +3352,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 221 as i32 as u16,
@@ -3360,7 +3360,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -3368,7 +3368,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 110 as i32 as u16,
@@ -3376,7 +3376,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 46 as i32 as u16,
@@ -3384,7 +3384,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 189 as i32 as u16,
@@ -3392,7 +3392,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 14 as i32 as u16,
@@ -3400,7 +3400,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 142 as i32 as u16,
@@ -3408,7 +3408,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 78 as i32 as u16,
@@ -3416,7 +3416,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 253 as i32 as u16,
@@ -3424,7 +3424,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 96 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -3432,7 +3432,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 81 as i32 as u16,
@@ -3440,7 +3440,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -3448,7 +3448,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 131 as i32 as u16,
@@ -3456,7 +3456,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -3464,7 +3464,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 113 as i32 as u16,
@@ -3472,7 +3472,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 49 as i32 as u16,
@@ -3480,7 +3480,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 195 as i32 as u16,
@@ -3488,7 +3488,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 10 as i32 as u16,
@@ -3496,7 +3496,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 97 as i32 as u16,
@@ -3504,7 +3504,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 33 as i32 as u16,
@@ -3512,7 +3512,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 163 as i32 as u16,
@@ -3520,7 +3520,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 1 as i32 as u16,
@@ -3528,7 +3528,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 129 as i32 as u16,
@@ -3536,7 +3536,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 65 as i32 as u16,
@@ -3544,7 +3544,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 227 as i32 as u16,
@@ -3552,7 +3552,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 6 as i32 as u16,
@@ -3560,7 +3560,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 89 as i32 as u16,
@@ -3568,7 +3568,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 25 as i32 as u16,
@@ -3576,7 +3576,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 147 as i32 as u16,
@@ -3584,7 +3584,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -3592,7 +3592,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 121 as i32 as u16,
@@ -3600,7 +3600,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 57 as i32 as u16,
@@ -3608,7 +3608,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 211 as i32 as u16,
@@ -3616,7 +3616,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -3624,7 +3624,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 105 as i32 as u16,
@@ -3632,7 +3632,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 41 as i32 as u16,
@@ -3640,7 +3640,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 179 as i32 as u16,
@@ -3648,7 +3648,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -3656,7 +3656,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 137 as i32 as u16,
@@ -3664,7 +3664,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 73 as i32 as u16,
@@ -3672,7 +3672,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 243 as i32 as u16,
@@ -3680,7 +3680,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -3688,7 +3688,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 85 as i32 as u16,
@@ -3696,7 +3696,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 21 as i32 as u16,
@@ -3704,7 +3704,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 258 as i32 as u16,
@@ -3712,7 +3712,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -3720,7 +3720,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 117 as i32 as u16,
@@ -3728,7 +3728,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 53 as i32 as u16,
@@ -3736,7 +3736,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 203 as i32 as u16,
@@ -3744,7 +3744,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -3752,7 +3752,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 101 as i32 as u16,
@@ -3760,7 +3760,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 37 as i32 as u16,
@@ -3768,7 +3768,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 171 as i32 as u16,
@@ -3776,7 +3776,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -3784,7 +3784,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 133 as i32 as u16,
@@ -3792,7 +3792,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 69 as i32 as u16,
@@ -3800,7 +3800,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 235 as i32 as u16,
@@ -3808,7 +3808,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 8 as i32 as u16,
@@ -3816,7 +3816,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 93 as i32 as u16,
@@ -3824,7 +3824,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 29 as i32 as u16,
@@ -3832,7 +3832,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 155 as i32 as u16,
@@ -3840,7 +3840,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -3848,7 +3848,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 125 as i32 as u16,
@@ -3856,7 +3856,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 61 as i32 as u16,
@@ -3864,7 +3864,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 219 as i32 as u16,
@@ -3872,7 +3872,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -3880,7 +3880,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 109 as i32 as u16,
@@ -3888,7 +3888,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 45 as i32 as u16,
@@ -3896,7 +3896,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 187 as i32 as u16,
@@ -3904,7 +3904,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -3912,7 +3912,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 141 as i32 as u16,
@@ -3920,7 +3920,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 77 as i32 as u16,
@@ -3928,7 +3928,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 251 as i32 as u16,
@@ -3936,7 +3936,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -3944,7 +3944,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 83 as i32 as u16,
@@ -3952,7 +3952,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -3960,7 +3960,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 195 as i32 as u16,
@@ -3968,7 +3968,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -3976,7 +3976,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 115 as i32 as u16,
@@ -3984,7 +3984,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -3992,7 +3992,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 199 as i32 as u16,
@@ -4000,7 +4000,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -4008,7 +4008,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -4016,7 +4016,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 35 as i32 as u16,
@@ -4024,7 +4024,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 167 as i32 as u16,
@@ -4032,7 +4032,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -4040,7 +4040,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 131 as i32 as u16,
@@ -4048,7 +4048,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -4056,7 +4056,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 231 as i32 as u16,
@@ -4064,7 +4064,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -4072,7 +4072,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 91 as i32 as u16,
@@ -4080,7 +4080,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -4088,7 +4088,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 151 as i32 as u16,
@@ -4096,7 +4096,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 67 as i32 as u16,
@@ -4104,7 +4104,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 123 as i32 as u16,
@@ -4112,7 +4112,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 59 as i32 as u16,
@@ -4120,7 +4120,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 215 as i32 as u16,
@@ -4128,7 +4128,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 19 as i32 as u16,
@@ -4136,7 +4136,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 107 as i32 as u16,
@@ -4144,7 +4144,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 43 as i32 as u16,
@@ -4152,7 +4152,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 183 as i32 as u16,
@@ -4160,7 +4160,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 11 as i32 as u16,
@@ -4168,7 +4168,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 139 as i32 as u16,
@@ -4176,7 +4176,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 75 as i32 as u16,
@@ -4184,7 +4184,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 247 as i32 as u16,
@@ -4192,7 +4192,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -4200,7 +4200,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 87 as i32 as u16,
@@ -4208,7 +4208,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 23 as i32 as u16,
@@ -4216,7 +4216,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -4224,7 +4224,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 51 as i32 as u16,
@@ -4232,7 +4232,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 119 as i32 as u16,
@@ -4240,7 +4240,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 55 as i32 as u16,
@@ -4248,7 +4248,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 207 as i32 as u16,
@@ -4256,7 +4256,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -4264,7 +4264,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 103 as i32 as u16,
@@ -4272,7 +4272,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 39 as i32 as u16,
@@ -4280,7 +4280,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 175 as i32 as u16,
@@ -4288,7 +4288,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -4296,7 +4296,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 135 as i32 as u16,
@@ -4304,7 +4304,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 71 as i32 as u16,
@@ -4312,7 +4312,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 239 as i32 as u16,
@@ -4320,7 +4320,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -4328,7 +4328,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 95 as i32 as u16,
@@ -4336,7 +4336,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 31 as i32 as u16,
@@ -4344,7 +4344,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 159 as i32 as u16,
@@ -4352,7 +4352,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 99 as i32 as u16,
@@ -4360,7 +4360,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 127 as i32 as u16,
@@ -4368,7 +4368,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 63 as i32 as u16,
@@ -4376,7 +4376,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 223 as i32 as u16,
@@ -4384,7 +4384,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 7 as i32 as u8,
                 val: 27 as i32 as u16,
@@ -4392,7 +4392,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 111 as i32 as u16,
@@ -4400,7 +4400,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 47 as i32 as u16,
@@ -4408,7 +4408,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 191 as i32 as u16,
@@ -4416,7 +4416,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 15 as i32 as u16,
@@ -4424,7 +4424,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 143 as i32 as u16,
@@ -4432,7 +4432,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 8 as i32 as u8,
                 val: 79 as i32 as u16,
@@ -4440,7 +4440,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 0 as i32 as u8,
                 bits: 9 as i32 as u8,
                 val: 255 as i32 as u16,
@@ -4448,9 +4448,9 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
     ];
-    static mut distfix: [crate::src::zlib::inftrees::code; 32] = [
+    static mut distfix: [code; 32] = [
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 1 as i32 as u16,
@@ -4458,7 +4458,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 23 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 257 as i32 as u16,
@@ -4466,7 +4466,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 17 as i32 as u16,
@@ -4474,7 +4474,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 27 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 4097 as i32 as u16,
@@ -4482,7 +4482,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 5 as i32 as u16,
@@ -4490,7 +4490,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 25 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 1025 as i32 as u16,
@@ -4498,7 +4498,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 65 as i32 as u16,
@@ -4506,7 +4506,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 29 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 16385 as i32 as u16,
@@ -4514,7 +4514,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 3 as i32 as u16,
@@ -4522,7 +4522,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 24 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 513 as i32 as u16,
@@ -4530,7 +4530,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 33 as i32 as u16,
@@ -4538,7 +4538,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 28 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 8193 as i32 as u16,
@@ -4546,7 +4546,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 9 as i32 as u16,
@@ -4554,7 +4554,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 26 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 2049 as i32 as u16,
@@ -4562,7 +4562,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 22 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 129 as i32 as u16,
@@ -4570,7 +4570,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -4578,7 +4578,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 2 as i32 as u16,
@@ -4586,7 +4586,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 23 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 385 as i32 as u16,
@@ -4594,7 +4594,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 19 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 25 as i32 as u16,
@@ -4602,7 +4602,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 27 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 6145 as i32 as u16,
@@ -4610,7 +4610,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 17 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 7 as i32 as u16,
@@ -4618,7 +4618,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 25 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 1537 as i32 as u16,
@@ -4626,7 +4626,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 21 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 97 as i32 as u16,
@@ -4634,7 +4634,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 29 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 24577 as i32 as u16,
@@ -4642,7 +4642,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 16 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 4 as i32 as u16,
@@ -4650,7 +4650,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 24 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 769 as i32 as u16,
@@ -4658,7 +4658,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 20 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 49 as i32 as u16,
@@ -4666,7 +4666,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 28 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 12289 as i32 as u16,
@@ -4674,7 +4674,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 18 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 13 as i32 as u16,
@@ -4682,7 +4682,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 26 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 3073 as i32 as u16,
@@ -4690,7 +4690,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 22 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 193 as i32 as u16,
@@ -4698,7 +4698,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
             init
         },
         {
-            let mut init = crate::src::zlib::inftrees::code {
+            let mut init = code {
                 op: 64 as i32 as u8,
                 bits: 5 as i32 as u8,
                 val: 0 as i32 as u16,
@@ -4729,7 +4729,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
   The advantage may be dependent on the size of the processor's data caches.
 */
 
-unsafe extern "C" fn updatewindow(mut strm: crate::zlib_h::z_streamp, mut out: u32) -> i32 {
+unsafe extern "C" fn updatewindow(mut strm: z_streamp, mut out: u32) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     let mut copy: u32 = 0;
@@ -4741,7 +4741,7 @@ unsafe extern "C" fn updatewindow(mut strm: crate::zlib_h::z_streamp, mut out: u
             .expect("non-null function pointer")(
             (*strm).opaque,
             (1 as u32) << (*state).wbits,
-            ::std::mem::size_of::<u8>() as libc::c_ulong as crate::zconf_h::uInt,
+            ::std::mem::size_of::<u8>() as libc::c_ulong as uInt,
         ) as *mut u8;
         if (*state).window.is_null() {
             return 1 as i32;
@@ -4891,7 +4891,7 @@ not enough available input to do that, then return from inflate(). */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: i32) -> i32 {
+pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     let mut current_block: u64; /* next input */
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state; /* next output */
@@ -4905,12 +4905,12 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
     let mut out: u32 = 0; /* parent table entry */
     let mut copy: u32 = 0; /* length to copy for repeats, bits to drop */
     let mut from: *mut u8 = 0 as *mut u8; /* return code */
-    let mut this: crate::src::zlib::inftrees::code = crate::src::zlib::inftrees::code {
+    let mut this: code = code {
         op: 0,
         bits: 0,
         val: 0,
     }; /* skip check */
-    let mut last: crate::src::zlib::inftrees::code = crate::src::zlib::inftrees::code {
+    let mut last: code = code {
         op: 0,
         bits: 0,
         val: 0,
@@ -5008,10 +5008,10 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                             continue;
                         } else {
                             (*state).dmax = (1 as u32) << len;
-                            (*state).check = crate::src::zlib::adler32::adler32(
-                                0 as isize as crate::zconf_h::uLong,
-                                0 as *const crate::zconf_h::Bytef,
-                                0 as i32 as crate::zconf_h::uInt,
+                            (*state).check = adler32(
+                                0 as isize as uLong,
+                                0 as *const Bytef,
+                                0 as i32 as uInt,
                             );
                             (*strm).adler = (*state).check;
                             (*state).mode = if hold & 0x200 as i32 as libc::c_ulong != 0 {
@@ -5174,10 +5174,10 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     out = out.wrapping_sub(left);
                     (*strm).total_out = ((*strm).total_out as libc::c_ulong)
                         .wrapping_add(out as libc::c_ulong)
-                        as crate::zconf_h::uLong;
+                        as uLong;
                     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
                     if out != 0 {
-                        (*state).check = crate::src::zlib::adler32::adler32(
+                        (*state).check = adler32(
                             (*state).check,
                             put.offset(-(out as isize)),
                             out,
@@ -5241,13 +5241,13 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     (*state).lens[order[fresh7 as usize] as usize] = 0 as i32 as u16
                 }
                 (*state).next = (*state).codes.as_mut_ptr();
-                (*state).lencode = (*state).next as *const crate::src::zlib::inftrees::code;
+                (*state).lencode = (*state).next as *const code;
                 (*state).lenbits = 7 as i32 as u32;
-                ret = crate::src::zlib::inftrees::inflate_table(
-                    crate::src::zlib::inftrees::CODES,
+                ret = inflate_table(
+                    CODES,
                     (*state).lens.as_mut_ptr(),
                     19 as i32 as u32,
-                    &mut (*state).next as *mut _ as *mut *mut crate::src::zlib::inftrees::code,
+                    &mut (*state).next as *mut _ as *mut *mut code,
                     &mut (*state).lenbits,
                     (*state).work.as_mut_ptr(),
                 );
@@ -5301,10 +5301,10 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     (*state).bits = bits;
                     return 2 as i32;
                 }
-                (*state).check = crate::src::zlib::adler32::adler32(
-                    0 as isize as crate::zconf_h::uLong,
-                    0 as *const crate::zconf_h::Bytef,
-                    0 as i32 as crate::zconf_h::uInt,
+                (*state).check = adler32(
+                    0 as isize as uLong,
+                    0 as *const Bytef,
+                    0 as i32 as uInt,
                 );
                 (*strm).adler = (*state).check;
                 (*state).mode = crate::src::zlib::inflate::TYPE;
@@ -5453,13 +5453,13 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                 }
                 /* build code tables */
                 (*state).next = (*state).codes.as_mut_ptr();
-                (*state).lencode = (*state).next as *const crate::src::zlib::inftrees::code;
+                (*state).lencode = (*state).next as *const code;
                 (*state).lenbits = 9 as i32 as u32;
-                ret = crate::src::zlib::inftrees::inflate_table(
-                    crate::src::zlib::inftrees::LENS,
+                ret = inflate_table(
+                    LENS,
                     (*state).lens.as_mut_ptr(),
                     (*state).nlen,
-                    &mut (*state).next as *mut _ as *mut *mut crate::src::zlib::inftrees::code,
+                    &mut (*state).next as *mut _ as *mut *mut code,
                     &mut (*state).lenbits,
                     (*state).work.as_mut_ptr(),
                 );
@@ -5470,13 +5470,13 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     (*state).mode = crate::src::zlib::inflate::BAD;
                     continue;
                 } else {
-                    (*state).distcode = (*state).next as *const crate::src::zlib::inftrees::code;
+                    (*state).distcode = (*state).next as *const code;
                     (*state).distbits = 6 as i32 as u32;
-                    ret = crate::src::zlib::inftrees::inflate_table(
-                        crate::src::zlib::inftrees::DISTS,
+                    ret = inflate_table(
+                        DISTS,
                         (*state).lens.as_mut_ptr().offset((*state).nlen as isize),
                         (*state).ndist,
-                        &mut (*state).next as *mut _ as *mut *mut crate::src::zlib::inftrees::code,
+                        &mut (*state).next as *mut _ as *mut *mut code,
                         &mut (*state).distbits,
                         (*state).work.as_mut_ptr(),
                     );
@@ -5510,7 +5510,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     (*state).hold = hold;
                     (*state).bits = bits;
                     crate::src::zlib::inffast::inflate_fast(
-                        strm as *mut crate::zlib_h::z_stream_s,
+                        strm as *mut z_stream_s,
                         out,
                     );
                     put = (*strm).next_out;
@@ -5827,12 +5827,12 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong)
-        as crate::zconf_h::uLong;
+        as uLong;
     (*strm).total_out = ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong)
-        as crate::zconf_h::uLong;
+        as uLong;
     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
     if (*state).wrap != 0 && out != 0 {
-        (*state).check = crate::src::zlib::adler32::adler32(
+        (*state).check = adler32(
             (*state).check,
             (*strm).next_out.offset(-(out as isize)),
             out,
@@ -5862,7 +5862,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateEnd(mut strm: crate::zlib_h::z_streamp) -> i32 {
+pub unsafe extern "C" fn inflateEnd(mut strm: z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() || (*strm).zfree.is_none() {
@@ -5872,22 +5872,22 @@ pub unsafe extern "C" fn inflateEnd(mut strm: crate::zlib_h::z_streamp) -> i32 {
     if !(*state).window.is_null() {
         Some((*strm).zfree.expect("non-null function pointer")).expect("non-null function pointer")(
             (*strm).opaque,
-            (*state).window as crate::zconf_h::voidpf,
+            (*state).window as voidpf,
         );
     }
     Some((*strm).zfree.expect("non-null function pointer")).expect("non-null function pointer")(
         (*strm).opaque,
-        (*strm).state as crate::zconf_h::voidpf,
+        (*strm).state as voidpf,
     );
-    (*strm).state = 0 as *mut crate::zlib_h::internal_state;
+    (*strm).state = 0 as *mut internal_state;
     return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateSetDictionary(
-    mut strm: crate::zlib_h::z_streamp,
-    mut dictionary: *const crate::zconf_h::Bytef,
-    mut dictLength: crate::zconf_h::uInt,
+    mut strm: z_streamp,
+    mut dictionary: *const Bytef,
+    mut dictLength: uInt,
 ) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
@@ -5904,12 +5904,12 @@ pub unsafe extern "C" fn inflateSetDictionary(
     }
     /* check for correct dictionary id */
     if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
-        id = crate::src::zlib::adler32::adler32(
-            0 as isize as crate::zconf_h::uLong,
-            0 as *const crate::zconf_h::Bytef,
-            0 as i32 as crate::zconf_h::uInt,
+        id = adler32(
+            0 as isize as uLong,
+            0 as *const Bytef,
+            0 as i32 as uInt,
         );
-        id = crate::src::zlib::adler32::adler32(id, dictionary, dictLength);
+        id = adler32(id, dictionary, dictLength);
         if id != (*state).check {
             return -(3 as i32);
         }
@@ -5945,8 +5945,8 @@ pub unsafe extern "C" fn inflateSetDictionary(
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateGetHeader(
-    mut strm: crate::zlib_h::z_streamp,
-    mut head: crate::zlib_h::gz_headerp,
+    mut strm: z_streamp,
+    mut head: gz_headerp,
 ) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
@@ -6001,7 +6001,7 @@ unsafe extern "C" fn syncsearch(mut have: *mut u32, mut buf: *mut u8, mut len: u
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 {
+pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     let mut len: u32 = 0;
     let mut in_0: libc::c_ulong = 0;
     let mut out: libc::c_ulong = 0;
@@ -6034,10 +6034,10 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 
     }
     /* search available input */
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
-    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt;
+    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
-        as crate::zconf_h::uLong;
+        as uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);
@@ -6506,7 +6506,7 @@ end of file, -1 for error). */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateSyncPoint(mut strm: crate::zlib_h::z_streamp) -> i32 {
+pub unsafe extern "C" fn inflateSyncPoint(mut strm: z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() {
@@ -6718,8 +6718,8 @@ ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
 #[no_mangle]
 
 pub unsafe extern "C" fn inflateCopy(
-    mut dest: crate::zlib_h::z_streamp,
-    mut source: crate::zlib_h::z_streamp,
+    mut dest: z_streamp,
+    mut source: z_streamp,
 ) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
@@ -6741,9 +6741,9 @@ pub unsafe extern "C" fn inflateCopy(
     copy = Some((*source).zalloc.expect("non-null function pointer"))
         .expect("non-null function pointer")(
         (*source).opaque,
-        1 as i32 as crate::zconf_h::uInt,
+        1 as i32 as uInt,
         ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
-            as crate::zconf_h::uInt,
+            as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if copy.is_null() {
         return -(4 as i32);
@@ -6754,13 +6754,13 @@ pub unsafe extern "C" fn inflateCopy(
             .expect("non-null function pointer")(
             (*source).opaque,
             (1 as u32) << (*state).wbits,
-            ::std::mem::size_of::<u8>() as libc::c_ulong as crate::zconf_h::uInt,
+            ::std::mem::size_of::<u8>() as libc::c_ulong as uInt,
         ) as *mut u8;
         if window.is_null() {
             Some((*source).zfree.expect("non-null function pointer"))
                 .expect("non-null function pointer")(
                 (*source).opaque,
-                copy as crate::zconf_h::voidpf,
+                copy as voidpf,
             );
             return -(4 as i32);
         }
@@ -6769,21 +6769,21 @@ pub unsafe extern "C" fn inflateCopy(
     crate::stdlib::memcpy(
         dest as *mut libc::c_void,
         source as *const libc::c_void,
-        ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong,
+        ::std::mem::size_of::<z_stream>() as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         copy as *mut libc::c_void,
         state as *const libc::c_void,
         ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong,
     );
-    if (*state).lencode >= (*state).codes.as_mut_ptr() as *const crate::src::zlib::inftrees::code
+    if (*state).lencode >= (*state).codes.as_mut_ptr() as *const code
         && (*state).lencode
             <= (*state)
                 .codes
                 .as_mut_ptr()
                 .offset(2048 as i32 as isize)
                 .offset(-(1 as i32 as isize))
-                as *const crate::src::zlib::inftrees::code
+                as *const code
     {
         (*copy).lencode = (*copy)
             .codes
@@ -6807,6 +6807,6 @@ pub unsafe extern "C" fn inflateCopy(
         );
     }
     (*copy).window = window;
-    (*dest).state = copy as *mut crate::zlib_h::internal_state;
+    (*dest).state = copy as *mut internal_state;
     return 0 as i32;
 }

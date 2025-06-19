@@ -79,7 +79,7 @@ pub union C2RustUnnamed_136 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union C2RustUnnamed_137 {
-    pub h: *mut crate::qfiles_h::vmHeader_t,
+    pub h: *mut vmHeader_t,
     pub v: *mut libc::c_void,
 }
 
@@ -124,12 +124,12 @@ and one exported function: Perform
 */
 #[no_mangle]
 
-pub static mut currentVM: *mut crate::qcommon_h::vm_t =
-    0 as *const crate::qcommon_h::vm_t as *mut crate::qcommon_h::vm_t;
+pub static mut currentVM: *mut vm_t =
+    0 as *const vm_t as *mut vm_t;
 #[no_mangle]
 
-pub static mut lastVM: *mut crate::qcommon_h::vm_t =
-    0 as *const crate::qcommon_h::vm_t as *mut crate::qcommon_h::vm_t;
+pub static mut lastVM: *mut vm_t =
+    0 as *const vm_t as *mut vm_t;
 #[no_mangle]
 
 pub static mut vm_debugLevel: i32 = 0;
@@ -138,7 +138,7 @@ pub static mut vm_debugLevel: i32 = 0;
 static mut forced_unload: i32 = 0;
 #[no_mangle]
 
-pub static mut vmTable: [crate::qcommon_h::vm_t; 3] = [crate::qcommon_h::vm_t {
+pub static mut vmTable: [vm_t; 3] = [vm_t {
     programStack: 0,
     systemCall: None,
     name: [0; 64],
@@ -146,26 +146,26 @@ pub static mut vmTable: [crate::qcommon_h::vm_t; 3] = [crate::qcommon_h::vm_t {
     dllHandle: 0 as *const libc::c_void as *mut libc::c_void,
     entryPoint: None,
     destroy: None,
-    currentlyInterpreting: crate::src::qcommon::q_shared::qfalse,
-    compiled: crate::src::qcommon::q_shared::qfalse,
-    codeBase: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    currentlyInterpreting: qfalse,
+    compiled: qfalse,
+    codeBase: 0 as *const byte
+        as *mut byte,
     entryOfs: 0,
     codeLength: 0,
-    instructionPointers: 0 as *const crate::stdlib::intptr_t as *mut crate::stdlib::intptr_t,
+    instructionPointers: 0 as *const intptr_t as *mut intptr_t,
     instructionCount: 0,
-    dataBase: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    dataBase: 0 as *const byte
+        as *mut byte,
     dataMask: 0,
     dataAlloc: 0,
     stackBottom: 0,
     numSymbols: 0,
-    symbols: 0 as *const crate::vm_local_h::vmSymbol_s as *mut crate::vm_local_h::vmSymbol_s,
+    symbols: 0 as *const vmSymbol_s as *mut vmSymbol_s,
     callLevel: 0,
     breakFunction: 0,
     breakCount: 0,
-    jumpTableTargets: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    jumpTableTargets: 0 as *const byte
+        as *mut byte,
     numJumpTableTargets: 0,
 }; 3];
 // 64bit!
@@ -182,35 +182,35 @@ VM_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_Init() {
-    crate::src::qcommon::cvar::Cvar_Get(
+    Cvar_Get(
         b"vm_cgame\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s; // !@# SHIP WITH SET TO 2
+    ) as *mut cvar_s; // !@# SHIP WITH SET TO 2
 
-    crate::src::qcommon::cvar::Cvar_Get(
+    Cvar_Get(
         b"vm_game\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s; // !@# SHIP WITH SET TO 2
+    ) as *mut cvar_s; // !@# SHIP WITH SET TO 2
 
-    crate::src::qcommon::cvar::Cvar_Get(
+    Cvar_Get(
         b"vm_ui\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s; // !@# SHIP WITH SET TO 2
-    crate::src::qcommon::cmd::Cmd_AddCommand(
+    ) as *mut cvar_s; // !@# SHIP WITH SET TO 2
+    Cmd_AddCommand(
         b"vmprofile\x00" as *const u8 as *const libc::c_char,
         Some(VM_VmProfile_f as unsafe extern "C" fn() -> ()),
     );
-    crate::src::qcommon::cmd::Cmd_AddCommand(
+    Cmd_AddCommand(
         b"vminfo\x00" as *const u8 as *const libc::c_char,
         Some(VM_VmInfo_f as unsafe extern "C" fn() -> ()),
     );
     crate::stdlib::memset(
         vmTable.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::qcommon_h::vm_t; 3]>() as libc::c_ulong,
+        ::std::mem::size_of::<[vm_t; 3]>() as libc::c_ulong,
     );
 }
 /*
@@ -223,10 +223,10 @@ Assumes a program counter value
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_ValueToSymbol(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut value: i32,
 ) -> *const libc::c_char {
-    let mut sym: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     static mut text: [libc::c_char; 1024] = [0; 1024];
     sym = (*vm).symbols;
     if sym.is_null() {
@@ -239,7 +239,7 @@ pub unsafe extern "C" fn VM_ValueToSymbol(
     if value == (*sym).symValue {
         return (*sym).symName.as_mut_ptr();
     }
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         text.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"%s+%i\x00" as *const u8 as *const libc::c_char,
@@ -258,12 +258,12 @@ For profiling, find the symbol behind this value
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_ValueToFunctionSymbol(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut value: i32,
-) -> *mut crate::vm_local_h::vmSymbol_t {
-    let mut sym: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
-    static mut nullSym: crate::vm_local_h::vmSymbol_t = crate::vm_local_h::vmSymbol_t {
-        next: 0 as *const crate::vm_local_h::vmSymbol_s as *mut crate::vm_local_h::vmSymbol_s,
+) -> *mut vmSymbol_t {
+    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    static mut nullSym: vmSymbol_t = vmSymbol_t {
+        next: 0 as *const vmSymbol_s as *mut vmSymbol_s,
         symValue: 0,
         profileCount: 0,
         symName: [0; 1],
@@ -285,13 +285,13 @@ VM_SymbolToValue
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_SymbolToValue(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut symbol: *const libc::c_char,
 ) -> i32 {
-    let mut sym: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     sym = (*vm).symbols;
     while !sym.is_null() {
-        if ::libc::strcmp(symbol, (*sym).symName.as_mut_ptr()) == 0 {
+        if libc::strcmp(symbol, (*sym).symName.as_mut_ptr()) == 0 {
             return (*sym).symValue;
         }
         sym = (*sym).next
@@ -342,7 +342,7 @@ VM_LoadSymbols
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut crate::qcommon_h::vm_t) {
+pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
     let mut mapfile: C2RustUnnamed_136 = C2RustUnnamed_136 {
         c: 0 as *mut libc::c_char,
     };
@@ -350,32 +350,32 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut crate::qcommon_h::vm_t) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut symbols: [libc::c_char; 64] = [0; 64];
-    let mut prev: *mut *mut crate::vm_local_h::vmSymbol_t =
-        0 as *mut *mut crate::vm_local_h::vmSymbol_t;
-    let mut sym: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
+    let mut prev: *mut *mut vmSymbol_t =
+        0 as *mut *mut vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     let mut count: i32 = 0;
     let mut value: i32 = 0;
     let mut chars: i32 = 0;
     let mut segment: i32 = 0;
     let mut numInstructions: i32 = 0;
     // don't load symbols if not developer
-    if (*crate::src::qcommon::common::com_developer).integer == 0 {
+    if (*com_developer).integer == 0 {
         return;
     }
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         (*vm).name.as_mut_ptr(),
         name.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         symbols.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"vm/%s.map\x00" as *const u8 as *const libc::c_char,
         name.as_mut_ptr(),
     );
-    crate::src::qcommon::files::FS_ReadFile(symbols.as_mut_ptr(), &mut mapfile.v);
+    FS_ReadFile(symbols.as_mut_ptr(), &mut mapfile.v);
     if mapfile.c.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Couldn\'t load symbol file: %s\n\x00" as *const u8 as *const libc::c_char,
             symbols.as_mut_ptr(),
         );
@@ -387,48 +387,48 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut crate::qcommon_h::vm_t) {
     prev = &mut (*vm).symbols;
     count = 0 as i32;
     loop {
-        token = crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
+        token = COM_Parse(&mut text_p);
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
         segment = ParseHex(token);
         if segment != 0 {
-            crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
-            crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
+            COM_Parse(&mut text_p);
+            COM_Parse(&mut text_p);
         // only load code segment values
         } else {
-            token = crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
+            token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"WARNING: incomplete line at end of file\n\x00" as *const u8
                         as *const libc::c_char,
                 );
                 break;
             } else {
                 value = ParseHex(token);
-                token = crate::src::qcommon::q_shared::COM_Parse(&mut text_p);
+                token = COM_Parse(&mut text_p);
                 if *token.offset(0 as i32 as isize) == 0 {
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"WARNING: incomplete line at end of file\n\x00" as *const u8
                             as *const libc::c_char,
                     );
                     break;
                 } else {
                     chars = crate::stdlib::strlen(token) as i32;
-                    sym = crate::src::qcommon::common::Hunk_Alloc(
-                        (::std::mem::size_of::<crate::vm_local_h::vmSymbol_t>() as libc::c_ulong)
+                    sym = Hunk_Alloc(
+                        (::std::mem::size_of::<vmSymbol_t>() as libc::c_ulong)
                             .wrapping_add(chars as libc::c_ulong) as i32,
-                        crate::src::qcommon::q_shared::h_high,
-                    ) as *mut crate::vm_local_h::vmSymbol_t;
+                        h_high,
+                    ) as *mut vmSymbol_t;
                     *prev = sym;
                     prev = &mut (*sym).next;
-                    (*sym).next = 0 as *mut crate::vm_local_h::vmSymbol_s;
+                    (*sym).next = 0 as *mut vmSymbol_s;
                     // convert value from an instruction number to a code offset
                     if value >= 0 as i32 && value < numInstructions {
                         value = *(*vm).instructionPointers.offset(value as isize) as i32
                     }
                     (*sym).symValue = value;
-                    crate::src::qcommon::q_shared::Q_strncpyz(
+                    Q_strncpyz(
                         (*sym).symName.as_mut_ptr(),
                         token,
                         chars + 1 as i32,
@@ -439,12 +439,12 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut crate::qcommon_h::vm_t) {
         }
     }
     (*vm).numSymbols = count;
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"%i symbols parsed from %s\n\x00" as *const u8 as *const libc::c_char,
         count,
         symbols.as_mut_ptr(),
     );
-    crate::src::qcommon::files::FS_FreeFile(mapfile.v);
+    FS_FreeFile(mapfile.v);
 }
 /*
 ============
@@ -487,21 +487,21 @@ Dlls will call this directly
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_DllSyscall(
-    mut arg: crate::stdlib::intptr_t,
+    mut arg: intptr_t,
     mut args: ...
-) -> crate::stdlib::intptr_t {
+) -> intptr_t {
     // rcg010206 - see commentary above
-    let mut args_0: [crate::stdlib::intptr_t; 16] = [0; 16];
+    let mut args_0: [intptr_t; 16] = [0; 16];
     let mut i: i32 = 0;
     let mut ap: ::std::ffi::VaListImpl;
     args_0[0 as i32 as usize] = arg;
     ap = args.clone();
     i = 1 as i32;
     while (i as libc::c_ulong)
-        < (::std::mem::size_of::<[crate::stdlib::intptr_t; 16]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<crate::stdlib::intptr_t>() as libc::c_ulong)
+        < (::std::mem::size_of::<[intptr_t; 16]>() as libc::c_ulong)
+            .wrapping_div(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
     {
-        args_0[i as usize] = ap.as_va_list().arg::<crate::stdlib::intptr_t>();
+        args_0[i as usize] = ap.as_va_list().arg::<intptr_t>();
         i += 1
     }
     return (*currentVM).systemCall.expect("non-null function pointer")(args_0.as_mut_ptr());
@@ -517,54 +517,54 @@ Load a .qvm file
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_LoadQVM(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut alloc: crate::src::qcommon::q_shared::qboolean,
-    mut unpure: crate::src::qcommon::q_shared::qboolean,
-) -> *mut crate::qfiles_h::vmHeader_t {
+    mut vm: *mut vm_t,
+    mut alloc: qboolean,
+    mut unpure: qboolean,
+) -> *mut vmHeader_t {
     let mut dataLength: i32 = 0;
     let mut i: i32 = 0;
     let mut filename: [libc::c_char; 64] = [0; 64];
     let mut header: C2RustUnnamed_137 = C2RustUnnamed_137 {
-        h: 0 as *mut crate::qfiles_h::vmHeader_t,
+        h: 0 as *mut vmHeader_t,
     };
     // load the image
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         filename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"vm/%s.qvm\x00" as *const u8 as *const libc::c_char,
         (*vm).name.as_mut_ptr(),
     );
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Loading vm file %s...\n\x00" as *const u8 as *const libc::c_char,
         filename.as_mut_ptr(),
     );
-    crate::src::qcommon::files::FS_ReadFileDir(
+    FS_ReadFileDir(
         filename.as_mut_ptr(),
         (*vm).searchPath,
         unpure,
         &mut header.v,
     );
     if header.h.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Failed.\n\x00" as *const u8 as *const libc::c_char,
         );
         VM_Free(vm);
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"^3Warning: Couldn\'t open VM file %s\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        return 0 as *mut crate::qfiles_h::vmHeader_t;
+        return 0 as *mut vmHeader_t;
     }
     // show where the qvm was loaded from
-    crate::src::qcommon::files::FS_Which(filename.as_mut_ptr(), (*vm).searchPath);
+    FS_Which(filename.as_mut_ptr(), (*vm).searchPath);
     if (*header.h).vmMagic == 0x12721445 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"...which has vmMagic VM_MAGIC_VER2\n\x00" as *const u8 as *const libc::c_char,
         );
         // byte swap the header
         i = 0 as i32;
         while (i as libc::c_ulong)
-            < (::std::mem::size_of::<crate::qfiles_h::vmHeader_t>() as libc::c_ulong)
+            < (::std::mem::size_of::<vmHeader_t>() as libc::c_ulong)
                 .wrapping_div(4 as i32 as libc::c_ulong)
         {
             *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
@@ -578,19 +578,19 @@ pub unsafe extern "C" fn VM_LoadQVM(
             || (*header.h).codeLength <= 0 as i32
         {
             VM_Free(vm);
-            crate::src::qcommon::files::FS_FreeFile(header.v);
-            crate::src::qcommon::common::Com_Printf(
+            FS_FreeFile(header.v);
+            Com_Printf(
                 b"^3Warning: %s has bad header\n\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut crate::qfiles_h::vmHeader_t;
+            return 0 as *mut vmHeader_t;
         }
     } else if (*header.h).vmMagic == 0x12721444 as i32 {
         // byte swap the header
         // sizeof( vmHeader_t ) - sizeof( int ) is the 1.32b vm header size
         i = 0 as i32;
         while (i as libc::c_ulong)
-            < (::std::mem::size_of::<crate::qfiles_h::vmHeader_t>() as libc::c_ulong)
+            < (::std::mem::size_of::<vmHeader_t>() as libc::c_ulong)
                 .wrapping_sub(::std::mem::size_of::<i32>() as libc::c_ulong)
                 .wrapping_div(4 as i32 as libc::c_ulong)
         {
@@ -604,22 +604,22 @@ pub unsafe extern "C" fn VM_LoadQVM(
             || (*header.h).codeLength <= 0 as i32
         {
             VM_Free(vm);
-            crate::src::qcommon::files::FS_FreeFile(header.v);
-            crate::src::qcommon::common::Com_Printf(
+            FS_FreeFile(header.v);
+            Com_Printf(
                 b"^3Warning: %s has bad header\n\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut crate::qfiles_h::vmHeader_t;
+            return 0 as *mut vmHeader_t;
         }
     } else {
         VM_Free(vm);
-        crate::src::qcommon::files::FS_FreeFile(header.v);
-        crate::src::qcommon::common::Com_Printf(
+        FS_FreeFile(header.v);
+        Com_Printf(
             b"^3Warning: %s does not have a recognisable magic number in its header\n\x00"
                 as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        return 0 as *mut crate::qfiles_h::vmHeader_t;
+        return 0 as *mut vmHeader_t;
     }
     // round up to next power of 2 so all data operations can
     // be mask protected
@@ -633,22 +633,22 @@ pub unsafe extern "C" fn VM_LoadQVM(
         // allocate zero filled space for initialized and uninitialized data
         // leave some space beyond data mask so we can secure all mask operations
         (*vm).dataAlloc = dataLength + 4 as i32;
-        (*vm).dataBase = crate::src::qcommon::common::Hunk_Alloc(
+        (*vm).dataBase = Hunk_Alloc(
             (*vm).dataAlloc,
-            crate::src::qcommon::q_shared::h_high,
-        ) as *mut crate::src::qcommon::q_shared::byte;
+            h_high,
+        ) as *mut byte;
         (*vm).dataMask = dataLength - 1 as i32
     } else {
         // clear the data, but make sure we're not clearing more than allocated
         if (*vm).dataAlloc != dataLength + 4 as i32 {
             VM_Free(vm);
-            crate::src::qcommon::files::FS_FreeFile(header.v);
-            crate::src::qcommon::common::Com_Printf(
+            FS_FreeFile(header.v);
+            Com_Printf(
                 b"^3Warning: Data region size of %s not matching after VM_Restart()\n\x00"
                     as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            return 0 as *mut crate::qfiles_h::vmHeader_t;
+            return 0 as *mut vmHeader_t;
         }
         crate::stdlib::memset(
             (*vm).dataBase as *mut libc::c_void,
@@ -659,7 +659,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
     // copy the intialized data
     crate::stdlib::memcpy(
         (*vm).dataBase as *mut libc::c_void,
-        (header.h as *mut crate::src::qcommon::q_shared::byte)
+        (header.h as *mut byte)
             .offset((*header.h).dataOffset as isize) as *const libc::c_void,
         ((*header.h).dataLength + (*header.h).litLength) as libc::c_ulong,
     );
@@ -674,25 +674,25 @@ pub unsafe extern "C" fn VM_LoadQVM(
         let mut previousNumJumpTableTargets: i32 = (*vm).numJumpTableTargets;
         (*header.h).jtrgLength &= !(0x3 as i32);
         (*vm).numJumpTableTargets = (*header.h).jtrgLength >> 2 as i32;
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Loading %d jump table targets\n\x00" as *const u8 as *const libc::c_char,
             (*vm).numJumpTableTargets,
         );
         if alloc as u64 != 0 {
-            (*vm).jumpTableTargets = crate::src::qcommon::common::Hunk_Alloc(
+            (*vm).jumpTableTargets = Hunk_Alloc(
                 (*header.h).jtrgLength,
-                crate::src::qcommon::q_shared::h_high,
-            ) as *mut crate::src::qcommon::q_shared::byte
+                h_high,
+            ) as *mut byte
         } else {
             if (*vm).numJumpTableTargets != previousNumJumpTableTargets {
                 VM_Free(vm);
-                crate::src::qcommon::files::FS_FreeFile(header.v);
-                crate::src::qcommon::common::Com_Printf(
+                FS_FreeFile(header.v);
+                Com_Printf(
                     b"^3Warning: Jump table size of %s not matching after VM_Restart()\n\x00"
                         as *const u8 as *const libc::c_char,
                     filename.as_mut_ptr(),
                 );
-                return 0 as *mut crate::qfiles_h::vmHeader_t;
+                return 0 as *mut vmHeader_t;
             }
             crate::stdlib::memset(
                 (*vm).jumpTableTargets as *mut libc::c_void,
@@ -702,7 +702,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
         }
         crate::stdlib::memcpy(
             (*vm).jumpTableTargets as *mut libc::c_void,
-            (header.h as *mut crate::src::qcommon::q_shared::byte)
+            (header.h as *mut byte)
                 .offset((*header.h).dataOffset as isize)
                 .offset((*header.h).dataLength as isize)
                 .offset((*header.h).litLength as isize) as *const libc::c_void,
@@ -732,39 +732,39 @@ even if the client is pure, so take "unpure" as argument.
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_Restart(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut unpure: crate::src::qcommon::q_shared::qboolean,
-) -> *mut crate::qcommon_h::vm_t {
-    let mut header: *mut crate::qfiles_h::vmHeader_t = 0 as *mut crate::qfiles_h::vmHeader_t;
+    mut vm: *mut vm_t,
+    mut unpure: qboolean,
+) -> *mut vm_t {
+    let mut header: *mut vmHeader_t = 0 as *mut vmHeader_t;
     // DLL's can't be restarted in place
     if !(*vm).dllHandle.is_null() {
         let mut name: [libc::c_char; 64] = [0; 64];
         let mut systemCall: Option<
-            unsafe extern "C" fn(_: *mut crate::stdlib::intptr_t) -> crate::stdlib::intptr_t,
+            unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
         > = None;
         systemCall = (*vm).systemCall;
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             name.as_mut_ptr(),
             (*vm).name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
         VM_Free(vm);
-        vm = VM_Create(name.as_mut_ptr(), systemCall, crate::qcommon_h::VMI_NATIVE);
+        vm = VM_Create(name.as_mut_ptr(), systemCall, VMI_NATIVE);
         return vm;
     }
     // load the image
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"VM_Restart()\n\x00" as *const u8 as *const libc::c_char,
     );
-    header = VM_LoadQVM(vm, crate::src::qcommon::q_shared::qfalse, unpure);
+    header = VM_LoadQVM(vm, qfalse, unpure);
     if header.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"VM_Restart failed\x00" as *const u8 as *const libc::c_char,
         );
     }
     // free the original file
-    crate::src::qcommon::files::FS_FreeFile(header as *mut libc::c_void);
+    FS_FreeFile(header as *mut libc::c_void);
     return vm;
 }
 /*
@@ -780,31 +780,31 @@ it will attempt to load as a system dll
 pub unsafe extern "C" fn VM_Create(
     mut module: *const libc::c_char,
     mut systemCalls: Option<
-        unsafe extern "C" fn(_: *mut crate::stdlib::intptr_t) -> crate::stdlib::intptr_t,
+        unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
     >,
-    mut interpret: crate::qcommon_h::vmInterpret_t,
-) -> *mut crate::qcommon_h::vm_t {
-    let mut vm: *mut crate::qcommon_h::vm_t = 0 as *mut crate::qcommon_h::vm_t;
-    let mut header: *mut crate::qfiles_h::vmHeader_t = 0 as *mut crate::qfiles_h::vmHeader_t;
+    mut interpret: vmInterpret_t,
+) -> *mut vm_t {
+    let mut vm: *mut vm_t = 0 as *mut vm_t;
+    let mut header: *mut vmHeader_t = 0 as *mut vmHeader_t;
     let mut i: i32 = 0;
     let mut remaining: i32 = 0;
     let mut retval: i32 = 0;
     let mut filename: [libc::c_char; 4096] = [0; 4096];
     let mut startSearch: *mut libc::c_void = 0 as *mut libc::c_void;
     if module.is_null() || *module.offset(0 as i32 as isize) == 0 || systemCalls.is_none() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"VM_Create: bad parms\x00" as *const u8 as *const libc::c_char,
         );
     }
-    remaining = crate::src::qcommon::common::Hunk_MemoryRemaining();
+    remaining = Hunk_MemoryRemaining();
     // see if we already have the VM
     i = 0 as i32;
     while i < 3 as i32 {
-        if crate::src::qcommon::q_shared::Q_stricmp(vmTable[i as usize].name.as_mut_ptr(), module)
+        if Q_stricmp(vmTable[i as usize].name.as_mut_ptr(), module)
             == 0
         {
-            vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut crate::qcommon_h::vm_t;
+            vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut vm_t;
             return vm;
         }
         i += 1
@@ -818,60 +818,60 @@ pub unsafe extern "C" fn VM_Create(
         i += 1
     }
     if i == 3 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"VM_Create: no free vm_t\x00" as *const u8 as *const libc::c_char,
         );
     }
-    vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut crate::qcommon_h::vm_t;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut vm_t;
+    Q_strncpyz(
         (*vm).name.as_mut_ptr(),
         module,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     loop {
-        retval = crate::src::qcommon::files::FS_FindVM(
+        retval = FS_FindVM(
             &mut startSearch,
             filename.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             module,
-            (interpret as u32 == crate::qcommon_h::VMI_NATIVE as i32 as u32) as i32,
+            (interpret as u32 == VMI_NATIVE as i32 as u32) as i32,
         );
-        if retval == crate::qcommon_h::VMI_NATIVE as i32 {
-            crate::src::qcommon::common::Com_Printf(
+        if retval == VMI_NATIVE as i32 {
+            Com_Printf(
                 b"Try loading dll file %s\n\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
-            (*vm).dllHandle = crate::src::sys::sys_main::Sys_LoadGameDll(
+            (*vm).dllHandle = Sys_LoadGameDll(
                 filename.as_mut_ptr(),
                 &mut (*vm).entryPoint,
                 Some(
                     VM_DllSyscall
                         as unsafe extern "C" fn(
-                            _: crate::stdlib::intptr_t,
+                            _: intptr_t,
                             _: ...
-                        ) -> crate::stdlib::intptr_t,
+                        ) -> intptr_t,
                 ),
             );
             if !(*vm).dllHandle.is_null() {
                 (*vm).systemCall = systemCalls;
                 return vm;
             }
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Failed loading dll, trying next\n\x00" as *const u8 as *const libc::c_char,
             );
-        } else if retval == crate::qcommon_h::VMI_COMPILED as i32 {
+        } else if retval == VMI_COMPILED as i32 {
             (*vm).searchPath = startSearch;
             header = VM_LoadQVM(
                 vm,
-                crate::src::qcommon::q_shared::qtrue,
-                crate::src::qcommon::q_shared::qfalse,
+                qtrue,
+                qfalse,
             );
             if !header.is_null() {
                 break;
             }
             // VM_Free overwrites the name on failed load
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 (*vm).name.as_mut_ptr(),
                 module,
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -882,45 +882,45 @@ pub unsafe extern "C" fn VM_Create(
         }
     }
     if retval < 0 as i32 {
-        return 0 as *mut crate::qcommon_h::vm_t;
+        return 0 as *mut vm_t;
     }
     (*vm).systemCall = systemCalls;
     // allocate space for the jump targets, which will be filled in by the compile/prep functions
     (*vm).instructionCount = (*header).instructionCount;
-    (*vm).instructionPointers = crate::src::qcommon::common::Hunk_Alloc(
+    (*vm).instructionPointers = Hunk_Alloc(
         ((*vm).instructionCount as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::stdlib::intptr_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_high,
-    ) as *mut crate::stdlib::intptr_t;
+        h_high,
+    ) as *mut intptr_t;
     // copy or compile the instructions
     (*vm).codeLength = (*header).codeLength;
-    (*vm).compiled = crate::src::qcommon::q_shared::qfalse;
-    if interpret as u32 != crate::qcommon_h::VMI_BYTECODE as i32 as u32 {
-        (*vm).compiled = crate::src::qcommon::q_shared::qtrue;
-        crate::src::qcommon::vm_x86::VM_Compile(
-            vm as *mut crate::vm_local_h::vm_s,
-            header as *mut crate::qfiles_h::vmHeader_t,
+    (*vm).compiled = qfalse;
+    if interpret as u32 != VMI_BYTECODE as i32 as u32 {
+        (*vm).compiled = qtrue;
+        VM_Compile(
+            vm as *mut vm_s,
+            header as *mut vmHeader_t,
         );
     }
     // VM_Compile may have reset vm->compiled if compilation failed
     if (*vm).compiled as u64 == 0 {
-        crate::src::qcommon::vm_interpreted::VM_PrepareInterpreter(
-            vm as *mut crate::vm_local_h::vm_s,
-            header as *mut crate::qfiles_h::vmHeader_t,
+        VM_PrepareInterpreter(
+            vm as *mut vm_s,
+            header as *mut vmHeader_t,
         );
     }
     // free the original file
-    crate::src::qcommon::files::FS_FreeFile(header as *mut libc::c_void);
+    FS_FreeFile(header as *mut libc::c_void);
     // load the map file
     VM_LoadSymbols(vm);
     // the stack is implicitly at the end of the image
     (*vm).programStack = (*vm).dataMask + 1 as i32;
     (*vm).stackBottom = (*vm).programStack - 0x10000 as i32;
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"%s loaded in %d bytes on the hunk\n\x00" as *const u8 as *const libc::c_char,
         module,
-        remaining - crate::src::qcommon::common::Hunk_MemoryRemaining(),
+        remaining - Hunk_MemoryRemaining(),
     );
     return vm;
 }
@@ -931,19 +931,19 @@ VM_Free
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_Free(mut vm: *mut crate::qcommon_h::vm_t) {
+pub unsafe extern "C" fn VM_Free(mut vm: *mut vm_t) {
     if vm.is_null() {
         return;
     }
     if (*vm).callLevel != 0 {
         if forced_unload == 0 {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            Com_Error(
+                ERR_FATAL as i32,
                 b"VM_Free(%s) on running vm\x00" as *const u8 as *const libc::c_char,
                 (*vm).name.as_mut_ptr(),
             );
         } else {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"forcefully unloading %s vm\n\x00" as *const u8 as *const libc::c_char,
                 (*vm).name.as_mut_ptr(),
             );
@@ -953,21 +953,21 @@ pub unsafe extern "C" fn VM_Free(mut vm: *mut crate::qcommon_h::vm_t) {
         (*vm).destroy.expect("non-null function pointer")(vm);
     }
     if !(*vm).dllHandle.is_null() {
-        crate::src::sys::sys_main::Sys_UnloadDll((*vm).dllHandle);
+        Sys_UnloadDll((*vm).dllHandle);
         crate::stdlib::memset(
             vm as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::qcommon_h::vm_t>() as libc::c_ulong,
+            ::std::mem::size_of::<vm_t>() as libc::c_ulong,
         );
     }
     // now automatically freed by hunk
     crate::stdlib::memset(
         vm as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::vm_t>() as libc::c_ulong,
+        ::std::mem::size_of::<vm_t>() as libc::c_ulong,
     );
-    currentVM = 0 as *mut crate::qcommon_h::vm_t;
-    lastVM = 0 as *mut crate::qcommon_h::vm_t;
+    currentVM = 0 as *mut vm_t;
+    lastVM = 0 as *mut vm_t;
 }
 #[no_mangle]
 
@@ -991,7 +991,7 @@ pub unsafe extern "C" fn VM_Forced_Unload_Done() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_ArgPtr(mut intValue: crate::stdlib::intptr_t) -> *mut libc::c_void {
+pub unsafe extern "C" fn VM_ArgPtr(mut intValue: intptr_t) -> *mut libc::c_void {
     if intValue == 0 {
         return 0 as *mut libc::c_void;
     }
@@ -1011,8 +1011,8 @@ pub unsafe extern "C" fn VM_ArgPtr(mut intValue: crate::stdlib::intptr_t) -> *mu
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_ExplicitArgPtr(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut intValue: crate::stdlib::intptr_t,
+    mut vm: *mut vm_t,
+    mut intValue: intptr_t,
 ) -> *mut libc::c_void {
     if intValue == 0 {
         return 0 as *mut libc::c_void;
@@ -1166,16 +1166,16 @@ locals from sp
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_Call(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut callnum: i32,
     mut args: ...
-) -> crate::stdlib::intptr_t {
-    let mut oldVM: *mut crate::qcommon_h::vm_t = 0 as *mut crate::qcommon_h::vm_t;
-    let mut r: crate::stdlib::intptr_t = 0;
+) -> intptr_t {
+    let mut oldVM: *mut vm_t = 0 as *mut vm_t;
+    let mut r: intptr_t = 0;
     let mut i: i32 = 0;
     if vm.is_null() || (*vm).name[0 as i32 as usize] == 0 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"VM_Call with NULL vm\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1183,7 +1183,7 @@ pub unsafe extern "C" fn VM_Call(
     currentVM = vm;
     lastVM = vm;
     if vm_debugLevel != 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"VM_Call( %d )\n\x00" as *const u8 as *const libc::c_char,
             callnum,
         );
@@ -1236,15 +1236,15 @@ pub unsafe extern "C" fn VM_Call(
             i += 1
         }
         if (*vm).compiled as u64 != 0 {
-            r = crate::src::qcommon::vm_x86::VM_CallCompiled(
-                vm as *mut crate::vm_local_h::vm_s,
+            r = VM_CallCompiled(
+                vm as *mut vm_s,
                 &mut a.callnum,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         } else {
-            r = crate::src::qcommon::vm_interpreted::VM_CallInterpreted(
-                vm as *mut crate::vm_local_h::vm_s,
+            r = VM_CallInterpreted(
+                vm as *mut vm_s,
                 &mut a.callnum,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
     }
     (*vm).callLevel -= 1;
@@ -1256,10 +1256,10 @@ pub unsafe extern "C" fn VM_Call(
 //=================================================================
 
 unsafe extern "C" fn VM_ProfileSort(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
-    let mut sa: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
-    let mut sb: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
-    sa = *(a as *mut *mut crate::vm_local_h::vmSymbol_t);
-    sb = *(b as *mut *mut crate::vm_local_h::vmSymbol_t);
+    let mut sa: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    let mut sb: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
+    sa = *(a as *mut *mut vmSymbol_t);
+    sb = *(b as *mut *mut vmSymbol_t);
     if (*sa).profileCount < (*sb).profileCount {
         return -(1 as i32);
     }
@@ -1277,10 +1277,10 @@ VM_VmProfile_f
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_VmProfile_f() {
-    let mut vm: *mut crate::qcommon_h::vm_t = 0 as *mut crate::qcommon_h::vm_t;
-    let mut sorted: *mut *mut crate::vm_local_h::vmSymbol_t =
-        0 as *mut *mut crate::vm_local_h::vmSymbol_t;
-    let mut sym: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
+    let mut vm: *mut vm_t = 0 as *mut vm_t;
+    let mut sorted: *mut *mut vmSymbol_t =
+        0 as *mut *mut vmSymbol_t;
+    let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     let mut i: i32 = 0;
     let mut total: f64 = 0.;
     if lastVM.is_null() {
@@ -1291,9 +1291,9 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         return;
     }
     sorted =
-        crate::src::qcommon::common::Z_Malloc(((*vm).numSymbols as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut crate::vm_local_h::vmSymbol_t>() as libc::c_ulong,
-        ) as i32) as *mut *mut crate::vm_local_h::vmSymbol_t;
+        Z_Malloc(((*vm).numSymbols as libc::c_ulong).wrapping_mul(
+            ::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong,
+        ) as i32) as *mut *mut vmSymbol_t;
     let ref mut fresh1 = *sorted.offset(0 as i32 as isize);
     *fresh1 = (*vm).symbols;
     total = (**sorted.offset(0 as i32 as isize)).profileCount as f64;
@@ -1304,10 +1304,10 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         total += (**sorted.offset(i as isize)).profileCount as f64;
         i += 1
     }
-    crate::stdlib::qsort(
+    qsort(
         sorted as *mut libc::c_void,
-        (*vm).numSymbols as crate::stddef_h::size_t,
-        ::std::mem::size_of::<*mut crate::vm_local_h::vmSymbol_t>() as libc::c_ulong,
+        (*vm).numSymbols as size_t,
+        ::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong,
         Some(
             VM_ProfileSort
                 as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -1318,7 +1318,7 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         let mut perc: i32 = 0;
         sym = *sorted.offset(i as isize);
         perc = ((100 as i32 as f32 * (*sym).profileCount as f32) as f64 / total) as i32;
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%2i%% %9i %s\n\x00" as *const u8 as *const libc::c_char,
             perc,
             (*sym).profileCount,
@@ -1327,11 +1327,11 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         (*sym).profileCount = 0 as i32;
         i += 1
     }
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"    %9.0f total\n\x00" as *const u8 as *const libc::c_char,
         total,
     );
-    crate::src::qcommon::common::Z_Free(sorted as *mut libc::c_void);
+    Z_Free(sorted as *mut libc::c_void);
 }
 /*
 ==============
@@ -1342,44 +1342,44 @@ VM_VmInfo_f
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_VmInfo_f() {
-    let mut vm: *mut crate::qcommon_h::vm_t = 0 as *mut crate::qcommon_h::vm_t;
+    let mut vm: *mut vm_t = 0 as *mut vm_t;
     let mut i: i32 = 0;
-    crate::src::qcommon::common::Com_Printf(
+    Com_Printf(
         b"Registered virtual machines:\n\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < 3 as i32 {
-        vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut crate::qcommon_h::vm_t;
+        vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut vm_t;
         if (*vm).name[0 as i32 as usize] == 0 {
             break;
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%s : \x00" as *const u8 as *const libc::c_char,
             (*vm).name.as_mut_ptr(),
         );
         if !(*vm).dllHandle.is_null() {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"native\n\x00" as *const u8 as *const libc::c_char,
             );
         } else {
             if (*vm).compiled as u64 != 0 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"compiled on load\n\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"interpreted\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"    code length : %7i\n\x00" as *const u8 as *const libc::c_char,
                 (*vm).codeLength,
             );
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"    table length: %7i\n\x00" as *const u8 as *const libc::c_char,
                 (*vm).instructionCount * 4 as i32,
             );
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"    data length : %7i\n\x00" as *const u8 as *const libc::c_char,
                 (*vm).dataMask + 1 as i32,
             );
@@ -1398,8 +1398,8 @@ Insert calls to this while debugging the vm compiler
 
 pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut i32) {
     static mut callnum: i32 = 0;
-    static mut f: *mut crate::stdlib::FILE =
-        0 as *const crate::stdlib::FILE as *mut crate::stdlib::FILE;
+    static mut f: *mut FILE =
+        0 as *const FILE as *mut FILE;
     if f.is_null() {
         f = crate::stdlib::fopen(
             b"syscalls.log\x00" as *const u8 as *const libc::c_char,
@@ -1472,7 +1472,7 @@ Executes a block copy operation within currentVM data space
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: crate::stddef_h::size_t) {
+pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: size_t) {
     let mut dataMask: u32 = (*currentVM).dataMask as u32;
     if dest & dataMask != dest
         || src & dataMask != src
@@ -1481,8 +1481,8 @@ pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: crate:
         || (src as libc::c_ulong).wrapping_add(n) & dataMask as libc::c_ulong
             != (src as libc::c_ulong).wrapping_add(n)
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"OP_BLOCK_COPY out of range!\x00" as *const u8 as *const libc::c_char,
         );
     }

@@ -68,24 +68,24 @@ function: basic codebook pack/unpack/code/decode operations
 
 pub unsafe extern "C" fn vorbis_staticbook_pack(
     mut c: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut opb: *mut oggpack_buffer,
 ) -> i32 {
     let mut i: isize = 0;
     let mut j: isize = 0;
     let mut ordered: i32 = 0 as i32;
     /* first the basic parameters */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         0x564342 as i32 as libc::c_ulong,
         24 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*c).dim as libc::c_ulong,
         16 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*c).entries as libc::c_ulong,
         24 as i32,
     );
@@ -109,13 +109,13 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         each length.  The actual codewords are generated
         deterministically */
         let mut count: isize = 0 as i32 as isize; /* ordered */
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             1 as i32 as libc::c_ulong,
             1 as i32,
         ); /* 1 to 32 */
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as libc::c_ulong,
             5 as i32,
         );
@@ -126,11 +126,11 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             if this as i32 > last as i32 {
                 j = last as isize;
                 while j < this as isize {
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         (i - count) as libc::c_ulong,
                         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                            ((*c).entries - count) as crate::config_types_h::ogg_uint32_t,
+                            ((*c).entries - count) as ogg_uint32_t,
                         ),
                     );
                     count = i;
@@ -139,18 +139,18 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             }
             i += 1
         }
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             (i - count) as libc::c_ulong,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                ((*c).entries - count) as crate::config_types_h::ogg_uint32_t,
+                ((*c).entries - count) as ogg_uint32_t,
             ),
         );
     } else {
         /* length random.  Again, we don't code the codeword itself, just
         the length.  This time, though, we have to encode each length */
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            opb as *mut oggpack_buffer,
             0 as i32 as libc::c_ulong,
             1 as i32,
         ); /* unordered */
@@ -165,42 +165,42 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             i += 1
         }
         if i == (*c).entries {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 0 as i32 as libc::c_ulong,
                 1 as i32,
             );
             i = 0 as i32 as isize;
             while i < (*c).entries {
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_write(
+                    opb as *mut oggpack_buffer,
                     (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
                     5 as i32,
                 );
                 i += 1
             }
         } else {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 1 as i32 as libc::c_ulong,
                 1 as i32,
             );
             i = 0 as i32 as isize;
             while i < (*c).entries {
                 if *(*c).lengthlist.offset(i as isize) as i32 == 0 as i32 {
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         0 as i32 as libc::c_ulong,
                         1 as i32,
                     );
                 } else {
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         1 as i32 as libc::c_ulong,
                         1 as i32,
                     );
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
                         5 as i32,
                     );
@@ -211,8 +211,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     }
     /* is the entry number the desired return value, or do we have a
     mapping? If we have a mapping, what type? */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*c).maptype as libc::c_ulong,
         4 as i32,
     );
@@ -226,23 +226,23 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 return -(1 as i32);
             }
             /* values that define the dequantization */
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 (*c).q_min as libc::c_ulong,
                 32 as i32,
             );
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 (*c).q_delta as libc::c_ulong,
                 32 as i32,
             );
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 ((*c).q_quant - 1 as i32) as libc::c_ulong,
                 4 as i32,
             );
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 (*c).q_sequencep as libc::c_ulong,
                 1 as i32,
             );
@@ -252,7 +252,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                     /* a single column of (c->entries/c->dim) quantized values for
                     building a full value list algorithmically (square lattice) */
                     quantvals =
-                        crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(
+                        _book_maptype1_quantvals(
                             c as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
                         ) as i32
                 }
@@ -268,9 +268,9 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             /* quantized values */
             i = 0 as i32 as isize;
             while i < quantvals as isize {
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
-                    ::libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long)
+                oggpack_write(
+                    opb as *mut oggpack_buffer,
+                    libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long)
                         as libc::c_ulong,
                     (*c).q_quant,
                 );
@@ -289,7 +289,7 @@ readies the codebook auxiliary structures for decode *************/
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_staticbook_unpack(
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut opb: *mut oggpack_buffer,
 ) -> *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook {
     let mut current_block: u64;
     let mut i: isize = 0;
@@ -302,30 +302,30 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
         ) as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
     (*s).allocedp = 1 as i32;
     /* make sure alignment is correct */
-    if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    if !(oggpack_read(
+        opb as *mut oggpack_buffer,
         24 as i32,
     ) != 0x564342 as i32 as isize)
     {
         /* first the basic parameters */
-        (*s).dim = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*s).dim = oggpack_read(
+            opb as *mut oggpack_buffer,
             16 as i32,
         );
-        (*s).entries = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        (*s).entries = oggpack_read(
+            opb as *mut oggpack_buffer,
             24 as i32,
         );
         if !((*s).entries == -(1 as i32) as isize) {
             if !(crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                (*s).dim as crate::config_types_h::ogg_uint32_t,
+                (*s).dim as ogg_uint32_t,
             ) + crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                (*s).entries as crate::config_types_h::ogg_uint32_t,
+                (*s).entries as ogg_uint32_t,
             ) > 24 as i32)
             {
                 /* codeword ordering.... length ordered or unordered? */
-                match crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                match oggpack_read(
+                    opb as *mut oggpack_buffer,
                     1 as i32,
                 ) as i32
                 {
@@ -335,8 +335,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             14523784380283086299 => {
                                 let mut unused: isize = 0;
                                 /* allocated but unused entries? */
-                                unused = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                    opb as *mut crate::ogg_h::oggpack_buffer,
+                                unused = oggpack_read(
+                                    opb as *mut oggpack_buffer,
                                     1 as i32,
                                 );
                                 if (*s).entries
@@ -344,8 +344,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
-                                        - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                                            opb as *mut crate::ogg_h::oggpack_buffer,
+                                        - oggpack_bytes(
+                                            opb as *mut oggpack_buffer,
                                         )
                                 {
                                     current_block = 15187751986642917127;
@@ -365,13 +365,13 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                                opb as *mut crate::ogg_h::oggpack_buffer,
+                                            if oggpack_read(
+                                                opb as *mut oggpack_buffer,
                                                 1 as i32,
                                             ) != 0
                                             {
                                                 let mut num: isize =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  5 as
                                                                      i32);
                                                 if num == -(1 as i32) as isize {
@@ -395,7 +395,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 break;
                                             }
                                             let mut num_0: isize =
-                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                oggpack_read(opb as *mut oggpack_buffer,
                                                              5 as
                                                                  i32);
                                             if num_0 == -(1 as i32) as isize {
@@ -413,8 +413,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             /* ordered */
                             {
                                 let mut length: isize =
-                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                        opb as *mut crate::ogg_h::oggpack_buffer,
+                                    oggpack_read(
+                                        opb as *mut oggpack_buffer,
                                         5 as i32,
                                     ) + 1 as i32 as isize;
                                 if length == 0 as i32 as isize {
@@ -432,10 +432,10 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             break;
                                         }
                                         let mut num_1: isize =
-                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                            oggpack_read(opb as *mut oggpack_buffer,
                                                          crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
                                                                       - i) as
-                                                                     crate::config_types_h::ogg_uint32_t));
+                                                                     ogg_uint32_t));
                                         if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
@@ -471,8 +471,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             _ =>
                             /* Do we have a mapping to unpack? */
                             {
-                                (*s).maptype = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                    opb as *mut crate::ogg_h::oggpack_buffer,
+                                (*s).maptype = oggpack_read(
+                                    opb as *mut oggpack_buffer,
                                     4 as i32,
                                 ) as i32;
                                 match (*s).maptype {
@@ -483,15 +483,15 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 /* implicitly populated value mapping */
                                                 /* explicitly populated value mapping */
                                                 (*s).q_min =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_delta =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_quant =
-                                                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    (oggpack_read(opb as *mut oggpack_buffer,
                                                                   4 as
                                                                       i32)
                                                          +
@@ -499,7 +499,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                              isize) as
                                                         i32;
                                                 (*s).q_sequencep =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  1 as
                                                                      i32)
                                                         as i32;
@@ -514,7 +514,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             {
                                                                 0 as i32 as isize
                                                             } else {
-                                                                crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
+                                                                _book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
                                                                 as i32
                                                         }
@@ -532,7 +532,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             3 as i32)
                                                            as isize >
                                                            (*opb).storage -
-                                                               crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
+                                                               oggpack_bytes(opb as *mut oggpack_buffer)
                                                        {
                                                         current_block =
                                                             15187751986642917127;
@@ -557,7 +557,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                                        as
                                                                                        isize)
                                                                 =
-                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                oggpack_read(opb as *mut oggpack_buffer,
                                                                              (*s).q_quant);
                                                             i += 1
                                                         }
@@ -601,15 +601,15 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         match current_block {
                                             9333025334031379274 => {
                                                 (*s).q_min =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_delta =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_quant =
-                                                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    (oggpack_read(opb as *mut oggpack_buffer,
                                                                   4 as
                                                                       i32)
                                                          +
@@ -617,7 +617,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                              isize) as
                                                         i32;
                                                 (*s).q_sequencep =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  1 as
                                                                      i32)
                                                         as i32;
@@ -632,7 +632,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             {
                                                                 0 as i32 as isize
                                                             } else {
-                                                                crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
+                                                                _book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
                                                                 as i32
                                                         }
@@ -649,7 +649,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             3 as i32)
                                                            as isize >
                                                            (*opb).storage -
-                                                               crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
+                                                               oggpack_bytes(opb as *mut oggpack_buffer)
                                                        {
                                                         current_block =
                                                             15187751986642917127;
@@ -674,7 +674,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                                        as
                                                                                        isize)
                                                                 =
-                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                oggpack_read(opb as *mut oggpack_buffer,
                                                                              (*s).q_quant);
                                                             i += 1
                                                         }
@@ -718,8 +718,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         match current_block {
                             14523784380283086299 => {
                                 let mut unused: isize = 0;
-                                unused = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                    opb as *mut crate::ogg_h::oggpack_buffer,
+                                unused = oggpack_read(
+                                    opb as *mut oggpack_buffer,
                                     1 as i32,
                                 );
                                 if (*s).entries
@@ -727,8 +727,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
-                                        - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                                            opb as *mut crate::ogg_h::oggpack_buffer,
+                                        - oggpack_bytes(
+                                            opb as *mut oggpack_buffer,
                                         )
                                 {
                                     current_block = 15187751986642917127;
@@ -745,13 +745,13 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                                opb as *mut crate::ogg_h::oggpack_buffer,
+                                            if oggpack_read(
+                                                opb as *mut oggpack_buffer,
                                                 1 as i32,
                                             ) != 0
                                             {
                                                 let mut num: isize =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  5 as
                                                                      i32);
                                                 if num == -(1 as i32) as isize {
@@ -774,7 +774,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 break;
                                             }
                                             let mut num_0: isize =
-                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                oggpack_read(opb as *mut oggpack_buffer,
                                                              5 as
                                                                  i32);
                                             if num_0 == -(1 as i32) as isize {
@@ -790,8 +790,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             }
                             _ => {
                                 let mut length: isize =
-                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                        opb as *mut crate::ogg_h::oggpack_buffer,
+                                    oggpack_read(
+                                        opb as *mut oggpack_buffer,
                                         5 as i32,
                                     ) + 1 as i32 as isize;
                                 if length == 0 as i32 as isize {
@@ -809,10 +809,10 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             break;
                                         }
                                         let mut num_1: isize =
-                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                            oggpack_read(opb as *mut oggpack_buffer,
                                                          crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
                                                                       - i) as
-                                                                     crate::config_types_h::ogg_uint32_t));
+                                                                     ogg_uint32_t));
                                         if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
@@ -846,8 +846,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         match current_block {
                             15187751986642917127 => {}
                             _ => {
-                                (*s).maptype = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                    opb as *mut crate::ogg_h::oggpack_buffer,
+                                (*s).maptype = oggpack_read(
+                                    opb as *mut oggpack_buffer,
                                     4 as i32,
                                 ) as i32;
                                 match (*s).maptype {
@@ -856,15 +856,15 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         match current_block {
                                             9333025334031379274 => {
                                                 (*s).q_min =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_delta =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_quant =
-                                                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    (oggpack_read(opb as *mut oggpack_buffer,
                                                                   4 as
                                                                       i32)
                                                          +
@@ -872,7 +872,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                              isize) as
                                                         i32;
                                                 (*s).q_sequencep =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  1 as
                                                                      i32)
                                                         as i32;
@@ -887,7 +887,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             {
                                                                 0 as i32 as isize
                                                             } else {
-                                                                crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
+                                                                _book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
                                                                 as i32
                                                         }
@@ -904,7 +904,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             3 as i32)
                                                            as isize >
                                                            (*opb).storage -
-                                                               crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
+                                                               oggpack_bytes(opb as *mut oggpack_buffer)
                                                        {
                                                         current_block =
                                                             15187751986642917127;
@@ -929,7 +929,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                                        as
                                                                                        isize)
                                                                 =
-                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                oggpack_read(opb as *mut oggpack_buffer,
                                                                              (*s).q_quant);
                                                             i += 1
                                                         }
@@ -968,15 +968,15 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         match current_block {
                                             9333025334031379274 => {
                                                 (*s).q_min =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_delta =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  32 as
                                                                      i32);
                                                 (*s).q_quant =
-                                                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    (oggpack_read(opb as *mut oggpack_buffer,
                                                                   4 as
                                                                       i32)
                                                          +
@@ -984,7 +984,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                              isize) as
                                                         i32;
                                                 (*s).q_sequencep =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  1 as
                                                                      i32)
                                                         as i32;
@@ -999,7 +999,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             {
                                                                 0 as i32 as isize
                                                             } else {
-                                                                crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
+                                                                _book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
                                                                 as i32
                                                         }
@@ -1016,7 +1016,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             3 as i32)
                                                            as isize >
                                                            (*opb).storage -
-                                                               crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
+                                                               oggpack_bytes(opb as *mut oggpack_buffer)
                                                        {
                                                         current_block =
                                                             15187751986642917127;
@@ -1041,7 +1041,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                                        as
                                                                                        isize)
                                                                 =
-                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                oggpack_read(opb as *mut oggpack_buffer,
                                                                              (*s).q_quant);
                                                             i += 1
                                                         }
@@ -1086,7 +1086,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
         }
     }
     /* EOF */
-    crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy(
+    vorbis_staticbook_destroy(
         s as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
     );
     return 0 as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
@@ -1097,13 +1097,13 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
 pub unsafe extern "C" fn vorbis_book_encode(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut a: i32,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
 ) -> i32 {
     if a < 0 as i32 || a as isize >= (*(*book).c).entries {
         return 0 as i32;
     }
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        b as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        b as *mut oggpack_buffer,
         *(*book).codelist.offset(a as isize) as libc::c_ulong,
         *(*(*book).c).lengthlist.offset(a as isize) as i32,
     );
@@ -1118,8 +1118,8 @@ be.  The first-stage decode table catches most words so that
 bitreverse is not in the main execution path. */
 
 unsafe extern "C" fn bitreverse(
-    mut x: crate::config_types_h::ogg_uint32_t,
-) -> crate::config_types_h::ogg_uint32_t {
+    mut x: ogg_uint32_t,
+) -> ogg_uint32_t {
     x = x >> 16 as i32 & 0xffff as i32 as u32 | x << 16 as i32 & 0xffff0000 as u32;
     x = x >> 8 as i32 & 0xff00ff as i32 as u32 | x << 8 as i32 & 0xff00ff00 as u32;
     x = x >> 4 as i32 & 0xf0f0f0f as i32 as u32 | x << 4 as i32 & 0xf0f0f0f0 as u32;
@@ -1130,13 +1130,13 @@ unsafe extern "C" fn bitreverse(
 
 unsafe extern "C" fn decode_packed_entry_number(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
 ) -> isize {
     let mut read: i32 = (*book).dec_maxlength;
     let mut lo: isize = 0;
     let mut hi: isize = 0;
-    let mut lok: isize = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
-        b as *mut crate::ogg_h::oggpack_buffer,
+    let mut lok: isize = oggpack_look(
+        b as *mut oggpack_buffer,
         (*book).dec_firsttablen,
     );
     if lok >= 0 as i32 as isize {
@@ -1145,8 +1145,8 @@ unsafe extern "C" fn decode_packed_entry_number(
             lo = entry >> 15 as i32 & 0x7fff as i32 as isize;
             hi = (*book).used_entries - (entry & 0x7fff as i32 as isize)
         } else {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_adv(
-                b as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_adv(
+                b as *mut oggpack_buffer,
                 *(*book)
                     .dec_codelengths
                     .offset((entry - 1 as i32 as isize) as isize) as i32,
@@ -1162,14 +1162,14 @@ unsafe extern "C" fn decode_packed_entry_number(
     failure to read one bit above), the next look attempt will also
     fail and we'll correctly kick out instead of trying to walk the
     underformed tree */
-    lok = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
-        b as *mut crate::ogg_h::oggpack_buffer,
+    lok = oggpack_look(
+        b as *mut oggpack_buffer,
         read,
     );
     while lok < 0 as i32 as isize && read > 1 as i32 {
         read -= 1;
-        lok = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
-            b as *mut crate::ogg_h::oggpack_buffer,
+        lok = oggpack_look(
+            b as *mut oggpack_buffer,
             read,
         )
     }
@@ -1177,8 +1177,8 @@ unsafe extern "C" fn decode_packed_entry_number(
         return -(1 as i32) as isize;
     }
     /* bisect search for the codeword in the ordered list */
-    let mut testword: crate::config_types_h::ogg_uint32_t =
-        bitreverse(lok as crate::config_types_h::ogg_uint32_t);
+    let mut testword: ogg_uint32_t =
+        bitreverse(lok as ogg_uint32_t);
     while hi - lo > 1 as i32 as isize {
         let mut p: isize = hi - lo >> 1 as i32;
         let mut test: isize =
@@ -1187,14 +1187,14 @@ unsafe extern "C" fn decode_packed_entry_number(
         hi -= p & -test
     }
     if *(*book).dec_codelengths.offset(lo as isize) as i32 <= read {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_adv(
-            b as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_adv(
+            b as *mut oggpack_buffer,
             *(*book).dec_codelengths.offset(lo as isize) as i32,
         );
         return lo;
     }
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_adv(
-        b as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_adv(
+        b as *mut oggpack_buffer,
         read,
     );
     return -(1 as i32) as isize;
@@ -1217,7 +1217,7 @@ addmul==2 -> multiplicitive */
 
 pub unsafe extern "C" fn vorbis_book_decode(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
 ) -> isize {
     if (*book).used_entries > 0 as i32 as isize {
         let mut packed_entry: isize = decode_packed_entry_number(book, b);
@@ -1235,7 +1235,7 @@ pub unsafe extern "C" fn vorbis_book_decode(
 pub unsafe extern "C" fn vorbis_book_decodevs_add(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut a: *mut f32,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut n: i32,
 ) -> isize {
     if (*book).used_entries > 0 as i32 as isize {
@@ -1287,7 +1287,7 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
 pub unsafe extern "C" fn vorbis_book_decodev_add(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut a: *mut f32,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut n: i32,
 ) -> isize {
     if (*book).used_entries > 0 as i32 as isize {
@@ -1324,7 +1324,7 @@ floor0) */
 pub unsafe extern "C" fn vorbis_book_decodev_set(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut a: *mut f32,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut n: i32,
 ) -> isize {
     if (*book).used_entries > 0 as i32 as isize {
@@ -1368,7 +1368,7 @@ pub unsafe extern "C" fn vorbis_book_decodevv_add(
     mut a: *mut *mut f32,
     mut offset: isize,
     mut ch: i32,
-    mut b: *mut crate::ogg_h::oggpack_buffer,
+    mut b: *mut oggpack_buffer,
     mut n: i32,
 ) -> isize {
     let mut i: isize = 0;

@@ -360,13 +360,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_NLSF_encode(
     mut NLSFIndices: *mut i8,
-    mut pNLSF_Q15: *mut crate::opus_types_h::opus_int16,
-    mut psNLSF_CB: *const crate::structs_h::silk_NLSF_CB_struct,
-    mut pW_Q2: *const crate::opus_types_h::opus_int16,
+    mut pNLSF_Q15: *mut opus_int16,
+    mut psNLSF_CB: *const silk_NLSF_CB_struct,
+    mut pW_Q2: *const opus_int16,
     NLSF_mu_Q20: i32,
     nSurvivors: i32,
     signalType: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /* I    Signal type: 0/1/2                          */ {
     let mut i: i32 = 0;
     let mut s: i32 = 0;
@@ -374,23 +374,23 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     let mut bestIndex: i32 = 0;
     let mut prob_Q8: i32 = 0;
     let mut bits_q7: i32 = 0;
-    let mut W_tmp_Q9: crate::opus_types_h::opus_int32 = 0;
-    let mut ret: crate::opus_types_h::opus_int32 = 0;
-    let mut err_Q24: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
-    let mut RD_Q25: *mut crate::opus_types_h::opus_int32 =
-        0 as *mut crate::opus_types_h::opus_int32;
+    let mut W_tmp_Q9: opus_int32 = 0;
+    let mut ret: opus_int32 = 0;
+    let mut err_Q24: *mut opus_int32 =
+        0 as *mut opus_int32;
+    let mut RD_Q25: *mut opus_int32 =
+        0 as *mut opus_int32;
     let mut tempIndices1: *mut i32 = 0 as *mut i32;
     let mut tempIndices2: *mut i8 = 0 as *mut i8;
-    let mut res_Q10: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut NLSF_tmp_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
-    let mut W_adj_Q5: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut res_Q10: [opus_int16; 16] = [0; 16];
+    let mut NLSF_tmp_Q15: [opus_int16; 16] = [0; 16];
+    let mut W_adj_Q5: [opus_int16; 16] = [0; 16];
     let mut pred_Q8: [u8; 16] = [0; 16];
-    let mut ec_ix: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut ec_ix: [opus_int16; 16] = [0; 16];
     let mut pCB_element: *const u8 = 0 as *const u8;
     let mut iCDF_ptr: *const u8 = 0 as *const u8;
-    let mut pCB_Wght_Q9: *const crate::opus_types_h::opus_int16 =
-        0 as *const crate::opus_types_h::opus_int16;
+    let mut pCB_Wght_Q9: *const opus_int16 =
+        0 as *const opus_int16;
     /* NLSF stabilization */
     crate::src::opus_1_2_1::silk::NLSF_stabilize::silk_NLSF_stabilize(
         pNLSF_Q15,
@@ -400,13 +400,13 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     /* First stage: VQ */
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul((*psNLSF_CB).nVectors as libc::c_ulong) as usize,
     );
-    err_Q24 = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    err_Q24 = fresh0.as_mut_ptr() as *mut opus_int32;
     crate::src::opus_1_2_1::silk::NLSF_VQ::silk_NLSF_VQ(
         err_Q24,
-        pNLSF_Q15 as *const crate::opus_types_h::opus_int16,
+        pNLSF_Q15 as *const opus_int16,
         (*psNLSF_CB).CB1_NLSF_Q8,
         (*psNLSF_CB).CB1_Wght_Q9,
         (*psNLSF_CB).nVectors as i32,
@@ -427,10 +427,10 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     );
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
             .wrapping_mul(nSurvivors as libc::c_ulong) as usize,
     );
-    RD_Q25 = fresh2.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
+    RD_Q25 = fresh2.as_mut_ptr() as *mut opus_int32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<i8>() as libc::c_ulong)
@@ -448,44 +448,44 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         pCB_Wght_Q9 = &*(*psNLSF_CB)
             .CB1_Wght_Q9
             .offset((ind1 * (*psNLSF_CB).order as i32) as isize)
-            as *const crate::opus_types_h::opus_int16;
+            as *const opus_int16;
         i = 0 as i32;
         while i < (*psNLSF_CB).order as i32 {
             NLSF_tmp_Q15[i as usize] =
-                ((*pCB_element.offset(i as isize) as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_uint16 as i32)
-                    << 7 as i32) as crate::opus_types_h::opus_int16;
-            W_tmp_Q9 = *pCB_Wght_Q9.offset(i as isize) as crate::opus_types_h::opus_int32;
+                ((*pCB_element.offset(i as isize) as opus_int16
+                    as opus_uint16 as i32)
+                    << 7 as i32) as opus_int16;
+            W_tmp_Q9 = *pCB_Wght_Q9.offset(i as isize) as opus_int32;
             res_Q10[i as usize] = ((*pNLSF_Q15.offset(i as isize) as i32
                 - NLSF_tmp_Q15[i as usize] as i32)
-                as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * W_tmp_Q9 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                >> 14 as i32) as crate::opus_types_h::opus_int16;
+                as opus_int16
+                as opus_int32
+                * W_tmp_Q9 as opus_int16 as opus_int32
+                >> 14 as i32) as opus_int16;
             W_adj_Q5[i as usize] = silk_DIV32_varQ(
-                *pW_Q2.offset(i as isize) as crate::opus_types_h::opus_int32,
-                W_tmp_Q9 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * W_tmp_Q9 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32,
+                *pW_Q2.offset(i as isize) as opus_int32,
+                W_tmp_Q9 as opus_int16 as opus_int32
+                    * W_tmp_Q9 as opus_int16
+                        as opus_int32,
                 21 as i32,
-            ) as crate::opus_types_h::opus_int16;
+            ) as opus_int16;
             i += 1
         }
         /* Unpack entropy table indices and predictor for current CB1 index */
         crate::src::opus_1_2_1::silk::NLSF_unpack::silk_NLSF_unpack(
             ec_ix.as_mut_ptr(),
             pred_Q8.as_mut_ptr(),
-            psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
+            psNLSF_CB as *const silk_NLSF_CB_struct,
             ind1,
         );
         /* Trellis quantizer */
         *RD_Q25.offset(s as isize) =
             crate::src::opus_1_2_1::silk::NLSF_del_dec_quant::silk_NLSF_del_dec_quant(
                 &mut *tempIndices2.offset((s * 16 as i32) as isize),
-                res_Q10.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
-                W_adj_Q5.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
+                res_Q10.as_mut_ptr() as *const opus_int16,
+                W_adj_Q5.as_mut_ptr() as *const opus_int16,
                 pred_Q8.as_mut_ptr() as *const u8,
-                ec_ix.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
+                ec_ix.as_mut_ptr() as *const opus_int16,
                 (*psNLSF_CB).ec_Rates_Q5,
                 (*psNLSF_CB).quantStepSize_Q16 as i32,
                 (*psNLSF_CB).invQuantStepSize_Q6,
@@ -506,9 +506,9 @@ pub unsafe extern "C" fn silk_NLSF_encode(
         bits_q7 =
             ((8 as i32) << 7 as i32) - crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(prob_Q8);
         *RD_Q25.offset(s as isize) = *RD_Q25.offset(s as isize)
-            + bits_q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * (NLSF_mu_Q20 >> 2 as i32) as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32;
+            + bits_q7 as opus_int16 as opus_int32
+                * (NLSF_mu_Q20 >> 2 as i32) as opus_int16
+                    as opus_int32;
         s += 1
     }
     /* Find the lowest rate-distortion error */
@@ -530,7 +530,7 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     crate::src::opus_1_2_1::silk::NLSF_decode::silk_NLSF_decode(
         pNLSF_Q15,
         NLSFIndices,
-        psNLSF_CB as *const crate::structs_h::silk_NLSF_CB_struct,
+        psNLSF_CB as *const silk_NLSF_CB_struct,
     );
     ret = *RD_Q25.offset(0 as i32 as isize);
     return ret;

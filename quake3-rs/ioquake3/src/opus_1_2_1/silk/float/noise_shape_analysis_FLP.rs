@@ -156,7 +156,7 @@ unsafe extern "C" fn warped_true2monic_coefs(
         chirp = 0.99f32
             - (0.8f32 + 0.1f32 * iter as f32) * (maxabs - limit)
                 / (maxabs * (ind + 1 as i32) as f32);
-        crate::src::opus_1_2_1::silk::float::bwexpander_FLP::silk_bwexpander_FLP(
+        silk_bwexpander_FLP(
             coefs, order, chirp,
         );
         /* Convert to monic warped coefficients */
@@ -204,7 +204,7 @@ unsafe extern "C" fn limit_coefs(mut coefs: *mut f32, mut limit: f32, mut order:
         chirp = 0.99f32
             - (0.8f32 + 0.1f32 * iter as f32) * (maxabs - limit)
                 / (maxabs * (ind + 1 as i32) as f32);
-        crate::src::opus_1_2_1::silk::float::bwexpander_FLP::silk_bwexpander_FLP(
+        silk_bwexpander_FLP(
             coefs, order, chirp,
         );
         iter += 1
@@ -266,14 +266,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut psEncCtrl: *mut silk_encoder_control_FLP,
     mut pitch_res: *const f32,
     mut x: *const f32,
 )
 /* I    Input signal [frame_length + la_shape]      */
 {
-    let mut psShapeSt: *mut crate::structs_FLP_h::silk_shape_state_FLP = &mut (*psEnc).sShape;
+    let mut psShapeSt: *mut silk_shape_state_FLP = &mut (*psEnc).sShape;
     let mut k: i32 = 0;
     let mut nSamples: i32 = 0;
     let mut nSegs: i32 = 0;
@@ -339,14 +339,14 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         energy_variation = 0.0f32;
         log_energy_prev = 0.0f32;
         pitch_res_ptr = pitch_res;
-        nSegs = 5 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            * (*psEnc).sCmn.nb_subfr as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
+        nSegs = 5 as i32 as opus_int16 as opus_int32
+            * (*psEnc).sCmn.nb_subfr as opus_int16
+                as opus_int32
             / 2 as i32;
         k = 0 as i32;
         while k < nSegs {
             nrg = nSamples as f32
-                + crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
+                + silk_energy_FLP(
                     pitch_res_ptr,
                     nSamples,
                 ) as f32;
@@ -415,7 +415,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
                                             (*psEnc).sCmn.shapingLPCOrder);
         } else {
             /* Calculate regular auto correlation */
-            crate::src::opus_1_2_1::silk::float::autocorrelation_FLP::silk_autocorrelation_FLP(
+            silk_autocorrelation_FLP(
                 auto_corr.as_mut_ptr(),
                 x_windowed.as_mut_ptr(),
                 (*psEnc).sCmn.shapeWinLength,
@@ -425,12 +425,12 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         /* Add white noise, as a fraction of energy */
         auto_corr[0 as i32 as usize] += auto_corr[0 as i32 as usize] * 3e-5f32 + 1.0f32;
         /* Convert correlations to prediction coefficients, and compute residual energy */
-        nrg = crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP(
+        nrg = silk_schur_FLP(
             rc.as_mut_ptr(),
             auto_corr.as_mut_ptr() as *const f32,
             (*psEnc).sCmn.shapingLPCOrder,
         );
-        crate::src::opus_1_2_1::silk::float::k2a_FLP::silk_k2a_FLP(
+        silk_k2a_FLP(
             &mut *(*psEncCtrl)
                 .AR
                 .as_mut_ptr()
@@ -451,7 +451,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
             )
         }
         /* Bandwidth expansion for synthesis filter shaping */
-        crate::src::opus_1_2_1::silk::float::bwexpander_FLP::silk_bwexpander_FLP(
+        silk_bwexpander_FLP(
             &mut *(*psEncCtrl)
                 .AR
                 .as_mut_ptr()

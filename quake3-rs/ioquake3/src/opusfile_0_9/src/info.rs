@@ -38,28 +38,28 @@ unsafe extern "C" fn op_parse_int16le(mut _data: *const u8) -> i32 {
     return (ret ^ 0x8000 as i32) - 0x8000 as i32;
 }
 
-unsafe extern "C" fn op_parse_uint32le(mut _data: *const u8) -> crate::opus_types_h::opus_uint32 {
+unsafe extern "C" fn op_parse_uint32le(mut _data: *const u8) -> opus_uint32 {
     return *_data.offset(0 as i32 as isize) as u32
-        | (*_data.offset(1 as i32 as isize) as crate::opus_types_h::opus_uint32) << 8 as i32
-        | (*_data.offset(2 as i32 as isize) as crate::opus_types_h::opus_uint32) << 16 as i32
-        | (*_data.offset(3 as i32 as isize) as crate::opus_types_h::opus_uint32) << 24 as i32;
+        | (*_data.offset(1 as i32 as isize) as opus_uint32) << 8 as i32
+        | (*_data.offset(2 as i32 as isize) as opus_uint32) << 16 as i32
+        | (*_data.offset(3 as i32 as isize) as opus_uint32) << 24 as i32;
 }
 
-unsafe extern "C" fn op_parse_uint32be(mut _data: *const u8) -> crate::opus_types_h::opus_uint32 {
+unsafe extern "C" fn op_parse_uint32be(mut _data: *const u8) -> opus_uint32 {
     return *_data.offset(3 as i32 as isize) as u32
-        | (*_data.offset(2 as i32 as isize) as crate::opus_types_h::opus_uint32) << 8 as i32
-        | (*_data.offset(1 as i32 as isize) as crate::opus_types_h::opus_uint32) << 16 as i32
-        | (*_data.offset(0 as i32 as isize) as crate::opus_types_h::opus_uint32) << 24 as i32;
+        | (*_data.offset(2 as i32 as isize) as opus_uint32) << 8 as i32
+        | (*_data.offset(1 as i32 as isize) as opus_uint32) << 16 as i32
+        | (*_data.offset(0 as i32 as isize) as opus_uint32) << 24 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_head_parse(
-    mut _head: *mut crate::src::opusfile_0_9::src::opusfile::OpusHead,
+    mut _head: *mut OpusHead,
     mut _data: *const u8,
-    mut _len: crate::stddef_h::size_t,
+    mut _len: size_t,
 ) -> i32 {
-    let mut head: crate::src::opusfile_0_9::src::opusfile::OpusHead =
-        crate::src::opusfile_0_9::src::opusfile::OpusHead {
+    let mut head: OpusHead =
+        OpusHead {
             version: 0,
             channel_count: 0,
             pre_skip: 0,
@@ -110,12 +110,12 @@ pub unsafe extern "C" fn opus_head_parse(
             (*_head).mapping[1 as i32 as usize] = 1 as i32 as u8
         }
     } else if head.mapping_family == 1 as i32 {
-        let mut size: crate::stddef_h::size_t = 0;
+        let mut size: size_t = 0;
         let mut ci: i32 = 0;
         if head.channel_count < 1 as i32 || head.channel_count > 8 as i32 {
             return -(133 as i32);
         }
-        size = (21 as i32 + head.channel_count) as crate::stddef_h::size_t;
+        size = (21 as i32 + head.channel_count) as size_t;
         if _len < size || head.version <= 1 as i32 && _len > size {
             return -(133 as i32);
         }
@@ -155,10 +155,10 @@ pub unsafe extern "C" fn opus_head_parse(
     if !_head.is_null() {
         crate::stdlib::memcpy(
             _head as *mut libc::c_void,
-            &mut head as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead
+            &mut head as *mut OpusHead
                 as *const libc::c_void,
             head.mapping.as_mut_ptr().offset_from(
-                &mut head as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead as *mut u8,
+                &mut head as *mut OpusHead as *mut u8,
             ) as isize as libc::c_ulong,
         );
     }
@@ -167,18 +167,18 @@ pub unsafe extern "C" fn opus_head_parse(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_init(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
 ) {
     crate::stdlib::memset(
         _tags as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::opusfile_0_9::src::opusfile::OpusTags>() as libc::c_ulong,
+        ::std::mem::size_of::<OpusTags>() as libc::c_ulong,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_clear(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
 ) {
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
@@ -193,23 +193,23 @@ pub unsafe extern "C" fn opus_tags_clear(
         if !(fresh0 > 0 as i32) {
             break;
         }
-        ::libc::free(*(*_tags).user_comments.offset(ci as isize) as *mut libc::c_void);
+        libc::free(*(*_tags).user_comments.offset(ci as isize) as *mut libc::c_void);
     }
-    ::libc::free((*_tags).user_comments as *mut libc::c_void);
-    ::libc::free((*_tags).comment_lengths as *mut libc::c_void);
-    ::libc::free((*_tags).vendor as *mut libc::c_void);
+    libc::free((*_tags).user_comments as *mut libc::c_void);
+    libc::free((*_tags).comment_lengths as *mut libc::c_void);
+    libc::free((*_tags).vendor as *mut libc::c_void);
 }
 /*Ensure there's room for up to _ncomments comments.*/
 
 unsafe extern "C" fn op_tags_ensure_capacity(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
-    mut _ncomments: crate::stddef_h::size_t,
+    mut _tags: *mut OpusTags,
+    mut _ncomments: size_t,
 ) -> i32 {
     let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut comment_lengths: *mut i32 = 0 as *mut i32;
     let mut cur_ncomments: i32 = 0;
-    let mut size: crate::stddef_h::size_t = 0;
-    if (_ncomments >= 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
+    let mut size: size_t = 0;
+    if (_ncomments >= 2147483647 as i32 as size_t) as i32 as isize != 0 {
         return -(129 as i32);
     }
     size = (::std::mem::size_of::<i32>() as libc::c_ulong)
@@ -259,9 +259,9 @@ unsafe extern "C" fn op_tags_ensure_capacity(
 
 unsafe extern "C" fn op_strdup_with_len(
     mut _s: *const libc::c_char,
-    mut _len: crate::stddef_h::size_t,
+    mut _len: size_t,
 ) -> *mut libc::c_char {
-    let mut size: crate::stddef_h::size_t = 0;
+    let mut size: size_t = 0;
     let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
     size = (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
         .wrapping_mul(_len.wrapping_add(1 as i32 as libc::c_ulong));
@@ -285,12 +285,12 @@ Unlike the public API, this function requires _tags to already be
  the caller will clear it on error.*/
 
 unsafe extern "C" fn opus_tags_parse_impl(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
     mut _data: *const u8,
-    mut _len: crate::stddef_h::size_t,
+    mut _len: size_t,
 ) -> i32 {
-    let mut count: crate::opus_types_h::opus_uint32 = 0;
-    let mut len: crate::stddef_h::size_t = 0;
+    let mut count: opus_uint32 = 0;
+    let mut len: size_t = 0;
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     len = _len;
@@ -309,40 +309,40 @@ unsafe extern "C" fn opus_tags_parse_impl(
         return -(133 as i32);
     }
     _data = _data.offset(8 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(8 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(8 as i32 as libc::c_ulong) as size_t;
     count = op_parse_uint32le(_data);
     _data = _data.offset(4 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as size_t;
     if count as libc::c_ulong > len {
         return -(133 as i32);
     }
     if !_tags.is_null() {
         (*_tags).vendor =
-            op_strdup_with_len(_data as *mut libc::c_char, count as crate::stddef_h::size_t);
+            op_strdup_with_len(_data as *mut libc::c_char, count as size_t);
         if (*_tags).vendor.is_null() {
             return -(129 as i32);
         }
     }
     _data = _data.offset(count as isize);
-    len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as size_t;
     if len < 4 as i32 as libc::c_ulong {
         return -(133 as i32);
     }
     count = op_parse_uint32le(_data);
     _data = _data.offset(4 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as size_t;
     /*Check to make sure there's minimally sufficient data left in the packet.*/
     if count as libc::c_ulong > len >> 2 as i32 {
         return -(133 as i32);
     }
     /*Check for overflow (the API limits this to an int).*/
-    if count > (2147483647 as i32 as crate::opus_types_h::opus_uint32).wrapping_sub(1 as i32 as u32)
+    if count > (2147483647 as i32 as opus_uint32).wrapping_sub(1 as i32 as u32)
     {
         return -(129 as i32);
     }
     if !_tags.is_null() {
         let mut ret: i32 = 0;
-        ret = op_tags_ensure_capacity(_tags, count as crate::stddef_h::size_t);
+        ret = op_tags_ensure_capacity(_tags, count as size_t);
         if ret < 0 as i32 {
             return ret;
         }
@@ -351,24 +351,24 @@ unsafe extern "C" fn opus_tags_parse_impl(
     ci = 0 as i32;
     while ci < ncomments {
         /*Check to make sure there's minimally sufficient data left in the packet.*/
-        if (ncomments - ci) as crate::stddef_h::size_t > len >> 2 as i32 {
+        if (ncomments - ci) as size_t > len >> 2 as i32 {
             return -(133 as i32);
         }
         count = op_parse_uint32le(_data);
         _data = _data.offset(4 as i32 as isize);
         len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong)
-            as crate::stddef_h::size_t;
+            as size_t;
         if count as libc::c_ulong > len {
             return -(133 as i32);
         }
         /*Check for overflow (the API limits this to an int).*/
-        if count > 2147483647 as i32 as crate::opus_types_h::opus_uint32 {
+        if count > 2147483647 as i32 as opus_uint32 {
             return -(129 as i32);
         }
         if !_tags.is_null() {
             let ref mut fresh3 = *(*_tags).user_comments.offset(ci as isize);
             *fresh3 =
-                op_strdup_with_len(_data as *mut libc::c_char, count as crate::stddef_h::size_t);
+                op_strdup_with_len(_data as *mut libc::c_char, count as size_t);
             if (*(*_tags).user_comments.offset(ci as isize)).is_null() {
                 return -(129 as i32);
             }
@@ -381,11 +381,11 @@ unsafe extern "C" fn opus_tags_parse_impl(
         }
         _data = _data.offset(count as isize);
         len =
-            (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
+            (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as size_t;
         ci += 1
     }
     if len > 0 as i32 as libc::c_ulong && *_data.offset(0 as i32 as isize) as i32 & 1 as i32 != 0 {
-        if len > 2147483647 as i32 as crate::opus_types_h::opus_uint32 as libc::c_ulong {
+        if len > 2147483647 as i32 as opus_uint32 as libc::c_ulong {
             return -(129 as i32);
         }
         if !_tags.is_null() {
@@ -407,13 +407,13 @@ unsafe extern "C" fn opus_tags_parse_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_parse(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
     mut _data: *const u8,
-    mut _len: crate::stddef_h::size_t,
+    mut _len: size_t,
 ) -> i32 {
     if !_tags.is_null() {
-        let mut tags: crate::src::opusfile_0_9::src::opusfile::OpusTags =
-            crate::src::opusfile_0_9::src::opusfile::OpusTags {
+        let mut tags: OpusTags =
+            OpusTags {
                 user_comments: 0 as *mut *mut libc::c_char,
                 comment_lengths: 0 as *mut i32,
                 comments: 0,
@@ -430,7 +430,7 @@ pub unsafe extern "C" fn opus_tags_parse(
         return ret;
     } else {
         return opus_tags_parse_impl(
-            0 as *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+            0 as *mut OpusTags,
             _data,
             _len,
         );
@@ -442,8 +442,8 @@ Unlike the public API, this function requires _dst to already be
  the caller will clear it on error.*/
 
 unsafe extern "C" fn opus_tags_copy_impl(
-    mut _dst: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
-    mut _src: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _dst: *mut OpusTags,
+    mut _src: *const OpusTags,
 ) -> i32 {
     let mut vendor: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut ncomments: i32 = 0;
@@ -455,7 +455,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
         return -(129 as i32);
     }
     ncomments = (*_src).comments;
-    ret = op_tags_ensure_capacity(_dst, ncomments as crate::stddef_h::size_t);
+    ret = op_tags_ensure_capacity(_dst, ncomments as size_t);
     if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
@@ -466,7 +466,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
         let ref mut fresh6 = *(*_dst).user_comments.offset(ci as isize);
         *fresh6 = op_strdup_with_len(
             *(*_src).user_comments.offset(ci as isize),
-            len as crate::stddef_h::size_t,
+            len as size_t,
         );
         if (*(*_dst).user_comments.offset(ci as isize)).is_null() as i32 as isize != 0 {
             return -(129 as i32);
@@ -497,11 +497,11 @@ unsafe extern "C" fn opus_tags_copy_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_copy(
-    mut _dst: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
-    mut _src: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _dst: *mut OpusTags,
+    mut _src: *const OpusTags,
 ) -> i32 {
-    let mut dst: crate::src::opusfile_0_9::src::opusfile::OpusTags =
-        crate::src::opusfile_0_9::src::opusfile::OpusTags {
+    let mut dst: OpusTags =
+        OpusTags {
             user_comments: 0 as *mut *mut libc::c_char,
             comment_lengths: 0 as *mut i32,
             comments: 0,
@@ -520,17 +520,17 @@ pub unsafe extern "C" fn opus_tags_copy(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_add(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
     mut _tag: *const libc::c_char,
     mut _value: *const libc::c_char,
 ) -> i32 {
     let mut comment: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut tag_len: crate::stddef_h::size_t = 0;
-    let mut value_len: crate::stddef_h::size_t = 0;
+    let mut tag_len: size_t = 0;
+    let mut value_len: size_t = 0;
     let mut ncomments: i32 = 0;
     let mut ret: i32 = 0;
     ncomments = (*_tags).comments;
-    ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as crate::stddef_h::size_t);
+    ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as size_t);
     if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
@@ -541,7 +541,7 @@ pub unsafe extern "C" fn opus_tags_add(
         return -(129 as i32);
     }
     if tag_len.wrapping_add(value_len)
-        > (2147483647 as i32 as crate::stddef_h::size_t).wrapping_sub(2 as i32 as libc::c_ulong)
+        > (2147483647 as i32 as size_t).wrapping_sub(2 as i32 as libc::c_ulong)
     {
         return -(129 as i32);
     }
@@ -579,7 +579,7 @@ pub unsafe extern "C" fn opus_tags_add(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_add_comment(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
     mut _comment: *const libc::c_char,
 ) -> i32 {
     let mut comment: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -587,12 +587,12 @@ pub unsafe extern "C" fn opus_tags_add_comment(
     let mut ncomments: i32 = 0;
     let mut ret: i32 = 0;
     ncomments = (*_tags).comments;
-    ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as crate::stddef_h::size_t);
+    ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as size_t);
     if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
     comment_len = crate::stdlib::strlen(_comment) as i32;
-    comment = op_strdup_with_len(_comment, comment_len as crate::stddef_h::size_t);
+    comment = op_strdup_with_len(_comment, comment_len as size_t);
     if comment.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
@@ -605,7 +605,7 @@ pub unsafe extern "C" fn opus_tags_add_comment(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_set_binary_suffix(
-    mut _tags: *mut crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *mut OpusTags,
     mut _data: *const u8,
     mut _len: i32,
 ) -> i32 {
@@ -619,7 +619,7 @@ pub unsafe extern "C" fn opus_tags_set_binary_suffix(
         return -(131 as i32);
     }
     ncomments = (*_tags).comments;
-    ret = op_tags_ensure_capacity(_tags, ncomments as crate::stddef_h::size_t);
+    ret = op_tags_ensure_capacity(_tags, ncomments as size_t);
     if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
@@ -646,9 +646,9 @@ pub unsafe extern "C" fn opus_tagcompare(
     mut _tag_name: *const libc::c_char,
     mut _comment: *const libc::c_char,
 ) -> i32 {
-    let mut tag_len: crate::stddef_h::size_t = 0;
+    let mut tag_len: size_t = 0;
     tag_len = crate::stdlib::strlen(_tag_name);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
+    if (tag_len > 2147483647 as i32 as size_t) as i32 as isize != 0 {
         return -(1 as i32);
     }
     return opus_tagncompare(_tag_name, tag_len as i32, _comment);
@@ -671,17 +671,17 @@ pub unsafe extern "C" fn opus_tagncompare(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_query(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _tag: *const libc::c_char,
     mut _count: i32,
 ) -> *const libc::c_char {
     let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut tag_len: crate::stddef_h::size_t = 0;
+    let mut tag_len: size_t = 0;
     let mut found: i32 = 0;
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     tag_len = crate::stdlib::strlen(_tag);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
+    if (tag_len > 2147483647 as i32 as size_t) as i32 as isize != 0 {
         return 0 as *const libc::c_char;
     }
     ncomments = (*_tags).comments;
@@ -707,16 +707,16 @@ pub unsafe extern "C" fn opus_tags_query(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_query_count(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _tag: *const libc::c_char,
 ) -> i32 {
     let mut user_comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    let mut tag_len: crate::stddef_h::size_t = 0;
+    let mut tag_len: size_t = 0;
     let mut found: i32 = 0;
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     tag_len = crate::stdlib::strlen(_tag);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
+    if (tag_len > 2147483647 as i32 as size_t) as i32 as isize != 0 {
         return 0 as i32;
     }
     ncomments = (*_tags).comments;
@@ -734,7 +734,7 @@ pub unsafe extern "C" fn opus_tags_query_count(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_get_binary_suffix(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _len: *mut i32,
 ) -> *const u8 {
     let mut ncomments: i32 = 0;
@@ -754,10 +754,10 @@ pub unsafe extern "C" fn opus_tags_get_binary_suffix(
 }
 
 unsafe extern "C" fn opus_tags_get_gain(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _gain_q8: *mut i32,
     mut _tag_name: *const libc::c_char,
-    mut _tag_len: crate::stddef_h::size_t,
+    mut _tag_len: size_t,
 ) -> i32 {
     let mut comments: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut ncomments: i32 = 0;
@@ -769,7 +769,7 @@ unsafe extern "C" fn opus_tags_get_gain(
     while ci < ncomments {
         if opus_tagncompare(_tag_name, _tag_len as i32, *comments.offset(ci as isize)) == 0 as i32 {
             let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-            let mut gain_q8: crate::opus_types_h::opus_int32 = 0;
+            let mut gain_q8: opus_int32 = 0;
             let mut negative: i32 = 0;
             p = (*comments.offset(ci as isize))
                 .offset(_tag_len as isize)
@@ -803,31 +803,31 @@ unsafe extern "C" fn opus_tags_get_gain(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_get_album_gain(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _gain_q8: *mut i32,
 ) -> i32 {
     return opus_tags_get_gain(
         _tags,
         _gain_q8,
         b"R128_ALBUM_GAIN\x00" as *const u8 as *const libc::c_char,
-        15 as i32 as crate::stddef_h::size_t,
+        15 as i32 as size_t,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_tags_get_track_gain(
-    mut _tags: *const crate::src::opusfile_0_9::src::opusfile::OpusTags,
+    mut _tags: *const OpusTags,
     mut _gain_q8: *mut i32,
 ) -> i32 {
     return opus_tags_get_gain(
         _tags,
         _gain_q8,
         b"R128_TRACK_GAIN\x00" as *const u8 as *const libc::c_char,
-        15 as i32 as crate::stddef_h::size_t,
+        15 as i32 as size_t,
     );
 }
 
-unsafe extern "C" fn op_is_jpeg(mut _buf: *const u8, mut _buf_sz: crate::stddef_h::size_t) -> i32 {
+unsafe extern "C" fn op_is_jpeg(mut _buf: *const u8, mut _buf_sz: size_t) -> i32 {
     return (_buf_sz >= 11 as i32 as libc::c_ulong
         && crate::stdlib::memcmp(
             _buf as *const libc::c_void,
@@ -849,18 +849,18 @@ On failure, simply leaves its outputs unmodified.*/
 
 unsafe extern "C" fn op_extract_jpeg_params(
     mut _buf: *const u8,
-    mut _buf_sz: crate::stddef_h::size_t,
-    mut _width: *mut crate::opus_types_h::opus_uint32,
-    mut _height: *mut crate::opus_types_h::opus_uint32,
-    mut _depth: *mut crate::opus_types_h::opus_uint32,
-    mut _colors: *mut crate::opus_types_h::opus_uint32,
+    mut _buf_sz: size_t,
+    mut _width: *mut opus_uint32,
+    mut _height: *mut opus_uint32,
+    mut _depth: *mut opus_uint32,
+    mut _colors: *mut opus_uint32,
     mut _has_palette: *mut i32,
 ) {
     if op_is_jpeg(_buf, _buf_sz) != 0 {
-        let mut offs: crate::stddef_h::size_t = 0;
-        offs = 2 as i32 as crate::stddef_h::size_t;
+        let mut offs: size_t = 0;
+        offs = 2 as i32 as size_t;
         loop {
-            let mut segment_len: crate::stddef_h::size_t = 0;
+            let mut segment_len: size_t = 0;
             let mut marker: i32 = 0;
             while offs < _buf_sz && *_buf.offset(offs as isize) as i32 != 0xff as i32 {
                 offs = offs.wrapping_add(1)
@@ -885,7 +885,7 @@ unsafe extern "C" fn op_extract_jpeg_params(
             }
             segment_len = ((*_buf.offset(offs as isize) as i32) << 8 as i32
                 | *_buf.offset(offs.wrapping_add(1 as i32 as libc::c_ulong) as isize) as i32)
-                as crate::stddef_h::size_t;
+                as size_t;
             if segment_len < 2 as i32 as libc::c_ulong || _buf_sz.wrapping_sub(offs) < segment_len {
                 break;
             }
@@ -899,30 +899,30 @@ unsafe extern "C" fn op_extract_jpeg_params(
                         << 8 as i32
                         | *_buf.offset(offs.wrapping_add(4 as i32 as libc::c_ulong) as isize)
                             as i32)
-                        as crate::opus_types_h::opus_uint32;
+                        as opus_uint32;
                     *_width = ((*_buf.offset(offs.wrapping_add(5 as i32 as libc::c_ulong) as isize)
                         as i32)
                         << 8 as i32
                         | *_buf.offset(offs.wrapping_add(6 as i32 as libc::c_ulong) as isize)
                             as i32)
-                        as crate::opus_types_h::opus_uint32;
+                        as opus_uint32;
                     *_depth =
                         (*_buf.offset(offs.wrapping_add(2 as i32 as libc::c_ulong) as isize) as i32
                             * *_buf.offset(offs.wrapping_add(7 as i32 as libc::c_ulong) as isize)
-                                as i32) as crate::opus_types_h::opus_uint32;
-                    *_colors = 0 as i32 as crate::opus_types_h::opus_uint32;
+                                as i32) as opus_uint32;
+                    *_colors = 0 as i32 as opus_uint32;
                     *_has_palette = 0 as i32
                 }
                 break;
             } else {
                 /*Other markers: skip the whole marker segment.*/
-                offs = (offs as libc::c_ulong).wrapping_add(segment_len) as crate::stddef_h::size_t
+                offs = (offs as libc::c_ulong).wrapping_add(segment_len) as size_t
             }
         }
     };
 }
 
-unsafe extern "C" fn op_is_png(mut _buf: *const u8, mut _buf_sz: crate::stddef_h::size_t) -> i32 {
+unsafe extern "C" fn op_is_png(mut _buf: *const u8, mut _buf_sz: size_t) -> i32 {
     return (_buf_sz >= 8 as i32 as libc::c_ulong
         && crate::stdlib::memcmp(
             _buf as *const libc::c_void,
@@ -936,18 +936,18 @@ On failure, simply leaves its outputs unmodified.*/
 
 unsafe extern "C" fn op_extract_png_params(
     mut _buf: *const u8,
-    mut _buf_sz: crate::stddef_h::size_t,
-    mut _width: *mut crate::opus_types_h::opus_uint32,
-    mut _height: *mut crate::opus_types_h::opus_uint32,
-    mut _depth: *mut crate::opus_types_h::opus_uint32,
-    mut _colors: *mut crate::opus_types_h::opus_uint32,
+    mut _buf_sz: size_t,
+    mut _width: *mut opus_uint32,
+    mut _height: *mut opus_uint32,
+    mut _depth: *mut opus_uint32,
+    mut _colors: *mut opus_uint32,
     mut _has_palette: *mut i32,
 ) {
     if op_is_png(_buf, _buf_sz) != 0 {
-        let mut offs: crate::stddef_h::size_t = 0;
-        offs = 8 as i32 as crate::stddef_h::size_t;
+        let mut offs: size_t = 0;
+        offs = 8 as i32 as size_t;
         while _buf_sz.wrapping_sub(offs) >= 12 as i32 as libc::c_ulong {
-            let mut chunk_len: crate::config_types_h::ogg_uint32_t = 0;
+            let mut chunk_len: ogg_uint32_t = 0;
             chunk_len = op_parse_uint32be(_buf.offset(offs as isize));
             if chunk_len as libc::c_ulong
                 > _buf_sz.wrapping_sub(offs.wrapping_add(12 as i32 as libc::c_ulong))
@@ -967,22 +967,22 @@ unsafe extern "C" fn op_extract_png_params(
                 color_type =
                     *_buf.offset(offs.wrapping_add(17 as i32 as libc::c_ulong) as isize) as i32;
                 if color_type == 3 as i32 {
-                    *_depth = 24 as i32 as crate::opus_types_h::opus_uint32;
+                    *_depth = 24 as i32 as opus_uint32;
                     *_has_palette = 1 as i32
                 } else {
                     let mut sample_depth: i32 = 0;
                     sample_depth =
                         *_buf.offset(offs.wrapping_add(16 as i32 as libc::c_ulong) as isize) as i32;
                     if color_type == 0 as i32 {
-                        *_depth = sample_depth as crate::opus_types_h::opus_uint32
+                        *_depth = sample_depth as opus_uint32
                     } else if color_type == 2 as i32 {
-                        *_depth = (sample_depth * 3 as i32) as crate::opus_types_h::opus_uint32
+                        *_depth = (sample_depth * 3 as i32) as opus_uint32
                     } else if color_type == 4 as i32 {
-                        *_depth = (sample_depth * 2 as i32) as crate::opus_types_h::opus_uint32
+                        *_depth = (sample_depth * 2 as i32) as opus_uint32
                     } else if color_type == 6 as i32 {
-                        *_depth = (sample_depth * 4 as i32) as crate::opus_types_h::opus_uint32
+                        *_depth = (sample_depth * 4 as i32) as opus_uint32
                     }
-                    *_colors = 0 as i32 as crate::opus_types_h::opus_uint32;
+                    *_colors = 0 as i32 as opus_uint32;
                     *_has_palette = 0 as i32;
                     break;
                 }
@@ -998,12 +998,12 @@ unsafe extern "C" fn op_extract_png_params(
             }
             offs = (offs as libc::c_ulong)
                 .wrapping_add((12 as i32 as u32).wrapping_add(chunk_len) as libc::c_ulong)
-                as crate::stddef_h::size_t
+                as size_t
         }
     };
 }
 
-unsafe extern "C" fn op_is_gif(mut _buf: *const u8, mut _buf_sz: crate::stddef_h::size_t) -> i32 {
+unsafe extern "C" fn op_is_gif(mut _buf: *const u8, mut _buf_sz: size_t) -> i32 {
     return (_buf_sz >= 6 as i32 as libc::c_ulong
         && (crate::stdlib::memcmp(
             _buf as *const libc::c_void,
@@ -1022,24 +1022,24 @@ On failure, simply leaves its outputs unmodified.*/
 
 unsafe extern "C" fn op_extract_gif_params(
     mut _buf: *const u8,
-    mut _buf_sz: crate::stddef_h::size_t,
-    mut _width: *mut crate::opus_types_h::opus_uint32,
-    mut _height: *mut crate::opus_types_h::opus_uint32,
-    mut _depth: *mut crate::opus_types_h::opus_uint32,
-    mut _colors: *mut crate::opus_types_h::opus_uint32,
+    mut _buf_sz: size_t,
+    mut _width: *mut opus_uint32,
+    mut _height: *mut opus_uint32,
+    mut _depth: *mut opus_uint32,
+    mut _colors: *mut opus_uint32,
     mut _has_palette: *mut i32,
 ) {
     if op_is_gif(_buf, _buf_sz) != 0 && _buf_sz >= 14 as i32 as libc::c_ulong {
         *_width = (*_buf.offset(6 as i32 as isize) as i32
             | (*_buf.offset(7 as i32 as isize) as i32) << 8 as i32)
-            as crate::opus_types_h::opus_uint32;
+            as opus_uint32;
         *_height = (*_buf.offset(8 as i32 as isize) as i32
             | (*_buf.offset(9 as i32 as isize) as i32) << 8 as i32)
-            as crate::opus_types_h::opus_uint32;
+            as opus_uint32;
         /*libFLAC hard-codes the depth to 24.*/
-        *_depth = 24 as i32 as crate::opus_types_h::opus_uint32;
+        *_depth = 24 as i32 as opus_uint32;
         *_colors = ((1 as i32) << (*_buf.offset(10 as i32 as isize) as i32 & 7 as i32) + 1 as i32)
-            as crate::opus_types_h::opus_uint32;
+            as opus_uint32;
         *_has_palette = 1 as i32
     };
 }
@@ -1049,36 +1049,36 @@ Unlike the public API, this function requires _pic to already be
  the caller will clear it on error.*/
 
 unsafe extern "C" fn opus_picture_tag_parse_impl(
-    mut _pic: *mut crate::src::opusfile_0_9::src::opusfile::OpusPictureTag,
+    mut _pic: *mut OpusPictureTag,
     mut _tag: *const libc::c_char,
     mut _buf: *mut u8,
-    mut _buf_sz: crate::stddef_h::size_t,
-    mut _base64_sz: crate::stddef_h::size_t,
+    mut _buf_sz: size_t,
+    mut _base64_sz: size_t,
 ) -> i32 {
-    let mut picture_type: crate::opus_types_h::opus_int32 = 0;
-    let mut mime_type_length: crate::opus_types_h::opus_uint32 = 0;
+    let mut picture_type: opus_int32 = 0;
+    let mut mime_type_length: opus_uint32 = 0;
     let mut mime_type: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut description_length: crate::opus_types_h::opus_uint32 = 0;
+    let mut description_length: opus_uint32 = 0;
     let mut description: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut width: crate::opus_types_h::opus_uint32 = 0;
-    let mut height: crate::opus_types_h::opus_uint32 = 0;
-    let mut depth: crate::opus_types_h::opus_uint32 = 0;
-    let mut colors: crate::opus_types_h::opus_uint32 = 0;
-    let mut data_length: crate::opus_types_h::opus_uint32 = 0;
-    let mut file_width: crate::opus_types_h::opus_uint32 = 0;
-    let mut file_height: crate::opus_types_h::opus_uint32 = 0;
-    let mut file_depth: crate::opus_types_h::opus_uint32 = 0;
-    let mut file_colors: crate::opus_types_h::opus_uint32 = 0;
+    let mut width: opus_uint32 = 0;
+    let mut height: opus_uint32 = 0;
+    let mut depth: opus_uint32 = 0;
+    let mut colors: opus_uint32 = 0;
+    let mut data_length: opus_uint32 = 0;
+    let mut file_width: opus_uint32 = 0;
+    let mut file_height: opus_uint32 = 0;
+    let mut file_depth: opus_uint32 = 0;
+    let mut file_colors: opus_uint32 = 0;
     let mut format: i32 = 0;
     let mut has_palette: i32 = 0;
     let mut colors_set: i32 = 0;
-    let mut i: crate::stddef_h::size_t = 0;
+    let mut i: size_t = 0;
     /*Decode the BASE64 data.*/
-    i = 0 as i32 as crate::stddef_h::size_t;
+    i = 0 as i32 as size_t;
     while i < _base64_sz {
-        let mut value: crate::opus_types_h::opus_uint32 = 0;
+        let mut value: opus_uint32 = 0;
         let mut j: i32 = 0;
-        value = 0 as i32 as crate::opus_types_h::opus_uint32;
+        value = 0 as i32 as opus_uint32;
         j = 0 as i32;
         while j < 4 as i32 {
             let mut c: u32 = 0;
@@ -1141,12 +1141,12 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         }
         i = i.wrapping_add(1)
     }
-    i = 0 as i32 as crate::stddef_h::size_t;
-    picture_type = op_parse_uint32be(_buf.offset(i as isize)) as crate::opus_types_h::opus_int32;
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = 0 as i32 as size_t;
+    picture_type = op_parse_uint32be(_buf.offset(i as isize)) as opus_int32;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     /*Extract the MIME type.*/
     mime_type_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     if mime_type_length as libc::c_ulong > _buf_sz.wrapping_sub(32 as i32 as libc::c_ulong) {
         return -(132 as i32);
     }
@@ -1166,10 +1166,10 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     *mime_type.offset(mime_type_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).mime_type = mime_type;
     i = (i as libc::c_ulong).wrapping_add(mime_type_length as libc::c_ulong)
-        as crate::stddef_h::size_t;
+        as size_t;
     /*Extract the description string.*/
     description_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     if description_length as libc::c_ulong
         > _buf_sz
             .wrapping_sub(mime_type_length as libc::c_ulong)
@@ -1193,16 +1193,16 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     *description.offset(description_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).description = description;
     i = (i as libc::c_ulong).wrapping_add(description_length as libc::c_ulong)
-        as crate::stddef_h::size_t;
+        as size_t;
     /*Extract the remaining fields.*/
     width = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     height = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     depth = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     colors = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     /*If one of these is set, they all must be, but colors==0 is a valid value.*/
     colors_set = (width != 0 as i32 as u32
         || height != 0 as i32 as u32
@@ -1214,7 +1214,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         return -(132 as i32);
     }
     data_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as size_t;
     if data_length as libc::c_ulong > _buf_sz.wrapping_sub(i) {
         return -(132 as i32);
     }
@@ -1223,7 +1223,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     /*Attempt to determine the image format.*/
     format = -(1 as i32);
     if mime_type_length == 3 as i32 as u32
-        && ::libc::strcmp(mime_type, b"-->\x00" as *const u8 as *const libc::c_char) == 0 as i32
+        && libc::strcmp(mime_type, b"-->\x00" as *const u8 as *const libc::c_char) == 0 as i32
     {
         format = 0 as i32;
         /*Picture type 1 must be a 32x32 PNG.*/
@@ -1247,7 +1247,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         {
             if op_is_jpeg(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 1 as i32
@@ -1261,7 +1261,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         {
             if op_is_png(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 2 as i32
@@ -1275,7 +1275,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         {
             if op_is_gif(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 3 as i32
@@ -1290,25 +1290,25 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         {
             if op_is_jpeg(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 1 as i32
             } else if op_is_png(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 2 as i32
             } else if op_is_gif(
                 _buf.offset(i as isize),
-                data_length as crate::stddef_h::size_t,
+                data_length as size_t,
             ) != 0
             {
                 format = 3 as i32
             }
         }
-        file_colors = 0 as i32 as crate::opus_types_h::opus_uint32;
+        file_colors = 0 as i32 as opus_uint32;
         file_depth = file_colors;
         file_height = file_depth;
         file_width = file_height;
@@ -1317,7 +1317,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
             1 => {
                 op_extract_jpeg_params(
                     _buf.offset(i as isize),
-                    data_length as crate::stddef_h::size_t,
+                    data_length as size_t,
                     &mut file_width,
                     &mut file_height,
                     &mut file_depth,
@@ -1328,7 +1328,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
             2 => {
                 op_extract_png_params(
                     _buf.offset(i as isize),
-                    data_length as crate::stddef_h::size_t,
+                    data_length as size_t,
                     &mut file_width,
                     &mut file_height,
                     &mut file_depth,
@@ -1339,7 +1339,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
             3 => {
                 op_extract_gif_params(
                     _buf.offset(i as isize),
-                    data_length as crate::stddef_h::size_t,
+                    data_length as size_t,
                     &mut file_width,
                     &mut file_height,
                     &mut file_depth,
@@ -1366,7 +1366,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     }
     /*Adjust _buf_sz instead of using data_length to capture the terminating NUL
     for URLs.*/
-    _buf_sz = (_buf_sz as libc::c_ulong).wrapping_sub(i) as crate::stddef_h::size_t;
+    _buf_sz = (_buf_sz as libc::c_ulong).wrapping_sub(i) as size_t;
     crate::stdlib::memmove(
         _buf as *mut libc::c_void,
         _buf.offset(i as isize) as *const libc::c_void,
@@ -1389,11 +1389,11 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_picture_tag_parse(
-    mut _pic: *mut crate::src::opusfile_0_9::src::opusfile::OpusPictureTag,
+    mut _pic: *mut OpusPictureTag,
     mut _tag: *const libc::c_char,
 ) -> i32 {
-    let mut pic: crate::src::opusfile_0_9::src::opusfile::OpusPictureTag =
-        crate::src::opusfile_0_9::src::opusfile::OpusPictureTag {
+    let mut pic: OpusPictureTag =
+        OpusPictureTag {
             type_0: 0,
             mime_type: 0 as *mut libc::c_char,
             description: 0 as *mut libc::c_char,
@@ -1406,9 +1406,9 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
             format: 0,
         };
     let mut buf: *mut u8 = 0 as *mut u8;
-    let mut base64_sz: crate::stddef_h::size_t = 0;
-    let mut buf_sz: crate::stddef_h::size_t = 0;
-    let mut tag_length: crate::stddef_h::size_t = 0;
+    let mut base64_sz: size_t = 0;
+    let mut buf_sz: size_t = 0;
+    let mut tag_length: size_t = 0;
     let mut ret: i32 = 0;
     if opus_tagncompare(
         b"METADATA_BLOCK_PICTURE\x00" as *const u8 as *const libc::c_char,
@@ -1453,7 +1453,7 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
     ret = opus_picture_tag_parse_impl(&mut pic, _tag, buf, buf_sz, base64_sz);
     if ret < 0 as i32 {
         opus_picture_tag_clear(&mut pic);
-        ::libc::free(buf as *mut libc::c_void);
+        libc::free(buf as *mut libc::c_void);
     } else {
         *_pic = pic
     }
@@ -1462,12 +1462,12 @@ pub unsafe extern "C" fn opus_picture_tag_parse(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_picture_tag_init(
-    mut _pic: *mut crate::src::opusfile_0_9::src::opusfile::OpusPictureTag,
+    mut _pic: *mut OpusPictureTag,
 ) {
     crate::stdlib::memset(
         _pic as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::src::opusfile_0_9::src::opusfile::OpusPictureTag>()
+        ::std::mem::size_of::<OpusPictureTag>()
             as libc::c_ulong,
     );
 }
@@ -1989,9 +1989,9 @@ It will free all memory used by the structure members.
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_picture_tag_clear(
-    mut _pic: *mut crate::src::opusfile_0_9::src::opusfile::OpusPictureTag,
+    mut _pic: *mut OpusPictureTag,
 ) {
-    ::libc::free((*_pic).description as *mut libc::c_void);
-    ::libc::free((*_pic).mime_type as *mut libc::c_void);
-    ::libc::free((*_pic).data as *mut libc::c_void);
+    libc::free((*_pic).description as *mut libc::c_void);
+    libc::free((*_pic).mime_type as *mut libc::c_void);
+    libc::free((*_pic).data as *mut libc::c_void);
 }

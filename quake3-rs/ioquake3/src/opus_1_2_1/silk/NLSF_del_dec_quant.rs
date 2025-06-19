@@ -266,16 +266,16 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
     mut indices: *mut i8,
-    mut x_Q10: *const crate::opus_types_h::opus_int16,
-    mut w_Q5: *const crate::opus_types_h::opus_int16,
+    mut x_Q10: *const opus_int16,
+    mut w_Q5: *const opus_int16,
     mut pred_coef_Q8: *const u8,
-    mut ec_ix: *const crate::opus_types_h::opus_int16,
+    mut ec_ix: *const opus_int16,
     mut ec_rates_Q5: *const u8,
     quant_step_size_Q16: i32,
-    inv_quant_step_size_Q6: crate::opus_types_h::opus_int16,
-    mu_Q20: crate::opus_types_h::opus_int32,
-    order: crate::opus_types_h::opus_int16,
-) -> crate::opus_types_h::opus_int32
+    inv_quant_step_size_Q6: opus_int16,
+    mu_Q20: opus_int32,
+    order: opus_int16,
+) -> opus_int32
 /* I    Number of input values                      */ {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -289,83 +289,83 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
     let mut diff_Q10: i32 = 0;
     let mut rate0_Q5: i32 = 0;
     let mut rate1_Q5: i32 = 0;
-    let mut out0_Q10: crate::opus_types_h::opus_int16 = 0;
-    let mut out1_Q10: crate::opus_types_h::opus_int16 = 0;
-    let mut RD_tmp_Q25: crate::opus_types_h::opus_int32 = 0;
-    let mut min_Q25: crate::opus_types_h::opus_int32 = 0;
-    let mut min_max_Q25: crate::opus_types_h::opus_int32 = 0;
-    let mut max_min_Q25: crate::opus_types_h::opus_int32 = 0;
+    let mut out0_Q10: opus_int16 = 0;
+    let mut out1_Q10: opus_int16 = 0;
+    let mut RD_tmp_Q25: opus_int32 = 0;
+    let mut min_Q25: opus_int32 = 0;
+    let mut min_max_Q25: opus_int32 = 0;
+    let mut max_min_Q25: opus_int32 = 0;
     let mut ind_sort: [i32; 4] = [0; 4];
     let mut ind: [[i8; 16]; 4] = [[0; 16]; 4];
-    let mut prev_out_Q10: [crate::opus_types_h::opus_int16; 8] = [0; 8];
-    let mut RD_Q25: [crate::opus_types_h::opus_int32; 8] = [0; 8];
-    let mut RD_min_Q25: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut RD_max_Q25: [crate::opus_types_h::opus_int32; 4] = [0; 4];
+    let mut prev_out_Q10: [opus_int16; 8] = [0; 8];
+    let mut RD_Q25: [opus_int32; 8] = [0; 8];
+    let mut RD_min_Q25: [opus_int32; 4] = [0; 4];
+    let mut RD_max_Q25: [opus_int32; 4] = [0; 4];
     let mut rates_Q5: *const u8 = 0 as *const u8;
     let mut out0_Q10_table: [i32; 20] = [0; 20];
     let mut out1_Q10_table: [i32; 20] = [0; 20];
     i = -(10 as i32);
     while i <= 10 as i32 - 1 as i32 {
-        out0_Q10 = ((i as crate::opus_types_h::opus_uint32) << 10 as i32)
-            as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_int16;
-        out1_Q10 = (out0_Q10 as i32 + 1024 as i32) as crate::opus_types_h::opus_int16;
+        out0_Q10 = ((i as opus_uint32) << 10 as i32)
+            as opus_int32
+            as opus_int16;
+        out1_Q10 = (out0_Q10 as i32 + 1024 as i32) as opus_int16;
         if i > 0 as i32 {
             out0_Q10 = (out0_Q10 as i32
                 - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16;
+                    as opus_int32)
+                as opus_int16;
             out1_Q10 = (out1_Q10 as i32
                 - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16
+                    as opus_int32)
+                as opus_int16
         } else if i == 0 as i32 {
             out1_Q10 = (out1_Q10 as i32
                 - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16
+                    as opus_int32)
+                as opus_int16
         } else if i == -(1 as i32) {
             out0_Q10 = (out0_Q10 as i32
                 + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16
+                    as opus_int32)
+                as opus_int16
         } else {
             out0_Q10 = (out0_Q10 as i32
                 + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16;
+                    as opus_int32)
+                as opus_int16;
             out1_Q10 = (out1_Q10 as i32
                 + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_int16
+                    as opus_int32)
+                as opus_int16
         }
-        out0_Q10_table[(i + 10 as i32) as usize] = out0_Q10 as crate::opus_types_h::opus_int32
-            * quant_step_size_Q16 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
+        out0_Q10_table[(i + 10 as i32) as usize] = out0_Q10 as opus_int32
+            * quant_step_size_Q16 as opus_int16
+                as opus_int32
             >> 16 as i32;
-        out1_Q10_table[(i + 10 as i32) as usize] = out1_Q10 as crate::opus_types_h::opus_int32
-            * quant_step_size_Q16 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
+        out1_Q10_table[(i + 10 as i32) as usize] = out1_Q10 as opus_int32
+            * quant_step_size_Q16 as opus_int16
+                as opus_int32
             >> 16 as i32;
         i += 1
     }
     /* must be power of two */
     nStates = 1 as i32;
     RD_Q25[0 as i32 as usize] = 0 as i32;
-    prev_out_Q10[0 as i32 as usize] = 0 as i32 as crate::opus_types_h::opus_int16;
+    prev_out_Q10[0 as i32 as usize] = 0 as i32 as opus_int16;
     i = order as i32 - 1 as i32;
     while i >= 0 as i32 {
         rates_Q5 = &*ec_rates_Q5.offset(*ec_ix.offset(i as isize) as isize) as *const u8;
         in_Q10 = *x_Q10.offset(i as isize) as i32;
         j = 0 as i32;
         while j < nStates {
-            pred_Q10 = *pred_coef_Q8.offset(i as isize) as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * prev_out_Q10[j as usize] as crate::opus_types_h::opus_int32
+            pred_Q10 = *pred_coef_Q8.offset(i as isize) as opus_int16
+                as opus_int32
+                * prev_out_Q10[j as usize] as opus_int32
                 >> 8 as i32;
             res_Q10 = in_Q10 - pred_Q10;
-            ind_tmp = inv_quant_step_size_Q6 as crate::opus_types_h::opus_int32
-                * res_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+            ind_tmp = inv_quant_step_size_Q6 as opus_int32
+                * res_Q10 as opus_int16 as opus_int32
                 >> 16 as i32;
             ind_tmp = if -(10 as i32) > 10 as i32 - 1 as i32 {
                 if ind_tmp > -(10 as i32) {
@@ -385,11 +385,11 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
             ind[j as usize][i as usize] = ind_tmp as i8;
             /* compute outputs for ind_tmp and ind_tmp + 1 */
             out0_Q10 =
-                out0_Q10_table[(ind_tmp + 10 as i32) as usize] as crate::opus_types_h::opus_int16;
+                out0_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
             out1_Q10 =
-                out1_Q10_table[(ind_tmp + 10 as i32) as usize] as crate::opus_types_h::opus_int16;
-            out0_Q10 = (out0_Q10 as i32 + pred_Q10) as crate::opus_types_h::opus_int16;
-            out1_Q10 = (out1_Q10 as i32 + pred_Q10) as crate::opus_types_h::opus_int16;
+                out1_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
+            out0_Q10 = (out0_Q10 as i32 + pred_Q10) as opus_int16;
+            out1_Q10 = (out1_Q10 as i32 + pred_Q10) as opus_int16;
             prev_out_Q10[j as usize] = out0_Q10;
             prev_out_Q10[(j + nStates) as usize] = out1_Q10;
             /* compute RD for ind_tmp and ind_tmp + 1 */
@@ -399,10 +399,10 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     rate1_Q5 = 280 as i32
                 } else {
                     rate0_Q5 = 280 as i32 - 43 as i32 * 4 as i32
-                        + 43 as i32 as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32
-                            * ind_tmp as crate::opus_types_h::opus_int16
-                                as crate::opus_types_h::opus_int32;
+                        + 43 as i32 as opus_int16
+                            as opus_int32
+                            * ind_tmp as opus_int16
+                                as opus_int32;
                     rate1_Q5 = rate0_Q5 + 43 as i32
                 }
             } else if ind_tmp <= -(4 as i32) {
@@ -411,10 +411,10 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     rate1_Q5 = *rates_Q5.offset((ind_tmp + 1 as i32 + 4 as i32) as isize) as i32
                 } else {
                     rate0_Q5 = 280 as i32 - 43 as i32 * 4 as i32
-                        + -(43 as i32) as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32
-                            * ind_tmp as crate::opus_types_h::opus_int16
-                                as crate::opus_types_h::opus_int32;
+                        + -(43 as i32) as opus_int16
+                            as opus_int32
+                            * ind_tmp as opus_int16
+                                as opus_int32;
                     rate1_Q5 = rate0_Q5 - 43 as i32
                 }
             } else {
@@ -424,22 +424,22 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
             RD_tmp_Q25 = RD_Q25[j as usize];
             diff_Q10 = in_Q10 - out0_Q10 as i32;
             RD_Q25[j as usize] = RD_tmp_Q25
-                + diff_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * diff_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                + diff_Q10 as opus_int16 as opus_int32
+                    * diff_Q10 as opus_int16
+                        as opus_int32
                     * *w_Q5.offset(i as isize) as i32
-                + mu_Q20 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * rate0_Q5 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
+                + mu_Q20 as opus_int16 as opus_int32
+                    * rate0_Q5 as opus_int16
+                        as opus_int32;
             diff_Q10 = in_Q10 - out1_Q10 as i32;
             RD_Q25[(j + nStates) as usize] = RD_tmp_Q25
-                + diff_Q10 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * diff_Q10 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
+                + diff_Q10 as opus_int16 as opus_int32
+                    * diff_Q10 as opus_int16
+                        as opus_int32
                     * *w_Q5.offset(i as isize) as i32
-                + mu_Q20 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * rate1_Q5 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32;
+                + mu_Q20 as opus_int16 as opus_int32
+                    * rate1_Q5 as opus_int16
+                        as opus_int32;
             j += 1
         }
         if nStates <= ((1 as i32) << 2 as i32) / 2 as i32 {
@@ -450,8 +450,8 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     (ind[j as usize][i as usize] as i32 + 1 as i32) as i8;
                 j += 1
             }
-            nStates = ((nStates as crate::opus_types_h::opus_uint32) << 1 as i32)
-                as crate::opus_types_h::opus_int32;
+            nStates = ((nStates as opus_uint32) << 1 as i32)
+                as opus_int32;
             j = nStates;
             while j < (1 as i32) << 2 as i32 {
                 ind[j as usize][i as usize] = ind[(j - nStates) as usize][i as usize];

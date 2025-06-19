@@ -28,7 +28,7 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn validate_layout(
-    mut layout: *const crate::opus_private_h::ChannelLayout,
+    mut layout: *const ChannelLayout,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut max_channel: i32 = 0;
@@ -50,7 +50,7 @@ pub unsafe extern "C" fn validate_layout(
 #[no_mangle]
 
 pub unsafe extern "C" fn get_left_channel(
-    mut layout: *const crate::opus_private_h::ChannelLayout,
+    mut layout: *const ChannelLayout,
     mut stream_id: i32,
     mut prev: i32,
 ) -> i32 {
@@ -71,7 +71,7 @@ pub unsafe extern "C" fn get_left_channel(
 #[no_mangle]
 
 pub unsafe extern "C" fn get_right_channel(
-    mut layout: *const crate::opus_private_h::ChannelLayout,
+    mut layout: *const ChannelLayout,
     mut stream_id: i32,
     mut prev: i32,
 ) -> i32 {
@@ -92,7 +92,7 @@ pub unsafe extern "C" fn get_right_channel(
 #[no_mangle]
 
 pub unsafe extern "C" fn get_mono_channel(
-    mut layout: *const crate::opus_private_h::ChannelLayout,
+    mut layout: *const ChannelLayout,
     mut stream_id: i32,
     mut prev: i32,
 ) -> i32 {

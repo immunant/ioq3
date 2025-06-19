@@ -122,11 +122,11 @@ function: PCM data envelope analysis
 
 pub unsafe extern "C" fn _ve_envelope_init(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut vi: *mut vorbis_info,
 ) {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info; /* not random */
-    let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info; /* not random */
+    let mut gi: *mut vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
     let mut ch: i32 = (*vi).channels;
     let mut i: i32 = 0;
@@ -142,8 +142,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
         n as libc::c_ulong,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
     ) as *mut f32;
-    crate::src::libvorbis_1_3_6::lib::mdct::mdct_init(
-        &mut (*e).mdct as *mut _ as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+    mdct_init(
+        &mut (*e).mdct as *mut _ as *mut mdct_lookup,
         n,
     );
     i = 0 as i32;
@@ -201,17 +201,17 @@ pub unsafe extern "C" fn _ve_envelope_clear(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
 ) {
     let mut i: i32 = 0;
-    crate::src::libvorbis_1_3_6::lib::mdct::mdct_clear(
-        &mut (*e).mdct as *mut _ as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+    mdct_clear(
+        &mut (*e).mdct as *mut _ as *mut mdct_lookup,
     );
     i = 0 as i32;
     while i < 7 as i32 {
-        ::libc::free((*e).band[i as usize].window as *mut libc::c_void);
+        libc::free((*e).band[i as usize].window as *mut libc::c_void);
         i += 1
     }
-    ::libc::free((*e).mdct_win as *mut libc::c_void);
-    ::libc::free((*e).filter as *mut libc::c_void);
-    ::libc::free((*e).mark as *mut libc::c_void);
+    libc::free((*e).mdct_win as *mut libc::c_void);
+    libc::free((*e).filter as *mut libc::c_void);
+    libc::free((*e).mark as *mut libc::c_void);
     crate::stdlib::memset(
         e as *mut libc::c_void,
         0 as i32,
@@ -224,7 +224,7 @@ that works better and isn't patented. */
 
 unsafe extern "C" fn _ve_amp(
     mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-    mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
+    mut gi: *mut vorbis_info_psy_global,
     mut data: *mut f32,
     mut bands: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_band,
     mut filters: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_filter_state,
@@ -265,8 +265,8 @@ unsafe extern "C" fn _ve_amp(
         *vec.offset(i as isize) = *data.offset(i as isize) * *(*ve).mdct_win.offset(i as isize);
         i += 1
     }
-    crate::src::libvorbis_1_3_6::lib::mdct::mdct_forward(
-        &mut (*ve).mdct as *mut _ as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+    mdct_forward(
+        &mut (*ve).mdct as *mut _ as *mut mdct_lookup,
         vec,
         vec,
     );
@@ -395,15 +395,15 @@ unsafe extern "C" fn _ve_amp(
 #[no_mangle]
 
 pub unsafe extern "C" fn _ve_envelope_search(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
 ) -> isize {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut gi: *mut vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
-        (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).ve;
+        (*((*v).backend_state as *mut private_state)).ve;
     let mut i: isize = 0;
     let mut j: isize = 0;
     let mut first: i32 = ((*ve).current / (*ve).searchstep as isize) as i32;
@@ -485,12 +485,12 @@ pub unsafe extern "C" fn _ve_envelope_search(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut crate::codec_h::vorbis_dsp_state) -> i32 {
+pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut vorbis_dsp_state) -> i32 {
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
-        (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).ve;
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+        (*((*v).backend_state as *mut private_state)).ve;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut centerW: isize = (*v).centerW;
     let mut beginW: isize = centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
     let mut endW: isize = centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;

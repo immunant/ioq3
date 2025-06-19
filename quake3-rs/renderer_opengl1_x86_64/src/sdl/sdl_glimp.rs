@@ -551,29 +551,29 @@ pub const RSERR_UNKNOWN: rserr_t = 3;
 pub const RSERR_OK: rserr_t = 0;
 #[no_mangle]
 
-pub static mut SDL_window: *mut crate::stdlib::SDL_Window =
-    0 as *const crate::stdlib::SDL_Window as *mut crate::stdlib::SDL_Window;
+pub static mut SDL_window: *mut SDL_Window =
+    0 as *const SDL_Window as *mut SDL_Window;
 
-static mut SDL_glContext: crate::stdlib::SDL_GLContext =
+static mut SDL_glContext: SDL_GLContext =
     0 as *const libc::c_void as *mut libc::c_void;
 #[no_mangle]
 
-pub static mut r_allowSoftwareGL: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut r_allowSoftwareGL: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // Don't abort out if a hardware visual can't be obtained
 #[no_mangle]
 
-pub static mut r_allowResize: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut r_allowResize: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 // make window resizable
 #[no_mangle]
 
-pub static mut r_centerWindow: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut r_centerWindow: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_sdlDriver: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+pub static mut r_sdlDriver: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut qglMajorVersion: i32 = 0;
@@ -588,505 +588,505 @@ pub static mut qglesMajorVersion: i32 = 0;
 pub static mut qglesMinorVersion: i32 = 0;
 #[no_mangle]
 
-pub static mut qglActiveTextureARB: Option<unsafe extern "C" fn(_: crate::stdlib::GLenum) -> ()> =
+pub static mut qglActiveTextureARB: Option<unsafe extern "C" fn(_: GLenum) -> ()> =
     None;
 #[no_mangle]
 
 pub static mut qglClientActiveTextureARB: Option<
-    unsafe extern "C" fn(_: crate::stdlib::GLenum) -> (),
+    unsafe extern "C" fn(_: GLenum) -> (),
 > = None;
 #[no_mangle]
 
 pub static mut qglMultiTexCoord2fARB: Option<
     unsafe extern "C" fn(
-        _: crate::stdlib::GLenum,
-        _: crate::stdlib::GLfloat,
-        _: crate::stdlib::GLfloat,
+        _: GLenum,
+        _: GLfloat,
+        _: GLfloat,
     ) -> (),
 > = None;
 #[no_mangle]
 
 pub static mut qglLockArraysEXT: Option<
-    unsafe extern "C" fn(_: crate::stdlib::GLint, _: crate::stdlib::GLsizei) -> (),
+    unsafe extern "C" fn(_: GLint, _: GLsizei) -> (),
 > = None;
 #[no_mangle]
 
 pub static mut qglUnlockArraysEXT: Option<unsafe extern "C" fn() -> ()> = None;
 #[no_mangle]
 
-pub static mut qglGenTextures: Option<crate::qgl_h::GenTexturesproc> = None;
+pub static mut qglGenTextures: Option<GenTexturesproc> = None;
 #[no_mangle]
 
-pub static mut qglBindTexture: Option<crate::qgl_h::BindTextureproc> = None;
+pub static mut qglBindTexture: Option<BindTextureproc> = None;
 #[no_mangle]
 
-pub static mut qglBlendFunc: Option<crate::qgl_h::BlendFuncproc> = None;
+pub static mut qglBlendFunc: Option<BlendFuncproc> = None;
 #[no_mangle]
 
-pub static mut qglClearStencil: Option<crate::qgl_h::ClearStencilproc> = None;
+pub static mut qglClearStencil: Option<ClearStencilproc> = None;
 #[no_mangle]
 
-pub static mut qglColorMask: Option<crate::qgl_h::ColorMaskproc> = None;
+pub static mut qglColorMask: Option<ColorMaskproc> = None;
 #[no_mangle]
 
-pub static mut qglCopyTexSubImage2D: Option<crate::qgl_h::CopyTexSubImage2Dproc> = None;
+pub static mut qglCopyTexSubImage2D: Option<CopyTexSubImage2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglCullFace: Option<crate::qgl_h::CullFaceproc> = None;
+pub static mut qglCullFace: Option<CullFaceproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteTextures: Option<crate::qgl_h::DeleteTexturesproc> = None;
+pub static mut qglDeleteTextures: Option<DeleteTexturesproc> = None;
 #[no_mangle]
 
-pub static mut qglDepthFunc: Option<crate::qgl_h::DepthFuncproc> = None;
+pub static mut qglDepthFunc: Option<DepthFuncproc> = None;
 #[no_mangle]
 
-pub static mut qglDepthMask: Option<crate::qgl_h::DepthMaskproc> = None;
+pub static mut qglDepthMask: Option<DepthMaskproc> = None;
 #[no_mangle]
 
-pub static mut qglDisable: Option<crate::qgl_h::Disableproc> = None;
+pub static mut qglDisable: Option<Disableproc> = None;
 #[no_mangle]
 
-pub static mut qglDrawArrays: Option<crate::qgl_h::DrawArraysproc> = None;
+pub static mut qglDrawArrays: Option<DrawArraysproc> = None;
 #[no_mangle]
 
-pub static mut qglDrawElements: Option<crate::qgl_h::DrawElementsproc> = None;
+pub static mut qglDrawElements: Option<DrawElementsproc> = None;
 #[no_mangle]
 
-pub static mut qglEnable: Option<crate::qgl_h::Enableproc> = None;
+pub static mut qglEnable: Option<Enableproc> = None;
 #[no_mangle]
 
-pub static mut qglFinish: Option<crate::qgl_h::Finishproc> = None;
+pub static mut qglFinish: Option<Finishproc> = None;
 #[no_mangle]
 
-pub static mut qglFlush: Option<crate::qgl_h::Flushproc> = None;
+pub static mut qglFlush: Option<Flushproc> = None;
 #[no_mangle]
 
-pub static mut qglGetBooleanv: Option<crate::qgl_h::GetBooleanvproc> = None;
+pub static mut qglGetBooleanv: Option<GetBooleanvproc> = None;
 #[no_mangle]
 
-pub static mut qglGetError: Option<crate::qgl_h::GetErrorproc> = None;
+pub static mut qglGetError: Option<GetErrorproc> = None;
 #[no_mangle]
 
-pub static mut qglLineWidth: Option<crate::qgl_h::LineWidthproc> = None;
+pub static mut qglLineWidth: Option<LineWidthproc> = None;
 #[no_mangle]
 
-pub static mut qglPolygonOffset: Option<crate::qgl_h::PolygonOffsetproc> = None;
+pub static mut qglPolygonOffset: Option<PolygonOffsetproc> = None;
 #[no_mangle]
 
-pub static mut qglReadPixels: Option<crate::qgl_h::ReadPixelsproc> = None;
+pub static mut qglReadPixels: Option<ReadPixelsproc> = None;
 #[no_mangle]
 
-pub static mut qglScissor: Option<crate::qgl_h::Scissorproc> = None;
+pub static mut qglScissor: Option<Scissorproc> = None;
 #[no_mangle]
 
-pub static mut qglStencilFunc: Option<crate::qgl_h::StencilFuncproc> = None;
+pub static mut qglStencilFunc: Option<StencilFuncproc> = None;
 #[no_mangle]
 
-pub static mut qglClearColor: Option<crate::qgl_h::ClearColorproc> = None;
+pub static mut qglClearColor: Option<ClearColorproc> = None;
 #[no_mangle]
 
-pub static mut qglClear: Option<crate::qgl_h::Clearproc> = None;
+pub static mut qglClear: Option<Clearproc> = None;
 #[no_mangle]
 
-pub static mut qglStencilMask: Option<crate::qgl_h::StencilMaskproc> = None;
+pub static mut qglStencilMask: Option<StencilMaskproc> = None;
 #[no_mangle]
 
-pub static mut qglStencilOp: Option<crate::qgl_h::StencilOpproc> = None;
+pub static mut qglStencilOp: Option<StencilOpproc> = None;
 #[no_mangle]
 
-pub static mut qglTexImage2D: Option<crate::qgl_h::TexImage2Dproc> = None;
+pub static mut qglTexImage2D: Option<TexImage2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglTexParameterf: Option<crate::qgl_h::TexParameterfproc> = None;
+pub static mut qglTexParameterf: Option<TexParameterfproc> = None;
 #[no_mangle]
 
-pub static mut qglTexParameteri: Option<crate::qgl_h::TexParameteriproc> = None;
+pub static mut qglTexParameteri: Option<TexParameteriproc> = None;
 #[no_mangle]
 
-pub static mut qglTexSubImage2D: Option<crate::qgl_h::TexSubImage2Dproc> = None;
+pub static mut qglTexSubImage2D: Option<TexSubImage2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglGetString: Option<crate::qgl_h::GetStringproc> = None;
+pub static mut qglGetString: Option<GetStringproc> = None;
 #[no_mangle]
 
-pub static mut qglGetIntegerv: Option<crate::qgl_h::GetIntegervproc> = None;
+pub static mut qglGetIntegerv: Option<GetIntegervproc> = None;
 #[no_mangle]
 
-pub static mut qglTranslatef: Option<crate::qgl_h::Translatefproc> = None;
+pub static mut qglTranslatef: Option<Translatefproc> = None;
 #[no_mangle]
 
-pub static mut qglViewport: Option<crate::qgl_h::Viewportproc> = None;
+pub static mut qglViewport: Option<Viewportproc> = None;
 #[no_mangle]
 
-pub static mut qglAlphaFunc: Option<crate::qgl_h::AlphaFuncproc> = None;
+pub static mut qglAlphaFunc: Option<AlphaFuncproc> = None;
 #[no_mangle]
 
-pub static mut qglColor4f: Option<crate::qgl_h::Color4fproc> = None;
+pub static mut qglColor4f: Option<Color4fproc> = None;
 #[no_mangle]
 
-pub static mut qglColorPointer: Option<crate::qgl_h::ColorPointerproc> = None;
+pub static mut qglColorPointer: Option<ColorPointerproc> = None;
 #[no_mangle]
 
-pub static mut qglDisableClientState: Option<crate::qgl_h::DisableClientStateproc> = None;
+pub static mut qglDisableClientState: Option<DisableClientStateproc> = None;
 #[no_mangle]
 
-pub static mut qglEnableClientState: Option<crate::qgl_h::EnableClientStateproc> = None;
+pub static mut qglEnableClientState: Option<EnableClientStateproc> = None;
 #[no_mangle]
 
-pub static mut qglLoadIdentity: Option<crate::qgl_h::LoadIdentityproc> = None;
+pub static mut qglLoadIdentity: Option<LoadIdentityproc> = None;
 #[no_mangle]
 
-pub static mut qglLoadMatrixf: Option<crate::qgl_h::LoadMatrixfproc> = None;
+pub static mut qglLoadMatrixf: Option<LoadMatrixfproc> = None;
 #[no_mangle]
 
-pub static mut qglMatrixMode: Option<crate::qgl_h::MatrixModeproc> = None;
+pub static mut qglMatrixMode: Option<MatrixModeproc> = None;
 #[no_mangle]
 
-pub static mut qglPopMatrix: Option<crate::qgl_h::PopMatrixproc> = None;
+pub static mut qglPopMatrix: Option<PopMatrixproc> = None;
 #[no_mangle]
 
-pub static mut qglPushMatrix: Option<crate::qgl_h::PushMatrixproc> = None;
+pub static mut qglPushMatrix: Option<PushMatrixproc> = None;
 #[no_mangle]
 
-pub static mut qglShadeModel: Option<crate::qgl_h::ShadeModelproc> = None;
+pub static mut qglShadeModel: Option<ShadeModelproc> = None;
 #[no_mangle]
 
-pub static mut qglTexCoordPointer: Option<crate::qgl_h::TexCoordPointerproc> = None;
+pub static mut qglTexCoordPointer: Option<TexCoordPointerproc> = None;
 #[no_mangle]
 
-pub static mut qglTexEnvf: Option<crate::qgl_h::TexEnvfproc> = None;
+pub static mut qglTexEnvf: Option<TexEnvfproc> = None;
 #[no_mangle]
 
-pub static mut qglVertexPointer: Option<crate::qgl_h::VertexPointerproc> = None;
+pub static mut qglVertexPointer: Option<VertexPointerproc> = None;
 #[no_mangle]
 
-pub static mut qglClearDepth: Option<crate::qgl_h::ClearDepthproc> = None;
+pub static mut qglClearDepth: Option<ClearDepthproc> = None;
 #[no_mangle]
 
-pub static mut qglDepthRange: Option<crate::qgl_h::DepthRangeproc> = None;
+pub static mut qglDepthRange: Option<DepthRangeproc> = None;
 #[no_mangle]
 
-pub static mut qglDrawBuffer: Option<crate::qgl_h::DrawBufferproc> = None;
+pub static mut qglDrawBuffer: Option<DrawBufferproc> = None;
 #[no_mangle]
 
-pub static mut qglPolygonMode: Option<crate::qgl_h::PolygonModeproc> = None;
+pub static mut qglPolygonMode: Option<PolygonModeproc> = None;
 #[no_mangle]
 
-pub static mut qglTexCoord2f: Option<crate::qgl_h::TexCoord2fproc> = None;
+pub static mut qglTexCoord2f: Option<TexCoord2fproc> = None;
 #[no_mangle]
 
-pub static mut qglArrayElement: Option<crate::qgl_h::ArrayElementproc> = None;
+pub static mut qglArrayElement: Option<ArrayElementproc> = None;
 #[no_mangle]
 
-pub static mut qglBegin: Option<crate::qgl_h::Beginproc> = None;
+pub static mut qglBegin: Option<Beginproc> = None;
 #[no_mangle]
 
-pub static mut qglClipPlane: Option<crate::qgl_h::ClipPlaneproc> = None;
+pub static mut qglClipPlane: Option<ClipPlaneproc> = None;
 #[no_mangle]
 
-pub static mut qglColor3f: Option<crate::qgl_h::Color3fproc> = None;
+pub static mut qglColor3f: Option<Color3fproc> = None;
 #[no_mangle]
 
-pub static mut qglColor4ubv: Option<crate::qgl_h::Color4ubvproc> = None;
+pub static mut qglColor4ubv: Option<Color4ubvproc> = None;
 #[no_mangle]
 
-pub static mut qglEnd: Option<crate::qgl_h::Endproc> = None;
+pub static mut qglEnd: Option<Endproc> = None;
 #[no_mangle]
 
-pub static mut qglFrustum: Option<crate::qgl_h::Frustumproc> = None;
+pub static mut qglFrustum: Option<Frustumproc> = None;
 #[no_mangle]
 
-pub static mut qglOrtho: Option<crate::qgl_h::Orthoproc> = None;
+pub static mut qglOrtho: Option<Orthoproc> = None;
 #[no_mangle]
 
-pub static mut qglTexCoord2fv: Option<crate::qgl_h::TexCoord2fvproc> = None;
+pub static mut qglTexCoord2fv: Option<TexCoord2fvproc> = None;
 #[no_mangle]
 
-pub static mut qglVertex2f: Option<crate::qgl_h::Vertex2fproc> = None;
+pub static mut qglVertex2f: Option<Vertex2fproc> = None;
 #[no_mangle]
 
-pub static mut qglVertex3f: Option<crate::qgl_h::Vertex3fproc> = None;
+pub static mut qglVertex3f: Option<Vertex3fproc> = None;
 #[no_mangle]
 
-pub static mut qglVertex3fv: Option<crate::qgl_h::Vertex3fvproc> = None;
+pub static mut qglVertex3fv: Option<Vertex3fvproc> = None;
 #[no_mangle]
 
-pub static mut qglClearDepthf: Option<crate::qgl_h::ClearDepthfproc> = None;
+pub static mut qglClearDepthf: Option<ClearDepthfproc> = None;
 #[no_mangle]
 
-pub static mut qglDepthRangef: Option<crate::qgl_h::DepthRangefproc> = None;
+pub static mut qglDepthRangef: Option<DepthRangefproc> = None;
 #[no_mangle]
 
-pub static mut qglClipPlanef: Option<crate::qgl_h::ClipPlanefproc> = None;
+pub static mut qglClipPlanef: Option<ClipPlanefproc> = None;
 #[no_mangle]
 
-pub static mut qglFrustumf: Option<crate::qgl_h::Frustumfproc> = None;
+pub static mut qglFrustumf: Option<Frustumfproc> = None;
 #[no_mangle]
 
-pub static mut qglOrthof: Option<crate::qgl_h::Orthofproc> = None;
+pub static mut qglOrthof: Option<Orthofproc> = None;
 #[no_mangle]
 
-pub static mut qglActiveTexture: Option<crate::qgl_h::ActiveTextureproc> = None;
+pub static mut qglActiveTexture: Option<ActiveTextureproc> = None;
 #[no_mangle]
 
-pub static mut qglCompressedTexImage2D: Option<crate::qgl_h::CompressedTexImage2Dproc> = None;
+pub static mut qglCompressedTexImage2D: Option<CompressedTexImage2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglCompressedTexSubImage2D: Option<crate::qgl_h::CompressedTexSubImage2Dproc> = None;
+pub static mut qglCompressedTexSubImage2D: Option<CompressedTexSubImage2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglBufferSubData: Option<crate::qgl_h::BufferSubDataproc> = None;
+pub static mut qglBufferSubData: Option<BufferSubDataproc> = None;
 #[no_mangle]
 
-pub static mut qglBindBuffer: Option<crate::qgl_h::BindBufferproc> = None;
+pub static mut qglBindBuffer: Option<BindBufferproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteBuffers: Option<crate::qgl_h::DeleteBuffersproc> = None;
+pub static mut qglDeleteBuffers: Option<DeleteBuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglGenBuffers: Option<crate::qgl_h::GenBuffersproc> = None;
+pub static mut qglGenBuffers: Option<GenBuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglBufferData: Option<crate::qgl_h::BufferDataproc> = None;
+pub static mut qglBufferData: Option<BufferDataproc> = None;
 #[no_mangle]
 
-pub static mut qglCompileShader: Option<crate::qgl_h::CompileShaderproc> = None;
+pub static mut qglCompileShader: Option<CompileShaderproc> = None;
 #[no_mangle]
 
-pub static mut qglGetShaderSource: Option<crate::qgl_h::GetShaderSourceproc> = None;
+pub static mut qglGetShaderSource: Option<GetShaderSourceproc> = None;
 #[no_mangle]
 
-pub static mut qglCreateShader: Option<crate::qgl_h::CreateShaderproc> = None;
+pub static mut qglCreateShader: Option<CreateShaderproc> = None;
 #[no_mangle]
 
-pub static mut qglCreateProgram: Option<crate::qgl_h::CreateProgramproc> = None;
+pub static mut qglCreateProgram: Option<CreateProgramproc> = None;
 #[no_mangle]
 
-pub static mut qglVertexAttribPointer: Option<crate::qgl_h::VertexAttribPointerproc> = None;
+pub static mut qglVertexAttribPointer: Option<VertexAttribPointerproc> = None;
 #[no_mangle]
 
-pub static mut qglBindAttribLocation: Option<crate::qgl_h::BindAttribLocationproc> = None;
+pub static mut qglBindAttribLocation: Option<BindAttribLocationproc> = None;
 #[no_mangle]
 
-pub static mut qglAttachShader: Option<crate::qgl_h::AttachShaderproc> = None;
+pub static mut qglAttachShader: Option<AttachShaderproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteProgram: Option<crate::qgl_h::DeleteProgramproc> = None;
+pub static mut qglDeleteProgram: Option<DeleteProgramproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteShader: Option<crate::qgl_h::DeleteShaderproc> = None;
+pub static mut qglDeleteShader: Option<DeleteShaderproc> = None;
 #[no_mangle]
 
-pub static mut qglDetachShader: Option<crate::qgl_h::DetachShaderproc> = None;
+pub static mut qglDetachShader: Option<DetachShaderproc> = None;
 #[no_mangle]
 
-pub static mut qglDisableVertexAttribArray: Option<crate::qgl_h::DisableVertexAttribArrayproc> =
+pub static mut qglDisableVertexAttribArray: Option<DisableVertexAttribArrayproc> =
     None;
 #[no_mangle]
 
-pub static mut qglEnableVertexAttribArray: Option<crate::qgl_h::EnableVertexAttribArrayproc> = None;
+pub static mut qglEnableVertexAttribArray: Option<EnableVertexAttribArrayproc> = None;
 #[no_mangle]
 
-pub static mut qglGetActiveUniform: Option<crate::qgl_h::GetActiveUniformproc> = None;
+pub static mut qglGetActiveUniform: Option<GetActiveUniformproc> = None;
 #[no_mangle]
 
-pub static mut qglGetProgramiv: Option<crate::qgl_h::GetProgramivproc> = None;
+pub static mut qglGetProgramiv: Option<GetProgramivproc> = None;
 #[no_mangle]
 
-pub static mut qglGetProgramInfoLog: Option<crate::qgl_h::GetProgramInfoLogproc> = None;
+pub static mut qglGetProgramInfoLog: Option<GetProgramInfoLogproc> = None;
 #[no_mangle]
 
-pub static mut qglGetShaderiv: Option<crate::qgl_h::GetShaderivproc> = None;
+pub static mut qglGetShaderiv: Option<GetShaderivproc> = None;
 #[no_mangle]
 
-pub static mut qglGetShaderInfoLog: Option<crate::qgl_h::GetShaderInfoLogproc> = None;
+pub static mut qglGetShaderInfoLog: Option<GetShaderInfoLogproc> = None;
 #[no_mangle]
 
-pub static mut qglValidateProgram: Option<crate::qgl_h::ValidateProgramproc> = None;
+pub static mut qglValidateProgram: Option<ValidateProgramproc> = None;
 #[no_mangle]
 
-pub static mut qglGetUniformLocation: Option<crate::qgl_h::GetUniformLocationproc> = None;
+pub static mut qglGetUniformLocation: Option<GetUniformLocationproc> = None;
 #[no_mangle]
 
-pub static mut qglLinkProgram: Option<crate::qgl_h::LinkProgramproc> = None;
+pub static mut qglLinkProgram: Option<LinkProgramproc> = None;
 #[no_mangle]
 
-pub static mut qglShaderSource: Option<crate::qgl_h::ShaderSourceproc> = None;
+pub static mut qglShaderSource: Option<ShaderSourceproc> = None;
 #[no_mangle]
 
-pub static mut qglUseProgram: Option<crate::qgl_h::UseProgramproc> = None;
+pub static mut qglUseProgram: Option<UseProgramproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform1f: Option<crate::qgl_h::Uniform1fproc> = None;
+pub static mut qglUniform1f: Option<Uniform1fproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform2f: Option<crate::qgl_h::Uniform2fproc> = None;
+pub static mut qglUniform2f: Option<Uniform2fproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform3f: Option<crate::qgl_h::Uniform3fproc> = None;
+pub static mut qglUniform3f: Option<Uniform3fproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform4f: Option<crate::qgl_h::Uniform4fproc> = None;
+pub static mut qglUniform4f: Option<Uniform4fproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform1i: Option<crate::qgl_h::Uniform1iproc> = None;
+pub static mut qglUniform1i: Option<Uniform1iproc> = None;
 #[no_mangle]
 
-pub static mut qglUniform1fv: Option<crate::qgl_h::Uniform1fvproc> = None;
+pub static mut qglUniform1fv: Option<Uniform1fvproc> = None;
 #[no_mangle]
 
-pub static mut qglUniformMatrix4fv: Option<crate::qgl_h::UniformMatrix4fvproc> = None;
+pub static mut qglUniformMatrix4fv: Option<UniformMatrix4fvproc> = None;
 #[no_mangle]
 
-pub static mut qglGetStringi: Option<crate::qgl_h::GetStringiproc> = None;
+pub static mut qglGetStringi: Option<GetStringiproc> = None;
 #[no_mangle]
 
-pub static mut qglGetQueryObjectuiv: Option<crate::qgl_h::GetQueryObjectuivproc> = None;
+pub static mut qglGetQueryObjectuiv: Option<GetQueryObjectuivproc> = None;
 #[no_mangle]
 
-pub static mut qglGenQueries: Option<crate::qgl_h::GenQueriesproc> = None;
+pub static mut qglGenQueries: Option<GenQueriesproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteQueries: Option<crate::qgl_h::DeleteQueriesproc> = None;
+pub static mut qglDeleteQueries: Option<DeleteQueriesproc> = None;
 #[no_mangle]
 
-pub static mut qglBeginQuery: Option<crate::qgl_h::BeginQueryproc> = None;
+pub static mut qglBeginQuery: Option<BeginQueryproc> = None;
 #[no_mangle]
 
-pub static mut qglEndQuery: Option<crate::qgl_h::EndQueryproc> = None;
+pub static mut qglEndQuery: Option<EndQueryproc> = None;
 #[no_mangle]
 
-pub static mut qglGetQueryObjectiv: Option<crate::qgl_h::GetQueryObjectivproc> = None;
+pub static mut qglGetQueryObjectiv: Option<GetQueryObjectivproc> = None;
 #[no_mangle]
 
-pub static mut qglCheckFramebufferStatus: Option<crate::qgl_h::CheckFramebufferStatusproc> = None;
+pub static mut qglCheckFramebufferStatus: Option<CheckFramebufferStatusproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteRenderbuffers: Option<crate::qgl_h::DeleteRenderbuffersproc> = None;
+pub static mut qglDeleteRenderbuffers: Option<DeleteRenderbuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglGenRenderbuffers: Option<crate::qgl_h::GenRenderbuffersproc> = None;
+pub static mut qglGenRenderbuffers: Option<GenRenderbuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteFramebuffers: Option<crate::qgl_h::DeleteFramebuffersproc> = None;
+pub static mut qglDeleteFramebuffers: Option<DeleteFramebuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglGenFramebuffers: Option<crate::qgl_h::GenFramebuffersproc> = None;
+pub static mut qglGenFramebuffers: Option<GenFramebuffersproc> = None;
 #[no_mangle]
 
-pub static mut qglRenderbufferStorage: Option<crate::qgl_h::RenderbufferStorageproc> = None;
+pub static mut qglRenderbufferStorage: Option<RenderbufferStorageproc> = None;
 #[no_mangle]
 
-pub static mut qglFramebufferTexture2D: Option<crate::qgl_h::FramebufferTexture2Dproc> = None;
+pub static mut qglFramebufferTexture2D: Option<FramebufferTexture2Dproc> = None;
 #[no_mangle]
 
-pub static mut qglFramebufferRenderbuffer: Option<crate::qgl_h::FramebufferRenderbufferproc> = None;
+pub static mut qglFramebufferRenderbuffer: Option<FramebufferRenderbufferproc> = None;
 #[no_mangle]
 
-pub static mut qglGenerateMipmap: Option<crate::qgl_h::GenerateMipmapproc> = None;
+pub static mut qglGenerateMipmap: Option<GenerateMipmapproc> = None;
 #[no_mangle]
 
-pub static mut qglBlitFramebuffer: Option<crate::qgl_h::BlitFramebufferproc> = None;
+pub static mut qglBlitFramebuffer: Option<BlitFramebufferproc> = None;
 #[no_mangle]
 
 pub static mut qglRenderbufferStorageMultisample: Option<
-    crate::qgl_h::RenderbufferStorageMultisampleproc,
+    RenderbufferStorageMultisampleproc,
 > = None;
 #[no_mangle]
 
-pub static mut qglBindFramebuffer: Option<crate::qgl_h::BindFramebufferproc> = None;
+pub static mut qglBindFramebuffer: Option<BindFramebufferproc> = None;
 #[no_mangle]
 
-pub static mut qglBindRenderbuffer: Option<crate::qgl_h::BindRenderbufferproc> = None;
+pub static mut qglBindRenderbuffer: Option<BindRenderbufferproc> = None;
 #[no_mangle]
 
-pub static mut qglGenVertexArrays: Option<crate::qgl_h::GenVertexArraysproc> = None;
+pub static mut qglGenVertexArrays: Option<GenVertexArraysproc> = None;
 #[no_mangle]
 
-pub static mut qglDeleteVertexArrays: Option<crate::qgl_h::DeleteVertexArraysproc> = None;
+pub static mut qglDeleteVertexArrays: Option<DeleteVertexArraysproc> = None;
 #[no_mangle]
 
-pub static mut qglBindVertexArray: Option<crate::qgl_h::BindVertexArrayproc> = None;
+pub static mut qglBindVertexArray: Option<BindVertexArrayproc> = None;
 #[no_mangle]
 
 pub static mut qglNamedFramebufferTexture2DEXT: Option<
-    crate::qgl_h::NamedFramebufferTexture2DEXTproc,
+    NamedFramebufferTexture2DEXTproc,
 > = None;
 #[no_mangle]
 
-pub static mut qglTextureImage2DEXT: Option<crate::qgl_h::TextureImage2DEXTproc> = None;
+pub static mut qglTextureImage2DEXT: Option<TextureImage2DEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglBindMultiTextureEXT: Option<crate::qgl_h::BindMultiTextureEXTproc> = None;
+pub static mut qglBindMultiTextureEXT: Option<BindMultiTextureEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglTextureParameterfEXT: Option<crate::qgl_h::TextureParameterfEXTproc> = None;
+pub static mut qglTextureParameterfEXT: Option<TextureParameterfEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglTextureParameteriEXT: Option<crate::qgl_h::TextureParameteriEXTproc> = None;
+pub static mut qglTextureParameteriEXT: Option<TextureParameteriEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglTextureSubImage2DEXT: Option<crate::qgl_h::TextureSubImage2DEXTproc> = None;
+pub static mut qglTextureSubImage2DEXT: Option<TextureSubImage2DEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglCopyTextureSubImage2DEXT: Option<crate::qgl_h::CopyTextureSubImage2DEXTproc> =
+pub static mut qglCopyTextureSubImage2DEXT: Option<CopyTextureSubImage2DEXTproc> =
     None;
 #[no_mangle]
 
 pub static mut qglCompressedTextureImage2DEXT: Option<
-    crate::qgl_h::CompressedTextureImage2DEXTproc,
+    CompressedTextureImage2DEXTproc,
 > = None;
 #[no_mangle]
 
 pub static mut qglNamedFramebufferRenderbufferEXT: Option<
-    crate::qgl_h::NamedFramebufferRenderbufferEXTproc,
+    NamedFramebufferRenderbufferEXTproc,
 > = None;
 #[no_mangle]
 
 pub static mut qglCompressedTextureSubImage2DEXT: Option<
-    crate::qgl_h::CompressedTextureSubImage2DEXTproc,
+    CompressedTextureSubImage2DEXTproc,
 > = None;
 #[no_mangle]
 
 pub static mut qglCheckNamedFramebufferStatusEXT: Option<
-    crate::qgl_h::CheckNamedFramebufferStatusEXTproc,
+    CheckNamedFramebufferStatusEXTproc,
 > = None;
 #[no_mangle]
 
 pub static mut qglNamedRenderbufferStorageMultisampleEXT: Option<
-    crate::qgl_h::NamedRenderbufferStorageMultisampleEXTproc,
+    NamedRenderbufferStorageMultisampleEXTproc,
 > = None;
 #[no_mangle]
 
 pub static mut qglNamedRenderbufferStorageEXT: Option<
-    crate::qgl_h::NamedRenderbufferStorageEXTproc,
+    NamedRenderbufferStorageEXTproc,
 > = None;
 #[no_mangle]
 
-pub static mut qglProgramUniformMatrix4fvEXT: Option<crate::qgl_h::ProgramUniformMatrix4fvEXTproc> =
+pub static mut qglProgramUniformMatrix4fvEXT: Option<ProgramUniformMatrix4fvEXTproc> =
     None;
 #[no_mangle]
 
-pub static mut qglProgramUniform1fvEXT: Option<crate::qgl_h::ProgramUniform1fvEXTproc> = None;
+pub static mut qglProgramUniform1fvEXT: Option<ProgramUniform1fvEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglProgramUniform4fEXT: Option<crate::qgl_h::ProgramUniform4fEXTproc> = None;
+pub static mut qglProgramUniform4fEXT: Option<ProgramUniform4fEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglProgramUniform3fEXT: Option<crate::qgl_h::ProgramUniform3fEXTproc> = None;
+pub static mut qglProgramUniform3fEXT: Option<ProgramUniform3fEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglProgramUniform2fEXT: Option<crate::qgl_h::ProgramUniform2fEXTproc> = None;
+pub static mut qglProgramUniform2fEXT: Option<ProgramUniform2fEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglProgramUniform1fEXT: Option<crate::qgl_h::ProgramUniform1fEXTproc> = None;
+pub static mut qglProgramUniform1fEXT: Option<ProgramUniform1fEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglProgramUniform1iEXT: Option<crate::qgl_h::ProgramUniform1iEXTproc> = None;
+pub static mut qglProgramUniform1iEXT: Option<ProgramUniform1iEXTproc> = None;
 #[no_mangle]
 
-pub static mut qglGenerateTextureMipmapEXT: Option<crate::qgl_h::GenerateTextureMipmapEXTproc> =
+pub static mut qglGenerateTextureMipmapEXT: Option<GenerateTextureMipmapEXTproc> =
     None;
 /*
 ===============
@@ -1111,7 +1111,7 @@ Minimize the game so that user is back at the desktop
 #[no_mangle]
 
 pub unsafe extern "C" fn GLimp_Minimize() {
-    crate::stdlib::SDL_MinimizeWindow(SDL_window);
+    SDL_MinimizeWindow(SDL_window);
 }
 /*
 ===============
@@ -1132,8 +1132,8 @@ unsafe extern "C" fn GLimp_CompareModes(
     mut b: *const libc::c_void,
 ) -> i32 {
     let ASPECT_EPSILON: f32 = 0.001f32;
-    let mut modeA: *mut crate::stdlib::SDL_Rect = a as *mut crate::stdlib::SDL_Rect;
-    let mut modeB: *mut crate::stdlib::SDL_Rect = b as *mut crate::stdlib::SDL_Rect;
+    let mut modeA: *mut SDL_Rect = a as *mut SDL_Rect;
+    let mut modeB: *mut SDL_Rect = b as *mut SDL_Rect;
     let mut aspectA: f32 = (*modeA).w as f32 / (*modeA).h as f32;
     let mut aspectB: f32 = (*modeB).w as f32 / (*modeB).h as f32;
     let mut areaA: i32 = (*modeA).w * (*modeA).h;
@@ -2189,71 +2189,71 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         0,
     ];
     let mut numSDLModes: i32 = 0;
-    let mut modes: *mut crate::stdlib::SDL_Rect = 0 as *mut crate::stdlib::SDL_Rect;
+    let mut modes: *mut SDL_Rect = 0 as *mut SDL_Rect;
     let mut numModes: i32 = 0 as i32;
-    let mut windowMode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
+    let mut windowMode: SDL_DisplayMode = SDL_DisplayMode {
         format: 0,
         w: 0,
         h: 0,
         refresh_rate: 0,
         driverdata: 0 as *mut libc::c_void,
     };
-    let mut display: i32 = crate::stdlib::SDL_GetWindowDisplayIndex(SDL_window);
+    let mut display: i32 = SDL_GetWindowDisplayIndex(SDL_window);
     if display < 0 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Couldn\'t get window display index, no resolutions detected: %s\n\x00" as *const u8
                 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
         );
         return;
     }
-    numSDLModes = crate::stdlib::SDL_GetNumDisplayModes(display);
-    if crate::stdlib::SDL_GetWindowDisplayMode(SDL_window, &mut windowMode) < 0 as i32
+    numSDLModes = SDL_GetNumDisplayModes(display);
+    if SDL_GetWindowDisplayMode(SDL_window, &mut windowMode) < 0 as i32
         || numSDLModes <= 0 as i32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Couldn\'t get window display mode, no resolutions detected: %s\n\x00" as *const u8
                 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
         );
         return;
     }
-    modes = crate::stdlib::SDL_calloc(
-        numSDLModes as crate::stddef_h::size_t,
-        ::std::mem::size_of::<crate::stdlib::SDL_Rect>() as libc::c_ulong,
-    ) as *mut crate::stdlib::SDL_Rect;
+    modes = SDL_calloc(
+        numSDLModes as size_t,
+        ::std::mem::size_of::<SDL_Rect>() as libc::c_ulong,
+    ) as *mut SDL_Rect;
     if modes.is_null() {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            ERR_FATAL as i32,
             b"Out of memory\x00" as *const u8 as *const libc::c_char,
         );
     }
     i = 0 as i32;
     while i < numSDLModes {
-        let mut mode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
+        let mut mode: SDL_DisplayMode = SDL_DisplayMode {
             format: 0,
             w: 0,
             h: 0,
             refresh_rate: 0,
             driverdata: 0 as *mut libc::c_void,
         };
-        if !(crate::stdlib::SDL_GetDisplayMode(display, i, &mut mode) < 0 as i32) {
+        if !(SDL_GetDisplayMode(display, i, &mut mode) < 0 as i32) {
             if mode.w == 0 || mode.h == 0 {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"Display supports any resolution\n\x00" as *const u8 as *const libc::c_char,
                 );
-                crate::stdlib::SDL_free(modes as *mut libc::c_void);
+                SDL_free(modes as *mut libc::c_void);
                 return;
             }
             if !(windowMode.format != mode.format) {
@@ -2278,10 +2278,10 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         i += 1
     }
     if numModes > 1 as i32 {
-        crate::stdlib::qsort(
+        qsort(
             modes as *mut libc::c_void,
-            numModes as crate::stddef_h::size_t,
-            ::std::mem::size_of::<crate::stdlib::SDL_Rect>() as libc::c_ulong,
+            numModes as size_t,
+            ::std::mem::size_of::<SDL_Rect>() as libc::c_ulong,
             Some(
                 GLimp_CompareModes
                     as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
@@ -2290,7 +2290,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
     }
     i = 0 as i32;
     while i < numModes {
-        let mut newModeString: *const libc::c_char = crate::src::qcommon::q_shared::va(
+        let mut newModeString: *const libc::c_char = va(
             b"%ux%u \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             (*modes.offset(i as isize)).w,
             (*modes.offset(i as isize)).h,
@@ -2300,7 +2300,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
                 as libc::c_ulong)
                 .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
         {
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 buf.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                 newModeString,
@@ -2309,7 +2309,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"Skipping mode %ux%u, buffer too small\n\x00" as *const u8 as *const libc::c_char,
                 (*modes.offset(i as isize)).w,
                 (*modes.offset(i as isize)).h,
@@ -2323,7 +2323,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Available modes: \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             buf.as_mut_ptr(),
         );
@@ -2334,7 +2334,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             buf.as_mut_ptr(),
         );
     }
-    crate::stdlib::SDL_free(modes as *mut libc::c_void);
+    SDL_free(modes as *mut libc::c_void);
 }
 /*
 ===============
@@ -2345,13 +2345,13 @@ Get addresses for OpenGL functions.
 */
 
 unsafe extern "C" fn GLimp_GetProcAddresses(
-    mut fixedFunction: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut success: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qtrue;
+    mut fixedFunction: qboolean,
+) -> qboolean {
+    let mut success: qboolean = qtrue;
     let mut version: *const libc::c_char = 0 as *const libc::c_char;
     // OpenGL 1.0 and OpenGL ES 1.0
-    qglGetString = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::GetStringproc>>(
-        crate::stdlib::SDL_GL_GetProcAddress(
+    qglGetString = ::std::mem::transmute::<*mut libc::c_void, Option<GetStringproc>>(
+        SDL_GL_GetProcAddress(
             b"glGetString\x00" as *const u8 as *const libc::c_char,
         ),
     ); // ES, ES-CM, or ES-CL
@@ -2359,35 +2359,35 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
             b"glGetString\x00" as *const u8 as *const libc::c_char,
         );
-        success = crate::src::qcommon::q_shared::qfalse
+        success = qfalse
     }
     if qglGetString.is_none() {
-        crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"glGetString is NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
     version =
-        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as crate::stdlib::GLenum)
+        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as GLenum)
             as *const libc::c_char;
     if version.is_null() {
-        crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"GL_VERSION is NULL\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if crate::src::qcommon::q_shared::Q_stricmpn(
+    if Q_stricmpn(
         b"OpenGL ES\x00" as *const u8 as *const libc::c_char,
         version,
         9 as i32,
     ) == 0 as i32
     {
         let mut profile: [libc::c_char; 6] = [0; 6];
-        ::libc::sscanf(
+        libc::sscanf(
             version,
             b"OpenGL %5s %d.%d\x00" as *const u8 as *const libc::c_char,
             profile.as_mut_ptr(),
@@ -2395,7 +2395,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             &mut qglesMinorVersion as *mut i32,
         );
         // common lite profile (no floating point) is not supported
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             profile.as_mut_ptr(),
             b"ES-CL\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
@@ -2404,7 +2404,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             qglesMinorVersion = 0 as i32
         }
     } else {
-        ::libc::sscanf(
+        libc::sscanf(
             version,
             b"%d.%d\x00" as *const u8 as *const libc::c_char,
             &mut qglMajorVersion as *mut i32,
@@ -2416,54 +2416,54 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
         {
             qglBindTexture = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::BindTextureproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<BindTextureproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             ));
             if qglBindTexture.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBindTexture\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglBlendFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::BlendFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<BlendFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglBlendFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearColor = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearColorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearColorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearColor.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearColor\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Clearproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<Clearproc>>(
+                SDL_GL_GetProcAddress(
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -2471,174 +2471,174 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearStencil = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearStencilproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearStencilproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearStencil.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearStencil\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColorMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ColorMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ColorMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColorMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglCopyTexSubImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::CopyTexSubImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<CopyTexSubImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglCopyTexSubImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglCullFace = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::CullFaceproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<CullFaceproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             ));
             if qglCullFace.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCullFace\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDeleteTextures = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DeleteTexturesproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DeleteTexturesproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDeleteTextures.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDisable = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Disableproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Disableproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDisable.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisable\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDrawArrays = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DrawArraysproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DrawArraysproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDrawArrays.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDrawElements = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DrawElementsproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DrawElementsproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDrawElements.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawElements\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Enableproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<Enableproc>>(
+                SDL_GL_GetProcAddress(
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -2646,14 +2646,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Finishproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<Finishproc>>(
+                SDL_GL_GetProcAddress(
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -2661,14 +2661,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Flushproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<Flushproc>>(
+                SDL_GL_GetProcAddress(
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -2676,606 +2676,606 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGenTextures = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GenTexturesproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GenTexturesproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGenTextures.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGenTextures\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetBooleanv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetBooleanvproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetBooleanvproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetBooleanv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetError = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetErrorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetErrorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetError.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetError\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetIntegerv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetIntegervproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetIntegervproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetIntegerv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetString = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetStringproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetStringproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetString.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetString\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLineWidth = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LineWidthproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LineWidthproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLineWidth.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLineWidth\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPolygonOffset = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PolygonOffsetproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PolygonOffsetproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPolygonOffset.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglReadPixels = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ReadPixelsproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ReadPixelsproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             ));
             if qglReadPixels.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glReadPixels\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglScissor = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Scissorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Scissorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             ));
             if qglScissor.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glScissor\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilOp = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilOpproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilOpproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilOp.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilOp\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexParameterf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexParameterfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexParameterfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexParameterf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexParameteri = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexParameteriproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexParameteriproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexParameteri.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexSubImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexSubImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexSubImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexSubImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTranslatef = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Translatefproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Translatefproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTranslatef.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTranslatef\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglViewport = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Viewportproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Viewportproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             ));
             if qglViewport.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glViewport\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglAlphaFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::AlphaFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<AlphaFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglAlphaFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColor4f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Color4fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Color4fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColor4f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColor4f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColorPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ColorPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ColorPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColorPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColorPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDisableClientState = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DisableClientStateproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DisableClientStateproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDisableClientState.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglEnableClientState = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::EnableClientStateproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<EnableClientStateproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
             ));
             if qglEnableClientState.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLoadIdentity = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LoadIdentityproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LoadIdentityproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLoadIdentity.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLoadMatrixf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LoadMatrixfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LoadMatrixfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLoadMatrixf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglMatrixMode = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::MatrixModeproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<MatrixModeproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
             ));
             if qglMatrixMode.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPopMatrix = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PopMatrixproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PopMatrixproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPopMatrix.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPushMatrix = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PushMatrixproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PushMatrixproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPushMatrix.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglShadeModel = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ShadeModelproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ShadeModelproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glShadeModel\x00" as *const u8 as *const libc::c_char,
             ));
             if qglShadeModel.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glShadeModel\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexCoordPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexCoordPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexCoordPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexCoordPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexEnvf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexEnvfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexEnvfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexEnvf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglVertexPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::VertexPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<VertexPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglVertexPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearDepth = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearDepthproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearDepthproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearDepth\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearDepth.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearDepth\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthRange = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthRangeproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthRangeproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthRange\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthRange.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthRange\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDrawBuffer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DrawBufferproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DrawBufferproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDrawBuffer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPolygonMode = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PolygonModeproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PolygonModeproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPolygonMode.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglArrayElement = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ArrayElementproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ArrayElementproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glArrayElement\x00" as *const u8 as *const libc::c_char,
             ));
             if qglArrayElement.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glArrayElement\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglBegin = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Beginproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglBegin = ::std::mem::transmute::<*mut libc::c_void, Option<Beginproc>>(
+                SDL_GL_GetProcAddress(
                     b"glBegin\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3283,62 +3283,62 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBegin\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClipPlane = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClipPlaneproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClipPlaneproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClipPlane\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClipPlane.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClipPlane\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColor3f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Color3fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Color3fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColor3f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColor3f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor3f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColor4ubv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Color4ubvproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Color4ubvproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColor4ubv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColor4ubv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4ubv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglEnd = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Endproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglEnd = ::std::mem::transmute::<*mut libc::c_void, Option<Endproc>>(
+                SDL_GL_GetProcAddress(
                     b"glEnd\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3346,30 +3346,30 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnd\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglFrustum = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Frustumproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Frustumproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glFrustum\x00" as *const u8 as *const libc::c_char,
             ));
             if qglFrustum.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFrustum\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglOrtho = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Orthoproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglOrtho = ::std::mem::transmute::<*mut libc::c_void, Option<Orthoproc>>(
+                SDL_GL_GetProcAddress(
                     b"glOrtho\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3377,144 +3377,144 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glOrtho\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexCoord2f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexCoord2fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexCoord2fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexCoord2f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexCoord2f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoord2f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexCoord2fv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexCoord2fvproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexCoord2fvproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexCoord2fv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexCoord2fv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoord2fv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglVertex2f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Vertex2fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Vertex2fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glVertex2f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglVertex2f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex2f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglVertex3f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Vertex3fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Vertex3fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glVertex3f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglVertex3f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex3f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglVertex3fv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Vertex3fvproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Vertex3fvproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glVertex3fv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglVertex3fv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertex3fv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
         } else if qglesMajorVersion == 1 as i32 && qglesMinorVersion >= 1 as i32 {
             // OpenGL ES 1.1 (2.0 is not backward compatible)
             qglBindTexture = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::BindTextureproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<BindTextureproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             ));
             if qglBindTexture.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBindTexture\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglBlendFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::BlendFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<BlendFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglBlendFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearColor = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearColorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearColorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearColor.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearColor\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Clearproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<Clearproc>>(
+                SDL_GL_GetProcAddress(
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3522,174 +3522,174 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClear\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearStencil = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearStencilproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearStencilproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearStencil.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearStencil\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColorMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ColorMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ColorMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColorMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglCopyTexSubImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::CopyTexSubImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<CopyTexSubImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglCopyTexSubImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglCullFace = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::CullFaceproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<CullFaceproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             ));
             if qglCullFace.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glCullFace\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDeleteTextures = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DeleteTexturesproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DeleteTexturesproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDeleteTextures.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDisable = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Disableproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Disableproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDisable.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisable\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDrawArrays = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DrawArraysproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DrawArraysproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDrawArrays.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDrawElements = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DrawElementsproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DrawElementsproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDrawElements.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDrawElements\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Enableproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<Enableproc>>(
+                SDL_GL_GetProcAddress(
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3697,14 +3697,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnable\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Finishproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<Finishproc>>(
+                SDL_GL_GetProcAddress(
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3712,14 +3712,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFinish\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Flushproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<Flushproc>>(
+                SDL_GL_GetProcAddress(
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -3727,590 +3727,590 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFlush\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGenTextures = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GenTexturesproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GenTexturesproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGenTextures.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGenTextures\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetBooleanv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetBooleanvproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetBooleanvproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetBooleanv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetError = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetErrorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetErrorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetError.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetError\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetIntegerv = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetIntegervproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetIntegervproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetIntegerv.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglGetString = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::GetStringproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<GetStringproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             ));
             if qglGetString.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glGetString\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLineWidth = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LineWidthproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LineWidthproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLineWidth.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLineWidth\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPolygonOffset = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PolygonOffsetproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PolygonOffsetproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPolygonOffset.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglReadPixels = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ReadPixelsproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ReadPixelsproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             ));
             if qglReadPixels.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glReadPixels\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglScissor = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Scissorproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Scissorproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             ));
             if qglScissor.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glScissor\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilMask = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilMaskproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilMaskproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilMask.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilMask\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglStencilOp = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::StencilOpproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<StencilOpproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             ));
             if qglStencilOp.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glStencilOp\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexParameterf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexParameterfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexParameterfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexParameterf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexParameteri = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexParameteriproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexParameteriproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexParameteri.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexSubImage2D = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexSubImage2Dproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexSubImage2Dproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexSubImage2D.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTranslatef = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Translatefproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Translatefproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTranslatef.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTranslatef\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglViewport = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Viewportproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Viewportproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             ));
             if qglViewport.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glViewport\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglAlphaFunc = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::AlphaFuncproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<AlphaFuncproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
             ));
             if qglAlphaFunc.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glAlphaFunc\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColor4f = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Color4fproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Color4fproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColor4f\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColor4f.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColor4f\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglColorPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ColorPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ColorPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glColorPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglColorPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glColorPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDisableClientState = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DisableClientStateproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DisableClientStateproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDisableClientState.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDisableClientState\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglEnableClientState = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::EnableClientStateproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<EnableClientStateproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
             ));
             if qglEnableClientState.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glEnableClientState\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLoadIdentity = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LoadIdentityproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LoadIdentityproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLoadIdentity.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadIdentity\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglLoadMatrixf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::LoadMatrixfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<LoadMatrixfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglLoadMatrixf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glLoadMatrixf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglMatrixMode = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::MatrixModeproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<MatrixModeproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
             ));
             if qglMatrixMode.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glMatrixMode\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPopMatrix = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PopMatrixproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PopMatrixproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPopMatrix.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPopMatrix\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglPushMatrix = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::PushMatrixproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<PushMatrixproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
             ));
             if qglPushMatrix.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glPushMatrix\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglShadeModel = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ShadeModelproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ShadeModelproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glShadeModel\x00" as *const u8 as *const libc::c_char,
             ));
             if qglShadeModel.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glShadeModel\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexCoordPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexCoordPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexCoordPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexCoordPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexCoordPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglTexEnvf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::TexEnvfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<TexEnvfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglTexEnvf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glTexEnvf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglVertexPointer = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::VertexPointerproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<VertexPointerproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
             ));
             if qglVertexPointer.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glVertexPointer\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClearDepthf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClearDepthfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClearDepthfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClearDepthf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglDepthRangef = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::DepthRangefproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<DepthRangefproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
             ));
             if qglDepthRangef.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglClipPlanef = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::ClipPlanefproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<ClipPlanefproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glClipPlanef\x00" as *const u8 as *const libc::c_char,
             ));
             if qglClipPlanef.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glClipPlanef\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             qglFrustumf = ::std::mem::transmute::<
                 *mut libc::c_void,
-                Option<crate::qgl_h::Frustumfproc>,
-            >(crate::stdlib::SDL_GL_GetProcAddress(
+                Option<Frustumfproc>,
+            >(SDL_GL_GetProcAddress(
                 b"glFrustumf\x00" as *const u8 as *const libc::c_char,
             ));
             if qglFrustumf.is_none() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glFrustumf\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
-            qglOrthof = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Orthofproc>>(
-                crate::stdlib::SDL_GL_GetProcAddress(
+            qglOrthof = ::std::mem::transmute::<*mut libc::c_void, Option<Orthofproc>>(
+                SDL_GL_GetProcAddress(
                     b"glOrthof\x00" as *const u8 as *const libc::c_char,
                 ),
             );
@@ -4318,21 +4318,21 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                     b"glOrthof\x00" as *const u8 as *const libc::c_char,
                 );
-                success = crate::src::qcommon::q_shared::qfalse
+                success = qfalse
             }
             // error so this doesn't segfault due to NULL desktop GL functions being used
-            crate::src::renderergl1::tr_subs::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            Com_Error(
+                ERR_FATAL as i32,
                 b"Unsupported OpenGL Version: %s\n\x00" as *const u8 as *const libc::c_char,
                 version,
             );
         } else {
-            crate::src::renderergl1::tr_subs::Com_Error(
-                crate::src::qcommon::q_shared::ERR_FATAL as i32,
+            Com_Error(
+                ERR_FATAL as i32,
                 b"Unsupported OpenGL Version (%s), OpenGL 1.2 is required\n\x00" as *const u8
                     as *const libc::c_char,
                 version,
@@ -4343,54 +4343,54 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
     {
         qglBindTexture = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindTextureproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindTextureproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindTexture\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindTexture.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBlendFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BlendFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BlendFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBlendFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearColor = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearColorproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearColorproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearColor\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearColor.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Clearproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<Clearproc>>(
+            SDL_GL_GetProcAddress(
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4398,62 +4398,62 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearStencil = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearStencilproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearStencilproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearStencil\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearStencil.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglColorMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ColorMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ColorMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glColorMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglColorMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCopyTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CopyTexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CopyTexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCopyTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglCullFace = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::CullFaceproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglCullFace = ::std::mem::transmute::<*mut libc::c_void, Option<CullFaceproc>>(
+            SDL_GL_GetProcAddress(
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4461,62 +4461,62 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteTextures = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteTexturesproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteTexturesproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteTextures.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglDisable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Disableproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglDisable = ::std::mem::transmute::<*mut libc::c_void, Option<Disableproc>>(
+            SDL_GL_GetProcAddress(
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4524,46 +4524,46 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDrawArrays = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DrawArraysproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DrawArraysproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDrawArrays.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDrawElements = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DrawElementsproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DrawElementsproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDrawElements\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDrawElements.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Enableproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<Enableproc>>(
+            SDL_GL_GetProcAddress(
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4571,14 +4571,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Finishproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<Finishproc>>(
+            SDL_GL_GetProcAddress(
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4586,14 +4586,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Flushproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<Flushproc>>(
+            SDL_GL_GetProcAddress(
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4601,46 +4601,46 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGenTextures = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GenTexturesproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GenTexturesproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGenTextures\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGenTextures.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetBooleanv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetBooleanvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetBooleanvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetBooleanv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglGetError = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::GetErrorproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglGetError = ::std::mem::transmute::<*mut libc::c_void, Option<GetErrorproc>>(
+            SDL_GL_GetProcAddress(
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4648,94 +4648,94 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetIntegerv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetIntegervproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetIntegervproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetIntegerv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetString = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetStringproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetStringproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetString\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetString.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglLineWidth = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::LineWidthproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<LineWidthproc>,
+        >(SDL_GL_GetProcAddress(
             b"glLineWidth\x00" as *const u8 as *const libc::c_char,
         ));
         if qglLineWidth.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglPolygonOffset = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::PolygonOffsetproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<PolygonOffsetproc>,
+        >(SDL_GL_GetProcAddress(
             b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
         ));
         if qglPolygonOffset.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglReadPixels = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ReadPixelsproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ReadPixelsproc>,
+        >(SDL_GL_GetProcAddress(
             b"glReadPixels\x00" as *const u8 as *const libc::c_char,
         ));
         if qglReadPixels.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglScissor = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Scissorproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglScissor = ::std::mem::transmute::<*mut libc::c_void, Option<Scissorproc>>(
+            SDL_GL_GetProcAddress(
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4743,142 +4743,142 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilOp = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilOpproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilOpproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilOp\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilOp.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexParameterf = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexParameterfproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexParameterfproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexParameterf.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexParameteri = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexParameteriproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexParameteriproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexParameteri.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTranslatef = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Translatefproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Translatefproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTranslatef\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTranslatef.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglViewport = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Viewportproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglViewport = ::std::mem::transmute::<*mut libc::c_void, Option<Viewportproc>>(
+            SDL_GL_GetProcAddress(
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -4886,721 +4886,721 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearDepth = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearDepthproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearDepthproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearDepth\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearDepth.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearDepth\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthRange = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthRangeproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthRangeproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthRange\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthRange.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthRange\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDrawBuffer = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DrawBufferproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DrawBufferproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDrawBuffer.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawBuffer\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglPolygonMode = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::PolygonModeproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<PolygonModeproc>,
+        >(SDL_GL_GetProcAddress(
             b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
         ));
         if qglPolygonMode.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonMode\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglActiveTexture = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ActiveTextureproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ActiveTextureproc>,
+        >(SDL_GL_GetProcAddress(
             b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
         ));
         if qglActiveTexture.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompressedTexImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompressedTexImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompressedTexImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompressedTexImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompressedTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompressedTexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompressedTexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompressedTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBindBuffer = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindBufferproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindBufferproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindBuffer.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteBuffers = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteBuffersproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteBuffersproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteBuffers.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGenBuffers = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GenBuffersproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GenBuffersproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGenBuffers.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBufferData = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BufferDataproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BufferDataproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBufferData\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBufferData.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferData\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBufferSubData = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BufferSubDataproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BufferSubDataproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBufferSubData.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglAttachShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::AttachShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<AttachShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glAttachShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglAttachShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glAttachShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBindAttribLocation = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindAttribLocationproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindAttribLocationproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindAttribLocation.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompileShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompileShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompileShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompileShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompileShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompileShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCreateProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CreateProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CreateProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCreateProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCreateShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CreateShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CreateShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCreateShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCreateShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDetachShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DetachShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DetachShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDetachShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDetachShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDetachShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDisableVertexAttribArray = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DisableVertexAttribArrayproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DisableVertexAttribArrayproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDisableVertexAttribArray.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglEnableVertexAttribArray = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::EnableVertexAttribArrayproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<EnableVertexAttribArrayproc>,
+        >(SDL_GL_GetProcAddress(
             b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
         ));
         if qglEnableVertexAttribArray.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetActiveUniform = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetActiveUniformproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetActiveUniformproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetActiveUniform.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetProgramiv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetProgramivproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetProgramivproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetProgramiv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetProgramInfoLog = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetProgramInfoLogproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetProgramInfoLogproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetProgramInfoLog.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderiv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderivproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderivproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderiv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderInfoLog = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderInfoLogproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderInfoLogproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderInfoLog.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderSource = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderSourceproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderSourceproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderSource.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetUniformLocation = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetUniformLocationproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetUniformLocationproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetUniformLocation.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglLinkProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::LinkProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<LinkProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglLinkProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglShaderSource = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ShaderSourceproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ShaderSourceproc>,
+        >(SDL_GL_GetProcAddress(
             b"glShaderSource\x00" as *const u8 as *const libc::c_char,
         ));
         if qglShaderSource.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glShaderSource\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUseProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::UseProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<UseProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUseProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUseProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUseProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform2f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform2fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform2fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform2f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform2f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform2f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform3f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform3fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform3fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform3f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform3f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform3f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform4f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform4fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform4fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform4f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform4f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform4f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1i = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1iproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1iproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1i\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1i.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1i\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1fv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1fvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1fvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1fv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniformMatrix4fv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::UniformMatrix4fvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<UniformMatrix4fvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniformMatrix4fv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglValidateProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ValidateProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ValidateProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglValidateProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglVertexAttribPointer = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::VertexAttribPointerproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<VertexAttribPointerproc>,
+        >(SDL_GL_GetProcAddress(
             b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
         ));
         if qglVertexAttribPointer.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
     } else if qglesMajorVersion > 2 as i32
         || qglesMajorVersion == 2 as i32 && qglesMinorVersion >= 0 as i32
     {
         qglBindTexture = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindTextureproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindTextureproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindTexture\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindTexture.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindTexture\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBlendFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BlendFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BlendFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBlendFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBlendFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearColor = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearColorproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearColorproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearColor\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearColor.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearColor\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Clearproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglClear = ::std::mem::transmute::<*mut libc::c_void, Option<Clearproc>>(
+            SDL_GL_GetProcAddress(
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5608,62 +5608,62 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClear\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearStencil = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearStencilproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearStencilproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearStencil\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearStencil.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearStencil\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglColorMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ColorMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ColorMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glColorMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglColorMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glColorMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCopyTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CopyTexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CopyTexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCopyTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCopyTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglCullFace = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::CullFaceproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglCullFace = ::std::mem::transmute::<*mut libc::c_void, Option<CullFaceproc>>(
+            SDL_GL_GetProcAddress(
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5671,62 +5671,62 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCullFace\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteTextures = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteTexturesproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteTexturesproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteTextures.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteTextures\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglDisable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Disableproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglDisable = ::std::mem::transmute::<*mut libc::c_void, Option<Disableproc>>(
+            SDL_GL_GetProcAddress(
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5734,46 +5734,46 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisable\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDrawArrays = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DrawArraysproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DrawArraysproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDrawArrays.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawArrays\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDrawElements = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DrawElementsproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DrawElementsproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDrawElements\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDrawElements.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDrawElements\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Enableproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglEnable = ::std::mem::transmute::<*mut libc::c_void, Option<Enableproc>>(
+            SDL_GL_GetProcAddress(
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5781,14 +5781,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnable\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Finishproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglFinish = ::std::mem::transmute::<*mut libc::c_void, Option<Finishproc>>(
+            SDL_GL_GetProcAddress(
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5796,14 +5796,14 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFinish\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Flushproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglFlush = ::std::mem::transmute::<*mut libc::c_void, Option<Flushproc>>(
+            SDL_GL_GetProcAddress(
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5811,46 +5811,46 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glFlush\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGenTextures = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GenTexturesproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GenTexturesproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGenTextures\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGenTextures.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenTextures\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetBooleanv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetBooleanvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetBooleanvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetBooleanv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetBooleanv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglGetError = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::GetErrorproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglGetError = ::std::mem::transmute::<*mut libc::c_void, Option<GetErrorproc>>(
+            SDL_GL_GetProcAddress(
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5858,94 +5858,94 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetError\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetIntegerv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetIntegervproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetIntegervproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetIntegerv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetIntegerv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetString = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetStringproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetStringproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetString\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetString.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetString\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglLineWidth = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::LineWidthproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<LineWidthproc>,
+        >(SDL_GL_GetProcAddress(
             b"glLineWidth\x00" as *const u8 as *const libc::c_char,
         ));
         if qglLineWidth.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLineWidth\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglPolygonOffset = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::PolygonOffsetproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<PolygonOffsetproc>,
+        >(SDL_GL_GetProcAddress(
             b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
         ));
         if qglPolygonOffset.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glPolygonOffset\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglReadPixels = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ReadPixelsproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ReadPixelsproc>,
+        >(SDL_GL_GetProcAddress(
             b"glReadPixels\x00" as *const u8 as *const libc::c_char,
         ));
         if qglReadPixels.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glReadPixels\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglScissor = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Scissorproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglScissor = ::std::mem::transmute::<*mut libc::c_void, Option<Scissorproc>>(
+            SDL_GL_GetProcAddress(
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -5953,142 +5953,142 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glScissor\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilFunc = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilFuncproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilFuncproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilFunc.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilFunc\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilMask = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilMaskproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilMaskproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilMask\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilMask.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilMask\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglStencilOp = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::StencilOpproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<StencilOpproc>,
+        >(SDL_GL_GetProcAddress(
             b"glStencilOp\x00" as *const u8 as *const libc::c_char,
         ));
         if qglStencilOp.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glStencilOp\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexParameterf = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexParameterfproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexParameterfproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexParameterf.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameterf\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexParameteri = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexParameteriproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexParameteriproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexParameteri.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexParameteri\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::TexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<TexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglTranslatef = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Translatefproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Translatefproc>,
+        >(SDL_GL_GetProcAddress(
             b"glTranslatef\x00" as *const u8 as *const libc::c_char,
         ));
         if qglTranslatef.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glTranslatef\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
-        qglViewport = ::std::mem::transmute::<*mut libc::c_void, Option<crate::qgl_h::Viewportproc>>(
-            crate::stdlib::SDL_GL_GetProcAddress(
+        qglViewport = ::std::mem::transmute::<*mut libc::c_void, Option<Viewportproc>>(
+            SDL_GL_GetProcAddress(
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             ),
         );
@@ -6096,645 +6096,645 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glViewport\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglClearDepthf = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ClearDepthfproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ClearDepthfproc>,
+        >(SDL_GL_GetProcAddress(
             b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
         ));
         if qglClearDepthf.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glClearDepthf\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDepthRangef = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DepthRangefproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DepthRangefproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDepthRangef.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDepthRangef\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglActiveTexture = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ActiveTextureproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ActiveTextureproc>,
+        >(SDL_GL_GetProcAddress(
             b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
         ));
         if qglActiveTexture.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glActiveTexture\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompressedTexImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompressedTexImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompressedTexImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompressedTexImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompressedTexSubImage2D = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompressedTexSubImage2Dproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompressedTexSubImage2Dproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompressedTexSubImage2D.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompressedTexSubImage2D\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBindBuffer = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindBufferproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindBufferproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindBuffer.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindBuffer\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteBuffers = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteBuffersproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteBuffersproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteBuffers.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteBuffers\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGenBuffers = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GenBuffersproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GenBuffersproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGenBuffers.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGenBuffers\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBufferData = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BufferDataproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BufferDataproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBufferData\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBufferData.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferData\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBufferSubData = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BufferSubDataproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BufferSubDataproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBufferSubData.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBufferSubData\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglAttachShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::AttachShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<AttachShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glAttachShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglAttachShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glAttachShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglBindAttribLocation = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::BindAttribLocationproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<BindAttribLocationproc>,
+        >(SDL_GL_GetProcAddress(
             b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
         ));
         if qglBindAttribLocation.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glBindAttribLocation\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCompileShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CompileShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CompileShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCompileShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCompileShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCompileShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCreateProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CreateProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CreateProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCreateProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglCreateShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::CreateShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<CreateShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glCreateShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglCreateShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glCreateShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDeleteShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DeleteShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DeleteShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDeleteShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDeleteShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDetachShader = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DetachShaderproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DetachShaderproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDetachShader\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDetachShader.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDetachShader\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglDisableVertexAttribArray = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::DisableVertexAttribArrayproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<DisableVertexAttribArrayproc>,
+        >(SDL_GL_GetProcAddress(
             b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
         ));
         if qglDisableVertexAttribArray.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glDisableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglEnableVertexAttribArray = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::EnableVertexAttribArrayproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<EnableVertexAttribArrayproc>,
+        >(SDL_GL_GetProcAddress(
             b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
         ));
         if qglEnableVertexAttribArray.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glEnableVertexAttribArray\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetActiveUniform = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetActiveUniformproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetActiveUniformproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetActiveUniform.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetActiveUniform\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetProgramiv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetProgramivproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetProgramivproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetProgramiv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramiv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetProgramInfoLog = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetProgramInfoLogproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetProgramInfoLogproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetProgramInfoLog.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetProgramInfoLog\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderiv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderivproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderivproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderiv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderiv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderInfoLog = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderInfoLogproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderInfoLogproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderInfoLog.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderInfoLog\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetShaderSource = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetShaderSourceproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetShaderSourceproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetShaderSource.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetShaderSource\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglGetUniformLocation = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetUniformLocationproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetUniformLocationproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetUniformLocation.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetUniformLocation\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglLinkProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::LinkProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<LinkProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglLinkProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glLinkProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglShaderSource = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ShaderSourceproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ShaderSourceproc>,
+        >(SDL_GL_GetProcAddress(
             b"glShaderSource\x00" as *const u8 as *const libc::c_char,
         ));
         if qglShaderSource.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glShaderSource\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUseProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::UseProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<UseProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUseProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUseProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUseProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform2f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform2fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform2fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform2f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform2f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform2f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform3f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform3fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform3fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform3f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform3f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform3f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform4f = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform4fproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform4fproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform4f\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform4f.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform4f\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1i = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1iproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1iproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1i\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1i.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1i\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniform1fv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::Uniform1fvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<Uniform1fvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniform1fv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniform1fv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglUniformMatrix4fv = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::UniformMatrix4fvproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<UniformMatrix4fvproc>,
+        >(SDL_GL_GetProcAddress(
             b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
         ));
         if qglUniformMatrix4fv.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glUniformMatrix4fv\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglValidateProgram = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::ValidateProgramproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<ValidateProgramproc>,
+        >(SDL_GL_GetProcAddress(
             b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
         ));
         if qglValidateProgram.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glValidateProgram\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         qglVertexAttribPointer = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::VertexAttribPointerproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<VertexAttribPointerproc>,
+        >(SDL_GL_GetProcAddress(
             b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
         ));
         if qglVertexAttribPointer.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glVertexAttribPointer\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
         // error so this doesn't segfault due to NULL desktop GL functions being used
-        crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Unsupported OpenGL Version: %s\n\x00" as *const u8 as *const libc::c_char,
             version,
         );
     } else {
-        crate::src::renderergl1::tr_subs::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Unsupported OpenGL Version (%s), OpenGL 2.0 is required\n\x00" as *const u8
                 as *const libc::c_char,
             version,
@@ -6747,19 +6747,19 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
     {
         qglGetStringi = ::std::mem::transmute::<
             *mut libc::c_void,
-            Option<crate::qgl_h::GetStringiproc>,
-        >(crate::stdlib::SDL_GL_GetProcAddress(
+            Option<GetStringiproc>,
+        >(SDL_GL_GetProcAddress(
             b"glGetStringi\x00" as *const u8 as *const libc::c_char,
         ));
         if qglGetStringi.is_none() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"ERROR: Missing OpenGL function %s\n\x00" as *const u8 as *const libc::c_char,
                 b"glGetStringi\x00" as *const u8 as *const libc::c_char,
             );
-            success = crate::src::qcommon::q_shared::qfalse
+            success = qfalse
         }
     }
     return success;
@@ -6943,9 +6943,9 @@ GLimp_SetMode
 
 unsafe extern "C" fn GLimp_SetMode(
     mut mode: i32,
-    mut fullscreen: crate::src::qcommon::q_shared::qboolean,
-    mut noborder: crate::src::qcommon::q_shared::qboolean,
-    mut fixedFunction: crate::src::qcommon::q_shared::qboolean,
+    mut fullscreen: qboolean,
+    mut noborder: qboolean,
+    mut fixedFunction: qboolean,
 ) -> i32 {
     let mut glstring: *const libc::c_char = 0 as *const libc::c_char;
     let mut perChannelColorBits: i32 = 0;
@@ -6954,11 +6954,11 @@ unsafe extern "C" fn GLimp_SetMode(
     let mut stencilBits: i32 = 0;
     let mut samples: i32 = 0;
     let mut i: i32 = 0 as i32;
-    let mut icon: *mut crate::stdlib::SDL_Surface = 0 as *mut crate::stdlib::SDL_Surface;
-    let mut flags: crate::stdlib::Uint32 = (crate::stdlib::SDL_WINDOW_SHOWN as i32
-        | crate::stdlib::SDL_WINDOW_OPENGL as i32)
-        as crate::stdlib::Uint32;
-    let mut desktopMode: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
+    let mut icon: *mut SDL_Surface = 0 as *mut SDL_Surface;
+    let mut flags: Uint32 = (SDL_WINDOW_SHOWN as i32
+        | SDL_WINDOW_OPENGL as i32)
+        as Uint32;
+    let mut desktopMode: SDL_DisplayMode = SDL_DisplayMode {
         format: 0,
         w: 0,
         h: 0,
@@ -6971,13 +6971,13 @@ unsafe extern "C" fn GLimp_SetMode(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"Initializing OpenGL display\n\x00" as *const u8 as *const libc::c_char,
     );
     if (*r_allowResize).integer != 0 {
-        flags |= crate::stdlib::SDL_WINDOW_RESIZABLE as i32 as u32
+        flags |= SDL_WINDOW_RESIZABLE as i32 as u32
     }
-    icon = crate::stdlib::SDL_CreateRGBSurfaceFrom(
+    icon = SDL_CreateRGBSurfaceFrom(
         CLIENT_WINDOW_ICON.pixel_data.as_ptr() as *mut libc::c_void,
         CLIENT_WINDOW_ICON.width as i32,
         CLIENT_WINDOW_ICON.height as i32,
@@ -6987,46 +6987,46 @@ unsafe extern "C" fn GLimp_SetMode(
         CLIENT_WINDOW_ICON
             .bytes_per_pixel
             .wrapping_mul(CLIENT_WINDOW_ICON.width) as i32,
-        0xff as i32 as crate::stdlib::Uint32,
-        0xff00 as i32 as crate::stdlib::Uint32,
-        0xff0000 as i32 as crate::stdlib::Uint32,
+        0xff as i32 as Uint32,
+        0xff00 as i32 as Uint32,
+        0xff0000 as i32 as Uint32,
         0xff000000 as u32,
     );
     // If a window exists, note its display index
     if !SDL_window.is_null() {
-        display = crate::stdlib::SDL_GetWindowDisplayIndex(SDL_window);
+        display = SDL_GetWindowDisplayIndex(SDL_window);
         if display < 0 as i32 {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                PRINT_DEVELOPER as i32,
                 b"SDL_GetWindowDisplayIndex() failed: %s\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
         }
     }
     if display >= 0 as i32
-        && crate::stdlib::SDL_GetDesktopDisplayMode(display, &mut desktopMode) == 0 as i32
+        && SDL_GetDesktopDisplayMode(display, &mut desktopMode) == 0 as i32
     {
         crate::src::renderergl1::tr_init::displayAspect =
             desktopMode.w as f32 / desktopMode.h as f32;
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Display aspect: %.3f\n\x00" as *const u8 as *const libc::c_char,
             crate::src::renderergl1::tr_init::displayAspect as f64,
         );
     } else {
         crate::stdlib::memset(
-            &mut desktopMode as *mut crate::stdlib::SDL_DisplayMode as *mut libc::c_void,
+            &mut desktopMode as *mut SDL_DisplayMode as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::stdlib::SDL_DisplayMode>() as libc::c_ulong,
+            ::std::mem::size_of::<SDL_DisplayMode>() as libc::c_ulong,
         );
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Cannot determine display aspect, assuming 1.333\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -7034,7 +7034,7 @@ unsafe extern "C" fn GLimp_SetMode(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"...setting mode %d:\x00" as *const u8 as *const libc::c_char,
         mode,
     );
@@ -7049,7 +7049,7 @@ unsafe extern "C" fn GLimp_SetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"Cannot determine display resolution, assuming 640x480\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7068,7 +7068,7 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b" invalid mode\n\x00" as *const u8 as *const libc::c_char,
         );
         return RSERR_INVALID_MODE as i32;
@@ -7076,7 +7076,7 @@ unsafe extern "C" fn GLimp_SetMode(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b" %d %d\n\x00" as *const u8 as *const libc::c_char,
         crate::src::renderergl1::tr_init::glConfig.vidWidth,
         crate::src::renderergl1::tr_init::glConfig.vidHeight,
@@ -7091,33 +7091,33 @@ unsafe extern "C" fn GLimp_SetMode(
     // Destroy existing state if it exists
     if !SDL_glContext.is_null() {
         GLimp_ClearProcAddresses();
-        crate::stdlib::SDL_GL_DeleteContext(SDL_glContext);
+        SDL_GL_DeleteContext(SDL_glContext);
         SDL_glContext = 0 as *mut libc::c_void
     }
     if !SDL_window.is_null() {
-        crate::stdlib::SDL_GetWindowPosition(SDL_window, &mut x, &mut y);
+        SDL_GetWindowPosition(SDL_window, &mut x, &mut y);
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"Existing window at %dx%d before being destroyed\n\x00" as *const u8
                 as *const libc::c_char,
             x,
             y,
         );
-        crate::stdlib::SDL_DestroyWindow(SDL_window);
-        SDL_window = 0 as *mut crate::stdlib::SDL_Window
+        SDL_DestroyWindow(SDL_window);
+        SDL_window = 0 as *mut SDL_Window
     }
     if fullscreen as u64 != 0 {
-        flags |= crate::stdlib::SDL_WINDOW_FULLSCREEN as i32 as u32;
+        flags |= SDL_WINDOW_FULLSCREEN as i32 as u32;
         crate::src::renderergl1::tr_init::glConfig.isFullscreen =
-            crate::src::qcommon::q_shared::qtrue
+            qtrue
     } else {
         if noborder as u64 != 0 {
-            flags |= crate::stdlib::SDL_WINDOW_BORDERLESS as i32 as u32
+            flags |= SDL_WINDOW_BORDERLESS as i32 as u32
         }
         crate::src::renderergl1::tr_init::glConfig.isFullscreen =
-            crate::src::qcommon::q_shared::qfalse
+            qfalse
     }
     colorBits = (*crate::src::renderergl1::tr_init::r_colorbits).value as i32;
     if colorBits == 0 || colorBits >= 32 as i32 {
@@ -7210,28 +7210,28 @@ unsafe extern "C" fn GLimp_SetMode(
             perChannelColorBits = 4 as i32
         }
         /* Fix for SGIs grabbing too many bits of color */
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_RED_SIZE, perChannelColorBits);
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_GREEN_SIZE, perChannelColorBits);
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_BLUE_SIZE, perChannelColorBits);
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_DEPTH_SIZE, testDepthBits);
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STENCIL_SIZE, testStencilBits);
-        crate::stdlib::SDL_GL_SetAttribute(
-            crate::stdlib::SDL_GL_MULTISAMPLEBUFFERS,
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, perChannelColorBits);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, perChannelColorBits);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, perChannelColorBits);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, testDepthBits);
+        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, testStencilBits);
+        SDL_GL_SetAttribute(
+            SDL_GL_MULTISAMPLEBUFFERS,
             if samples != 0 { 1 as i32 } else { 0 as i32 },
         );
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_MULTISAMPLESAMPLES, samples);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, samples);
         if (*crate::src::renderergl1::tr_init::r_stereoEnabled).integer != 0 {
             crate::src::renderergl1::tr_init::glConfig.stereoEnabled =
-                crate::src::qcommon::q_shared::qtrue;
-            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 1 as i32);
+                qtrue;
+            SDL_GL_SetAttribute(SDL_GL_STEREO, 1 as i32);
         } else {
             crate::src::renderergl1::tr_init::glConfig.stereoEnabled =
-                crate::src::qcommon::q_shared::qfalse;
-            crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STEREO, 0 as i32);
+                qfalse;
+            SDL_GL_SetAttribute(SDL_GL_STEREO, 0 as i32);
         }
-        crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_DOUBLEBUFFER, 1 as i32);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1 as i32);
         // if multisampling is enabled on X11, this causes create window to fail.
-        SDL_window = crate::stdlib::SDL_CreateWindow(
+        SDL_window = SDL_CreateWindow(
             b"ioquake3\x00" as *const u8 as *const libc::c_char,
             x,
             y,
@@ -7243,13 +7243,13 @@ unsafe extern "C" fn GLimp_SetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                PRINT_DEVELOPER as i32,
                 b"SDL_CreateWindow failed: %s\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
         } else {
             if fullscreen as u64 != 0 {
-                let mut mode_0: crate::stdlib::SDL_DisplayMode = crate::stdlib::SDL_DisplayMode {
+                let mut mode_0: SDL_DisplayMode = SDL_DisplayMode {
                     format: 0,
                     w: 0,
                     h: 0,
@@ -7259,19 +7259,19 @@ unsafe extern "C" fn GLimp_SetMode(
                 match testColorBits {
                     16 => {
                         mode_0.format =
-                            crate::stdlib::SDL_PIXELFORMAT_RGB565 as i32 as crate::stdlib::Uint32;
+                            SDL_PIXELFORMAT_RGB565 as i32 as Uint32;
                         current_block_184 = 1425453989644512380;
                     }
                     24 => {
                         mode_0.format =
-                            crate::stdlib::SDL_PIXELFORMAT_RGB24 as i32 as crate::stdlib::Uint32;
+                            SDL_PIXELFORMAT_RGB24 as i32 as Uint32;
                         current_block_184 = 1425453989644512380;
                     }
                     _ => {
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                            PRINT_DEVELOPER as i32,
                             b"testColorBits is %d, can\'t fullscreen\n\x00" as *const u8
                                 as *const libc::c_char,
                             testColorBits,
@@ -7293,13 +7293,13 @@ unsafe extern "C" fn GLimp_SetMode(
                         mode_0.refresh_rate =
                             crate::src::renderergl1::tr_init::glConfig.displayFrequency;
                         mode_0.driverdata = 0 as *mut libc::c_void;
-                        if crate::stdlib::SDL_SetWindowDisplayMode(SDL_window, &mut mode_0)
+                        if SDL_SetWindowDisplayMode(SDL_window, &mut mode_0)
                             < 0 as i32
                         {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                                PRINT_DEVELOPER as i32,
                                 b"SDL_SetWindowDisplayMode failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
@@ -7316,48 +7316,48 @@ unsafe extern "C" fn GLimp_SetMode(
             match current_block_184 {
                 5597585068398118923 => {}
                 _ => {
-                    crate::stdlib::SDL_SetWindowIcon(SDL_window, icon);
+                    SDL_SetWindowIcon(SDL_window, icon);
                     if fixedFunction as u64 == 0 {
                         let mut profileMask: i32 = 0;
                         let mut majorVersion: i32 = 0;
                         let mut minorVersion: i32 = 0;
-                        crate::stdlib::SDL_GL_GetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
+                        SDL_GL_GetAttribute(
+                            SDL_GL_CONTEXT_PROFILE_MASK,
                             &mut profileMask,
                         );
-                        crate::stdlib::SDL_GL_GetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_MAJOR_VERSION,
+                        SDL_GL_GetAttribute(
+                            SDL_GL_CONTEXT_MAJOR_VERSION,
                             &mut majorVersion,
                         );
-                        crate::stdlib::SDL_GL_GetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_MINOR_VERSION,
+                        SDL_GL_GetAttribute(
+                            SDL_GL_CONTEXT_MINOR_VERSION,
                             &mut minorVersion,
                         );
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                            PRINT_ALL as i32,
                             b"Trying to get an OpenGL 3.2 core context\n\x00" as *const u8
                                 as *const libc::c_char,
                         );
-                        crate::stdlib::SDL_GL_SetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
-                            crate::stdlib::SDL_GL_CONTEXT_PROFILE_CORE as i32,
+                        SDL_GL_SetAttribute(
+                            SDL_GL_CONTEXT_PROFILE_MASK,
+                            SDL_GL_CONTEXT_PROFILE_CORE as i32,
                         );
-                        crate::stdlib::SDL_GL_SetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_MAJOR_VERSION,
+                        SDL_GL_SetAttribute(
+                            SDL_GL_CONTEXT_MAJOR_VERSION,
                             3 as i32,
                         );
-                        crate::stdlib::SDL_GL_SetAttribute(
-                            crate::stdlib::SDL_GL_CONTEXT_MINOR_VERSION,
+                        SDL_GL_SetAttribute(
+                            SDL_GL_CONTEXT_MINOR_VERSION,
                             2 as i32,
                         );
-                        SDL_glContext = crate::stdlib::SDL_GL_CreateContext(SDL_window);
+                        SDL_glContext = SDL_GL_CreateContext(SDL_window);
                         if SDL_glContext.is_null() {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                PRINT_ALL as i32,
                                 b"SDL_GL_CreateContext failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
@@ -7365,20 +7365,20 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                PRINT_ALL as i32,
                                 b"Reverting to default context\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
-                            crate::stdlib::SDL_GL_SetAttribute(
-                                crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
+                            SDL_GL_SetAttribute(
+                                SDL_GL_CONTEXT_PROFILE_MASK,
                                 profileMask,
                             );
-                            crate::stdlib::SDL_GL_SetAttribute(
-                                crate::stdlib::SDL_GL_CONTEXT_MAJOR_VERSION,
+                            SDL_GL_SetAttribute(
+                                SDL_GL_CONTEXT_MAJOR_VERSION,
                                 majorVersion,
                             );
-                            crate::stdlib::SDL_GL_SetAttribute(
-                                crate::stdlib::SDL_GL_CONTEXT_MINOR_VERSION,
+                            SDL_GL_SetAttribute(
+                                SDL_GL_CONTEXT_MINOR_VERSION,
                                 minorVersion,
                             );
                         } else {
@@ -7386,16 +7386,16 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                PRINT_ALL as i32,
                                 b"SDL_GL_CreateContext succeeded.\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
                             if GLimp_GetProcAddresses(fixedFunction) as u64 != 0 {
                                 renderer = qglGetString.expect("non-null function pointer")(
-                                    0x1f01 as i32 as crate::stdlib::GLenum,
+                                    0x1f01 as i32 as GLenum,
                                 ) as *const libc::c_char
                             } else {
-                                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_ALL
+                                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(PRINT_ALL
                                                                                   as
                                                                                   i32,
                                                                               b"GLimp_GetProcAddresses() failed for OpenGL 3.2 core context\n\x00"
@@ -7406,12 +7406,12 @@ unsafe extern "C" fn GLimp_SetMode(
                                 renderer = 0 as *const libc::c_char
                             }
                             if renderer.is_null()
-                                || (!::libc::strstr(
+                                || (!libc::strstr(
                                     renderer,
                                     b"Software Renderer\x00" as *const u8 as *const libc::c_char,
                                 )
                                 .is_null()
-                                    || !::libc::strstr(
+                                    || !libc::strstr(
                                         renderer,
                                         b"Software Rasterizer\x00" as *const u8
                                             as *const libc::c_char,
@@ -7422,25 +7422,25 @@ unsafe extern "C" fn GLimp_SetMode(
                                     crate::src::renderergl1::tr_main::ri
                                         .Printf
                                         .expect("non-null function pointer")(
-                                        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                        PRINT_ALL as i32,
                                         b"GL_RENDERER is %s, rejecting context\n\x00" as *const u8
                                             as *const libc::c_char,
                                         renderer,
                                     );
                                 }
                                 GLimp_ClearProcAddresses();
-                                crate::stdlib::SDL_GL_DeleteContext(SDL_glContext);
+                                SDL_GL_DeleteContext(SDL_glContext);
                                 SDL_glContext = 0 as *mut libc::c_void;
-                                crate::stdlib::SDL_GL_SetAttribute(
-                                    crate::stdlib::SDL_GL_CONTEXT_PROFILE_MASK,
+                                SDL_GL_SetAttribute(
+                                    SDL_GL_CONTEXT_PROFILE_MASK,
                                     profileMask,
                                 );
-                                crate::stdlib::SDL_GL_SetAttribute(
-                                    crate::stdlib::SDL_GL_CONTEXT_MAJOR_VERSION,
+                                SDL_GL_SetAttribute(
+                                    SDL_GL_CONTEXT_MAJOR_VERSION,
                                     majorVersion,
                                 );
-                                crate::stdlib::SDL_GL_SetAttribute(
-                                    crate::stdlib::SDL_GL_CONTEXT_MINOR_VERSION,
+                                SDL_GL_SetAttribute(
+                                    SDL_GL_CONTEXT_MINOR_VERSION,
                                     minorVersion,
                                 );
                             }
@@ -7449,32 +7449,32 @@ unsafe extern "C" fn GLimp_SetMode(
                         SDL_glContext = 0 as *mut libc::c_void
                     }
                     if SDL_glContext.is_null() {
-                        SDL_glContext = crate::stdlib::SDL_GL_CreateContext(SDL_window);
+                        SDL_glContext = SDL_GL_CreateContext(SDL_window);
                         if SDL_glContext.is_null() {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                                PRINT_DEVELOPER as i32,
                                 b"SDL_GL_CreateContext failed: %s\n\x00" as *const u8
                                     as *const libc::c_char,
                                 crate::stdlib::SDL_GetError(),
                             );
-                            crate::stdlib::SDL_DestroyWindow(SDL_window);
-                            SDL_window = 0 as *mut crate::stdlib::SDL_Window;
+                            SDL_DestroyWindow(SDL_window);
+                            SDL_window = 0 as *mut SDL_Window;
                             current_block_184 = 5597585068398118923;
                         } else if GLimp_GetProcAddresses(fixedFunction) as u64 == 0 {
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                PRINT_ALL as i32,
                                 b"GLimp_GetProcAddresses() failed\n\x00" as *const u8
                                     as *const libc::c_char,
                             );
                             GLimp_ClearProcAddresses();
-                            crate::stdlib::SDL_GL_DeleteContext(SDL_glContext);
+                            SDL_GL_DeleteContext(SDL_glContext);
                             SDL_glContext = 0 as *mut libc::c_void;
-                            crate::stdlib::SDL_DestroyWindow(SDL_window);
-                            SDL_window = 0 as *mut crate::stdlib::SDL_Window;
+                            SDL_DestroyWindow(SDL_window);
+                            SDL_window = 0 as *mut SDL_Window;
                             current_block_184 = 5597585068398118923;
                         } else {
                             current_block_184 = 1953367063549441504;
@@ -7486,46 +7486,46 @@ unsafe extern "C" fn GLimp_SetMode(
                         5597585068398118923 => {}
                         _ => {
                             qglClearColor.expect("non-null function pointer")(
-                                0 as i32 as crate::stdlib::GLclampf,
-                                0 as i32 as crate::stdlib::GLclampf,
-                                0 as i32 as crate::stdlib::GLclampf,
-                                1 as i32 as crate::stdlib::GLclampf,
+                                0 as i32 as GLclampf,
+                                0 as i32 as GLclampf,
+                                0 as i32 as GLclampf,
+                                1 as i32 as GLclampf,
                             );
                             qglClear.expect("non-null function pointer")(
-                                0x4000 as i32 as crate::stdlib::GLbitfield,
+                                0x4000 as i32 as GLbitfield,
                             );
-                            crate::stdlib::SDL_GL_SwapWindow(SDL_window);
-                            if crate::stdlib::SDL_GL_SetSwapInterval(
+                            SDL_GL_SwapWindow(SDL_window);
+                            if SDL_GL_SetSwapInterval(
                                 (*crate::src::renderergl1::tr_init::r_swapInterval).integer,
                             ) == -(1 as i32)
                             {
                                 crate::src::renderergl1::tr_main::ri
                                     .Printf
                                     .expect("non-null function pointer")(
-                                    crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                                    PRINT_DEVELOPER as i32,
                                     b"SDL_GL_SetSwapInterval failed: %s\n\x00" as *const u8
                                         as *const libc::c_char,
                                     crate::stdlib::SDL_GetError(),
                                 );
                             }
-                            crate::stdlib::SDL_GL_GetAttribute(
-                                crate::stdlib::SDL_GL_RED_SIZE,
+                            SDL_GL_GetAttribute(
+                                SDL_GL_RED_SIZE,
                                 &mut *realColorBits.as_mut_ptr().offset(0 as i32 as isize),
                             );
-                            crate::stdlib::SDL_GL_GetAttribute(
-                                crate::stdlib::SDL_GL_GREEN_SIZE,
+                            SDL_GL_GetAttribute(
+                                SDL_GL_GREEN_SIZE,
                                 &mut *realColorBits.as_mut_ptr().offset(1 as i32 as isize),
                             );
-                            crate::stdlib::SDL_GL_GetAttribute(
-                                crate::stdlib::SDL_GL_BLUE_SIZE,
+                            SDL_GL_GetAttribute(
+                                SDL_GL_BLUE_SIZE,
                                 &mut *realColorBits.as_mut_ptr().offset(2 as i32 as isize),
                             );
-                            crate::stdlib::SDL_GL_GetAttribute(
-                                crate::stdlib::SDL_GL_DEPTH_SIZE,
+                            SDL_GL_GetAttribute(
+                                SDL_GL_DEPTH_SIZE,
                                 &mut crate::src::renderergl1::tr_init::glConfig.depthBits,
                             );
-                            crate::stdlib::SDL_GL_GetAttribute(
-                                crate::stdlib::SDL_GL_STENCIL_SIZE,
+                            SDL_GL_GetAttribute(
+                                SDL_GL_STENCIL_SIZE,
                                 &mut crate::src::renderergl1::tr_init::glConfig.stencilBits,
                             );
                             crate::src::renderergl1::tr_init::glConfig.colorBits = realColorBits
@@ -7535,7 +7535,7 @@ unsafe extern "C" fn GLimp_SetMode(
                             crate::src::renderergl1::tr_main::ri
                                 .Printf
                                 .expect("non-null function pointer")(
-                                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                                PRINT_ALL as i32,
                                 b"Using %d color bits, %d depth, %d stencil display.\n\x00"
                                     as *const u8
                                     as *const libc::c_char,
@@ -7551,24 +7551,24 @@ unsafe extern "C" fn GLimp_SetMode(
         }
         i += 1
     }
-    crate::stdlib::SDL_FreeSurface(icon);
+    SDL_FreeSurface(icon);
     if SDL_window.is_null() {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Couldn\'t get a visual\n\x00" as *const u8 as *const libc::c_char,
         );
         return RSERR_INVALID_MODE as i32;
     }
     GLimp_DetectAvailableModes();
     glstring =
-        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as crate::stdlib::GLenum)
+        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as GLenum)
             as *mut libc::c_char;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"GL_RENDERER: %s\n\x00" as *const u8 as *const libc::c_char,
         glstring,
     );
@@ -7582,10 +7582,10 @@ GLimp_StartDriverAndSetMode
 
 unsafe extern "C" fn GLimp_StartDriverAndSetMode(
     mut mode: i32,
-    mut fullscreen: crate::src::qcommon::q_shared::qboolean,
-    mut noborder: crate::src::qcommon::q_shared::qboolean,
-    mut gl3Core: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut fullscreen: qboolean,
+    mut noborder: qboolean,
+    mut gl3Core: qboolean,
+) -> qboolean {
     let mut err: rserr_t = RSERR_OK;
     if crate::stdlib::SDL_WasInit(0x20 as u32) == 0 {
         let mut driverName: *const libc::c_char = 0 as *const libc::c_char;
@@ -7593,17 +7593,17 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"SDL_Init( SDL_INIT_VIDEO ) FAILED (%s)\n\x00" as *const u8 as *const libc::c_char,
                 crate::stdlib::SDL_GetError(),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
-        driverName = crate::stdlib::SDL_GetCurrentVideoDriver();
+        driverName = SDL_GetCurrentVideoDriver();
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"SDL using driver \"%s\"\n\x00" as *const u8 as *const libc::c_char,
             driverName,
         );
@@ -7624,7 +7624,7 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Fullscreen not allowed with in_nograb 1\n\x00" as *const u8 as *const libc::c_char,
         );
         crate::src::renderergl1::tr_main::ri
@@ -7634,8 +7634,8 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
             b"0\x00" as *const u8 as *const libc::c_char,
         );
         (*crate::src::renderergl1::tr_init::r_fullscreen).modified =
-            crate::src::qcommon::q_shared::qfalse;
-        fullscreen = crate::src::qcommon::q_shared::qfalse
+            qfalse;
+        fullscreen = qfalse
     }
     err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core) as rserr_t;
     match err as u32 {
@@ -7643,26 +7643,26 @@ unsafe extern "C" fn GLimp_StartDriverAndSetMode(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...WARNING: fullscreen unavailable in this mode\n\x00" as *const u8
                     as *const libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         2 => {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...WARNING: could not set the given mode (%d)\n\x00" as *const u8
                     as *const libc::c_char,
                 mode,
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         _ => {}
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -7671,13 +7671,13 @@ GLimp_InitExtensions
 */
 
 unsafe extern "C" fn GLimp_InitExtensions(
-    mut fixedFunction: crate::src::qcommon::q_shared::qboolean,
+    mut fixedFunction: qboolean,
 ) {
     if (*crate::src::renderergl1::tr_init::r_allowExtensions).integer == 0 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"* IGNORING OPENGL EXTENSIONS *\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -7685,27 +7685,27 @@ unsafe extern "C" fn GLimp_InitExtensions(
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"Initializing OpenGL extensions\n\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::renderergl1::tr_init::glConfig.textureCompression = crate::tr_types_h::TC_NONE;
+    crate::src::renderergl1::tr_init::glConfig.textureCompression = TC_NONE;
     // GL_EXT_texture_compression_s3tc
-    if crate::stdlib::SDL_GL_ExtensionSupported(
+    if SDL_GL_ExtensionSupported(
         b"GL_ARB_texture_compression\x00" as *const u8 as *const libc::c_char,
     ) as u32
         != 0
-        && crate::stdlib::SDL_GL_ExtensionSupported(
+        && SDL_GL_ExtensionSupported(
             b"GL_EXT_texture_compression_s3tc\x00" as *const u8 as *const libc::c_char,
         ) as u32
             != 0
     {
         if (*crate::src::renderergl1::tr_init::r_ext_compressed_textures).value != 0. {
             crate::src::renderergl1::tr_init::glConfig.textureCompression =
-                crate::tr_types_h::TC_S3TC_ARB;
+                TC_S3TC_ARB;
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...using GL_EXT_texture_compression_s3tc\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7713,7 +7713,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...ignoring GL_EXT_texture_compression_s3tc\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7722,34 +7722,34 @@ unsafe extern "C" fn GLimp_InitExtensions(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"...GL_EXT_texture_compression_s3tc not found\n\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // GL_S3_s3tc ... legacy extension before GL_EXT_texture_compression_s3tc.
     if crate::src::renderergl1::tr_init::glConfig.textureCompression as u32
-        == crate::tr_types_h::TC_NONE as i32 as u32
+        == TC_NONE as i32 as u32
     {
-        if crate::stdlib::SDL_GL_ExtensionSupported(
+        if SDL_GL_ExtensionSupported(
             b"GL_S3_s3tc\x00" as *const u8 as *const libc::c_char,
         ) as u64
             != 0
         {
             if (*crate::src::renderergl1::tr_init::r_ext_compressed_textures).value != 0. {
                 crate::src::renderergl1::tr_init::glConfig.textureCompression =
-                    crate::tr_types_h::TC_S3TC;
+                    TC_S3TC;
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...using GL_S3_s3tc\n\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...ignoring GL_S3_s3tc\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7757,7 +7757,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...GL_S3_s3tc not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -7766,28 +7766,28 @@ unsafe extern "C" fn GLimp_InitExtensions(
     if fixedFunction as u64 != 0 {
         // GL_EXT_texture_env_add
         crate::src::renderergl1::tr_init::glConfig.textureEnvAddAvailable =
-            crate::src::qcommon::q_shared::qfalse;
-        if crate::stdlib::SDL_GL_ExtensionSupported(
+            qfalse;
+        if SDL_GL_ExtensionSupported(
             b"GL_EXT_texture_env_add\x00" as *const u8 as *const libc::c_char,
         ) as u64
             != 0
         {
             if (*crate::src::renderergl1::tr_init::r_ext_texture_env_add).integer != 0 {
                 crate::src::renderergl1::tr_init::glConfig.textureEnvAddAvailable =
-                    crate::src::qcommon::q_shared::qtrue;
+                    qtrue;
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...using GL_EXT_texture_env_add\n\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
                 crate::src::renderergl1::tr_init::glConfig.textureEnvAddAvailable =
-                    crate::src::qcommon::q_shared::qfalse;
+                    qfalse;
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...ignoring GL_EXT_texture_env_add\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7795,7 +7795,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...GL_EXT_texture_env_add not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -7803,7 +7803,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
         qglMultiTexCoord2fARB = None;
         qglActiveTextureARB = None;
         qglClientActiveTextureARB = None;
-        if crate::stdlib::SDL_GL_ExtensionSupported(
+        if SDL_GL_ExtensionSupported(
             b"GL_ARB_multitexture\x00" as *const u8 as *const libc::c_char,
         ) as u64
             != 0
@@ -7813,30 +7813,30 @@ unsafe extern "C" fn GLimp_InitExtensions(
                     *mut libc::c_void,
                     Option<
                         unsafe extern "C" fn(
-                            _: crate::stdlib::GLenum,
-                            _: crate::stdlib::GLfloat,
-                            _: crate::stdlib::GLfloat,
+                            _: GLenum,
+                            _: GLfloat,
+                            _: GLfloat,
                         ) -> (),
                     >,
-                >(crate::stdlib::SDL_GL_GetProcAddress(
+                >(SDL_GL_GetProcAddress(
                     b"glMultiTexCoord2fARB\x00" as *const u8 as *const libc::c_char,
                 ));
                 qglActiveTextureARB = ::std::mem::transmute::<
                     *mut libc::c_void,
-                    Option<unsafe extern "C" fn(_: crate::stdlib::GLenum) -> ()>,
-                >(crate::stdlib::SDL_GL_GetProcAddress(
+                    Option<unsafe extern "C" fn(_: GLenum) -> ()>,
+                >(SDL_GL_GetProcAddress(
                     b"glActiveTextureARB\x00" as *const u8 as *const libc::c_char,
                 ));
                 qglClientActiveTextureARB = ::std::mem::transmute::<
                     *mut libc::c_void,
-                    Option<unsafe extern "C" fn(_: crate::stdlib::GLenum) -> ()>,
-                >(crate::stdlib::SDL_GL_GetProcAddress(
+                    Option<unsafe extern "C" fn(_: GLenum) -> ()>,
+                >(SDL_GL_GetProcAddress(
                     b"glClientActiveTextureARB\x00" as *const u8 as *const libc::c_char,
                 ));
                 if qglActiveTextureARB.is_some() {
-                    let mut glint: crate::stdlib::GLint = 0 as i32;
+                    let mut glint: GLint = 0 as i32;
                     qglGetIntegerv.expect("non-null function pointer")(
-                        0x84e2 as i32 as crate::stdlib::GLenum,
+                        0x84e2 as i32 as GLenum,
                         &mut glint,
                     );
                     crate::src::renderergl1::tr_init::glConfig.numTextureUnits = glint;
@@ -7844,7 +7844,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                            PRINT_ALL as i32,
                             b"...using GL_ARB_multitexture\n\x00" as *const u8
                                 as *const libc::c_char,
                         );
@@ -7855,7 +7855,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                            PRINT_ALL as i32,
                             b"...not using GL_ARB_multitexture, < 2 texture units\n\x00"
                                 as *const u8 as *const libc::c_char,
                         );
@@ -7865,7 +7865,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...ignoring GL_ARB_multitexture\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -7873,12 +7873,12 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...GL_ARB_multitexture not found\n\x00" as *const u8 as *const libc::c_char,
             );
         }
         // GL_EXT_compiled_vertex_array
-        if crate::stdlib::SDL_GL_ExtensionSupported(
+        if SDL_GL_ExtensionSupported(
             b"GL_EXT_compiled_vertex_array\x00" as *const u8 as *const libc::c_char,
         ) as u64
             != 0
@@ -7887,7 +7887,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...using GL_EXT_compiled_vertex_array\n\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -7895,24 +7895,24 @@ unsafe extern "C" fn GLimp_InitExtensions(
                     *mut libc::c_void,
                     Option<
                         unsafe extern "C" fn(
-                            _: crate::stdlib::GLint,
-                            _: crate::stdlib::GLint,
+                            _: GLint,
+                            _: GLint,
                         ) -> (),
                     >,
-                >(crate::stdlib::SDL_GL_GetProcAddress(
+                >(SDL_GL_GetProcAddress(
                     b"glLockArraysEXT\x00" as *const u8 as *const libc::c_char,
                 ));
                 qglUnlockArraysEXT = ::std::mem::transmute::<
                     *mut libc::c_void,
                     Option<unsafe extern "C" fn() -> ()>,
-                >(crate::stdlib::SDL_GL_GetProcAddress(
+                >(SDL_GL_GetProcAddress(
                     b"glUnlockArraysEXT\x00" as *const u8 as *const libc::c_char,
                 ));
                 if qglLockArraysEXT.is_none() || qglUnlockArraysEXT.is_none() {
                     crate::src::renderergl1::tr_main::ri
                         .Error
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::ERR_FATAL as i32,
+                        ERR_FATAL as i32,
                         b"bad getprocaddress\x00" as *const u8 as *const libc::c_char,
                     );
                 }
@@ -7920,7 +7920,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...ignoring GL_EXT_compiled_vertex_array\n\x00" as *const u8
                         as *const libc::c_char,
                 );
@@ -7929,30 +7929,30 @@ unsafe extern "C" fn GLimp_InitExtensions(
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...GL_EXT_compiled_vertex_array not found\n\x00" as *const u8
                     as *const libc::c_char,
             );
         }
     }
     crate::src::renderergl1::tr_init::textureFilterAnisotropic =
-        crate::src::qcommon::q_shared::qfalse;
-    if crate::stdlib::SDL_GL_ExtensionSupported(
+        qfalse;
+    if SDL_GL_ExtensionSupported(
         b"GL_EXT_texture_filter_anisotropic\x00" as *const u8 as *const libc::c_char,
     ) as u64
         != 0
     {
         if (*crate::src::renderergl1::tr_init::r_ext_texture_filter_anisotropic).integer != 0 {
             qglGetIntegerv.expect("non-null function pointer")(
-                0x84ff as i32 as crate::stdlib::GLenum,
+                0x84ff as i32 as GLenum,
                 &mut crate::src::renderergl1::tr_init::maxAnisotropy as *mut i32
-                    as *mut crate::stdlib::GLint,
+                    as *mut GLint,
             );
             if crate::src::renderergl1::tr_init::maxAnisotropy <= 0 as i32 {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...GL_EXT_texture_filter_anisotropic not properly supported!\n\x00"
                         as *const u8 as *const libc::c_char,
                 );
@@ -7961,19 +7961,19 @@ unsafe extern "C" fn GLimp_InitExtensions(
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"...using GL_EXT_texture_filter_anisotropic (max: %i)\n\x00" as *const u8
                         as *const libc::c_char,
                     crate::src::renderergl1::tr_init::maxAnisotropy,
                 );
                 crate::src::renderergl1::tr_init::textureFilterAnisotropic =
-                    crate::src::qcommon::q_shared::qtrue
+                    qtrue
             }
         } else {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"...ignoring GL_EXT_texture_filter_anisotropic\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -7982,7 +7982,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"...GL_EXT_texture_filter_anisotropic not found\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -7999,12 +7999,12 @@ of OpenGL
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_shared::qboolean) {
+pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: qboolean) {
     let mut current_block: u64;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+        PRINT_DEVELOPER as i32,
         b"Glimp_Init( )\n\x00" as *const u8 as *const libc::c_char,
     );
     r_allowSoftwareGL = crate::src::renderergl1::tr_main::ri
@@ -8045,7 +8045,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
             .Cvar_Set
             .expect("non-null function pointer")(
             b"r_mode\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 3 as i32,
             ),
@@ -8076,9 +8076,9 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
     if !(GLimp_StartDriverAndSetMode(
         (*crate::src::renderergl1::tr_init::r_mode).integer,
         (*crate::src::renderergl1::tr_init::r_fullscreen).integer
-            as crate::src::qcommon::q_shared::qboolean,
+            as qboolean,
         (*crate::src::renderergl1::tr_init::r_noborder).integer
-            as crate::src::qcommon::q_shared::qboolean,
+            as qboolean,
         fixedFunction,
     ) as u64
         != 0)
@@ -8090,8 +8090,8 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         if !(GLimp_StartDriverAndSetMode(
             (*crate::src::renderergl1::tr_init::r_mode).integer,
             (*crate::src::renderergl1::tr_init::r_fullscreen).integer
-                as crate::src::qcommon::q_shared::qboolean,
-            crate::src::qcommon::q_shared::qfalse,
+                as qboolean,
+            qfalse,
             fixedFunction,
         ) as u64
             != 0)
@@ -8101,7 +8101,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                    PRINT_ALL as i32,
                     b"Setting r_mode %d failed, falling back on r_mode %d\n\x00" as *const u8
                         as *const libc::c_char,
                     (*crate::src::renderergl1::tr_init::r_mode).integer,
@@ -8109,8 +8109,8 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 );
                 if GLimp_StartDriverAndSetMode(
                     3 as i32,
-                    crate::src::qcommon::q_shared::qfalse,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
+                    qfalse,
                     fixedFunction,
                 ) as u64
                     != 0
@@ -8129,7 +8129,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                     crate::src::renderergl1::tr_main::ri
                         .Error
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::ERR_FATAL as i32,
+                        ERR_FATAL as i32,
                         b"GLimp_Init() - could not load OpenGL subsystem\x00" as *const u8
                             as *const libc::c_char,
                     );
@@ -8138,27 +8138,27 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         }
     }
     // These values force the UI to disable driver selection
-    crate::src::renderergl1::tr_init::glConfig.driverType = crate::tr_types_h::GLDRV_ICD;
-    crate::src::renderergl1::tr_init::glConfig.hardwareType = crate::tr_types_h::GLHW_GENERIC;
+    crate::src::renderergl1::tr_init::glConfig.driverType = GLDRV_ICD;
+    crate::src::renderergl1::tr_init::glConfig.hardwareType = GLHW_GENERIC;
     // Only using SDL_SetWindowBrightness to determine if hardware gamma is supported
     crate::src::renderergl1::tr_init::glConfig.deviceSupportsGamma =
         ((*crate::src::renderergl1::tr_init::r_ignorehwgamma).integer == 0
-            && crate::stdlib::SDL_SetWindowBrightness(SDL_window, 1.0f32) >= 0 as i32)
-            as i32 as crate::src::qcommon::q_shared::qboolean;
+            && SDL_SetWindowBrightness(SDL_window, 1.0f32) >= 0 as i32)
+            as i32 as qboolean;
     // get our config strings
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .vendor_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(0x1f00 as i32 as crate::stdlib::GLenum)
+        qglGetString.expect("non-null function pointer")(0x1f00 as i32 as GLenum)
             as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .renderer_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as crate::stdlib::GLenum)
+        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as GLenum)
             as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
@@ -8183,11 +8183,11 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         .wrapping_sub(1 as i32 as libc::c_ulong)
             as usize] = 0 as i32 as libc::c_char
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .version_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as crate::stdlib::GLenum)
+        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as GLenum)
             as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
@@ -8199,15 +8199,15 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         let mut listLength: i32 = 0;
         let mut extension: *const libc::c_char = 0 as *const libc::c_char;
         qglGetIntegerv.expect("non-null function pointer")(
-            0x821d as i32 as crate::stdlib::GLenum,
+            0x821d as i32 as GLenum,
             &mut numExtensions,
         );
         listLength = 0 as i32;
         i = 0 as i32;
         while i < numExtensions {
             extension = qglGetStringi.expect("non-null function pointer")(
-                0x1f03 as i32 as crate::stdlib::GLenum,
-                i as crate::stdlib::GLuint,
+                0x1f03 as i32 as GLenum,
+                i as GLuint,
             ) as *mut libc::c_char;
             extensionLength = crate::stdlib::strlen(extension) as i32;
             if (listLength + extensionLength + 1 as i32) as libc::c_ulong
@@ -8216,7 +8216,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 break;
             }
             if i > 0 as i32 {
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     crate::src::renderergl1::tr_init::glConfig
                         .extensions_string
                         .as_mut_ptr(),
@@ -8225,7 +8225,7 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
                 );
                 listLength += 1
             }
-            crate::src::qcommon::q_shared::Q_strcat(
+            Q_strcat(
                 crate::src::renderergl1::tr_init::glConfig
                     .extensions_string
                     .as_mut_ptr(),
@@ -8236,11 +8236,11 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
             i += 1
         }
     } else {
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             crate::src::renderergl1::tr_init::glConfig
                 .extensions_string
                 .as_mut_ptr(),
-            qglGetString.expect("non-null function pointer")(0x1f03 as i32 as crate::stdlib::GLenum)
+            qglGetString.expect("non-null function pointer")(0x1f03 as i32 as GLenum)
                 as *mut libc::c_char,
             ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
         );
@@ -8338,22 +8338,22 @@ Responsible for doing a swapbuffers
 
 pub unsafe extern "C" fn GLimp_EndFrame() {
     // don't flip if drawing to front buffer
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         (*crate::src::renderergl1::tr_init::r_drawBuffer).string,
         b"GL_FRONT\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32
     {
-        crate::stdlib::SDL_GL_SwapWindow(SDL_window);
+        SDL_GL_SwapWindow(SDL_window);
     }
     if (*crate::src::renderergl1::tr_init::r_fullscreen).modified as u64 != 0 {
         let mut fullscreen: i32 = 0;
-        let mut needToToggle: crate::src::qcommon::q_shared::qboolean =
-            crate::src::qcommon::q_shared::qfalse;
-        let mut sdlToggled: crate::src::qcommon::q_shared::qboolean =
-            crate::src::qcommon::q_shared::qfalse;
+        let mut needToToggle: qboolean =
+            qfalse;
+        let mut sdlToggled: qboolean =
+            qfalse;
         // Find out the current state
-        fullscreen = (crate::stdlib::SDL_GetWindowFlags(SDL_window)
-            & crate::stdlib::SDL_WINDOW_FULLSCREEN as i32 as u32
+        fullscreen = (SDL_GetWindowFlags(SDL_window)
+            & SDL_WINDOW_FULLSCREEN as i32 as u32
             != 0) as i32;
         if (*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0
             && crate::src::renderergl1::tr_main::ri
@@ -8365,7 +8365,7 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
             crate::src::renderergl1::tr_main::ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"Fullscreen not allowed with in_nograb 1\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -8376,23 +8376,23 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
             (*crate::src::renderergl1::tr_init::r_fullscreen).modified =
-                crate::src::qcommon::q_shared::qfalse
+                qfalse
         }
         // Is the state we want different from the current state?
         needToToggle = (((*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0) as i32
-            != fullscreen) as i32 as crate::src::qcommon::q_shared::qboolean;
+            != fullscreen) as i32 as qboolean;
         if needToToggle as u64 != 0 {
-            sdlToggled = (crate::stdlib::SDL_SetWindowFullscreen(
+            sdlToggled = (SDL_SetWindowFullscreen(
                 SDL_window,
-                (*crate::src::renderergl1::tr_init::r_fullscreen).integer as crate::stdlib::Uint32,
+                (*crate::src::renderergl1::tr_init::r_fullscreen).integer as Uint32,
             ) >= 0 as i32) as i32
-                as crate::src::qcommon::q_shared::qboolean;
+                as qboolean;
             // SDL_WM_ToggleFullScreen didn't work, so do it the slow way
             if sdlToggled as u64 == 0 {
                 crate::src::renderergl1::tr_main::ri
                     .Cmd_ExecuteText
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+                    EXEC_APPEND as i32,
                     b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -8401,6 +8401,6 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
                 .expect("non-null function pointer")();
         }
         (*crate::src::renderergl1::tr_init::r_fullscreen).modified =
-            crate::src::qcommon::q_shared::qfalse
+            qfalse
     };
 }

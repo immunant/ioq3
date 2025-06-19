@@ -1935,10 +1935,10 @@ pub unsafe extern "C" fn drft_clear(
 ) {
     if !l.is_null() {
         if !(*l).trigcache.is_null() {
-            ::libc::free((*l).trigcache as *mut libc::c_void);
+            libc::free((*l).trigcache as *mut libc::c_void);
         }
         if !(*l).splitcache.is_null() {
-            ::libc::free((*l).splitcache as *mut libc::c_void);
+            libc::free((*l).splitcache as *mut libc::c_void);
         }
         crate::stdlib::memset(
             l as *mut libc::c_void,

@@ -204,14 +204,14 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn _celt_lpc(
-    mut _lpc: *mut crate::arch_h::opus_val16,
-    mut ac: *const crate::arch_h::opus_val32,
+    mut _lpc: *mut opus_val16,
+    mut ac: *const opus_val32,
     mut p: i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut r: crate::arch_h::opus_val32 = 0.;
-    let mut error: crate::arch_h::opus_val32 = *ac.offset(0 as i32 as isize);
+    let mut r: opus_val32 = 0.;
+    let mut error: opus_val32 = *ac.offset(0 as i32 as isize);
     let mut lpc: *mut f32 = _lpc;
     crate::stdlib::memset(
         lpc as *mut libc::c_void,
@@ -222,7 +222,7 @@ pub unsafe extern "C" fn _celt_lpc(
         i = 0 as i32;
         while i < p {
             /* Sum up this iteration's reflection coefficient */
-            let mut rr: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+            let mut rr: opus_val32 = 0 as i32 as opus_val32;
             j = 0 as i32;
             while j < i {
                 rr += *lpc.offset(j as isize) * *ac.offset((i - j) as isize);
@@ -234,8 +234,8 @@ pub unsafe extern "C" fn _celt_lpc(
             *lpc.offset(i as isize) = r;
             j = 0 as i32;
             while j < i + 1 as i32 >> 1 as i32 {
-                let mut tmp1: crate::arch_h::opus_val32 = 0.;
-                let mut tmp2: crate::arch_h::opus_val32 = 0.;
+                let mut tmp1: opus_val32 = 0.;
+                let mut tmp2: opus_val32 = 0.;
                 tmp1 = *lpc.offset(j as isize);
                 tmp2 = *lpc.offset((i - 1 as i32 - j) as isize);
                 *lpc.offset(j as isize) = tmp1 + r * tmp2;
@@ -254,22 +254,22 @@ pub unsafe extern "C" fn _celt_lpc(
 #[no_mangle]
 
 pub unsafe extern "C" fn celt_fir_c(
-    mut x: *const crate::arch_h::opus_val16,
-    mut num: *const crate::arch_h::opus_val16,
-    mut y: *mut crate::arch_h::opus_val16,
+    mut x: *const opus_val16,
+    mut num: *const opus_val16,
+    mut y: *mut opus_val16,
     mut N: i32,
     mut ord: i32,
     mut _arch: i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut rnum: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
+    let mut rnum: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul(ord as libc::c_ulong) as usize,
     );
-    rnum = fresh19.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    rnum = fresh19.as_mut_ptr() as *mut opus_val16;
     i = 0 as i32;
     while i < ord {
         *rnum.offset(i as isize) = *num.offset((ord - i - 1 as i32) as isize);
@@ -277,7 +277,7 @@ pub unsafe extern "C" fn celt_fir_c(
     }
     i = 0 as i32;
     while i < N - 3 as i32 {
-        let mut sum: [crate::arch_h::opus_val32; 4] = [0.; 4];
+        let mut sum: [opus_val32; 4] = [0.; 4];
         sum[0 as i32 as usize] = *x.offset(i as isize);
         sum[1 as i32 as usize] = *x.offset((i + 1 as i32) as isize);
         sum[2 as i32 as usize] = *x.offset((i + 2 as i32) as isize);
@@ -295,7 +295,7 @@ pub unsafe extern "C" fn celt_fir_c(
         i += 4 as i32
     }
     while i < N {
-        let mut sum_0: crate::arch_h::opus_val32 = *x.offset(i as isize);
+        let mut sum_0: opus_val32 = *x.offset(i as isize);
         j = 0 as i32;
         while j < ord {
             sum_0 = sum_0 + *rnum.offset(j as isize) * *x.offset((i + j - ord) as isize);
@@ -308,30 +308,30 @@ pub unsafe extern "C" fn celt_fir_c(
 #[no_mangle]
 
 pub unsafe extern "C" fn celt_iir(
-    mut _x: *const crate::arch_h::opus_val32,
-    mut den: *const crate::arch_h::opus_val16,
-    mut _y: *mut crate::arch_h::opus_val32,
+    mut _x: *const opus_val32,
+    mut den: *const opus_val16,
+    mut _y: *mut opus_val32,
     mut N: i32,
     mut ord: i32,
-    mut mem: *mut crate::arch_h::opus_val16,
+    mut mem: *mut opus_val16,
     mut _arch: i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut rden: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
-    let mut y: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
+    let mut rden: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut y: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul(ord as libc::c_ulong) as usize,
     );
-    rden = fresh20.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    rden = fresh20.as_mut_ptr() as *mut opus_val16;
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul((N + ord) as libc::c_ulong) as usize,
     );
-    y = fresh21.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    y = fresh21.as_mut_ptr() as *mut opus_val16;
     i = 0 as i32;
     while i < ord {
         *rden.offset(i as isize) = *den.offset((ord - i - 1 as i32) as isize);
@@ -343,13 +343,13 @@ pub unsafe extern "C" fn celt_iir(
         i += 1
     }
     while i < N + ord {
-        *y.offset(i as isize) = 0 as i32 as crate::arch_h::opus_val16;
+        *y.offset(i as isize) = 0 as i32 as opus_val16;
         i += 1
     }
     i = 0 as i32;
     while i < N - 3 as i32 {
         /* Unroll by 4 as if it were an FIR filter */
-        let mut sum: [crate::arch_h::opus_val32; 4] = [0.; 4];
+        let mut sum: [opus_val32; 4] = [0.; 4];
         sum[0 as i32 as usize] = *_x.offset(i as isize);
         sum[1 as i32 as usize] = *_x.offset((i + 1 as i32) as isize);
         sum[2 as i32 as usize] = *_x.offset((i + 2 as i32) as isize);
@@ -379,7 +379,7 @@ pub unsafe extern "C" fn celt_iir(
         i += 4 as i32
     }
     while i < N {
-        let mut sum_0: crate::arch_h::opus_val32 = *_x.offset(i as isize);
+        let mut sum_0: opus_val32 = *_x.offset(i as isize);
         j = 0 as i32;
         while j < ord {
             sum_0 -= *rden.offset(j as isize) * *y.offset((i + j) as isize);
@@ -398,27 +398,27 @@ pub unsafe extern "C" fn celt_iir(
 #[no_mangle]
 
 pub unsafe extern "C" fn _celt_autocorr(
-    mut x: *const crate::arch_h::opus_val16,
-    mut ac: *mut crate::arch_h::opus_val32,
-    mut window: *const crate::arch_h::opus_val16,
+    mut x: *const opus_val16,
+    mut ac: *mut opus_val32,
+    mut window: *const opus_val16,
     mut overlap: i32,
     mut lag: i32,
     mut n: i32,
     mut arch: i32,
 ) -> i32 {
-    let mut d: crate::arch_h::opus_val32 = 0.;
+    let mut d: opus_val32 = 0.;
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut fastN: i32 = n - lag;
     let mut shift: i32 = 0;
-    let mut xptr: *const crate::arch_h::opus_val16 = 0 as *const crate::arch_h::opus_val16;
-    let mut xx: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
+    let mut xptr: *const opus_val16 = 0 as *const opus_val16;
+    let mut xx: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul(n as libc::c_ulong) as usize,
     );
-    xx = fresh22.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    xx = fresh22.as_mut_ptr() as *mut opus_val16;
     if overlap == 0 as i32 {
         xptr = x
     } else {
@@ -437,7 +437,7 @@ pub unsafe extern "C" fn _celt_autocorr(
         xptr = xx
     }
     shift = 0 as i32;
-    crate::src::opus_1_2_1::celt::pitch::celt_pitch_xcorr_c(
+    celt_pitch_xcorr_c(
         xptr,
         xptr,
         ac,
@@ -448,7 +448,7 @@ pub unsafe extern "C" fn _celt_autocorr(
     k = 0 as i32;
     while k <= lag {
         i = k + fastN;
-        d = 0 as i32 as crate::arch_h::opus_val32;
+        d = 0 as i32 as opus_val32;
         while i < n {
             d = d + *xptr.offset(i as isize) * *xptr.offset((i - k) as isize);
             i += 1

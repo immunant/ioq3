@@ -121,8 +121,8 @@ pub type aas_tracestack_t = aas_tracestack_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_tracestack_s {
-    pub start: crate::src::qcommon::q_shared::vec3_t,
-    pub end: crate::src::qcommon::q_shared::vec3_t,
+    pub start: vec3_t,
+    pub end: vec3_t,
     pub planenum: i32,
     pub nodenum: i32,
 }
@@ -149,43 +149,43 @@ pub static mut numaaslinks: i32 = 0;
 
 pub unsafe extern "C" fn AAS_PresenceTypeBoundingBox(
     mut presencetype: i32,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
 ) {
     let mut index: i32 = 0;
     //bounding box size for each presence type
-    let mut boxmins: [crate::src::qcommon::q_shared::vec3_t; 3] = [
+    let mut boxmins: [vec3_t; 3] = [
         [
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
+            0 as i32 as vec_t,
+            0 as i32 as vec_t,
+            0 as i32 as vec_t,
         ],
         [
-            -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-            -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-            -(24 as i32) as crate::src::qcommon::q_shared::vec_t,
+            -(15 as i32) as vec_t,
+            -(15 as i32) as vec_t,
+            -(24 as i32) as vec_t,
         ],
         [
-            -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-            -(15 as i32) as crate::src::qcommon::q_shared::vec_t,
-            -(24 as i32) as crate::src::qcommon::q_shared::vec_t,
+            -(15 as i32) as vec_t,
+            -(15 as i32) as vec_t,
+            -(24 as i32) as vec_t,
         ],
     ]; //end if
-    let mut boxmaxs: [crate::src::qcommon::q_shared::vec3_t; 3] = [
+    let mut boxmaxs: [vec3_t; 3] = [
         [
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
-            0 as i32 as crate::src::qcommon::q_shared::vec_t,
+            0 as i32 as vec_t,
+            0 as i32 as vec_t,
+            0 as i32 as vec_t,
         ],
         [
-            15 as i32 as crate::src::qcommon::q_shared::vec_t,
-            15 as i32 as crate::src::qcommon::q_shared::vec_t,
-            32 as i32 as crate::src::qcommon::q_shared::vec_t,
+            15 as i32 as vec_t,
+            15 as i32 as vec_t,
+            32 as i32 as vec_t,
         ],
         [
-            15 as i32 as crate::src::qcommon::q_shared::vec_t,
-            15 as i32 as crate::src::qcommon::q_shared::vec_t,
-            8 as i32 as crate::src::qcommon::q_shared::vec_t,
+            15 as i32 as vec_t,
+            15 as i32 as vec_t,
+            8 as i32 as vec_t,
         ],
     ];
     if presencetype == 2 as i32 {
@@ -235,23 +235,23 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         crate::src::botlib::be_aas_main::aasworld.linkheap =
             crate::src::botlib::l_memory::GetHunkMemory(
                 (max_aaslinks as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::be_aas_def_h::aas_link_t,
+                    aas_link_t,
                 >() as libc::c_ulong),
-            ) as *mut crate::be_aas_def_h::aas_link_t
+            ) as *mut aas_link_t
     }
     //link the links on the heap
     let ref mut fresh0 = (*crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset(0 as i32 as isize))
     .prev_ent; //end for
-    *fresh0 = 0 as *mut crate::be_aas_def_h::aas_link_s;
+    *fresh0 = 0 as *mut aas_link_s;
     let ref mut fresh1 = (*crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset(0 as i32 as isize))
     .next_ent;
     *fresh1 = &mut *crate::src::botlib::be_aas_main::aasworld
         .linkheap
-        .offset(1 as i32 as isize) as *mut crate::be_aas_def_h::aas_link_t;
+        .offset(1 as i32 as isize) as *mut aas_link_t;
     i = 1 as i32;
     while i < max_aaslinks - 1 as i32 {
         let ref mut fresh2 = (*crate::src::botlib::be_aas_main::aasworld
@@ -261,7 +261,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         *fresh2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .linkheap
             .offset((i - 1 as i32) as isize)
-            as *mut crate::be_aas_def_h::aas_link_t;
+            as *mut aas_link_t;
         let ref mut fresh3 = (*crate::src::botlib::be_aas_main::aasworld
             .linkheap
             .offset(i as isize))
@@ -269,7 +269,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         *fresh3 = &mut *crate::src::botlib::be_aas_main::aasworld
             .linkheap
             .offset((i + 1 as i32) as isize)
-            as *mut crate::be_aas_def_h::aas_link_t;
+            as *mut aas_link_t;
         i += 1
     }
     let ref mut fresh4 = (*crate::src::botlib::be_aas_main::aasworld
@@ -279,17 +279,17 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
     *fresh4 = &mut *crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset((max_aaslinks - 2 as i32) as isize)
-        as *mut crate::be_aas_def_h::aas_link_t;
+        as *mut aas_link_t;
     let ref mut fresh5 = (*crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset((max_aaslinks - 1 as i32) as isize))
     .next_ent;
-    *fresh5 = 0 as *mut crate::be_aas_def_h::aas_link_s;
+    *fresh5 = 0 as *mut aas_link_s;
     //pointer to the first free link
     crate::src::botlib::be_aas_main::aasworld.freelinks =
         &mut *crate::src::botlib::be_aas_main::aasworld
             .linkheap
-            .offset(0 as i32 as isize) as *mut crate::be_aas_def_h::aas_link_t;
+            .offset(0 as i32 as isize) as *mut aas_link_t;
     //
     numaaslinks = max_aaslinks;
 }
@@ -308,7 +308,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkHeap() {
             crate::src::botlib::be_aas_main::aasworld.linkheap as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.linkheap = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    crate::src::botlib::be_aas_main::aasworld.linkheap = 0 as *mut aas_link_t;
     crate::src::botlib::be_aas_main::aasworld.linkheapsize = 0 as i32;
 }
 //end of the function AAS_FreeAASLinkHeap
@@ -320,8 +320,8 @@ pub unsafe extern "C" fn AAS_FreeAASLinkHeap() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut crate::be_aas_def_h::aas_link_t {
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t; //end if
+pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut aas_link_t {
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t; //end if
     link = crate::src::botlib::be_aas_main::aasworld.freelinks; //end if
     if link.is_null() {
         if crate::src::botlib::be_interface::botDeveloper != 0 {
@@ -333,7 +333,7 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut crate::be_aas_def_h::aas_lin
                     as *mut libc::c_char,
             );
         }
-        return 0 as *mut crate::be_aas_def_h::aas_link_t;
+        return 0 as *mut aas_link_t;
     }
     if !crate::src::botlib::be_aas_main::aasworld
         .freelinks
@@ -347,7 +347,7 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut crate::be_aas_def_h::aas_lin
         .is_null()
     {
         (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent =
-            0 as *mut crate::be_aas_def_h::aas_link_s
+            0 as *mut aas_link_s
     }
     numaaslinks -= 1;
     return link;
@@ -361,17 +361,17 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut crate::be_aas_def_h::aas_lin
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_DeAllocAASLink(mut link: *mut crate::be_aas_def_h::aas_link_t) {
+pub unsafe extern "C" fn AAS_DeAllocAASLink(mut link: *mut aas_link_t) {
     if !crate::src::botlib::be_aas_main::aasworld
         .freelinks
         .is_null()
     {
         (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent = link
     }
-    (*link).prev_ent = 0 as *mut crate::be_aas_def_h::aas_link_s;
+    (*link).prev_ent = 0 as *mut aas_link_s;
     (*link).next_ent = crate::src::botlib::be_aas_main::aasworld.freelinks;
-    (*link).prev_area = 0 as *mut crate::be_aas_def_h::aas_link_s;
-    (*link).next_area = 0 as *mut crate::be_aas_def_h::aas_link_s;
+    (*link).prev_area = 0 as *mut aas_link_s;
+    (*link).next_area = 0 as *mut aas_link_s;
     crate::src::botlib::be_aas_main::aasworld.freelinks = link;
     numaaslinks += 1;
 }
@@ -399,9 +399,9 @@ pub unsafe extern "C" fn AAS_InitAASLinkedEntities() {
     crate::src::botlib::be_aas_main::aasworld.arealinkedentities =
         crate::src::botlib::l_memory::GetClearedHunkMemory(
             (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<*mut crate::be_aas_def_h::aas_link_t>() as libc::c_ulong,
+                ::std::mem::size_of::<*mut aas_link_t>() as libc::c_ulong,
             ),
-        ) as *mut *mut crate::be_aas_def_h::aas_link_t;
+        ) as *mut *mut aas_link_t;
 }
 //end of the function AAS_InitAASLinkedEntities
 //===========================================================================
@@ -422,7 +422,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
         );
     }
     crate::src::botlib::be_aas_main::aasworld.arealinkedentities =
-        0 as *mut *mut crate::be_aas_def_h::aas_link_t;
+        0 as *mut *mut aas_link_t;
 }
 //end of the function AAS_InitAASLinkedEntities
 //===========================================================================
@@ -435,12 +435,12 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_PointAreaNum(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
 ) -> i32 {
     let mut nodenum: i32 = 0; //end if
-    let mut dist: crate::src::qcommon::q_shared::vec_t = 0.;
-    let mut node: *mut crate::aasfile_h::aas_node_t = 0 as *mut crate::aasfile_h::aas_node_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut dist: vec_t = 0.;
+    let mut node: *mut aas_node_t = 0 as *mut aas_node_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -458,12 +458,12 @@ pub unsafe extern "C" fn AAS_PointAreaNum(
         //AAS_SAMPLE_DEBUG
         node = &mut *crate::src::botlib::be_aas_main::aasworld
             .nodes
-            .offset(nodenum as isize) as *mut crate::aasfile_h::aas_node_t;
+            .offset(nodenum as isize) as *mut aas_node_t;
         //AAS_SAMPLE_DEBUG
         plane = &mut *crate::src::botlib::be_aas_main::aasworld
             .planes
             .offset((*node).planenum as isize)
-            as *mut crate::aasfile_h::aas_plane_t; //end if
+            as *mut aas_plane_t; //end if
         dist = *point.offset(0 as i32 as isize) * (*plane).normal[0 as i32 as usize]
             + *point.offset(1 as i32 as isize) * (*plane).normal[1 as i32 as usize]
             + *point.offset(2 as i32 as isize) * (*plane).normal[2 as i32 as usize]
@@ -490,7 +490,7 @@ pub unsafe extern "C" fn AAS_PointAreaNum(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_PointReachabilityAreaIndex(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
 ) -> i32 {
     let mut areanum: i32 = 0; //end if
     let mut cluster: i32 = 0; //end for
@@ -610,7 +610,7 @@ pub unsafe extern "C" fn AAS_AreaPresenceType(mut areanum: i32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_PointPresenceType(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
 ) -> i32 {
     let mut areanum: i32 = 0;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
@@ -644,13 +644,13 @@ pub unsafe extern "C" fn AAS_PointPresenceType(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BoxOriginDistanceFromPlane(
-    mut normal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut normal: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
     mut side: i32,
-) -> crate::src::qcommon::q_shared::vec_t {
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+) -> vec_t {
+    let mut v1: vec3_t = [0.; 3];
+    let mut v2: vec3_t = [0.; 3];
     let mut i: i32 = 0;
     //swap maxs and mins when on the other side of the plane
     if side != 0 {
@@ -664,7 +664,7 @@ pub unsafe extern "C" fn AAS_BoxOriginDistanceFromPlane(
             } else if (*normal.offset(i as isize) as f64) < -0.001f64 {
                 v1[i as usize] = *mins.offset(i as isize)
             } else {
-                v1[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+                v1[i as usize] = 0 as i32 as vec_t
             }
             i += 1
         }
@@ -679,7 +679,7 @@ pub unsafe extern "C" fn AAS_BoxOriginDistanceFromPlane(
             } else if (*normal.offset(i as isize) as f64) < -0.001f64 {
                 v1[i as usize] = *maxs.offset(i as isize)
             } else {
-                v1[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+                v1[i as usize] = 0 as i32 as vec_t
             }
             i += 1
         }
@@ -706,22 +706,22 @@ pub unsafe extern "C" fn AAS_BoxOriginDistanceFromPlane(
 
 pub unsafe extern "C" fn AAS_AreaEntityCollision(
     mut areanum: i32,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut presencetype: i32,
     mut passent: i32,
-    mut trace: *mut crate::be_aas_h::aas_trace_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut trace: *mut aas_trace_t,
+) -> qboolean {
     let mut collision: i32 = 0; //make compiler happy
-    let mut boxmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut boxmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut bsptrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut boxmins: vec3_t = [0.; 3];
+    let mut boxmaxs: vec3_t = [0.; 3];
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut bsptrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -730,7 +730,7 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -740,13 +740,13 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
     };
     AAS_PresenceTypeBoundingBox(presencetype, boxmins.as_mut_ptr(), boxmaxs.as_mut_ptr());
     crate::stdlib::memset(
-        &mut bsptrace as *mut crate::botlib_h::bsp_trace_t as *mut libc::c_void,
+        &mut bsptrace as *mut bsp_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::botlib_h::bsp_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<bsp_trace_t>() as libc::c_ulong,
     );
     //assume no collision
     bsptrace.fraction = 1 as i32 as f32; //end for
-    collision = crate::src::qcommon::q_shared::qfalse as i32;
+    collision = qfalse as i32;
     link = *crate::src::botlib::be_aas_main::aasworld
         .arealinkedentities
         .offset(areanum as isize);
@@ -761,11 +761,11 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
                 boxmaxs.as_mut_ptr(),
                 end,
                 1 as i32 | 0x10000 as i32,
-                &mut bsptrace as *mut _ as *mut crate::botlib_h::bsp_trace_s,
+                &mut bsptrace as *mut _ as *mut bsp_trace_s,
             ) as u64
                 != 0
             {
-                collision = crate::src::qcommon::q_shared::qtrue as i32
+                collision = qtrue as i32
             }
         }
         link = (*link).next_ent
@@ -779,9 +779,9 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
         (*trace).endpos[2 as i32 as usize] = bsptrace.endpos[2 as i32 as usize];
         (*trace).area = 0 as i32;
         (*trace).planenum = 0 as i32;
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 //end of the function AAS_AreaEntityCollision
 //===========================================================================
@@ -794,22 +794,22 @@ pub unsafe extern "C" fn AAS_AreaEntityCollision(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_TraceClientBBox(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut presencetype: i32,
     mut passent: i32,
-) -> crate::be_aas_h::aas_trace_t {
+) -> aas_trace_t {
     let mut side: i32 = 0;
     let mut nodenum: i32 = 0;
     let mut tmpplanenum: i32 = 0;
     let mut front: f32 = 0.;
     let mut back: f32 = 0.;
     let mut frac: f32 = 0.;
-    let mut cur_start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cur_end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cur_mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut cur_start: vec3_t = [0.; 3];
+    let mut cur_end: vec3_t = [0.; 3];
+    let mut cur_mid: vec3_t = [0.; 3];
+    let mut v1: vec3_t = [0.; 3];
+    let mut v2: vec3_t = [0.; 3];
     let mut tracestack: [aas_tracestack_t; 127] = [aas_tracestack_t {
         start: [0.; 3],
         end: [0.; 3],
@@ -817,10 +817,10 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
         nodenum: 0,
     }; 127];
     let mut tstack_p: *mut aas_tracestack_t = 0 as *mut aas_tracestack_t;
-    let mut aasnode: *mut crate::aasfile_h::aas_node_t = 0 as *mut crate::aasfile_h::aas_node_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut trace: crate::be_aas_h::aas_trace_t = crate::be_aas_h::aas_trace_t {
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut trace: aas_trace_t = aas_trace_t {
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
         ent: 0,
@@ -830,9 +830,9 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
     };
     //clear the trace structure
     crate::stdlib::memset(
-        &mut trace as *mut crate::be_aas_h::aas_trace_t as *mut libc::c_void,
+        &mut trace as *mut aas_trace_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::be_aas_h::aas_trace_t>() as libc::c_ulong,
+        ::std::mem::size_of::<aas_trace_t>() as libc::c_ulong,
     );
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return trace;
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
         if tstack_p < tracestack.as_mut_ptr() {
             tstack_p = tstack_p.offset(1); //end if
                                            //nothing was hit
-            trace.startsolid = crate::src::qcommon::q_shared::qfalse;
+            trace.startsolid = qfalse;
             trace.fraction = 1.0f64 as f32;
             //endpos is the end of the line
             trace.endpos[0 as i32 as usize] = *end.offset(0 as i32 as isize);
@@ -895,13 +895,13 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     //NOTE: no need for epsilons because the points will be
                     //exactly the same when they're both the start point
                     //end else
-                    trace.startsolid = crate::src::qcommon::q_shared::qtrue; //end if
+                    trace.startsolid = qtrue; //end if
                     trace.fraction = 0.0f64 as f32;
-                    v1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    v1[2 as i32 as usize] = 0 as i32 as vec_t;
                     v1[1 as i32 as usize] = v1[2 as i32 as usize];
                     v1[0 as i32 as usize] = v1[1 as i32 as usize]
                 } else {
-                    trace.startsolid = crate::src::qcommon::q_shared::qfalse;
+                    trace.startsolid = qfalse;
                     v1[0 as i32 as usize] =
                         *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
                     v1[1 as i32 as usize] =
@@ -915,22 +915,22 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     v2[2 as i32 as usize] =
                         (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                     trace.fraction = VectorLength(
-                        v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
-                    ) / crate::src::qcommon::q_math::VectorNormalize(
+                        v2.as_mut_ptr() as *const vec_t
+                    ) / VectorNormalize(
                         v1.as_mut_ptr(),
                     );
                     (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
                         as f64
                         + v1[0 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*tstack_p).start[1 as i32 as usize] = ((*tstack_p).start[1 as i32 as usize]
                         as f64
                         + v1[1 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*tstack_p).start[2 as i32 as usize] = ((*tstack_p).start[2 as i32 as usize]
                         as f64
                         + v1[2 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t
+                        as vec_t
                 }
                 trace.endpos[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
                 trace.endpos[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -943,7 +943,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
                     .offset(trace.planenum as isize)
-                    as *mut crate::aasfile_h::aas_plane_t; //end if
+                    as *mut aas_plane_t; //end if
                 if v1[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                     + v1[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                     + v1[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
@@ -978,9 +978,9 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                             v2[2 as i32 as usize] =
                                 trace.endpos[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                             trace.fraction = VectorLength(
-                                v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                                v2.as_mut_ptr() as *const vec_t
                             ) / VectorLength(
-                                v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                                v1.as_mut_ptr() as *const vec_t
                             )
                         }
                         return trace;
@@ -1002,13 +1002,13 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     && (*tstack_p).start[2 as i32 as usize] == *start.offset(2 as i32 as isize)
                 {
                     //end else
-                    trace.startsolid = crate::src::qcommon::q_shared::qtrue; //end if
+                    trace.startsolid = qtrue; //end if
                     trace.fraction = 0.0f64 as f32; //hit solid leaf
-                    v1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    v1[2 as i32 as usize] = 0 as i32 as vec_t;
                     v1[1 as i32 as usize] = v1[2 as i32 as usize];
                     v1[0 as i32 as usize] = v1[1 as i32 as usize]
                 } else {
-                    trace.startsolid = crate::src::qcommon::q_shared::qfalse;
+                    trace.startsolid = qfalse;
                     v1[0 as i32 as usize] =
                         *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
                     v1[1 as i32 as usize] =
@@ -1022,22 +1022,22 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     v2[2 as i32 as usize] =
                         (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                     trace.fraction = VectorLength(
-                        v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
-                    ) / crate::src::qcommon::q_math::VectorNormalize(
+                        v2.as_mut_ptr() as *const vec_t
+                    ) / VectorNormalize(
                         v1.as_mut_ptr(),
                     );
                     (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
                         as f64
                         + v1[0 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*tstack_p).start[1 as i32 as usize] = ((*tstack_p).start[1 as i32 as usize]
                         as f64
                         + v1[1 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*tstack_p).start[2 as i32 as usize] = ((*tstack_p).start[2 as i32 as usize]
                         as f64
                         + v1[2 as i32 as usize] as f64 * -0.125f64)
-                        as crate::src::qcommon::q_shared::vec_t
+                        as vec_t
                 }
                 trace.endpos[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
                 trace.endpos[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -1050,7 +1050,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
                     .offset(trace.planenum as isize)
-                    as *mut crate::aasfile_h::aas_plane_t;
+                    as *mut aas_plane_t;
                 if v1[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                     + v1[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                     + v1[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
@@ -1065,7 +1065,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
                 .offset(nodenum as isize)
-                as *mut crate::aasfile_h::aas_node_t;
+                as *mut aas_node_t;
             //start point of current line to test against node
             cur_start[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
             cur_start[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -1078,7 +1078,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset((*aasnode).planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //end default
             match (*plane).type_0 {
                 _ => {}
@@ -1235,10 +1235,10 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_TraceAreas(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut areas: *mut i32,
-    mut points: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut points: *mut vec3_t,
     mut maxareas: i32,
 ) -> i32 {
     let mut side: i32 = 0;
@@ -1248,9 +1248,9 @@ pub unsafe extern "C" fn AAS_TraceAreas(
     let mut front: f32 = 0.;
     let mut back: f32 = 0.;
     let mut frac: f32 = 0.;
-    let mut cur_start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cur_end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cur_mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut cur_start: vec3_t = [0.; 3];
+    let mut cur_end: vec3_t = [0.; 3];
+    let mut cur_mid: vec3_t = [0.; 3];
     let mut tracestack: [aas_tracestack_t; 127] = [aas_tracestack_t {
         start: [0.; 3],
         end: [0.; 3],
@@ -1258,8 +1258,8 @@ pub unsafe extern "C" fn AAS_TraceAreas(
         nodenum: 0,
     }; 127];
     let mut tstack_p: *mut aas_tracestack_t = 0 as *mut aas_tracestack_t;
-    let mut aasnode: *mut crate::aasfile_h::aas_node_t = 0 as *mut crate::aasfile_h::aas_node_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     numareas = 0 as i32;
     *areas.offset(0 as i32 as isize) = 0 as i32;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
@@ -1316,7 +1316,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
                 .offset(nodenum as isize)
-                as *mut crate::aasfile_h::aas_node_t;
+                as *mut aas_node_t;
             //start point of current line to test against node
             cur_start[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
             cur_start[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -1329,7 +1329,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset((*aasnode).planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //end default
             match (*plane).type_0 {
                 _ => {}
@@ -1487,22 +1487,22 @@ pub unsafe extern "C" fn AAS_TraceAreas(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_InsideFace(
-    mut face: *mut crate::aasfile_h::aas_face_t,
-    mut pnormal: *mut crate::src::qcommon::q_shared::vec_t,
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut face: *mut aas_face_t,
+    mut pnormal: *mut vec_t,
+    mut point: *mut vec_t,
     mut epsilon: f32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: i32 = 0;
     let mut firstvertex: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut v0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut edgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut pointvec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sepnormal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
+    let mut v0: vec3_t = [0.; 3];
+    let mut edgevec: vec3_t = [0.; 3];
+    let mut pointvec: vec3_t = [0.; 3];
+    let mut sepnormal: vec3_t = [0.; 3];
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
     //AAS_SAMPLE_DEBUG
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     } //end for
     i = 0 as i32;
     while i < (*face).numedges {
@@ -1511,8 +1511,8 @@ pub unsafe extern "C" fn AAS_InsideFace(
             .offset(((*face).firstedge + i) as isize);
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
-            as *mut crate::aasfile_h::aas_edge_t;
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut aas_edge_t;
         //get the first vertex of the edge
         firstvertex = (edgenum < 0 as i32) as i32;
         v0[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -1567,11 +1567,11 @@ pub unsafe extern "C" fn AAS_InsideFace(
             + pointvec[2 as i32 as usize] * sepnormal[2 as i32 as usize]
             < -epsilon
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function AAS_InsideFace
 //===========================================================================
@@ -1584,31 +1584,31 @@ pub unsafe extern "C" fn AAS_InsideFace(
 
 pub unsafe extern "C" fn AAS_PointInsideFace(
     mut facenum: i32,
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
     mut epsilon: f32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: i32 = 0;
     let mut firstvertex: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut v1: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut v2: *mut crate::src::qcommon::q_shared::vec_t =
-        0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut edgevec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut pointvec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sepnormal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut edge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
+    let mut v1: *mut vec_t =
+        0 as *mut vec_t;
+    let mut v2: *mut vec_t =
+        0 as *mut vec_t;
+    let mut edgevec: vec3_t = [0.; 3];
+    let mut pointvec: vec3_t = [0.; 3];
+    let mut sepnormal: vec3_t = [0.; 3];
+    let mut edge: *mut aas_edge_t = 0 as *mut aas_edge_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
-        .offset(facenum as isize) as *mut crate::aasfile_h::aas_face_t;
+        .offset(facenum as isize) as *mut aas_face_t;
     plane = &mut *crate::src::botlib::be_aas_main::aasworld
         .planes
-        .offset((*face).planenum as isize) as *mut crate::aasfile_h::aas_plane_t;
+        .offset((*face).planenum as isize) as *mut aas_plane_t;
     //
     i = 0 as i32; //end for
     while i < (*face).numedges {
@@ -1617,8 +1617,8 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
             .offset(((*face).firstedge + i) as isize);
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
-            as *mut crate::aasfile_h::aas_edge_t;
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut aas_edge_t;
         //get the first vertex of the edge
         firstvertex = (edgenum < 0 as i32) as i32;
         v1 = (*crate::src::botlib::be_aas_main::aasworld
@@ -1642,8 +1642,8 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
             *point.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
         //
         CrossProduct(
-            edgevec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*plane).normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            edgevec.as_mut_ptr() as *const vec_t,
+            (*plane).normal.as_mut_ptr() as *const vec_t,
             sepnormal.as_mut_ptr(),
         );
         //
@@ -1652,11 +1652,11 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
             + pointvec[2 as i32 as usize] * sepnormal[2 as i32 as usize]
             < -epsilon
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 //end of the function AAS_PointInsideFace
 //===========================================================================
@@ -1670,24 +1670,24 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
 
 pub unsafe extern "C" fn AAS_AreaGroundFace(
     mut areanum: i32,
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-) -> *mut crate::aasfile_h::aas_face_t {
+    mut point: *mut vec_t,
+) -> *mut aas_face_t {
     let mut i: i32 = 0; //end for
     let mut facenum: i32 = 0;
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
+    let mut normal: vec3_t = [0.; 3];
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut crate::aasfile_h::aas_face_t;
+        return 0 as *mut aas_face_t;
     }
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset(areanum as isize) as *mut aas_area_t;
     i = 0 as i32;
     while i < (*area).numfaces {
         facenum = *crate::src::botlib::be_aas_main::aasworld
@@ -1695,8 +1695,8 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
             .offset(((*area).firstface + i) as isize);
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut aas_face_t;
         //end if
         if (*face).faceflags & 4 as i32 != 0 {
             //if this is a ground face
@@ -1722,7 +1722,7 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
         }
         i += 1
     }
-    return 0 as *mut crate::aasfile_h::aas_face_t;
+    return 0 as *mut aas_face_t;
 }
 //returns the area the point is in
 //returns the area the point is in
@@ -1742,16 +1742,16 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
 
 pub unsafe extern "C" fn AAS_FacePlane(
     mut facenum: i32,
-    mut normal: *mut crate::src::qcommon::q_shared::vec_t,
+    mut normal: *mut vec_t,
     mut dist: *mut f32,
 ) {
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     plane = &mut *crate::src::botlib::be_aas_main::aasworld.planes.offset(
         (*crate::src::botlib::be_aas_main::aasworld
             .faces
             .offset(facenum as isize))
         .planenum as isize,
-    ) as *mut crate::aasfile_h::aas_plane_t;
+    ) as *mut aas_plane_t;
     *normal.offset(0 as i32 as isize) = (*plane).normal[0 as i32 as usize];
     *normal.offset(1 as i32 as isize) = (*plane).normal[1 as i32 as usize];
     *normal.offset(2 as i32 as isize) = (*plane).normal[2 as i32 as usize];
@@ -1768,24 +1768,24 @@ pub unsafe extern "C" fn AAS_FacePlane(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_TraceEndFace(
-    mut trace: *mut crate::be_aas_h::aas_trace_t,
-) -> *mut crate::aasfile_h::aas_face_t {
+    mut trace: *mut aas_trace_t,
+) -> *mut aas_face_t {
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
-    let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
-    let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
-    let mut firstface: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
+    let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
+    let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
+    let mut firstface: *mut aas_face_t = 0 as *mut aas_face_t;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut crate::aasfile_h::aas_face_t;
+        return 0 as *mut aas_face_t;
     }
     //if started in solid no face was hit
     if (*trace).startsolid as u64 != 0 {
-        return 0 as *mut crate::aasfile_h::aas_face_t;
+        return 0 as *mut aas_face_t;
     }
     //trace->lastarea is the last area the trace was in
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
-        .offset((*trace).lastarea as isize) as *mut crate::aasfile_h::aas_area_t;
+        .offset((*trace).lastarea as isize) as *mut aas_area_t;
     //check which face the trace.endpos was in
     i = 0 as i32; //end for
     while i < (*area).numfaces {
@@ -1794,8 +1794,8 @@ pub unsafe extern "C" fn AAS_TraceEndFace(
             .offset(((*area).firstface + i) as isize);
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
-            as *mut crate::aasfile_h::aas_face_t;
+            .offset((libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut aas_face_t;
         //end if
         if (*face).planenum & !(1 as i32) == (*trace).planenum & !(1 as i32) {
             //if the face is in the same plane as the trace end point
@@ -1856,15 +1856,15 @@ pub unsafe extern "C" fn AAS_TraceEndFace(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BoxOnPlaneSide2(
-    mut absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p: *mut crate::aasfile_h::aas_plane_t,
+    mut absmins: *mut vec_t,
+    mut absmaxs: *mut vec_t,
+    mut p: *mut aas_plane_t,
 ) -> i32 {
     let mut i: i32 = 0; //end for
     let mut sides: i32 = 0; //end if
     let mut dist1: f32 = 0.;
     let mut dist2: f32 = 0.;
-    let mut corners: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
+    let mut corners: [vec3_t; 2] = [[0.; 3]; 2];
     i = 0 as i32;
     while i < 3 as i32 {
         if (*p).normal[i as usize] < 0 as i32 as f32 {
@@ -1912,10 +1912,10 @@ pub unsafe extern "C" fn AAS_BoxOnPlaneSide2(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_UnlinkFromAreas(mut areas: *mut crate::be_aas_def_h::aas_link_t) {
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut nextlink: *mut crate::be_aas_def_h::aas_link_t =
-        0 as *mut crate::be_aas_def_h::aas_link_t;
+pub unsafe extern "C" fn AAS_UnlinkFromAreas(mut areas: *mut aas_link_t) {
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut nextlink: *mut aas_link_t =
+        0 as *mut aas_link_t;
     link = areas;
     while !link.is_null() {
         //next area the entity is linked in
@@ -1941,18 +1941,18 @@ pub unsafe extern "C" fn AAS_UnlinkFromAreas(mut areas: *mut crate::be_aas_def_h
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AASLinkEntity(
-    mut absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut absmins: *mut vec_t,
+    mut absmaxs: *mut vec_t,
     mut entnum: i32,
-) -> *mut crate::be_aas_def_h::aas_link_t {
+) -> *mut aas_link_t {
     let mut side: i32 = 0; //end if
     let mut nodenum: i32 = 0;
     let mut linkstack: [aas_linkstack_t; 128] = [aas_linkstack_t { nodenum: 0 }; 128];
     let mut lstack_p: *mut aas_linkstack_t = 0 as *mut aas_linkstack_t;
-    let mut aasnode: *mut crate::aasfile_h::aas_node_t = 0 as *mut crate::aasfile_h::aas_node_t;
-    let mut plane: *mut crate::aasfile_h::aas_plane_t = 0 as *mut crate::aasfile_h::aas_plane_t;
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
-    let mut areas: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    let mut aasnode: *mut aas_node_t = 0 as *mut aas_node_t;
+    let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
+    let mut areas: *mut aas_link_t = 0 as *mut aas_link_t;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -1961,9 +1961,9 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             b"AAS_LinkEntity: aas not loaded\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        return 0 as *mut crate::be_aas_def_h::aas_link_t;
+        return 0 as *mut aas_link_t;
     }
-    areas = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    areas = 0 as *mut aas_link_t;
     //
     lstack_p = linkstack.as_mut_ptr();
     //we start with the whole line on the stack
@@ -2006,14 +2006,14 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             (*link).entnum = entnum;
             (*link).areanum = -nodenum;
             //put the link into the double linked area list of the entity
-            (*link).prev_area = 0 as *mut crate::be_aas_def_h::aas_link_s;
+            (*link).prev_area = 0 as *mut aas_link_s;
             (*link).next_area = areas;
             if !areas.is_null() {
                 (*areas).prev_area = link
             }
             areas = link;
             //put the link into the double linked entity list of the area
-            (*link).prev_ent = 0 as *mut crate::be_aas_def_h::aas_link_s;
+            (*link).prev_ent = 0 as *mut aas_link_s;
             (*link).next_ent = *crate::src::botlib::be_aas_main::aasworld
                 .arealinkedentities
                 .offset(-nodenum as isize);
@@ -2041,12 +2041,12 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
                 .offset(nodenum as isize)
-                as *mut crate::aasfile_h::aas_node_t;
+                as *mut aas_node_t;
             //the current node plane
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
                 .offset((*aasnode).planenum as isize)
-                as *mut crate::aasfile_h::aas_plane_t;
+                as *mut aas_plane_t;
             //get the side(s) the box is situated relative to the plane
             side = AAS_BoxOnPlaneSide2(absmins, absmaxs, plane);
             //if on the front side of the node
@@ -2100,15 +2100,15 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_LinkEntityClientBBox(
-    mut absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut absmins: *mut vec_t,
+    mut absmaxs: *mut vec_t,
     mut entnum: i32,
     mut presencetype: i32,
-) -> *mut crate::be_aas_def_h::aas_link_t {
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut newabsmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut newabsmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+) -> *mut aas_link_t {
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
+    let mut newabsmins: vec3_t = [0.; 3];
+    let mut newabsmaxs: vec3_t = [0.; 3];
     AAS_PresenceTypeBoundingBox(presencetype, mins.as_mut_ptr(), maxs.as_mut_ptr());
     newabsmins[0 as i32 as usize] = *absmins.offset(0 as i32 as isize) - maxs[0 as i32 as usize];
     newabsmins[1 as i32 as usize] = *absmins.offset(1 as i32 as isize) - maxs[1 as i32 as usize];
@@ -2129,14 +2129,14 @@ pub unsafe extern "C" fn AAS_LinkEntityClientBBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BBoxAreas(
-    mut absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut absmins: *mut vec_t,
+    mut absmaxs: *mut vec_t,
     mut areas: *mut i32,
     mut maxareas: i32,
 ) -> i32 {
-    let mut linkedareas: *mut crate::be_aas_def_h::aas_link_t =
-        0 as *mut crate::be_aas_def_h::aas_link_t; //end for
-    let mut link: *mut crate::be_aas_def_h::aas_link_t = 0 as *mut crate::be_aas_def_h::aas_link_t;
+    let mut linkedareas: *mut aas_link_t =
+        0 as *mut aas_link_t; //end for
+    let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
     let mut num: i32 = 0;
     linkedareas = AAS_AASLinkEntity(absmins, absmaxs, -(1 as i32));
     num = 0 as i32;
@@ -2181,10 +2181,10 @@ pub unsafe extern "C" fn AAS_BBoxAreas(
 
 pub unsafe extern "C" fn AAS_AreaInfo(
     mut areanum: i32,
-    mut info: *mut crate::be_aas_h::aas_areainfo_t,
+    mut info: *mut aas_areainfo_t,
 ) -> i32 {
-    let mut settings: *mut crate::aasfile_h::aas_areasettings_t =
-        0 as *mut crate::aasfile_h::aas_areasettings_t; //end if
+    let mut settings: *mut aas_areasettings_t =
+        0 as *mut aas_areasettings_t; //end if
     if info.is_null() {
         return 0 as i32;
     }
@@ -2201,7 +2201,7 @@ pub unsafe extern "C" fn AAS_AreaInfo(
     }
     settings = &mut *crate::src::botlib::be_aas_main::aasworld
         .areasettings
-        .offset(areanum as isize) as *mut crate::aasfile_h::aas_areasettings_t;
+        .offset(areanum as isize) as *mut aas_areasettings_t;
     (*info).cluster = (*settings).cluster;
     (*info).contents = (*settings).contents;
     (*info).flags = (*settings).areaflags;
@@ -2242,7 +2242,7 @@ pub unsafe extern "C" fn AAS_AreaInfo(
         .areas
         .offset(areanum as isize))
     .center[2 as i32 as usize];
-    return ::std::mem::size_of::<crate::be_aas_h::aas_areainfo_t>() as libc::c_ulong as i32;
+    return ::std::mem::size_of::<aas_areainfo_t>() as libc::c_ulong as i32;
 }
 /*
 ===========================================================================
@@ -2311,12 +2311,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PlaneFromNum(mut planenum: i32) -> *mut crate::aasfile_h::aas_plane_t {
+pub unsafe extern "C" fn AAS_PlaneFromNum(mut planenum: i32) -> *mut aas_plane_t {
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
-        return 0 as *mut crate::aasfile_h::aas_plane_t;
+        return 0 as *mut aas_plane_t;
     }
     return &mut *crate::src::botlib::be_aas_main::aasworld
         .planes
-        .offset(planenum as isize) as *mut crate::aasfile_h::aas_plane_t;
+        .offset(planenum as isize) as *mut aas_plane_t;
 }
 //end of the function AAS_PlaneFromNum

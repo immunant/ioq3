@@ -129,74 +129,74 @@ C89-compliant. */
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LPC_analysis_filter(
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut B: *const crate::opus_types_h::opus_int16,
-    len: crate::opus_types_h::opus_int32,
-    d: crate::opus_types_h::opus_int32,
+    mut out: *mut opus_int16,
+    mut in_0: *const opus_int16,
+    mut B: *const opus_int16,
+    len: opus_int32,
+    d: opus_int32,
     mut _arch: i32,
 )
 /* I    Run-time architecture                                       */
 {
     let mut j: i32 = 0;
     let mut ix: i32 = 0;
-    let mut out32_Q12: crate::opus_types_h::opus_int32 = 0;
-    let mut out32: crate::opus_types_h::opus_int32 = 0;
-    let mut in_ptr: *const crate::opus_types_h::opus_int16 =
-        0 as *const crate::opus_types_h::opus_int16;
+    let mut out32_Q12: opus_int32 = 0;
+    let mut out32: opus_int32 = 0;
+    let mut in_ptr: *const opus_int16 =
+        0 as *const opus_int16;
     ix = d;
     while ix < len {
-        in_ptr = &*in_0.offset((ix - 1 as i32) as isize) as *const crate::opus_types_h::opus_int16;
-        out32_Q12 = *in_ptr.offset(0 as i32 as isize) as crate::opus_types_h::opus_int32
-            * *B.offset(0 as i32 as isize) as crate::opus_types_h::opus_int32;
+        in_ptr = &*in_0.offset((ix - 1 as i32) as isize) as *const opus_int16;
+        out32_Q12 = *in_ptr.offset(0 as i32 as isize) as opus_int32
+            * *B.offset(0 as i32 as isize) as opus_int32;
         /* Allowing wrap around so that two wraps can cancel each other. The rare
         cases where the result wraps around can only be triggered by invalid streams*/
-        out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*in_ptr.offset(-(1 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *B.offset(1 as i32 as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32;
-        out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*in_ptr.offset(-(2 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *B.offset(2 as i32 as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32;
-        out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*in_ptr.offset(-(3 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *B.offset(3 as i32 as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32;
-        out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*in_ptr.offset(-(4 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *B.offset(4 as i32 as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32;
-        out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*in_ptr.offset(-(5 as i32) as isize) as crate::opus_types_h::opus_int32
-                * *B.offset(5 as i32 as isize) as crate::opus_types_h::opus_int32)
-                as crate::opus_types_h::opus_uint32,
-        ) as crate::opus_types_h::opus_int32;
+        out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+            (*in_ptr.offset(-(1 as i32) as isize) as opus_int32
+                * *B.offset(1 as i32 as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32;
+        out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+            (*in_ptr.offset(-(2 as i32) as isize) as opus_int32
+                * *B.offset(2 as i32 as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32;
+        out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+            (*in_ptr.offset(-(3 as i32) as isize) as opus_int32
+                * *B.offset(3 as i32 as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32;
+        out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+            (*in_ptr.offset(-(4 as i32) as isize) as opus_int32
+                * *B.offset(4 as i32 as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32;
+        out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+            (*in_ptr.offset(-(5 as i32) as isize) as opus_int32
+                * *B.offset(5 as i32 as isize) as opus_int32)
+                as opus_uint32,
+        ) as opus_int32;
         j = 6 as i32;
         while j < d {
-            out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-                (*in_ptr.offset(-j as isize) as crate::opus_types_h::opus_int32
-                    * *B.offset(j as isize) as crate::opus_types_h::opus_int32)
-                    as crate::opus_types_h::opus_uint32,
-            ) as crate::opus_types_h::opus_int32;
-            out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-                (*in_ptr.offset((-j - 1 as i32) as isize) as crate::opus_types_h::opus_int32
-                    * *B.offset((j + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
-                    as crate::opus_types_h::opus_uint32,
-            ) as crate::opus_types_h::opus_int32;
+            out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+                (*in_ptr.offset(-j as isize) as opus_int32
+                    * *B.offset(j as isize) as opus_int32)
+                    as opus_uint32,
+            ) as opus_int32;
+            out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
+                (*in_ptr.offset((-j - 1 as i32) as isize) as opus_int32
+                    * *B.offset((j + 1 as i32) as isize) as opus_int32)
+                    as opus_uint32,
+            ) as opus_int32;
             j += 2 as i32
         }
         /* Subtract prediction */
-        out32_Q12 = (((*in_ptr.offset(1 as i32 as isize) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 12 as i32) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            .wrapping_sub(out32_Q12 as crate::opus_types_h::opus_uint32)
-            as crate::opus_types_h::opus_int32;
+        out32_Q12 = (((*in_ptr.offset(1 as i32 as isize) as opus_int32
+            as opus_uint32)
+            << 12 as i32) as opus_int32
+            as opus_uint32)
+            .wrapping_sub(out32_Q12 as opus_uint32)
+            as opus_int32;
         /* Scale to Q0 */
         out32 = if 12 as i32 == 1 as i32 {
             (out32_Q12 >> 1 as i32) + (out32_Q12 & 1 as i32)
@@ -206,16 +206,16 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
         /* Saturate output */
         *out.offset(ix as isize) = if out32 > 0x7fff as i32 {
             0x7fff as i32
-        } else if out32 < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32 {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        } else if out32 < 0x8000 as i32 as opus_int16 as i32 {
+            0x8000 as i32 as opus_int16 as i32
         } else {
             out32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         ix += 1
     }
     /* Set first d output samples to zero */
     crate::stdlib::memset(out as *mut libc::c_void, 0 as i32,
            (d as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
 }

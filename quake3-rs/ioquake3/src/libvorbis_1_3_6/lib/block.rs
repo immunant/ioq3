@@ -65,14 +65,14 @@ pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_block_init(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut v: *mut vorbis_dsp_state,
+    mut vb: *mut vorbis_block,
 ) -> i32 {
     let mut i: i32 = 0;
     crate::stdlib::memset(
         vb as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_block>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_block>() as libc::c_ulong,
     );
     (*vb).vd = v;
     (*vb).localalloc = 0 as i32 as isize;
@@ -80,11 +80,11 @@ pub unsafe extern "C" fn vorbis_block_init(
     if (*v).analysisp != 0 {
         (*vb).internal = crate::stdlib::calloc(
             1 as i32 as libc::c_ulong,
-            ::std::mem::size_of::<crate::codec_internal_h::vorbis_block_internal>()
+            ::std::mem::size_of::<vorbis_block_internal>()
                 as libc::c_ulong,
         );
-        let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
-            (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
+        let mut vbi: *mut vorbis_block_internal =
+            (*vb).internal as *mut vorbis_block_internal;
         (*vbi).ampmax = -(9999 as i32) as f32;
         i = 0 as i32;
         while i < 15 as i32 {
@@ -93,12 +93,12 @@ pub unsafe extern "C" fn vorbis_block_init(
             } else {
                 (*vbi).packetblob[i as usize] = crate::stdlib::calloc(
                     1 as i32 as libc::c_ulong,
-                    ::std::mem::size_of::<crate::ogg_h::oggpack_buffer>() as libc::c_ulong,
+                    ::std::mem::size_of::<oggpack_buffer>() as libc::c_ulong,
                 )
-                    as *mut crate::ogg_h::oggpack_buffer
+                    as *mut oggpack_buffer
             }
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_writeinit(
-                (*vbi).packetblob[i as usize] as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_writeinit(
+                (*vbi).packetblob[i as usize] as *mut oggpack_buffer,
             );
             i += 1
         }
@@ -108,17 +108,17 @@ pub unsafe extern "C" fn vorbis_block_init(
 #[no_mangle]
 
 pub unsafe extern "C" fn _vorbis_block_alloc(
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut vb: *mut vorbis_block,
     mut bytes: isize,
 ) -> *mut libc::c_void {
     bytes = bytes + (8 as i32 - 1 as i32) as isize & !(8 as i32 - 1 as i32) as isize;
     if bytes + (*vb).localtop > (*vb).localalloc {
         /* can't just _ogg_realloc... there are outstanding pointers */
         if !(*vb).localstore.is_null() {
-            let mut link: *mut crate::codec_h::alloc_chain = crate::stdlib::malloc(
-                ::std::mem::size_of::<crate::codec_h::alloc_chain>() as libc::c_ulong,
+            let mut link: *mut alloc_chain = crate::stdlib::malloc(
+                ::std::mem::size_of::<alloc_chain>() as libc::c_ulong,
             )
-                as *mut crate::codec_h::alloc_chain;
+                as *mut alloc_chain;
             (*vb).totaluse += (*vb).localtop;
             (*link).next = (*vb).reap;
             (*link).ptr = (*vb).localstore;
@@ -152,18 +152,18 @@ function: miscellaneous prototypes
 /* reap the chain, pull the ripcord */
 #[no_mangle]
 
-pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorbis_block) {
+pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut vorbis_block) {
     /* reap the chain */
-    let mut reap: *mut crate::codec_h::alloc_chain = (*vb).reap;
+    let mut reap: *mut alloc_chain = (*vb).reap;
     while !reap.is_null() {
-        let mut next: *mut crate::codec_h::alloc_chain = (*reap).next;
-        ::libc::free((*reap).ptr);
+        let mut next: *mut alloc_chain = (*reap).next;
+        libc::free((*reap).ptr);
         crate::stdlib::memset(
             reap as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::codec_h::alloc_chain>() as libc::c_ulong,
+            ::std::mem::size_of::<alloc_chain>() as libc::c_ulong,
         );
-        ::libc::free(reap as *mut libc::c_void);
+        libc::free(reap as *mut libc::c_void);
         reap = next
     }
     /* consolidate storage */
@@ -177,35 +177,35 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorb
     }
     /* pull the ripcord */
     (*vb).localtop = 0 as i32 as isize;
-    (*vb).reap = 0 as *mut crate::codec_h::alloc_chain;
+    (*vb).reap = 0 as *mut alloc_chain;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_block_clear(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
+pub unsafe extern "C" fn vorbis_block_clear(mut vb: *mut vorbis_block) -> i32 {
     let mut i: i32 = 0;
-    let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
-        (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
+    let mut vbi: *mut vorbis_block_internal =
+        (*vb).internal as *mut vorbis_block_internal;
     _vorbis_block_ripcord(vb);
     if !(*vb).localstore.is_null() {
-        ::libc::free((*vb).localstore);
+        libc::free((*vb).localstore);
     }
     if !vbi.is_null() {
         i = 0 as i32;
         while i < 15 as i32 {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
-                (*vbi).packetblob[i as usize] as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_writeclear(
+                (*vbi).packetblob[i as usize] as *mut oggpack_buffer,
             );
             if i != 15 as i32 / 2 as i32 {
-                ::libc::free((*vbi).packetblob[i as usize] as *mut libc::c_void);
+                libc::free((*vbi).packetblob[i as usize] as *mut libc::c_void);
             }
             i += 1
         }
-        ::libc::free(vbi as *mut libc::c_void);
+        libc::free(vbi as *mut libc::c_void);
     }
     crate::stdlib::memset(
         vb as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_block>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_block>() as libc::c_ulong,
     );
     return 0 as i32;
 }
@@ -214,16 +214,16 @@ here and not in analysis.c (which is for analysis transforms only).
 The init is here because some of it is shared */
 
 unsafe extern "C" fn _vds_shared_init(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut v: *mut vorbis_dsp_state,
+    mut vi: *mut vorbis_info,
     mut encp: i32,
 ) -> i32 {
     let mut current_block: u64;
     let mut i: i32 = 0;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        0 as *mut crate::codec_internal_h::private_state;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut b: *mut private_state =
+        0 as *mut private_state;
     let mut hs: i32 = 0;
     if ci.is_null()
         || (*ci).modes <= 0 as i32
@@ -236,16 +236,16 @@ unsafe extern "C" fn _vds_shared_init(
     crate::stdlib::memset(
         v as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_dsp_state>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_dsp_state>() as libc::c_ulong,
     );
     (*v).backend_state = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::codec_internal_h::private_state>() as libc::c_ulong,
+        ::std::mem::size_of::<private_state>() as libc::c_ulong,
     );
-    b = (*v).backend_state as *mut crate::codec_internal_h::private_state;
+    b = (*v).backend_state as *mut private_state;
     (*v).vi = vi;
     (*b).modebits = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        ((*ci).modes - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+        ((*ci).modes - 1 as i32) as ogg_uint32_t,
     );
     (*b).transform[0 as i32 as usize] = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
@@ -259,25 +259,25 @@ unsafe extern "C" fn _vds_shared_init(
     let ref mut fresh0 = *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize);
     *fresh0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
+        ::std::mem::size_of::<mdct_lookup>()
             as libc::c_ulong,
     );
     let ref mut fresh1 = *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize);
     *fresh1 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
+        ::std::mem::size_of::<mdct_lookup>()
             as libc::c_ulong,
     );
-    crate::src::libvorbis_1_3_6::lib::mdct::mdct_init(
+    mdct_init(
         *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize)
-            as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
-            as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+            as *mut mdct_lookup
+            as *mut mdct_lookup,
         ((*ci).blocksizes[0 as i32 as usize] >> hs) as i32,
     );
-    crate::src::libvorbis_1_3_6::lib::mdct::mdct_init(
+    mdct_init(
         *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize)
-            as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
-            as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+            as *mut mdct_lookup
+            as *mut mdct_lookup,
         ((*ci).blocksizes[1 as i32 as usize] >> hs) as i32,
     );
     /* Vorbis I uses only window type 0 */
@@ -288,57 +288,57 @@ unsafe extern "C" fn _vds_shared_init(
      the below is equivalent.
     */
     (*b).window[0 as i32 as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        (*ci).blocksizes[0 as i32 as usize] as crate::config_types_h::ogg_uint32_t,
+        (*ci).blocksizes[0 as i32 as usize] as ogg_uint32_t,
     ) - 7 as i32;
     (*b).window[1 as i32 as usize] = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-        (*ci).blocksizes[1 as i32 as usize] as crate::config_types_h::ogg_uint32_t,
+        (*ci).blocksizes[1 as i32 as usize] as ogg_uint32_t,
     ) - 7 as i32;
     if encp != 0 {
         /* encode/decode differ here */
         /* analysis always needs an fft */
-        crate::src::libvorbis_1_3_6::lib::smallft::drft_init(
+        drft_init(
             &mut *(*b).fft_look.as_mut_ptr().offset(0 as i32 as isize) as *mut _
-                as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
+                as *mut drft_lookup,
             (*ci).blocksizes[0 as i32 as usize] as i32,
         );
-        crate::src::libvorbis_1_3_6::lib::smallft::drft_init(
+        drft_init(
             &mut *(*b).fft_look.as_mut_ptr().offset(1 as i32 as isize) as *mut _
-                as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
+                as *mut drft_lookup,
             (*ci).blocksizes[1 as i32 as usize] as i32,
         );
         /* finish the codebooks */
         if (*ci).fullbooks.is_null() {
             (*ci).fullbooks = crate::stdlib::calloc(
                 (*ci).books as libc::c_ulong,
-                ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
+                ::std::mem::size_of::<codebook>()
                     as libc::c_ulong,
             )
-                as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook;
+                as *mut codebook;
             i = 0 as i32;
             while i < (*ci).books {
-                crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_init_encode(
+                vorbis_book_init_encode(
                     (*ci).fullbooks.offset(i as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+                        as *mut codebook,
                     (*ci).book_param[i as usize]
-                        as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                        as *const static_codebook,
                 );
                 i += 1
             }
         }
         (*b).psy = crate::stdlib::calloc(
             (*ci).psys as libc::c_ulong,
-            ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy>()
+            ::std::mem::size_of::<vorbis_look_psy>()
                 as libc::c_ulong,
-        ) as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy;
+        ) as *mut vorbis_look_psy;
         i = 0 as i32;
         while i < (*ci).psys {
-            crate::src::libvorbis_1_3_6::lib::psy::_vp_psy_init(
+            _vp_psy_init(
                 (*b).psy.offset(i as isize)
-                    as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy,
+                    as *mut vorbis_look_psy,
                 (*ci).psy_param[i as usize]
-                    as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy,
+                    as *mut vorbis_info_psy,
                 &mut (*ci).psy_g_param as *mut _
-                    as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
+                    as *mut vorbis_info_psy_global,
                 ((*ci).blocksizes[(*(*ci).psy_param[i as usize]).blockflag as usize]
                     / 2 as i32 as isize) as i32,
                 (*vi).rate,
@@ -349,9 +349,9 @@ unsafe extern "C" fn _vds_shared_init(
     } else if (*ci).fullbooks.is_null() {
         (*ci).fullbooks = crate::stdlib::calloc(
             (*ci).books as libc::c_ulong,
-            ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::codebook::codebook>()
+            ::std::mem::size_of::<codebook>()
                 as libc::c_ulong,
-        ) as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook;
+        ) as *mut codebook;
         i = 0 as i32;
         loop {
             if !(i < (*ci).books) {
@@ -362,11 +362,11 @@ unsafe extern "C" fn _vds_shared_init(
                 current_block = 2095308920063660201;
                 break;
             }
-            if crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_init_decode(
+            if vorbis_book_init_decode(
                 (*ci).fullbooks.offset(i as isize)
-                    as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+                    as *mut codebook,
                 (*ci).book_param[i as usize]
-                    as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                    as *const static_codebook,
             ) != 0
             {
                 current_block = 2095308920063660201;
@@ -374,12 +374,12 @@ unsafe extern "C" fn _vds_shared_init(
             }
             /* finish the codebooks */
             /* decode codebooks are now standalone after init */
-            crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy(
+            vorbis_staticbook_destroy(
                 (*ci).book_param[i as usize]
-                    as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                    as *mut static_codebook,
             );
             (*ci).book_param[i as usize] =
-                0 as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
+                0 as *mut static_codebook;
             i += 1
         }
         match current_block {
@@ -388,12 +388,12 @@ unsafe extern "C" fn _vds_shared_init(
                 i = 0 as i32;
                 while i < (*ci).books {
                     if !(*ci).book_param[i as usize].is_null() {
-                        crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy(
+                        vorbis_staticbook_destroy(
                             (*ci).book_param[i as usize]
-                                as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                                as *mut static_codebook,
                         );
                         (*ci).book_param[i as usize] =
-                            0 as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook
+                            0 as *mut static_codebook
                     }
                     i += 1
                 }
@@ -466,76 +466,76 @@ unsafe extern "C" fn _vds_shared_init(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_analysis_init(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut v: *mut vorbis_dsp_state,
+    mut vi: *mut vorbis_info,
 ) -> i32 {
-    let mut b: *mut crate::codec_internal_h::private_state =
-        0 as *mut crate::codec_internal_h::private_state;
+    let mut b: *mut private_state =
+        0 as *mut private_state;
     if _vds_shared_init(v, vi, 1 as i32) != 0 {
         return 1 as i32;
     }
-    b = (*v).backend_state as *mut crate::codec_internal_h::private_state;
-    (*b).psy_g_look = crate::src::libvorbis_1_3_6::lib::psy::_vp_global_look(
-        vi as *mut crate::codec_h::vorbis_info,
-    ) as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
+    b = (*v).backend_state as *mut private_state;
+    (*b).psy_g_look = _vp_global_look(
+        vi as *mut vorbis_info,
+    ) as *mut vorbis_look_psy_global;
     /* Initialize the envelope state storage */
     (*b).ve = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup>()
+        ::std::mem::size_of::<envelope_lookup>()
             as libc::c_ulong,
-    ) as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup;
-    crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_init(
-        (*b).ve as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-        vi as *mut crate::codec_h::vorbis_info,
+    ) as *mut envelope_lookup;
+    _ve_envelope_init(
+        (*b).ve as *mut envelope_lookup,
+        vi as *mut vorbis_info,
     );
-    crate::src::libvorbis_1_3_6::lib::bitrate::vorbis_bitrate_init(
-        vi as *mut crate::codec_h::vorbis_info,
+    vorbis_bitrate_init(
+        vi as *mut vorbis_info,
         &mut (*b).bms as *mut _
-            as *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state,
+            as *mut bitrate_manager_state,
     );
     /* compressed audio packets start after the headers
     with sequence number 3 */
-    (*v).sequence = 3 as i32 as crate::config_types_h::ogg_int64_t;
+    (*v).sequence = 3 as i32 as ogg_int64_t;
     return 0 as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp_state) {
+pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut vorbis_dsp_state) {
     let mut i: i32 = 0;
     if !v.is_null() {
-        let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-        let mut ci: *mut crate::codec_internal_h::codec_setup_info = if !vi.is_null() {
+        let mut vi: *mut vorbis_info = (*v).vi;
+        let mut ci: *mut codec_setup_info = if !vi.is_null() {
             (*vi).codec_setup
         } else {
             0 as *mut libc::c_void
         }
-            as *mut crate::codec_internal_h::codec_setup_info;
-        let mut b: *mut crate::codec_internal_h::private_state =
-            (*v).backend_state as *mut crate::codec_internal_h::private_state;
+            as *mut codec_setup_info;
+        let mut b: *mut private_state =
+            (*v).backend_state as *mut private_state;
         if !b.is_null() {
             if !(*b).ve.is_null() {
-                crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_clear(
-                    (*b).ve as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
+                _ve_envelope_clear(
+                    (*b).ve as *mut envelope_lookup,
                 );
-                ::libc::free((*b).ve as *mut libc::c_void);
+                libc::free((*b).ve as *mut libc::c_void);
             }
             if !(*b).transform[0 as i32 as usize].is_null() {
-                crate::src::libvorbis_1_3_6::lib::mdct::mdct_clear(
+                mdct_clear(
                     *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
-                        as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+                        as *mut mdct_lookup
+                        as *mut mdct_lookup,
                 );
-                ::libc::free(*(*b).transform[0 as i32 as usize].offset(0 as i32 as isize));
-                ::libc::free((*b).transform[0 as i32 as usize] as *mut libc::c_void);
+                libc::free(*(*b).transform[0 as i32 as usize].offset(0 as i32 as isize));
+                libc::free((*b).transform[0 as i32 as usize] as *mut libc::c_void);
             }
             if !(*b).transform[1 as i32 as usize].is_null() {
-                crate::src::libvorbis_1_3_6::lib::mdct::mdct_clear(
+                mdct_clear(
                     *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
-                        as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
+                        as *mut mdct_lookup
+                        as *mut mdct_lookup,
                 );
-                ::libc::free(*(*b).transform[1 as i32 as usize].offset(0 as i32 as isize));
-                ::libc::free((*b).transform[1 as i32 as usize] as *mut libc::c_void);
+                libc::free(*(*b).transform[1 as i32 as usize].offset(0 as i32 as isize));
+                libc::free((*b).transform[1 as i32 as usize] as *mut libc::c_void);
             }
             if !(*b).flr.is_null() {
                 if !ci.is_null() {
@@ -551,7 +551,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                         i += 1
                     }
                 }
-                ::libc::free((*b).flr as *mut libc::c_void);
+                libc::free((*b).flr as *mut libc::c_void);
             }
             if !(*b).residue.is_null() {
                 if !ci.is_null() {
@@ -567,38 +567,38 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                         i += 1
                     }
                 }
-                ::libc::free((*b).residue as *mut libc::c_void);
+                libc::free((*b).residue as *mut libc::c_void);
             }
             if !(*b).psy.is_null() {
                 if !ci.is_null() {
                     i = 0 as i32;
                     while i < (*ci).psys {
-                        crate::src::libvorbis_1_3_6::lib::psy::_vp_psy_clear(
+                        _vp_psy_clear(
                             (*b).psy.offset(i as isize)
-                                as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy,
+                                as *mut vorbis_look_psy,
                         );
                         i += 1
                     }
                 }
-                ::libc::free((*b).psy as *mut libc::c_void);
+                libc::free((*b).psy as *mut libc::c_void);
             }
             if !(*b).psy_g_look.is_null() {
-                crate::src::libvorbis_1_3_6::lib::psy::_vp_global_free(
+                _vp_global_free(
                     (*b).psy_g_look
-                        as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global,
+                        as *mut vorbis_look_psy_global,
                 );
             }
-            crate::src::libvorbis_1_3_6::lib::bitrate::vorbis_bitrate_clear(
+            vorbis_bitrate_clear(
                 &mut (*b).bms as *mut _
-                    as *mut crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state,
+                    as *mut bitrate_manager_state,
             );
-            crate::src::libvorbis_1_3_6::lib::smallft::drft_clear(
+            drft_clear(
                 &mut *(*b).fft_look.as_mut_ptr().offset(0 as i32 as isize) as *mut _
-                    as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
+                    as *mut drft_lookup,
             );
-            crate::src::libvorbis_1_3_6::lib::smallft::drft_clear(
+            drft_clear(
                 &mut *(*b).fft_look.as_mut_ptr().offset(1 as i32 as isize) as *mut _
-                    as *mut crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup,
+                    as *mut drft_lookup,
             );
         }
         if !(*v).pcm.is_null() {
@@ -606,57 +606,57 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                 i = 0 as i32;
                 while i < (*vi).channels {
                     if !(*(*v).pcm.offset(i as isize)).is_null() {
-                        ::libc::free(*(*v).pcm.offset(i as isize) as *mut libc::c_void);
+                        libc::free(*(*v).pcm.offset(i as isize) as *mut libc::c_void);
                     }
                     i += 1
                 }
             }
-            ::libc::free((*v).pcm as *mut libc::c_void);
+            libc::free((*v).pcm as *mut libc::c_void);
             if !(*v).pcmret.is_null() {
-                ::libc::free((*v).pcmret as *mut libc::c_void);
+                libc::free((*v).pcmret as *mut libc::c_void);
             }
         }
         if !b.is_null() {
             /* free header, header1, header2 */
             if !(*b).header.is_null() {
-                ::libc::free((*b).header as *mut libc::c_void);
+                libc::free((*b).header as *mut libc::c_void);
             }
             if !(*b).header1.is_null() {
-                ::libc::free((*b).header1 as *mut libc::c_void);
+                libc::free((*b).header1 as *mut libc::c_void);
             }
             if !(*b).header2.is_null() {
-                ::libc::free((*b).header2 as *mut libc::c_void);
+                libc::free((*b).header2 as *mut libc::c_void);
             }
-            ::libc::free(b as *mut libc::c_void);
+            libc::free(b as *mut libc::c_void);
         }
         crate::stdlib::memset(
             v as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::codec_h::vorbis_dsp_state>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_dsp_state>() as libc::c_ulong,
         );
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_analysis_buffer(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut vals: i32,
 ) -> *mut *mut f32 {
     let mut i: i32 = 0;
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*v).backend_state as *mut crate::codec_internal_h::private_state;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut b: *mut private_state =
+        (*v).backend_state as *mut private_state;
     /* free header, header1, header2 */
     if !(*b).header.is_null() {
-        ::libc::free((*b).header as *mut libc::c_void);
+        libc::free((*b).header as *mut libc::c_void);
     }
     (*b).header = 0 as *mut u8;
     if !(*b).header1.is_null() {
-        ::libc::free((*b).header1 as *mut libc::c_void);
+        libc::free((*b).header1 as *mut libc::c_void);
     }
     (*b).header1 = 0 as *mut u8;
     if !(*b).header2.is_null() {
-        ::libc::free((*b).header2 as *mut libc::c_void);
+        libc::free((*b).header2 as *mut libc::c_void);
     }
     (*b).header2 = 0 as *mut u8;
     /* Do we have enough storage space for the requested buffer? If not,
@@ -683,7 +683,7 @@ pub unsafe extern "C" fn vorbis_analysis_buffer(
     return (*v).pcmret;
 }
 
-unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_dsp_state) {
+unsafe extern "C" fn _preextrapolate_helper(mut v: *mut vorbis_dsp_state) {
     let mut i: i32 = 0;
     let mut order: i32 = 16 as i32;
     let mut fresh7 = ::std::vec::from_elem(
@@ -744,12 +744,12 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_analysis_wrote(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut vals: i32,
 ) -> i32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     if vals <= 0 as i32 {
         let mut order: i32 = 32 as i32;
         let mut i: i32 = 0;
@@ -839,20 +839,20 @@ the next block on which to continue analysis */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_analysis_blockout(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut v: *mut vorbis_dsp_state,
+    mut vb: *mut vorbis_block,
 ) -> i32 {
     let mut i: i32 = 0;
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*v).backend_state as *mut crate::codec_internal_h::private_state;
-    let mut g: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = (*b).psy_g_look;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut b: *mut private_state =
+        (*v).backend_state as *mut private_state;
+    let mut g: *mut vorbis_look_psy_global = (*b).psy_g_look;
     let mut beginW: isize = (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as isize;
     let mut centerNext: isize = 0;
-    let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
-        (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
+    let mut vbi: *mut vorbis_block_internal =
+        (*vb).internal as *mut vorbis_block_internal;
     /* check to see if we're started... */
     if (*v).preextrapolate == 0 {
         return 0 as i32;
@@ -867,8 +867,8 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     /* we do an envelope search even on a single blocksize; we may still
     be throwing more bits at impulses, and envelope search handles
     marking impulses too. */
-    let mut bp: isize = crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_search(
-        v as *mut crate::codec_h::vorbis_dsp_state,
+    let mut bp: isize = _ve_envelope_search(
+        v as *mut vorbis_dsp_state,
     ); /* not enough data currently to search for a
        full long block */
     if bp == -(1 as i32) as isize {
@@ -903,8 +903,8 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
             (*vbi).blocktype = 1 as i32
             /*fprintf(stderr,"_");*/
         }
-    } else if crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_mark(
-        v as *mut crate::codec_h::vorbis_dsp_state,
+    } else if _ve_envelope_mark(
+        v as *mut vorbis_dsp_state,
     ) != 0
     {
         (*vbi).blocktype = 0 as i32
@@ -925,9 +925,9 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     if (*vbi).ampmax > (*g).ampmax {
         (*g).ampmax = (*vbi).ampmax
     }
-    (*g).ampmax = crate::src::libvorbis_1_3_6::lib::psy::_vp_ampmax_decay(
+    (*g).ampmax = _vp_ampmax_decay(
         (*g).ampmax,
-        v as *mut crate::codec_h::vorbis_dsp_state,
+        v as *mut vorbis_dsp_state,
     );
     (*vbi).ampmax = (*g).ampmax;
     (*vb).pcm = _vorbis_block_alloc(
@@ -976,8 +976,8 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     let mut new_centerNext: i32 = ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize) as i32;
     let mut movementW: i32 = (centerNext - new_centerNext as isize) as i32;
     if movementW > 0 as i32 {
-        crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_shift(
-            (*b).ve as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
+        _ve_envelope_shift(
+            (*b).ve as *mut envelope_lookup,
             movementW as isize,
         );
         (*v).pcm_current -= movementW;
@@ -1015,11 +1015,11 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_restart(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
 ) -> i32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        0 as *mut crate::codec_internal_h::codec_setup_info;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        0 as *mut codec_setup_info;
     let mut hs: i32 = 0;
     if (*v).backend_state.is_null() {
         return -(1 as i32);
@@ -1027,7 +1027,7 @@ pub unsafe extern "C" fn vorbis_synthesis_restart(
     if vi.is_null() {
         return -(1 as i32);
     }
-    ci = (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    ci = (*vi).codec_setup as *mut codec_setup_info;
     if ci.is_null() {
         return -(1 as i32);
     }
@@ -1035,18 +1035,18 @@ pub unsafe extern "C" fn vorbis_synthesis_restart(
     (*v).centerW = (*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32;
     (*v).pcm_current = ((*v).centerW >> hs) as i32;
     (*v).pcm_returned = -(1 as i32);
-    (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
-    (*v).sequence = -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    (*v).granulepos = -(1 as i32) as ogg_int64_t;
+    (*v).sequence = -(1 as i32) as ogg_int64_t;
     (*v).eofflag = 0 as i32;
-    (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).sample_count =
-        -(1 as i32) as crate::config_types_h::ogg_int64_t;
+    (*((*v).backend_state as *mut private_state)).sample_count =
+        -(1 as i32) as ogg_int64_t;
     return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_init(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut v: *mut vorbis_dsp_state,
+    mut vi: *mut vorbis_info,
 ) -> i32 {
     if _vds_shared_init(v, vi, 0 as i32) != 0 {
         vorbis_dsp_clear(v);
@@ -1061,14 +1061,14 @@ calling (as it relies on the previous block). */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_blockin(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut v: *mut vorbis_dsp_state,
+    mut vb: *mut vorbis_block,
 ) -> i32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi; /* out of sequence; lose count */
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*v).backend_state as *mut crate::codec_internal_h::private_state;
+    let mut vi: *mut vorbis_info = (*v).vi; /* out of sequence; lose count */
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
+    let mut b: *mut private_state =
+        (*v).backend_state as *mut private_state;
     let mut hs: i32 = (*ci).halfrate_flag;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -1083,8 +1083,8 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     (*v).nW = -(1 as i32) as isize;
     if (*v).sequence == -(1 as i32) as isize || (*v).sequence + 1 as i32 as isize != (*vb).sequence
     {
-        (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
-        (*b).sample_count = -(1 as i32) as crate::config_types_h::ogg_int64_t
+        (*v).granulepos = -(1 as i32) as ogg_int64_t;
+        (*b).sample_count = -(1 as i32) as ogg_int64_t
     }
     (*v).sequence = (*vb).sequence;
     if !(*vb).pcm.is_null() {
@@ -1227,7 +1227,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     is.  For this reason, vorbisfile will always try to make sure
     it reads the last two marked pages in proper sequence */
     if (*b).sample_count == -(1 as i32) as isize {
-        (*b).sample_count = 0 as i32 as crate::config_types_h::ogg_int64_t
+        (*b).sample_count = 0 as i32 as ogg_int64_t
     } else {
         (*b).sample_count += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize
             + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
@@ -1312,10 +1312,10 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_pcmout(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut pcm: *mut *mut *mut f32,
 ) -> i32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
+    let mut vi: *mut vorbis_info = (*v).vi;
     if (*v).pcm_returned > -(1 as i32) && (*v).pcm_returned < (*v).pcm_current {
         if !pcm.is_null() {
             let mut i: i32 = 0;
@@ -1334,7 +1334,7 @@ pub unsafe extern "C" fn vorbis_synthesis_pcmout(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_read(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut n: i32,
 ) -> i32 {
     if n != 0 && (*v).pcm_returned + n > (*v).pcm_current {
@@ -1351,12 +1351,12 @@ this implicit buffer data not normally decoded. */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_lapout(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut pcm: *mut *mut *mut f32,
 ) -> i32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut hs: i32 = (*ci).halfrate_flag;
     let mut n: i32 = ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
     let mut n0: i32 = ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
@@ -1444,15 +1444,15 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_window(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
+    mut v: *mut vorbis_dsp_state,
     mut W: i32,
 ) -> *const f32 {
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut hs: i32 = (*ci).halfrate_flag;
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*v).backend_state as *mut crate::codec_internal_h::private_state;
+    let mut b: *mut private_state =
+        (*v).backend_state as *mut private_state;
     if ((*b).window[W as usize] - 1 as i32) < 0 as i32 {
         return 0 as *const f32;
     }

@@ -40,15 +40,15 @@ static mut bloc: i32 = 0 as i32;
 
 pub unsafe extern "C" fn Huff_putBit(
     mut bit: i32,
-    mut fout: *mut crate::src::qcommon::q_shared::byte,
+    mut fout: *mut byte,
     mut offset: *mut i32,
 ) {
     bloc = *offset;
     if bloc & 7 as i32 == 0 as i32 {
-        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as crate::src::qcommon::q_shared::byte
+        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as byte
     }
     let ref mut fresh0 = *fout.offset((bloc >> 3 as i32) as isize);
-    *fresh0 = (*fresh0 as i32 | bit << (bloc & 7 as i32)) as crate::src::qcommon::q_shared::byte;
+    *fresh0 = (*fresh0 as i32 | bit << (bloc & 7 as i32)) as byte;
     bloc += 1;
     *offset = bloc;
 }
@@ -66,7 +66,7 @@ pub unsafe extern "C" fn Huff_setBloc(mut _bloc: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_getBit(
-    mut fin: *mut crate::src::qcommon::q_shared::byte,
+    mut fin: *mut byte,
     mut offset: *mut i32,
 ) -> i32 {
     let mut t: i32 = 0;
@@ -80,19 +80,19 @@ pub unsafe extern "C" fn Huff_getBit(
 
 unsafe extern "C" fn add_bit(
     mut bit: libc::c_char,
-    mut fout: *mut crate::src::qcommon::q_shared::byte,
+    mut fout: *mut byte,
 ) {
     if bloc & 7 as i32 == 0 as i32 {
-        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as crate::src::qcommon::q_shared::byte
+        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as byte
     }
     let ref mut fresh1 = *fout.offset((bloc >> 3 as i32) as isize);
     *fresh1 =
-        (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32)) as crate::src::qcommon::q_shared::byte;
+        (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32)) as byte;
     bloc += 1;
 }
 /* Receive one bit from the input file (buffered) */
 
-unsafe extern "C" fn get_bit(mut fin: *mut crate::src::qcommon::q_shared::byte) -> i32 {
+unsafe extern "C" fn get_bit(mut fin: *mut byte) -> i32 {
     let mut t: i32 = 0;
     t = *fin.offset((bloc >> 3 as i32) as isize) as i32 >> (bloc & 7 as i32) & 0x1 as i32;
     bloc += 1;
@@ -100,37 +100,37 @@ unsafe extern "C" fn get_bit(mut fin: *mut crate::src::qcommon::q_shared::byte) 
 }
 
 unsafe extern "C" fn get_ppnode(
-    mut huff: *mut crate::qcommon_h::huff_t,
-) -> *mut *mut crate::qcommon_h::node_t {
-    let mut tppnode: *mut *mut crate::qcommon_h::node_t = 0 as *mut *mut crate::qcommon_h::node_t;
+    mut huff: *mut huff_t,
+) -> *mut *mut node_t {
+    let mut tppnode: *mut *mut node_t = 0 as *mut *mut node_t;
     if (*huff).freelist.is_null() {
         let fresh2 = (*huff).blocPtrs;
         (*huff).blocPtrs = (*huff).blocPtrs + 1;
         return &mut *(*huff).nodePtrs.as_mut_ptr().offset(fresh2 as isize)
-            as *mut *mut crate::qcommon_h::node_t;
+            as *mut *mut node_t;
     } else {
         tppnode = (*huff).freelist;
-        (*huff).freelist = *tppnode as *mut *mut crate::qcommon_h::node_t;
+        (*huff).freelist = *tppnode as *mut *mut node_t;
         return tppnode;
     };
 }
 
 unsafe extern "C" fn free_ppnode(
-    mut huff: *mut crate::qcommon_h::huff_t,
-    mut ppnode: *mut *mut crate::qcommon_h::node_t,
+    mut huff: *mut huff_t,
+    mut ppnode: *mut *mut node_t,
 ) {
-    *ppnode = (*huff).freelist as *mut crate::qcommon_h::node_t;
+    *ppnode = (*huff).freelist as *mut node_t;
     (*huff).freelist = ppnode;
 }
 /* Swap the location of these two nodes in the tree */
 
 unsafe extern "C" fn swap(
-    mut huff: *mut crate::qcommon_h::huff_t,
-    mut node1: *mut crate::qcommon_h::node_t,
-    mut node2: *mut crate::qcommon_h::node_t,
+    mut huff: *mut huff_t,
+    mut node1: *mut node_t,
+    mut node2: *mut node_t,
 ) {
-    let mut par1: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
-    let mut par2: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
+    let mut par1: *mut node_t = 0 as *mut node_t;
+    let mut par2: *mut node_t = 0 as *mut node_t;
     par1 = (*node1).parent;
     par2 = (*node2).parent;
     if !par1.is_null() {
@@ -157,10 +157,10 @@ unsafe extern "C" fn swap(
 /* Swap these two nodes in the linked list (update ranks) */
 
 unsafe extern "C" fn swaplist(
-    mut node1: *mut crate::qcommon_h::node_t,
-    mut node2: *mut crate::qcommon_h::node_t,
+    mut node1: *mut node_t,
+    mut node2: *mut node_t,
 ) {
-    let mut par1: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
+    let mut par1: *mut node_t = 0 as *mut node_t;
     par1 = (*node1).next;
     (*node1).next = (*node2).next;
     (*node2).next = par1;
@@ -189,10 +189,10 @@ unsafe extern "C" fn swaplist(
 /* Do the increments */
 
 unsafe extern "C" fn increment(
-    mut huff: *mut crate::qcommon_h::huff_t,
-    mut node: *mut crate::qcommon_h::node_t,
+    mut huff: *mut huff_t,
+    mut node: *mut node_t,
 ) {
-    let mut lnode: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
+    let mut lnode: *mut node_t = 0 as *mut node_t;
     if node.is_null() {
         return;
     }
@@ -206,7 +206,7 @@ unsafe extern "C" fn increment(
     if !(*node).prev.is_null() && (*(*node).prev).weight == (*node).weight {
         *(*node).head = (*node).prev
     } else {
-        *(*node).head = 0 as *mut crate::qcommon_h::nodetype;
+        *(*node).head = 0 as *mut nodetype;
         free_ppnode(huff, (*node).head);
     }
     (*node).weight += 1;
@@ -229,21 +229,21 @@ unsafe extern "C" fn increment(
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_addRef(
-    mut huff: *mut crate::qcommon_h::huff_t,
-    mut ch: crate::src::qcommon::q_shared::byte,
+    mut huff: *mut huff_t,
+    mut ch: byte,
 ) {
-    let mut tnode: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
-    let mut tnode2: *mut crate::qcommon_h::node_t = 0 as *mut crate::qcommon_h::node_t;
+    let mut tnode: *mut node_t = 0 as *mut node_t;
+    let mut tnode2: *mut node_t = 0 as *mut node_t;
     if (*huff).loc[ch as usize].is_null() {
         /* if this is the first transmission of this node */
         let fresh3 = (*huff).blocNode;
         (*huff).blocNode = (*huff).blocNode + 1;
         tnode = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh3 as isize)
-            as *mut crate::qcommon_h::node_t;
+            as *mut node_t;
         let fresh4 = (*huff).blocNode;
         (*huff).blocNode = (*huff).blocNode + 1;
         tnode2 = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh4 as isize)
-            as *mut crate::qcommon_h::node_t;
+            as *mut node_t;
         (*tnode2).symbol = 256 as i32 + 1 as i32;
         (*tnode2).weight = 1 as i32;
         (*tnode2).next = (*(*huff).lhead).next;
@@ -280,7 +280,7 @@ pub unsafe extern "C" fn Huff_addRef(
         }
         (*(*huff).lhead).next = tnode;
         (*tnode).prev = (*huff).lhead;
-        (*tnode).right = 0 as *mut crate::qcommon_h::nodetype;
+        (*tnode).right = 0 as *mut nodetype;
         (*tnode).left = (*tnode).right;
         if !(*(*huff).lhead).parent.is_null() {
             if (*(*(*huff).lhead).parent).left == (*huff).lhead {
@@ -307,9 +307,9 @@ pub unsafe extern "C" fn Huff_addRef(
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_Receive(
-    mut node: *mut crate::qcommon_h::node_t,
+    mut node: *mut node_t,
     mut ch: *mut i32,
-    mut fin: *mut crate::src::qcommon::q_shared::byte,
+    mut fin: *mut byte,
 ) -> i32 {
     while !node.is_null() && (*node).symbol == 256 as i32 + 1 as i32 {
         if get_bit(fin) != 0 {
@@ -329,9 +329,9 @@ pub unsafe extern "C" fn Huff_Receive(
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_offsetReceive(
-    mut node: *mut crate::qcommon_h::node_t,
+    mut node: *mut node_t,
     mut ch: *mut i32,
-    mut fin: *mut crate::src::qcommon::q_shared::byte,
+    mut fin: *mut byte,
     mut offset: *mut i32,
     mut maxoffset: i32,
 ) {
@@ -359,9 +359,9 @@ pub unsafe extern "C" fn Huff_offsetReceive(
 /* Send the prefix code for this node */
 
 unsafe extern "C" fn send(
-    mut node: *mut crate::qcommon_h::node_t,
-    mut child: *mut crate::qcommon_h::node_t,
-    mut fout: *mut crate::src::qcommon::q_shared::byte,
+    mut node: *mut node_t,
+    mut child: *mut node_t,
+    mut fout: *mut byte,
     mut maxoffset: i32,
 ) {
     if !(*node).parent.is_null() {
@@ -383,9 +383,9 @@ unsafe extern "C" fn send(
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_transmit(
-    mut huff: *mut crate::qcommon_h::huff_t,
+    mut huff: *mut huff_t,
     mut ch: i32,
-    mut fout: *mut crate::src::qcommon::q_shared::byte,
+    mut fout: *mut byte,
     mut maxoffset: i32,
 ) {
     let mut i: i32 = 0;
@@ -400,7 +400,7 @@ pub unsafe extern "C" fn Huff_transmit(
     } else {
         send(
             (*huff).loc[ch as usize],
-            0 as *mut crate::qcommon_h::node_t,
+            0 as *mut node_t,
             fout,
             maxoffset,
         );
@@ -409,16 +409,16 @@ pub unsafe extern "C" fn Huff_transmit(
 #[no_mangle]
 
 pub unsafe extern "C" fn Huff_offsetTransmit(
-    mut huff: *mut crate::qcommon_h::huff_t,
+    mut huff: *mut huff_t,
     mut ch: i32,
-    mut fout: *mut crate::src::qcommon::q_shared::byte,
+    mut fout: *mut byte,
     mut offset: *mut i32,
     mut maxoffset: i32,
 ) {
     bloc = *offset;
     send(
         (*huff).loc[ch as usize],
-        0 as *mut crate::qcommon_h::node_t,
+        0 as *mut node_t,
         fout,
         maxoffset,
     );
@@ -426,34 +426,34 @@ pub unsafe extern "C" fn Huff_offsetTransmit(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t, mut offset: i32) {
+pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) {
     let mut ch: i32 = 0;
     let mut cch: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut size: i32 = 0;
-    let mut seq: [crate::src::qcommon::q_shared::byte; 65536] = [0; 65536];
-    let mut buffer: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut huff: crate::qcommon_h::huff_t = crate::qcommon_h::huff_t {
+    let mut seq: [byte; 65536] = [0; 65536];
+    let mut buffer: *mut byte =
+        0 as *mut byte;
+    let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *mut crate::qcommon_h::node_t,
-        lhead: 0 as *mut crate::qcommon_h::node_t,
-        ltail: 0 as *mut crate::qcommon_h::node_t,
-        loc: [0 as *mut crate::qcommon_h::node_t; 257],
-        freelist: 0 as *mut *mut crate::qcommon_h::node_t,
-        nodeList: [crate::qcommon_h::node_t {
-            left: 0 as *mut crate::qcommon_h::nodetype,
-            right: 0 as *mut crate::qcommon_h::nodetype,
-            parent: 0 as *mut crate::qcommon_h::nodetype,
-            next: 0 as *mut crate::qcommon_h::nodetype,
-            prev: 0 as *mut crate::qcommon_h::nodetype,
-            head: 0 as *mut *mut crate::qcommon_h::nodetype,
+        tree: 0 as *mut node_t,
+        lhead: 0 as *mut node_t,
+        ltail: 0 as *mut node_t,
+        loc: [0 as *mut node_t; 257],
+        freelist: 0 as *mut *mut node_t,
+        nodeList: [node_t {
+            left: 0 as *mut nodetype,
+            right: 0 as *mut nodetype,
+            parent: 0 as *mut nodetype,
+            next: 0 as *mut nodetype,
+            prev: 0 as *mut nodetype,
+            head: 0 as *mut *mut nodetype,
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *mut crate::qcommon_h::node_t; 768],
+        nodePtrs: [0 as *mut node_t; 768],
     };
     size = (*mbuf).cursize - offset;
     buffer = (*mbuf).data.offset(offset as isize);
@@ -461,23 +461,23 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t,
         return;
     }
     crate::stdlib::memset(
-        &mut huff as *mut crate::qcommon_h::huff_t as *mut libc::c_void,
+        &mut huff as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
     );
     // Initialize the tree & list with the NYT node
     let fresh5 = huff.blocNode;
     huff.blocNode = huff.blocNode + 1;
     huff.loc[256 as i32 as usize] =
-        &mut *huff.nodeList.as_mut_ptr().offset(fresh5 as isize) as *mut crate::qcommon_h::node_t;
+        &mut *huff.nodeList.as_mut_ptr().offset(fresh5 as isize) as *mut node_t;
     huff.ltail = huff.loc[256 as i32 as usize];
     huff.lhead = huff.ltail;
     huff.tree = huff.lhead;
     (*huff.tree).symbol = 256 as i32;
     (*huff.tree).weight = 0 as i32;
-    (*huff.lhead).prev = 0 as *mut crate::qcommon_h::nodetype;
+    (*huff.lhead).prev = 0 as *mut nodetype;
     (*huff.lhead).next = (*huff.lhead).prev;
-    (*huff.tree).right = 0 as *mut crate::qcommon_h::nodetype;
+    (*huff.tree).right = 0 as *mut nodetype;
     (*huff.tree).left = (*huff.tree).right;
     (*huff.tree).parent = (*huff.tree).left;
     cch = *buffer.offset(0 as i32 as isize) as i32 * 256 as i32
@@ -492,7 +492,7 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t,
         ch = 0 as i32;
         /* Increment node */
         if bloc >> 3 as i32 > size {
-            seq[j as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+            seq[j as usize] = 0 as i32 as byte;
             break;
         } else {
             // don't overflow reading from the messages
@@ -507,8 +507,8 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t,
                     i += 1
                 }
             }
-            seq[j as usize] = ch as crate::src::qcommon::q_shared::byte;
-            Huff_addRef(&mut huff, ch as crate::src::qcommon::q_shared::byte);
+            seq[j as usize] = ch as byte;
+            Huff_addRef(&mut huff, ch as byte);
             j += 1
         }
     }
@@ -521,32 +521,32 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t,
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut crate::qcommon_h::msg_t, mut offset: i32) {
+pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     let mut i: i32 = 0;
     let mut ch: i32 = 0;
     let mut size: i32 = 0;
-    let mut seq: [crate::src::qcommon::q_shared::byte; 65536] = [0; 65536];
-    let mut buffer: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut huff: crate::qcommon_h::huff_t = crate::qcommon_h::huff_t {
+    let mut seq: [byte; 65536] = [0; 65536];
+    let mut buffer: *mut byte =
+        0 as *mut byte;
+    let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
-        tree: 0 as *mut crate::qcommon_h::node_t,
-        lhead: 0 as *mut crate::qcommon_h::node_t,
-        ltail: 0 as *mut crate::qcommon_h::node_t,
-        loc: [0 as *mut crate::qcommon_h::node_t; 257],
-        freelist: 0 as *mut *mut crate::qcommon_h::node_t,
-        nodeList: [crate::qcommon_h::node_t {
-            left: 0 as *mut crate::qcommon_h::nodetype,
-            right: 0 as *mut crate::qcommon_h::nodetype,
-            parent: 0 as *mut crate::qcommon_h::nodetype,
-            next: 0 as *mut crate::qcommon_h::nodetype,
-            prev: 0 as *mut crate::qcommon_h::nodetype,
-            head: 0 as *mut *mut crate::qcommon_h::nodetype,
+        tree: 0 as *mut node_t,
+        lhead: 0 as *mut node_t,
+        ltail: 0 as *mut node_t,
+        loc: [0 as *mut node_t; 257],
+        freelist: 0 as *mut *mut node_t,
+        nodeList: [node_t {
+            left: 0 as *mut nodetype,
+            right: 0 as *mut nodetype,
+            parent: 0 as *mut nodetype,
+            next: 0 as *mut nodetype,
+            prev: 0 as *mut nodetype,
+            head: 0 as *mut *mut nodetype,
             weight: 0,
             symbol: 0,
         }; 768],
-        nodePtrs: [0 as *mut crate::qcommon_h::node_t; 768],
+        nodePtrs: [0 as *mut node_t; 768],
     };
     size = (*mbuf).cursize - offset;
     buffer = (*mbuf).data.offset(offset as isize);
@@ -554,33 +554,33 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut crate::qcommon_h::msg_t, m
         return;
     }
     crate::stdlib::memset(
-        &mut huff as *mut crate::qcommon_h::huff_t as *mut libc::c_void,
+        &mut huff as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
     );
     // Add the NYT (not yet transmitted) node into the tree/list */
     let fresh6 = huff.blocNode;
     huff.blocNode = huff.blocNode + 1;
     huff.loc[256 as i32 as usize] =
-        &mut *huff.nodeList.as_mut_ptr().offset(fresh6 as isize) as *mut crate::qcommon_h::node_t;
+        &mut *huff.nodeList.as_mut_ptr().offset(fresh6 as isize) as *mut node_t;
     huff.lhead = huff.loc[256 as i32 as usize];
     huff.tree = huff.lhead;
     (*huff.tree).symbol = 256 as i32;
     (*huff.tree).weight = 0 as i32;
-    (*huff.lhead).prev = 0 as *mut crate::qcommon_h::nodetype;
+    (*huff.lhead).prev = 0 as *mut nodetype;
     (*huff.lhead).next = (*huff.lhead).prev;
-    (*huff.tree).right = 0 as *mut crate::qcommon_h::nodetype;
+    (*huff.tree).right = 0 as *mut nodetype;
     (*huff.tree).left = (*huff.tree).right;
     (*huff.tree).parent = (*huff.tree).left;
-    seq[0 as i32 as usize] = (size >> 8 as i32) as crate::src::qcommon::q_shared::byte;
-    seq[1 as i32 as usize] = (size & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    seq[0 as i32 as usize] = (size >> 8 as i32) as byte;
+    seq[1 as i32 as usize] = (size & 0xff as i32) as byte;
     bloc = 16 as i32;
     i = 0 as i32;
     while i < size {
         ch = *buffer.offset(i as isize) as i32;
         /* Do update */
         Huff_transmit(&mut huff, ch, seq.as_mut_ptr(), size << 3 as i32); /* Transmit symbol */
-        Huff_addRef(&mut huff, ch as crate::src::qcommon::q_shared::byte); // next byte
+        Huff_addRef(&mut huff, ch as byte); // next byte
         i += 1
     }
     bloc += 8 as i32;
@@ -601,16 +601,16 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut crate::qcommon_h::msg_t, m
 /* Maximum symbol */
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_Init(mut huff: *mut crate::qcommon_h::huffman_t) {
+pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
     crate::stdlib::memset(
-        &mut (*huff).compressor as *mut crate::qcommon_h::huff_t as *mut libc::c_void,
+        &mut (*huff).compressor as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut (*huff).decompressor as *mut crate::qcommon_h::huff_t as *mut libc::c_void,
+        &mut (*huff).decompressor as *mut huff_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::qcommon_h::huff_t>() as libc::c_ulong,
+        ::std::mem::size_of::<huff_t>() as libc::c_ulong,
     );
     // Initialize the tree & list with the NYT node
     let fresh7 = (*huff).decompressor.blocNode;
@@ -620,15 +620,15 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut crate::qcommon_h::huffman_t) {
         .nodeList
         .as_mut_ptr()
         .offset(fresh7 as isize)
-        as *mut crate::qcommon_h::node_t;
+        as *mut node_t;
     (*huff).decompressor.ltail = (*huff).decompressor.loc[256 as i32 as usize];
     (*huff).decompressor.lhead = (*huff).decompressor.ltail;
     (*huff).decompressor.tree = (*huff).decompressor.lhead;
     (*(*huff).decompressor.tree).symbol = 256 as i32;
     (*(*huff).decompressor.tree).weight = 0 as i32;
-    (*(*huff).decompressor.lhead).prev = 0 as *mut crate::qcommon_h::nodetype;
+    (*(*huff).decompressor.lhead).prev = 0 as *mut nodetype;
     (*(*huff).decompressor.lhead).next = (*(*huff).decompressor.lhead).prev;
-    (*(*huff).decompressor.tree).right = 0 as *mut crate::qcommon_h::nodetype;
+    (*(*huff).decompressor.tree).right = 0 as *mut nodetype;
     (*(*huff).decompressor.tree).left = (*(*huff).decompressor.tree).right;
     (*(*huff).decompressor.tree).parent = (*(*huff).decompressor.tree).left;
     // Add the NYT (not yet transmitted) node into the tree/list */
@@ -639,14 +639,14 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut crate::qcommon_h::huffman_t) {
         .nodeList
         .as_mut_ptr()
         .offset(fresh8 as isize)
-        as *mut crate::qcommon_h::node_t;
+        as *mut node_t;
     (*huff).compressor.lhead = (*huff).compressor.loc[256 as i32 as usize];
     (*huff).compressor.tree = (*huff).compressor.lhead;
     (*(*huff).compressor.tree).symbol = 256 as i32;
     (*(*huff).compressor.tree).weight = 0 as i32;
-    (*(*huff).compressor.lhead).prev = 0 as *mut crate::qcommon_h::nodetype;
+    (*(*huff).compressor.lhead).prev = 0 as *mut nodetype;
     (*(*huff).compressor.lhead).next = (*(*huff).compressor.lhead).prev;
-    (*(*huff).compressor.tree).right = 0 as *mut crate::qcommon_h::nodetype;
+    (*(*huff).compressor.tree).right = 0 as *mut nodetype;
     (*(*huff).compressor.tree).left = (*(*huff).compressor.tree).right;
     (*(*huff).compressor.tree).parent = (*(*huff).compressor.tree).left;
 }

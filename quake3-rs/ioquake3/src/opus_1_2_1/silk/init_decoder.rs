@@ -333,14 +333,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_init_decoder(
-    mut psDec: *mut crate::structs_h::silk_decoder_state,
+    mut psDec: *mut silk_decoder_state,
 ) -> i32
 /* I/O  Decoder state pointer                       */ {
     /* Clear the entire encoder state, except anything copied */
     crate::stdlib::memset(
         psDec as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::structs_h::silk_decoder_state>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_decoder_state>() as libc::c_ulong,
     );
     /* Used to deactivate LSF interpolation */
     (*psDec).first_frame_after_reset = 1 as i32;
@@ -348,11 +348,11 @@ pub unsafe extern "C" fn silk_init_decoder(
     (*psDec).arch = opus_select_arch();
     /* Reset CNG state */
     crate::src::opus_1_2_1::silk::CNG::silk_CNG_Reset(
-        psDec as *mut crate::structs_h::silk_decoder_state,
+        psDec as *mut silk_decoder_state,
     );
     /* Reset PLC state */
     crate::src::opus_1_2_1::silk::PLC::silk_PLC_Reset(
-        psDec as *mut crate::structs_h::silk_decoder_state,
+        psDec as *mut silk_decoder_state,
     );
     return 0 as i32;
 }

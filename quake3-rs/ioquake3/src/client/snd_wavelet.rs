@@ -623,16 +623,16 @@ static mut numBits: [u8; 256] = [
 ];
 #[no_mangle]
 
-pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> crate::src::qcommon::q_shared::byte {
+pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> byte {
     let mut adjusted: libc::c_ulong = 0;
-    let mut sign: crate::src::qcommon::q_shared::byte = 0;
-    let mut exponent: crate::src::qcommon::q_shared::byte = 0;
-    let mut mantissa: crate::src::qcommon::q_shared::byte = 0;
+    let mut sign: byte = 0;
+    let mut exponent: byte = 0;
+    let mut mantissa: byte = 0;
     sign = if (s as i32) < 0 as i32 {
         0 as i32
     } else {
         0x80 as i32
-    } as crate::src::qcommon::q_shared::byte;
+    } as byte;
     if (s as i32) < 0 as i32 {
         s = -(s as i32) as i16
     }
@@ -645,21 +645,21 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> crate::src::qcommon::q_share
         adjusted = 32767 as i32 as libc::c_ulong
     }
     exponent = (numBits[(adjusted >> 7 as i32 & 0xff as i32 as libc::c_ulong) as usize] as i32
-        - 1 as i32) as crate::src::qcommon::q_shared::byte;
+        - 1 as i32) as byte;
     mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as libc::c_ulong)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     return !(sign as i32 | (exponent as i32) << 4 as i32 | mantissa as i32)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn MuLawDecode(mut uLaw: crate::src::qcommon::q_shared::byte) -> i16 {
+pub unsafe extern "C" fn MuLawDecode(mut uLaw: byte) -> i16 {
     let mut adjusted: isize = 0;
-    let mut exponent: crate::src::qcommon::q_shared::byte = 0;
-    let mut mantissa: crate::src::qcommon::q_shared::byte = 0;
-    uLaw = !(uLaw as i32) as crate::src::qcommon::q_shared::byte;
-    exponent = (uLaw as i32 >> 4 as i32 & 0x7 as i32) as crate::src::qcommon::q_shared::byte;
-    mantissa = ((uLaw as i32 & 0xf as i32) + 16 as i32) as crate::src::qcommon::q_shared::byte;
+    let mut exponent: byte = 0;
+    let mut mantissa: byte = 0;
+    uLaw = !(uLaw as i32) as byte;
+    exponent = (uLaw as i32 >> 4 as i32 & 0x7 as i32) as byte;
+    mantissa = ((uLaw as i32 & 0xf as i32) + 16 as i32) as byte;
     adjusted = (((mantissa as i32) << exponent as i32 + 3 as i32) - 128 as i32 - 4 as i32) as isize;
     return if uLaw as i32 & 0x80 as i32 != 0 {
         adjusted
@@ -671,24 +671,24 @@ pub unsafe extern "C" fn MuLawDecode(mut uLaw: crate::src::qcommon::q_shared::by
 
 pub static mut mulawToShort: [i16; 256] = [0; 256];
 
-static mut madeTable: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut madeTable: qboolean =
+    qfalse;
 
 static mut NXStreamCount: i32 = 0;
 #[no_mangle]
 
 pub unsafe extern "C" fn NXPutc(
-    mut stream: *mut crate::src::qcommon::q_shared::byte,
+    mut stream: *mut byte,
     mut out: libc::c_char,
 ) {
     let fresh2 = NXStreamCount;
     NXStreamCount = NXStreamCount + 1;
-    *stream.offset(fresh2 as isize) = out as crate::src::qcommon::q_shared::byte;
+    *stream.offset(fresh2 as isize) = out as byte;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn encodeWavelet(
-    mut sfx: *mut crate::snd_local_h::sfx_t,
+    mut sfx: *mut sfx_t,
     mut packets: *mut i16,
 ) {
     let mut wksp: [f32; 4097] = [
@@ -4794,20 +4794,20 @@ pub unsafe extern "C" fn encodeWavelet(
     let mut i: i32 = 0;
     let mut samples: i32 = 0;
     let mut size: i32 = 0;
-    let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut out: *mut byte =
+        0 as *mut byte;
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
             mulawToShort[i as usize] =
-                MuLawDecode(i as crate::src::qcommon::q_shared::byte) as f32 as i16;
+                MuLawDecode(i as byte) as f32 as i16;
             i += 1
         }
-        madeTable = crate::src::qcommon::q_shared::qtrue
+        madeTable = qtrue
     }
-    chunk = 0 as *mut crate::snd_local_h::sndBuffer;
+    chunk = 0 as *mut sndBuffer;
     samples = (*sfx).soundLength;
     while samples > 0 as i32 {
         size = samples;
@@ -4818,7 +4818,7 @@ pub unsafe extern "C" fn encodeWavelet(
             size = 4 as i32
         }
         newchunk =
-            crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
+            SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {
@@ -4832,7 +4832,7 @@ pub unsafe extern "C" fn encodeWavelet(
             i += 1
         }
         wt1(wksp.as_mut_ptr(), size as libc::c_ulong, 1 as i32);
-        out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+        out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
         i = 0 as i32;
         while i < size {
             temp = wksp[i as usize];
@@ -4851,7 +4851,7 @@ pub unsafe extern "C" fn encodeWavelet(
 #[no_mangle]
 
 pub unsafe extern "C" fn decodeWavelet(
-    mut chunk: *mut crate::snd_local_h::sndBuffer,
+    mut chunk: *mut sndBuffer,
     mut to: *mut i16,
 ) {
     let mut wksp: [f32; 4097] = [
@@ -8954,10 +8954,10 @@ pub unsafe extern "C" fn decodeWavelet(
         0.,
     ];
     let mut i: i32 = 0;
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut out: *mut byte =
+        0 as *mut byte;
     let mut size: i32 = (*chunk).size;
-    out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+    out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;
     while i < size {
         wksp[i as usize] = mulawToShort[*out.offset(i as isize) as usize] as f32;
@@ -9037,7 +9037,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn encodeMuLaw(
-    mut sfx: *mut crate::snd_local_h::sfx_t,
+    mut sfx: *mut sfx_t,
     mut packets: *mut i16,
 ) {
     let mut i: i32 = 0;
@@ -9045,20 +9045,20 @@ pub unsafe extern "C" fn encodeMuLaw(
     let mut size: i32 = 0;
     let mut grade: i32 = 0;
     let mut poop: i32 = 0;
-    let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut out: *mut byte =
+        0 as *mut byte;
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
             mulawToShort[i as usize] =
-                MuLawDecode(i as crate::src::qcommon::q_shared::byte) as f32 as i16;
+                MuLawDecode(i as byte) as f32 as i16;
             i += 1
         }
-        madeTable = crate::src::qcommon::q_shared::qtrue
+        madeTable = qtrue
     }
-    chunk = 0 as *mut crate::snd_local_h::sndBuffer;
+    chunk = 0 as *mut sndBuffer;
     samples = (*sfx).soundLength;
     grade = 0 as i32;
     while samples > 0 as i32 {
@@ -9067,14 +9067,14 @@ pub unsafe extern "C" fn encodeMuLaw(
             size = 1024 as i32 * 2 as i32
         }
         newchunk =
-            crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
+            SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {
             (*chunk).next = newchunk
         }
         chunk = newchunk;
-        out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+        out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
         i = 0 as i32;
         while i < size {
             poop = *packets.offset(0 as i32 as isize) as i32 + grade;
@@ -9095,14 +9095,14 @@ pub unsafe extern "C" fn encodeMuLaw(
 #[no_mangle]
 
 pub unsafe extern "C" fn decodeMuLaw(
-    mut chunk: *mut crate::snd_local_h::sndBuffer,
+    mut chunk: *mut sndBuffer,
     mut to: *mut i16,
 ) {
     let mut i: i32 = 0;
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut out: *mut byte =
+        0 as *mut byte;
     let mut size: i32 = (*chunk).size;
-    out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+    out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;
     while i < size {
         *to.offset(i as isize) = mulawToShort[*out.offset(i as isize) as usize];

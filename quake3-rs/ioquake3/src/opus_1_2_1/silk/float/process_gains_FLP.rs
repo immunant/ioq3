@@ -201,15 +201,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_process_gains_FLP(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut psEncCtrl: *mut silk_encoder_control_FLP,
     mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */
 {
-    let mut psShapeSt: *mut crate::structs_FLP_h::silk_shape_state_FLP = &mut (*psEnc).sShape;
+    let mut psShapeSt: *mut silk_shape_state_FLP = &mut (*psEnc).sShape;
     let mut k: i32 = 0;
-    let mut pGains_Q16: [crate::opus_types_h::opus_int32; 4] = [0; 4];
+    let mut pGains_Q16: [opus_int32; 4] = [0; 4];
     let mut s: f32 = 0.;
     let mut InvMaxSqrVal: f32 = 0.;
     let mut gain: f32 = 0.;
@@ -243,14 +243,14 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     k = 0 as i32;
     while k < (*psEnc).sCmn.nb_subfr {
         pGains_Q16[k as usize] =
-            ((*psEncCtrl).Gains[k as usize] * 65536.0f32) as crate::opus_types_h::opus_int32;
+            ((*psEncCtrl).Gains[k as usize] * 65536.0f32) as opus_int32;
         k += 1
     }
     /* Save unquantized gains and gain Index */
     crate::stdlib::memcpy((*psEncCtrl).GainsUnq_Q16.as_mut_ptr() as *mut libc::c_void,
            pGains_Q16.as_mut_ptr() as *const libc::c_void,
            ((*psEnc).sCmn.nb_subfr as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int32>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
                                                 as libc::c_ulong));
     (*psEncCtrl).lastGainIndexPrev = (*psShapeSt).LastGainIndex;
     /* Quantize gains */

@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_decode_pitch(
-    mut lagIndex: crate::opus_types_h::opus_int16,
+    mut lagIndex: opus_int16,
     mut contourIndex: i8,
     mut pitch_lags: *mut i32,
     Fs_kHz: i32,
@@ -83,10 +83,10 @@ pub unsafe extern "C" fn silk_decode_pitch(
         .offset(0 as i32 as isize) as *const i8;
         cbk_size = 12 as i32
     }
-    min_lag = 2 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-        * Fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-    max_lag = 18 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-        * Fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+    min_lag = 2 as i32 as opus_int16 as opus_int32
+        * Fs_kHz as opus_int16 as opus_int32;
+    max_lag = 18 as i32 as opus_int16 as opus_int32
+        * Fs_kHz as opus_int16 as opus_int32;
     lag = min_lag + lagIndex as i32;
     k = 0 as i32;
     while k < nb_subfr {

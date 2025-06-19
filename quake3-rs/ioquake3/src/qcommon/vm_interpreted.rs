@@ -126,7 +126,7 @@ unsafe extern "C" fn loadWord(mut addr: *mut libc::c_void) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_Indent(mut vm: *mut crate::qcommon_h::vm_t) -> *mut libc::c_char {
+pub unsafe extern "C" fn VM_Indent(mut vm: *mut vm_t) -> *mut libc::c_char {
     static mut string: *mut libc::c_char = b"                                        \x00"
         as *const u8 as *const libc::c_char
         as *mut libc::c_char;
@@ -138,24 +138,24 @@ pub unsafe extern "C" fn VM_Indent(mut vm: *mut crate::qcommon_h::vm_t) -> *mut 
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_StackTrace(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut programCounter: i32,
     mut programStack: i32,
 ) {
     let mut count: i32 = 0;
     count = 0 as i32;
     loop {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"%s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::qcommon::vm::VM_ValueToSymbol(
-                vm as *mut crate::vm_local_h::vm_s,
+            VM_ValueToSymbol(
+                vm as *mut vm_s,
                 programCounter,
             ),
         );
         programStack = *(&mut *(*vm).dataBase.offset((programStack + 4 as i32) as isize)
-            as *mut crate::src::qcommon::q_shared::byte as *mut i32);
+            as *mut byte as *mut i32);
         programCounter = *(&mut *(*vm).dataBase.offset(programStack as isize)
-            as *mut crate::src::qcommon::q_shared::byte as *mut i32);
+            as *mut byte as *mut i32);
         if !(programCounter != -(1 as i32) && {
             count += 1;
             (count) < 32 as i32
@@ -172,20 +172,20 @@ VM_PrepareInterpreter
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_PrepareInterpreter(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut header: *mut crate::qfiles_h::vmHeader_t,
+    mut vm: *mut vm_t,
+    mut header: *mut vmHeader_t,
 ) {
     let mut op: i32 = 0; // we're now int aligned
     let mut byte_pc: i32 = 0;
     let mut int_pc: i32 = 0;
-    let mut code: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut code: *mut byte =
+        0 as *mut byte;
     let mut instruction: i32 = 0;
     let mut codeBase: *mut i32 = 0 as *mut i32;
-    (*vm).codeBase = crate::src::qcommon::common::Hunk_Alloc(
+    (*vm).codeBase = Hunk_Alloc(
         (*vm).codeLength * 4 as i32,
-        crate::src::qcommon::q_shared::h_high,
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        h_high,
+    ) as *mut byte;
     //	memcpy( vm->codeBase, (byte *)header + header->codeOffset, vm->codeLength );
     // we don't need to translate the instructions, but we still need
     // to find each instructions starting point for jumps
@@ -193,17 +193,17 @@ pub unsafe extern "C" fn VM_PrepareInterpreter(
     int_pc = byte_pc;
     instruction = 0 as i32;
     code =
-        (header as *mut crate::src::qcommon::q_shared::byte).offset((*header).codeOffset as isize);
+        (header as *mut byte).offset((*header).codeOffset as isize);
     codeBase = (*vm).codeBase as *mut i32;
     // Copy and expand instructions to words while building instruction table
     while instruction < (*header).instructionCount {
-        *(*vm).instructionPointers.offset(instruction as isize) = int_pc as crate::stdlib::intptr_t;
+        *(*vm).instructionPointers.offset(instruction as isize) = int_pc as intptr_t;
         instruction += 1;
         op = *code.offset(byte_pc as isize) as i32;
         *codeBase.offset(int_pc as isize) = op;
         if byte_pc > (*header).codeLength {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"VM_PrepareInterpreter: pc > header->codeLength\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -215,7 +215,7 @@ pub unsafe extern "C" fn VM_PrepareInterpreter(
             3 | 8 | 9 | 4 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24
             | 25 | 26 | 34 => {
                 *codeBase.offset(int_pc as isize) = loadWord(&mut *code.offset(byte_pc as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *mut libc::c_void);
                 byte_pc += 4 as i32;
                 int_pc += 1
@@ -242,8 +242,8 @@ pub unsafe extern "C" fn VM_PrepareInterpreter(
                 if *codeBase.offset(int_pc as isize) < 0 as i32
                     || *codeBase.offset(int_pc as isize) > (*vm).instructionCount
                 {
-                    crate::src::qcommon::common::Com_Error(
-                        crate::src::qcommon::q_shared::ERR_DROP as i32,
+                    Com_Error(
+                        ERR_DROP as i32,
                         b"VM_PrepareInterpreter: Jump to invalid instruction number\x00"
                             as *const u8 as *const libc::c_char,
                     );
@@ -335,24 +335,24 @@ locals from sp
 #[no_mangle]
 
 pub unsafe extern "C" fn VM_CallInterpreted(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut vm: *mut vm_t,
     mut args: *mut i32,
 ) -> i32 {
     let mut current_block: u64;
-    let mut stack: [crate::src::qcommon::q_shared::byte; 1039] = [0; 1039];
+    let mut stack: [byte; 1039] = [0; 1039];
     let mut opStack: *mut i32 = 0 as *mut i32;
-    let mut opStackOfs: crate::stdlib::uint8_t = 0;
+    let mut opStackOfs: uint8_t = 0;
     let mut programCounter: i32 = 0;
     let mut programStack: i32 = 0;
     let mut stackOnEntry: i32 = 0;
-    let mut image: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut image: *mut byte =
+        0 as *mut byte;
     let mut codeImage: *mut i32 = 0 as *mut i32;
     let mut v1: i32 = 0;
     let mut dataMask: i32 = 0;
     let mut arg: i32 = 0;
     // interpret the code
-    (*vm).currentlyInterpreting = crate::src::qcommon::q_shared::qtrue;
+    (*vm).currentlyInterpreting = qtrue;
     // we might be called recursively, so this might not be the very top
     stackOnEntry = (*vm).programStack;
     programStack = stackOnEntry;
@@ -365,22 +365,22 @@ pub unsafe extern "C" fn VM_CallInterpreted(
     arg = 0 as i32;
     while arg < 13 as i32 {
         *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize)
-            as *mut crate::src::qcommon::q_shared::byte as *mut i32) = *args.offset(arg as isize);
+            as *mut byte as *mut i32) = *args.offset(arg as isize);
         arg += 1
     }
     *(&mut *image.offset((programStack + 4 as i32) as isize)
-        as *mut crate::src::qcommon::q_shared::byte as *mut i32) = 0 as i32;
-    *(&mut *image.offset(programStack as isize) as *mut crate::src::qcommon::q_shared::byte
+        as *mut byte as *mut i32) = 0 as i32;
+    *(&mut *image.offset(programStack as isize) as *mut byte
         as *mut i32) = -(1 as i32);
-    crate::src::qcommon::vm::VM_Debug(0 as i32);
+    VM_Debug(0 as i32);
     // leave a free spot at start of stack so
     // that as long as opStack is valid, opStack-1 will
     // not corrupt anything
-    opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as isize
+    opStack = (stack.as_mut_ptr() as intptr_t + 16 as i32 as isize
         - 1 as i32 as isize
         & !(16 as i32 - 1 as i32) as isize) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
-    opStackOfs = 0 as i32 as crate::stdlib::uint8_t;
+    opStackOfs = 0 as i32 as uint8_t;
     's_105: loop
     //	vm_debugLevel=2;
     // main interpreter loop, will exit when a LEAVE instruction
@@ -393,7 +393,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
         //		unsigned int	r2;
         {
             r0 = *opStack.offset(opStackOfs as isize);
-            r1 = *opStack.offset((opStackOfs as i32 - 1 as i32) as crate::stdlib::uint8_t as isize);
+            r1 = *opStack.offset((opStackOfs as i32 - 1 as i32) as uint8_t as isize);
             loop {
                 let fresh0 = programCounter;
                 programCounter = programCounter + 1;
@@ -419,14 +419,14 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     29 => {
                         let ref mut fresh3 = *opStack.offset(opStackOfs as isize);
                         *fresh3 = *(&mut *image.offset((r0 & dataMask) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32);
                         r0 = *fresh3
                     }
                     28 => {
                         let ref mut fresh4 = *opStack.offset(opStackOfs as isize);
                         *fresh4 = *(&mut *image.offset((r0 & dataMask) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut u16) as i32;
                         r0 = *fresh4
                     }
@@ -437,22 +437,22 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     32 => {
                         *(&mut *image.offset((r1 & dataMask) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32) = r0;
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     31 => {
                         *(&mut *image.offset((r1 & dataMask) as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i16) = r0 as i16;
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     30 => {
                         *image.offset((r1 & dataMask) as isize) =
-                            r0 as crate::src::qcommon::q_shared::byte;
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                            r0 as byte;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     33 => {
@@ -460,26 +460,26 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(&mut *image.offset(
                             (*codeImage.offset(programCounter as isize) + programStack & dataMask)
                                 as isize,
-                        ) as *mut crate::src::qcommon::q_shared::byte
+                        ) as *mut byte
                             as *mut i32) = r0;
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         programCounter += 1 as i32;
                         continue 'c_7647;
                     }
                     34 => {
-                        crate::src::qcommon::vm::VM_BlockCopy(
+                        VM_BlockCopy(
                             r1 as u32,
                             r0 as u32,
-                            *codeImage.offset(programCounter as isize) as crate::stddef_h::size_t,
+                            *codeImage.offset(programCounter as isize) as size_t,
                         );
                         programCounter += 1 as i32;
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     5 => {
                         // save current program counter
                         *(&mut *image.offset(programStack as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32) = programCounter;
                         // jump to the location on the stack
                         programCounter = r0;
@@ -492,52 +492,52 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                             //				temp = vm->callLevel;
                             (*vm).programStack = programStack - 4 as i32;
                             *(&mut *image.offset((programStack + 4 as i32) as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32) = -(1 as i32) - programCounter;
                             //VM_LogSyscalls( (int *)&image[ programStack + 4 ] );
                             // the vm has ints on the stack, we expect
                             // pointers so we might have to convert it
-                            if ::std::mem::size_of::<crate::stdlib::intptr_t>() as libc::c_ulong
+                            if ::std::mem::size_of::<intptr_t>() as libc::c_ulong
                                 != ::std::mem::size_of::<i32>() as libc::c_ulong
                             {
-                                let mut argarr: [crate::stdlib::intptr_t; 16] = [0; 16];
+                                let mut argarr: [intptr_t; 16] = [0; 16];
                                 let mut imagePtr: *mut i32 = &mut *image
                                     .offset(programStack as isize)
-                                    as *mut crate::src::qcommon::q_shared::byte
+                                    as *mut byte
                                     as *mut i32;
                                 let mut i: i32 = 0;
                                 i = 0 as i32;
                                 while (i as libc::c_ulong)
-                                    < (::std::mem::size_of::<[crate::stdlib::intptr_t; 16]>()
+                                    < (::std::mem::size_of::<[intptr_t; 16]>()
                                         as libc::c_ulong)
                                         .wrapping_div(
-                                            ::std::mem::size_of::<crate::stdlib::intptr_t>()
+                                            ::std::mem::size_of::<intptr_t>()
                                                 as libc::c_ulong,
                                         )
                                 {
                                     imagePtr = imagePtr.offset(1);
-                                    argarr[i as usize] = *imagePtr as crate::stdlib::intptr_t;
+                                    argarr[i as usize] = *imagePtr as intptr_t;
                                     i += 1
                                 }
                                 r = (*vm).systemCall.expect("non-null function pointer")(
                                     argarr.as_mut_ptr(),
                                 ) as i32
                             } else {
-                                let mut argptr: *mut crate::stdlib::intptr_t = &mut *image
+                                let mut argptr: *mut intptr_t = &mut *image
                                     .offset((programStack + 4 as i32) as isize)
-                                    as *mut crate::src::qcommon::q_shared::byte
-                                    as *mut crate::stdlib::intptr_t;
+                                    as *mut byte
+                                    as *mut intptr_t;
                                 r = (*vm).systemCall.expect("non-null function pointer")(argptr)
                                     as i32
                             }
                             opStackOfs = opStackOfs.wrapping_add(1);
                             *opStack.offset(opStackOfs as isize) = r;
                             programCounter = *(&mut *image.offset(programStack as isize)
-                                as *mut crate::src::qcommon::q_shared::byte
+                                as *mut byte
                                 as *mut i32)
                         } else if programCounter as u32 >= (*vm).instructionCount as u32 {
-                            crate::src::qcommon::common::Com_Error(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                            Com_Error(
+                                ERR_DROP as i32,
                                 b"VM program counter out of range in OP_CALL\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -570,15 +570,15 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         programStack += v1;
                         // grab the saved program counter
                         programCounter = *(&mut *image.offset(programStack as isize)
-                            as *mut crate::src::qcommon::q_shared::byte
+                            as *mut byte
                             as *mut i32);
                         // check for leaving the VM
                         if programCounter == -(1 as i32) {
                             break 's_105;
                         }
                         if programCounter as u32 >= (*vm).codeLength as u32 {
-                            crate::src::qcommon::common::Com_Error(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                            Com_Error(
+                                ERR_DROP as i32,
                                 b"VM program counter out of range in OP_LEAVE\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -592,8 +592,8 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         ===================================================================
                         */
                         if r0 as u32 >= (*vm).instructionCount as u32 {
-                            crate::src::qcommon::common::Com_Error(
-                                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                            Com_Error(
+                                ERR_DROP as i32,
                                 b"VM program counter out of range in OP_JUMP\x00" as *const u8
                                     as *const libc::c_char,
                             );
@@ -603,7 +603,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         continue 'c_7647;
                     }
                     11 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 == r0 {
                             current_block = 4691324637564808323;
                             break;
@@ -613,7 +613,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     12 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 != r0 {
                             current_block = 3812947724376655173;
                             break;
@@ -623,7 +623,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     13 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 < r0 {
                             current_block = 2522825242109451841;
                             break;
@@ -633,7 +633,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     14 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 <= r0 {
                             current_block = 8533724845731836612;
                             break;
@@ -643,7 +643,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     15 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 > r0 {
                             current_block = 7728257318064351663;
                             break;
@@ -653,7 +653,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     16 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 >= r0 {
                             current_block = 5590933039760577279;
                             break;
@@ -663,7 +663,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     17 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if (r1 as u32) < r0 as u32 {
                             current_block = 12608488225262500095;
                             break;
@@ -673,7 +673,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     18 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 as u32 <= r0 as u32 {
                             current_block = 5089124893069931607;
                             break;
@@ -683,7 +683,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     19 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 as u32 > r0 as u32 {
                             current_block = 4871270227279186910;
                             break;
@@ -693,7 +693,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     20 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if r1 as u32 >= r0 as u32 {
                             current_block = 15993708482136914563;
                             break;
@@ -703,11 +703,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     21 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) == *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 6186816898867308296;
                             break;
@@ -717,11 +717,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     22 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) != *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 11226769033371074123;
                             break;
@@ -731,11 +731,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     23 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) < *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 4122836492991094814;
                             break;
@@ -745,11 +745,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     24 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) <= *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 654039154479240366;
                             break;
@@ -759,11 +759,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     25 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) > *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 2346768750020253347;
                             break;
@@ -773,11 +773,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         }
                     }
                     26 => {
-                        opStackOfs = (opStackOfs as i32 - 2 as i32) as crate::stdlib::uint8_t;
+                        opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                         ) >= *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as crate::stdlib::uint8_t as isize,
+                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
                         ) {
                             current_block = 14187386403465544025;
                             break;
@@ -878,7 +878,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
                             + *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                             );
                         continue 'c_7647;
                     }
@@ -887,7 +887,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
                             - *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                             );
                         continue 'c_7647;
                     }
@@ -896,7 +896,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
                             / *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                             );
                         continue 'c_7647;
                     }
@@ -905,7 +905,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
                             * *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as crate::stdlib::uint8_t as isize,
+                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
                             );
                         continue 'c_7647;
                     }
@@ -915,7 +915,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         continue 'c_7647;
                     }
                     59 => {
-                        *opStack.offset(opStackOfs as isize) = crate::src::asm::ftola::qftolsse(
+                        *opStack.offset(opStackOfs as isize) = qftolsse(
                             *(opStack as *mut f32).offset(opStackOfs as isize),
                         ) as i32;
                         continue 'c_7647;
@@ -971,10 +971,10 @@ pub unsafe extern "C" fn VM_CallInterpreted(
             }
         }
     }
-    (*vm).currentlyInterpreting = crate::src::qcommon::q_shared::qfalse;
+    (*vm).currentlyInterpreting = qfalse;
     if opStackOfs as i32 != 1 as i32 || *opStack as u32 != 0xdeadbeef as u32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"Interpreter error: opStack[0] = %X, opStackOfs = %d\x00" as *const u8
                 as *const libc::c_char,
             *opStack.offset(0 as i32 as isize),

@@ -120,14 +120,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_bwexpander(
-    mut ar: *mut crate::opus_types_h::opus_int16,
+    mut ar: *mut opus_int16,
     d: i32,
-    mut chirp_Q16: crate::opus_types_h::opus_int32,
+    mut chirp_Q16: opus_int32,
 )
 /* I    Chirp factor (typically in the range 0 to 1)                */
 {
     let mut i: i32 = 0;
-    let mut chirp_minus_one_Q16: crate::opus_types_h::opus_int32 = chirp_Q16 - 65536 as i32;
+    let mut chirp_minus_one_Q16: opus_int32 = chirp_Q16 - 65536 as i32;
     /* NB: Dont use silk_SMULWB, instead of silk_RSHIFT_ROUND( silk_MUL(), 16 ), below.  */
     /* Bias in silk_SMULWB can lead to unstable filters                                */
     i = 0 as i32;
@@ -138,7 +138,7 @@ pub unsafe extern "C" fn silk_bwexpander(
         } else {
             ((chirp_Q16 * *ar.offset(i as isize) as i32 >> 16 as i32 - 1 as i32) + 1 as i32)
                 >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         chirp_Q16 += if 16 as i32 == 1 as i32 {
             (chirp_Q16 * chirp_minus_one_Q16 >> 1 as i32)
                 + (chirp_Q16 * chirp_minus_one_Q16 & 1 as i32)
@@ -154,5 +154,5 @@ pub unsafe extern "C" fn silk_bwexpander(
         ((chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32 >> 16 as i32 - 1 as i32)
             + 1 as i32)
             >> 1 as i32
-    } as crate::opus_types_h::opus_int16;
+    } as opus_int16;
 }

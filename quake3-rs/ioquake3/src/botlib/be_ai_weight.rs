@@ -94,10 +94,10 @@ pub static mut weightFileList: [*mut crate::src::botlib::be_ai_weight::weightcon
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadValue(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut value: *mut f32,
 ) -> i32 {
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -107,48 +107,48 @@ pub unsafe extern "C" fn ReadValue(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    if PC_ExpectAnyToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    if ::libc::strcmp(
+    if libc::strcmp(
         token.string.as_mut_ptr(),
         b"-\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        crate::src::botlib::l_precomp::SourceWarning(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        SourceWarning(
+            source as *mut source_s,
             b"negative value set to zero\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-            source as *mut crate::src::botlib::l_precomp::source_s,
-            &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        if PC_ExpectAnyToken(
+            source as *mut source_s,
+            &mut token as *mut _ as *mut token_s,
         ) == 0
         {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"Missing return value\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     }
     if token.type_0 != 3 as i32 {
-        crate::src::botlib::l_precomp::SourceError(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        SourceError(
+            source as *mut source_s,
             b"invalid return value %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             token.string.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     *value = token.floatvalue;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function ReadValue
 //===========================================================================
@@ -160,69 +160,69 @@ pub unsafe extern "C" fn ReadValue(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadFuzzyWeight(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
     mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t,
 ) -> i32 {
-    if crate::src::botlib::l_precomp::PC_CheckTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_CheckTokenString(
+        source as *mut source_s,
         b"balance\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) != 0
     {
         //end if
         (*fs).type_0 = 1 as i32; //end if
-        if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        if PC_ExpectTokenString(
+            source as *mut source_s,
             b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if ReadValue(source, &mut (*fs).weight) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
-        if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        if PC_ExpectTokenString(
+            source as *mut source_s,
             b",\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if ReadValue(source, &mut (*fs).minweight) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
-        if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        if PC_ExpectTokenString(
+            source as *mut source_s,
             b",\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if ReadValue(source, &mut (*fs).maxweight) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
-        if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        if PC_ExpectTokenString(
+            source as *mut source_s,
             b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ) == 0
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     } else {
         (*fs).type_0 = 0 as i32;
         if ReadValue(source, &mut (*fs).weight) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         (*fs).minweight = (*fs).weight;
         (*fs).maxweight = (*fs).weight
     }
-    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenString(
+        source as *mut source_s,
         b";\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function ReadFuzzyWeight
 //===========================================================================
@@ -303,13 +303,13 @@ pub unsafe extern "C" fn FreeWeightConfig(
 #[no_mangle]
 
 pub unsafe extern "C" fn ReadFuzzySeperators_r(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut source: *mut source_t,
 ) -> *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t {
     let mut newindent: i32 = 0;
     let mut index: i32 = 0;
     let mut def: i32 = 0;
     let mut founddefault: i32 = 0;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -319,7 +319,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
         0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
@@ -327,55 +327,55 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
         0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     let mut firstfs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
         0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
-    founddefault = crate::src::qcommon::q_shared::qfalse as i32;
+    founddefault = qfalse as i32;
     firstfs = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     lastfs = 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
-    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenString(
+        source as *mut source_s,
         b"(\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
         return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     }
-    if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenType(
+        source as *mut source_s,
         3 as i32,
         0x1000 as i32,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
         return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     }
     index = token.intvalue as i32;
-    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenString(
+        source as *mut source_s,
         b")\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
         return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     }
-    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    if PC_ExpectTokenString(
+        source as *mut source_s,
         b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) == 0
     {
         return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     }
-    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    if PC_ExpectAnyToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) == 0
     {
         return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     }
     loop {
-        def = (::libc::strcmp(
+        def = (libc::strcmp(
             token.string.as_mut_ptr(),
             b"default\x00" as *const u8 as *const libc::c_char,
         ) == 0) as i32;
         //end if
         if def != 0
-            || ::libc::strcmp(
+            || libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"case\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -395,8 +395,8 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
             if def != 0 {
                 //end else
                 if founddefault != 0 {
-                    crate::src::botlib::l_precomp::SourceError(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    SourceError(
+                        source as *mut source_s,
                         b"switch already has a default\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                     ); //end if
@@ -404,13 +404,13 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                     return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
                 } //end if
                 (*fs).value = 999999 as i32; //end if
-                founddefault = crate::src::qcommon::q_shared::qtrue as i32
+                founddefault = qtrue as i32
             } else {
-                if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                if PC_ExpectTokenType(
+                    source as *mut source_s,
                     3 as i32,
                     0x1000 as i32,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
                 {
                     FreeFuzzySeperators_r(firstfs); //end if
@@ -418,28 +418,28 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 }
                 (*fs).value = token.intvalue as i32
             }
-            if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            if PC_ExpectTokenString(
+                source as *mut source_s,
                 b":\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ) == 0
-                || crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                || PC_ExpectAnyToken(
+                    source as *mut source_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
             {
                 FreeFuzzySeperators_r(firstfs);
                 return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
             }
-            newindent = crate::src::qcommon::q_shared::qfalse as i32;
-            if ::libc::strcmp(
+            newindent = qfalse as i32;
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"{\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                newindent = crate::src::qcommon::q_shared::qtrue as i32;
-                if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                newindent = qtrue as i32;
+                if PC_ExpectAnyToken(
+                    source as *mut source_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
                 {
                     FreeFuzzySeperators_r(firstfs);
@@ -447,7 +447,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 }
                 //end if
             } //end else
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"return\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -457,7 +457,7 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                     return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
                 }
             //end if
-            } else if ::libc::strcmp(
+            } else if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"switch\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -469,16 +469,16 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
                 }
             //end if
             } else {
-                crate::src::botlib::l_precomp::SourceError(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceError(
+                    source as *mut source_s,
                     b"invalid name %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     token.string.as_mut_ptr(),
                 );
                 return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
             }
             if newindent != 0 {
-                if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                if PC_ExpectTokenString(
+                    source as *mut source_s,
                     b"}\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 ) == 0
                 {
@@ -489,22 +489,22 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
             }
         } else {
             FreeFuzzySeperators_r(firstfs);
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"invalid name %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
             return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
         }
-        if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-            source as *mut crate::src::botlib::l_precomp::source_s,
-            &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+        if PC_ExpectAnyToken(
+            source as *mut source_s,
+            &mut token as *mut _ as *mut token_s,
         ) == 0
         {
             FreeFuzzySeperators_r(firstfs);
             return 0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
         }
-        if !(::libc::strcmp(
+        if !(libc::strcmp(
             token.string.as_mut_ptr(),
             b"}\x00" as *const u8 as *const libc::c_char,
         ) != 0)
@@ -514,8 +514,8 @@ pub unsafe extern "C" fn ReadFuzzySeperators_r(
     }
     //
     if founddefault == 0 {
-        crate::src::botlib::l_precomp::SourceWarning(
-            source as *mut crate::src::botlib::l_precomp::source_s,
+        SourceWarning(
+            source as *mut source_s,
             b"switch without default\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
         fs = crate::src::botlib::l_memory::GetClearedMemory(::std::mem::size_of::<
@@ -552,7 +552,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
     let mut newindent: i32 = 0;
     let mut avail: i32 = 0 as i32;
     let mut n: i32 = 0;
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -562,10 +562,10 @@ pub unsafe extern "C" fn ReadWeightConfig(
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t;
+    let mut source: *mut source_t =
+        0 as *mut source_t;
     let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
         0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     let mut config: *mut crate::src::botlib::be_ai_weight::weightconfig_t =
@@ -586,7 +586,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 if avail == -(1 as i32) {
                     avail = n
                 }
-            } else if ::libc::strcmp(filename, (*config).filename.as_mut_ptr()) == 0 as i32 {
+            } else if libc::strcmp(filename, (*config).filename.as_mut_ptr()) == 0 as i32 {
                 //end if
                 //botimport.Print( PRT_MESSAGE, "retained %s\n", filename );
                 return config;
@@ -605,11 +605,11 @@ pub unsafe extern "C" fn ReadWeightConfig(
             return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
         }
     }
-    crate::src::botlib::l_precomp::PC_SetBaseFolder(
+    PC_SetBaseFolder(
         b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    source = crate::src::botlib::l_precomp::LoadSourceFile(filename)
-        as *mut crate::src::botlib::l_precomp::source_s;
+    source = LoadSourceFile(filename)
+        as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -625,85 +625,85 @@ pub unsafe extern "C" fn ReadWeightConfig(
         crate::src::botlib::be_ai_weight::weightconfig_t,
     >() as libc::c_ulong) as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
     (*config).numweights = 0 as i32;
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         (*config).filename.as_mut_ptr(),
         filename,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     //parse the item config file
-    while crate::src::botlib::l_precomp::PC_ReadToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    while PC_ReadToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) != 0
     {
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"weight\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             if (*config).numweights >= 128 as i32 {
-                crate::src::botlib::l_precomp::SourceWarning(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceWarning(
+                    source as *mut source_s,
                     b"too many fuzzy weights\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                 ); //end while
                 break; //end if
             } else {
-                if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                if PC_ExpectTokenType(
+                    source as *mut source_s,
                     1 as i32,
                     0 as i32,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
                 {
                     FreeWeightConfig(config); //end if
-                    crate::src::botlib::l_precomp::FreeSource(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    FreeSource(
+                        source as *mut source_s,
                     ); //end if
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
-                crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
+                StripDoubleQuotes(token.string.as_mut_ptr());
                 (*config).weights[(*config).numweights as usize].name =
                     crate::src::botlib::l_memory::GetClearedMemory(
                         crate::stdlib::strlen(token.string.as_mut_ptr())
                             .wrapping_add(1 as i32 as libc::c_ulong),
                     ) as *mut libc::c_char;
-                ::libc::strcpy(
+                libc::strcpy(
                     (*config).weights[(*config).numweights as usize].name,
                     token.string.as_mut_ptr(),
                 );
-                if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                if PC_ExpectAnyToken(
+                    source as *mut source_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
                 {
                     FreeWeightConfig(config);
-                    crate::src::botlib::l_precomp::FreeSource(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    FreeSource(
+                        source as *mut source_s,
                     );
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
-                newindent = crate::src::qcommon::q_shared::qfalse as i32;
-                if ::libc::strcmp(
+                newindent = qfalse as i32;
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b"{\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
-                    newindent = crate::src::qcommon::q_shared::qtrue as i32;
-                    if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
-                        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    newindent = qtrue as i32;
+                    if PC_ExpectAnyToken(
+                        source as *mut source_s,
+                        &mut token as *mut _ as *mut token_s,
                     ) == 0
                     {
                         FreeWeightConfig(config);
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
                     //end if
                 } //end else
-                if ::libc::strcmp(
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b"switch\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -711,13 +711,13 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     fs = ReadFuzzySeperators_r(source); //end if
                     if fs.is_null() {
                         FreeWeightConfig(config); //end if
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         ); //end else if
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     } //end if
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
-                } else if ::libc::strcmp(
+                } else if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b"return\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -734,34 +734,34 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     if ReadFuzzyWeight(source, fs) == 0 {
                         crate::src::botlib::l_memory::FreeMemory(fs as *mut libc::c_void);
                         FreeWeightConfig(config);
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
                 } else {
-                    crate::src::botlib::l_precomp::SourceError(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    SourceError(
+                        source as *mut source_s,
                         b"invalid name %s\x00" as *const u8 as *const libc::c_char
                             as *mut libc::c_char,
                         token.string.as_mut_ptr(),
                     );
                     FreeWeightConfig(config);
-                    crate::src::botlib::l_precomp::FreeSource(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    FreeSource(
+                        source as *mut source_s,
                     );
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
                 if newindent != 0 {
-                    if crate::src::botlib::l_precomp::PC_ExpectTokenString(
-                        source as *mut crate::src::botlib::l_precomp::source_s,
+                    if PC_ExpectTokenString(
+                        source as *mut source_s,
                         b"}\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     ) == 0
                     {
                         FreeWeightConfig(config);
-                        crate::src::botlib::l_precomp::FreeSource(
-                            source as *mut crate::src::botlib::l_precomp::source_s,
+                        FreeSource(
+                            source as *mut source_s,
                         );
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
@@ -770,22 +770,22 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 (*config).numweights += 1
             }
         } else {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"invalid name %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end if
             FreeWeightConfig(config);
-            crate::src::botlib::l_precomp::FreeSource(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            FreeSource(
+                source as *mut source_s,
             );
             return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
         }
         //end else
     }
     //free the source at the end of a pass
-    crate::src::botlib::l_precomp::FreeSource(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    FreeSource(
+        source as *mut source_s,
     );
     //if the file was located in a pak file
     crate::src::botlib::be_interface::botimport
@@ -823,7 +823,7 @@ pub unsafe extern "C" fn FindFuzzyWeight(
     let mut i: i32 = 0; //end if
     i = 0 as i32;
     while i < (*wc).numweights {
-        if ::libc::strcmp((*wc).weights[i as usize].name, name) == 0 {
+        if libc::strcmp((*wc).weights[i as usize].name, name) == 0 {
             return i;
         }
         i += 1
@@ -905,7 +905,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
             return FuzzyWeightUndecided_r(inventory, (*fs).child);
         } else {
             return (*fs).minweight
-                + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                + (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                     * ((*fs).maxweight - (*fs).minweight);
         }
     } else {
@@ -916,7 +916,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
                     w1 = FuzzyWeightUndecided_r(inventory, (*fs).child)
                 } else {
                     w1 = (*fs).minweight
-                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                        + (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * ((*fs).maxweight - (*fs).minweight)
                 }
                 //second weight
@@ -924,7 +924,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
                     w2 = FuzzyWeight_r(inventory, (*(*fs).next).child)
                 } else {
                     w2 = (*(*fs).next).minweight
-                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                        + (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * ((*(*fs).next).maxweight - (*(*fs).next).minweight)
                 }
                 //the scale factor
@@ -993,16 +993,16 @@ pub unsafe extern "C" fn EvolveFuzzySeperator_r(
         EvolveFuzzySeperator_r((*fs).child); //end if
     } else if (*fs).type_0 == 1 as i32 {
         //every once in a while an evolution leap occurs, mutation
-        if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.01f64 {
+        if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.01f64 {
             (*fs).weight = ((*fs).weight as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * ((*fs).maxweight - (*fs).minweight) as f64) as f32
         } else {
             (*fs).weight = ((*fs).weight as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * ((*fs).maxweight - (*fs).minweight) as f64
                     * 0.5f64) as f32
@@ -1092,7 +1092,7 @@ pub unsafe extern "C" fn ScaleWeight(
     }
     i = 0 as i32;
     while i < (*config).numweights {
-        if ::libc::strcmp(name, (*config).weights[i as usize].name) == 0 {
+        if libc::strcmp(name, (*config).weights[i as usize].name) == 0 {
             ScaleFuzzySeperator_r((*config).weights[i as usize].firstseperator, scale);
             break;
         } else {
@@ -1182,10 +1182,10 @@ pub unsafe extern "C" fn InterbreedFuzzySeperator_r(
                 b"cannot interbreed weight configs, unequal child\n\x00" as *const u8
                     as *const libc::c_char as *mut libc::c_char,
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if InterbreedFuzzySeperator_r((*fs2).child, (*fs2).child, (*fsout).child) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
     //end if
     } else if (*fs1).type_0 == 1 as i32 {
@@ -1197,7 +1197,7 @@ pub unsafe extern "C" fn InterbreedFuzzySeperator_r(
                 b"cannot interbreed weight configs, unequal balance\n\x00" as *const u8
                     as *const libc::c_char as *mut libc::c_char,
             ); //end if
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         } //end if
         (*fsout).weight = ((*fs1).weight + (*fs2).weight) / 2 as i32 as f32; //end if
         if (*fsout).weight > (*fsout).maxweight {
@@ -1216,14 +1216,14 @@ pub unsafe extern "C" fn InterbreedFuzzySeperator_r(
                 b"cannot interbreed weight configs, unequal next\n\x00" as *const u8
                     as *const libc::c_char as *mut libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         if InterbreedFuzzySeperator_r((*fs1).next, (*fs2).next, (*fsout).next) == 0 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //end if
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //interbreed the weight configurations and stores the interbreeded one in configout
 //end of the function InterbreedFuzzySeperator_r

@@ -210,7 +210,7 @@ pub type my_inputctl_ptr = *mut my_input_controller;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_input_controller {
-    pub pub_0: crate::jpegint_h::jpeg_input_controller,
+    pub pub_0: jpeg_input_controller,
     pub inheaders: i32,
 }
 /*
@@ -224,234 +224,234 @@ pub struct my_input_controller {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_core_output_dimensions(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut cinfo: j_decompress_ptr,
 )
 /* Do computations that are needed before master selection phase.
  * This function is used for transcoding and full decompression.
  */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     /* Compute actual output image dimensions and DCT scaling choices. */
     if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32) <= (*cinfo).scale_denom {
         /* Provide 1/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 1 as i32;
         (*cinfo).min_DCT_v_scaled_size = 1 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(2 as i32 as u32)
     {
         /* Provide 2/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 2 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 2 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 2 as i32;
         (*cinfo).min_DCT_v_scaled_size = 2 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(3 as i32 as u32)
     {
         /* Provide 3/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 3 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 3 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 3 as i32;
         (*cinfo).min_DCT_v_scaled_size = 3 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(4 as i32 as u32)
     {
         /* Provide 4/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 4 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 4 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 4 as i32;
         (*cinfo).min_DCT_v_scaled_size = 4 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(5 as i32 as u32)
     {
         /* Provide 5/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 5 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 5 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 5 as i32;
         (*cinfo).min_DCT_v_scaled_size = 5 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(6 as i32 as u32)
     {
         /* Provide 6/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 6 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 6 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 6 as i32;
         (*cinfo).min_DCT_v_scaled_size = 6 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(7 as i32 as u32)
     {
         /* Provide 7/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 7 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 7 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 7 as i32;
         (*cinfo).min_DCT_v_scaled_size = 7 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(8 as i32 as u32)
     {
         /* Provide 8/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 8 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 8 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 8 as i32;
         (*cinfo).min_DCT_v_scaled_size = 8 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(9 as i32 as u32)
     {
         /* Provide 9/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 9 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 9 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 9 as i32;
         (*cinfo).min_DCT_v_scaled_size = 9 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(10 as i32 as u32)
     {
         /* Provide 10/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 10 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 10 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 10 as i32;
         (*cinfo).min_DCT_v_scaled_size = 10 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(11 as i32 as u32)
     {
         /* Provide 11/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 11 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 11 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 11 as i32;
         (*cinfo).min_DCT_v_scaled_size = 11 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(12 as i32 as u32)
     {
         /* Provide 12/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 12 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 12 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 12 as i32;
         (*cinfo).min_DCT_v_scaled_size = 12 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(13 as i32 as u32)
     {
         /* Provide 13/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 13 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 13 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 13 as i32;
         (*cinfo).min_DCT_v_scaled_size = 13 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(14 as i32 as u32)
     {
         /* Provide 14/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 14 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 14 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 14 as i32;
         (*cinfo).min_DCT_v_scaled_size = 14 as i32
     } else if (*cinfo).scale_num.wrapping_mul((*cinfo).block_size as u32)
         <= (*cinfo).scale_denom.wrapping_mul(15 as i32 as u32)
     {
         /* Provide 15/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 15 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 15 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 15 as i32;
         (*cinfo).min_DCT_v_scaled_size = 15 as i32
     } else {
         /* Provide 16/block_size scaling */
-        (*cinfo).output_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).output_width = jdiv_round_up(
             (*cinfo).image_width as isize * 16 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).output_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).output_height = jdiv_round_up(
             (*cinfo).image_height as isize * 16 as isize,
             (*cinfo).block_size as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).min_DCT_h_scaled_size = 16 as i32;
         (*cinfo).min_DCT_v_scaled_size = 16 as i32
     }
@@ -468,39 +468,39 @@ pub unsafe extern "C" fn jpeg_core_output_dimensions(
     /* IDCT_SCALING_SUPPORTED */
 }
 
-unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr)
+unsafe extern "C" fn initial_setup(mut cinfo: j_decompress_ptr)
 /* Called once, when first SOS marker is reached */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     /* Make sure image isn't bigger than I can handle */
     if (*cinfo).image_height as isize > 65500 as isize
         || (*cinfo).image_width as isize > 65500 as isize
     {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_IMAGE_TOO_BIG as i32;
+        (*(*cinfo).err).msg_code = JERR_IMAGE_TOO_BIG as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 65500 as isize as u32 as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* For now, precision must match compiled-in value... */
     if (*cinfo).data_precision != 8 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_PRECISION as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_PRECISION as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).data_precision;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Check that number of components won't exceed internal array sizes */
     if (*cinfo).num_components > 10 as i32 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+        (*(*cinfo).err).msg_code = JERR_COMPONENT_COUNT as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).num_components;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
         Some(
@@ -508,7 +508,7 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Compute maximum sampling factors; check factor validity */
     (*cinfo).max_h_samp_factor = 1 as i32;
@@ -521,14 +521,14 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
             || (*compptr).v_samp_factor <= 0 as i32
             || (*compptr).v_samp_factor > 4 as i32
         {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_SAMPLING as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_SAMPLING as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         (*cinfo).max_h_samp_factor = if (*cinfo).max_h_samp_factor > (*compptr).h_samp_factor {
@@ -548,92 +548,92 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
     if (*cinfo).is_baseline != 0 || (*cinfo).progressive_mode != 0 && (*cinfo).comps_in_scan != 0 {
         /* no pseudo SOS marker */
         (*cinfo).block_size = 8 as i32; /* not needed */
-        (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+        (*cinfo).natural_order = jpeg_natural_order.as_ptr();
         (*cinfo).lim_Se = 64 as i32 - 1 as i32
     } else {
         match (*cinfo).Se {
             0 => {
                 (*cinfo).block_size = 1 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             3 => {
                 (*cinfo).block_size = 2 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order2.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order2.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             8 => {
                 (*cinfo).block_size = 3 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order3.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order3.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             15 => {
                 (*cinfo).block_size = 4 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order4.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order4.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             24 => {
                 (*cinfo).block_size = 5 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order5.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order5.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             35 => {
                 (*cinfo).block_size = 6 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order6.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order6.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             48 => {
                 (*cinfo).block_size = 7 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order7.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order7.as_ptr();
                 (*cinfo).lim_Se = (*cinfo).Se
             }
             63 => {
                 (*cinfo).block_size = 8 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             80 => {
                 (*cinfo).block_size = 9 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             99 => {
                 (*cinfo).block_size = 10 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             120 => {
                 (*cinfo).block_size = 11 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             143 => {
                 (*cinfo).block_size = 12 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             168 => {
                 (*cinfo).block_size = 13 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             195 => {
                 (*cinfo).block_size = 14 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             224 => {
                 (*cinfo).block_size = 15 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             255 => {
                 (*cinfo).block_size = 16 as i32;
-                (*cinfo).natural_order = crate::src::jpeg_8c::jutils::jpeg_natural_order.as_ptr();
+                (*cinfo).natural_order = jpeg_natural_order.as_ptr();
                 (*cinfo).lim_Se = 64 as i32 - 1 as i32
             }
             _ => {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_PROGRESSION as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_PROGRESSION as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).Ss;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (*cinfo).Se;
                 (*(*cinfo).err).msg_parm.i[2 as i32 as usize] = (*cinfo).Ah;
@@ -644,7 +644,7 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
         }
@@ -664,39 +664,39 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
         (*compptr).DCT_h_scaled_size = (*cinfo).block_size;
         (*compptr).DCT_v_scaled_size = (*cinfo).block_size;
         /* Size in DCT blocks */
-        (*compptr).width_in_blocks = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*compptr).width_in_blocks = jdiv_round_up(
             (*cinfo).image_width as isize * (*compptr).h_samp_factor as isize,
             ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*compptr).height_in_blocks = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*compptr).height_in_blocks = jdiv_round_up(
             (*cinfo).image_height as isize * (*compptr).v_samp_factor as isize,
             ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         /* downsampled_width and downsampled_height will also be overridden by
          * jdmaster.c if we are doing full decompression.  The transcoder library
          * doesn't use these values, but the calling application might.
          */
         /* Size in samples */
-        (*compptr).downsampled_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*compptr).downsampled_width = jdiv_round_up(
             (*cinfo).image_width as isize * (*compptr).h_samp_factor as isize,
             (*cinfo).max_h_samp_factor as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*compptr).downsampled_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*compptr).downsampled_height = jdiv_round_up(
             (*cinfo).image_height as isize * (*compptr).v_samp_factor as isize,
             (*cinfo).max_v_samp_factor as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         /* Mark component needed, until color conversion says otherwise */
         (*compptr).component_needed = 1 as i32;
         /* Mark no quantization table yet saved for component */
-        (*compptr).quant_table = 0 as *mut crate::jpeglib_h::JQUANT_TBL;
+        (*compptr).quant_table = 0 as *mut JQUANT_TBL;
         ci += 1;
         compptr = compptr.offset(1)
     }
     /* Compute number of fully interleaved MCU rows. */
-    (*cinfo).total_iMCU_rows = crate::src::jpeg_8c::jutils::jdiv_round_up(
+    (*cinfo).total_iMCU_rows = jdiv_round_up(
         (*cinfo).image_height as isize,
         ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
-    ) as crate::jmorecfg_h::JDIMENSION;
+    ) as JDIMENSION;
     /* Decide whether file contains multiple scans */
     if (*cinfo).comps_in_scan < (*cinfo).num_components || (*cinfo).progressive_mode != 0 {
         (*(*cinfo).inputctl).has_multiple_scans = 1 as i32
@@ -705,15 +705,15 @@ unsafe extern "C" fn initial_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr
     };
 }
 
-unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_ptr)
+unsafe extern "C" fn per_scan_setup(mut cinfo: j_decompress_ptr)
 /* Do computations that are needed before processing a JPEG scan */
 /* cinfo->comps_in_scan and cinfo->cur_comp_info[] were set from SOS marker */
 {
     let mut ci: i32 = 0;
     let mut mcublks: i32 = 0;
     let mut tmp: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     if (*cinfo).comps_in_scan == 1 as i32 {
         /* Noninterleaved (single-component) scan */
         compptr = (*cinfo).cur_comp_info[0 as i32 as usize];
@@ -742,7 +742,7 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_pt
     } else {
         /* Interleaved (multi-component) scan */
         if (*cinfo).comps_in_scan <= 0 as i32 || (*cinfo).comps_in_scan > 4 as i32 {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+            (*(*cinfo).err).msg_code = JERR_COMPONENT_COUNT as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).comps_in_scan;
             (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 4 as i32;
             Some(
@@ -751,18 +751,18 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_pt
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
         /* Overall image size in MCUs */
-        (*cinfo).MCUs_per_row = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        (*cinfo).MCUs_per_row = jdiv_round_up(
             (*cinfo).image_width as isize,
             ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
-        (*cinfo).MCU_rows_in_scan = crate::src::jpeg_8c::jutils::jdiv_round_up(
+        ) as JDIMENSION;
+        (*cinfo).MCU_rows_in_scan = jdiv_round_up(
             (*cinfo).image_height as isize,
             ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
-        ) as crate::jmorecfg_h::JDIMENSION;
+        ) as JDIMENSION;
         (*cinfo).blocks_in_MCU = 0 as i32;
         ci = 0 as i32;
         while ci < (*cinfo).comps_in_scan {
@@ -790,14 +790,14 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_pt
             /* Prepare array describing MCU composition */
             mcublks = (*compptr).MCU_blocks;
             if (*cinfo).blocks_in_MCU + mcublks > 10 as i32 {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_MCU_SIZE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_MCU_SIZE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             loop {
@@ -835,12 +835,12 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_decompress_pt
  * not at the current Q-table slots.
  */
 
-unsafe extern "C" fn latch_quant_tables(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn latch_quant_tables(mut cinfo: j_decompress_ptr) {
     let mut ci: i32 = 0;
     let mut qtblno: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
-    let mut qtbl: *mut crate::jpeglib_h::JQUANT_TBL = 0 as *mut crate::jpeglib_h::JQUANT_TBL;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
+    let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
         compptr = (*cinfo).cur_comp_info[ci as usize];
@@ -852,7 +852,7 @@ unsafe extern "C" fn latch_quant_tables(mut cinfo: crate::jpeglib_h::j_decompres
                 || qtblno >= 4 as i32
                 || (*cinfo).quant_tbl_ptrs[qtblno as usize].is_null()
             {
-                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
+                (*(*cinfo).err).msg_code = JERR_NO_QUANT_TABLE as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = qtblno;
                 Some(
                     (*(*cinfo).err)
@@ -860,7 +860,7 @@ unsafe extern "C" fn latch_quant_tables(mut cinfo: crate::jpeglib_h::j_decompres
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as crate::jpeglib_h::j_common_ptr
+                    cinfo as j_common_ptr
                 );
             }
             /* OK, save away the quantization table */
@@ -870,14 +870,14 @@ unsafe extern "C" fn latch_quant_tables(mut cinfo: crate::jpeglib_h::j_decompres
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr,
+                cinfo as j_common_ptr,
                 1 as i32,
-                ::std::mem::size_of::<crate::jpeglib_h::JQUANT_TBL>() as libc::c_ulong,
-            ) as *mut crate::jpeglib_h::JQUANT_TBL;
+                ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
+            ) as *mut JQUANT_TBL;
             crate::stdlib::memcpy(
                 qtbl as *mut libc::c_void,
                 (*cinfo).quant_tbl_ptrs[qtblno as usize] as *const libc::c_void,
-                ::std::mem::size_of::<crate::jpeglib_h::JQUANT_TBL>() as libc::c_ulong,
+                ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
             );
             (*compptr).quant_table = qtbl
         }
@@ -891,7 +891,7 @@ unsafe extern "C" fn latch_quant_tables(mut cinfo: crate::jpeglib_h::j_decompres
  * Subsequent calls come from consume_markers, below.
  */
 
-unsafe extern "C" fn start_input_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn start_input_pass(mut cinfo: j_decompress_ptr) {
     per_scan_setup(cinfo);
     latch_quant_tables(cinfo);
     Some(
@@ -914,9 +914,9 @@ unsafe extern "C" fn start_input_pass(mut cinfo: crate::jpeglib_h::j_decompress_
  * the expected data of the scan.
  */
 
-unsafe extern "C" fn finish_input_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn finish_input_pass(mut cinfo: j_decompress_ptr) {
     (*(*cinfo).inputctl).consume_input =
-        Some(consume_markers as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32);
+        Some(consume_markers as unsafe extern "C" fn(_: j_decompress_ptr) -> i32);
 }
 /* Forward declarations */
 /*
@@ -933,7 +933,7 @@ unsafe extern "C" fn finish_input_pass(mut cinfo: crate::jpeglib_h::j_decompress
  * read_markers is processed and then skipped for other markers.
  */
 
-unsafe extern "C" fn consume_markers(mut cinfo: crate::jpeglib_h::j_decompress_ptr) -> i32 {
+unsafe extern "C" fn consume_markers(mut cinfo: j_decompress_ptr) -> i32 {
     let mut inputctl: my_inputctl_ptr = (*cinfo).inputctl as my_inputctl_ptr;
     let mut val: i32 = 0;
     if (*inputctl).pub_0.eoi_reached != 0 {
@@ -972,14 +972,14 @@ unsafe extern "C" fn consume_markers(mut cinfo: crate::jpeglib_h::j_decompress_p
                 } else {
                     if (*inputctl).pub_0.has_multiple_scans == 0 {
                         (*(*cinfo).err).msg_code =
-                            crate::src::jpeg_8c::jerror::JERR_EOI_EXPECTED as i32;
+                            JERR_EOI_EXPECTED as i32;
                         Some(
                             (*(*cinfo).err)
                                 .error_exit
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
+                            cinfo as j_common_ptr,
                         );
                     }
                     if (*cinfo).comps_in_scan == 0 as i32 {
@@ -1003,14 +1003,14 @@ unsafe extern "C" fn consume_markers(mut cinfo: crate::jpeglib_h::j_decompress_p
                     /* Tables-only datastream, apparently */
                     if (*(*cinfo).marker).saw_SOF != 0 {
                         (*(*cinfo).err).msg_code =
-                            crate::src::jpeg_8c::jerror::JERR_SOF_NO_SOS as i32;
+                            JERR_SOF_NO_SOS as i32;
                         Some(
                             (*(*cinfo).err)
                                 .error_exit
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
+                            cinfo as j_common_ptr,
                         );
                     }
                 } else if (*cinfo).output_scan_number > (*cinfo).input_scan_number {
@@ -1030,10 +1030,10 @@ unsafe extern "C" fn consume_markers(mut cinfo: crate::jpeglib_h::j_decompress_p
  * Reset state to begin a fresh datastream.
  */
 
-unsafe extern "C" fn reset_input_controller(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn reset_input_controller(mut cinfo: j_decompress_ptr) {
     let mut inputctl: my_inputctl_ptr = (*cinfo).inputctl as my_inputctl_ptr; /* "unknown" would be better */
     (*inputctl).pub_0.consume_input =
-        Some(consume_markers as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32);
+        Some(consume_markers as unsafe extern "C" fn(_: j_decompress_ptr) -> i32);
     (*inputctl).pub_0.has_multiple_scans = 0 as i32;
     (*inputctl).pub_0.eoi_reached = 0 as i32;
     (*inputctl).inheaders = 1 as i32;
@@ -1043,7 +1043,7 @@ unsafe extern "C" fn reset_input_controller(mut cinfo: crate::jpeglib_h::j_decom
             .reset_error_mgr
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     Some(
         (*(*cinfo).marker)
             .reset_marker_reader
@@ -1078,7 +1078,7 @@ unsafe extern "C" fn reset_input_controller(mut cinfo: crate::jpeglib_h::j_decom
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jinit_input_controller(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+pub unsafe extern "C" fn jinit_input_controller(mut cinfo: j_decompress_ptr) {
     let mut inputctl: my_inputctl_ptr = 0 as *mut my_input_controller;
     /* Create subobject in permanent pool */
     inputctl = Some(
@@ -1087,21 +1087,21 @@ pub unsafe extern "C" fn jinit_input_controller(mut cinfo: crate::jpeglib_h::j_d
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         0 as i32,
         ::std::mem::size_of::<my_input_controller>() as libc::c_ulong,
     ) as my_inputctl_ptr;
-    (*cinfo).inputctl = inputctl as *mut crate::jpegint_h::jpeg_input_controller;
+    (*cinfo).inputctl = inputctl as *mut jpeg_input_controller;
     /* Initialize method pointers */
     (*inputctl).pub_0.consume_input =
-        Some(consume_markers as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> i32);
+        Some(consume_markers as unsafe extern "C" fn(_: j_decompress_ptr) -> i32);
     (*inputctl).pub_0.reset_input_controller = Some(
-        reset_input_controller as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> (),
+        reset_input_controller as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
     );
     (*inputctl).pub_0.start_input_pass =
-        Some(start_input_pass as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ());
+        Some(start_input_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*inputctl).pub_0.finish_input_pass = Some(
-        finish_input_pass as unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> (),
+        finish_input_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
     );
     /* Initialize state: can't use reset_input_controller since we don't
      * want to try to reset other modules yet.

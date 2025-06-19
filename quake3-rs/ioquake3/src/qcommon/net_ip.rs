@@ -183,57 +183,57 @@ pub type ioctlarg_t = i32;
 #[derive(Copy, Clone)]
 pub struct nip_localaddr_t {
     pub ifname: [libc::c_char; 16],
-    pub type_0: crate::qcommon_h::netadrtype_t,
-    pub family: crate::stdlib::sa_family_t,
-    pub addr: crate::stdlib::sockaddr_storage,
-    pub netmask: crate::stdlib::sockaddr_storage,
+    pub type_0: netadrtype_t,
+    pub family: sa_family_t,
+    pub addr: sockaddr_storage,
+    pub netmask: sockaddr_storage,
 }
 
-static mut usingSocks: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut usingSocks: qboolean =
+    qfalse;
 
 static mut networkingEnabled: i32 = 0 as i32;
 
-static mut net_enabled: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_enabled: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_socksEnabled: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_socksEnabled: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_socksServer: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_socksServer: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_socksPort: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_socksPort: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_socksUsername: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_socksUsername: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_socksPassword: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_socksPassword: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_ip: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_ip: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_ip6: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_ip6: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_port: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_port: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_port6: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_port6: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_mcast6addr: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_mcast6addr: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_mcast6iface: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_mcast6iface: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut net_dropsim: *mut crate::src::qcommon::q_shared::cvar_t =
-    0 as *const crate::src::qcommon::q_shared::cvar_t as *mut crate::src::qcommon::q_shared::cvar_t;
+static mut net_dropsim: *mut cvar_t =
+    0 as *const cvar_t as *mut cvar_t;
 
-static mut socksRelayAddr: ::libc::sockaddr = ::libc::sockaddr {
+static mut socksRelayAddr: sockaddr = sockaddr {
     sa_family: 0,
     sa_data: [0; 14],
 };
@@ -247,9 +247,9 @@ static mut socks_socket: SOCKET = -(1 as i32);
 static mut multicast6_socket: SOCKET = -(1 as i32);
 // Keep track of currently joined multicast group.
 
-static mut curgroup: crate::stdlib::ipv6_mreq = crate::stdlib::ipv6_mreq {
-    ipv6mr_multiaddr: crate::stdlib::in6_addr {
-        __in6_u: crate::stdlib::C2RustUnnamed_129 {
+static mut curgroup: ipv6_mreq = ipv6_mreq {
+    ipv6mr_multiaddr: in6_addr {
+        __in6_u: C2RustUnnamed_129 {
             __u6_addr8: [0; 16],
         },
     },
@@ -257,12 +257,12 @@ static mut curgroup: crate::stdlib::ipv6_mreq = crate::stdlib::ipv6_mreq {
 };
 // And the currently bound address.
 
-static mut boundto: crate::stdlib::sockaddr_in6 = crate::stdlib::sockaddr_in6 {
+static mut boundto: sockaddr_in6 = sockaddr_in6 {
     sin6_family: 0,
     sin6_port: 0,
     sin6_flowinfo: 0,
-    sin6_addr: crate::stdlib::in6_addr {
-        __in6_u: crate::stdlib::C2RustUnnamed_129 {
+    sin6_addr: in6_addr {
+        __in6_u: C2RustUnnamed_129 {
             __u6_addr8: [0; 16],
         },
     },
@@ -271,14 +271,14 @@ static mut boundto: crate::stdlib::sockaddr_in6 = crate::stdlib::sockaddr_in6 {
 
 static mut localIP: [nip_localaddr_t; 32] = [nip_localaddr_t {
     ifname: [0; 16],
-    type_0: crate::qcommon_h::NA_BAD,
+    type_0: NA_BAD,
     family: 0,
-    addr: crate::stdlib::sockaddr_storage {
+    addr: sockaddr_storage {
         ss_family: 0,
         __ss_padding: [0; 118],
         __ss_align: 0,
     },
-    netmask: crate::stdlib::sockaddr_storage {
+    netmask: sockaddr_storage {
         ss_family: 0,
         __ss_padding: [0; 118],
         __ss_align: 0,
@@ -295,73 +295,73 @@ NET_ErrorString
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_ErrorString() -> *mut libc::c_char {
-    return ::libc::strerror(*::libc::__errno_location());
+    return libc::strerror(*libc::__errno_location());
 }
 
 unsafe extern "C" fn NetadrToSockadr(
-    mut a: *mut crate::qcommon_h::netadr_t,
-    mut s: *mut ::libc::sockaddr,
+    mut a: *mut netadr_t,
+    mut s: *mut sockaddr,
 ) {
-    if (*a).type_0 as u32 == crate::qcommon_h::NA_BROADCAST as i32 as u32 {
-        (*(s as *mut ::libc::sockaddr_in)).sin_family = 2 as i32 as crate::stdlib::sa_family_t;
-        (*(s as *mut ::libc::sockaddr_in)).sin_port = (*a).port;
-        (*(s as *mut ::libc::sockaddr_in)).sin_addr.s_addr = 0xffffffff as u32
-    } else if (*a).type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
-        (*(s as *mut ::libc::sockaddr_in)).sin_family = 2 as i32 as crate::stdlib::sa_family_t;
-        (*(s as *mut ::libc::sockaddr_in)).sin_addr.s_addr =
-            *(&mut (*a).ip as *mut [crate::src::qcommon::q_shared::byte; 4] as *mut i32)
-                as crate::stdlib::in_addr_t;
-        (*(s as *mut ::libc::sockaddr_in)).sin_port = (*a).port
-    } else if (*a).type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_family =
-            10 as i32 as crate::stdlib::sa_family_t;
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_addr = *(&mut (*a).ip6
-            as *mut [crate::src::qcommon::q_shared::byte; 16]
-            as *mut crate::stdlib::in6_addr);
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_port = (*a).port;
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_scope_id =
-            (*a).scope_id as crate::stdlib::uint32_t
-    } else if (*a).type_0 as u32 == crate::qcommon_h::NA_MULTICAST6 as i32 as u32 {
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_family =
-            10 as i32 as crate::stdlib::sa_family_t;
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_addr = curgroup.ipv6mr_multiaddr;
-        (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_port = (*a).port
+    if (*a).type_0 as u32 == NA_BROADCAST as i32 as u32 {
+        (*(s as *mut sockaddr_in)).sin_family = 2 as i32 as sa_family_t;
+        (*(s as *mut sockaddr_in)).sin_port = (*a).port;
+        (*(s as *mut sockaddr_in)).sin_addr.s_addr = 0xffffffff as u32
+    } else if (*a).type_0 as u32 == NA_IP as i32 as u32 {
+        (*(s as *mut sockaddr_in)).sin_family = 2 as i32 as sa_family_t;
+        (*(s as *mut sockaddr_in)).sin_addr.s_addr =
+            *(&mut (*a).ip as *mut [byte; 4] as *mut i32)
+                as in_addr_t;
+        (*(s as *mut sockaddr_in)).sin_port = (*a).port
+    } else if (*a).type_0 as u32 == NA_IP6 as i32 as u32 {
+        (*(s as *mut sockaddr_in6)).sin6_family =
+            10 as i32 as sa_family_t;
+        (*(s as *mut sockaddr_in6)).sin6_addr = *(&mut (*a).ip6
+            as *mut [byte; 16]
+            as *mut in6_addr);
+        (*(s as *mut sockaddr_in6)).sin6_port = (*a).port;
+        (*(s as *mut sockaddr_in6)).sin6_scope_id =
+            (*a).scope_id as uint32_t
+    } else if (*a).type_0 as u32 == NA_MULTICAST6 as i32 as u32 {
+        (*(s as *mut sockaddr_in6)).sin6_family =
+            10 as i32 as sa_family_t;
+        (*(s as *mut sockaddr_in6)).sin6_addr = curgroup.ipv6mr_multiaddr;
+        (*(s as *mut sockaddr_in6)).sin6_port = (*a).port
     };
 }
 
 unsafe extern "C" fn SockadrToNetadr(
-    mut s: *mut ::libc::sockaddr,
-    mut a: *mut crate::qcommon_h::netadr_t,
+    mut s: *mut sockaddr,
+    mut a: *mut netadr_t,
 ) {
     if (*s).sa_family as i32 == 2 as i32 {
-        (*a).type_0 = crate::qcommon_h::NA_IP;
-        *(&mut (*a).ip as *mut [crate::src::qcommon::q_shared::byte; 4] as *mut i32) =
-            (*(s as *mut ::libc::sockaddr_in)).sin_addr.s_addr as i32;
-        (*a).port = (*(s as *mut ::libc::sockaddr_in)).sin_port
+        (*a).type_0 = NA_IP;
+        *(&mut (*a).ip as *mut [byte; 4] as *mut i32) =
+            (*(s as *mut sockaddr_in)).sin_addr.s_addr as i32;
+        (*a).port = (*(s as *mut sockaddr_in)).sin_port
     } else if (*s).sa_family as i32 == 10 as i32 {
-        (*a).type_0 = crate::qcommon_h::NA_IP6;
+        (*a).type_0 = NA_IP6;
         crate::stdlib::memcpy(
             (*a).ip6.as_mut_ptr() as *mut libc::c_void,
-            &mut (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_addr
-                as *mut crate::stdlib::in6_addr as *const libc::c_void,
-            ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16]>() as libc::c_ulong,
+            &mut (*(s as *mut sockaddr_in6)).sin6_addr
+                as *mut in6_addr as *const libc::c_void,
+            ::std::mem::size_of::<[byte; 16]>() as libc::c_ulong,
         );
-        (*a).port = (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_port;
-        (*a).scope_id = (*(s as *mut crate::stdlib::sockaddr_in6)).sin6_scope_id as libc::c_ulong
+        (*a).port = (*(s as *mut sockaddr_in6)).sin6_port;
+        (*a).scope_id = (*(s as *mut sockaddr_in6)).sin6_scope_id as libc::c_ulong
     };
 }
 
 unsafe extern "C" fn SearchAddrInfo(
-    mut hints: *mut ::libc::addrinfo,
-    mut family: crate::stdlib::sa_family_t,
-) -> *mut ::libc::addrinfo {
+    mut hints: *mut addrinfo,
+    mut family: sa_family_t,
+) -> *mut addrinfo {
     while !hints.is_null() {
         if (*hints).ai_family == family as i32 {
             return hints;
         }
         hints = (*hints).ai_next
     }
-    return 0 as *mut ::libc::addrinfo;
+    return 0 as *mut addrinfo;
 }
 /*
 =============
@@ -371,59 +371,59 @@ Sys_StringToSockaddr
 
 unsafe extern "C" fn Sys_StringToSockaddr(
     mut s: *const libc::c_char,
-    mut sadr: *mut ::libc::sockaddr,
+    mut sadr: *mut sockaddr,
     mut sadr_len: i32,
-    mut family: crate::stdlib::sa_family_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut hints: ::libc::addrinfo = ::libc::addrinfo {
+    mut family: sa_family_t,
+) -> qboolean {
+    let mut hints: addrinfo = addrinfo {
         ai_flags: 0,
         ai_family: 0,
         ai_socktype: 0,
         ai_protocol: 0,
         ai_addrlen: 0,
-        ai_addr: 0 as *mut ::libc::sockaddr,
+        ai_addr: 0 as *mut sockaddr,
         ai_canonname: 0 as *mut libc::c_char,
-        ai_next: 0 as *mut ::libc::addrinfo,
+        ai_next: 0 as *mut addrinfo,
     };
-    let mut res: *mut ::libc::addrinfo = 0 as *mut ::libc::addrinfo;
-    let mut search: *mut ::libc::addrinfo = 0 as *mut ::libc::addrinfo;
-    let mut hintsp: *mut ::libc::addrinfo = 0 as *mut ::libc::addrinfo;
+    let mut res: *mut addrinfo = 0 as *mut addrinfo;
+    let mut search: *mut addrinfo = 0 as *mut addrinfo;
+    let mut hintsp: *mut addrinfo = 0 as *mut addrinfo;
     let mut retval: i32 = 0;
     crate::stdlib::memset(
         sadr as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<::libc::sockaddr>() as libc::c_ulong,
+        ::std::mem::size_of::<sockaddr>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut hints as *mut ::libc::addrinfo as *mut libc::c_void,
+        &mut hints as *mut addrinfo as *mut libc::c_void,
         '\u{0}' as i32,
-        ::std::mem::size_of::<::libc::addrinfo>() as libc::c_ulong,
+        ::std::mem::size_of::<addrinfo>() as libc::c_ulong,
     );
     hintsp = &mut hints;
     (*hintsp).ai_family = family as i32;
-    (*hintsp).ai_socktype = crate::stdlib::SOCK_DGRAM as i32;
-    retval = ::libc::getaddrinfo(
+    (*hintsp).ai_socktype = SOCK_DGRAM as i32;
+    retval = getaddrinfo(
         s,
         0 as *const libc::c_char,
-        hintsp as *const ::libc::addrinfo,
-        &mut res as *mut _ as *mut *mut ::libc::addrinfo,
+        hintsp as *const addrinfo,
+        &mut res as *mut _ as *mut *mut addrinfo,
     );
     if retval == 0 {
         if family as i32 == 0 as i32 {
             // Decide here and now which protocol family to use
             if (*net_enabled).integer & 0x4 as i32 != 0 {
                 if (*net_enabled).integer & 0x2 as i32 != 0 {
-                    search = SearchAddrInfo(res, 10 as i32 as crate::stdlib::sa_family_t)
+                    search = SearchAddrInfo(res, 10 as i32 as sa_family_t)
                 }
                 if search.is_null() && (*net_enabled).integer & 0x1 as i32 != 0 {
-                    search = SearchAddrInfo(res, 2 as i32 as crate::stdlib::sa_family_t)
+                    search = SearchAddrInfo(res, 2 as i32 as sa_family_t)
                 }
             } else {
                 if (*net_enabled).integer & 0x1 as i32 != 0 {
-                    search = SearchAddrInfo(res, 2 as i32 as crate::stdlib::sa_family_t)
+                    search = SearchAddrInfo(res, 2 as i32 as sa_family_t)
                 }
                 if search.is_null() && (*net_enabled).integer & 0x2 as i32 != 0 {
-                    search = SearchAddrInfo(res, 10 as i32 as crate::stdlib::sa_family_t)
+                    search = SearchAddrInfo(res, 10 as i32 as sa_family_t)
                 }
             }
         } else {
@@ -431,31 +431,31 @@ unsafe extern "C" fn Sys_StringToSockaddr(
         }
         if !search.is_null() {
             if (*search).ai_addrlen > sadr_len as u32 {
-                (*search).ai_addrlen = sadr_len as crate::stdlib::socklen_t
+                (*search).ai_addrlen = sadr_len as socklen_t
             }
             crate::stdlib::memcpy(
                 sadr as *mut libc::c_void,
                 (*search).ai_addr as *const libc::c_void,
                 (*search).ai_addrlen as libc::c_ulong,
             );
-            ::libc::freeaddrinfo(res as *mut ::libc::addrinfo);
-            return crate::src::qcommon::q_shared::qtrue;
+            freeaddrinfo(res as *mut addrinfo);
+            return qtrue;
         } else {
-            crate::src::qcommon::common::Com_Printf(b"Sys_StringToSockaddr: Error resolving %s: No address of required type found.\n\x00"
+            Com_Printf(b"Sys_StringToSockaddr: Error resolving %s: No address of required type found.\n\x00"
                            as *const u8 as *const libc::c_char, s);
         }
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Sys_StringToSockaddr: Error resolving %s: %s\n\x00" as *const u8
                 as *const libc::c_char,
             s,
-            ::libc::gai_strerror(retval),
+            gai_strerror(retval),
         );
     }
     if !res.is_null() {
-        ::libc::freeaddrinfo(res as *mut ::libc::addrinfo);
+        freeaddrinfo(res as *mut addrinfo);
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 =============
@@ -466,23 +466,23 @@ Sys_SockaddrToString
 unsafe extern "C" fn Sys_SockaddrToString(
     mut dest: *mut libc::c_char,
     mut destlen: i32,
-    mut input: *mut ::libc::sockaddr,
+    mut input: *mut sockaddr,
 ) {
-    let mut inputlen: crate::stdlib::socklen_t = 0;
+    let mut inputlen: socklen_t = 0;
     if (*input).sa_family as i32 == 10 as i32 {
-        inputlen = ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong
-            as crate::stdlib::socklen_t
+        inputlen = ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong
+            as socklen_t
     } else {
-        inputlen = ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong
-            as crate::stdlib::socklen_t
+        inputlen = ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong
+            as socklen_t
     }
-    if ::libc::getnameinfo(
-        input as *const ::libc::sockaddr,
+    if getnameinfo(
+        input as *const sockaddr,
         inputlen,
         dest,
-        destlen as crate::stdlib::socklen_t,
+        destlen as socklen_t,
         0 as *mut libc::c_char,
-        0 as i32 as crate::stdlib::socklen_t,
+        0 as i32 as socklen_t,
         1 as i32,
     ) != 0
         && destlen > 0 as i32
@@ -499,35 +499,35 @@ Sys_StringToAdr
 
 pub unsafe extern "C" fn Sys_StringToAdr(
     mut s: *const libc::c_char,
-    mut a: *mut crate::qcommon_h::netadr_t,
-    mut family: crate::qcommon_h::netadrtype_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut sadr: crate::stdlib::sockaddr_storage = crate::stdlib::sockaddr_storage {
+    mut a: *mut netadr_t,
+    mut family: netadrtype_t,
+) -> qboolean {
+    let mut sadr: sockaddr_storage = sockaddr_storage {
         ss_family: 0,
         __ss_padding: [0; 118],
         __ss_align: 0,
     };
-    let mut fam: crate::stdlib::sa_family_t = 0;
+    let mut fam: sa_family_t = 0;
     match family as u32 {
-        4 => fam = 2 as i32 as crate::stdlib::sa_family_t,
-        5 => fam = 10 as i32 as crate::stdlib::sa_family_t,
-        _ => fam = 0 as i32 as crate::stdlib::sa_family_t,
+        4 => fam = 2 as i32 as sa_family_t,
+        5 => fam = 10 as i32 as sa_family_t,
+        _ => fam = 0 as i32 as sa_family_t,
     }
     if Sys_StringToSockaddr(
         s,
-        &mut sadr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
-        ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong as i32,
+        &mut sadr as *mut sockaddr_storage as *mut sockaddr,
+        ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong as i32,
         fam,
     ) as u64
         == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     SockadrToNetadr(
-        &mut sadr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+        &mut sadr as *mut sockaddr_storage as *mut sockaddr,
         a,
     );
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===================
@@ -539,43 +539,43 @@ Compare without port, and up to the bit number given in netmask.
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_CompareBaseAdrMask(
-    mut a: crate::qcommon_h::netadr_t,
-    mut b: crate::qcommon_h::netadr_t,
+    mut a: netadr_t,
+    mut b: netadr_t,
     mut netmask: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut cmpmask: crate::src::qcommon::q_shared::byte = 0;
-    let mut addra: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut addrb: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+) -> qboolean {
+    let mut cmpmask: byte = 0;
+    let mut addra: *mut byte =
+        0 as *mut byte;
+    let mut addrb: *mut byte =
+        0 as *mut byte;
     let mut curbyte: i32 = 0;
     if a.type_0 as u32 != b.type_0 as u32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if a.type_0 as u32 == crate::qcommon_h::NA_LOOPBACK as i32 as u32 {
-        return crate::src::qcommon::q_shared::qtrue;
+    if a.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
+        return qtrue;
     }
-    if a.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
-        addra = &mut a.ip as *mut [crate::src::qcommon::q_shared::byte; 4]
-            as *mut crate::src::qcommon::q_shared::byte;
-        addrb = &mut b.ip as *mut [crate::src::qcommon::q_shared::byte; 4]
-            as *mut crate::src::qcommon::q_shared::byte;
+    if a.type_0 as u32 == NA_IP as i32 as u32 {
+        addra = &mut a.ip as *mut [byte; 4]
+            as *mut byte;
+        addrb = &mut b.ip as *mut [byte; 4]
+            as *mut byte;
         if netmask < 0 as i32 || netmask > 32 as i32 {
             netmask = 32 as i32
         }
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
-        addra = &mut a.ip6 as *mut [crate::src::qcommon::q_shared::byte; 16]
-            as *mut crate::src::qcommon::q_shared::byte;
-        addrb = &mut b.ip6 as *mut [crate::src::qcommon::q_shared::byte; 16]
-            as *mut crate::src::qcommon::q_shared::byte;
+    } else if a.type_0 as u32 == NA_IP6 as i32 as u32 {
+        addra = &mut a.ip6 as *mut [byte; 16]
+            as *mut byte;
+        addrb = &mut b.ip6 as *mut [byte; 16]
+            as *mut byte;
         if netmask < 0 as i32 || netmask > 128 as i32 {
             netmask = 128 as i32
         }
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_CompareBaseAdr: bad address type\n\x00" as *const u8 as *const libc::c_char,
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     curbyte = netmask >> 3 as i32;
     if curbyte != 0
@@ -585,21 +585,21 @@ pub unsafe extern "C" fn NET_CompareBaseAdrMask(
             curbyte as libc::c_ulong,
         ) != 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     netmask &= 0x7 as i32;
     if netmask != 0 {
-        cmpmask = (((1 as i32) << netmask) - 1 as i32) as crate::src::qcommon::q_shared::byte;
-        cmpmask = ((cmpmask as i32) << 8 as i32 - netmask) as crate::src::qcommon::q_shared::byte;
+        cmpmask = (((1 as i32) << netmask) - 1 as i32) as byte;
+        cmpmask = ((cmpmask as i32) << 8 as i32 - netmask) as byte;
         if *addra.offset(curbyte as isize) as i32 & cmpmask as i32
             == *addrb.offset(curbyte as isize) as i32 & cmpmask as i32
         {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     } else {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ===================
@@ -611,48 +611,48 @@ Compares without the port
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_CompareBaseAdr(
-    mut a: crate::qcommon_h::netadr_t,
-    mut b: crate::qcommon_h::netadr_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut a: netadr_t,
+    mut b: netadr_t,
+) -> qboolean {
     return NET_CompareBaseAdrMask(a, b, -(1 as i32));
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn NET_AdrToString(mut a: crate::qcommon_h::netadr_t) -> *const libc::c_char {
+pub unsafe extern "C" fn NET_AdrToString(mut a: netadr_t) -> *const libc::c_char {
     static mut s: [libc::c_char; 48] = [0; 48];
-    if a.type_0 as u32 == crate::qcommon_h::NA_LOOPBACK as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    if a.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"loopback\x00" as *const u8 as *const libc::c_char,
         );
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_BOT as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    } else if a.type_0 as u32 == NA_BOT as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"bot\x00" as *const u8 as *const libc::c_char,
         );
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32
-        || a.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32
+    } else if a.type_0 as u32 == NA_IP as i32 as u32
+        || a.type_0 as u32 == NA_IP6 as i32 as u32
     {
-        let mut sadr: crate::stdlib::sockaddr_storage = crate::stdlib::sockaddr_storage {
+        let mut sadr: sockaddr_storage = sockaddr_storage {
             ss_family: 0,
             __ss_padding: [0; 118],
             __ss_align: 0,
         };
         crate::stdlib::memset(
-            &mut sadr as *mut crate::stdlib::sockaddr_storage as *mut libc::c_void,
+            &mut sadr as *mut sockaddr_storage as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong,
+            ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong,
         );
         NetadrToSockadr(
             &mut a,
-            &mut sadr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+            &mut sadr as *mut sockaddr_storage as *mut sockaddr,
         );
         Sys_SockaddrToString(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
-            &mut sadr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+            &mut sadr as *mut sockaddr_storage as *mut sockaddr,
         );
     }
     return s.as_mut_ptr();
@@ -660,31 +660,31 @@ pub unsafe extern "C" fn NET_AdrToString(mut a: crate::qcommon_h::netadr_t) -> *
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_AdrToStringwPort(
-    mut a: crate::qcommon_h::netadr_t,
+    mut a: netadr_t,
 ) -> *const libc::c_char {
     static mut s: [libc::c_char; 48] = [0; 48];
-    if a.type_0 as u32 == crate::qcommon_h::NA_LOOPBACK as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    if a.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"loopback\x00" as *const u8 as *const libc::c_char,
         );
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_BOT as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    } else if a.type_0 as u32 == NA_BOT as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"bot\x00" as *const u8 as *const libc::c_char,
         );
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    } else if a.type_0 as u32 == NA_IP as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"%s:%hu\x00" as *const u8 as *const libc::c_char,
             NET_AdrToString(a),
             __bswap_16(a.port) as i32,
         );
-    } else if a.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
-        crate::src::qcommon::q_shared::Com_sprintf(
+    } else if a.type_0 as u32 == NA_IP6 as i32 as u32 {
+        Com_sprintf(
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             b"[%s]:%hu\x00" as *const u8 as *const libc::c_char,
@@ -697,30 +697,30 @@ pub unsafe extern "C" fn NET_AdrToStringwPort(
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_CompareAdr(
-    mut a: crate::qcommon_h::netadr_t,
-    mut b: crate::qcommon_h::netadr_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut a: netadr_t,
+    mut b: netadr_t,
+) -> qboolean {
     if NET_CompareBaseAdr(a, b) as u64 == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if a.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32
-        || a.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32
+    if a.type_0 as u32 == NA_IP as i32 as u32
+        || a.type_0 as u32 == NA_IP6 as i32 as u32
     {
         if a.port as i32 == b.port as i32 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     } else {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_IsLocalAddress(
-    mut adr: crate::qcommon_h::netadr_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    return (adr.type_0 as u32 == crate::qcommon_h::NA_LOOPBACK as i32 as u32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    mut adr: netadr_t,
+) -> qboolean {
+    return (adr.type_0 as u32 == NA_LOOPBACK as i32 as u32) as i32
+        as qboolean;
 }
 //=============================================================================
 /*
@@ -733,51 +733,51 @@ Receive one packet
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_GetPacket(
-    mut net_from: *mut crate::qcommon_h::netadr_t,
-    mut net_message: *mut crate::qcommon_h::msg_t,
-    mut fdr: *mut crate::stdlib::fd_set,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut net_from: *mut netadr_t,
+    mut net_message: *mut msg_t,
+    mut fdr: *mut fd_set,
+) -> qboolean {
     let mut ret: i32 = 0;
-    let mut from: crate::stdlib::sockaddr_storage = crate::stdlib::sockaddr_storage {
+    let mut from: sockaddr_storage = sockaddr_storage {
         ss_family: 0,
         __ss_padding: [0; 118],
         __ss_align: 0,
     };
-    let mut fromlen: crate::stdlib::socklen_t = 0;
+    let mut fromlen: socklen_t = 0;
     let mut err: i32 = 0;
     if ip_socket != -(1 as i32)
         && (*fdr).__fds_bits[(ip_socket
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize]
             & ((1 as libc::c_ulong)
                 << ip_socket
                     % (8 as i32
-                        * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                            as i32)) as crate::stdlib::__fd_mask
+                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
+                            as i32)) as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
-            as crate::stdlib::socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong
+            as socklen_t;
         ret = crate::stdlib::recvfrom(
             ip_socket,
             (*net_message).data as *mut libc::c_void,
-            (*net_message).maxsize as crate::stddef_h::size_t,
+            (*net_message).maxsize as size_t,
             0 as i32,
-            &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+            &mut from as *mut sockaddr_storage as *mut sockaddr,
             &mut fromlen,
         ) as i32;
         if ret == -(1 as i32) {
-            err = *::libc::__errno_location();
+            err = *libc::__errno_location();
             if err != 11 as i32 && err != 104 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"NET_GetPacket: %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_ErrorString(),
                 );
             }
         } else {
             crate::stdlib::memset(
-                (*(&mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr_in))
+                (*(&mut from as *mut sockaddr_storage as *mut sockaddr_in))
                     .sin_zero
                     .as_mut_ptr() as *mut libc::c_void,
                 0 as i32,
@@ -785,8 +785,8 @@ pub unsafe extern "C" fn NET_GetPacket(
             );
             if usingSocks as u32 != 0
                 && crate::stdlib::memcmp(
-                    &mut from as *mut crate::stdlib::sockaddr_storage as *const libc::c_void,
-                    &mut socksRelayAddr as *mut ::libc::sockaddr as *const libc::c_void,
+                    &mut from as *mut sockaddr_storage as *const libc::c_void,
+                    &mut socksRelayAddr as *mut sockaddr as *const libc::c_void,
                     fromlen as libc::c_ulong,
                 ) == 0 as i32
             {
@@ -796,131 +796,131 @@ pub unsafe extern "C" fn NET_GetPacket(
                     || *(*net_message).data.offset(2 as i32 as isize) as i32 != 0 as i32
                     || *(*net_message).data.offset(3 as i32 as isize) as i32 != 1 as i32
                 {
-                    return crate::src::qcommon::q_shared::qfalse;
+                    return qfalse;
                 }
-                (*net_from).type_0 = crate::qcommon_h::NA_IP;
+                (*net_from).type_0 = NA_IP;
                 (*net_from).ip[0 as i32 as usize] = *(*net_message).data.offset(4 as i32 as isize);
                 (*net_from).ip[1 as i32 as usize] = *(*net_message).data.offset(5 as i32 as isize);
                 (*net_from).ip[2 as i32 as usize] = *(*net_message).data.offset(6 as i32 as isize);
                 (*net_from).ip[3 as i32 as usize] = *(*net_message).data.offset(7 as i32 as isize);
                 (*net_from).port = *(&mut *(*net_message).data.offset(8 as i32 as isize)
-                    as *mut crate::src::qcommon::q_shared::byte
+                    as *mut byte
                     as *mut i16) as u16;
                 (*net_message).readcount = 10 as i32
             } else {
                 SockadrToNetadr(
-                    &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+                    &mut from as *mut sockaddr_storage as *mut sockaddr,
                     net_from,
                 );
                 (*net_message).readcount = 0 as i32
             }
             if ret >= (*net_message).maxsize {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"Oversize packet from %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_AdrToString(*net_from),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             (*net_message).cursize = ret;
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
     if ip6_socket != -(1 as i32)
         && (*fdr).__fds_bits[(ip6_socket
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize]
             & ((1 as libc::c_ulong)
                 << ip6_socket
                     % (8 as i32
-                        * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                            as i32)) as crate::stdlib::__fd_mask
+                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
+                            as i32)) as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
-            as crate::stdlib::socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong
+            as socklen_t;
         ret = crate::stdlib::recvfrom(
             ip6_socket,
             (*net_message).data as *mut libc::c_void,
-            (*net_message).maxsize as crate::stddef_h::size_t,
+            (*net_message).maxsize as size_t,
             0 as i32,
-            &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+            &mut from as *mut sockaddr_storage as *mut sockaddr,
             &mut fromlen,
         ) as i32;
         if ret == -(1 as i32) {
-            err = *::libc::__errno_location();
+            err = *libc::__errno_location();
             if err != 11 as i32 && err != 104 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"NET_GetPacket: %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_ErrorString(),
                 );
             }
         } else {
             SockadrToNetadr(
-                &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+                &mut from as *mut sockaddr_storage as *mut sockaddr,
                 net_from,
             );
             (*net_message).readcount = 0 as i32;
             if ret >= (*net_message).maxsize {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"Oversize packet from %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_AdrToString(*net_from),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             (*net_message).cursize = ret;
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
     if multicast6_socket != -(1 as i32)
         && multicast6_socket != ip6_socket
         && (*fdr).__fds_bits[(multicast6_socket
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize]
             & ((1 as libc::c_ulong)
                 << multicast6_socket
                     % (8 as i32
-                        * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                            as i32)) as crate::stdlib::__fd_mask
+                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
+                            as i32)) as __fd_mask
             != 0 as i32 as isize
     {
-        fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
-            as crate::stdlib::socklen_t;
+        fromlen = ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong
+            as socklen_t;
         ret = crate::stdlib::recvfrom(
             multicast6_socket,
             (*net_message).data as *mut libc::c_void,
-            (*net_message).maxsize as crate::stddef_h::size_t,
+            (*net_message).maxsize as size_t,
             0 as i32,
-            &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+            &mut from as *mut sockaddr_storage as *mut sockaddr,
             &mut fromlen,
         ) as i32;
         if ret == -(1 as i32) {
-            err = *::libc::__errno_location();
+            err = *libc::__errno_location();
             if err != 11 as i32 && err != 104 as i32 {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"NET_GetPacket: %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_ErrorString(),
                 );
             }
         } else {
             SockadrToNetadr(
-                &mut from as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+                &mut from as *mut sockaddr_storage as *mut sockaddr,
                 net_from,
             );
             (*net_message).readcount = 0 as i32;
             if ret >= (*net_message).maxsize {
-                crate::src::qcommon::common::Com_Printf(
+                Com_Printf(
                     b"Oversize packet from %s\n\x00" as *const u8 as *const libc::c_char,
                     NET_AdrToString(*net_from),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             (*net_message).cursize = ret;
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 //=============================================================================
 
@@ -935,58 +935,58 @@ Sys_SendPacket
 pub unsafe extern "C" fn Sys_SendPacket(
     mut length: i32,
     mut data: *const libc::c_void,
-    mut to: crate::qcommon_h::netadr_t,
+    mut to: netadr_t,
 ) {
     let mut ret: i32 = -(1 as i32); // reserved
-    let mut addr: crate::stdlib::sockaddr_storage = crate::stdlib::sockaddr_storage {
+    let mut addr: sockaddr_storage = sockaddr_storage {
         ss_family: 0,
         __ss_padding: [0; 118],
         __ss_align: 0,
     }; // fragment (not fragmented)
-    if to.type_0 as u32 != crate::qcommon_h::NA_BROADCAST as i32 as u32
-        && to.type_0 as u32 != crate::qcommon_h::NA_IP as i32 as u32
-        && to.type_0 as u32 != crate::qcommon_h::NA_IP6 as i32 as u32
-        && to.type_0 as u32 != crate::qcommon_h::NA_MULTICAST6 as i32 as u32
+    if to.type_0 as u32 != NA_BROADCAST as i32 as u32
+        && to.type_0 as u32 != NA_IP as i32 as u32
+        && to.type_0 as u32 != NA_IP6 as i32 as u32
+        && to.type_0 as u32 != NA_MULTICAST6 as i32 as u32
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+        Com_Error(
+            ERR_FATAL as i32,
             b"Sys_SendPacket: bad address type\x00" as *const u8 as *const libc::c_char,
         ); // address type: IPV4
     }
-    if ip_socket == -(1 as i32) && to.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32
+    if ip_socket == -(1 as i32) && to.type_0 as u32 == NA_IP as i32 as u32
         || ip_socket == -(1 as i32)
-            && to.type_0 as u32 == crate::qcommon_h::NA_BROADCAST as i32 as u32
-        || ip6_socket == -(1 as i32) && to.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32
+            && to.type_0 as u32 == NA_BROADCAST as i32 as u32
+        || ip6_socket == -(1 as i32) && to.type_0 as u32 == NA_IP6 as i32 as u32
         || ip6_socket == -(1 as i32)
-            && to.type_0 as u32 == crate::qcommon_h::NA_MULTICAST6 as i32 as u32
+            && to.type_0 as u32 == NA_MULTICAST6 as i32 as u32
     {
         return;
     }
-    if to.type_0 as u32 == crate::qcommon_h::NA_MULTICAST6 as i32 as u32
+    if to.type_0 as u32 == NA_MULTICAST6 as i32 as u32
         && (*net_enabled).integer & 0x8 as i32 != 0
     {
         return;
     }
     crate::stdlib::memset(
-        &mut addr as *mut crate::stdlib::sockaddr_storage as *mut libc::c_void,
+        &mut addr as *mut sockaddr_storage as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong,
+        ::std::mem::size_of::<sockaddr_storage>() as libc::c_ulong,
     );
     NetadrToSockadr(
         &mut to,
-        &mut addr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+        &mut addr as *mut sockaddr_storage as *mut sockaddr,
     );
-    if usingSocks as u32 != 0 && to.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
+    if usingSocks as u32 != 0 && to.type_0 as u32 == NA_IP as i32 as u32 {
         socksBuf[0 as i32 as usize] = 0 as i32 as libc::c_char;
         socksBuf[1 as i32 as usize] = 0 as i32 as libc::c_char;
         socksBuf[2 as i32 as usize] = 0 as i32 as libc::c_char;
         socksBuf[3 as i32 as usize] = 1 as i32 as libc::c_char;
         *(&mut *socksBuf.as_mut_ptr().offset(4 as i32 as isize) as *mut libc::c_char as *mut i32) =
-            (*(&mut addr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr_in))
+            (*(&mut addr as *mut sockaddr_storage as *mut sockaddr_in))
                 .sin_addr
                 .s_addr as i32;
         *(&mut *socksBuf.as_mut_ptr().offset(8 as i32 as isize) as *mut libc::c_char as *mut i16) =
-            (*(&mut addr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr_in))
+            (*(&mut addr as *mut sockaddr_storage as *mut sockaddr_in))
                 .sin_port as i16;
         crate::stdlib::memcpy(
             &mut *socksBuf.as_mut_ptr().offset(10 as i32 as isize) as *mut libc::c_char
@@ -997,43 +997,43 @@ pub unsafe extern "C" fn Sys_SendPacket(
         ret = crate::stdlib::sendto(
             ip_socket,
             socksBuf.as_mut_ptr() as *const libc::c_void,
-            (length + 10 as i32) as crate::stddef_h::size_t,
+            (length + 10 as i32) as size_t,
             0 as i32,
             &mut socksRelayAddr,
-            ::std::mem::size_of::<::libc::sockaddr>() as libc::c_ulong as crate::stdlib::socklen_t,
+            ::std::mem::size_of::<sockaddr>() as libc::c_ulong as socklen_t,
         ) as i32
     } else if addr.ss_family as i32 == 2 as i32 {
         ret = crate::stdlib::sendto(
             ip_socket,
             data,
-            length as crate::stddef_h::size_t,
+            length as size_t,
             0 as i32,
-            &mut addr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
-            ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong
-                as crate::stdlib::socklen_t,
+            &mut addr as *mut sockaddr_storage as *mut sockaddr,
+            ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong
+                as socklen_t,
         ) as i32
     } else if addr.ss_family as i32 == 10 as i32 {
         ret = crate::stdlib::sendto(
             ip6_socket,
             data,
-            length as crate::stddef_h::size_t,
+            length as size_t,
             0 as i32,
-            &mut addr as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
-            ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong
-                as crate::stdlib::socklen_t,
+            &mut addr as *mut sockaddr_storage as *mut sockaddr,
+            ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong
+                as socklen_t,
         ) as i32
     }
     if ret == -(1 as i32) {
-        let mut err: i32 = *::libc::__errno_location();
+        let mut err: i32 = *libc::__errno_location();
         // wouldblock is silent
         if err == 11 as i32 {
             return;
         }
         // some PPP links do not allow broadcasts and return an error
-        if err == 99 as i32 && to.type_0 as u32 == crate::qcommon_h::NA_BROADCAST as i32 as u32 {
+        if err == 99 as i32 && to.type_0 as u32 == NA_BROADCAST as i32 as u32 {
             return;
         }
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Sys_SendPacket: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
@@ -1050,109 +1050,109 @@ LAN clients will have their rate var ignored
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_IsLANAddress(
-    mut adr: crate::qcommon_h::netadr_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut adr: netadr_t,
+) -> qboolean {
     let mut index: i32 = 0;
     let mut run: i32 = 0;
     let mut addrsize: i32 = 0;
-    let mut differed: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut compareadr: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut comparemask: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut compareip: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    if adr.type_0 as u32 == crate::qcommon_h::NA_LOOPBACK as i32 as u32 {
-        return crate::src::qcommon::q_shared::qtrue;
+    let mut differed: qboolean =
+        qfalse;
+    let mut compareadr: *mut byte =
+        0 as *mut byte;
+    let mut comparemask: *mut byte =
+        0 as *mut byte;
+    let mut compareip: *mut byte =
+        0 as *mut byte;
+    if adr.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
+        return qtrue;
     }
-    if adr.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
+    if adr.type_0 as u32 == NA_IP as i32 as u32 {
         // RFC1918:
         // 10.0.0.0        -   10.255.255.255  (10/8 prefix)
         // 172.16.0.0      -   172.31.255.255  (172.16/12 prefix)
         // 192.168.0.0     -   192.168.255.255 (192.168/16 prefix)
         if adr.ip[0 as i32 as usize] as i32 == 10 as i32 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         if adr.ip[0 as i32 as usize] as i32 == 172 as i32
             && adr.ip[1 as i32 as usize] as i32 & 0xf0 as i32 == 16 as i32
         {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         if adr.ip[0 as i32 as usize] as i32 == 192 as i32
             && adr.ip[1 as i32 as usize] as i32 == 168 as i32
         {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         if adr.ip[0 as i32 as usize] as i32 == 127 as i32 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
-    } else if adr.type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
+    } else if adr.type_0 as u32 == NA_IP6 as i32 as u32 {
         if adr.ip6[0 as i32 as usize] as i32 == 0xfe as i32
             && adr.ip6[1 as i32 as usize] as i32 & 0xc0 as i32 == 0x80 as i32
         {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         if adr.ip6[0 as i32 as usize] as i32 & 0xfe as i32 == 0xfc as i32 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
     // Now compare against the networks this computer is member of.
     index = 0 as i32;
     while index < numIP {
         if localIP[index as usize].type_0 as u32 == adr.type_0 as u32 {
-            if adr.type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
+            if adr.type_0 as u32 == NA_IP as i32 as u32 {
                 compareip = &mut (*(&mut (*localIP.as_mut_ptr().offset(index as isize)).addr
-                    as *mut crate::stdlib::sockaddr_storage
-                    as *mut ::libc::sockaddr_in))
+                    as *mut sockaddr_storage
+                    as *mut sockaddr_in))
                     .sin_addr
-                    .s_addr as *mut crate::stdlib::in_addr_t
-                    as *mut crate::src::qcommon::q_shared::byte;
+                    .s_addr as *mut in_addr_t
+                    as *mut byte;
                 comparemask = &mut (*(&mut (*localIP.as_mut_ptr().offset(index as isize)).netmask
-                    as *mut crate::stdlib::sockaddr_storage
-                    as *mut ::libc::sockaddr_in))
+                    as *mut sockaddr_storage
+                    as *mut sockaddr_in))
                     .sin_addr
-                    .s_addr as *mut crate::stdlib::in_addr_t
-                    as *mut crate::src::qcommon::q_shared::byte;
+                    .s_addr as *mut in_addr_t
+                    as *mut byte;
                 compareadr = adr.ip.as_mut_ptr();
-                addrsize = ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 4]>()
+                addrsize = ::std::mem::size_of::<[byte; 4]>()
                     as libc::c_ulong as i32
             } else {
                 // TODO? should we check the scope_id here?
                 compareip = &mut (*(&mut (*localIP.as_mut_ptr().offset(index as isize)).addr
-                    as *mut crate::stdlib::sockaddr_storage
-                    as *mut crate::stdlib::sockaddr_in6))
-                    .sin6_addr as *mut crate::stdlib::in6_addr
-                    as *mut crate::src::qcommon::q_shared::byte;
+                    as *mut sockaddr_storage
+                    as *mut sockaddr_in6))
+                    .sin6_addr as *mut in6_addr
+                    as *mut byte;
                 comparemask = &mut (*(&mut (*localIP.as_mut_ptr().offset(index as isize)).netmask
-                    as *mut crate::stdlib::sockaddr_storage
-                    as *mut crate::stdlib::sockaddr_in6))
-                    .sin6_addr as *mut crate::stdlib::in6_addr
-                    as *mut crate::src::qcommon::q_shared::byte;
+                    as *mut sockaddr_storage
+                    as *mut sockaddr_in6))
+                    .sin6_addr as *mut in6_addr
+                    as *mut byte;
                 compareadr = adr.ip6.as_mut_ptr();
-                addrsize = ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16]>()
+                addrsize = ::std::mem::size_of::<[byte; 16]>()
                     as libc::c_ulong as i32
             }
-            differed = crate::src::qcommon::q_shared::qfalse;
+            differed = qfalse;
             run = 0 as i32;
             while run < addrsize {
                 if *compareip.offset(run as isize) as i32 & *comparemask.offset(run as isize) as i32
                     != *compareadr.offset(run as isize) as i32
                         & *comparemask.offset(run as isize) as i32
                 {
-                    differed = crate::src::qcommon::q_shared::qtrue;
+                    differed = qtrue;
                     break;
                 } else {
                     run += 1
                 }
             }
             if differed as u64 == 0 {
-                return crate::src::qcommon::q_shared::qtrue;
+                return qtrue;
             }
         }
         index += 1
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ==============================================================
@@ -1223,15 +1223,15 @@ pub unsafe extern "C" fn Sys_ShowIP() {
             addrbuf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
             &mut (*localIP.as_mut_ptr().offset(i as isize)).addr
-                as *mut crate::stdlib::sockaddr_storage as *mut ::libc::sockaddr,
+                as *mut sockaddr_storage as *mut sockaddr,
         );
-        if localIP[i as usize].type_0 as u32 == crate::qcommon_h::NA_IP as i32 as u32 {
-            crate::src::qcommon::common::Com_Printf(
+        if localIP[i as usize].type_0 as u32 == NA_IP as i32 as u32 {
+            Com_Printf(
                 b"IP: %s\n\x00" as *const u8 as *const libc::c_char,
                 addrbuf.as_mut_ptr(),
             );
-        } else if localIP[i as usize].type_0 as u32 == crate::qcommon_h::NA_IP6 as i32 as u32 {
-            crate::src::qcommon::common::Com_Printf(
+        } else if localIP[i as usize].type_0 as u32 == NA_IP6 as i32 as u32 {
+            Com_Printf(
                 b"IP6: %s\n\x00" as *const u8 as *const libc::c_char,
                 addrbuf.as_mut_ptr(),
             );
@@ -1253,102 +1253,102 @@ pub unsafe extern "C" fn NET_IPSocket(
     mut err: *mut i32,
 ) -> SOCKET {
     let mut newsocket: SOCKET = 0;
-    let mut address: ::libc::sockaddr_in = ::libc::sockaddr_in {
+    let mut address: sockaddr_in = sockaddr_in {
         sin_family: 0,
         sin_port: 0,
-        sin_addr: ::libc::in_addr { s_addr: 0 },
+        sin_addr: in_addr { s_addr: 0 },
         sin_zero: [0; 8],
     };
     let mut _true: ioctlarg_t = 1 as i32;
     let mut i: i32 = 1 as i32;
     *err = 0 as i32;
     if !net_interface.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Opening IP socket: %s:%i\n\x00" as *const u8 as *const libc::c_char,
             net_interface,
             port,
         );
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Opening IP socket: 0.0.0.0:%i\n\x00" as *const u8 as *const libc::c_char,
             port,
         );
     }
-    newsocket = ::libc::socket(
+    newsocket = libc::socket(
         2 as i32,
-        crate::stdlib::SOCK_DGRAM as i32,
-        crate::stdlib::IPPROTO_UDP as i32,
+        SOCK_DGRAM as i32,
+        IPPROTO_UDP as i32,
     );
     if newsocket == -(1 as i32) {
-        *err = *::libc::__errno_location();
-        crate::src::qcommon::common::Com_Printf(
+        *err = *libc::__errno_location();
+        Com_Printf(
             b"WARNING: NET_IPSocket: socket: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return newsocket;
     }
     // make it non-blocking
-    if ::libc::ioctl(
+    if libc::ioctl(
         newsocket,
         0x5421 as i32 as libc::c_ulong,
         &mut _true as *mut ioctlarg_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_IPSocket: ioctl FIONBIO: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
-        *err = *::libc::__errno_location();
-        ::libc::close(newsocket);
+        *err = *libc::__errno_location();
+        libc::close(newsocket);
         return -(1 as i32);
     }
     // make it broadcast capable
-    if ::libc::setsockopt(
+    if libc::setsockopt(
         newsocket,
         1 as i32,
         6 as i32,
         &mut i as *mut i32 as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as crate::stdlib::socklen_t,
+        ::std::mem::size_of::<i32>() as libc::c_ulong as socklen_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_IPSocket: setsockopt SO_BROADCAST: %s\n\x00" as *const u8
                 as *const libc::c_char,
             NET_ErrorString(),
         );
     }
     if net_interface.is_null() || *net_interface.offset(0 as i32 as isize) == 0 {
-        address.sin_family = 2 as i32 as crate::stdlib::sa_family_t;
-        address.sin_addr.s_addr = 0 as i32 as crate::stdlib::in_addr_t
+        address.sin_family = 2 as i32 as sa_family_t;
+        address.sin_addr.s_addr = 0 as i32 as in_addr_t
     } else if Sys_StringToSockaddr(
         net_interface,
-        &mut address as *mut ::libc::sockaddr_in as *mut ::libc::sockaddr,
-        ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong as i32,
-        2 as i32 as crate::stdlib::sa_family_t,
+        &mut address as *mut sockaddr_in as *mut sockaddr,
+        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as i32,
+        2 as i32 as sa_family_t,
     ) as u64
         == 0
     {
-        ::libc::close(newsocket);
+        libc::close(newsocket);
         return -(1 as i32);
     }
     if port == -(1 as i32) {
-        address.sin_port = 0 as i32 as crate::stdlib::in_port_t
+        address.sin_port = 0 as i32 as in_port_t
     } else {
-        address.sin_port = __bswap_16(port as i16 as crate::stdlib::__uint16_t)
+        address.sin_port = __bswap_16(port as i16 as __uint16_t)
     }
-    if ::libc::bind(
+    if libc::bind(
         newsocket,
-        &mut address as *mut ::libc::sockaddr_in as *mut libc::c_void as *const ::libc::sockaddr
-            as *const ::libc::sockaddr,
-        ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong as crate::stdlib::socklen_t,
+        &mut address as *mut sockaddr_in as *mut libc::c_void as *const sockaddr
+            as *const sockaddr,
+        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_IPSocket: bind: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
-        *err = *::libc::__errno_location();
-        ::libc::close(newsocket);
+        *err = *libc::__errno_location();
+        libc::close(newsocket);
         return -(1 as i32);
     }
     return newsocket;
@@ -1363,16 +1363,16 @@ NET_IP6Socket
 pub unsafe extern "C" fn NET_IP6Socket(
     mut net_interface: *mut libc::c_char,
     mut port: i32,
-    mut bindto: *mut crate::stdlib::sockaddr_in6,
+    mut bindto: *mut sockaddr_in6,
     mut err: *mut i32,
 ) -> SOCKET {
     let mut newsocket: SOCKET = 0;
-    let mut address: crate::stdlib::sockaddr_in6 = crate::stdlib::sockaddr_in6 {
+    let mut address: sockaddr_in6 = sockaddr_in6 {
         sin6_family: 0,
         sin6_port: 0,
         sin6_flowinfo: 0,
-        sin6_addr: crate::stdlib::in6_addr {
-            __in6_u: crate::stdlib::C2RustUnnamed_129 {
+        sin6_addr: in6_addr {
+            __in6_u: C2RustUnnamed_129 {
                 __u6_addr8: [0; 16],
             },
         },
@@ -1382,105 +1382,105 @@ pub unsafe extern "C" fn NET_IP6Socket(
     *err = 0 as i32;
     if !net_interface.is_null() {
         // Print the name in brackets if there is a colon:
-        if crate::src::qcommon::q_shared::Q_CountChar(net_interface, ':' as i32 as libc::c_char)
+        if Q_CountChar(net_interface, ':' as i32 as libc::c_char)
             != 0
         {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Opening IP6 socket: [%s]:%i\n\x00" as *const u8 as *const libc::c_char,
                 net_interface,
                 port,
             );
         } else {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"Opening IP6 socket: %s:%i\n\x00" as *const u8 as *const libc::c_char,
                 net_interface,
                 port,
             );
         }
     } else {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Opening IP6 socket: [::]:%i\n\x00" as *const u8 as *const libc::c_char,
             port,
         );
     }
-    newsocket = ::libc::socket(
+    newsocket = libc::socket(
         10 as i32,
-        crate::stdlib::SOCK_DGRAM as i32,
-        crate::stdlib::IPPROTO_UDP as i32,
+        SOCK_DGRAM as i32,
+        IPPROTO_UDP as i32,
     );
     if newsocket == -(1 as i32) {
-        *err = *::libc::__errno_location();
-        crate::src::qcommon::common::Com_Printf(
+        *err = *libc::__errno_location();
+        Com_Printf(
             b"WARNING: NET_IP6Socket: socket: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return newsocket;
     }
     // make it non-blocking
-    if ::libc::ioctl(
+    if libc::ioctl(
         newsocket,
         0x5421 as i32 as libc::c_ulong,
         &mut _true as *mut ioctlarg_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_IP6Socket: ioctl FIONBIO: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
-        *err = *::libc::__errno_location();
-        ::libc::close(newsocket);
+        *err = *libc::__errno_location();
+        libc::close(newsocket);
         return -(1 as i32);
     }
     let mut i: i32 = 1 as i32;
     // ipv4 addresses should not be allowed to connect via this socket.
-    if ::libc::setsockopt(
+    if libc::setsockopt(
         newsocket,
-        crate::stdlib::IPPROTO_IPV6 as i32,
+        IPPROTO_IPV6 as i32,
         26 as i32,
         &mut i as *mut i32 as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<i32>() as libc::c_ulong as crate::stdlib::socklen_t,
+        ::std::mem::size_of::<i32>() as libc::c_ulong as socklen_t,
     ) == -(1 as i32)
     {
         // win32 systems don't seem to support this anyways.
-        crate::src::qcommon::common::Com_DPrintf(
+        Com_DPrintf(
             b"WARNING: NET_IP6Socket: setsockopt IPV6_V6ONLY: %s\n\x00" as *const u8
                 as *const libc::c_char,
             NET_ErrorString(),
         );
     }
     if net_interface.is_null() || *net_interface.offset(0 as i32 as isize) == 0 {
-        address.sin6_family = 10 as i32 as crate::stdlib::sa_family_t;
-        address.sin6_addr = crate::stdlib::in6addr_any
+        address.sin6_family = 10 as i32 as sa_family_t;
+        address.sin6_addr = in6addr_any
     } else if Sys_StringToSockaddr(
         net_interface,
-        &mut address as *mut crate::stdlib::sockaddr_in6 as *mut ::libc::sockaddr,
-        ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong as i32,
-        10 as i32 as crate::stdlib::sa_family_t,
+        &mut address as *mut sockaddr_in6 as *mut sockaddr,
+        ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32,
+        10 as i32 as sa_family_t,
     ) as u64
         == 0
     {
-        ::libc::close(newsocket);
+        libc::close(newsocket);
         return -(1 as i32);
     }
     if port == -(1 as i32) {
-        address.sin6_port = 0 as i32 as crate::stdlib::in_port_t
+        address.sin6_port = 0 as i32 as in_port_t
     } else {
-        address.sin6_port = __bswap_16(port as i16 as crate::stdlib::__uint16_t)
+        address.sin6_port = __bswap_16(port as i16 as __uint16_t)
     }
-    if ::libc::bind(
+    if libc::bind(
         newsocket,
-        &mut address as *mut crate::stdlib::sockaddr_in6 as *mut libc::c_void
-            as *const ::libc::sockaddr as *const ::libc::sockaddr,
-        ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong
-            as crate::stdlib::socklen_t,
+        &mut address as *mut sockaddr_in6 as *mut libc::c_void
+            as *const sockaddr as *const sockaddr,
+        ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong
+            as socklen_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_IP6Socket: bind: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
-        *err = *::libc::__errno_location();
-        ::libc::close(newsocket);
+        *err = *libc::__errno_location();
+        libc::close(newsocket);
         return -(1 as i32);
     }
     if !bindto.is_null() {
@@ -1497,12 +1497,12 @@ Set the current multicast group
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_SetMulticast6() {
-    let mut addr: crate::stdlib::sockaddr_in6 = crate::stdlib::sockaddr_in6 {
+    let mut addr: sockaddr_in6 = sockaddr_in6 {
         sin6_family: 0,
         sin6_port: 0,
         sin6_flowinfo: 0,
-        sin6_addr: crate::stdlib::in6_addr {
-            __in6_u: crate::stdlib::C2RustUnnamed_129 {
+        sin6_addr: in6_addr {
+            __in6_u: C2RustUnnamed_129 {
                 __u6_addr8: [0; 16],
             },
         },
@@ -1511,28 +1511,28 @@ pub unsafe extern "C" fn NET_SetMulticast6() {
     if *(*net_mcast6addr).string == 0
         || Sys_StringToSockaddr(
             (*net_mcast6addr).string,
-            &mut addr as *mut crate::stdlib::sockaddr_in6 as *mut ::libc::sockaddr,
-            ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong as i32,
-            10 as i32 as crate::stdlib::sa_family_t,
+            &mut addr as *mut sockaddr_in6 as *mut sockaddr,
+            ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32,
+            10 as i32 as sa_family_t,
         ) as u64
             == 0
     {
-        crate::src::qcommon::common::Com_Printf(b"WARNING: NET_JoinMulticast6: Incorrect multicast address given, please set cvar %s to a sane value.\n\x00"
+        Com_Printf(b"WARNING: NET_JoinMulticast6: Incorrect multicast address given, please set cvar %s to a sane value.\n\x00"
                        as *const u8 as *const libc::c_char,
                    (*net_mcast6addr).name);
-        crate::src::qcommon::cvar::Cvar_SetValue(
+        Cvar_SetValue(
             (*net_enabled).name,
             ((*net_enabled).integer | 0x8 as i32) as f32,
         );
         return;
     }
     crate::stdlib::memcpy(
-        &mut curgroup.ipv6mr_multiaddr as *mut crate::stdlib::in6_addr as *mut libc::c_void,
-        &mut addr.sin6_addr as *mut crate::stdlib::in6_addr as *const libc::c_void,
-        ::std::mem::size_of::<crate::stdlib::in6_addr>() as libc::c_ulong,
+        &mut curgroup.ipv6mr_multiaddr as *mut in6_addr as *mut libc::c_void,
+        &mut addr.sin6_addr as *mut in6_addr as *const libc::c_void,
+        ::std::mem::size_of::<in6_addr>() as libc::c_ulong,
     );
     if *(*net_mcast6iface).string != 0 {
-        curgroup.ipv6mr_interface = ::libc::if_nametoindex((*net_mcast6iface).string)
+        curgroup.ipv6mr_interface = if_nametoindex((*net_mcast6iface).string)
     } else {
         curgroup.ipv6mr_interface = 0 as i32 as u32
     };
@@ -1553,13 +1553,13 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
     {
         return;
     }
-    if *(&mut boundto.sin6_addr as *mut crate::stdlib::in6_addr as *const crate::stdlib::uint8_t)
+    if *(&mut boundto.sin6_addr as *mut in6_addr as *const uint8_t)
         .offset(0 as i32 as isize) as i32
         == 0xff as i32
         || ({
-            let mut __a: *const crate::stdlib::in6_addr = &mut boundto.sin6_addr
-                as *mut crate::stdlib::in6_addr
-                as *const crate::stdlib::in6_addr;
+            let mut __a: *const in6_addr = &mut boundto.sin6_addr
+                as *mut in6_addr
+                as *const in6_addr;
             ((*__a).__in6_u.__u6_addr32[0 as i32 as usize] == 0 as i32 as u32
                 && (*__a).__in6_u.__u6_addr32[1 as i32 as usize] == 0 as i32 as u32
                 && (*__a).__in6_u.__u6_addr32[2 as i32 as usize] == 0 as i32 as u32
@@ -1573,7 +1573,7 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
         multicast6_socket = NET_IP6Socket(
             (*net_mcast6addr).string,
             __bswap_16(boundto.sin6_port) as i32,
-            0 as *mut crate::stdlib::sockaddr_in6,
+            0 as *mut sockaddr_in6,
             &mut err,
         );
         if multicast6_socket == -(1 as i32) {
@@ -1582,42 +1582,42 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
         }
     }
     if curgroup.ipv6mr_interface != 0 {
-        if ::libc::setsockopt(
+        if libc::setsockopt(
             multicast6_socket,
-            crate::stdlib::IPPROTO_IPV6 as i32,
+            IPPROTO_IPV6 as i32,
             17 as i32,
             &mut curgroup.ipv6mr_interface as *mut u32 as *mut libc::c_char as *const libc::c_void,
-            ::std::mem::size_of::<u32>() as libc::c_ulong as crate::stdlib::socklen_t,
+            ::std::mem::size_of::<u32>() as libc::c_ulong as socklen_t,
         ) < 0 as i32
         {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_JoinMulticast6: Couldn\'t set scope on multicast socket: %s\n\x00"
                     as *const u8 as *const libc::c_char,
                 NET_ErrorString(),
             );
             if multicast6_socket != ip6_socket {
-                ::libc::close(multicast6_socket);
+                libc::close(multicast6_socket);
                 multicast6_socket = -(1 as i32);
                 return;
             }
         }
     }
-    if ::libc::setsockopt(
+    if libc::setsockopt(
         multicast6_socket,
-        crate::stdlib::IPPROTO_IPV6 as i32,
+        IPPROTO_IPV6 as i32,
         20 as i32,
-        &mut curgroup as *mut crate::stdlib::ipv6_mreq as *mut libc::c_char as *const libc::c_void,
-        ::std::mem::size_of::<crate::stdlib::ipv6_mreq>() as libc::c_ulong
-            as crate::stdlib::socklen_t,
+        &mut curgroup as *mut ipv6_mreq as *mut libc::c_char as *const libc::c_void,
+        ::std::mem::size_of::<ipv6_mreq>() as libc::c_ulong
+            as socklen_t,
     ) != 0
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_JoinMulticast6: Couldn\'t join multicast group: %s\n\x00" as *const u8
                 as *const libc::c_char,
             NET_ErrorString(),
         );
         if multicast6_socket != ip6_socket {
-            ::libc::close(multicast6_socket);
+            libc::close(multicast6_socket);
             multicast6_socket = -(1 as i32);
             return;
         }
@@ -1628,16 +1628,16 @@ pub unsafe extern "C" fn NET_JoinMulticast6() {
 pub unsafe extern "C" fn NET_LeaveMulticast6() {
     if multicast6_socket != -(1 as i32) {
         if multicast6_socket != ip6_socket {
-            ::libc::close(multicast6_socket);
+            libc::close(multicast6_socket);
         } else {
-            ::libc::setsockopt(
+            libc::setsockopt(
                 multicast6_socket,
-                crate::stdlib::IPPROTO_IPV6 as i32,
+                IPPROTO_IPV6 as i32,
                 21 as i32,
-                &mut curgroup as *mut crate::stdlib::ipv6_mreq as *mut libc::c_char
+                &mut curgroup as *mut ipv6_mreq as *mut libc::c_char
                     as *const libc::c_void,
-                ::std::mem::size_of::<crate::stdlib::ipv6_mreq>() as libc::c_ulong
-                    as crate::stdlib::socklen_t,
+                ::std::mem::size_of::<ipv6_mreq>() as libc::c_ulong
+                    as socklen_t,
             );
         }
         multicast6_socket = -(1 as i32)
@@ -1651,60 +1651,60 @@ NET_OpenSocks
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
-    let mut address: ::libc::sockaddr_in = ::libc::sockaddr_in {
+    let mut address: sockaddr_in = sockaddr_in {
         sin_family: 0,
         sin_port: 0,
-        sin_addr: ::libc::in_addr { s_addr: 0 },
+        sin_addr: in_addr { s_addr: 0 },
         sin_zero: [0; 8],
     };
-    let mut h: *mut ::libc::hostent = 0 as *mut ::libc::hostent;
+    let mut h: *mut hostent = 0 as *mut hostent;
     let mut len: i32 = 0;
-    let mut rfc1929: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut rfc1929: qboolean =
+        qfalse;
     let mut buf: [u8; 64] = [0; 64];
-    usingSocks = crate::src::qcommon::q_shared::qfalse;
-    crate::src::qcommon::common::Com_Printf(
+    usingSocks = qfalse;
+    Com_Printf(
         b"Opening connection to SOCKS server.\n\x00" as *const u8 as *const libc::c_char,
     );
-    socks_socket = ::libc::socket(
+    socks_socket = libc::socket(
         2 as i32,
-        crate::stdlib::SOCK_STREAM as i32,
-        crate::stdlib::IPPROTO_TCP as i32,
+        SOCK_STREAM as i32,
+        IPPROTO_TCP as i32,
     );
     if socks_socket == -(1 as i32) {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_OpenSocks: socket: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return;
     }
-    h = crate::stdlib::gethostbyname((*net_socksServer).string);
+    h = gethostbyname((*net_socksServer).string);
     if h.is_null() {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_OpenSocks: gethostbyname: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return;
     }
     if (*h).h_addrtype != 2 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"WARNING: NET_OpenSocks: gethostbyname: address type was not AF_INET\n\x00"
                 as *const u8 as *const libc::c_char,
         );
         return;
     }
-    address.sin_family = 2 as i32 as crate::stdlib::sa_family_t;
+    address.sin_family = 2 as i32 as sa_family_t;
     address.sin_addr.s_addr =
-        *(*(*h).h_addr_list.offset(0 as i32 as isize) as *mut i32) as crate::stdlib::in_addr_t;
-    address.sin_port = __bswap_16((*net_socksPort).integer as i16 as crate::stdlib::__uint16_t);
-    if ::libc::connect(
+        *(*(*h).h_addr_list.offset(0 as i32 as isize) as *mut i32) as in_addr_t;
+    address.sin_port = __bswap_16((*net_socksPort).integer as i16 as __uint16_t);
+    if libc::connect(
         socks_socket,
-        &mut address as *mut ::libc::sockaddr_in as *mut ::libc::sockaddr
-            as *const ::libc::sockaddr,
-        ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong as crate::stdlib::socklen_t,
+        &mut address as *mut sockaddr_in as *mut sockaddr
+            as *const sockaddr,
+        ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as socklen_t,
     ) == -(1 as i32)
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: connect: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
@@ -1712,9 +1712,9 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     }
     // send socks authentication handshake
     if *(*net_socksUsername).string as i32 != 0 || *(*net_socksPassword).string as i32 != 0 {
-        rfc1929 = crate::src::qcommon::q_shared::qtrue
+        rfc1929 = qtrue
     } else {
-        rfc1929 = crate::src::qcommon::q_shared::qfalse
+        rfc1929 = qfalse
     } // SOCKS version
     buf[0 as i32 as usize] = 5 as i32 as u8;
     // method count
@@ -1733,11 +1733,11 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     if crate::stdlib::send(
         socks_socket,
         buf.as_mut_ptr() as *mut libc::c_void,
-        len as crate::stddef_h::size_t,
+        len as size_t,
         0 as i32,
     ) == -(1 as i32) as isize
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
@@ -1747,18 +1747,18 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     len = crate::stdlib::recv(
         socks_socket,
         buf.as_mut_ptr() as *mut libc::c_void,
-        64 as i32 as crate::stddef_h::size_t,
+        64 as i32 as size_t,
         0 as i32,
     ) as i32;
     if len == -(1 as i32) {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: recv: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return;
     }
     if len != 2 as i32 || buf[0 as i32 as usize] as i32 != 5 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: bad response\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -1767,7 +1767,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         0 => {}
         2 => {}
         _ => {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_OpenSocks: request denied\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -1802,11 +1802,11 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         if crate::stdlib::send(
             socks_socket,
             buf.as_mut_ptr() as *mut libc::c_void,
-            (3 as i32 + ulen + plen) as crate::stddef_h::size_t,
+            (3 as i32 + ulen + plen) as size_t,
             0 as i32,
         ) == -(1 as i32) as isize
         {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,
                 NET_ErrorString(),
             );
@@ -1816,24 +1816,24 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         len = crate::stdlib::recv(
             socks_socket,
             buf.as_mut_ptr() as *mut libc::c_void,
-            64 as i32 as crate::stddef_h::size_t,
+            64 as i32 as size_t,
             0 as i32,
         ) as i32;
         if len == -(1 as i32) {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_OpenSocks: recv: %s\n\x00" as *const u8 as *const libc::c_char,
                 NET_ErrorString(),
             );
             return;
         }
         if len != 2 as i32 || buf[0 as i32 as usize] as i32 != 1 as i32 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_OpenSocks: bad response\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
         }
         if buf[1 as i32 as usize] as i32 != 0 as i32 {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"NET_OpenSocks: authentication failed\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -1845,17 +1845,17 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     buf[2 as i32 as usize] = 0 as i32 as u8; // reserved
     buf[3 as i32 as usize] = 1 as i32 as u8; // address type: IPV4
     *(&mut *buf.as_mut_ptr().offset(4 as i32 as isize) as *mut u8 as *mut i32) =
-        0 as i32 as crate::stdlib::in_addr_t as i32; // port
+        0 as i32 as in_addr_t as i32; // port
     *(&mut *buf.as_mut_ptr().offset(8 as i32 as isize) as *mut u8 as *mut i16) =
-        __bswap_16(port as i16 as crate::stdlib::__uint16_t) as i16;
+        __bswap_16(port as i16 as __uint16_t) as i16;
     if crate::stdlib::send(
         socks_socket,
         buf.as_mut_ptr() as *mut libc::c_void,
-        10 as i32 as crate::stddef_h::size_t,
+        10 as i32 as size_t,
         0 as i32,
     ) == -(1 as i32) as isize
     {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
@@ -1865,55 +1865,55 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
     len = crate::stdlib::recv(
         socks_socket,
         buf.as_mut_ptr() as *mut libc::c_void,
-        64 as i32 as crate::stddef_h::size_t,
+        64 as i32 as size_t,
         0 as i32,
     ) as i32;
     if len == -(1 as i32) {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: recv: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
         return;
     }
     if len < 2 as i32 || buf[0 as i32 as usize] as i32 != 5 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: bad response\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     // check completion code
     if buf[1 as i32 as usize] as i32 != 0 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: request denied: %i\n\x00" as *const u8 as *const libc::c_char,
             buf[1 as i32 as usize] as i32,
         );
         return;
     }
     if buf[3 as i32 as usize] as i32 != 1 as i32 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"NET_OpenSocks: relay address is not IPV4: %i\n\x00" as *const u8
                 as *const libc::c_char,
             buf[3 as i32 as usize] as i32,
         );
         return;
     }
-    (*(&mut socksRelayAddr as *mut ::libc::sockaddr as *mut ::libc::sockaddr_in)).sin_family =
-        2 as i32 as crate::stdlib::sa_family_t;
-    (*(&mut socksRelayAddr as *mut ::libc::sockaddr as *mut ::libc::sockaddr_in))
+    (*(&mut socksRelayAddr as *mut sockaddr as *mut sockaddr_in)).sin_family =
+        2 as i32 as sa_family_t;
+    (*(&mut socksRelayAddr as *mut sockaddr as *mut sockaddr_in))
         .sin_addr
         .s_addr = *(&mut *buf.as_mut_ptr().offset(4 as i32 as isize) as *mut u8 as *mut i32)
-        as crate::stdlib::in_addr_t;
-    (*(&mut socksRelayAddr as *mut ::libc::sockaddr as *mut ::libc::sockaddr_in)).sin_port =
+        as in_addr_t;
+    (*(&mut socksRelayAddr as *mut sockaddr as *mut sockaddr_in)).sin_port =
         *(&mut *buf.as_mut_ptr().offset(8 as i32 as isize) as *mut u8 as *mut i16)
-            as crate::stdlib::in_port_t;
+            as in_port_t;
     crate::stdlib::memset(
-        (*(&mut socksRelayAddr as *mut ::libc::sockaddr as *mut ::libc::sockaddr_in))
+        (*(&mut socksRelayAddr as *mut sockaddr as *mut sockaddr_in))
             .sin_zero
             .as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         8 as i32 as libc::c_ulong,
     );
-    usingSocks = crate::src::qcommon::q_shared::qtrue;
+    usingSocks = qtrue;
 }
 /*
 =====================
@@ -1923,11 +1923,11 @@ NET_AddLocalAddress
 
 unsafe extern "C" fn NET_AddLocalAddress(
     mut ifname: *mut libc::c_char,
-    mut addr: *mut ::libc::sockaddr,
-    mut netmask: *mut ::libc::sockaddr,
+    mut addr: *mut sockaddr,
+    mut netmask: *mut sockaddr,
 ) {
     let mut addrlen: i32 = 0;
-    let mut family: crate::stdlib::sa_family_t = 0;
+    let mut family: sa_family_t = 0;
     // only add addresses that have all required info.
     if addr.is_null() || netmask.is_null() || ifname.is_null() {
         return;
@@ -1935,15 +1935,15 @@ unsafe extern "C" fn NET_AddLocalAddress(
     family = (*addr).sa_family;
     if numIP < 32 as i32 {
         if family as i32 == 2 as i32 {
-            addrlen = ::std::mem::size_of::<::libc::sockaddr_in>() as libc::c_ulong as i32;
-            localIP[numIP as usize].type_0 = crate::qcommon_h::NA_IP
+            addrlen = ::std::mem::size_of::<sockaddr_in>() as libc::c_ulong as i32;
+            localIP[numIP as usize].type_0 = NA_IP
         } else if family as i32 == 10 as i32 {
-            addrlen = ::std::mem::size_of::<crate::stdlib::sockaddr_in6>() as libc::c_ulong as i32;
-            localIP[numIP as usize].type_0 = crate::qcommon_h::NA_IP6
+            addrlen = ::std::mem::size_of::<sockaddr_in6>() as libc::c_ulong as i32;
+            localIP[numIP as usize].type_0 = NA_IP6
         } else {
             return;
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             localIP[numIP as usize].ifname.as_mut_ptr(),
             ifname,
             ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
@@ -1951,13 +1951,13 @@ unsafe extern "C" fn NET_AddLocalAddress(
         localIP[numIP as usize].family = family;
         crate::stdlib::memcpy(
             &mut (*localIP.as_mut_ptr().offset(numIP as isize)).addr
-                as *mut crate::stdlib::sockaddr_storage as *mut libc::c_void,
+                as *mut sockaddr_storage as *mut libc::c_void,
             addr as *const libc::c_void,
             addrlen as libc::c_ulong,
         );
         crate::stdlib::memcpy(
             &mut (*localIP.as_mut_ptr().offset(numIP as isize)).netmask
-                as *mut crate::stdlib::sockaddr_storage as *mut libc::c_void,
+                as *mut sockaddr_storage as *mut libc::c_void,
             netmask as *const libc::c_void,
             addrlen as libc::c_ulong,
         );
@@ -1966,11 +1966,11 @@ unsafe extern "C" fn NET_AddLocalAddress(
 }
 
 unsafe extern "C" fn NET_GetLocalAddress() {
-    let mut ifap: *mut crate::stdlib::ifaddrs = 0 as *mut crate::stdlib::ifaddrs;
-    let mut search: *mut crate::stdlib::ifaddrs = 0 as *mut crate::stdlib::ifaddrs;
+    let mut ifap: *mut ifaddrs = 0 as *mut ifaddrs;
+    let mut search: *mut ifaddrs = 0 as *mut ifaddrs;
     numIP = 0 as i32;
-    if crate::stdlib::getifaddrs(&mut ifap) != 0 {
-        crate::src::qcommon::common::Com_Printf(
+    if getifaddrs(&mut ifap) != 0 {
+        Com_Printf(
             b"NET_GetLocalAddress: Unable to get list of network interfaces: %s\n\x00" as *const u8
                 as *const libc::c_char,
             NET_ErrorString(),
@@ -1979,7 +1979,7 @@ unsafe extern "C" fn NET_GetLocalAddress() {
         search = ifap;
         while !search.is_null() {
             // Only add interfaces that are up.
-            if (*ifap).ifa_flags & crate::stdlib::IFF_UP as i32 as u32 != 0 {
+            if (*ifap).ifa_flags & IFF_UP as i32 as u32 != 0 {
                 NET_AddLocalAddress(
                     (*search).ifa_name,
                     (*search).ifa_addr,
@@ -1988,7 +1988,7 @@ unsafe extern "C" fn NET_GetLocalAddress() {
             }
             search = (*search).ifa_next
         }
-        crate::stdlib::freeifaddrs(ifap);
+        freeifaddrs(ifap);
         Sys_ShowIP();
     };
 }
@@ -2015,7 +2015,7 @@ pub unsafe extern "C" fn NET_OpenIP() {
         while i < 10 as i32 {
             ip6_socket = NET_IP6Socket((*net_ip6).string, port6 + i, &mut boundto, &mut err);
             if ip6_socket != -(1 as i32) {
-                crate::src::qcommon::cvar::Cvar_SetValue(
+                Cvar_SetValue(
                     b"net_port6\x00" as *const u8 as *const libc::c_char,
                     (port6 + i) as f32,
                 );
@@ -2028,7 +2028,7 @@ pub unsafe extern "C" fn NET_OpenIP() {
             }
         }
         if ip6_socket == -(1 as i32) {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"WARNING: Couldn\'t bind to a v6 ip address.\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -2039,7 +2039,7 @@ pub unsafe extern "C" fn NET_OpenIP() {
         while i < 10 as i32 {
             ip_socket = NET_IPSocket((*net_ip).string, port + i, &mut err);
             if ip_socket != -(1 as i32) {
-                crate::src::qcommon::cvar::Cvar_SetValue(
+                Cvar_SetValue(
                     b"net_port\x00" as *const u8 as *const libc::c_char,
                     (port + i) as f32,
                 );
@@ -2055,7 +2055,7 @@ pub unsafe extern "C" fn NET_OpenIP() {
             }
         }
         if ip_socket == -(1 as i32) {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"WARNING: Couldn\'t bind to a v4 ip address.\n\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -2069,111 +2069,111 @@ NET_GetCvars
 ====================
 */
 
-unsafe extern "C" fn NET_GetCvars() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn NET_GetCvars() -> qboolean {
     let mut modified: i32 = 0;
     /* End users have it enabled so they can connect to ipv6-only hosts, but ipv4 will be
      * used if available due to ping */
-    net_enabled = crate::src::qcommon::cvar::Cvar_Get(
+    net_enabled = Cvar_Get(
         b"net_enabled\x00" as *const u8 as *const libc::c_char,
         b"3\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (*net_enabled).modified as i32;
-    (*net_enabled).modified = crate::src::qcommon::q_shared::qfalse;
-    net_ip = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_enabled).modified = qfalse;
+    net_ip = Cvar_Get(
         b"net_ip\x00" as *const u8 as *const libc::c_char,
         b"0.0.0.0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_ip).modified as u32) as i32;
-    (*net_ip).modified = crate::src::qcommon::q_shared::qfalse;
-    net_ip6 = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_ip).modified = qfalse;
+    net_ip6 = Cvar_Get(
         b"net_ip6\x00" as *const u8 as *const libc::c_char,
         b"::\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_ip6).modified as u32) as i32;
-    (*net_ip6).modified = crate::src::qcommon::q_shared::qfalse;
-    net_port = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_ip6).modified = qfalse;
+    net_port = Cvar_Get(
         b"net_port\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             27960 as i32,
         ),
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_port).modified as u32) as i32;
-    (*net_port).modified = crate::src::qcommon::q_shared::qfalse;
-    net_port6 = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_port).modified = qfalse;
+    net_port6 = Cvar_Get(
         b"net_port6\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             27960 as i32,
         ),
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_port6).modified as u32) as i32;
-    (*net_port6).modified = crate::src::qcommon::q_shared::qfalse;
+    (*net_port6).modified = qfalse;
     // Some cvars for configuring multicast options which facilitates scanning for servers on local subnets.
-    net_mcast6addr = crate::src::qcommon::cvar::Cvar_Get(
+    net_mcast6addr = Cvar_Get(
         b"net_mcast6addr\x00" as *const u8 as *const libc::c_char,
         b"ff04::696f:7175:616b:6533\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_mcast6addr).modified as u32) as i32;
-    (*net_mcast6addr).modified = crate::src::qcommon::q_shared::qfalse;
-    net_mcast6iface = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_mcast6addr).modified = qfalse;
+    net_mcast6iface = Cvar_Get(
         b"net_mcast6iface\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_mcast6iface).modified as u32) as i32;
-    (*net_mcast6iface).modified = crate::src::qcommon::q_shared::qfalse;
-    net_socksEnabled = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_mcast6iface).modified = qfalse;
+    net_socksEnabled = Cvar_Get(
         b"net_socksEnabled\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_socksEnabled).modified as u32) as i32;
-    (*net_socksEnabled).modified = crate::src::qcommon::q_shared::qfalse;
-    net_socksServer = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_socksEnabled).modified = qfalse;
+    net_socksServer = Cvar_Get(
         b"net_socksServer\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_socksServer).modified as u32) as i32;
-    (*net_socksServer).modified = crate::src::qcommon::q_shared::qfalse;
-    net_socksPort = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_socksServer).modified = qfalse;
+    net_socksPort = Cvar_Get(
         b"net_socksPort\x00" as *const u8 as *const libc::c_char,
         b"1080\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_socksPort).modified as u32) as i32;
-    (*net_socksPort).modified = crate::src::qcommon::q_shared::qfalse;
-    net_socksUsername = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_socksPort).modified = qfalse;
+    net_socksUsername = Cvar_Get(
         b"net_socksUsername\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_socksUsername).modified as u32) as i32;
-    (*net_socksUsername).modified = crate::src::qcommon::q_shared::qfalse;
-    net_socksPassword = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_socksUsername).modified = qfalse;
+    net_socksPassword = Cvar_Get(
         b"net_socksPassword\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     modified = (modified as u32).wrapping_add((*net_socksPassword).modified as u32) as i32;
-    (*net_socksPassword).modified = crate::src::qcommon::q_shared::qfalse;
-    net_dropsim = crate::src::qcommon::cvar::Cvar_Get(
+    (*net_socksPassword).modified = qfalse;
+    net_dropsim = Cvar_Get(
         b"net_dropsim\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     return if modified != 0 {
-        crate::src::qcommon::q_shared::qtrue as i32
+        qtrue as i32
     } else {
-        crate::src::qcommon::q_shared::qfalse as i32
-    } as crate::src::qcommon::q_shared::qboolean;
+        qfalse as i32
+    } as qboolean;
 }
 /*
 ====================
@@ -2182,15 +2182,15 @@ NET_Config
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn NET_Config(mut enableNetworking: crate::src::qcommon::q_shared::qboolean) {
-    let mut modified: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut stop: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut start: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
+pub unsafe extern "C" fn NET_Config(mut enableNetworking: qboolean) {
+    let mut modified: qboolean =
+        qfalse;
+    let mut stop: qboolean = qfalse;
+    let mut start: qboolean = qfalse;
     // get any latched changes to cvars
     modified = NET_GetCvars();
     if (*net_enabled).integer == 0 {
-        enableNetworking = crate::src::qcommon::q_shared::qfalse
+        enableNetworking = qfalse
     }
     // if enable state is the same and no cvars were modified, we have nothing to do
     if enableNetworking as u32 == networkingEnabled as u32 && modified as u64 == 0 {
@@ -2198,39 +2198,39 @@ pub unsafe extern "C" fn NET_Config(mut enableNetworking: crate::src::qcommon::q
     }
     if enableNetworking as u32 == networkingEnabled as u32 {
         if enableNetworking as u64 != 0 {
-            stop = crate::src::qcommon::q_shared::qtrue;
-            start = crate::src::qcommon::q_shared::qtrue
+            stop = qtrue;
+            start = qtrue
         } else {
-            stop = crate::src::qcommon::q_shared::qfalse;
-            start = crate::src::qcommon::q_shared::qfalse
+            stop = qfalse;
+            start = qfalse
         }
     } else {
         if enableNetworking as u64 != 0 {
-            stop = crate::src::qcommon::q_shared::qfalse;
-            start = crate::src::qcommon::q_shared::qtrue
+            stop = qfalse;
+            start = qtrue
         } else {
-            stop = crate::src::qcommon::q_shared::qtrue;
-            start = crate::src::qcommon::q_shared::qfalse
+            stop = qtrue;
+            start = qfalse
         }
         networkingEnabled = enableNetworking as i32
     }
     if stop as u64 != 0 {
         if ip_socket != -(1 as i32) {
-            ::libc::close(ip_socket);
+            libc::close(ip_socket);
             ip_socket = -(1 as i32)
         }
         if multicast6_socket != -(1 as i32) {
             if multicast6_socket != ip6_socket {
-                ::libc::close(multicast6_socket);
+                libc::close(multicast6_socket);
             }
             multicast6_socket = -(1 as i32)
         }
         if ip6_socket != -(1 as i32) {
-            ::libc::close(ip6_socket);
+            libc::close(ip6_socket);
             ip6_socket = -(1 as i32)
         }
         if socks_socket != -(1 as i32) {
-            ::libc::close(socks_socket);
+            libc::close(socks_socket);
             socks_socket = -(1 as i32)
         }
     }
@@ -2249,8 +2249,8 @@ NET_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_Init() {
-    NET_Config(crate::src::qcommon::q_shared::qtrue);
-    crate::src::qcommon::cmd::Cmd_AddCommand(
+    NET_Config(qtrue);
+    Cmd_AddCommand(
         b"net_restart\x00" as *const u8 as *const libc::c_char,
         Some(NET_Restart_f as unsafe extern "C" fn() -> ()),
     );
@@ -2266,7 +2266,7 @@ pub unsafe extern "C" fn NET_Shutdown() {
     if networkingEnabled == 0 {
         return;
     }
-    NET_Config(crate::src::qcommon::q_shared::qfalse);
+    NET_Config(qfalse);
 }
 /*
 ====================
@@ -2277,11 +2277,11 @@ Called from NET_Sleep which uses select() to determine which sockets have seen a
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn NET_Event(mut fdr: *mut crate::stdlib::fd_set) {
-    let mut bufData: [crate::src::qcommon::q_shared::byte; 16385] = [0; 16385];
-    let mut from: crate::qcommon_h::netadr_t = {
-        let mut init = crate::qcommon_h::netadr_t {
-            type_0: crate::qcommon_h::NA_BAD,
+pub unsafe extern "C" fn NET_Event(mut fdr: *mut fd_set) {
+    let mut bufData: [byte; 16385] = [0; 16385];
+    let mut from: netadr_t = {
+        let mut init = netadr_t {
+            type_0: NA_BAD,
             ip: [0; 4],
             ip6: [0; 16],
             port: 0,
@@ -2289,21 +2289,21 @@ pub unsafe extern "C" fn NET_Event(mut fdr: *mut crate::stdlib::fd_set) {
         };
         init
     };
-    let mut netmsg: crate::qcommon_h::msg_t = crate::qcommon_h::msg_t {
-        allowoverflow: crate::src::qcommon::q_shared::qfalse,
-        overflowed: crate::src::qcommon::q_shared::qfalse,
-        oob: crate::src::qcommon::q_shared::qfalse,
-        data: 0 as *mut crate::src::qcommon::q_shared::byte,
+    let mut netmsg: msg_t = msg_t {
+        allowoverflow: qfalse,
+        overflowed: qfalse,
+        oob: qfalse,
+        data: 0 as *mut byte,
         maxsize: 0,
         cursize: 0,
         readcount: 0,
         bit: 0,
     };
     loop {
-        crate::src::qcommon::msg::MSG_Init(
-            &mut netmsg as *mut _ as *mut crate::qcommon_h::msg_t,
+        MSG_Init(
+            &mut netmsg as *mut _ as *mut msg_t,
             bufData.as_mut_ptr(),
-            ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16385]>() as libc::c_ulong
+            ::std::mem::size_of::<[byte; 16385]>() as libc::c_ulong
                 as i32,
         );
         if !(NET_GetPacket(&mut from, &mut netmsg, fdr) as u64 != 0) {
@@ -2311,22 +2311,22 @@ pub unsafe extern "C" fn NET_Event(mut fdr: *mut crate::stdlib::fd_set) {
         }
         if (*net_dropsim).value > 0.0f32 && (*net_dropsim).value <= 100.0f32 {
             // com_dropsim->value percent of incoming packets get dropped.
-            if ::libc::rand()
+            if libc::rand()
                 < (2147483647 as i32 as f64 / 100.0f64 * (*net_dropsim).value as f64) as i32
             {
                 continue;
             }
             // drop this packet
         }
-        if (*crate::src::qcommon::common::com_sv_running).integer != 0 {
-            crate::src::qcommon::common::Com_RunAndTimeServerPacket(
-                &mut from as *mut _ as *mut crate::qcommon_h::netadr_t,
-                &mut netmsg as *mut _ as *mut crate::qcommon_h::msg_t,
+        if (*com_sv_running).integer != 0 {
+            Com_RunAndTimeServerPacket(
+                &mut from as *mut _ as *mut netadr_t,
+                &mut netmsg as *mut _ as *mut msg_t,
             );
         } else {
-            crate::src::client::cl_main::CL_PacketEvent(
-                from as crate::qcommon_h::netadr_t,
-                &mut netmsg as *mut _ as *mut crate::qcommon_h::msg_t,
+            CL_PacketEvent(
+                from as netadr_t,
+                &mut netmsg as *mut _ as *mut msg_t,
             );
         }
     }
@@ -2341,11 +2341,11 @@ Sleeps msec or until something happens on the network
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
-    let mut timeout: ::libc::timeval = ::libc::timeval {
+    let mut timeout: timeval = timeval {
         tv_sec: 0,
         tv_usec: 0,
     };
-    let mut fdr: crate::stdlib::fd_set = crate::stdlib::fd_set {
+    let mut fdr: fd_set = fd_set {
         __fds_bits: [0; 16],
     };
     let mut retval: i32 = 0;
@@ -2359,10 +2359,10 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     let fresh1;
     let fresh2 = &mut __d1;
     let fresh3;
-    let fresh4 = (::std::mem::size_of::<crate::stdlib::fd_set>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong);
+    let fresh4 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
     let fresh5 = &mut *fdr.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
-        as *mut crate::stdlib::__fd_mask;
+        as *mut __fd_mask;
     asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as i32), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
@@ -2373,39 +2373,39 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
     if ip_socket != -(1 as i32) {
         fdr.__fds_bits[(ip_socket
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize] |= ((1 as libc::c_ulong)
             << ip_socket
                 % (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
-            as crate::stdlib::__fd_mask;
+                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            as __fd_mask;
         highestfd = ip_socket
     }
     if ip6_socket != -(1 as i32) {
         fdr.__fds_bits[(ip6_socket
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize] |= ((1 as libc::c_ulong)
             << ip6_socket
                 % (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
-            as crate::stdlib::__fd_mask;
+                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            as __fd_mask;
         if highestfd == -(1 as i32) || ip6_socket > highestfd {
             highestfd = ip6_socket
         }
     }
-    timeout.tv_sec = ((msec / 1000 as i32) as crate::stdlib::__time_t) as libc::time_t;
+    timeout.tv_sec = ((msec / 1000 as i32) as __time_t) as libc::time_t;
     timeout.tv_usec =
-        ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t) as libc::suseconds_t;
-    retval = crate::stdlib::select(
+        ((msec % 1000 as i32 * 1000 as i32) as __suseconds_t) as libc::suseconds_t;
+    retval = select(
         highestfd + 1 as i32,
         &mut fdr,
-        0 as *mut crate::stdlib::fd_set,
-        0 as *mut crate::stdlib::fd_set,
+        0 as *mut fd_set,
+        0 as *mut fd_set,
         &mut timeout,
     );
     if retval == -(1 as i32) {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"Warning: select() syscall failed: %s\n\x00" as *const u8 as *const libc::c_char,
             NET_ErrorString(),
         );
@@ -2421,5 +2421,5 @@ NET_Restart_f
 #[no_mangle]
 
 pub unsafe extern "C" fn NET_Restart_f() {
-    NET_Config(crate::src::qcommon::q_shared::qtrue);
+    NET_Config(qtrue);
 }

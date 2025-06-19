@@ -72,7 +72,7 @@ Written by Jean-Marc Valin */
 This has been tested on all possible 32-bit inputs.*/
 #[no_mangle]
 
-pub unsafe extern "C" fn isqrt32(mut _val: crate::opus_types_h::opus_uint32) -> u32 {
+pub unsafe extern "C" fn isqrt32(mut _val: opus_uint32) -> u32 {
     let mut b: u32 = 0;
     let mut g: u32 = 0;
     let mut bshift: i32 = 0;
@@ -87,12 +87,12 @@ pub unsafe extern "C" fn isqrt32(mut _val: crate::opus_types_h::opus_uint32) -> 
         >> 1 as i32;
     b = (1 as u32) << bshift;
     loop {
-        let mut t: crate::opus_types_h::opus_uint32 = 0;
+        let mut t: opus_uint32 = 0;
         t = (g << 1 as i32).wrapping_add(b) << bshift;
         if t <= _val {
             g = g.wrapping_add(b);
-            _val = (_val as u32).wrapping_sub(t) as crate::opus_types_h::opus_uint32
-                as crate::opus_types_h::opus_uint32
+            _val = (_val as u32).wrapping_sub(t) as opus_uint32
+                as opus_uint32
         }
         b >>= 1 as i32;
         bshift -= 1;

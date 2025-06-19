@@ -109,8 +109,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_LTP_scale_ctrl_FLP(
-    mut psEnc: *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-    mut psEncCtrl: *mut crate::structs_FLP_h::silk_encoder_control_FLP,
+    mut psEnc: *mut silk_encoder_state_FLP,
+    mut psEncCtrl: *mut silk_encoder_control_FLP,
     mut condCoding: i32,
 )
 /* I    The type of conditional coding to use       */

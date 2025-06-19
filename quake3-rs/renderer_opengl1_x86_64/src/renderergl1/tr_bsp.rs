@@ -509,7 +509,7 @@ pub use crate::tr_local_h::TMOD_TURBULENT;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union C2RustUnnamed_102 {
-    pub b: *mut crate::src::qcommon::q_shared::byte,
+    pub b: *mut byte,
     pub v: *mut libc::c_void,
 }
 /*
@@ -544,43 +544,43 @@ void RE_LoadWorldMap( const char *name );
 
 */
 
-static mut s_worldData: crate::tr_local_h::world_t = crate::tr_local_h::world_t {
+static mut s_worldData: world_t = world_t {
     name: [0; 64],
     baseName: [0; 64],
     dataSize: 0,
     numShaders: 0,
-    shaders: 0 as *const crate::qfiles_h::dshader_t as *mut crate::qfiles_h::dshader_t,
-    bmodels: 0 as *const crate::tr_local_h::bmodel_t as *mut crate::tr_local_h::bmodel_t,
+    shaders: 0 as *const dshader_t as *mut dshader_t,
+    bmodels: 0 as *const bmodel_t as *mut bmodel_t,
     numplanes: 0,
-    planes: 0 as *const crate::src::qcommon::q_shared::cplane_t
-        as *mut crate::src::qcommon::q_shared::cplane_t,
+    planes: 0 as *const cplane_t
+        as *mut cplane_t,
     numnodes: 0,
     numDecisionNodes: 0,
-    nodes: 0 as *const crate::tr_local_h::mnode_t as *mut crate::tr_local_h::mnode_t,
+    nodes: 0 as *const mnode_t as *mut mnode_t,
     numsurfaces: 0,
-    surfaces: 0 as *const crate::tr_local_h::msurface_t as *mut crate::tr_local_h::msurface_t,
+    surfaces: 0 as *const msurface_t as *mut msurface_t,
     nummarksurfaces: 0,
-    marksurfaces: 0 as *const *mut crate::tr_local_h::msurface_t
-        as *mut *mut crate::tr_local_h::msurface_t,
+    marksurfaces: 0 as *const *mut msurface_t
+        as *mut *mut msurface_t,
     numfogs: 0,
-    fogs: 0 as *const crate::tr_local_h::fog_t as *mut crate::tr_local_h::fog_t,
+    fogs: 0 as *const fog_t as *mut fog_t,
     lightGridOrigin: [0.; 3],
     lightGridSize: [0.; 3],
     lightGridInverseSize: [0.; 3],
     lightGridBounds: [0; 3],
-    lightGridData: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    lightGridData: 0 as *const byte
+        as *mut byte,
     numClusters: 0,
     clusterBytes: 0,
-    vis: 0 as *const crate::src::qcommon::q_shared::byte,
-    novis: 0 as *const crate::src::qcommon::q_shared::byte
-        as *mut crate::src::qcommon::q_shared::byte,
+    vis: 0 as *const byte,
+    novis: 0 as *const byte
+        as *mut byte,
     entityString: 0 as *const libc::c_char as *mut libc::c_char,
     entityParsePoint: 0 as *const libc::c_char as *mut libc::c_char,
 };
 
-static mut fileBase: *mut crate::src::qcommon::q_shared::byte =
-    0 as *const crate::src::qcommon::q_shared::byte as *mut crate::src::qcommon::q_shared::byte;
+static mut fileBase: *mut byte =
+    0 as *const byte as *mut byte;
 #[no_mangle]
 
 pub static mut c_subdivisions: i32 = 0;
@@ -643,16 +643,16 @@ R_ColorShiftLightingBytes
 */
 
 unsafe extern "C" fn R_ColorShiftLightingBytes(
-    mut in_0: *mut crate::src::qcommon::q_shared::byte,
-    mut out: *mut crate::src::qcommon::q_shared::byte,
+    mut in_0: *mut byte,
+    mut out: *mut byte,
 ) {
     let mut shift: i32 = 0;
     let mut r: i32 = 0;
     let mut g: i32 = 0;
     let mut b: i32 = 0;
     // shift the color data based on overbright range
-    shift = (*crate::src::renderergl1::tr_init::r_mapOverBrightBits).integer
-        - crate::src::renderergl1::tr_main::tr.overbrightBits;
+    shift = (*r_mapOverBrightBits).integer
+        - tr.overbrightBits;
     // shift the data based on overbright range
     r = (*in_0.offset(0 as i32 as isize) as i32) << shift;
     g = (*in_0.offset(1 as i32 as isize) as i32) << shift;
@@ -666,19 +666,19 @@ unsafe extern "C" fn R_ColorShiftLightingBytes(
         g = g * 255 as i32 / max;
         b = b * 255 as i32 / max
     }
-    *out.offset(0 as i32 as isize) = r as crate::src::qcommon::q_shared::byte;
-    *out.offset(1 as i32 as isize) = g as crate::src::qcommon::q_shared::byte;
-    *out.offset(2 as i32 as isize) = b as crate::src::qcommon::q_shared::byte;
+    *out.offset(0 as i32 as isize) = r as byte;
+    *out.offset(1 as i32 as isize) = g as byte;
+    *out.offset(2 as i32 as isize) = b as byte;
     *out.offset(3 as i32 as isize) = *in_0.offset(3 as i32 as isize);
 }
 
-unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut buf: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut buf_p: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
+    let mut buf: *mut byte =
+        0 as *mut byte;
+    let mut buf_p: *mut byte =
+        0 as *mut byte;
     let mut len: i32 = 0;
-    let mut image: [crate::src::qcommon::q_shared::byte; 65536] = [0; 65536];
+    let mut image: [byte; 65536] = [0; 65536];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut maxIntensity: f32 = 0 as i32 as f32;
@@ -688,35 +688,35 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
     }
     buf = fileBase.offset((*l).fileofs as isize);
     // we are about to upload textures
-    crate::src::renderergl1::tr_cmds::R_IssuePendingRenderCommands();
+    R_IssuePendingRenderCommands();
     // create all the lightmaps
-    crate::src::renderergl1::tr_main::tr.numLightmaps = len / (128 as i32 * 128 as i32 * 3 as i32);
-    if crate::src::renderergl1::tr_main::tr.numLightmaps == 1 as i32 {
+    tr.numLightmaps = len / (128 as i32 * 128 as i32 * 3 as i32);
+    if tr.numLightmaps == 1 as i32 {
         //FIXME: HACK: maps with only one lightmap turn up fullbright for some reason.
         //this avoids this, but isn't the correct solution.
-        crate::src::renderergl1::tr_main::tr.numLightmaps += 1
+        tr.numLightmaps += 1
     }
     // if we are in r_vertexLight mode, we don't need the lightmaps at all
-    if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
+    if (*r_vertexLight).integer != 0
+        || glConfig.hardwareType as u32
+            == GLHW_PERMEDIA2 as i32 as u32
     {
         return;
     }
-    crate::src::renderergl1::tr_main::tr.lightmaps =
-        crate::src::renderergl1::tr_main::ri
+    tr.lightmaps =
+        ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
-            (crate::src::renderergl1::tr_main::tr.numLightmaps as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<*mut crate::tr_common_h::image_t>() as libc::c_ulong,
+            (tr.numLightmaps as libc::c_ulong).wrapping_mul(
+                ::std::mem::size_of::<*mut image_t>() as libc::c_ulong,
             ) as i32,
-            crate::src::qcommon::q_shared::h_low,
-        ) as *mut *mut crate::tr_common_h::image_t;
+            h_low,
+        ) as *mut *mut image_t;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_main::tr.numLightmaps {
+    while i < tr.numLightmaps {
         // expand the 24 bit on-disk to 32 bit
         buf_p = buf.offset((i * 128 as i32 * 128 as i32 * 3 as i32) as isize);
-        if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as i32 {
+        if (*r_lightmap).integer == 2 as i32 {
             // color code by intensity as development tool	(FIXME: check range)
             j = 0 as i32;
             while j < 128 as i32 * 128 as i32 {
@@ -737,15 +737,15 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
                 HSVtoRGB(intensity, 1.00f64 as f32, 0.50f64 as f32, out.as_mut_ptr());
                 image[(j * 4 as i32 + 0 as i32) as usize] = (out[0 as i32 as usize]
                     * 255 as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
+                    as byte;
                 image[(j * 4 as i32 + 1 as i32) as usize] = (out[1 as i32 as usize]
                     * 255 as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
+                    as byte;
                 image[(j * 4 as i32 + 2 as i32) as usize] = (out[2 as i32 as usize]
                     * 255 as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
+                    as byte;
                 image[(j * 4 as i32 + 3 as i32) as usize] =
-                    255 as i32 as crate::src::qcommon::q_shared::byte;
+                    255 as i32 as byte;
                 j += 1
             }
         } else {
@@ -756,35 +756,35 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
                     &mut *image.as_mut_ptr().offset((j * 4 as i32) as isize),
                 );
                 image[(j * 4 as i32 + 3 as i32) as usize] =
-                    255 as i32 as crate::src::qcommon::q_shared::byte;
+                    255 as i32 as byte;
                 j += 1
             }
         }
-        let ref mut fresh0 = *crate::src::renderergl1::tr_main::tr
+        let ref mut fresh0 = *tr
             .lightmaps
             .offset(i as isize);
-        *fresh0 = crate::src::renderergl1::tr_image::R_CreateImage(
-            crate::src::qcommon::q_shared::va(
+        *fresh0 = R_CreateImage(
+            va(
                 b"*lightmap%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 i,
             ),
             image.as_mut_ptr(),
             128 as i32,
             128 as i32,
-            crate::tr_common_h::IMGTYPE_COLORALPHA,
-            (crate::tr_common_h::IMGFLAG_NOLIGHTSCALE as i32
-                | crate::tr_common_h::IMGFLAG_NO_COMPRESSION as i32
-                | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32)
-                as crate::tr_common_h::imgFlags_t,
+            IMGTYPE_COLORALPHA,
+            (IMGFLAG_NOLIGHTSCALE as i32
+                | IMGFLAG_NO_COMPRESSION as i32
+                | IMGFLAG_CLAMPTOEDGE as i32)
+                as imgFlags_t,
             0 as i32,
-        ) as *mut crate::tr_common_h::image_s;
+        ) as *mut image_s;
         i += 1
     }
-    if (*crate::src::renderergl1::tr_init::r_lightmap).integer == 2 as i32 {
-        crate::src::renderergl1::tr_main::ri
+    if (*r_lightmap).integer == 2 as i32 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Brightest lightmap value: %d\n\x00" as *const u8 as *const libc::c_char,
             (maxIntensity * 255 as i32 as f32) as i32,
         );
@@ -800,8 +800,8 @@ space in big maps...
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RE_SetWorldVisData(mut vis: *const crate::src::qcommon::q_shared::byte) {
-    crate::src::renderergl1::tr_main::tr.externalVisData = vis;
+pub unsafe extern "C" fn RE_SetWorldVisData(mut vis: *const byte) {
+    tr.externalVisData = vis;
 }
 /*
 =================
@@ -809,16 +809,16 @@ R_LoadVisibility
 =================
 */
 
-unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
+unsafe extern "C" fn R_LoadVisibility(mut l: *mut lump_t) {
     let mut len: i32 = 0;
-    let mut buf: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut buf: *mut byte =
+        0 as *mut byte;
     len = s_worldData.numClusters + 63 as i32 & !(63 as i32);
-    s_worldData.novis = crate::src::renderergl1::tr_main::ri
+    s_worldData.novis = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        len, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        len, h_low
+    ) as *mut byte;
     crate::stdlib::memset(
         s_worldData.novis as *mut libc::c_void,
         0xff as i32,
@@ -833,20 +833,20 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut crate::qfiles_h::lump_t) {
     s_worldData.clusterBytes = *(buf as *mut i32).offset(1 as i32 as isize);
     // CM_Load should have given us the vis data to share, so
     // we don't need to allocate another copy
-    if !crate::src::renderergl1::tr_main::tr
+    if !tr
         .externalVisData
         .is_null()
     {
-        s_worldData.vis = crate::src::renderergl1::tr_main::tr.externalVisData
+        s_worldData.vis = tr.externalVisData
     } else {
-        let mut dest: *mut crate::src::qcommon::q_shared::byte =
-            0 as *mut crate::src::qcommon::q_shared::byte;
-        dest = crate::src::renderergl1::tr_main::ri
+        let mut dest: *mut byte =
+            0 as *mut byte;
+        dest = ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
             len - 8 as i32,
-            crate::src::qcommon::q_shared::h_low,
-        ) as *mut crate::src::qcommon::q_shared::byte;
+            h_low,
+        ) as *mut byte;
         crate::stdlib::memcpy(
             dest as *mut libc::c_void,
             buf.offset(8 as i32 as isize) as *const libc::c_void,
@@ -865,37 +865,37 @@ ShaderForShaderNum
 unsafe extern "C" fn ShaderForShaderNum(
     mut shaderNum: i32,
     mut lightmapNum: i32,
-) -> *mut crate::tr_local_h::shader_t {
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut dsh: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
+) -> *mut shader_t {
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut dsh: *mut dshader_t = 0 as *mut dshader_t;
     let mut _shaderNum: i32 = shaderNum;
     if _shaderNum < 0 as i32 || _shaderNum >= s_worldData.numShaders {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"ShaderForShaderNum: bad num %i\x00" as *const u8 as *const libc::c_char,
             _shaderNum,
         );
     }
-    dsh = &mut *s_worldData.shaders.offset(_shaderNum as isize) as *mut crate::qfiles_h::dshader_t;
-    if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0
-        || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
+    dsh = &mut *s_worldData.shaders.offset(_shaderNum as isize) as *mut dshader_t;
+    if (*r_vertexLight).integer != 0
+        || glConfig.hardwareType as u32
+            == GLHW_PERMEDIA2 as i32 as u32
     {
         lightmapNum = -(3 as i32)
     }
-    if (*crate::src::renderergl1::tr_init::r_fullbright).integer != 0 {
+    if (*r_fullbright).integer != 0 {
         lightmapNum = -(2 as i32)
     }
-    shader = crate::src::renderergl1::tr_shader::R_FindShader(
+    shader = R_FindShader(
         (*dsh).shader.as_mut_ptr(),
         lightmapNum,
-        crate::src::qcommon::q_shared::qtrue,
-    ) as *mut crate::tr_local_h::shader_s;
+        qtrue,
+    ) as *mut shader_s;
     // if the shader had errors, just use default shader
     if (*shader).defaultShader as u64 != 0 {
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
     return shader;
 }
@@ -906,15 +906,15 @@ ParseFace
 */
 
 unsafe extern "C" fn ParseFace(
-    mut ds: *mut crate::qfiles_h::dsurface_t,
-    mut verts: *mut crate::qfiles_h::drawVert_t,
-    mut surf: *mut crate::tr_local_h::msurface_t,
+    mut ds: *mut dsurface_t,
+    mut verts: *mut drawVert_t,
+    mut surf: *mut msurface_t,
     mut indexes: *mut i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cv: *mut crate::tr_local_h::srfSurfaceFace_t =
-        0 as *mut crate::tr_local_h::srfSurfaceFace_t;
+    let mut cv: *mut srfSurfaceFace_t =
+        0 as *mut srfSurfaceFace_t;
     let mut numPoints: i32 = 0;
     let mut numIndexes: i32 = 0;
     let mut lightmapNum: i32 = 0;
@@ -925,22 +925,22 @@ unsafe extern "C" fn ParseFace(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
-    if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
+    if (*r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
-        (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+        (*surf).shader = tr.defaultShader
     }
     numPoints = (*ds).numVerts;
     if numPoints > 64 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: MAX_FACE_POINTS exceeded: %i\n\x00" as *const u8 as *const libc::c_char,
             numPoints,
         );
         numPoints = 64 as i32;
-        (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+        (*surf).shader = tr.defaultShader
     }
     numIndexes = (*ds).numIndexes;
     // create the srfSurfaceFace_t
@@ -952,12 +952,12 @@ unsafe extern "C" fn ParseFace(
     sfaceSize = (sfaceSize as libc::c_ulong).wrapping_add(
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(numIndexes as libc::c_ulong),
     ) as i32;
-    cv = crate::src::renderergl1::tr_main::ri
+    cv = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        sfaceSize, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::tr_local_h::srfSurfaceFace_t;
-    (*cv).surfaceType = crate::tr_local_h::SF_FACE;
+        sfaceSize, h_low
+    ) as *mut srfSurfaceFace_t;
+    (*cv).surfaceType = SF_FACE;
     (*cv).numPoints = numPoints;
     (*cv).numIndices = numIndexes;
     (*cv).ofsIndices = ofsIndexes;
@@ -983,14 +983,14 @@ unsafe extern "C" fn ParseFace(
             &mut *(*(*cv).points.as_mut_ptr().offset(i as isize))
                 .as_mut_ptr()
                 .offset(7 as i32 as isize) as *mut f32
-                as *mut crate::src::qcommon::q_shared::byte,
+                as *mut byte,
         );
         i += 1
     }
     indexes = indexes.offset((*ds).firstIndex as isize);
     i = 0 as i32;
     while i < numIndexes {
-        *((cv as *mut crate::src::qcommon::q_shared::byte).offset((*cv).ofsIndices as isize)
+        *((cv as *mut byte).offset((*cv).ofsIndices as isize)
             as *mut i32)
             .offset(i as isize) = *indexes.offset(i as isize);
         i += 1
@@ -1007,8 +1007,8 @@ unsafe extern "C" fn ParseFace(
             * (*cv).plane.normal[1 as i32 as usize]
         + (*(*cv).points.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize]
             * (*cv).plane.normal[2 as i32 as usize];
-    crate::src::qcommon::q_math::SetPlaneSignbits(
-        &mut (*cv).plane as *mut _ as *mut crate::src::qcommon::q_shared::cplane_s,
+    SetPlaneSignbits(
+        &mut (*cv).plane as *mut _ as *mut cplane_s,
     );
     (*cv).plane.type_0 = if (*cv).plane.normal[0 as i32 as usize] as f64 == 1.0f64 {
         0 as i32
@@ -1018,8 +1018,8 @@ unsafe extern "C" fn ParseFace(
         2 as i32
     } else {
         3 as i32
-    } as crate::src::qcommon::q_shared::byte;
-    (*surf).data = cv as *mut crate::tr_local_h::surfaceType_t;
+    } as byte;
+    (*surf).data = cv as *mut surfaceType_t;
 }
 /*
 ===============
@@ -1028,18 +1028,18 @@ ParseMesh
 */
 
 unsafe extern "C" fn ParseMesh(
-    mut ds: *mut crate::qfiles_h::dsurface_t,
-    mut verts: *mut crate::qfiles_h::drawVert_t,
-    mut surf: *mut crate::tr_local_h::msurface_t,
+    mut ds: *mut dsurface_t,
+    mut verts: *mut drawVert_t,
+    mut surf: *mut msurface_t,
 ) {
-    let mut grid: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut width: i32 = 0;
     let mut height: i32 = 0;
     let mut numPoints: i32 = 0;
-    let mut points: [crate::qfiles_h::drawVert_t; 1024] = [crate::qfiles_h::drawVert_t {
+    let mut points: [drawVert_t; 1024] = [drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -1047,18 +1047,18 @@ unsafe extern "C" fn ParseMesh(
         color: [0; 4],
     }; 1024];
     let mut lightmapNum: i32 = 0;
-    let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut tmpVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    static mut skipData: crate::tr_local_h::surfaceType_t = crate::tr_local_h::SF_SKIP;
+    let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut tmpVec: vec3_t = [0.; 3];
+    static mut skipData: surfaceType_t = SF_SKIP;
     lightmapNum = (*ds).lightmapNum;
     // get fog volume
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
-    if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
+    if (*r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
-        (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+        (*surf).shader = tr.defaultShader
     }
     // we may have a nodraw surface, because they might still need to
     // be around for movement clipping
@@ -1092,12 +1092,12 @@ unsafe extern "C" fn ParseMesh(
         i += 1
     }
     // pre-tesseleate
-    grid = crate::src::renderergl1::tr_curve::R_SubdividePatchToGrid(
+    grid = R_SubdividePatchToGrid(
         width,
         height,
-        points.as_mut_ptr() as *mut crate::qfiles_h::drawVert_t,
-    ) as *mut crate::tr_local_h::srfGridMesh_s;
-    (*surf).data = grid as *mut crate::tr_local_h::surfaceType_t;
+        points.as_mut_ptr() as *mut drawVert_t,
+    ) as *mut srfGridMesh_s;
+    (*surf).data = grid as *mut surfaceType_t;
     // copy the level of detail origin, which is the center
     // of the group of all curves that must subdivide the same
     // to avoid cracking
@@ -1123,7 +1123,7 @@ unsafe extern "C" fn ParseMesh(
     tmpVec[2 as i32 as usize] =
         bounds[0 as i32 as usize][2 as i32 as usize] - (*grid).lodOrigin[2 as i32 as usize];
     (*grid).lodRadius =
-        VectorLength(tmpVec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
 }
 /*
 ===============
@@ -1132,13 +1132,13 @@ ParseTriSurf
 */
 
 unsafe extern "C" fn ParseTriSurf(
-    mut ds: *mut crate::qfiles_h::dsurface_t,
-    mut verts: *mut crate::qfiles_h::drawVert_t,
-    mut surf: *mut crate::tr_local_h::msurface_t,
+    mut ds: *mut dsurface_t,
+    mut verts: *mut drawVert_t,
+    mut surf: *mut msurface_t,
     mut indexes: *mut i32,
 ) {
-    let mut tri: *mut crate::tr_local_h::srfTriangles_t =
-        0 as *mut crate::tr_local_h::srfTriangles_t;
+    let mut tri: *mut srfTriangles_t =
+        0 as *mut srfTriangles_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut numVerts: i32 = 0;
@@ -1147,36 +1147,36 @@ unsafe extern "C" fn ParseTriSurf(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
-    if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
+    if (*r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
-        (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+        (*surf).shader = tr.defaultShader
     }
     numVerts = (*ds).numVerts;
     numIndexes = (*ds).numIndexes;
-    tri = crate::src::renderergl1::tr_main::ri
+    tri = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        (::std::mem::size_of::<crate::tr_local_h::srfTriangles_t>() as libc::c_ulong)
+        (::std::mem::size_of::<srfTriangles_t>() as libc::c_ulong)
             .wrapping_add(
                 (numVerts as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::qfiles_h::drawVert_t,
+                    drawVert_t,
                 >() as libc::c_ulong),
             )
             .wrapping_add(
                 (numIndexes as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
             ) as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::srfTriangles_t;
-    (*tri).surfaceType = crate::tr_local_h::SF_TRIANGLES;
+        h_low,
+    ) as *mut srfTriangles_t;
+    (*tri).surfaceType = SF_TRIANGLES;
     (*tri).numVerts = numVerts;
     (*tri).numIndexes = numIndexes;
-    (*tri).verts = tri.offset(1 as i32 as isize) as *mut crate::qfiles_h::drawVert_t;
+    (*tri).verts = tri.offset(1 as i32 as isize) as *mut drawVert_t;
     (*tri).indexes = (*tri).verts.offset((*tri).numVerts as isize) as *mut i32;
-    (*surf).data = tri as *mut crate::tr_local_h::surfaceType_t;
+    (*surf).data = tri as *mut surfaceType_t;
     // copy vertexes
-    crate::src::qcommon::q_math::ClearBounds(
+    ClearBounds(
         (*tri).bounds[0 as i32 as usize].as_mut_ptr(),
         (*tri).bounds[1 as i32 as usize].as_mut_ptr(),
     );
@@ -1191,9 +1191,9 @@ unsafe extern "C" fn ParseTriSurf(
                 (*verts.offset(i as isize)).normal[j as usize];
             j += 1
         }
-        crate::src::qcommon::q_math::AddPointToBounds(
+        AddPointToBounds(
             (*(*tri).verts.offset(i as isize)).xyz.as_mut_ptr()
-                as *const crate::src::qcommon::q_shared::vec_t,
+                as *const vec_t,
             (*tri).bounds[0 as i32 as usize].as_mut_ptr(),
             (*tri).bounds[1 as i32 as usize].as_mut_ptr(),
         );
@@ -1219,10 +1219,10 @@ unsafe extern "C" fn ParseTriSurf(
         if *(*tri).indexes.offset(i as isize) < 0 as i32
             || *(*tri).indexes.offset(i as isize) >= numVerts
         {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"Bad index in triangle surface\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -1236,30 +1236,30 @@ ParseFlare
 */
 
 unsafe extern "C" fn ParseFlare(
-    mut ds: *mut crate::qfiles_h::dsurface_t,
-    mut _verts: *mut crate::qfiles_h::drawVert_t,
-    mut surf: *mut crate::tr_local_h::msurface_t,
+    mut ds: *mut dsurface_t,
+    mut _verts: *mut drawVert_t,
+    mut surf: *mut msurface_t,
     mut _indexes: *mut i32,
 ) {
-    let mut flare: *mut crate::tr_local_h::srfFlare_t = 0 as *mut crate::tr_local_h::srfFlare_t;
+    let mut flare: *mut srfFlare_t = 0 as *mut srfFlare_t;
     let mut i: i32 = 0;
     // get fog volume
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
-    if (*crate::src::renderergl1::tr_init::r_singleShader).integer != 0
+    if (*r_singleShader).integer != 0
         && (*(*surf).shader).isSky as u64 == 0
     {
-        (*surf).shader = crate::src::renderergl1::tr_main::tr.defaultShader
+        (*surf).shader = tr.defaultShader
     }
-    flare = crate::src::renderergl1::tr_main::ri
+    flare = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        ::std::mem::size_of::<crate::tr_local_h::srfFlare_t>() as libc::c_ulong as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::srfFlare_t;
-    (*flare).surfaceType = crate::tr_local_h::SF_FLARE;
-    (*surf).data = flare as *mut crate::tr_local_h::surfaceType_t;
+        ::std::mem::size_of::<srfFlare_t>() as libc::c_ulong as i32,
+        h_low,
+    ) as *mut srfFlare_t;
+    (*flare).surfaceType = SF_FLARE;
+    (*surf).data = flare as *mut surfaceType_t;
     i = 0 as i32;
     while i < 3 as i32 {
         (*flare).origin[i as usize] = (*ds).lightmapOrigin[i as usize];
@@ -1278,7 +1278,7 @@ returns true if there are grid points merged on a width edge
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MergedWidthPoints(
-    mut grid: *mut crate::tr_local_h::srfGridMesh_t,
+    mut grid: *mut srfGridMesh_t,
     mut offset: i32,
 ) -> i32 {
     let mut i: i32 = 0;
@@ -1307,7 +1307,7 @@ pub unsafe extern "C" fn R_MergedWidthPoints(
                                 [2 as i32 as usize]) as f64,
                     ) > 0.1f64)
                     {
-                        return crate::src::qcommon::q_shared::qtrue as i32;
+                        return qtrue as i32;
                     }
                 }
             }
@@ -1315,7 +1315,7 @@ pub unsafe extern "C" fn R_MergedWidthPoints(
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 /*
 =================
@@ -1327,7 +1327,7 @@ returns true if there are grid points merged on a height edge
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MergedHeightPoints(
-    mut grid: *mut crate::tr_local_h::srfGridMesh_t,
+    mut grid: *mut srfGridMesh_t,
     mut offset: i32,
 ) -> i32 {
     let mut i: i32 = 0;
@@ -1375,7 +1375,7 @@ pub unsafe extern "C" fn R_MergedHeightPoints(
                             .xyz[2 as i32 as usize]) as f64,
                     ) > 0.1f64)
                     {
-                        return crate::src::qcommon::q_shared::qtrue as i32;
+                        return qtrue as i32;
                     }
                 }
             }
@@ -1383,7 +1383,7 @@ pub unsafe extern "C" fn R_MergedHeightPoints(
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 /*
 =================
@@ -1398,7 +1398,7 @@ FIXME: write generalized version that also avoids cracks between a patch and one
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
     mut start: i32,
-    mut grid1: *mut crate::tr_local_h::srfGridMesh_t,
+    mut grid1: *mut srfGridMesh_t,
 ) {
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -1408,15 +1408,15 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
     let mut offset1: i32 = 0;
     let mut offset2: i32 = 0;
     let mut touch: i32 = 0;
-    let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     j = start;
     while j < s_worldData.numsurfaces {
         //
         grid2 = (*s_worldData.surfaces.offset(j as isize)).data
-            as *mut crate::tr_local_h::srfGridMesh_t;
+            as *mut srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid2).surfaceType as u32 != crate::tr_local_h::SF_GRID as i32 as u32) {
+        if !((*grid2).surfaceType as u32 != SF_GRID as i32 as u32) {
             // if the LOD errors are already fixed for this patch
             if !((*grid2).lodFixed == 2 as i32) {
                 // grids in the same LOD group should have the exact same lod radius
@@ -1432,7 +1432,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                 != (*grid2).lodOrigin[2 as i32 as usize])
                             {
                                 //
-                                touch = crate::src::qcommon::q_shared::qfalse as i32;
+                                touch = qfalse as i32;
                                 n = 0 as i32;
                                 while n < 2 as i32 {
                                     //
@@ -1523,7 +1523,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             .widthLodError
                                                                             .offset(k as isize);
                                                                     touch =
-                                                                        crate::src::qcommon::q_shared::qtrue
+                                                                        qtrue
                                                                             as
                                                                             i32
                                                                 }
@@ -1617,7 +1617,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             .widthLodError
                                                                             .offset(k as isize);
                                                                     touch =
-                                                                        crate::src::qcommon::q_shared::qtrue
+                                                                        qtrue
                                                                             as
                                                                             i32
                                                                 }
@@ -1727,7 +1727,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             .heightLodError
                                                                             .offset(k as isize);
                                                                     touch =
-                                                                        crate::src::qcommon::q_shared::qtrue
+                                                                        qtrue
                                                                             as
                                                                             i32
                                                                 }
@@ -1825,7 +1825,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                             .heightLodError
                                                                             .offset(k as isize);
                                                                     touch =
-                                                                        crate::src::qcommon::q_shared::qtrue
+                                                                        qtrue
                                                                             as
                                                                             i32
                                                                 }
@@ -1868,15 +1868,15 @@ If this is not the case this function will still do its job but won't fix the hi
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError() {
     let mut i: i32 = 0;
-    let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
         grid1 = (*s_worldData.surfaces.offset(i as isize)).data
-            as *mut crate::tr_local_h::srfGridMesh_t;
+            as *mut srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid1).surfaceType as u32 != crate::tr_local_h::SF_GRID as i32 as u32) {
+        if !((*grid1).surfaceType as u32 != SF_GRID as i32 as u32) {
             //
             if !((*grid1).lodFixed != 0) {
                 //
@@ -1898,10 +1898,10 @@ R_StitchPatches
 pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -> i32 {
     let mut v1: *mut f32 = 0 as *mut f32;
     let mut v2: *mut f32 = 0 as *mut f32;
-    let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
     let mut m: i32 = 0;
@@ -1911,9 +1911,9 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
     let mut row: i32 = 0;
     let mut column: i32 = 0;
     grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
-        as *mut crate::tr_local_h::srfGridMesh_t;
+        as *mut srfGridMesh_t;
     grid2 = (*s_worldData.surfaces.offset(grid2num as isize)).data
-        as *mut crate::tr_local_h::srfGridMesh_t;
+        as *mut srfGridMesh_t;
     n = 0 as i32;
     while n < 2 as i32 {
         //
@@ -2027,7 +2027,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertColumn(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
                                                                            l +
                                                                                1
                                                                                    as
@@ -2049,17 +2049,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                    i32)
                                                                                                               as
                                                                                                               isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh1 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh1 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2175,7 +2175,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertRow(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
                                                                         l +
                                                                             1
                                                                                 as
@@ -2197,17 +2197,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                 i32)
                                                                                                            as
                                                                                                            isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh2 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh2 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2340,7 +2340,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertColumn(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
                                                                            l +
                                                                                1
                                                                                    as
@@ -2364,17 +2364,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                     i32)
                                                                                                                as
                                                                                                                isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh3 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh3 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2492,7 +2492,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertRow(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
                                                                         l +
                                                                             1
                                                                                 as
@@ -2516,17 +2516,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                  i32)
                                                                                                             as
                                                                                                             isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh4 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh4 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2657,7 +2657,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertColumn(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
                                                                            l +
                                                                                1
                                                                                    as
@@ -2679,17 +2679,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                    i32)
                                                                                                               as
                                                                                                               isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh5 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh5 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2805,7 +2805,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertRow(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
                                                                         l +
                                                                             1
                                                                                 as
@@ -2827,20 +2827,20 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                 i32)
                                                                                                            as
                                                                                                            isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     if grid2.is_null() {
                                                         break;
                                                     }
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh6 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh6 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -2973,7 +2973,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertColumn(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
                                                                            l +
                                                                                1
                                                                                    as
@@ -2997,17 +2997,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                     i32)
                                                                                                                as
                                                                                                                isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh7 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh7 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -3125,7 +3125,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     }
                                                     grid2 =
                                                         
-                                                        crate::src::renderergl1::tr_curve::R_GridInsertRow(grid2 as *mut crate::tr_local_h::srfGridMesh_s,
+                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
                                                                         l +
                                                                             1
                                                                                 as
@@ -3149,17 +3149,17 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                                                                                  i32)
                                                                                                             as
                                                                                                             isize))
-    as *mut crate::tr_local_h::srfGridMesh_s;
+    as *mut srfGridMesh_s;
                                                     (*grid2).lodStitched =
-                                                        crate::src::qcommon::q_shared::qfalse
+                                                        qfalse
                                                             as i32;
                                                     let ref mut fresh8 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh8 = grid2 as *mut libc::c_void
-                                                        as *mut crate::tr_local_h::surfaceType_t;
-                                                    return crate::src::qcommon::q_shared::qtrue
+                                                        as *mut surfaceType_t;
+                                                    return qtrue
                                                         as i32;
                                                 }
                                             }
@@ -3177,7 +3177,7 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
         }
         n += 1
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 /*
 ===============
@@ -3197,20 +3197,20 @@ might still appear at that side.
 pub unsafe extern "C" fn R_TryStitchingPatch(mut grid1num: i32) -> i32 {
     let mut j: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut grid2: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     numstitches = 0 as i32;
     grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
-        as *mut crate::tr_local_h::srfGridMesh_t;
+        as *mut srfGridMesh_t;
     j = 0 as i32;
     while j < s_worldData.numsurfaces {
         //
         grid2 = (*s_worldData.surfaces.offset(j as isize)).data
-            as *mut crate::tr_local_h::srfGridMesh_t;
+            as *mut srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid2).surfaceType as u32 != crate::tr_local_h::SF_GRID as i32 as u32) {
+        if !((*grid2).surfaceType as u32 != SF_GRID as i32 as u32) {
             // grids in the same LOD group should have the exact same lod radius
             if !((*grid1).lodRadius != (*grid2).lodRadius) {
                 // grids in the same LOD group should have the exact same lod origin
@@ -3246,23 +3246,23 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
     let mut i: i32 = 0;
     let mut stitched: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     numstitches = 0 as i32;
     loop {
-        stitched = crate::src::qcommon::q_shared::qfalse as i32;
+        stitched = qfalse as i32;
         i = 0 as i32;
         while i < s_worldData.numsurfaces {
             //
             grid1 = (*s_worldData.surfaces.offset(i as isize)).data
-                as *mut crate::tr_local_h::srfGridMesh_t;
+                as *mut srfGridMesh_t;
             // if this surface is not a grid
-            if !((*grid1).surfaceType as u32 != crate::tr_local_h::SF_GRID as i32 as u32) {
+            if !((*grid1).surfaceType as u32 != SF_GRID as i32 as u32) {
                 //
                 if !((*grid1).lodStitched != 0) {
                     //
-                    (*grid1).lodStitched = crate::src::qcommon::q_shared::qtrue as i32;
-                    stitched = crate::src::qcommon::q_shared::qtrue as i32;
+                    (*grid1).lodStitched = qtrue as i32;
+                    stitched = qtrue as i32;
                     //
                     numstitches += R_TryStitchingPatch(i)
                 }
@@ -3273,10 +3273,10 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
             break;
         }
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"stitched %d LoD cracks\n\x00" as *const u8 as *const libc::c_char,
         numstitches,
     );
@@ -3291,60 +3291,60 @@ R_MovePatchSurfacesToHunk
 pub unsafe extern "C" fn R_MovePatchSurfacesToHunk() {
     let mut i: i32 = 0;
     let mut size: i32 = 0;
-    let mut grid: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
-    let mut hunkgrid: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
+    let mut hunkgrid: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
         grid = (*s_worldData.surfaces.offset(i as isize)).data
-            as *mut crate::tr_local_h::srfGridMesh_t;
+            as *mut srfGridMesh_t;
         // if this surface is not a grid
-        if !((*grid).surfaceType as u32 != crate::tr_local_h::SF_GRID as i32 as u32) {
+        if !((*grid).surfaceType as u32 != SF_GRID as i32 as u32) {
             //
             size = (((*grid).width * (*grid).height - 1 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::drawVert_t>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
                 .wrapping_add(
-                    ::std::mem::size_of::<crate::tr_local_h::srfGridMesh_t>() as libc::c_ulong
+                    ::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong
                 ) as i32;
-            hunkgrid = crate::src::renderergl1::tr_main::ri
+            hunkgrid = ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
-                size, crate::src::qcommon::q_shared::h_low
-            ) as *mut crate::tr_local_h::srfGridMesh_t;
+                size, h_low
+            ) as *mut srfGridMesh_t;
             crate::stdlib::memcpy(
                 hunkgrid as *mut libc::c_void,
                 grid as *const libc::c_void,
                 size as libc::c_ulong,
             );
-            (*hunkgrid).widthLodError = crate::src::renderergl1::tr_main::ri
+            (*hunkgrid).widthLodError = ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
                 (*grid).width * 4 as i32,
-                crate::src::qcommon::q_shared::h_low,
+                h_low,
             ) as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).widthLodError as *mut libc::c_void,
                 (*grid).widthLodError as *const libc::c_void,
                 ((*grid).width * 4 as i32) as libc::c_ulong,
             );
-            (*hunkgrid).heightLodError = crate::src::renderergl1::tr_main::ri
+            (*hunkgrid).heightLodError = ri
                 .Hunk_Alloc
                 .expect("non-null function pointer")(
                 (*grid).height * 4 as i32,
-                crate::src::qcommon::q_shared::h_low,
+                h_low,
             ) as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).heightLodError as *mut libc::c_void,
                 (*grid).heightLodError as *const libc::c_void,
                 ((*grid).height * 4 as i32) as libc::c_ulong,
             );
-            crate::src::renderergl1::tr_curve::R_FreeSurfaceGridMesh(
-                grid as *mut crate::tr_local_h::srfGridMesh_s,
+            R_FreeSurfaceGridMesh(
+                grid as *mut srfGridMesh_s,
             );
             let ref mut fresh9 = (*s_worldData.surfaces.offset(i as isize)).data;
-            *fresh9 = hunkgrid as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t
+            *fresh9 = hunkgrid as *mut libc::c_void as *mut surfaceType_t
         }
         i += 1
     }
@@ -3356,13 +3356,13 @@ R_LoadSurfaces
 */
 
 unsafe extern "C" fn R_LoadSurfaces(
-    mut surfs: *mut crate::qfiles_h::lump_t,
-    mut verts: *mut crate::qfiles_h::lump_t,
-    mut indexLump: *mut crate::qfiles_h::lump_t,
+    mut surfs: *mut lump_t,
+    mut verts: *mut lump_t,
+    mut indexLump: *mut lump_t,
 ) {
-    let mut in_0: *mut crate::qfiles_h::dsurface_t = 0 as *mut crate::qfiles_h::dsurface_t;
-    let mut out: *mut crate::tr_local_h::msurface_t = 0 as *mut crate::tr_local_h::msurface_t;
-    let mut dv: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
+    let mut in_0: *mut dsurface_t = 0 as *mut dsurface_t;
+    let mut out: *mut msurface_t = 0 as *mut msurface_t;
+    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut indexes: *mut i32 = 0 as *mut i32;
     let mut count: i32 = 0;
     let mut numFaces: i32 = 0;
@@ -3375,32 +3375,32 @@ unsafe extern "C" fn R_LoadSurfaces(
     numTriSurfs = 0 as i32;
     numFlares = 0 as i32;
     in_0 = fileBase.offset((*surfs).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dsurface_t;
+        as *mut dsurface_t;
     if ((*surfs).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dsurface_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*surfs).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dsurface_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
         as i32;
     dv = fileBase.offset((*verts).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::drawVert_t;
+        as *mut drawVert_t;
     if ((*verts).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::drawVert_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
@@ -3410,22 +3410,22 @@ unsafe extern "C" fn R_LoadSurfaces(
         .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::msurface_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<msurface_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::msurface_t;
+        h_low,
+    ) as *mut msurface_t;
     s_worldData.surfaces = out;
     s_worldData.numsurfaces = count;
     i = 0 as i32;
@@ -3448,10 +3448,10 @@ unsafe extern "C" fn R_LoadSurfaces(
                 numFlares += 1
             }
             _ => {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Error
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::ERR_DROP as i32,
+                    ERR_DROP as i32,
                     b"Bad surfaceType\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -3463,10 +3463,10 @@ unsafe extern "C" fn R_LoadSurfaces(
     R_StitchAllPatches();
     R_FixSharedVertexLodError();
     R_MovePatchSurfacesToHunk();
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"...loaded %d faces, %i meshes, %i trisurfs, %i flares\n\x00" as *const u8
             as *const libc::c_char,
         numFaces,
@@ -3481,55 +3481,55 @@ R_LoadSubmodels
 =================
 */
 
-unsafe extern "C" fn R_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t) {
-    let mut in_0: *mut crate::qfiles_h::dmodel_t = 0 as *mut crate::qfiles_h::dmodel_t;
-    let mut out: *mut crate::tr_local_h::bmodel_t = 0 as *mut crate::tr_local_h::bmodel_t;
+unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
+    let mut in_0: *mut dmodel_t = 0 as *mut dmodel_t;
+    let mut out: *mut bmodel_t = 0 as *mut bmodel_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dmodel_t;
+        as *mut dmodel_t;
     if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dmodel_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dmodel_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
         as i32;
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::bmodel_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<bmodel_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::bmodel_t;
+        h_low,
+    ) as *mut bmodel_t;
     s_worldData.bmodels = out;
     i = 0 as i32;
     while i < count {
-        let mut model: *mut crate::tr_local_h::model_t = 0 as *mut crate::tr_local_h::model_t;
+        let mut model: *mut model_t = 0 as *mut model_t;
         model =
-            crate::src::renderergl1::tr_model::R_AllocModel() as *mut crate::tr_local_h::model_s;
+            R_AllocModel() as *mut model_s;
         // this should never happen
         if model.is_null() {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"R_LoadSubmodels: R_AllocModel() failed\x00" as *const u8 as *const libc::c_char,
             );
         }
-        (*model).type_0 = crate::tr_local_h::MOD_BRUSH;
+        (*model).type_0 = MOD_BRUSH;
         (*model).bmodel = out;
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             (*model).name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"*%d\x00" as *const u8 as *const libc::c_char,
@@ -3556,8 +3556,8 @@ R_SetParent
 */
 
 unsafe extern "C" fn R_SetParent(
-    mut node: *mut crate::tr_local_h::mnode_t,
-    mut parent: *mut crate::tr_local_h::mnode_t,
+    mut node: *mut mnode_t,
+    mut parent: *mut mnode_t,
 ) {
     (*node).parent = parent;
     if (*node).contents != -(1 as i32) {
@@ -3573,48 +3573,48 @@ R_LoadNodesAndLeafs
 */
 
 unsafe extern "C" fn R_LoadNodesAndLeafs(
-    mut nodeLump: *mut crate::qfiles_h::lump_t,
-    mut leafLump: *mut crate::qfiles_h::lump_t,
+    mut nodeLump: *mut lump_t,
+    mut leafLump: *mut lump_t,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut p: i32 = 0;
-    let mut in_0: *mut crate::qfiles_h::dnode_t = 0 as *mut crate::qfiles_h::dnode_t;
-    let mut inLeaf: *mut crate::qfiles_h::dleaf_t = 0 as *mut crate::qfiles_h::dleaf_t;
-    let mut out: *mut crate::tr_local_h::mnode_t = 0 as *mut crate::tr_local_h::mnode_t;
+    let mut in_0: *mut dnode_t = 0 as *mut dnode_t;
+    let mut inLeaf: *mut dleaf_t = 0 as *mut dleaf_t;
+    let mut out: *mut mnode_t = 0 as *mut mnode_t;
     let mut numNodes: i32 = 0;
     let mut numLeafs: i32 = 0;
     in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dnode_t;
+        as *mut dnode_t;
     if ((*nodeLump).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dnode_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
         != 0
         || ((*leafLump).filelen as libc::c_ulong)
-            .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dleaf_t>() as libc::c_ulong)
+            .wrapping_rem(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
             != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     numNodes = ((*nodeLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dnode_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
         as i32;
     numLeafs = ((*leafLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dleaf_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
         as i32;
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         ((numNodes + numLeafs) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::mnode_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<mnode_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::mnode_t;
+        h_low,
+    ) as *mut mnode_t;
     s_worldData.nodes = out;
     s_worldData.numnodes = numNodes + numLeafs;
     s_worldData.numDecisionNodes = numNodes;
@@ -3624,9 +3624,9 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         j = 0 as i32;
         while j < 3 as i32 {
             (*out).mins[j as usize] =
-                (*in_0).mins[j as usize] as crate::src::qcommon::q_shared::vec_t;
+                (*in_0).mins[j as usize] as vec_t;
             (*out).maxs[j as usize] =
-                (*in_0).maxs[j as usize] as crate::src::qcommon::q_shared::vec_t;
+                (*in_0).maxs[j as usize] as vec_t;
             j += 1
         }
         p = (*in_0).planeNum;
@@ -3651,15 +3651,15 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
     }
     // load leafs
     inLeaf = fileBase.offset((*leafLump).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dleaf_t;
+        as *mut dleaf_t;
     i = 0 as i32;
     while i < numLeafs {
         j = 0 as i32;
         while j < 3 as i32 {
             (*out).mins[j as usize] =
-                (*inLeaf).mins[j as usize] as crate::src::qcommon::q_shared::vec_t;
+                (*inLeaf).mins[j as usize] as vec_t;
             (*out).maxs[j as usize] =
-                (*inLeaf).maxs[j as usize] as crate::src::qcommon::q_shared::vec_t;
+                (*inLeaf).maxs[j as usize] as vec_t;
             j += 1
         }
         (*out).cluster = (*inLeaf).cluster;
@@ -3676,7 +3676,7 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         out = out.offset(1)
     }
     // chain descendants
-    R_SetParent(s_worldData.nodes, 0 as *mut crate::tr_local_h::mnode_t);
+    R_SetParent(s_worldData.nodes, 0 as *mut mnode_t);
 }
 //=============================================================================
 /*
@@ -3685,43 +3685,43 @@ R_LoadShaders
 =================
 */
 
-unsafe extern "C" fn R_LoadShaders(mut l: *mut crate::qfiles_h::lump_t) {
+unsafe extern "C" fn R_LoadShaders(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    let mut in_0: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
-    let mut out: *mut crate::qfiles_h::dshader_t = 0 as *mut crate::qfiles_h::dshader_t;
+    let mut in_0: *mut dshader_t = 0 as *mut dshader_t;
+    let mut out: *mut dshader_t = 0 as *mut dshader_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dshader_t;
+        as *mut dshader_t;
     if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
         as i32;
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::qfiles_h::dshader_t;
+        h_low,
+    ) as *mut dshader_t;
     s_worldData.shaders = out;
     s_worldData.numShaders = count;
     crate::stdlib::memcpy(
         out as *mut libc::c_void,
         in_0 as *const libc::c_void,
         (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::dshader_t>() as libc::c_ulong),
+            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong),
     );
     i = 0 as i32;
     while i < count {
@@ -3736,35 +3736,35 @@ R_LoadMarksurfaces
 =================
 */
 
-unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut crate::qfiles_h::lump_t) {
+unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     let mut in_0: *mut i32 = 0 as *mut i32;
-    let mut out: *mut *mut crate::tr_local_h::msurface_t =
-        0 as *mut *mut crate::tr_local_h::msurface_t;
+    let mut out: *mut *mut msurface_t =
+        0 as *mut *mut msurface_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
     if ((*l).filelen as libc::c_ulong).wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong) as i32;
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            *mut crate::tr_local_h::msurface_t,
+            *mut msurface_t,
         >() as libc::c_ulong) as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut *mut crate::tr_local_h::msurface_t;
+        h_low,
+    ) as *mut *mut msurface_t;
     s_worldData.marksurfaces = out;
     s_worldData.nummarksurfaces = count;
     i = 0 as i32;
@@ -3781,39 +3781,39 @@ R_LoadPlanes
 =================
 */
 
-unsafe extern "C" fn R_LoadPlanes(mut l: *mut crate::qfiles_h::lump_t) {
+unsafe extern "C" fn R_LoadPlanes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut out: *mut crate::src::qcommon::q_shared::cplane_t =
-        0 as *mut crate::src::qcommon::q_shared::cplane_t;
-    let mut in_0: *mut crate::qfiles_h::dplane_t = 0 as *mut crate::qfiles_h::dplane_t;
+    let mut out: *mut cplane_t =
+        0 as *mut cplane_t;
+    let mut in_0: *mut dplane_t = 0 as *mut dplane_t;
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dplane_t;
+        as *mut dplane_t;
     if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dplane_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dplane_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
         as i32;
-    out = crate::src::renderergl1::tr_main::ri
+    out = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         ((count * 2 as i32) as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            crate::src::qcommon::q_shared::cplane_t,
+            cplane_t,
         >() as libc::c_ulong) as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::src::qcommon::q_shared::cplane_t;
+        h_low,
+    ) as *mut cplane_t;
     s_worldData.planes = out;
     s_worldData.numplanes = count;
     i = 0 as i32;
@@ -3836,8 +3836,8 @@ unsafe extern "C" fn R_LoadPlanes(mut l: *mut crate::qfiles_h::lump_t) {
             2 as i32
         } else {
             3 as i32
-        } as crate::src::qcommon::q_shared::byte;
-        (*out).signbits = bits as crate::src::qcommon::q_shared::byte;
+        } as byte;
+        (*out).signbits = bits as byte;
         i += 1;
         in_0 = in_0.offset(1);
         out = out.offset(1)
@@ -3851,107 +3851,107 @@ R_LoadFogs
 */
 
 unsafe extern "C" fn R_LoadFogs(
-    mut l: *mut crate::qfiles_h::lump_t,
-    mut brushesLump: *mut crate::qfiles_h::lump_t,
-    mut sidesLump: *mut crate::qfiles_h::lump_t,
+    mut l: *mut lump_t,
+    mut brushesLump: *mut lump_t,
+    mut sidesLump: *mut lump_t,
 ) {
     let mut i: i32 = 0;
-    let mut out: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    let mut fogs: *mut crate::qfiles_h::dfog_t = 0 as *mut crate::qfiles_h::dfog_t;
-    let mut brushes: *mut crate::qfiles_h::dbrush_t = 0 as *mut crate::qfiles_h::dbrush_t;
-    let mut brush: *mut crate::qfiles_h::dbrush_t = 0 as *mut crate::qfiles_h::dbrush_t;
-    let mut sides: *mut crate::qfiles_h::dbrushside_t = 0 as *mut crate::qfiles_h::dbrushside_t;
+    let mut out: *mut fog_t = 0 as *mut fog_t;
+    let mut fogs: *mut dfog_t = 0 as *mut dfog_t;
+    let mut brushes: *mut dbrush_t = 0 as *mut dbrush_t;
+    let mut brush: *mut dbrush_t = 0 as *mut dbrush_t;
+    let mut sides: *mut dbrushside_t = 0 as *mut dbrushside_t;
     let mut count: i32 = 0;
     let mut brushesCount: i32 = 0;
     let mut sidesCount: i32 = 0;
     let mut sideNum: i32 = 0;
     let mut planeNum: i32 = 0;
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut d: f32 = 0.;
     let mut firstSide: i32 = 0;
     fogs =
-        fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut crate::qfiles_h::dfog_t;
+        fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dfog_t;
     if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dfog_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dfog_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dfog_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dfog_t>() as libc::c_ulong)
         as i32;
     // create fog structures for them
     s_worldData.numfogs = count + 1 as i32;
-    s_worldData.fogs = crate::src::renderergl1::tr_main::ri
+    s_worldData.fogs = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (s_worldData.numfogs as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::tr_local_h::fog_t>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<fog_t>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::fog_t;
+        h_low,
+    ) as *mut fog_t;
     out = s_worldData.fogs.offset(1 as i32 as isize);
     if count == 0 {
         return;
     }
     brushes = fileBase.offset((*brushesLump).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dbrush_t;
+        as *mut dbrush_t;
     if ((*brushesLump).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dbrush_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     brushesCount = ((*brushesLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dbrush_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
         as i32;
     sides = fileBase.offset((*sidesLump).fileofs as isize) as *mut libc::c_void
-        as *mut crate::qfiles_h::dbrushside_t;
+        as *mut dbrushside_t;
     if ((*sidesLump).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<crate::qfiles_h::dbrushside_t>() as libc::c_ulong)
+        .wrapping_rem(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong)
         != 0
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     sidesCount = ((*sidesLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::qfiles_h::dbrushside_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong)
         as i32;
     i = 0 as i32;
     while i < count {
         (*out).originalBrushNumber = (*fogs).brushNum;
         if (*out).originalBrushNumber as u32 >= brushesCount as u32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"fog brushNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
         }
         brush = brushes.offset((*out).originalBrushNumber as isize);
         firstSide = (*brush).firstSide;
         if firstSide as u32 > (sidesCount - 6 as i32) as u32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"fog brush sideNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -3981,19 +3981,19 @@ unsafe extern "C" fn R_LoadFogs(
         (*out).bounds[1 as i32 as usize][2 as i32 as usize] =
             (*s_worldData.planes.offset(planeNum as isize)).dist;
         // get information from the shader for fog parameters
-        shader = crate::src::renderergl1::tr_shader::R_FindShader(
+        shader = R_FindShader(
             (*fogs).shader.as_mut_ptr(),
             -(1 as i32),
-            crate::src::qcommon::q_shared::qtrue,
-        ) as *mut crate::tr_local_h::shader_s;
+            qtrue,
+        ) as *mut shader_s;
         (*out).parms = (*shader).fogParms;
-        (*out).colorInt = crate::src::qcommon::q_math::ColorBytes4(
+        (*out).colorInt = ColorBytes4(
             (*shader).fogParms.color[0 as i32 as usize]
-                * crate::src::renderergl1::tr_main::tr.identityLight,
+                * tr.identityLight,
             (*shader).fogParms.color[1 as i32 as usize]
-                * crate::src::renderergl1::tr_main::tr.identityLight,
+                * tr.identityLight,
             (*shader).fogParms.color[2 as i32 as usize]
-                * crate::src::renderergl1::tr_main::tr.identityLight,
+                * tr.identityLight,
             1.0f64 as f32,
         );
         d = if (*shader).fogParms.depthForOpaque < 1 as i32 as f32 {
@@ -4005,17 +4005,17 @@ unsafe extern "C" fn R_LoadFogs(
         // set the gradient vector
         sideNum = (*fogs).visibleSide;
         if sideNum == -(1 as i32) {
-            (*out).hasSurface = crate::src::qcommon::q_shared::qfalse
+            (*out).hasSurface = qfalse
         } else {
-            (*out).hasSurface = crate::src::qcommon::q_shared::qtrue;
+            (*out).hasSurface = qtrue;
             planeNum = (*sides.offset((firstSide + sideNum) as isize)).planeNum;
-            (*out).surface[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            (*out).surface[0 as i32 as usize] = vec3_origin
                 [0 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[0 as i32 as usize];
-            (*out).surface[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            (*out).surface[1 as i32 as usize] = vec3_origin
                 [1 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[1 as i32 as usize];
-            (*out).surface[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+            (*out).surface[2 as i32 as usize] = vec3_origin
                 [2 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[2 as i32 as usize];
             (*out).surface[3 as i32 as usize] =
@@ -4034,11 +4034,11 @@ R_LoadLightGrid
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut crate::qfiles_h::lump_t) {
+pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut lump_t) {
     let mut i: i32 = 0;
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     let mut numGridPoints: i32 = 0;
-    let mut w: *mut crate::tr_local_h::world_t = 0 as *mut crate::tr_local_h::world_t;
+    let mut w: *mut world_t = 0 as *mut world_t;
     let mut wMins: *mut f32 = 0 as *mut f32;
     let mut wMaxs: *mut f32 = 0 as *mut f32;
     w = &mut s_worldData;
@@ -4052,11 +4052,11 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut crate::qfiles_h::lump_t) {
         (*w).lightGridOrigin[i as usize] = ((*w).lightGridSize[i as usize] as f64
             * crate::stdlib::ceil(
                 (*wMins.offset(i as isize) / (*w).lightGridSize[i as usize]) as f64,
-            )) as crate::src::qcommon::q_shared::vec_t;
+            )) as vec_t;
         maxs[i as usize] = ((*w).lightGridSize[i as usize] as f64
             * crate::stdlib::floor(
                 (*wMaxs.offset(i as isize) / (*w).lightGridSize[i as usize]) as f64,
-            )) as crate::src::qcommon::q_shared::vec_t;
+            )) as vec_t;
         (*w).lightGridBounds[i as usize] = ((maxs[i as usize] - (*w).lightGridOrigin[i as usize])
             / (*w).lightGridSize[i as usize]
             + 1 as i32 as f32) as i32;
@@ -4066,20 +4066,20 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut crate::qfiles_h::lump_t) {
         * (*w).lightGridBounds[1 as i32 as usize]
         * (*w).lightGridBounds[2 as i32 as usize];
     if (*l).filelen != numGridPoints * 8 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: light grid mismatch\n\x00" as *const u8 as *const libc::c_char,
         );
-        (*w).lightGridData = 0 as *mut crate::src::qcommon::q_shared::byte;
+        (*w).lightGridData = 0 as *mut byte;
         return;
     }
-    (*w).lightGridData = crate::src::renderergl1::tr_main::ri
+    (*w).lightGridData = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        (*l).filelen, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        (*l).filelen, h_low
+    ) as *mut byte;
     crate::stdlib::memcpy(
         (*w).lightGridData as *mut libc::c_void,
         fileBase.offset((*l).fileofs as isize) as *mut libc::c_void,
@@ -4110,29 +4110,29 @@ R_LoadEntities
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
+pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut keyname: [libc::c_char; 1024] = [0; 1024];
     let mut value: [libc::c_char; 1024] = [0; 1024];
-    let mut w: *mut crate::tr_local_h::world_t = 0 as *mut crate::tr_local_h::world_t;
+    let mut w: *mut world_t = 0 as *mut world_t;
     w = &mut s_worldData;
-    (*w).lightGridSize[0 as i32 as usize] = 64 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*w).lightGridSize[1 as i32 as usize] = 64 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*w).lightGridSize[2 as i32 as usize] = 128 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*w).lightGridSize[0 as i32 as usize] = 64 as i32 as vec_t;
+    (*w).lightGridSize[1 as i32 as usize] = 64 as i32 as vec_t;
+    (*w).lightGridSize[2 as i32 as usize] = 128 as i32 as vec_t;
     p = fileBase.offset((*l).fileofs as isize) as *mut libc::c_char;
     // store for reference by the cgame
-    (*w).entityString = crate::src::renderergl1::tr_main::ri
+    (*w).entityString = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (*l).filelen + 1 as i32,
-        crate::src::qcommon::q_shared::h_low,
+        h_low,
     ) as *mut libc::c_char;
-    ::libc::strcpy((*w).entityString, p);
+    libc::strcpy((*w).entityString, p);
     (*w).entityParsePoint = (*w).entityString;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(&mut p, crate::src::qcommon::q_shared::qtrue);
+        COM_ParseExt(&mut p, qtrue);
     if *token == 0 || *token as i32 != '{' as i32 {
         return;
     }
@@ -4140,45 +4140,45 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
     // only parse the world spawn
     // parse key
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             &mut p,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             keyname.as_mut_ptr(),
             token,
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         // parse value
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             &mut p,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             value.as_mut_ptr(),
             token,
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         // check for remapping of shaders for vertex lighting
         s = b"vertexremapshader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-        if crate::src::qcommon::q_shared::Q_strncmp(
+        if Q_strncmp(
             keyname.as_mut_ptr(),
             s,
             crate::stdlib::strlen(s) as i32,
         ) == 0
         {
-            s = ::libc::strchr(value.as_mut_ptr(), ';' as i32);
+            s = libc::strchr(value.as_mut_ptr(), ';' as i32);
             if s.is_null() {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: no semi colon in vertexshaderremap \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     value.as_mut_ptr(),
@@ -4188,8 +4188,8 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                 let fresh11 = s;
                 s = s.offset(1);
                 *fresh11 = 0 as i32 as libc::c_char;
-                if (*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0 {
-                    crate::src::renderergl1::tr_shader::R_RemapShader(
+                if (*r_vertexLight).integer != 0 {
+                    R_RemapShader(
                         value.as_mut_ptr(),
                         s,
                         b"0\x00" as *const u8 as *const libc::c_char,
@@ -4199,18 +4199,18 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
         } else {
             // check for remapping of shaders
             s = b"remapshader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-            if crate::src::qcommon::q_shared::Q_strncmp(
+            if Q_strncmp(
                 keyname.as_mut_ptr(),
                 s,
                 crate::stdlib::strlen(s) as i32,
             ) == 0
             {
-                s = ::libc::strchr(value.as_mut_ptr(), ';' as i32);
+                s = libc::strchr(value.as_mut_ptr(), ';' as i32);
                 if s.is_null() {
-                    crate::src::renderergl1::tr_main::ri
+                    ri
                         .Printf
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                        PRINT_WARNING as i32,
                         b"WARNING: no semi colon in shaderremap \'%s\'\n\x00" as *const u8
                             as *const libc::c_char,
                         value.as_mut_ptr(),
@@ -4220,7 +4220,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                     let fresh12 = s;
                     s = s.offset(1);
                     *fresh12 = 0 as i32 as libc::c_char;
-                    crate::src::renderergl1::tr_shader::R_RemapShader(
+                    R_RemapShader(
                         value.as_mut_ptr(),
                         s,
                         b"0\x00" as *const u8 as *const libc::c_char,
@@ -4228,22 +4228,22 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut crate::qfiles_h::lump_t) {
                 }
             } else {
                 // check for a different grid size
-                if !(crate::src::qcommon::q_shared::Q_stricmp(
+                if !(Q_stricmp(
                     keyname.as_mut_ptr(),
                     b"gridsize\x00" as *const u8 as *const libc::c_char,
                 ) == 0)
                 {
                     continue;
                 }
-                ::libc::sscanf(
+                libc::sscanf(
                     value.as_mut_ptr(),
                     b"%f %f %f\x00" as *const u8 as *const libc::c_char,
                     &mut *(*w).lightGridSize.as_mut_ptr().offset(0 as i32 as isize)
-                        as *mut crate::src::qcommon::q_shared::vec_t,
+                        as *mut vec_t,
                     &mut *(*w).lightGridSize.as_mut_ptr().offset(1 as i32 as isize)
-                        as *mut crate::src::qcommon::q_shared::vec_t,
+                        as *mut vec_t,
                     &mut *(*w).lightGridSize.as_mut_ptr().offset(2 as i32 as isize)
-                        as *mut crate::src::qcommon::q_shared::vec_t,
+                        as *mut vec_t,
                 );
             }
         }
@@ -4259,15 +4259,15 @@ R_GetEntityToken
 pub unsafe extern "C" fn R_GetEntityToken(
     mut buffer: *mut libc::c_char,
     mut size: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    s = crate::src::qcommon::q_shared::COM_Parse(&mut s_worldData.entityParsePoint);
-    crate::src::qcommon::q_shared::Q_strncpyz(buffer, s, size);
+    s = COM_Parse(&mut s_worldData.entityParsePoint);
+    Q_strncpyz(buffer, s, size);
     if s_worldData.entityParsePoint.is_null() && *s.offset(0 as i32 as isize) == 0 {
         s_worldData.entityParsePoint = s_worldData.entityString;
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     } else {
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     };
 }
 /*
@@ -4599,82 +4599,82 @@ Called directly from cgame
 
 pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut header: *mut crate::qfiles_h::dheader_t = 0 as *mut crate::qfiles_h::dheader_t;
+    let mut header: *mut dheader_t = 0 as *mut dheader_t;
     let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 {
-        b: 0 as *mut crate::src::qcommon::q_shared::byte,
+        b: 0 as *mut byte,
     };
-    let mut startMarker: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
-    if crate::src::renderergl1::tr_main::tr.worldMapLoaded as u64 != 0 {
-        crate::src::renderergl1::tr_main::ri
+    let mut startMarker: *mut byte =
+        0 as *mut byte;
+    if tr.worldMapLoaded as u64 != 0 {
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"ERROR: attempted to redundantly load world map\x00" as *const u8
                 as *const libc::c_char,
         );
     }
     // set default sun direction to be used if it isn't
     // overridden by a shader
-    crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] = 0.45f32;
-    crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize] = 0.3f32;
-    crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize] = 0.9f32;
-    crate::src::qcommon::q_math::VectorNormalize(
-        crate::src::renderergl1::tr_main::tr
+    tr.sunDirection[0 as i32 as usize] = 0.45f32;
+    tr.sunDirection[1 as i32 as usize] = 0.3f32;
+    tr.sunDirection[2 as i32 as usize] = 0.9f32;
+    VectorNormalize(
+        tr
             .sunDirection
             .as_mut_ptr(),
     );
-    crate::src::renderergl1::tr_main::tr.worldMapLoaded = crate::src::qcommon::q_shared::qtrue;
+    tr.worldMapLoaded = qtrue;
     // load it
-    crate::src::renderergl1::tr_main::ri
+    ri
         .FS_ReadFile
         .expect("non-null function pointer")(name, &mut buffer.v);
     if buffer.b.is_null() {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"RE_LoadWorldMap: %s not found\x00" as *const u8 as *const libc::c_char,
             name,
         );
     }
     // clear tr.world so if the level fails to load, the next
     // try will not look at the partially loaded version
-    crate::src::renderergl1::tr_main::tr.world = 0 as *mut crate::tr_local_h::world_t;
+    tr.world = 0 as *mut world_t;
     crate::stdlib::memset(
-        &mut s_worldData as *mut crate::tr_local_h::world_t as *mut libc::c_void,
+        &mut s_worldData as *mut world_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_local_h::world_t>() as libc::c_ulong,
+        ::std::mem::size_of::<world_t>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_worldData.name.as_mut_ptr(),
         name,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         s_worldData.baseName.as_mut_ptr(),
-        crate::src::qcommon::q_shared::COM_SkipPath(s_worldData.name.as_mut_ptr()),
+        COM_SkipPath(s_worldData.name.as_mut_ptr()),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         s_worldData.baseName.as_mut_ptr(),
         s_worldData.baseName.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    startMarker = crate::src::renderergl1::tr_main::ri
+    startMarker = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        0 as i32, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        0 as i32, h_low
+    ) as *mut byte;
     c_gridVerts = 0 as i32;
-    header = buffer.b as *mut crate::qfiles_h::dheader_t;
-    fileBase = header as *mut crate::src::qcommon::q_shared::byte;
+    header = buffer.b as *mut dheader_t;
+    fileBase = header as *mut byte;
     i = (*header).version;
     if i != 46 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"RE_LoadWorldMap: %s has wrong version number (%i should be %i)\x00" as *const u8
                 as *const libc::c_char,
             name,
@@ -4685,7 +4685,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     // swap all the lumps
     i = 0 as i32;
     while (i as libc::c_ulong)
-        < (::std::mem::size_of::<crate::qfiles_h::dheader_t>() as libc::c_ulong)
+        < (::std::mem::size_of::<dheader_t>() as libc::c_ulong)
             .wrapping_div(4 as i32 as libc::c_ulong)
     {
         *(header as *mut i32).offset(i as isize) = *(header as *mut i32).offset(i as isize);
@@ -4714,15 +4714,15 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     R_LoadVisibility(&mut *(*header).lumps.as_mut_ptr().offset(16 as i32 as isize));
     R_LoadEntities(&mut *(*header).lumps.as_mut_ptr().offset(0 as i32 as isize));
     R_LoadLightGrid(&mut *(*header).lumps.as_mut_ptr().offset(15 as i32 as isize));
-    s_worldData.dataSize = (crate::src::renderergl1::tr_main::ri
+    s_worldData.dataSize = (ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        0 as i32, crate::src::qcommon::q_shared::h_low
-    ) as *mut crate::src::qcommon::q_shared::byte)
+        0 as i32, h_low
+    ) as *mut byte)
         .offset_from(startMarker) as isize as i32;
     // only set tr.world now that we know the entire level has loaded properly
-    crate::src::renderergl1::tr_main::tr.world = &mut s_worldData;
-    crate::src::renderergl1::tr_main::ri
+    tr.world = &mut s_worldData;
+    ri
         .FS_FreeFile
         .expect("non-null function pointer")(buffer.v);
 }

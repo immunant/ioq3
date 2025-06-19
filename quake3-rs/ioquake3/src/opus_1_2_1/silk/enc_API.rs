@@ -53,7 +53,7 @@ pub unsafe extern "C" fn silk_Get_Encoder_Size(mut encSizeBytes: *mut i32) -> i3
 /* O    Number of bytes in SILK encoder state           */ {
     let mut ret: i32 = 0 as i32;
     *encSizeBytes =
-        ::std::mem::size_of::<crate::structs_FLP_h::silk_encoder>() as libc::c_ulong as i32;
+        ::std::mem::size_of::<silk_encoder>() as libc::c_ulong as i32;
     return ret;
 }
 /* ************************/
@@ -64,25 +64,25 @@ pub unsafe extern "C" fn silk_Get_Encoder_Size(mut encSizeBytes: *mut i32) -> i3
 pub unsafe extern "C" fn silk_InitEncoder(
     mut encState: *mut libc::c_void,
     mut arch: i32,
-    mut encStatus: *mut crate::control_h::silk_EncControlStruct,
+    mut encStatus: *mut silk_EncControlStruct,
 ) -> i32
 /* O    Encoder Status                                  */ {
-    let mut psEnc: *mut crate::structs_FLP_h::silk_encoder =
-        0 as *mut crate::structs_FLP_h::silk_encoder;
+    let mut psEnc: *mut silk_encoder =
+        0 as *mut silk_encoder;
     let mut n: i32 = 0;
     let mut ret: i32 = 0 as i32;
-    psEnc = encState as *mut crate::structs_FLP_h::silk_encoder;
+    psEnc = encState as *mut silk_encoder;
     /* Reset encoder */
     crate::stdlib::memset(
         psEnc as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::structs_FLP_h::silk_encoder>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_encoder>() as libc::c_ulong,
     );
     n = 0 as i32;
     while n < 2 as i32 {
         ret += crate::src::opus_1_2_1::silk::init_encoder::silk_init_encoder(
             &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize) as *mut _
-                as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                as *mut silk_encoder_state_FLP,
             arch,
         );
         // ignore return value
@@ -130,14 +130,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
 unsafe extern "C" fn silk_QueryEncoder(
     mut encState: *const libc::c_void,
-    mut encStatus: *mut crate::control_h::silk_EncControlStruct,
+    mut encStatus: *mut silk_EncControlStruct,
 ) -> i32
 /* O    Encoder Status                                  */ {
     let mut ret: i32 = 0 as i32;
-    let mut state_Fxx: *mut crate::structs_FLP_h::silk_encoder_state_FLP =
-        0 as *mut crate::structs_FLP_h::silk_encoder_state_FLP;
-    let mut psEnc: *mut crate::structs_FLP_h::silk_encoder =
-        encState as *mut crate::structs_FLP_h::silk_encoder;
+    let mut state_Fxx: *mut silk_encoder_state_FLP =
+        0 as *mut silk_encoder_state_FLP;
+    let mut psEnc: *mut silk_encoder =
+        encState as *mut silk_encoder;
     state_Fxx = (*psEnc).state_Fxx.as_mut_ptr();
     (*encStatus).nChannelsAPI = (*psEnc).nChannelsAPI;
     (*encStatus).nChannelsInternal = (*psEnc).nChannelsInternal;
@@ -159,9 +159,9 @@ unsafe extern "C" fn silk_QueryEncoder(
     (*encStatus).useDTX = (*state_Fxx.offset(0 as i32 as isize)).sCmn.useDTX;
     (*encStatus).useCBR = (*state_Fxx.offset(0 as i32 as isize)).sCmn.useCBR;
     (*encStatus).internalSampleRate = (*state_Fxx.offset(0 as i32 as isize)).sCmn.fs_kHz
-        as crate::opus_types_h::opus_int16
-        as crate::opus_types_h::opus_int32
-        * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+        as opus_int16
+        as opus_int32
+        * 1000 as i32 as opus_int16 as opus_int32;
     (*encStatus).allowBandwidthSwitch = (*state_Fxx.offset(0 as i32 as isize))
         .sCmn
         .allow_bandwidth_switch;
@@ -179,11 +179,11 @@ unsafe extern "C" fn silk_QueryEncoder(
 
 pub unsafe extern "C" fn silk_Encode(
     mut encState: *mut libc::c_void,
-    mut encControl: *mut crate::control_h::silk_EncControlStruct,
-    mut samplesIn: *const crate::opus_types_h::opus_int16,
+    mut encControl: *mut silk_EncControlStruct,
+    mut samplesIn: *const opus_int16,
     mut nSamplesIn: i32,
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
-    mut nBytesOut: *mut crate::opus_types_h::opus_int32,
+    mut psRangeEnc: *mut ec_enc,
+    mut nBytesOut: *mut opus_int32,
     prefillFlag: i32,
 ) -> i32
 /* I    Flag to indicate prefilling buffers no coding   */ {
@@ -200,14 +200,14 @@ pub unsafe extern "C" fn silk_Encode(
     let mut nSamplesFromInput: i32 = 0 as i32;
     let mut nSamplesFromInputMax: i32 = 0;
     let mut speech_act_thr_for_switch_Q8: i32 = 0;
-    let mut TargetRate_bps: crate::opus_types_h::opus_int32 = 0;
-    let mut MStargetRates_bps: [crate::opus_types_h::opus_int32; 2] = [0; 2];
-    let mut channelRate_bps: crate::opus_types_h::opus_int32 = 0;
-    let mut LBRR_symbol: crate::opus_types_h::opus_int32 = 0;
-    let mut sum: crate::opus_types_h::opus_int32 = 0;
-    let mut psEnc: *mut crate::structs_FLP_h::silk_encoder =
-        encState as *mut crate::structs_FLP_h::silk_encoder;
-    let mut buf: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
+    let mut TargetRate_bps: opus_int32 = 0;
+    let mut MStargetRates_bps: [opus_int32; 2] = [0; 2];
+    let mut channelRate_bps: opus_int32 = 0;
+    let mut LBRR_symbol: opus_int32 = 0;
+    let mut sum: opus_int32 = 0;
+    let mut psEnc: *mut silk_encoder =
+        encState as *mut silk_encoder;
+    let mut buf: *mut opus_int16 = 0 as *mut opus_int16;
     let mut transition: i32 = 0;
     let mut curr_block: i32 = 0;
     let mut tot_blocks: i32 = 0;
@@ -224,7 +224,7 @@ pub unsafe extern "C" fn silk_Encode(
         (*psEnc).state_Fxx[1 as i32 as usize].sCmn.nFramesEncoded;
     /* Check values in encoder control structure */
     ret = crate::src::opus_1_2_1::silk::check_control_input::check_control_input(
-        encControl as *mut crate::control_h::silk_EncControlStruct,
+        encControl as *mut silk_EncControlStruct,
     );
     if ret != 0 as i32 {
         return ret;
@@ -234,52 +234,52 @@ pub unsafe extern "C" fn silk_Encode(
         /* Mono -> Stereo transition: init state of second channel and stereo state */
         ret += crate::src::opus_1_2_1::silk::init_encoder::silk_init_encoder(
             &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize) as *mut _
-                as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                as *mut silk_encoder_state_FLP,
             (*psEnc).state_Fxx[0 as i32 as usize].sCmn.arch,
         );
         crate::stdlib::memset(
             (*psEnc).sStereo.pred_prev_Q13.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 2]>() as libc::c_ulong,
         );
         crate::stdlib::memset(
             (*psEnc).sStereo.sSide.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 2]>() as libc::c_ulong,
+            ::std::mem::size_of::<[opus_int16; 2]>() as libc::c_ulong,
         );
         (*psEnc).sStereo.mid_side_amp_Q0[0 as i32 as usize] = 0 as i32;
         (*psEnc).sStereo.mid_side_amp_Q0[1 as i32 as usize] = 1 as i32;
         (*psEnc).sStereo.mid_side_amp_Q0[2 as i32 as usize] = 0 as i32;
         (*psEnc).sStereo.mid_side_amp_Q0[3 as i32 as usize] = 1 as i32;
-        (*psEnc).sStereo.width_prev_Q14 = 0 as i32 as crate::opus_types_h::opus_int16;
+        (*psEnc).sStereo.width_prev_Q14 = 0 as i32 as opus_int16;
         (*psEnc).sStereo.smth_width_Q14 =
             ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16;
+                as opus_int32 as opus_int16;
         if (*psEnc).nChannelsAPI == 2 as i32 {
             crate::stdlib::memcpy(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                     .sCmn
                     .resampler_state
-                    as *mut crate::resampler_structs_h::silk_resampler_state_struct
+                    as *mut silk_resampler_state_struct
                     as *mut libc::c_void,
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .resampler_state
-                    as *mut crate::resampler_structs_h::silk_resampler_state_struct
+                    as *mut silk_resampler_state_struct
                     as *const libc::c_void,
-                ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
+                ::std::mem::size_of::<silk_resampler_state_struct>()
                     as libc::c_ulong,
             );
             crate::stdlib::memcpy(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                     .sCmn
-                    .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
+                    .In_HP_State as *mut [opus_int32; 2]
                     as *mut libc::c_void,
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
+                    .In_HP_State as *mut [opus_int32; 2]
                     as *const libc::c_void,
-                ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>() as libc::c_ulong,
+                ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
             );
         }
     }
@@ -305,7 +305,7 @@ pub unsafe extern "C" fn silk_Encode(
         while n < (*encControl).nChannelsInternal {
             ret = crate::src::opus_1_2_1::silk::init_encoder::silk_init_encoder(
                 &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize) as *mut _
-                    as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                    as *mut silk_encoder_state_FLP,
                 (*psEnc).state_Fxx[n as usize].sCmn.arch,
             );
             n += 1
@@ -344,8 +344,8 @@ pub unsafe extern "C" fn silk_Encode(
         };
         ret = crate::src::opus_1_2_1::silk::control_codec::silk_control_encoder(
             &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize) as *mut _
-                as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
-            encControl as *mut crate::control_h::silk_EncControlStruct,
+                as *mut silk_encoder_state_FLP,
+            encControl as *mut silk_EncControlStruct,
             (*psEnc).allowBandwidthSwitch,
             n,
             force_fs_kHz,
@@ -371,10 +371,10 @@ pub unsafe extern "C" fn silk_Encode(
         / ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz * 1000 as i32);
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul(nSamplesFromInputMax as libc::c_ulong) as usize,
     );
-    buf = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    buf = fresh0.as_mut_ptr() as *mut opus_int16;
     loop {
         nSamplesToBuffer = (*psEnc).state_Fxx[0 as i32 as usize].sCmn.frame_length
             - (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx;
@@ -399,14 +399,14 @@ pub unsafe extern "C" fn silk_Encode(
                     &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                         .sCmn
                         .resampler_state
-                        as *mut crate::resampler_structs_h::silk_resampler_state_struct
+                        as *mut silk_resampler_state_struct
                         as *mut libc::c_void,
                     &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                         .sCmn
                         .resampler_state
-                        as *mut crate::resampler_structs_h::silk_resampler_state_struct
+                        as *mut silk_resampler_state_struct
                         as *const libc::c_void,
-                    ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
+                    ::std::mem::size_of::<silk_resampler_state_struct>()
                         as libc::c_ulong,
                 );
             }
@@ -414,7 +414,7 @@ pub unsafe extern "C" fn silk_Encode(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .inputBuf
@@ -425,7 +425,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .inputBufIx
                             + 2 as i32) as isize,
                     ),
-                buf as *const crate::opus_types_h::opus_int16,
+                buf as *const opus_int16,
                 nSamplesFromInput,
             );
             (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer;
@@ -447,7 +447,7 @@ pub unsafe extern "C" fn silk_Encode(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                     .sCmn
                     .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                     .sCmn
                     .inputBuf
@@ -458,7 +458,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .inputBufIx
                             + 2 as i32) as isize,
                     ),
-                buf as *const crate::opus_types_h::opus_int16,
+                buf as *const opus_int16,
                 nSamplesFromInput,
             );
             (*psEnc).state_Fxx[1 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer
@@ -474,14 +474,14 @@ pub unsafe extern "C" fn silk_Encode(
                     (sum >> 1 as i32) + (sum & 1 as i32)
                 } else {
                     ((sum >> 1 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-                } as crate::opus_types_h::opus_int16;
+                } as opus_int16;
                 n += 1
             }
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .inputBuf
@@ -492,7 +492,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .inputBufIx
                             + 2 as i32) as isize,
                     ),
-                buf as *const crate::opus_types_h::opus_int16,
+                buf as *const opus_int16,
                 nSamplesFromInput,
             );
             /* On the first mono frame, average the results for the two resampler states  */
@@ -503,7 +503,7 @@ pub unsafe extern "C" fn silk_Encode(
                     &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                         .sCmn
                         .resampler_state as *mut _
-                        as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                        as *mut _silk_resampler_state_struct,
                     &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                         .sCmn
                         .inputBuf
@@ -514,7 +514,7 @@ pub unsafe extern "C" fn silk_Encode(
                                 .inputBufIx
                                 + 2 as i32) as isize,
                         ),
-                    buf as *const crate::opus_types_h::opus_int16,
+                    buf as *const opus_int16,
                     nSamplesFromInput,
                 );
                 n = 0 as i32;
@@ -540,7 +540,7 @@ pub unsafe extern "C" fn silk_Encode(
                             + 2 as i32)
                             as usize] as i32
                         >> 1 as i32)
-                        as crate::opus_types_h::opus_int16;
+                        as opus_int16;
                     n += 1
                 }
             }
@@ -551,14 +551,14 @@ pub unsafe extern "C" fn silk_Encode(
                 samplesIn as *const libc::c_void,
                 (nSamplesFromInput as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_int16>() as libc::c_ulong
                     ),
             );
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
                 &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    as *mut _silk_resampler_state_struct,
                 &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .inputBuf
@@ -569,7 +569,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .inputBufIx
                             + 2 as i32) as isize,
                     ),
-                buf as *const crate::opus_types_h::opus_int16,
+                buf as *const opus_int16,
                 nSamplesFromInput,
             );
             (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer
@@ -596,7 +596,7 @@ pub unsafe extern "C" fn silk_Encode(
                         * (*encControl).nChannelsInternal))
                 as u8;
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                psRangeEnc as *mut ec_ctx,
                 0 as i32,
                 iCDF.as_mut_ptr(),
                 8 as i32 as u32,
@@ -609,8 +609,8 @@ pub unsafe extern "C" fn silk_Encode(
                 i = 0 as i32;
                 while i < (*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket {
                     LBRR_symbol |= (((*psEnc).state_Fxx[n as usize].sCmn.LBRR_flags[i as usize]
-                        as crate::opus_types_h::opus_uint32)
-                        << i) as crate::opus_types_h::opus_int32;
+                        as opus_uint32)
+                        << i) as opus_int32;
                     i += 1
                 }
                 (*psEnc).state_Fxx[n as usize].sCmn.LBRR_flag = if LBRR_symbol > 0 as i32 {
@@ -622,7 +622,7 @@ pub unsafe extern "C" fn silk_Encode(
                     && (*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket > 1 as i32
                 {
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        psRangeEnc as *mut ec_ctx,
                         LBRR_symbol - 1 as i32,
                         crate::src::opus_1_2_1::silk::tables_other::silk_LBRR_flags_iCDF_ptr
                             [((*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket - 2 as i32)
@@ -640,7 +640,7 @@ pub unsafe extern "C" fn silk_Encode(
                     if (*psEnc).state_Fxx[n as usize].sCmn.LBRR_flags[i as usize] != 0 {
                         let mut condCoding: i32 = 0;
                         if (*encControl).nChannelsInternal == 2 as i32 && n == 0 as i32 {
-                            crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                            crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred(psRangeEnc as *mut ec_ctx,
                                                     (*psEnc).sStereo.predIx[i
                                                                                 as
                                                                                 usize].as_mut_ptr());
@@ -648,7 +648,7 @@ pub unsafe extern "C" fn silk_Encode(
                             if (*psEnc).state_Fxx[1 as i32 as usize].sCmn.LBRR_flags[i as usize]
                                 == 0 as i32
                             {
-                                crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                                crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only(psRangeEnc as *mut ec_ctx,
                                                             (*psEnc).sStereo.mid_only_flags[i
                                                                                                 as
                                                                                                 usize]);
@@ -667,14 +667,14 @@ pub unsafe extern "C" fn silk_Encode(
                         crate::src::opus_1_2_1::silk::encode_indices::silk_encode_indices(
                             &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize)).sCmn
                                 as *mut _
-                                as *mut crate::structs_h::silk_encoder_state,
-                            psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                                as *mut silk_encoder_state,
+                            psRangeEnc as *mut ec_ctx,
                             i,
                             1 as i32,
                             condCoding,
                         );
                         crate::src::opus_1_2_1::silk::encode_pulses::silk_encode_pulses(
-                            psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                            psRangeEnc as *mut ec_ctx,
                             (*psEnc).state_Fxx[n as usize].sCmn.indices_LBRR[i as usize].signalType
                                 as i32,
                             (*psEnc).state_Fxx[n as usize].sCmn.indices_LBRR[i as usize]
@@ -702,7 +702,7 @@ pub unsafe extern "C" fn silk_Encode(
             (*psEnc).nBitsUsedLBRR = ec_tell(psRangeEnc)
         }
         crate::src::opus_1_2_1::silk::HP_variable_cutoff::silk_HP_variable_cutoff(
-            (*psEnc).state_Fxx.as_mut_ptr() as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+            (*psEnc).state_Fxx.as_mut_ptr() as *mut silk_encoder_state_FLP,
         );
         /* Total target bits for packet */
         nBits = (*encControl).bitRate * (*encControl).payloadSize_ms / 1000 as i32;
@@ -714,20 +714,20 @@ pub unsafe extern "C" fn silk_Encode(
         nBits = nBits / (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket;
         /* Convert to bits/second */
         if (*encControl).payloadSize_ms == 10 as i32 {
-            TargetRate_bps = nBits as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * 100 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+            TargetRate_bps = nBits as opus_int16
+                as opus_int32
+                * 100 as i32 as opus_int16 as opus_int32
         } else {
-            TargetRate_bps = nBits as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32
-                * 50 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+            TargetRate_bps = nBits as opus_int16
+                as opus_int32
+                * 50 as i32 as opus_int16 as opus_int32
         }
         /* Subtract fraction of bits in excess of target in previous frames and packets */
         TargetRate_bps -= (*psEnc).nBitsExceeded * 1000 as i32 / 500 as i32;
         if prefillFlag == 0 && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded > 0 as i32
         {
             /* Compare actual vs target bits so far in this packet */
-            let mut bitsBalance: crate::opus_types_h::opus_int32 = ec_tell(psRangeEnc)
+            let mut bitsBalance: opus_int32 = ec_tell(psRangeEnc)
                 - (*psEnc).nBitsUsedLBRR
                 - nBits * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded;
             TargetRate_bps -= bitsBalance * 1000 as i32 / 500 as i32
@@ -751,7 +751,7 @@ pub unsafe extern "C" fn silk_Encode(
         /* Convert Left/Right to Mid/Side */
         if (*encControl).nChannelsInternal == 2 as i32 {
             crate::src::opus_1_2_1::silk::stereo_LR_to_MS::silk_stereo_LR_to_MS(
-                &mut (*psEnc).sStereo as *mut _ as *mut crate::structs_h::stereo_enc_state,
+                &mut (*psEnc).sStereo as *mut _ as *mut stereo_enc_state,
                 &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
                     .inputBuf
@@ -788,19 +788,19 @@ pub unsafe extern "C" fn silk_Encode(
                 if (*psEnc).prev_decode_only_middle == 1 as i32 {
                     crate::stdlib::memset(
                         &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize)).sShape
-                            as *mut crate::structs_FLP_h::silk_shape_state_FLP
+                            as *mut silk_shape_state_FLP
                             as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<crate::structs_FLP_h::silk_shape_state_FLP>()
+                        ::std::mem::size_of::<silk_shape_state_FLP>()
                             as libc::c_ulong,
                     );
                     crate::stdlib::memset(
                         &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                             .sCmn
-                            .sNSQ as *mut crate::structs_h::silk_nsq_state
+                            .sNSQ as *mut silk_nsq_state
                             as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<crate::structs_h::silk_nsq_state>() as libc::c_ulong,
+                        ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
                     );
                     crate::stdlib::memset(
                         (*psEnc).state_Fxx[1 as i32 as usize]
@@ -808,7 +808,7 @@ pub unsafe extern "C" fn silk_Encode(
                             .prev_NLSFq_Q15
                             .as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[crate::opus_types_h::opus_int16; 16]>()
+                        ::std::mem::size_of::<[opus_int16; 16]>()
                             as libc::c_ulong,
                     );
                     crate::stdlib::memset(
@@ -816,10 +816,10 @@ pub unsafe extern "C" fn silk_Encode(
                             .sCmn
                             .sLP
                             .In_LP_State
-                            as *mut [crate::opus_types_h::opus_int32; 2]
+                            as *mut [opus_int32; 2]
                             as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>()
+                        ::std::mem::size_of::<[opus_int32; 2]>()
                             as libc::c_ulong,
                     );
                     (*psEnc).state_Fxx[1 as i32 as usize].sCmn.prevLag = 100 as i32;
@@ -836,7 +836,7 @@ pub unsafe extern "C" fn silk_Encode(
                 }
                 crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP(
                     &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize) as *mut _
-                        as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                        as *mut silk_encoder_state_FLP,
                 );
             } else {
                 (*psEnc).state_Fxx[1 as i32 as usize].sCmn.VAD_flags
@@ -845,7 +845,7 @@ pub unsafe extern "C" fn silk_Encode(
             }
             if prefillFlag == 0 {
                 crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred(
-                    psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    psRangeEnc as *mut ec_ctx,
                     (*psEnc).sStereo.predIx
                         [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize]
                         .as_mut_ptr(),
@@ -856,7 +856,7 @@ pub unsafe extern "C" fn silk_Encode(
                     == 0 as i32
                 {
                     crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only(
-                        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        psRangeEnc as *mut ec_ctx,
                         (*psEnc).sStereo.mid_only_flags
                             [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize],
                     );
@@ -871,7 +871,7 @@ pub unsafe extern "C" fn silk_Encode(
                     .as_mut_ptr() as *mut libc::c_void,
                 (*psEnc).sStereo.sMid.as_mut_ptr() as *const libc::c_void,
                 (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::opus_types_h::opus_int16,
+                    opus_int16,
                 >() as libc::c_ulong),
             );
             crate::stdlib::memcpy(
@@ -884,16 +884,16 @@ pub unsafe extern "C" fn silk_Encode(
                         (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                             .sCmn
                             .frame_length as isize,
-                    ) as *mut crate::opus_types_h::opus_int16
+                    ) as *mut opus_int16
                     as *const libc::c_void,
                 (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    crate::opus_types_h::opus_int16,
+                    opus_int16,
                 >() as libc::c_ulong),
             );
         }
         crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP(
             &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize) as *mut _
-                as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                as *mut silk_encoder_state_FLP,
         );
         /* Encode */
         n = 0 as i32;
@@ -926,7 +926,7 @@ pub unsafe extern "C" fn silk_Encode(
                 let mut condCoding_0: i32 = 0;
                 crate::src::opus_1_2_1::silk::control_SNR::silk_control_SNR(
                     &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize)).sCmn as *mut _
-                        as *mut crate::structs_h::silk_encoder_state,
+                        as *mut silk_encoder_state,
                     channelRate_bps,
                 );
                 /* Use independent coding if no previous frame available */
@@ -941,9 +941,9 @@ pub unsafe extern "C" fn silk_Encode(
                 }
                 ret = crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_frame_FLP(
                     &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(n as isize) as *mut _
-                        as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
+                        as *mut silk_encoder_state_FLP,
                     nBytesOut,
-                    psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    psRangeEnc as *mut ec_ctx,
                     condCoding_0,
                     maxBits,
                     useCBR,
@@ -970,19 +970,19 @@ pub unsafe extern "C" fn silk_Encode(
             while n < (*encControl).nChannelsInternal {
                 i = 0 as i32;
                 while i < (*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket {
-                    flags = ((flags as crate::opus_types_h::opus_uint32) << 1 as i32)
-                        as crate::opus_types_h::opus_int32;
+                    flags = ((flags as opus_uint32) << 1 as i32)
+                        as opus_int32;
                     flags |= (*psEnc).state_Fxx[n as usize].sCmn.VAD_flags[i as usize] as i32;
                     i += 1
                 }
-                flags = ((flags as crate::opus_types_h::opus_uint32) << 1 as i32)
-                    as crate::opus_types_h::opus_int32;
+                flags = ((flags as opus_uint32) << 1 as i32)
+                    as opus_int32;
                 flags |= (*psEnc).state_Fxx[n as usize].sCmn.LBRR_flag as i32;
                 n += 1
             }
             if prefillFlag == 0 {
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_patch_initial_bits(
-                    psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    psRangeEnc as *mut ec_ctx,
                     flags as u32,
                     (((*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket + 1 as i32)
                         * (*encControl).nChannelsInternal) as u32,
@@ -1016,14 +1016,14 @@ pub unsafe extern "C" fn silk_Encode(
             /* Update flag indicating if bandwidth switching is allowed */
             speech_act_thr_for_switch_Q8 =
                 (((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32 as i64
+                    as opus_int32 as i64
                     + ((((1 as i32 as f32 - 0.05f32) / 5000 as i32 as f32
                         * ((1 as i32 as i64) << 16 as i32 + 8 as i32) as f32)
                         as f64
-                        + 0.5f64) as crate::opus_types_h::opus_int32 as i64
-                        * (*psEnc).timeSinceSwitchAllowed_ms as crate::opus_types_h::opus_int16
+                        + 0.5f64) as opus_int32 as i64
+                        * (*psEnc).timeSinceSwitchAllowed_ms as opus_int16
                             as i64
-                        >> 16 as i32)) as crate::opus_types_h::opus_int32;
+                        >> 16 as i32)) as opus_int32;
             if (*psEnc).state_Fxx[0 as i32 as usize]
                 .sCmn
                 .speech_activity_Q8
@@ -1047,9 +1047,9 @@ pub unsafe extern "C" fn silk_Encode(
         ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz == 16 as i32
             && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.sLP.mode == 0 as i32) as i32;
     (*encControl).internalSampleRate = (*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz
-        as crate::opus_types_h::opus_int16
-        as crate::opus_types_h::opus_int32
-        * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+        as opus_int16
+        as opus_int32
+        * 1000 as i32 as opus_int16 as opus_int32;
     (*encControl).stereoWidth_Q14 = if (*encControl).toMono != 0 {
         0 as i32
     } else {

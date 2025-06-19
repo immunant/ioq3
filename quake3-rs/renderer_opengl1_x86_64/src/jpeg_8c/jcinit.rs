@@ -92,50 +92,50 @@ pub use crate::src::jpeg_8c::jcsample::jinit_downsampler;
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jinit_compress_master(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+pub unsafe extern "C" fn jinit_compress_master(mut cinfo: j_compress_ptr) {
     /* Initialize master control (includes parameter checking/processing) */
-    crate::src::jpeg_8c::jcmaster::jinit_c_master_control(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_c_master_control(
+        cinfo as *mut jpeg_compress_struct,
         0 as i32,
     );
     /* Preprocessing */
     if (*cinfo).raw_data_in == 0 {
-        crate::src::jpeg_8c::jccolor::jinit_color_converter(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_color_converter(
+            cinfo as *mut jpeg_compress_struct,
         );
-        crate::src::jpeg_8c::jcsample::jinit_downsampler(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_downsampler(
+            cinfo as *mut jpeg_compress_struct,
         );
-        crate::src::jpeg_8c::jcprepct::jinit_c_prep_controller(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_c_prep_controller(
+            cinfo as *mut jpeg_compress_struct,
             0 as i32,
         );
     }
     /* Forward DCT */
-    crate::src::jpeg_8c::jcdctmgr::jinit_forward_dct(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_forward_dct(
+        cinfo as *mut jpeg_compress_struct,
     );
     /* Entropy encoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        crate::src::jpeg_8c::jcarith::jinit_arith_encoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_arith_encoder(
+            cinfo as *mut jpeg_compress_struct,
         );
     } else {
-        crate::src::jpeg_8c::jchuff::jinit_huff_encoder(
-            cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+        jinit_huff_encoder(
+            cinfo as *mut jpeg_compress_struct,
         );
     }
     /* Need a full-image coefficient buffer in any multi-pass mode. */
-    crate::src::jpeg_8c::jccoefct::jinit_c_coef_controller(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_c_coef_controller(
+        cinfo as *mut jpeg_compress_struct,
         ((*cinfo).num_scans > 1 as i32 || (*cinfo).optimize_coding != 0) as i32,
     );
-    crate::src::jpeg_8c::jcmainct::jinit_c_main_controller(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_c_main_controller(
+        cinfo as *mut jpeg_compress_struct,
         0 as i32,
     );
-    crate::src::jpeg_8c::jcmarker::jinit_marker_writer(
-        cinfo as *mut crate::jpeglib_h::jpeg_compress_struct,
+    jinit_marker_writer(
+        cinfo as *mut jpeg_compress_struct,
     );
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
@@ -143,7 +143,7 @@ pub unsafe extern "C" fn jinit_compress_master(mut cinfo: crate::jpeglib_h::j_co
             .realize_virt_arrays
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+    .expect("non-null function pointer")(cinfo as j_common_ptr);
     /* Write the datastream header (SOI) immediately.
      * Frame and scan headers are postponed till later.
      * This lets application insert special markers after the SOI.

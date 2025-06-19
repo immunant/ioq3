@@ -258,9 +258,9 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 */
 #[no_mangle]
 
-pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
+pub static mut bg_itemlist: [gitem_t; 37] = [
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: 0 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
             world_model: [
@@ -272,7 +272,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: 0 as *const libc::c_char as *mut libc::c_char,
             pickup_name: 0 as *const libc::c_char as *mut libc::c_char,
             quantity: 0 as i32,
-            giType: crate::bg_public_h::IT_BAD,
+            giType: IT_BAD,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -280,7 +280,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_armor_shard\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/ar1_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -297,7 +297,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Armor Shard\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 5 as i32,
-            giType: crate::bg_public_h::IT_ARMOR,
+            giType: IT_ARMOR,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -305,7 +305,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_armor_combat\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/ar2_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -321,7 +321,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Armor\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 50 as i32,
-            giType: crate::bg_public_h::IT_ARMOR,
+            giType: IT_ARMOR,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -329,7 +329,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_armor_body\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/ar2_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -345,7 +345,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Heavy Armor\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 100 as i32,
-            giType: crate::bg_public_h::IT_ARMOR,
+            giType: IT_ARMOR,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -353,7 +353,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_health_small\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/items/s_health.wav\x00" as *const u8 as *const libc::c_char
@@ -369,7 +369,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/iconh_green\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"5 Health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 5 as i32,
-            giType: crate::bg_public_h::IT_HEALTH,
+            giType: IT_HEALTH,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -377,7 +377,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/n_health.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -393,7 +393,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"25 Health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 25 as i32,
-            giType: crate::bg_public_h::IT_HEALTH,
+            giType: IT_HEALTH,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -401,7 +401,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_health_large\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/items/l_health.wav\x00" as *const u8 as *const libc::c_char
@@ -417,7 +417,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/iconh_red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"50 Health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 50 as i32,
-            giType: crate::bg_public_h::IT_HEALTH,
+            giType: IT_HEALTH,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -425,7 +425,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_health_mega\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/items/m_health.wav\x00" as *const u8 as *const libc::c_char
@@ -442,7 +442,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Mega Health\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 100 as i32,
-            giType: crate::bg_public_h::IT_HEALTH,
+            giType: IT_HEALTH,
             giTag: 0 as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -450,7 +450,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_gauntlet\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -466,15 +466,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Gauntlet\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 0 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_GAUNTLET as i32,
+            giType: IT_WEAPON,
+            giTag: WP_GAUNTLET as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_shotgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -490,15 +490,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Shotgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_SHOTGUN as i32,
+            giType: IT_WEAPON,
+            giTag: WP_SHOTGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_machinegun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -514,15 +514,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Machinegun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 40 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_MACHINEGUN as i32,
+            giType: IT_WEAPON,
+            giTag: WP_MACHINEGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_grenadelauncher\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -539,8 +539,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Grenade Launcher\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_GRENADE_LAUNCHER as i32,
+            giType: IT_WEAPON,
+            giTag: WP_GRENADE_LAUNCHER as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav\x00"
                 as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -548,7 +548,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_rocketlauncher\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -565,15 +565,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Rocket Launcher\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_ROCKET_LAUNCHER as i32,
+            giType: IT_WEAPON,
+            giTag: WP_ROCKET_LAUNCHER as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_lightning\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -590,15 +590,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Lightning Gun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 100 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_LIGHTNING as i32,
+            giType: IT_WEAPON,
+            giTag: WP_LIGHTNING as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_railgun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -614,15 +614,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Railgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_RAILGUN as i32,
+            giType: IT_WEAPON,
+            giTag: WP_RAILGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_plasmagun\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -638,15 +638,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Plasma Gun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 50 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_PLASMAGUN as i32,
+            giType: IT_WEAPON,
+            giTag: WP_PLASMAGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -660,15 +660,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/iconw_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"BFG10K\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 20 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_BFG as i32,
+            giType: IT_WEAPON,
+            giTag: WP_BFG as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"weapon_grapplinghook\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/w_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -685,15 +685,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Grappling Hook\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 0 as i32,
-            giType: crate::bg_public_h::IT_WEAPON,
-            giTag: crate::bg_public_h::WP_GRAPPLING_HOOK as i32,
+            giType: IT_WEAPON,
+            giTag: WP_GRAPPLING_HOOK as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_shells\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -708,15 +708,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Shells\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_SHOTGUN as i32,
+            giType: IT_AMMO,
+            giTag: WP_SHOTGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_bullets\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -731,15 +731,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Bullets\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 50 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_MACHINEGUN as i32,
+            giType: IT_AMMO,
+            giTag: WP_MACHINEGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_grenades\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -755,15 +755,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Grenades\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 5 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_GRENADE_LAUNCHER as i32,
+            giType: IT_AMMO,
+            giTag: WP_GRENADE_LAUNCHER as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_cells\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -778,15 +778,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Cells\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_PLASMAGUN as i32,
+            giType: IT_AMMO,
+            giTag: WP_PLASMAGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_lightning\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
@@ -802,15 +802,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Lightning\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 60 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_LIGHTNING as i32,
+            giType: IT_AMMO,
+            giTag: WP_LIGHTNING as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_rockets\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -825,15 +825,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Rockets\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 5 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_ROCKET_LAUNCHER as i32,
+            giType: IT_AMMO,
+            giTag: WP_ROCKET_LAUNCHER as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_slugs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -848,15 +848,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
                 as *mut libc::c_char,
             pickup_name: b"Slugs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 10 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_RAILGUN as i32,
+            giType: IT_AMMO,
+            giTag: WP_RAILGUN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"ammo_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/misc/am_pkup.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -870,15 +870,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/icona_bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Bfg Ammo\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 15 as i32,
-            giType: crate::bg_public_h::IT_AMMO,
-            giTag: crate::bg_public_h::WP_BFG as i32,
+            giType: IT_AMMO,
+            giTag: WP_BFG as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"holdable_teleporter\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/items/holdable.wav\x00" as *const u8 as *const libc::c_char
@@ -894,15 +894,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Personal Teleporter\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 60 as i32,
-            giType: crate::bg_public_h::IT_HOLDABLE,
-            giTag: crate::bg_public_h::HI_TELEPORTER as i32,
+            giType: IT_HOLDABLE,
+            giTag: HI_TELEPORTER as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"holdable_medkit\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: b"sound/items/holdable.wav\x00" as *const u8 as *const libc::c_char
@@ -918,8 +918,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/medkit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Medkit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 60 as i32,
-            giType: crate::bg_public_h::IT_HOLDABLE,
-            giTag: crate::bg_public_h::HI_MEDKIT as i32,
+            giType: IT_HOLDABLE,
+            giTag: HI_MEDKIT as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/items/use_medkit.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -927,7 +927,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_quad\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/quaddamage.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -943,8 +943,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Quad Damage\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_QUAD as i32,
+            giType: IT_POWERUP,
+            giTag: PW_QUAD as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/items/damage2.wav sound/items/damage3.wav\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
@@ -952,7 +952,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_enviro\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/protect.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -968,8 +968,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Battle Suit\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_BATTLESUIT as i32,
+            giType: IT_POWERUP,
+            giTag: PW_BATTLESUIT as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/items/airout.wav sound/items/protect3.wav\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
@@ -977,7 +977,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_haste\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/haste.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -992,15 +992,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/haste\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_HASTE as i32,
+            giType: IT_POWERUP,
+            giTag: PW_HASTE as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_invis\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/invisibility.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1016,15 +1016,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Invisibility\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_INVIS as i32,
+            giType: IT_POWERUP,
+            giTag: PW_INVIS as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_regen\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/regeneration.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1040,8 +1040,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             pickup_name: b"Regeneration\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             quantity: 30 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_REGEN as i32,
+            giType: IT_POWERUP,
+            giTag: PW_REGEN as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/items/regen.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1049,7 +1049,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"item_flight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: b"sound/items/flight.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1064,8 +1064,8 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/flight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Flight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 60 as i32,
-            giType: crate::bg_public_h::IT_POWERUP,
-            giTag: crate::bg_public_h::PW_FLIGHT as i32,
+            giType: IT_POWERUP,
+            giTag: PW_FLIGHT as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"sound/items/flight.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1073,7 +1073,7 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"team_CTF_redflag\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
@@ -1087,15 +1087,15 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/iconf_red1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Red Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 0 as i32,
-            giType: crate::bg_public_h::IT_TEAM,
-            giTag: crate::bg_public_h::PW_REDFLAG as i32,
+            giType: IT_TEAM,
+            giTag: PW_REDFLAG as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: b"team_CTF_blueflag\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
             pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
@@ -1109,22 +1109,22 @@ pub static mut bg_itemlist: [crate::bg_public_h::gitem_t; 37] = [
             icon: b"icons/iconf_blu1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             pickup_name: b"Blue Flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             quantity: 0 as i32,
-            giType: crate::bg_public_h::IT_TEAM,
-            giTag: crate::bg_public_h::PW_BLUEFLAG as i32,
+            giType: IT_TEAM,
+            giTag: PW_BLUEFLAG as i32,
             precaches: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             sounds: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         };
         init
     },
     {
-        let mut init = crate::bg_public_h::gitem_s {
+        let mut init = gitem_s {
             classname: 0 as *const libc::c_char as *mut libc::c_char,
             pickup_sound: 0 as *const libc::c_char as *mut libc::c_char,
             world_model: [0 as *const libc::c_char as *mut libc::c_char; 4],
             icon: 0 as *const libc::c_char as *mut libc::c_char,
             pickup_name: 0 as *const libc::c_char as *mut libc::c_char,
             quantity: 0,
-            giType: crate::bg_public_h::IT_BAD,
+            giType: IT_BAD,
             giTag: 0,
             precaches: 0 as *const libc::c_char as *mut libc::c_char,
             sounds: 0 as *const libc::c_char as *mut libc::c_char,
@@ -1144,23 +1144,23 @@ BG_FindItemForPowerup
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_FindItemForPowerup(
-    mut pw: crate::bg_public_h::powerup_t,
-) -> *mut crate::bg_public_h::gitem_t {
+    mut pw: powerup_t,
+) -> *mut gitem_t {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
-        if (bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
-            || bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
+        if (bg_itemlist[i as usize].giType as u32 == IT_POWERUP as i32 as u32
+            || bg_itemlist[i as usize].giType as u32 == IT_TEAM as i32 as u32
             || bg_itemlist[i as usize].giType as u32
-                == crate::bg_public_h::IT_PERSISTANT_POWERUP as i32 as u32)
+                == IT_PERSISTANT_POWERUP as i32 as u32)
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
         {
             return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut crate::bg_public_h::gitem_t;
+                as *mut gitem_t;
         }
         i += 1
     }
-    return 0 as *mut crate::bg_public_h::gitem_t;
+    return 0 as *mut gitem_t;
 }
 /*
 ==============
@@ -1170,21 +1170,21 @@ BG_FindItemForHoldable
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_FindItemForHoldable(
-    mut pw: crate::bg_public_h::holdable_t,
-) -> *mut crate::bg_public_h::gitem_t {
+    mut pw: holdable_t,
+) -> *mut gitem_t {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
-        if bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+        if bg_itemlist[i as usize].giType as u32 == IT_HOLDABLE as i32 as u32
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
         {
             return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut crate::bg_public_h::gitem_t;
+                as *mut gitem_t;
         }
         i += 1
     }
-    crate::src::game::g_main::Com_Error(
-        crate::src::qcommon::q_shared::ERR_DROP as i32,
+    Com_Error(
+        ERR_DROP as i32,
         b"HoldableItem not found\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -1197,20 +1197,20 @@ BG_FindItemForWeapon
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_FindItemForWeapon(
-    mut weapon: crate::bg_public_h::weapon_t,
-) -> *mut crate::bg_public_h::gitem_t {
-    let mut it: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+    mut weapon: weapon_t,
+) -> *mut gitem_t {
+    let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
-        if (*it).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
+        if (*it).giType as u32 == IT_WEAPON as i32 as u32
             && (*it).giTag as u32 == weapon as u32
         {
             return it;
         }
         it = it.offset(1)
     }
-    crate::src::game::g_main::Com_Error(
-        crate::src::qcommon::q_shared::ERR_DROP as i32,
+    Com_Error(
+        ERR_DROP as i32,
         b"Couldn\'t find item for weapon %i\x00" as *const u8 as *const libc::c_char,
         weapon as u32,
     );
@@ -1226,16 +1226,16 @@ BG_FindItem
 
 pub unsafe extern "C" fn BG_FindItem(
     mut pickupName: *const libc::c_char,
-) -> *mut crate::bg_public_h::gitem_t {
-    let mut it: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+) -> *mut gitem_t {
+    let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp((*it).pickup_name, pickupName) == 0 {
+        if Q_stricmp((*it).pickup_name, pickupName) == 0 {
             return it;
         }
         it = it.offset(1)
     }
-    return 0 as *mut crate::bg_public_h::gitem_t;
+    return 0 as *mut gitem_t;
 }
 /*
 ============
@@ -1248,11 +1248,11 @@ grabbing them easier
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_PlayerTouchesItem(
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut item: *mut crate::src::qcommon::q_shared::entityState_t,
+    mut ps: *mut playerState_t,
+    mut item: *mut entityState_t,
     mut atTime: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+) -> qboolean {
+    let mut origin: vec3_t = [0.; 3];
     BG_EvaluateTrajectory(&mut (*item).pos, atTime, origin.as_mut_ptr());
     // we are ignoring ducked differences here
     if (*ps).origin[0 as i32 as usize] - origin[0 as i32 as usize] > 44 as i32 as f32
@@ -1262,9 +1262,9 @@ pub unsafe extern "C" fn BG_PlayerTouchesItem(
         || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize] > 36 as i32 as f32
         || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize] < -(36 as i32) as f32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ================
@@ -1278,102 +1278,102 @@ This needs to be the same for client side prediction and server use.
 
 pub unsafe extern "C" fn BG_CanItemBeGrabbed(
     mut gametype: i32,
-    mut ent: *const crate::src::qcommon::q_shared::entityState_t,
-    mut ps: *const crate::src::qcommon::q_shared::playerState_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t; // weapons are always picked up
+    mut ent: *const entityState_t,
+    mut ps: *const playerState_t,
+) -> qboolean {
+    let mut item: *mut gitem_t = 0 as *mut gitem_t; // weapons are always picked up
     if (*ent).modelindex < 1 as i32 || (*ent).modelindex >= bg_numItems {
-        crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"BG_CanItemBeGrabbed: index out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
     item = &mut *bg_itemlist.as_mut_ptr().offset((*ent).modelindex as isize)
-        as *mut crate::bg_public_h::gitem_t;
+        as *mut gitem_t;
     match (*item).giType as u32 {
-        1 => return crate::src::qcommon::q_shared::qtrue,
+        1 => return qtrue,
         2 => {
             if (*ps).ammo[(*item).giTag as usize] >= 200 as i32 {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
                 // can't hold any more
             }
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         3 => {
-            if (*ps).stats[crate::bg_public_h::STAT_ARMOR as i32 as usize]
-                >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] * 2 as i32
+            if (*ps).stats[STAT_ARMOR as i32 as usize]
+                >= (*ps).stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         4 => {
             // small and mega healths will go over the max, otherwise
             // don't pick up if already at max
             if (*item).quantity == 5 as i32 || (*item).quantity == 100 as i32 {
-                if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                    >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] * 2 as i32
+                if (*ps).stats[STAT_HEALTH as i32 as usize]
+                    >= (*ps).stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32
                 {
-                    return crate::src::qcommon::q_shared::qfalse;
+                    return qfalse;
                 } // powerups are always picked up
-                return crate::src::qcommon::q_shared::qtrue;
+                return qtrue;
             }
-            if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+            if (*ps).stats[STAT_HEALTH as i32 as usize]
+                >= (*ps).stats[STAT_MAX_HEALTH as i32 as usize]
             {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
-        5 => return crate::src::qcommon::q_shared::qtrue,
+        5 => return qtrue,
         8 => {
             // team items, such as flags
-            if gametype == crate::bg_public_h::GT_CTF as i32 {
+            if gametype == GT_CTF as i32 {
                 // ent->modelindex2 is non-zero on items if they are dropped
                 // we need to know this because we can pick up our dropped flag (and return it)
                 // but we can't pick up our flag at base
-                if (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
-                    == crate::bg_public_h::TEAM_RED as i32
+                if (*ps).persistant[PERS_TEAM as i32 as usize]
+                    == TEAM_RED as i32
                 {
-                    if (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
-                        || (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
+                    if (*item).giTag == PW_BLUEFLAG as i32
+                        || (*item).giTag == PW_REDFLAG as i32
                             && (*ent).modelindex2 != 0
-                        || (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
-                            && (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0
+                        || (*item).giTag == PW_REDFLAG as i32
+                            && (*ps).powerups[PW_BLUEFLAG as i32 as usize] != 0
                     {
-                        return crate::src::qcommon::q_shared::qtrue;
+                        return qtrue;
                     }
-                } else if (*ps).persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
-                    == crate::bg_public_h::TEAM_BLUE as i32
+                } else if (*ps).persistant[PERS_TEAM as i32 as usize]
+                    == TEAM_BLUE as i32
                 {
-                    if (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
-                        || (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
+                    if (*item).giTag == PW_REDFLAG as i32
+                        || (*item).giTag == PW_BLUEFLAG as i32
                             && (*ent).modelindex2 != 0
-                        || (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
-                            && (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
+                        || (*item).giTag == PW_BLUEFLAG as i32
+                            && (*ps).powerups[PW_REDFLAG as i32 as usize] != 0
                     {
-                        return crate::src::qcommon::q_shared::qtrue;
+                        return qtrue;
                     }
                 }
             }
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         6 => {
             // can only hold one item at a time
-            if (*ps).stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] != 0 {
-                return crate::src::qcommon::q_shared::qfalse;
+            if (*ps).stats[STAT_HOLDABLE_ITEM as i32 as usize] != 0 {
+                return qfalse;
             }
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         0 => {
-            crate::src::game::g_main::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"BG_CanItemBeGrabbed: IT_BAD\x00" as *const u8 as *const libc::c_char,
             );
         }
         _ => {}
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 //======================================================================
 /*
@@ -1385,9 +1385,9 @@ BG_EvaluateTrajectory
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_EvaluateTrajectory(
-    mut tr: *const crate::src::qcommon::q_shared::trajectory_t,
+    mut tr: *const trajectory_t,
     mut atTime: i32,
-    mut result: *mut crate::src::qcommon::q_shared::vec_t,
+    mut result: *mut vec_t,
 ) {
     let mut deltaTime: f32 = 0.; // milliseconds to seconds
     let mut phase: f32 = 0.; // milliseconds to seconds
@@ -1444,11 +1444,11 @@ pub unsafe extern "C" fn BG_EvaluateTrajectory(
             let ref mut fresh0 = *result.offset(2 as i32 as isize);
             *fresh0 = (*fresh0 as f64
                 - 0.5f64 * 800 as i32 as f64 * deltaTime as f64 * deltaTime as f64)
-                as crate::src::qcommon::q_shared::vec_t
+                as vec_t
         }
         _ => {
-            crate::src::game::g_main::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"BG_EvaluateTrajectory: unknown trType: %i\x00" as *const u8
                     as *const libc::c_char,
                 (*tr).trType as u32,
@@ -1466,16 +1466,16 @@ For determining velocity at a given time
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_EvaluateTrajectoryDelta(
-    mut tr: *const crate::src::qcommon::q_shared::trajectory_t,
+    mut tr: *const trajectory_t,
     mut atTime: i32,
-    mut result: *mut crate::src::qcommon::q_shared::vec_t,
+    mut result: *mut vec_t,
 ) {
     let mut deltaTime: f32 = 0.; // derivative of sin = cos
     let mut phase: f32 = 0.; // milliseconds to seconds
     match (*tr).trType as u32 {
         0 | 1 => {
             let ref mut fresh1 = *result.offset(2 as i32 as isize); // FIXME: local gravity...
-            *fresh1 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            *fresh1 = 0 as i32 as vec_t;
             let ref mut fresh2 = *result.offset(1 as i32 as isize);
             *fresh2 = *fresh1;
             *result.offset(0 as i32 as isize) = *fresh2
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn BG_EvaluateTrajectoryDelta(
         3 => {
             if atTime > (*tr).trTime + (*tr).trDuration {
                 let ref mut fresh3 = *result.offset(2 as i32 as isize);
-                *fresh3 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                *fresh3 = 0 as i32 as vec_t;
                 let ref mut fresh4 = *result.offset(1 as i32 as isize);
                 *fresh4 = *fresh3;
                 *result.offset(0 as i32 as isize) = *fresh4;
@@ -1517,8 +1517,8 @@ pub unsafe extern "C" fn BG_EvaluateTrajectoryDelta(
             *fresh5 -= 800 as i32 as f32 * deltaTime
         }
         _ => {
-            crate::src::game::g_main::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"BG_EvaluateTrajectoryDelta: unknown trType: %i\x00" as *const u8
                     as *const libc::c_char,
                 (*tr).trType as u32,
@@ -1618,7 +1618,7 @@ pub static mut eventnames: [*mut libc::c_char; 83] = [
 pub unsafe extern "C" fn BG_AddPredictableEventToPlayerstate(
     mut newEvent: i32,
     mut eventParm: i32,
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
+    mut ps: *mut playerState_t,
 ) {
     (*ps).events[((*ps).eventSequence & 2 as i32 - 1 as i32) as usize] = newEvent;
     (*ps).eventParms[((*ps).eventSequence & 2 as i32 - 1 as i32) as usize] = eventParm;
@@ -1632,28 +1632,28 @@ BG_TouchJumpPad
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_TouchJumpPad(
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut jumppad: *mut crate::src::qcommon::q_shared::entityState_t,
+    mut ps: *mut playerState_t,
+    mut jumppad: *mut entityState_t,
 ) {
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
     let mut p: f32 = 0.;
     let mut effectNum: i32 = 0;
     // spectators don't use jump pads
-    if (*ps).pm_type != crate::bg_public_h::PM_NORMAL as i32 {
+    if (*ps).pm_type != PM_NORMAL as i32 {
         return;
     }
     // flying characters don't hit bounce pads
-    if (*ps).powerups[crate::bg_public_h::PW_FLIGHT as i32 as usize] != 0 {
+    if (*ps).powerups[PW_FLIGHT as i32 as usize] != 0 {
         return;
     }
     // if we didn't hit this same jumppad the previous frame
     // then don't play the event sound again if we are in a fat trigger
     if (*ps).jumppad_ent != (*jumppad).number {
-        crate::src::qcommon::q_math::vectoangles(
-            (*jumppad).origin2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        vectoangles(
+            (*jumppad).origin2.as_mut_ptr() as *const vec_t,
             angles.as_mut_ptr(),
         );
-        p = crate::stdlib::fabs(crate::src::qcommon::q_math::AngleNormalize180(
+        p = crate::stdlib::fabs(AngleNormalize180(
             angles[0 as i32 as usize],
         ) as f64) as f32;
         if p < 45 as i32 as f32 {
@@ -1661,7 +1661,7 @@ pub unsafe extern "C" fn BG_TouchJumpPad(
         } else {
             effectNum = 1 as i32
         }
-        BG_AddPredictableEventToPlayerstate(crate::bg_public_h::EV_JUMP_PAD as i32, effectNum, ps);
+        BG_AddPredictableEventToPlayerstate(EV_JUMP_PAD as i32, effectNum, ps);
     }
     // remember hitting this jumppad this frame
     (*ps).jumppad_ent = (*jumppad).number;
@@ -1682,56 +1682,56 @@ and after local prediction on the client
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_PlayerStateToEntityState(
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut s: *mut crate::src::qcommon::q_shared::entityState_t,
-    mut snap: crate::src::qcommon::q_shared::qboolean,
+    mut ps: *mut playerState_t,
+    mut s: *mut entityState_t,
+    mut snap: qboolean,
 ) {
     let mut i: i32 = 0;
-    if (*ps).pm_type == crate::bg_public_h::PM_INTERMISSION as i32
-        || (*ps).pm_type == crate::bg_public_h::PM_SPECTATOR as i32
+    if (*ps).pm_type == PM_INTERMISSION as i32
+        || (*ps).pm_type == PM_SPECTATOR as i32
     {
-        (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
-    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= -(40 as i32) {
-        (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
+        (*s).eType = ET_INVISIBLE as i32
+    } else if (*ps).stats[STAT_HEALTH as i32 as usize] <= -(40 as i32) {
+        (*s).eType = ET_INVISIBLE as i32
     } else {
-        (*s).eType = crate::bg_public_h::ET_PLAYER as i32
+        (*s).eType = ET_PLAYER as i32
     }
     (*s).number = (*ps).clientNum;
-    (*s).pos.trType = crate::src::qcommon::q_shared::TR_INTERPOLATE;
+    (*s).pos.trType = TR_INTERPOLATE;
     (*s).pos.trBase[0 as i32 as usize] = (*ps).origin[0 as i32 as usize];
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
         (*s).pos.trBase[0 as i32 as usize] =
-            (*s).pos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
         (*s).pos.trBase[1 as i32 as usize] =
-            (*s).pos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
         (*s).pos.trBase[2 as i32 as usize] =
-            (*s).pos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
+            (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     // set the trDelta for flag direction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize]; // ET_PLAYER looks here instead of at number
     (*s).pos.trDelta[1 as i32 as usize] = (*ps).velocity[1 as i32 as usize];
     (*s).pos.trDelta[2 as i32 as usize] = (*ps).velocity[2 as i32 as usize];
-    (*s).apos.trType = crate::src::qcommon::q_shared::TR_INTERPOLATE;
+    (*s).apos.trType = TR_INTERPOLATE;
     (*s).apos.trBase[0 as i32 as usize] = (*ps).viewangles[0 as i32 as usize];
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
         (*s).apos.trBase[0 as i32 as usize] =
-            (*s).apos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
         (*s).apos.trBase[1 as i32 as usize] =
-            (*s).apos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
         (*s).apos.trBase[2 as i32 as usize] =
-            (*s).apos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
+            (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
     }
-    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
+    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;
     // so corpses can also reference the proper config
     (*s).eFlags = (*ps).eFlags;
-    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
+    if (*ps).stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         (*s).eFlags |= 0x1 as i32
     } else {
         (*s).eFlags &= !(0x1 as i32)
@@ -1774,33 +1774,33 @@ and after local prediction on the client
 #[no_mangle]
 
 pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
-    mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
-    mut s: *mut crate::src::qcommon::q_shared::entityState_t,
+    mut ps: *mut playerState_t,
+    mut s: *mut entityState_t,
     mut time: i32,
-    mut snap: crate::src::qcommon::q_shared::qboolean,
+    mut snap: qboolean,
 ) {
     let mut i: i32 = 0;
-    if (*ps).pm_type == crate::bg_public_h::PM_INTERMISSION as i32
-        || (*ps).pm_type == crate::bg_public_h::PM_SPECTATOR as i32
+    if (*ps).pm_type == PM_INTERMISSION as i32
+        || (*ps).pm_type == PM_SPECTATOR as i32
     {
-        (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
-    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= -(40 as i32) {
-        (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
+        (*s).eType = ET_INVISIBLE as i32
+    } else if (*ps).stats[STAT_HEALTH as i32 as usize] <= -(40 as i32) {
+        (*s).eType = ET_INVISIBLE as i32
     } else {
-        (*s).eType = crate::bg_public_h::ET_PLAYER as i32
+        (*s).eType = ET_PLAYER as i32
     }
     (*s).number = (*ps).clientNum;
-    (*s).pos.trType = crate::src::qcommon::q_shared::TR_LINEAR_STOP;
+    (*s).pos.trType = TR_LINEAR_STOP;
     (*s).pos.trBase[0 as i32 as usize] = (*ps).origin[0 as i32 as usize];
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
         (*s).pos.trBase[0 as i32 as usize] =
-            (*s).pos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
         (*s).pos.trBase[1 as i32 as usize] =
-            (*s).pos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
         (*s).pos.trBase[2 as i32 as usize] =
-            (*s).pos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
+            (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     // set the trDelta for flag direction and linear prediction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize];
@@ -1810,25 +1810,25 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).pos.trTime = time;
     // set maximum extra polation time
     (*s).pos.trDuration = 50 as i32; // 1000 / sv_fps (default = 20)
-    (*s).apos.trType = crate::src::qcommon::q_shared::TR_INTERPOLATE; // ET_PLAYER looks here instead of at number
+    (*s).apos.trType = TR_INTERPOLATE; // ET_PLAYER looks here instead of at number
     (*s).apos.trBase[0 as i32 as usize] = (*ps).viewangles[0 as i32 as usize];
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
         (*s).apos.trBase[0 as i32 as usize] =
-            (*s).apos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
         (*s).apos.trBase[1 as i32 as usize] =
-            (*s).apos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
         (*s).apos.trBase[2 as i32 as usize] =
-            (*s).apos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
+            (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
     }
-    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
+    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;
     // so corpses can also reference the proper config
     (*s).eFlags = (*ps).eFlags;
-    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
+    if (*ps).stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         (*s).eFlags |= 0x1 as i32
     } else {
         (*s).eFlags &= !(0x1 as i32)
@@ -1861,8 +1861,8 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).generic1 = (*ps).generic1;
 }
 unsafe extern "C" fn run_static_initializers() {
-    bg_numItems = (::std::mem::size_of::<[crate::bg_public_h::gitem_t; 37]>() as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<crate::bg_public_h::gitem_t>() as libc::c_ulong)
+    bg_numItems = (::std::mem::size_of::<[gitem_t; 37]>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<gitem_t>() as libc::c_ulong)
         .wrapping_sub(1 as i32 as libc::c_ulong) as i32
 }
 #[used]

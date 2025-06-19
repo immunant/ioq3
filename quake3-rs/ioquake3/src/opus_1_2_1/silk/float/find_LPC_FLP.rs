@@ -126,8 +126,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_find_LPC_FLP(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut NLSF_Q15: *mut crate::opus_types_h::opus_int16,
+    mut psEncC: *mut silk_encoder_state,
+    mut NLSF_Q15: *mut opus_int16,
     mut x: *const f32,
     minInvGain: f32,
 )
@@ -140,7 +140,7 @@ pub unsafe extern "C" fn silk_find_LPC_FLP(
     let mut res_nrg: f32 = 0.;
     let mut res_nrg_2nd: f32 = 0.;
     let mut res_nrg_interp: f32 = 0.;
-    let mut NLSF0_Q15: [crate::opus_types_h::opus_int16; 16] = [0; 16];
+    let mut NLSF0_Q15: [opus_int16; 16] = [0; 16];
     let mut a_tmp: [f32; 16] = [0.; 16];
     let mut LPC_res: [f32; 384] = [0.; 384];
     subfr_length = (*psEncC).subfr_length + (*psEncC).predictLPCOrder;
@@ -182,8 +182,8 @@ pub unsafe extern "C" fn silk_find_LPC_FLP(
             /* Interpolate NLSFs for first half */
             crate::src::opus_1_2_1::silk::interpolate::silk_interpolate(
                 NLSF0_Q15.as_mut_ptr(),
-                (*psEncC).prev_NLSFq_Q15.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
-                NLSF_Q15 as *const crate::opus_types_h::opus_int16,
+                (*psEncC).prev_NLSFq_Q15.as_mut_ptr() as *const opus_int16,
+                NLSF_Q15 as *const opus_int16,
                 k,
                 (*psEncC).predictLPCOrder,
             );

@@ -208,28 +208,28 @@ pub type my_main_ptr = *mut my_main_controller;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct my_main_controller {
-    pub pub_0: crate::jpegint_h::jpeg_c_main_controller,
-    pub cur_iMCU_row: crate::jmorecfg_h::JDIMENSION,
-    pub rowgroup_ctr: crate::jmorecfg_h::JDIMENSION,
-    pub suspended: crate::jmorecfg_h::boolean,
-    pub pass_mode: crate::jpegint_h::J_BUF_MODE,
-    pub buffer: [crate::jpeglib_h::JSAMPARRAY; 10],
+    pub pub_0: jpeg_c_main_controller,
+    pub cur_iMCU_row: JDIMENSION,
+    pub rowgroup_ctr: JDIMENSION,
+    pub suspended: boolean,
+    pub pass_mode: J_BUF_MODE,
+    pub buffer: [JSAMPARRAY; 10],
 }
 /*
  * Initialize for a processing pass.
  */
 
 unsafe extern "C" fn start_pass_main(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut pass_mode: crate::jpegint_h::J_BUF_MODE,
+    mut cinfo: j_compress_ptr,
+    mut pass_mode: J_BUF_MODE,
 ) {
     let mut main_ptr: my_main_ptr = (*cinfo).main as my_main_ptr;
     /* Do nothing in raw-data mode. */
     if (*cinfo).raw_data_in != 0 {
         return;
     } /* initialize counters */
-    (*main_ptr).cur_iMCU_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION; /* save mode for use by process_data */
-    (*main_ptr).rowgroup_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+    (*main_ptr).cur_iMCU_row = 0 as i32 as JDIMENSION; /* save mode for use by process_data */
+    (*main_ptr).rowgroup_ctr = 0 as i32 as JDIMENSION;
     (*main_ptr).suspended = 0 as i32;
     (*main_ptr).pass_mode = pass_mode;
     match pass_mode as u32 {
@@ -237,22 +237,22 @@ unsafe extern "C" fn start_pass_main(
             (*main_ptr).pub_0.process_data = Some(
                 process_data_simple_main
                     as unsafe extern "C" fn(
-                        _: crate::jpeglib_h::j_compress_ptr,
-                        _: crate::jpeglib_h::JSAMPARRAY,
-                        _: *mut crate::jmorecfg_h::JDIMENSION,
-                        _: crate::jmorecfg_h::JDIMENSION,
+                        _: j_compress_ptr,
+                        _: JSAMPARRAY,
+                        _: *mut JDIMENSION,
+                        _: JDIMENSION,
                     ) -> (),
             )
         }
         _ => {
-            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+            (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr
+                cinfo as j_common_ptr
             );
         }
     };
@@ -265,16 +265,16 @@ unsafe extern "C" fn start_pass_main(
  */
 
 unsafe extern "C" fn process_data_simple_main(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut in_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_rows_avail: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_compress_ptr,
+    mut input_buf: JSAMPARRAY,
+    mut in_row_ctr: *mut JDIMENSION,
+    mut in_rows_avail: JDIMENSION,
 ) {
     let mut main_ptr: my_main_ptr = (*cinfo).main as my_main_ptr;
     while (*main_ptr).cur_iMCU_row < (*cinfo).total_iMCU_rows {
         /* Read input data if we haven't filled the main buffer yet */
         if (*main_ptr).rowgroup_ctr
-            < (*cinfo).min_DCT_v_scaled_size as crate::jmorecfg_h::JDIMENSION
+            < (*cinfo).min_DCT_v_scaled_size as JDIMENSION
         {
             Some(
                 (*(*cinfo).prep)
@@ -288,7 +288,7 @@ unsafe extern "C" fn process_data_simple_main(
                 in_rows_avail,
                 (*main_ptr).buffer.as_mut_ptr(),
                 &mut (*main_ptr).rowgroup_ctr,
-                (*cinfo).min_DCT_v_scaled_size as crate::jmorecfg_h::JDIMENSION,
+                (*cinfo).min_DCT_v_scaled_size as JDIMENSION,
             );
         }
         /* If we don't have a full iMCU row buffered, return to application for
@@ -296,7 +296,7 @@ unsafe extern "C" fn process_data_simple_main(
          * at the bottom of the image.
          */
         if (*main_ptr).rowgroup_ctr
-            != (*cinfo).min_DCT_v_scaled_size as crate::jmorecfg_h::JDIMENSION
+            != (*cinfo).min_DCT_v_scaled_size as JDIMENSION
         {
             return;
         }
@@ -328,7 +328,7 @@ unsafe extern "C" fn process_data_simple_main(
             *in_row_ctr = (*in_row_ctr).wrapping_add(1);
             (*main_ptr).suspended = 0 as i32
         }
-        (*main_ptr).rowgroup_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
+        (*main_ptr).rowgroup_ctr = 0 as i32 as JDIMENSION;
         (*main_ptr).cur_iMCU_row = (*main_ptr).cur_iMCU_row.wrapping_add(1)
     }
 }
@@ -353,29 +353,29 @@ unsafe extern "C" fn process_data_simple_main(
 #[no_mangle]
 
 pub unsafe extern "C" fn jinit_c_main_controller(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut need_full_buffer: crate::jmorecfg_h::boolean,
+    mut cinfo: j_compress_ptr,
+    mut need_full_buffer: boolean,
 ) {
     let mut main_ptr: my_main_ptr = 0 as *mut my_main_controller;
     let mut ci: i32 = 0;
-    let mut compptr: *mut crate::jpeglib_h::jpeg_component_info =
-        0 as *mut crate::jpeglib_h::jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info =
+        0 as *mut jpeg_component_info;
     main_ptr = Some(
         (*(*cinfo).mem)
             .alloc_small
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
+        cinfo as j_common_ptr,
         1 as i32,
         ::std::mem::size_of::<my_main_controller>() as libc::c_ulong,
     ) as my_main_ptr;
-    (*cinfo).main = main_ptr as *mut crate::jpegint_h::jpeg_c_main_controller;
+    (*cinfo).main = main_ptr as *mut jpeg_c_main_controller;
     (*main_ptr).pub_0.start_pass = Some(
         start_pass_main
             as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_compress_ptr,
-                _: crate::jpegint_h::J_BUF_MODE,
+                _: j_compress_ptr,
+                _: J_BUF_MODE,
             ) -> (),
     );
     /* We don't need to create a buffer in raw-data mode. */
@@ -386,13 +386,13 @@ pub unsafe extern "C" fn jinit_c_main_controller(
      * may be of a different size.
      */
     if need_full_buffer != 0 {
-        (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+        (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
+        .expect("non-null function pointer")(cinfo as j_common_ptr);
     } else {
         /* Allocate a strip buffer for each component */
         ci = 0 as i32;
@@ -404,13 +404,13 @@ pub unsafe extern "C" fn jinit_c_main_controller(
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr,
+                cinfo as j_common_ptr,
                 1 as i32,
                 (*compptr)
                     .width_in_blocks
                     .wrapping_mul((*compptr).DCT_h_scaled_size as u32),
                 ((*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size)
-                    as crate::jmorecfg_h::JDIMENSION,
+                    as JDIMENSION,
             );
             ci += 1;
             compptr = compptr.offset(1)

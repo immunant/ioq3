@@ -276,7 +276,7 @@ static mut numEdgeDefs: [i32; 1000] = [0; 1000];
 
 static mut facing: [i32; 2000] = [0; 2000];
 
-static mut shadowXyz: [crate::src::qcommon::q_shared::vec3_t; 1000] = [[0.; 3]; 1000];
+static mut shadowXyz: [vec3_t; 1000] = [[0.; 3]; 1000];
 #[no_mangle]
 
 pub unsafe extern "C" fn R_AddEdgeDef(mut i1: i32, mut i2: i32, mut facing_0: i32) {
@@ -309,7 +309,7 @@ pub unsafe extern "C" fn R_RenderShadowEdges() {
     _c_edges = 0 as i32;
     _c_rejected = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         c = numEdgeDefs[i as usize];
         j = 0 as i32;
         while j < c {
@@ -328,22 +328,22 @@ pub unsafe extern "C" fn R_RenderShadowEdges() {
                 // if it doesn't share the edge with another front facing
                 // triangle, it is a sil edge
                 if hit[1 as i32 as usize] == 0 as i32 {
-                    crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-                        0x5 as i32 as crate::stdlib::GLenum,
+                    qglBegin.expect("non-null function pointer")(
+                        0x5 as i32 as GLenum,
                     );
-                    crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
-                        crate::src::renderergl1::tr_shade::tess.xyz[i as usize].as_mut_ptr(),
+                    qglVertex3fv.expect("non-null function pointer")(
+                        tess.xyz[i as usize].as_mut_ptr(),
                     );
-                    crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+                    qglVertex3fv.expect("non-null function pointer")(
                         shadowXyz[i as usize].as_mut_ptr(),
                     );
-                    crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
-                        crate::src::renderergl1::tr_shade::tess.xyz[i2 as usize].as_mut_ptr(),
+                    qglVertex3fv.expect("non-null function pointer")(
+                        tess.xyz[i2 as usize].as_mut_ptr(),
                     );
-                    crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
+                    qglVertex3fv.expect("non-null function pointer")(
                         shadowXyz[i2 as usize].as_mut_ptr(),
                     );
-                    crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
+                    qglEnd.expect("non-null function pointer")();
                     _c_edges += 1
                 } else {
                     _c_rejected += 1
@@ -371,27 +371,27 @@ triangleFromEdge[ v1 ][ v2 ]
 pub unsafe extern "C" fn RB_ShadowTessEnd() {
     let mut i: i32 = 0;
     let mut numTris: i32 = 0;
-    let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut rgba: [crate::stdlib::GLboolean; 4] = [0; 4];
-    if crate::src::renderergl1::tr_init::glConfig.stencilBits < 4 as i32 {
+    let mut lightDir: vec3_t = [0.; 3];
+    let mut rgba: [GLboolean; 4] = [0; 4];
+    if glConfig.stencilBits < 4 as i32 {
         return;
     }
     lightDir[0 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[0 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[0 as i32 as usize];
     lightDir[1 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[1 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[1 as i32 as usize];
     lightDir[2 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[2 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[2 as i32 as usize];
     // project vertexes away from light direction
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        shadowXyz[i as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+    while i < tess.numVertexes {
+        shadowXyz[i as usize][0 as i32 as usize] = tess.xyz
             [i as usize][0 as i32 as usize]
             + lightDir[0 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+        shadowXyz[i as usize][1 as i32 as usize] = tess.xyz
             [i as usize][1 as i32 as usize]
             + lightDir[1 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+        shadowXyz[i as usize][2 as i32 as usize] = tess.xyz
             [i as usize][2 as i32 as usize]
             + lightDir[2 as i32 as usize] * -(512 as i32) as f32;
         i += 1
@@ -400,30 +400,30 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     crate::stdlib::memset(
         numEdgeDefs.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (4 as i32 * crate::src::renderergl1::tr_shade::tess.numVertexes) as libc::c_ulong,
+        (4 as i32 * tess.numVertexes) as libc::c_ulong,
     );
-    numTris = crate::src::renderergl1::tr_shade::tess.numIndexes / 3 as i32;
+    numTris = tess.numIndexes / 3 as i32;
     i = 0 as i32;
     while i < numTris {
         let mut i1: i32 = 0;
         let mut i2: i32 = 0;
         let mut i3: i32 = 0;
-        let mut d1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut d2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut d1: vec3_t = [0.; 3];
+        let mut d2: vec3_t = [0.; 3];
+        let mut normal: vec3_t = [0.; 3];
         let mut v1: *mut f32 = 0 as *mut f32;
         let mut v2: *mut f32 = 0 as *mut f32;
         let mut v3: *mut f32 = 0 as *mut f32;
         let mut d: f32 = 0.;
-        i1 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 0 as i32) as usize]
+        i1 = tess.indexes[(i * 3 as i32 + 0 as i32) as usize]
             as i32;
-        i2 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 1 as i32) as usize]
+        i2 = tess.indexes[(i * 3 as i32 + 1 as i32) as usize]
             as i32;
-        i3 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 2 as i32) as usize]
+        i3 = tess.indexes[(i * 3 as i32 + 2 as i32) as usize]
             as i32;
-        v1 = crate::src::renderergl1::tr_shade::tess.xyz[i1 as usize].as_mut_ptr();
-        v2 = crate::src::renderergl1::tr_shade::tess.xyz[i2 as usize].as_mut_ptr();
-        v3 = crate::src::renderergl1::tr_shade::tess.xyz[i3 as usize].as_mut_ptr();
+        v1 = tess.xyz[i1 as usize].as_mut_ptr();
+        v2 = tess.xyz[i2 as usize].as_mut_ptr();
+        v3 = tess.xyz[i3 as usize].as_mut_ptr();
         d1[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
         d1[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
         d1[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
@@ -431,8 +431,8 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         d2[1 as i32 as usize] = *v3.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
         d2[2 as i32 as usize] = *v3.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
         CrossProduct(
-            d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            d1.as_mut_ptr() as *const vec_t,
+            d2.as_mut_ptr() as *const vec_t,
             normal.as_mut_ptr(),
         );
         d = normal[0 as i32 as usize] * lightDir[0 as i32 as usize]
@@ -450,48 +450,48 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         i += 1
     }
     // draw the silhouette edges
-    crate::src::renderergl1::tr_backend::GL_Bind(
-        crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
+    GL_Bind(
+        tr.whiteImage as *mut image_s,
     );
-    crate::src::renderergl1::tr_backend::GL_State((0x2 as i32 | 0x10 as i32) as libc::c_ulong);
-    crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
+    GL_State((0x2 as i32 | 0x10 as i32) as libc::c_ulong);
+    qglColor3f.expect("non-null function pointer")(
         0.2f32, 0.2f32, 0.2f32,
     );
     // don't write to the color buffer
-    crate::src::sdl::sdl_glimp::qglGetBooleanv.expect("non-null function pointer")(
-        0xc23 as i32 as crate::stdlib::GLenum,
+    qglGetBooleanv.expect("non-null function pointer")(
+        0xc23 as i32 as GLenum,
         rgba.as_mut_ptr(),
     );
-    crate::src::sdl::sdl_glimp::qglColorMask.expect("non-null function pointer")(
-        0 as i32 as crate::stdlib::GLboolean,
-        0 as i32 as crate::stdlib::GLboolean,
-        0 as i32 as crate::stdlib::GLboolean,
-        0 as i32 as crate::stdlib::GLboolean,
+    qglColorMask.expect("non-null function pointer")(
+        0 as i32 as GLboolean,
+        0 as i32 as GLboolean,
+        0 as i32 as GLboolean,
+        0 as i32 as GLboolean,
     );
-    crate::src::sdl::sdl_glimp::qglEnable.expect("non-null function pointer")(
-        0xb90 as i32 as crate::stdlib::GLenum,
+    qglEnable.expect("non-null function pointer")(
+        0xb90 as i32 as GLenum,
     );
-    crate::src::sdl::sdl_glimp::qglStencilFunc.expect("non-null function pointer")(
-        0x207 as i32 as crate::stdlib::GLenum,
+    qglStencilFunc.expect("non-null function pointer")(
+        0x207 as i32 as GLenum,
         1 as i32,
-        255 as i32 as crate::stdlib::GLuint,
+        255 as i32 as GLuint,
     );
-    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_BACK_SIDED as i32);
-    crate::src::sdl::sdl_glimp::qglStencilOp.expect("non-null function pointer")(
-        0x1e00 as i32 as crate::stdlib::GLenum,
-        0x1e00 as i32 as crate::stdlib::GLenum,
-        0x1e02 as i32 as crate::stdlib::GLenum,
+    GL_Cull(CT_BACK_SIDED as i32);
+    qglStencilOp.expect("non-null function pointer")(
+        0x1e00 as i32 as GLenum,
+        0x1e00 as i32 as GLenum,
+        0x1e02 as i32 as GLenum,
     );
     R_RenderShadowEdges();
-    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_FRONT_SIDED as i32);
-    crate::src::sdl::sdl_glimp::qglStencilOp.expect("non-null function pointer")(
-        0x1e00 as i32 as crate::stdlib::GLenum,
-        0x1e00 as i32 as crate::stdlib::GLenum,
-        0x1e03 as i32 as crate::stdlib::GLenum,
+    GL_Cull(CT_FRONT_SIDED as i32);
+    qglStencilOp.expect("non-null function pointer")(
+        0x1e00 as i32 as GLenum,
+        0x1e00 as i32 as GLenum,
+        0x1e03 as i32 as GLenum,
     );
     R_RenderShadowEdges();
     // reenable writing to the color buffer
-    crate::src::sdl::sdl_glimp::qglColorMask.expect("non-null function pointer")(
+    qglColorMask.expect("non-null function pointer")(
         rgba[0 as i32 as usize],
         rgba[1 as i32 as usize],
         rgba[2 as i32 as usize],
@@ -511,68 +511,68 @@ overlap and double darken.
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_ShadowFinish() {
-    if (*crate::src::renderergl1::tr_init::r_shadows).integer != 2 as i32 {
+    if (*r_shadows).integer != 2 as i32 {
         return;
     }
-    if crate::src::renderergl1::tr_init::glConfig.stencilBits < 4 as i32 {
+    if glConfig.stencilBits < 4 as i32 {
         return;
     }
-    crate::src::sdl::sdl_glimp::qglEnable.expect("non-null function pointer")(
-        0xb90 as i32 as crate::stdlib::GLenum,
+    qglEnable.expect("non-null function pointer")(
+        0xb90 as i32 as GLenum,
     );
-    crate::src::sdl::sdl_glimp::qglStencilFunc.expect("non-null function pointer")(
-        0x205 as i32 as crate::stdlib::GLenum,
+    qglStencilFunc.expect("non-null function pointer")(
+        0x205 as i32 as GLenum,
         0 as i32,
-        255 as i32 as crate::stdlib::GLuint,
+        255 as i32 as GLuint,
     );
-    crate::src::sdl::sdl_glimp::qglDisable.expect("non-null function pointer")(
-        0x3000 as i32 as crate::stdlib::GLenum,
+    qglDisable.expect("non-null function pointer")(
+        0x3000 as i32 as GLenum,
     );
-    crate::src::renderergl1::tr_backend::GL_Cull(crate::tr_local_h::CT_TWO_SIDED as i32);
-    crate::src::renderergl1::tr_backend::GL_Bind(
-        crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
+    GL_Cull(CT_TWO_SIDED as i32);
+    GL_Bind(
+        tr.whiteImage as *mut image_s,
     );
-    crate::src::sdl::sdl_glimp::qglLoadIdentity.expect("non-null function pointer")();
-    crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
+    qglLoadIdentity.expect("non-null function pointer")();
+    qglColor3f.expect("non-null function pointer")(
         0.6f32, 0.6f32, 0.6f32,
     );
-    crate::src::renderergl1::tr_backend::GL_State(
+    GL_State(
         (0x100 as i32 | 0x3 as i32 | 0x10 as i32) as libc::c_ulong,
     );
     //	qglColor3f( 1, 0, 0 );
     //	GL_State( GLS_DEPTHMASK_TRUE | GLS_SRCBLEND_ONE | GLS_DSTBLEND_ZERO );
-    crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
-        0x7 as i32 as crate::stdlib::GLenum,
+    qglBegin.expect("non-null function pointer")(
+        0x7 as i32 as GLenum,
     );
-    crate::src::sdl::sdl_glimp::qglVertex3f.expect("non-null function pointer")(
-        -(100 as i32) as crate::stdlib::GLfloat,
-        100 as i32 as crate::stdlib::GLfloat,
-        -(10 as i32) as crate::stdlib::GLfloat,
+    qglVertex3f.expect("non-null function pointer")(
+        -(100 as i32) as GLfloat,
+        100 as i32 as GLfloat,
+        -(10 as i32) as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglVertex3f.expect("non-null function pointer")(
-        100 as i32 as crate::stdlib::GLfloat,
-        100 as i32 as crate::stdlib::GLfloat,
-        -(10 as i32) as crate::stdlib::GLfloat,
+    qglVertex3f.expect("non-null function pointer")(
+        100 as i32 as GLfloat,
+        100 as i32 as GLfloat,
+        -(10 as i32) as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglVertex3f.expect("non-null function pointer")(
-        100 as i32 as crate::stdlib::GLfloat,
-        -(100 as i32) as crate::stdlib::GLfloat,
-        -(10 as i32) as crate::stdlib::GLfloat,
+    qglVertex3f.expect("non-null function pointer")(
+        100 as i32 as GLfloat,
+        -(100 as i32) as GLfloat,
+        -(10 as i32) as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglVertex3f.expect("non-null function pointer")(
-        -(100 as i32) as crate::stdlib::GLfloat,
-        -(100 as i32) as crate::stdlib::GLfloat,
-        -(10 as i32) as crate::stdlib::GLfloat,
+    qglVertex3f.expect("non-null function pointer")(
+        -(100 as i32) as GLfloat,
+        -(100 as i32) as GLfloat,
+        -(10 as i32) as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
-    crate::src::sdl::sdl_glimp::qglColor4f.expect("non-null function pointer")(
-        1 as i32 as crate::stdlib::GLfloat,
-        1 as i32 as crate::stdlib::GLfloat,
-        1 as i32 as crate::stdlib::GLfloat,
-        1 as i32 as crate::stdlib::GLfloat,
+    qglEnd.expect("non-null function pointer")();
+    qglColor4f.expect("non-null function pointer")(
+        1 as i32 as GLfloat,
+        1 as i32 as GLfloat,
+        1 as i32 as GLfloat,
+        1 as i32 as GLfloat,
     );
-    crate::src::sdl::sdl_glimp::qglDisable.expect("non-null function pointer")(
-        0xb90 as i32 as crate::stdlib::GLenum,
+    qglDisable.expect("non-null function pointer")(
+        0xb90 as i32 as GLenum,
     );
 }
 /*
@@ -946,28 +946,28 @@ pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
     let mut xyz: *mut f32 = 0 as *mut f32;
     let mut i: i32 = 0;
     let mut h: f32 = 0.;
-    let mut ground: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut light: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ground: vec3_t = [0.; 3];
+    let mut light: vec3_t = [0.; 3];
     let mut groundDist: f32 = 0.;
     let mut d: f32 = 0.;
-    let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    xyz = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
+    let mut lightDir: vec3_t = [0.; 3];
+    xyz = tess.xyz.as_mut_ptr() as *mut f32;
     ground[0 as i32 as usize] =
-        crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize][2 as i32 as usize];
+        backEnd.or.axis[0 as i32 as usize][2 as i32 as usize];
     ground[1 as i32 as usize] =
-        crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize][2 as i32 as usize];
+        backEnd.or.axis[1 as i32 as usize][2 as i32 as usize];
     ground[2 as i32 as usize] =
-        crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize][2 as i32 as usize];
-    groundDist = crate::src::renderergl1::tr_backend::backEnd.or.origin[2 as i32 as usize]
-        - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        backEnd.or.axis[2 as i32 as usize][2 as i32 as usize];
+    groundDist = backEnd.or.origin[2 as i32 as usize]
+        - (*backEnd.currentEntity)
             .e
             .shadowPlane;
     lightDir[0 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[0 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[0 as i32 as usize];
     lightDir[1 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[1 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[1 as i32 as usize];
     lightDir[2 as i32 as usize] =
-        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[2 as i32 as usize];
+        (*backEnd.currentEntity).lightDir[2 as i32 as usize];
     d = lightDir[0 as i32 as usize] * ground[0 as i32 as usize]
         + lightDir[1 as i32 as usize] * ground[1 as i32 as usize]
         + lightDir[2 as i32 as usize] * ground[2 as i32 as usize];
@@ -975,13 +975,13 @@ pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
     if (d as f64) < 0.5f64 {
         lightDir[0 as i32 as usize] = (lightDir[0 as i32 as usize] as f64
             + ground[0 as i32 as usize] as f64 * (0.5f64 - d as f64))
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         lightDir[1 as i32 as usize] = (lightDir[1 as i32 as usize] as f64
             + ground[1 as i32 as usize] as f64 * (0.5f64 - d as f64))
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         lightDir[2 as i32 as usize] = (lightDir[2 as i32 as usize] as f64
             + ground[2 as i32 as usize] as f64 * (0.5f64 - d as f64))
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         d = lightDir[0 as i32 as usize] * ground[0 as i32 as usize]
             + lightDir[1 as i32 as usize] * ground[1 as i32 as usize]
             + lightDir[2 as i32 as usize] * ground[2 as i32 as usize]
@@ -991,7 +991,7 @@ pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
     light[1 as i32 as usize] = lightDir[1 as i32 as usize] * d;
     light[2 as i32 as usize] = lightDir[2 as i32 as usize] * d;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         h = *xyz.offset(0 as i32 as isize) * ground[0 as i32 as usize]
             + *xyz.offset(1 as i32 as isize) * ground[1 as i32 as usize]
             + *xyz.offset(2 as i32 as isize) * ground[2 as i32 as usize]

@@ -89,7 +89,7 @@ pub unsafe extern "C" fn GeneticSelection(mut numranks: i32, mut rankings: *mut 
     }
     //select a bot randomly
     index =
-        ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numranks as f32) as i32; //end for
+        ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numranks as f32) as i32; //end for
     i = 0 as i32;
     while i < numranks {
         if *rankings.offset(index as isize) >= 0 as i32 as f32 {
@@ -160,7 +160,7 @@ pub unsafe extern "C" fn GeneticParentsAndChildSelection(
         *child = 0 as i32;
         *parent2 = *child;
         *parent1 = *parent2;
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     max = 0 as i32 as f32;
     i = 0 as i32;
@@ -181,7 +181,7 @@ pub unsafe extern "C" fn GeneticParentsAndChildSelection(
         *child = 0 as i32;
         *parent2 = *child;
         *parent1 = *parent2;
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::stdlib::memcpy(
         rankings.as_mut_ptr() as *mut libc::c_void,
@@ -214,6 +214,6 @@ pub unsafe extern "C" fn GeneticParentsAndChildSelection(
     }
     //select child
     *child = GeneticSelection(numranks, rankings.as_mut_ptr());
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function GeneticParentsAndChildSelection

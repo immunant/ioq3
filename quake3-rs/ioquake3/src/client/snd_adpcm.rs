@@ -163,7 +163,7 @@ pub unsafe extern "C" fn S_AdpcmEncode(
     mut indata: *mut i16,
     mut outdata: *mut libc::c_char,
     mut len: i32,
-    mut state: *mut crate::snd_local_h::adpcm_state,
+    mut state: *mut adpcm_state,
 ) {
     let mut inp: *mut i16 = 0 as *mut i16; /* Input buffer pointer */
     let mut outp: *mut i8 = 0 as *mut i8; /* output buffer pointer */
@@ -270,7 +270,7 @@ pub unsafe extern "C" fn S_AdpcmDecode(
     mut indata: *const libc::c_char,
     mut outdata: *mut i16,
     mut len: i32,
-    mut state: *mut crate::snd_local_h::adpcm_state,
+    mut state: *mut adpcm_state,
 ) {
     let mut inp: *mut i8 = 0 as *mut i8; /* Input buffer pointer */
     let mut outp: i32 = 0; /* output buffer pointer */
@@ -357,7 +357,7 @@ Returns the amount of memory (in bytes) needed to store the samples in out inter
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AdpcmMemoryNeeded(
-    mut info: *const crate::snd_local_h::wavinfo_t,
+    mut info: *const wavinfo_t,
 ) -> i32 {
     let mut scale: f32 = 0.;
     let mut scaledSampleCount: i32 = 0;
@@ -365,7 +365,7 @@ pub unsafe extern "C" fn S_AdpcmMemoryNeeded(
     let mut blockCount: i32 = 0;
     let mut headerMemory: i32 = 0;
     // determine scale to convert from input sampling rate to desired sampling rate
-    scale = (*info).rate as f32 / crate::src::client::snd_dma::dma.speed as f32;
+    scale = (*info).rate as f32 / dma.speed as f32;
     // calc number of samples at playback sampling rate
     scaledSampleCount = ((*info).samples as f32 / scale) as i32;
     // calc memory need to store those samples using ADPCM at 4 bits per sample
@@ -377,7 +377,7 @@ pub unsafe extern "C" fn S_AdpcmMemoryNeeded(
     }
     // calc memory needed to store the block headers
     headerMemory = (blockCount as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<crate::snd_local_h::adpcm_state_t>() as libc::c_ulong)
+        .wrapping_mul(::std::mem::size_of::<adpcm_state_t>() as libc::c_ulong)
         as i32;
     return sampleMemory + headerMemory;
 }
@@ -389,19 +389,19 @@ S_AdpcmGetSamples
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AdpcmGetSamples(
-    mut chunk: *mut crate::snd_local_h::sndBuffer,
+    mut chunk: *mut sndBuffer,
     mut to: *mut i16,
 ) {
-    let mut state: crate::snd_local_h::adpcm_state_t = crate::snd_local_h::adpcm_state_t {
+    let mut state: adpcm_state_t = adpcm_state_t {
         sample: 0,
         index: 0,
     };
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut out: *mut byte =
+        0 as *mut byte;
     // get the starting state from the block header
     state.index = (*chunk).adpcm.index;
     state.sample = (*chunk).adpcm.sample;
-    out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+    out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     // get samples
     S_AdpcmDecode(
         out as *mut libc::c_char as *const libc::c_char,
@@ -478,32 +478,32 @@ S_AdpcmEncodeSound
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AdpcmEncodeSound(
-    mut sfx: *mut crate::snd_local_h::sfx_t,
+    mut sfx: *mut sfx_t,
     mut samples: *mut i16,
 ) {
-    let mut state: crate::snd_local_h::adpcm_state_t = crate::snd_local_h::adpcm_state_t {
+    let mut state: adpcm_state_t = adpcm_state_t {
         sample: 0,
         index: 0,
     };
     let mut inOffset: i32 = 0;
     let mut count: i32 = 0;
     let mut n: i32 = 0;
-    let mut newchunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut chunk: *mut crate::snd_local_h::sndBuffer = 0 as *mut crate::snd_local_h::sndBuffer;
-    let mut out: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
+    let mut out: *mut byte =
+        0 as *mut byte;
     inOffset = 0 as i32;
     count = (*sfx).soundLength;
     state.index = 0 as i32 as libc::c_char;
     state.sample = *samples.offset(0 as i32 as isize);
-    chunk = 0 as *mut crate::snd_local_h::sndBuffer;
+    chunk = 0 as *mut sndBuffer;
     while count != 0 {
         n = count;
         if n > 1024 as i32 * 2 as i32 * 2 as i32 {
             n = 1024 as i32 * 2 as i32 * 2 as i32
         }
         newchunk =
-            crate::src::client::snd_mem::SND_malloc() as *mut crate::snd_local_h::sndBuffer_s;
+            SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {
@@ -513,7 +513,7 @@ pub unsafe extern "C" fn S_AdpcmEncodeSound(
         // output the header
         (*chunk).adpcm.index = state.index;
         (*chunk).adpcm.sample = state.sample;
-        out = (*chunk).sndChunk.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
+        out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
         // encode the samples
         S_AdpcmEncode(
             samples.offset(inOffset as isize),

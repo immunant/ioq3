@@ -19,7 +19,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -439,67 +439,67 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // sv_game.c -- interface to the game dll
 #[no_mangle]
 
-pub static mut botlib_export: *mut crate::botlib_h::botlib_export_t =
-    0 as *const crate::botlib_h::botlib_export_t as *mut crate::botlib_h::botlib_export_t;
+pub static mut botlib_export: *mut botlib_export_t =
+    0 as *const botlib_export_t as *mut botlib_export_t;
 // these functions must be used instead of pointer arithmetic, because
 // the game allocates gentities with private information after the server shared part
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut crate::g_public_h::sharedEntity_t) -> i32 {
+pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut sharedEntity_t) -> i32 {
     let mut num: i32 = 0;
-    num = ((ent as *mut crate::src::qcommon::q_shared::byte).offset_from(
-        crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte,
+    num = ((ent as *mut byte).offset_from(
+        sv.gentities as *mut byte,
     ) as isize
-        / crate::src::server::sv_main::sv.gentitySize as isize) as i32;
+        / sv.gentitySize as isize) as i32;
     return num;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut crate::g_public_h::sharedEntity_t {
-    let mut ent: *mut crate::g_public_h::sharedEntity_t =
-        0 as *mut crate::g_public_h::sharedEntity_t;
-    ent = (crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte)
-        .offset((crate::src::server::sv_main::sv.gentitySize * num) as isize)
-        as *mut crate::g_public_h::sharedEntity_t;
+pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut sharedEntity_t {
+    let mut ent: *mut sharedEntity_t =
+        0 as *mut sharedEntity_t;
+    ent = (sv.gentities as *mut byte)
+        .offset((sv.gentitySize * num) as isize)
+        as *mut sharedEntity_t;
     return ent;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GameClientNum(
     mut num: i32,
-) -> *mut crate::src::qcommon::q_shared::playerState_t {
-    let mut ps: *mut crate::src::qcommon::q_shared::playerState_t =
-        0 as *mut crate::src::qcommon::q_shared::playerState_t;
-    ps = (crate::src::server::sv_main::sv.gameClients as *mut crate::src::qcommon::q_shared::byte)
-        .offset((crate::src::server::sv_main::sv.gameClientSize * num) as isize)
-        as *mut crate::src::qcommon::q_shared::playerState_t;
+) -> *mut playerState_t {
+    let mut ps: *mut playerState_t =
+        0 as *mut playerState_t;
+    ps = (sv.gameClients as *mut byte)
+        .offset((sv.gameClientSize * num) as isize)
+        as *mut playerState_t;
     return ps;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_SvEntityForGentity(
-    mut gEnt: *mut crate::g_public_h::sharedEntity_t,
-) -> *mut crate::server_h::svEntity_t {
+    mut gEnt: *mut sharedEntity_t,
+) -> *mut svEntity_t {
     if gEnt.is_null() || (*gEnt).s.number < 0 as i32 || (*gEnt).s.number >= (1 as i32) << 10 as i32
     {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"SV_SvEntityForGentity: bad gEnt\x00" as *const u8 as *const libc::c_char,
         );
     }
-    return &mut *crate::src::server::sv_main::sv
+    return &mut *sv
         .svEntities
         .as_mut_ptr()
-        .offset((*gEnt).s.number as isize) as *mut crate::server_h::svEntity_t;
+        .offset((*gEnt).s.number as isize) as *mut svEntity_t;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GEntityForSvEntity(
-    mut svEnt: *mut crate::server_h::svEntity_t,
-) -> *mut crate::g_public_h::sharedEntity_t {
+    mut svEnt: *mut svEntity_t,
+) -> *mut sharedEntity_t {
     let mut num: i32 = 0;
     num =
-        svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr()) as isize as i32;
+        svEnt.offset_from(sv.svEntities.as_mut_ptr()) as isize as i32;
     return SV_GentityNum(num);
 }
 /*
@@ -516,21 +516,21 @@ pub unsafe extern "C" fn SV_GameSendServerCommand(
     mut text: *const libc::c_char,
 ) {
     if clientNum == -(1 as i32) {
-        crate::src::server::sv_main::SV_SendServerCommand(
-            0 as *mut crate::server_h::client_t as *mut crate::server_h::client_s,
+        SV_SendServerCommand(
+            0 as *mut client_t as *mut client_s,
             b"%s\x00" as *const u8 as *const libc::c_char,
             text,
         );
     } else {
         if clientNum < 0 as i32
-            || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer
+            || clientNum >= (*sv_maxclients).integer
         {
             return;
         }
-        crate::src::server::sv_main::SV_SendServerCommand(
-            crate::src::server::sv_main::svs
+        SV_SendServerCommand(
+            svs
                 .clients
-                .offset(clientNum as isize) as *mut crate::server_h::client_s,
+                .offset(clientNum as isize) as *mut client_s,
             b"%s\x00" as *const u8 as *const libc::c_char,
             text,
         );
@@ -546,13 +546,13 @@ Disconnects the client with a message
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GameDropClient(mut clientNum: i32, mut reason: *const libc::c_char) {
-    if clientNum < 0 as i32 || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer {
+    if clientNum < 0 as i32 || clientNum >= (*sv_maxclients).integer {
         return;
     }
-    crate::src::server::sv_client::SV_DropClient(
-        crate::src::server::sv_main::svs
+    SV_DropClient(
+        svs
             .clients
-            .offset(clientNum as isize) as *mut crate::server_h::client_s,
+            .offset(clientNum as isize) as *mut client_s,
         reason,
     );
 }
@@ -566,21 +566,21 @@ sets mins and maxs for inline bmodels
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_SetBrushModel(
-    mut ent: *mut crate::g_public_h::sharedEntity_t,
+    mut ent: *mut sharedEntity_t,
     mut name: *const libc::c_char,
 ) {
-    let mut h: crate::src::qcommon::q_shared::clipHandle_t = 0; // we don't know exactly what is in the brushes
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut h: clipHandle_t = 0; // we don't know exactly what is in the brushes
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     if name.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"SV_SetBrushModel: NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
     if *name.offset(0 as i32 as isize) as i32 != '*' as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"SV_SetBrushModel: %s isn\'t a brush model\x00" as *const u8 as *const libc::c_char,
             name,
         );
@@ -594,9 +594,9 @@ pub unsafe extern "C" fn SV_SetBrushModel(
     (*ent).r.maxs[0 as i32 as usize] = maxs[0 as i32 as usize];
     (*ent).r.maxs[1 as i32 as usize] = maxs[1 as i32 as usize];
     (*ent).r.maxs[2 as i32 as usize] = maxs[2 as i32 as usize];
-    (*ent).r.bmodel = crate::src::qcommon::q_shared::qtrue;
+    (*ent).r.bmodel = qtrue;
     (*ent).r.contents = -(1 as i32);
-    crate::src::server::sv_world::SV_LinkEntity(ent as *mut crate::g_public_h::sharedEntity_t);
+    SV_LinkEntity(ent as *mut sharedEntity_t);
     // FIXME: remove
 }
 /*
@@ -609,15 +609,15 @@ Also checks portalareas so that doors block sight
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_inPVS(
-    mut p1: *const crate::src::qcommon::q_shared::vec_t,
-    mut p2: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut p1: *const vec_t,
+    mut p2: *const vec_t,
+) -> qboolean {
     let mut leafnum: i32 = 0; // a door blocks sight
     let mut cluster: i32 = 0;
     let mut area1: i32 = 0;
     let mut area2: i32 = 0;
-    let mut mask: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut mask: *mut byte =
+        0 as *mut byte;
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     area1 = crate::src::qcommon::cm_load::CM_LeafArea(leafnum);
@@ -629,12 +629,12 @@ pub unsafe extern "C" fn SV_inPVS(
         && *mask.offset((cluster >> 3 as i32) as isize) as i32 & (1 as i32) << (cluster & 7 as i32)
             == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if crate::src::qcommon::cm_test::CM_AreasConnected(area1, area2) as u64 == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -646,13 +646,13 @@ Does NOT check portalareas
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_inPVSIgnorePortals(
-    mut p1: *const crate::src::qcommon::q_shared::vec_t,
-    mut p2: *const crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut p1: *const vec_t,
+    mut p2: *const vec_t,
+) -> qboolean {
     let mut leafnum: i32 = 0;
     let mut cluster: i32 = 0;
-    let mut mask: *mut crate::src::qcommon::q_shared::byte =
-        0 as *mut crate::src::qcommon::q_shared::byte;
+    let mut mask: *mut byte =
+        0 as *mut byte;
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     mask = crate::src::qcommon::cm_test::CM_ClusterPVS(cluster);
@@ -662,9 +662,9 @@ pub unsafe extern "C" fn SV_inPVSIgnorePortals(
         && *mask.offset((cluster >> 3 as i32) as isize) as i32 & (1 as i32) << (cluster & 7 as i32)
             == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ========================
@@ -674,10 +674,10 @@ SV_AdjustAreaPortalState
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_AdjustAreaPortalState(
-    mut ent: *mut crate::g_public_h::sharedEntity_t,
-    mut open: crate::src::qcommon::q_shared::qboolean,
+    mut ent: *mut sharedEntity_t,
+    mut open: qboolean,
 ) {
-    let mut svEnt: *mut crate::server_h::svEntity_t = 0 as *mut crate::server_h::svEntity_t;
+    let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
     svEnt = SV_SvEntityForGentity(ent);
     if (*svEnt).areanum2 == -(1 as i32) {
         return;
@@ -696,21 +696,21 @@ SV_EntityContact
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_EntityContact(
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut gEnt: *const crate::g_public_h::sharedEntity_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut gEnt: *const sharedEntity_t,
     mut capsule: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut origin: *const f32 = 0 as *const f32;
     let mut angles: *const f32 = 0 as *const f32;
-    let mut ch: crate::src::qcommon::q_shared::clipHandle_t = 0;
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut ch: clipHandle_t = 0;
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -724,15 +724,15 @@ pub unsafe extern "C" fn SV_EntityContact(
     // check for exact collision
     origin = (*gEnt).r.currentOrigin.as_ptr();
     angles = (*gEnt).r.currentAngles.as_ptr();
-    ch = crate::src::server::sv_world::SV_ClipHandleForEntity(
-        gEnt as *const crate::g_public_h::sharedEntity_t,
+    ch = SV_ClipHandleForEntity(
+        gEnt as *const sharedEntity_t,
     );
     crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
-        &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        crate::src::qcommon::q_math::vec3_origin.as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        &mut trace as *mut _ as *mut trace_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
+        vec3_origin.as_mut_ptr()
+            as *const vec_t,
         mins,
         maxs,
         ch,
@@ -753,15 +753,15 @@ SV_GetServerinfo
 
 pub unsafe extern "C" fn SV_GetServerinfo(mut buffer: *mut libc::c_char, mut bufferSize: i32) {
     if bufferSize < 1 as i32 {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+        Com_Error(
+            ERR_DROP as i32,
             b"SV_GetServerinfo: bufferSize == %i\x00" as *const u8 as *const libc::c_char,
             bufferSize,
         );
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         buffer,
-        crate::src::qcommon::cvar::Cvar_InfoString(0x4 as i32),
+        Cvar_InfoString(0x4 as i32),
         bufferSize,
     );
 }
@@ -774,17 +774,17 @@ SV_LocateGameData
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_LocateGameData(
-    mut gEnts: *mut crate::g_public_h::sharedEntity_t,
+    mut gEnts: *mut sharedEntity_t,
     mut numGEntities: i32,
     mut sizeofGEntity_t: i32,
-    mut clients: *mut crate::src::qcommon::q_shared::playerState_t,
+    mut clients: *mut playerState_t,
     mut sizeofGameClient: i32,
 ) {
-    crate::src::server::sv_main::sv.gentities = gEnts;
-    crate::src::server::sv_main::sv.gentitySize = sizeofGEntity_t;
-    crate::src::server::sv_main::sv.num_entities = numGEntities;
-    crate::src::server::sv_main::sv.gameClients = clients;
-    crate::src::server::sv_main::sv.gameClientSize = sizeofGameClient;
+    sv.gentities = gEnts;
+    sv.gentitySize = sizeofGEntity_t;
+    sv.num_entities = numGEntities;
+    sv.gameClients = clients;
+    sv.gameClientSize = sizeofGameClient;
 }
 /*
 ===============
@@ -796,16 +796,16 @@ SV_GetUsercmd
 
 pub unsafe extern "C" fn SV_GetUsercmd(
     mut clientNum: i32,
-    mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t,
+    mut cmd: *mut usercmd_t,
 ) {
-    if clientNum < 0 as i32 || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+    if clientNum < 0 as i32 || clientNum >= (*sv_maxclients).integer {
+        Com_Error(
+            ERR_DROP as i32,
             b"SV_GetUsercmd: bad clientNum:%i\x00" as *const u8 as *const libc::c_char,
             clientNum,
         );
     }
-    *cmd = (*crate::src::server::sv_main::svs
+    *cmd = (*svs
         .clients
         .offset(clientNum as isize))
     .lastUsercmd;
@@ -813,8 +813,8 @@ pub unsafe extern "C" fn SV_GetUsercmd(
 //==============================================
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
-    let mut fi: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut fi: floatint_t =
+        floatint_t { f: 0. };
     fi.f = f;
     return fi.i;
 }
@@ -828,548 +828,548 @@ The module is making a system call
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GameSystemCalls(
-    mut args: *mut crate::stdlib::intptr_t,
-) -> crate::stdlib::intptr_t {
+    mut args: *mut intptr_t,
+) -> intptr_t {
     match *args.offset(0 as i32 as isize) {
         0 => {
-            crate::src::qcommon::common::Com_Printf(
+            Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         1 => {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
             );
         }
-        2 => return crate::src::sys::sys_unix::Sys_Milliseconds() as crate::stdlib::intptr_t,
+        2 => return Sys_Milliseconds() as intptr_t,
         3 => {
-            crate::src::qcommon::cvar::Cvar_Register(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t
-                    as *mut crate::src::qcommon::q_shared::vmCvar_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+            Cvar_Register(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vmCvar_t
+                    as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         4 => {
-            crate::src::qcommon::cvar::Cvar_Update(crate::src::qcommon::vm::VM_ArgPtr(
+            Cvar_Update(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::vmCvar_t
-                as *mut crate::src::qcommon::q_shared::vmCvar_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut vmCvar_t
+                as *mut vmCvar_t);
+            return 0 as i32 as intptr_t;
         }
         5 => {
-            crate::src::qcommon::cvar::Cvar_SetSafe(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Cvar_SetSafe(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         6 => {
-            return crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            return Cvar_VariableIntegerValue(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         7 => {
-            crate::src::qcommon::cvar::Cvar_VariableStringBuffer(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Cvar_VariableStringBuffer(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
-        8 => return crate::src::qcommon::cmd::Cmd_Argc() as crate::stdlib::intptr_t,
+        8 => return Cmd_Argc() as intptr_t,
         9 => {
-            crate::src::qcommon::cmd::Cmd_ArgvBuffer(
+            Cmd_ArgvBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         14 => {
-            crate::src::qcommon::cmd::Cbuf_ExecuteText(
+            Cbuf_ExecuteText(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         10 => {
-            return crate::src::qcommon::files::FS_FOpenFileByMode(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            return FS_FOpenFileByMode(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::fileHandle_t,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fsMode_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut fileHandle_t,
+                *args.offset(3 as i32 as isize) as fsMode_t,
+            ) as intptr_t
         }
         11 => {
-            crate::src::qcommon::files::FS_Read(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+            FS_Read(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as fileHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         12 => {
-            crate::src::qcommon::files::FS_Write(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+            FS_Write(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as fileHandle_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         13 => {
-            crate::src::qcommon::files::FS_FCloseFile(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t
+            FS_FCloseFile(
+                *args.offset(1 as i32 as isize) as fileHandle_t
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         38 => {
-            return crate::src::qcommon::files::FS_GetFileList(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            return FS_GetFileList(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         45 => {
-            return crate::src::qcommon::files::FS_Seek(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
+            return FS_Seek(
+                *args.offset(1 as i32 as isize) as fileHandle_t,
                 *args.offset(2 as i32 as isize),
                 *args.offset(3 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         15 => {
             SV_LocateGameData(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::g_public_h::sharedEntity_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut sharedEntity_t,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::playerState_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut playerState_t,
                 *args.offset(5 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         16 => {
             SV_GameDropClient(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         17 => {
             SV_GameSendServerCommand(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         30 => {
-            crate::src::server::sv_world::SV_LinkEntity(crate::src::qcommon::vm::VM_ArgPtr(
+            SV_LinkEntity(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::g_public_h::sharedEntity_t
-                as *mut crate::g_public_h::sharedEntity_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut sharedEntity_t
+                as *mut sharedEntity_t);
+            return 0 as i32 as intptr_t;
         }
         31 => {
-            crate::src::server::sv_world::SV_UnlinkEntity(crate::src::qcommon::vm::VM_ArgPtr(
+            SV_UnlinkEntity(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::g_public_h::sharedEntity_t
-                as *mut crate::g_public_h::sharedEntity_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut sharedEntity_t
+                as *mut sharedEntity_t);
+            return 0 as i32 as intptr_t;
         }
         32 => {
-            return crate::src::server::sv_world::SV_AreaEntities(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+            return SV_AreaEntities(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         33 => {
             return SV_EntityContact(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::g_public_h::sharedEntity_t,
-                crate::src::qcommon::q_shared::qfalse as i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const sharedEntity_t,
+                qfalse as i32,
+            ) as intptr_t
         }
         44 => {
             return SV_EntityContact(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const crate::g_public_h::sharedEntity_t,
-                crate::src::qcommon::q_shared::qtrue as i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *const sharedEntity_t,
+                qtrue as i32,
+            ) as intptr_t
         }
         24 => {
-            crate::src::server::sv_world::SV_Trace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            SV_Trace(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *const vec_t,
                 *args.offset(6 as i32 as isize) as i32,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         43 => {
-            crate::src::server::sv_world::SV_Trace(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::trace_t
-                    as *mut crate::src::qcommon::q_shared::trace_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            SV_Trace(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut trace_t
+                    as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *const vec_t,
                 *args.offset(6 as i32 as isize) as i32,
                 *args.offset(7 as i32 as isize) as i32,
-                crate::src::qcommon::q_shared::qtrue as i32,
+                qtrue as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         25 => {
-            return crate::src::server::sv_world::SV_PointContents(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            return SV_PointContents(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         23 => {
             SV_SetBrushModel(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::g_public_h::sharedEntity_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut sharedEntity_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         26 => {
             return SV_inPVS(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+            ) as intptr_t
         }
         27 => {
             return SV_inPVSIgnorePortals(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
+            ) as intptr_t
         }
         18 => {
-            crate::src::server::sv_init::SV_SetConfigstring(
+            SV_SetConfigstring(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         19 => {
-            crate::src::server::sv_init::SV_GetConfigstring(
+            SV_GetConfigstring(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         21 => {
-            crate::src::server::sv_init::SV_SetUserinfo(
+            SV_SetUserinfo(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         20 => {
-            crate::src::server::sv_init::SV_GetUserinfo(
+            SV_GetUserinfo(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         22 => {
             SV_GetServerinfo(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         28 => {
             SV_AdjustAreaPortalState(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::g_public_h::sharedEntity_t,
-                *args.offset(2 as i32 as isize) as crate::src::qcommon::q_shared::qboolean,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut sharedEntity_t,
+                *args.offset(2 as i32 as isize) as qboolean,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         29 => {
             return crate::src::qcommon::cm_test::CM_AreasConnected(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
-        34 => return crate::src::server::sv_bot::SV_BotAllocateClient() as crate::stdlib::intptr_t,
+        34 => return SV_BotAllocateClient() as intptr_t,
         35 => {
-            crate::src::server::sv_bot::SV_BotFreeClient(*args.offset(1 as i32 as isize) as i32);
-            return 0 as i32 as crate::stdlib::intptr_t;
+            SV_BotFreeClient(*args.offset(1 as i32 as isize) as i32);
+            return 0 as i32 as intptr_t;
         }
         36 => {
             SV_GetUsercmd(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::usercmd_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut usercmd_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         37 => {
             let mut s: *const libc::c_char = 0 as *const libc::c_char;
-            s = crate::src::qcommon::q_shared::COM_Parse(
-                &mut crate::src::server::sv_main::sv.entityParsePoint,
+            s = COM_Parse(
+                &mut sv.entityParsePoint,
             );
-            crate::src::qcommon::q_shared::Q_strncpyz(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            Q_strncpyz(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 s,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            if crate::src::server::sv_main::sv.entityParsePoint.is_null()
+            if sv.entityParsePoint.is_null()
                 && *s.offset(0 as i32 as isize) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as i32 as crate::stdlib::intptr_t;
+                return qfalse as i32 as intptr_t;
             } else {
-                return crate::src::qcommon::q_shared::qtrue as i32 as crate::stdlib::intptr_t;
+                return qtrue as i32 as intptr_t;
             }
         }
         39 => {
-            return crate::src::server::sv_bot::BotImport_DebugPolygonCreate(
+            return BotImport_DebugPolygonCreate(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec3_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec3_t,
+            ) as intptr_t
         }
         40 => {
-            crate::src::server::sv_bot::BotImport_DebugPolygonDelete(
+            BotImport_DebugPolygonDelete(
                 *args.offset(1 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         41 => {
-            return crate::src::qcommon::common::Com_RealTime(crate::src::qcommon::vm::VM_ArgPtr(
+            return Com_RealTime(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::qtime_t
-                as *mut crate::src::qcommon::q_shared::qtime_s)
-                as crate::stdlib::intptr_t
+                as *mut qtime_t
+                as *mut qtime_s)
+                as intptr_t
         }
         42 => {
-            crate::src::asm::snapvector::qsnapvectorsse(crate::src::qcommon::vm::VM_ArgPtr(
+            qsnapvectorsse(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut crate::src::qcommon::q_shared::vec_t);
-            return 0 as i32 as crate::stdlib::intptr_t;
+                as *mut vec_t);
+            return 0 as i32 as intptr_t;
         }
         200 => {
             //====================================
-            return crate::src::server::sv_bot::SV_BotLibSetup() as crate::stdlib::intptr_t;
+            return SV_BotLibSetup() as intptr_t;
         }
-        201 => return crate::src::server::sv_bot::SV_BotLibShutdown() as crate::stdlib::intptr_t,
+        201 => return SV_BotLibShutdown() as intptr_t,
         202 => {
             return (*botlib_export)
                 .BotLibVarSet
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         203 => {
             return (*botlib_export)
                 .BotLibVarGet
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         204 => {
             return (*botlib_export)
                 .PC_AddGlobalDefine
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         578 => {
             return (*botlib_export)
                 .PC_LoadSourceHandle
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         579 => {
             return (*botlib_export)
                 .PC_FreeSourceHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         580 => {
             return (*botlib_export)
                 .PC_ReadTokenHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::pc_token_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut pc_token_t,
+            ) as intptr_t
         }
         581 => {
             return (*botlib_export)
                 .PC_SourceFileAndLine
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+            ) as intptr_t
         }
         205 => {
             return (*botlib_export)
                 .BotLibStartFrame
                 .expect("non-null function pointer")(_vmf(
                 *args.offset(1 as i32 as isize),
-            )) as crate::stdlib::intptr_t
+            )) as intptr_t
         }
         206 => {
             return (*botlib_export)
                 .BotLibLoadMap
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *const libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         207 => {
             return (*botlib_export)
                 .BotLibUpdateEntity
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::botlib_h::bot_entitystate_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_entitystate_t,
+            ) as intptr_t
         }
         208 => {
             return (*botlib_export).Test.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         209 => {
-            return crate::src::server::sv_bot::SV_BotGetSnapshotEntity(
+            return SV_BotGetSnapshotEntity(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         210 => {
-            return crate::src::server::sv_bot::SV_BotGetConsoleMessage(
+            return SV_BotGetConsoleMessage(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         211 => {
             let mut clientNum: i32 = *args.offset(1 as i32 as isize) as i32;
             if clientNum >= 0 as i32
-                && clientNum < (*crate::src::server::sv_main::sv_maxclients).integer
+                && clientNum < (*sv_maxclients).integer
             {
-                crate::src::server::sv_client::SV_ClientThink(
-                    &mut *crate::src::server::sv_main::svs
+                SV_ClientThink(
+                    &mut *svs
                         .clients
                         .offset(clientNum as isize) as *mut _
-                        as *mut crate::server_h::client_s,
-                    crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                        as *mut crate::src::qcommon::q_shared::usercmd_t
-                        as *mut crate::src::qcommon::q_shared::usercmd_s,
+                        as *mut client_s,
+                    VM_ArgPtr(*args.offset(2 as i32 as isize))
+                        as *mut usercmd_t
+                        as *mut usercmd_s,
                 );
             }
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         301 => {
             return (*botlib_export)
                 .aas
                 .AAS_BBoxAreas
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         302 => {
             return (*botlib_export)
@@ -1377,27 +1377,27 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_AreaInfo
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::be_aas_h::aas_areainfo_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut aas_areainfo_s,
+            ) as intptr_t
         }
         575 => {
             return (*botlib_export)
                 .aas
                 .AAS_AlternativeRouteGoals
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut crate::be_aas_h::aas_altroutegoal_s,
+                VM_ArgPtr(*args.offset(6 as i32 as isize))
+                    as *mut aas_altroutegoal_s,
                 *args.offset(7 as i32 as isize) as i32,
                 *args.offset(8 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         303 => {
             (*botlib_export)
@@ -1405,17 +1405,17 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_EntityInfo
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::be_aas_h::aas_entityinfo_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut aas_entityinfo_s,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         304 => {
             return (*botlib_export)
                 .aas
                 .AAS_Initialized
                 .expect("non-null function pointer")()
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
         305 => {
             (*botlib_export)
@@ -1423,61 +1423,61 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_PresenceTypeBoundingBox
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         306 => {
             return FloatAsInt((*botlib_export)
                 .aas
                 .AAS_Time
                 .expect("non-null function pointer")())
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
         307 => {
             return (*botlib_export)
                 .aas
                 .AAS_PointAreaNum
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         577 => {
             return (*botlib_export)
                 .aas
                 .AAS_PointReachabilityAreaIndex
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         308 => {
             return (*botlib_export)
                 .aas
                 .AAS_TraceAreas
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec3_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec3_t,
                 *args.offset(5 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         309 => {
             return (*botlib_export)
                 .aas
                 .AAS_PointContents
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         310 => {
             return (*botlib_export)
@@ -1485,7 +1485,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_NextBSPEntity
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         311 => {
             return (*botlib_export)
@@ -1493,12 +1493,12 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_ValueForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         312 => {
             return (*botlib_export)
@@ -1506,11 +1506,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_VectorForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         313 => {
             return (*botlib_export)
@@ -1518,10 +1518,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_FloatForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut f32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut f32,
+            ) as intptr_t
         }
         314 => {
             return (*botlib_export)
@@ -1529,10 +1529,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_IntForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+            ) as intptr_t
         }
         315 => {
             return (*botlib_export)
@@ -1540,7 +1540,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_AreaReachability
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         316 => {
             return (*botlib_export)
@@ -1548,11 +1548,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_AreaTravelTimeToGoalArea
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         300 => {
             return (*botlib_export)
@@ -1561,18 +1561,18 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         576 => {
             return (*botlib_export)
                 .aas
                 .AAS_PredictRoute
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::be_aas_h::aas_predictroute_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut aas_predictroute_s,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
                 *args.offset(6 as i32 as isize) as i32,
@@ -1581,40 +1581,40 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(9 as i32 as isize) as i32,
                 *args.offset(10 as i32 as isize) as i32,
                 *args.offset(11 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         317 => {
             return (*botlib_export)
                 .aas
                 .AAS_Swimming
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         318 => {
             return (*botlib_export)
                 .aas
                 .AAS_PredictClientMovement
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::be_aas_h::aas_clientmove_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut aas_clientmove_s,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(6 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(7 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(8 as i32 as isize) as i32,
                 *args.offset(9 as i32 as isize) as i32,
                 _vmf(*args.offset(10 as i32 as isize)),
                 *args.offset(11 as i32 as isize) as i32,
                 *args.offset(12 as i32 as isize) as i32,
                 *args.offset(13 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         400 => {
             (*botlib_export)
@@ -1622,10 +1622,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Say
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         401 => {
             (*botlib_export)
@@ -1633,10 +1633,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_SayTeam
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         402 => {
             (*botlib_export)
@@ -1644,10 +1644,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Command
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         403 => {
             (*botlib_export)
@@ -1657,7 +1657,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         404 => {
             (*botlib_export)
@@ -1666,7 +1666,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         405 => {
             (*botlib_export)
@@ -1675,7 +1675,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         406 => {
             (*botlib_export)
@@ -1684,7 +1684,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         407 => {
             (*botlib_export)
@@ -1693,7 +1693,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         408 => {
             (*botlib_export)
@@ -1702,7 +1702,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         409 => {
             (*botlib_export)
@@ -1711,7 +1711,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         410 => {
             (*botlib_export)
@@ -1720,7 +1720,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         411 => {
             (*botlib_export)
@@ -1729,7 +1729,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         412 => {
             (*botlib_export)
@@ -1738,7 +1738,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         413 => {
             (*botlib_export)
@@ -1747,7 +1747,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         414 => {
             (*botlib_export)
@@ -1756,7 +1756,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         415 => {
             (*botlib_export)
@@ -1765,7 +1765,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         416 => {
             (*botlib_export)
@@ -1775,7 +1775,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         417 => {
             (*botlib_export)
@@ -1784,7 +1784,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         418 => {
             (*botlib_export)
@@ -1793,7 +1793,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         419 => {
             (*botlib_export)
@@ -1801,11 +1801,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Move
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         420 => {
             (*botlib_export)
@@ -1813,10 +1813,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_View
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         421 => {
             (*botlib_export)
@@ -1826,7 +1826,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 _vmf(*args.offset(2 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         422 => {
             (*botlib_export)
@@ -1835,10 +1835,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 _vmf(*args.offset(2 as i32 as isize)),
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::botlib_h::bot_input_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut bot_input_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         423 => {
             (*botlib_export)
@@ -1847,17 +1847,17 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         500 => {
             return (*botlib_export)
                 .ai
                 .BotLoadCharacter
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 _vmf(*args.offset(2 as i32 as isize)),
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         501 => {
             (*botlib_export)
@@ -1866,7 +1866,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         502 => {
             return FloatAsInt((*botlib_export)
@@ -1875,7 +1875,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            )) as crate::stdlib::intptr_t
+            )) as intptr_t
         }
         503 => {
             return FloatAsInt((*botlib_export)
@@ -1886,7 +1886,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
-            )) as crate::stdlib::intptr_t
+            )) as intptr_t
         }
         504 => {
             return (*botlib_export)
@@ -1895,7 +1895,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         505 => {
             return (*botlib_export)
@@ -1906,7 +1906,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         506 => {
             (*botlib_export)
@@ -1915,18 +1915,18 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         507 => {
             return (*botlib_export)
                 .ai
                 .BotAllocChatState
                 .expect("non-null function pointer")()
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
         508 => {
             (*botlib_export)
@@ -1935,7 +1935,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         509 => {
             (*botlib_export)
@@ -1944,10 +1944,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         510 => {
             (*botlib_export)
@@ -1957,7 +1957,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         511 => {
             return (*botlib_export)
@@ -1965,9 +1965,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotNextConsoleMessage
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_chat::bot_consolemessage_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_consolemessage_s,
+            ) as intptr_t
         }
         512 => {
             return (*botlib_export)
@@ -1975,7 +1975,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotNumConsoleMessages
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         513 => {
             (*botlib_export)
@@ -1983,27 +1983,27 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotInitialChat
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(6 as i32 as isize))
+                VM_ArgPtr(*args.offset(6 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(7 as i32 as isize))
+                VM_ArgPtr(*args.offset(7 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(8 as i32 as isize))
+                VM_ArgPtr(*args.offset(8 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(9 as i32 as isize))
+                VM_ArgPtr(*args.offset(9 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(10 as i32 as isize))
+                VM_ArgPtr(*args.offset(10 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(11 as i32 as isize))
+                VM_ArgPtr(*args.offset(11 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         569 => {
             return (*botlib_export)
@@ -2011,9 +2011,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotNumInitialChats
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         514 => {
             return (*botlib_export)
@@ -2021,27 +2021,27 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotReplyChat
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(6 as i32 as isize))
+                VM_ArgPtr(*args.offset(6 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(7 as i32 as isize))
+                VM_ArgPtr(*args.offset(7 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(8 as i32 as isize))
+                VM_ArgPtr(*args.offset(8 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(9 as i32 as isize))
+                VM_ArgPtr(*args.offset(9 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(10 as i32 as isize))
+                VM_ArgPtr(*args.offset(10 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(11 as i32 as isize))
+                VM_ArgPtr(*args.offset(11 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(12 as i32 as isize))
+                VM_ArgPtr(*args.offset(12 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         515 => {
             return (*botlib_export)
@@ -2049,7 +2049,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChatLength
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         516 => {
             (*botlib_export)
@@ -2060,7 +2060,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         570 => {
             (*botlib_export)
@@ -2068,72 +2068,72 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetChatMessage
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         517 => {
             return (*botlib_export)
                 .ai
                 .StringContains
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         518 => {
             return (*botlib_export)
                 .ai
                 .BotFindMatch
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_chat::bot_match_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_match_s,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         519 => {
             (*botlib_export)
                 .ai
                 .BotMatchVariable
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_chat::bot_match_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut bot_match_s,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         520 => {
             (*botlib_export)
                 .ai
                 .UnifyWhiteSpaces
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(
+                VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
                 as *mut libc::c_char
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         521 => {
             (*botlib_export)
                 .ai
                 .BotReplaceSynonyms
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as libc::c_ulong,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         522 => {
             return (*botlib_export)
@@ -2141,11 +2141,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadChatFile
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         523 => {
             (*botlib_export)
@@ -2155,7 +2155,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         524 => {
             (*botlib_export)
@@ -2163,11 +2163,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotSetChatName
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         525 => {
             (*botlib_export)
@@ -2176,7 +2176,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         526 => {
             (*botlib_export)
@@ -2185,7 +2185,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         571 => {
             (*botlib_export)
@@ -2195,7 +2195,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         527 => {
             (*botlib_export)
@@ -2203,10 +2203,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotPushGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         528 => {
             (*botlib_export)
@@ -2215,7 +2215,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         529 => {
             (*botlib_export)
@@ -2224,7 +2224,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         530 => {
             (*botlib_export)
@@ -2233,7 +2233,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         531 => {
             (*botlib_export)
@@ -2242,7 +2242,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         532 => {
             (*botlib_export)
@@ -2250,11 +2250,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGoalName
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         533 => {
             return (*botlib_export)
@@ -2262,9 +2262,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetTopGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         534 => {
             return (*botlib_export)
@@ -2272,9 +2272,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetSecondGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         535 => {
             return (*botlib_export)
@@ -2282,11 +2282,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseLTGItem
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         536 => {
             return (*botlib_export)
@@ -2294,25 +2294,25 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseNBGItem
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut bot_goal_s,
                 _vmf(*args.offset(6 as i32 as isize)),
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         537 => {
             return (*botlib_export)
                 .ai
                 .BotTouchingGoal
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         538 => {
             return (*botlib_export)
@@ -2320,13 +2320,13 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotItemGoalInVisButNotVisible
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         539 => {
             return (*botlib_export)
@@ -2334,11 +2334,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetLevelItemGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         567 => {
             return (*botlib_export)
@@ -2346,20 +2346,20 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetNextCampSpotGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         568 => {
             return (*botlib_export)
                 .ai
                 .BotGetMapLocationGoal
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
+            ) as intptr_t
         }
         540 => {
             return FloatAsInt((*botlib_export)
@@ -2368,7 +2368,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-            )) as crate::stdlib::intptr_t
+            )) as intptr_t
         }
         573 => {
             (*botlib_export)
@@ -2379,21 +2379,21 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
                 _vmf(*args.offset(3 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         541 => {
             (*botlib_export)
                 .ai
                 .BotInitLevelItems
                 .expect("non-null function pointer")();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         542 => {
             (*botlib_export)
                 .ai
                 .BotUpdateEntityItems
                 .expect("non-null function pointer")();
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         543 => {
             return (*botlib_export)
@@ -2401,9 +2401,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadItemWeights
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         544 => {
             (*botlib_export)
@@ -2412,7 +2412,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         565 => {
             (*botlib_export)
@@ -2423,7 +2423,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         545 => {
             (*botlib_export)
@@ -2431,10 +2431,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotSaveGoalFuzzyLogic
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         566 => {
             (*botlib_export)
@@ -2444,7 +2444,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 _vmf(*args.offset(2 as i32 as isize)),
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         546 => {
             return (*botlib_export)
@@ -2452,7 +2452,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotAllocGoalState
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         547 => {
             (*botlib_export)
@@ -2461,7 +2461,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         548 => {
             (*botlib_export)
@@ -2470,7 +2470,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         574 => {
             (*botlib_export)
@@ -2478,26 +2478,26 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotAddAvoidSpot
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         549 => {
             (*botlib_export)
                 .ai
                 .BotMoveToGoal
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_move::bot_moveresult_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut bot_moveresult_s,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut bot_goal_s,
                 *args.offset(4 as i32 as isize) as i32,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         550 => {
             return (*botlib_export)
@@ -2505,11 +2505,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotMoveInDirection
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
                 *args.offset(4 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         551 => {
             (*botlib_export)
@@ -2518,7 +2518,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         552 => {
             (*botlib_export)
@@ -2527,17 +2527,17 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         553 => {
             return (*botlib_export)
                 .ai
                 .BotReachabilityArea
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         554 => {
             return (*botlib_export)
@@ -2545,35 +2545,35 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotMovementViewTarget
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_goal_s,
                 *args.offset(3 as i32 as isize) as i32,
                 _vmf(*args.offset(4 as i32 as isize)),
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         572 => {
             return (*botlib_export)
                 .ai
                 .BotPredictVisiblePosition
                 .expect("non-null function pointer")(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut bot_goal_s,
                 *args.offset(4 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(5 as i32 as isize))
+                    as *mut vec_t,
+            ) as intptr_t
         }
         555 => {
             return (*botlib_export)
                 .ai
                 .BotAllocMoveState
                 .expect("non-null function pointer")()
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
         556 => {
             (*botlib_export)
@@ -2582,7 +2582,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         557 => {
             (*botlib_export)
@@ -2590,10 +2590,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotInitMoveState
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_move::bot_initmove_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut bot_initmove_s,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         558 => {
             return (*botlib_export)
@@ -2601,8 +2601,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseBestFightWeapon
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut i32,
+            ) as intptr_t
         }
         559 => {
             (*botlib_export)
@@ -2611,10 +2611,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::botlib::be_ai_weap::weaponinfo_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut weaponinfo_s,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         560 => {
             return (*botlib_export)
@@ -2622,16 +2622,16 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadWeaponWeights
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         561 => {
             return (*botlib_export)
                 .ai
                 .BotAllocWeaponState
                 .expect("non-null function pointer")()
-                as crate::stdlib::intptr_t
+                as intptr_t
         }
         562 => {
             (*botlib_export)
@@ -2640,7 +2640,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         563 => {
             (*botlib_export)
@@ -2649,7 +2649,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         564 => {
             return (*botlib_export)
@@ -2657,33 +2657,33 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .GeneticParentsAndChildSelection
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut f32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut i32,
-            ) as crate::stdlib::intptr_t
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut f32,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut i32,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut i32,
+            ) as intptr_t
         }
         100 => {
             crate::stdlib::memset(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         101 => {
             crate::stdlib::memcpy(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)),
+                VM_ArgPtr(*args.offset(1 as i32 as isize)),
+                VM_ArgPtr(*args.offset(2 as i32 as isize)),
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         102 => {
             crate::stdlib::strncpy(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
@@ -2692,70 +2692,70 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         103 => {
             return FloatAsInt(
                 crate::stdlib::sin(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         104 => {
             return FloatAsInt(
                 crate::stdlib::cos(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         105 => {
             return FloatAsInt(crate::stdlib::atan2(
                 _vmf(*args.offset(1 as i32 as isize)) as f64,
                 _vmf(*args.offset(2 as i32 as isize)) as f64,
-            ) as f32) as crate::stdlib::intptr_t
+            ) as f32) as intptr_t
         }
         106 => {
             return FloatAsInt(
                 crate::stdlib::sqrt(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         107 => {
-            crate::src::qcommon::q_math::MatrixMultiply(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+            MatrixMultiply(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
                     as *mut [f32; 3],
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut [f32; 3],
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
                     as *mut [f32; 3],
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         108 => {
-            crate::src::qcommon::q_math::AngleVectors(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
+            AngleVectors(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize))
+                    as *mut vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         109 => {
-            crate::src::qcommon::q_math::PerpendicularVector(
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            PerpendicularVector(
+                VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize))
+                    as *const vec_t,
             );
-            return 0 as i32 as crate::stdlib::intptr_t;
+            return 0 as i32 as intptr_t;
         }
         110 => {
             return FloatAsInt(
                 crate::stdlib::floor(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         111 => {
             return FloatAsInt(
                 crate::stdlib::ceil(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
-            ) as crate::stdlib::intptr_t
+            ) as intptr_t
         }
         _ => {
-            crate::src::qcommon::common::Com_Error(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+            Com_Error(
+                ERR_DROP as i32,
                 b"Bad game system trap: %ld\x00" as *const u8 as *const libc::c_char,
                 *args.offset(0 as i32 as isize),
             );
@@ -2772,16 +2772,16 @@ Called every time a map changes
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_ShutdownGameProgs() {
-    if crate::src::server::sv_main::gvm.is_null() {
+    if gvm.is_null() {
         return;
     }
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::server::sv_main::gvm,
-        crate::g_public_h::GAME_SHUTDOWN as i32,
-        crate::src::qcommon::q_shared::qfalse as i32,
+    VM_Call(
+        gvm,
+        GAME_SHUTDOWN as i32,
+        qfalse as i32,
     );
-    crate::src::qcommon::vm::VM_Free(crate::src::server::sv_main::gvm);
-    crate::src::server::sv_main::gvm = 0 as *mut crate::qcommon_h::vm_t;
+    VM_Free(gvm);
+    gvm = 0 as *mut vm_t;
 }
 /*
 ==================
@@ -2791,28 +2791,28 @@ Called for both a full init and a restart
 ==================
 */
 
-unsafe extern "C" fn SV_InitGameVM(mut restart: crate::src::qcommon::q_shared::qboolean) {
+unsafe extern "C" fn SV_InitGameVM(mut restart: qboolean) {
     let mut i: i32 = 0;
     // start the entity parsing at the beginning
-    crate::src::server::sv_main::sv.entityParsePoint =
+    sv.entityParsePoint =
         crate::src::qcommon::cm_load::CM_EntityString();
     // clear all gentity pointers that might still be set from
     // a previous level
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=522
     //   now done before GAME_INIT call
     i = 0 as i32;
-    while i < (*crate::src::server::sv_main::sv_maxclients).integer {
-        let ref mut fresh0 = (*crate::src::server::sv_main::svs.clients.offset(i as isize)).gentity;
-        *fresh0 = 0 as *mut crate::g_public_h::sharedEntity_t;
+    while i < (*sv_maxclients).integer {
+        let ref mut fresh0 = (*svs.clients.offset(i as isize)).gentity;
+        *fresh0 = 0 as *mut sharedEntity_t;
         i += 1
     }
     // use the current msec count for a random seed
     // init for this gamestate
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::server::sv_main::gvm,
-        crate::g_public_h::GAME_INIT as i32,
-        crate::src::server::sv_main::sv.time,
-        crate::src::qcommon::common::Com_Milliseconds(),
+    VM_Call(
+        gvm,
+        GAME_INIT as i32,
+        sv.time,
+        Com_Milliseconds(),
         restart as u32,
     );
 }
@@ -2826,26 +2826,26 @@ Called on a map_restart, but not on a normal map change
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_RestartGameProgs() {
-    if crate::src::server::sv_main::gvm.is_null() {
+    if gvm.is_null() {
         return;
     }
-    crate::src::qcommon::vm::VM_Call(
-        crate::src::server::sv_main::gvm,
-        crate::g_public_h::GAME_SHUTDOWN as i32,
-        crate::src::qcommon::q_shared::qtrue as i32,
+    VM_Call(
+        gvm,
+        GAME_SHUTDOWN as i32,
+        qtrue as i32,
     );
     // do a restart instead of a free
-    crate::src::server::sv_main::gvm = crate::src::qcommon::vm::VM_Restart(
-        crate::src::server::sv_main::gvm,
-        crate::src::qcommon::q_shared::qtrue,
+    gvm = VM_Restart(
+        gvm,
+        qtrue,
     );
-    if crate::src::server::sv_main::gvm.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+    if gvm.is_null() {
+        Com_Error(
+            ERR_FATAL as i32,
             b"VM_Restart on game failed\x00" as *const u8 as *const libc::c_char,
         );
     }
-    SV_InitGameVM(crate::src::qcommon::q_shared::qtrue);
+    SV_InitGameVM(qtrue);
 }
 /*
 ===========================================================================
@@ -2999,41 +2999,41 @@ Called on a normal map change, not on a map_restart
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_InitGameProgs() {
-    let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
-        0 as *mut crate::src::qcommon::q_shared::cvar_t;
+    let mut var: *mut cvar_t =
+        0 as *mut cvar_t;
     //FIXME these are temp while I make bots run in vm
     extern "C" {
         #[no_mangle]
         pub static mut bot_enable: i32;
     }
-    var = crate::src::qcommon::cvar::Cvar_Get(
+    var = Cvar_Get(
         b"bot_enable\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
-    ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    ) as *mut cvar_s;
     if !var.is_null() {
         bot_enable = (*var).integer
     } else {
         bot_enable = 0 as i32
     }
     // load the dll or bytecode
-    crate::src::server::sv_main::gvm = crate::src::qcommon::vm::VM_Create(
+    gvm = VM_Create(
         b"qagame\x00" as *const u8 as *const libc::c_char,
         Some(
             SV_GameSystemCalls
-                as unsafe extern "C" fn(_: *mut crate::stdlib::intptr_t) -> crate::stdlib::intptr_t,
+                as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
         ),
-        crate::src::qcommon::cvar::Cvar_VariableValue(
+        Cvar_VariableValue(
             b"vm_game\x00" as *const u8 as *const libc::c_char,
-        ) as crate::qcommon_h::vmInterpret_t,
+        ) as vmInterpret_t,
     );
-    if crate::src::server::sv_main::gvm.is_null() {
-        crate::src::qcommon::common::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as i32,
+    if gvm.is_null() {
+        Com_Error(
+            ERR_FATAL as i32,
             b"VM_Create on game failed\x00" as *const u8 as *const libc::c_char,
         );
     }
-    SV_InitGameVM(crate::src::qcommon::q_shared::qfalse);
+    SV_InitGameVM(qfalse);
 }
 /*
 ====================
@@ -3044,12 +3044,12 @@ See if the current console command is claimed by the game
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GameCommand() -> crate::src::qcommon::q_shared::qboolean {
-    if crate::src::server::sv_main::sv.state as u32 != crate::server_h::SS_GAME as i32 as u32 {
-        return crate::src::qcommon::q_shared::qfalse;
+pub unsafe extern "C" fn SV_GameCommand() -> qboolean {
+    if sv.state as u32 != SS_GAME as i32 as u32 {
+        return qfalse;
     }
-    return crate::src::qcommon::vm::VM_Call(
-        crate::src::server::sv_main::gvm,
-        crate::g_public_h::GAME_CONSOLE_COMMAND as i32,
-    ) as crate::src::qcommon::q_shared::qboolean;
+    return VM_Call(
+        gvm,
+        GAME_CONSOLE_COMMAND as i32,
+    ) as qboolean;
 }

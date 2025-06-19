@@ -283,49 +283,49 @@ R_MDRCullModel
 */
 
 unsafe extern "C" fn R_MDRCullModel(
-    mut header: *mut crate::qfiles_h::mdrHeader_t,
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
+    mut header: *mut mdrHeader_t,
+    mut ent: *mut trRefEntity_t,
 ) -> i32 {
-    let mut bounds: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-    let mut oldFrame: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
-    let mut newFrame: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
+    let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
+    let mut oldFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut newFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
     let mut i: i32 = 0;
     let mut frameSize: i32 = 0;
-    frameSize = &mut *(*(0 as *mut crate::qfiles_h::mdrFrame_t))
+    frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut crate::qfiles_h::mdrBone_t
-        as crate::stddef_h::size_t as i32;
+        .offset((*header).numBones as isize) as *mut mdrBone_t
+        as size_t as i32;
     // compute frame pointers
-    newFrame = (header as *mut crate::src::qcommon::q_shared::byte)
+    newFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
         .offset((frameSize * (*ent).e.frame) as isize)
-        as *mut crate::qfiles_h::mdrFrame_t;
-    oldFrame = (header as *mut crate::src::qcommon::q_shared::byte)
+        as *mut mdrFrame_t;
+    oldFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
         .offset((frameSize * (*ent).e.oldframe) as isize)
-        as *mut crate::qfiles_h::mdrFrame_t;
+        as *mut mdrFrame_t;
     // cull bounding sphere ONLY if this is not an upscaled entity
     if (*ent).e.nonNormalizedAxes as u64 == 0 {
         if (*ent).e.frame == (*ent).e.oldframe {
-            match crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius(
+            match R_CullLocalPointAndRadius(
                 (*newFrame).localOrigin.as_mut_ptr(),
                 (*newFrame).radius,
             ) {
                 2 => {
                     // Ummm... yeah yeah I know we don't really have an md3 here.. but we pretend
                     // we do. After all, the purpose of mdrs are not that different, are they?
-                    crate::src::renderergl1::tr_main::tr
+                    tr
                         .pc
                         .c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 }
                 0 => {
-                    crate::src::renderergl1::tr_main::tr.pc.c_sphere_cull_md3_in += 1;
+                    tr.pc.c_sphere_cull_md3_in += 1;
                     return 0 as i32;
                 }
                 1 => {
-                    crate::src::renderergl1::tr_main::tr
+                    tr
                         .pc
                         .c_sphere_cull_md3_clip += 1
                 }
@@ -334,30 +334,30 @@ unsafe extern "C" fn R_MDRCullModel(
         } else {
             let mut sphereCull: i32 = 0;
             let mut sphereCullB: i32 = 0;
-            sphereCull = crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius(
+            sphereCull = R_CullLocalPointAndRadius(
                 (*newFrame).localOrigin.as_mut_ptr(),
                 (*newFrame).radius,
             );
             if newFrame == oldFrame {
                 sphereCullB = sphereCull
             } else {
-                sphereCullB = crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius(
+                sphereCullB = R_CullLocalPointAndRadius(
                     (*oldFrame).localOrigin.as_mut_ptr(),
                     (*oldFrame).radius,
                 )
             }
             if sphereCull == sphereCullB {
                 if sphereCull == 2 as i32 {
-                    crate::src::renderergl1::tr_main::tr
+                    tr
                         .pc
                         .c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 } else {
                     if sphereCull == 0 as i32 {
-                        crate::src::renderergl1::tr_main::tr.pc.c_sphere_cull_md3_in += 1;
+                        tr.pc.c_sphere_cull_md3_in += 1;
                         return 0 as i32;
                     } else {
-                        crate::src::renderergl1::tr_main::tr
+                        tr
                             .pc
                             .c_sphere_cull_md3_clip += 1
                     }
@@ -384,17 +384,17 @@ unsafe extern "C" fn R_MDRCullModel(
         };
         i += 1
     }
-    match crate::src::renderergl1::tr_main::R_CullLocalBox(bounds.as_mut_ptr()) {
+    match R_CullLocalBox(bounds.as_mut_ptr()) {
         0 => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_in += 1;
+            tr.pc.c_box_cull_md3_in += 1;
             return 0 as i32;
         }
         1 => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_clip += 1;
+            tr.pc.c_box_cull_md3_clip += 1;
             return 1 as i32;
         }
         2 | _ => {
-            crate::src::renderergl1::tr_main::tr.pc.c_box_cull_md3_out += 1;
+            tr.pc.c_box_cull_md3_out += 1;
             return 2 as i32;
         }
     };
@@ -408,28 +408,28 @@ R_MDRComputeFogNum
 #[no_mangle]
 
 pub unsafe extern "C" fn R_MDRComputeFogNum(
-    mut header: *mut crate::qfiles_h::mdrHeader_t,
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
+    mut header: *mut mdrHeader_t,
+    mut ent: *mut trRefEntity_t,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    let mut mdrFrame: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
-    let mut localOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut mdrFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut localOrigin: vec3_t = [0.; 3];
     let mut frameSize: i32 = 0;
-    if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as i32 != 0 {
+    if tr.refdef.rdflags & 0x1 as i32 != 0 {
         return 0 as i32;
     }
-    frameSize = &mut *(*(0 as *mut crate::qfiles_h::mdrFrame_t))
+    frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut crate::qfiles_h::mdrBone_t
-        as crate::stddef_h::size_t as i32;
+        .offset((*header).numBones as isize) as *mut mdrBone_t
+        as size_t as i32;
     // FIXME: non-normalized axis issues
-    mdrFrame = (header as *mut crate::src::qcommon::q_shared::byte)
+    mdrFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
         .offset((frameSize * (*ent).e.frame) as isize)
-        as *mut crate::qfiles_h::mdrFrame_t;
+        as *mut mdrFrame_t;
     localOrigin[0 as i32 as usize] =
         (*ent).e.origin[0 as i32 as usize] + (*mdrFrame).localOrigin[0 as i32 as usize];
     localOrigin[1 as i32 as usize] =
@@ -437,10 +437,10 @@ pub unsafe extern "C" fn R_MDRComputeFogNum(
     localOrigin[2 as i32 as usize] =
         (*ent).e.origin[2 as i32 as usize] + (*mdrFrame).localOrigin[2 as i32 as usize];
     i = 1 as i32;
-    while i < (*crate::src::renderergl1::tr_main::tr.world).numfogs {
-        fog = &mut *(*crate::src::renderergl1::tr_main::tr.world)
+    while i < (*tr.world).numfogs {
+        fog = &mut *(*tr.world)
             .fogs
-            .offset(i as isize) as *mut crate::tr_local_h::fog_t;
+            .offset(i as isize) as *mut fog_t;
         j = 0 as i32;
         while j < 3 as i32 {
             if localOrigin[j as usize] - (*mdrFrame).radius
@@ -470,24 +470,24 @@ R_MDRAddAnimSurfaces
 // much stuff in there is just copied from R_AddMd3Surfaces in tr_mesh.c
 #[no_mangle]
 
-pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut crate::tr_local_h::trRefEntity_t) {
-    let mut header: *mut crate::qfiles_h::mdrHeader_t = 0 as *mut crate::qfiles_h::mdrHeader_t;
-    let mut surface: *mut crate::qfiles_h::mdrSurface_t = 0 as *mut crate::qfiles_h::mdrSurface_t;
-    let mut lod: *mut crate::qfiles_h::mdrLOD_t = 0 as *mut crate::qfiles_h::mdrLOD_t;
-    let mut shader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut skin: *mut crate::tr_local_h::skin_t = 0 as *mut crate::tr_local_h::skin_t;
+pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
+    let mut header: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
+    let mut surface: *mut mdrSurface_t = 0 as *mut mdrSurface_t;
+    let mut lod: *mut mdrLOD_t = 0 as *mut mdrLOD_t;
+    let mut shader: *mut shader_t = 0 as *mut shader_t;
+    let mut skin: *mut skin_t = 0 as *mut skin_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut lodnum: i32 = 0 as i32;
     let mut fogNum: i32 = 0 as i32;
     let mut cull: i32 = 0;
-    let mut personalModel: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    header = (*crate::src::renderergl1::tr_main::tr.currentModel).modelData
-        as *mut crate::qfiles_h::mdrHeader_t;
+    let mut personalModel: qboolean =
+        qfalse;
+    header = (*tr.currentModel).modelData
+        as *mut mdrHeader_t;
     personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0
-        && crate::src::renderergl1::tr_main::tr.viewParms.isPortal as u64 == 0)
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+        && tr.viewParms.isPortal as u64 == 0)
+        as i32 as qboolean;
     if (*ent).e.renderfx & 0x200 as i32 != 0 {
         (*ent).e.frame %= (*header).numFrames;
         (*ent).e.oldframe %= (*header).numFrames
@@ -503,15 +503,15 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut crate::tr_local_h::t
         || (*ent).e.oldframe >= (*header).numFrames
         || (*ent).e.oldframe < 0 as i32
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"R_MDRAddAnimSurfaces: no such frame %d to %d for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             (*ent).e.oldframe,
             (*ent).e.frame,
-            (*crate::src::renderergl1::tr_main::tr.currentModel)
+            (*tr.currentModel)
                 .name
                 .as_mut_ptr(),
         );
@@ -527,8 +527,8 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut crate::tr_local_h::t
         return;
     }
     // figure out the current LOD of the model we're rendering, and set the lod pointer respectively.
-    lodnum = crate::src::renderergl1::tr_mesh::R_ComputeLOD(
-        ent as *mut crate::tr_local_h::trRefEntity_t,
+    lodnum = R_ComputeLOD(
+        ent as *mut trRefEntity_t,
     );
     // check whether this model has as that many LODs at all. If not, try the closest thing we got.
     if (*header).numLODs <= 0 as i32 {
@@ -537,42 +537,42 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut crate::tr_local_h::t
     if (*header).numLODs <= lodnum {
         lodnum = (*header).numLODs - 1 as i32
     }
-    lod = (header as *mut crate::src::qcommon::q_shared::byte).offset((*header).ofsLODs as isize)
-        as *mut crate::qfiles_h::mdrLOD_t;
+    lod = (header as *mut byte).offset((*header).ofsLODs as isize)
+        as *mut mdrLOD_t;
     i = 0 as i32;
     while i < lodnum {
-        lod = (lod as *mut crate::src::qcommon::q_shared::byte).offset((*lod).ofsEnd as isize)
-            as *mut crate::qfiles_h::mdrLOD_t;
+        lod = (lod as *mut byte).offset((*lod).ofsEnd as isize)
+            as *mut mdrLOD_t;
         i += 1
     }
     // set up lighting
     if personalModel as u64 == 0
-        || (*crate::src::renderergl1::tr_init::r_shadows).integer > 1 as i32
+        || (*r_shadows).integer > 1 as i32
     {
-        crate::src::renderergl1::tr_light::R_SetupEntityLighting(
-            &mut crate::src::renderergl1::tr_main::tr.refdef as *mut _
-                as *const crate::tr_local_h::trRefdef_t,
-            ent as *mut crate::tr_local_h::trRefEntity_t,
+        R_SetupEntityLighting(
+            &mut tr.refdef as *mut _
+                as *const trRefdef_t,
+            ent as *mut trRefEntity_t,
         );
     }
     // fogNum?
     fogNum = R_MDRComputeFogNum(header, ent);
-    surface = (lod as *mut crate::src::qcommon::q_shared::byte).offset((*lod).ofsSurfaces as isize)
-        as *mut crate::qfiles_h::mdrSurface_t;
+    surface = (lod as *mut byte).offset((*lod).ofsSurfaces as isize)
+        as *mut mdrSurface_t;
     i = 0 as i32;
     while i < (*lod).numSurfaces {
         if (*ent).e.customShader != 0 {
-            shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle((*ent).e.customShader)
-                as *mut crate::tr_local_h::shader_s
+            shader = R_GetShaderByHandle((*ent).e.customShader)
+                as *mut shader_s
         } else if (*ent).e.customSkin > 0 as i32
-            && (*ent).e.customSkin < crate::src::renderergl1::tr_main::tr.numSkins
+            && (*ent).e.customSkin < tr.numSkins
         {
-            skin = crate::src::renderergl1::tr_image::R_GetSkinByHandle((*ent).e.customSkin)
-                as *mut crate::tr_local_h::skin_s;
-            shader = crate::src::renderergl1::tr_main::tr.defaultShader;
+            skin = R_GetSkinByHandle((*ent).e.customSkin)
+                as *mut skin_s;
+            shader = tr.defaultShader;
             j = 0 as i32;
             while j < (*skin).numSurfaces {
-                if ::libc::strcmp(
+                if libc::strcmp(
                     (*(*skin).surfaces.offset(j as isize)).name.as_mut_ptr(),
                     (*surface).name.as_mut_ptr(),
                 ) == 0
@@ -584,52 +584,52 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut crate::tr_local_h::t
                 }
             }
         } else if (*surface).shaderIndex > 0 as i32 {
-            shader = crate::src::renderergl1::tr_shader::R_GetShaderByHandle((*surface).shaderIndex)
-                as *mut crate::tr_local_h::shader_s
+            shader = R_GetShaderByHandle((*surface).shaderIndex)
+                as *mut shader_s
         } else {
-            shader = crate::src::renderergl1::tr_main::tr.defaultShader
+            shader = tr.defaultShader
         }
         // we will add shadows even if the main object isn't visible in the view
         // stencil shadows can't do personal models unless I polyhedron clip
         if personalModel as u64 == 0
-            && (*crate::src::renderergl1::tr_init::r_shadows).integer == 2 as i32
+            && (*r_shadows).integer == 2 as i32
             && fogNum == 0 as i32
             && (*ent).e.renderfx & (0x40 as i32 | 0x8 as i32) == 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
+            && (*shader).sort == SS_OPAQUE as i32 as f32
         {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                crate::src::renderergl1::tr_main::tr.shadowShader
-                    as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                tr.shadowShader
+                    as *mut shader_s,
                 0 as i32,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
         }
         // projection shadows work fine with personal models
-        if (*crate::src::renderergl1::tr_init::r_shadows).integer == 3 as i32
+        if (*r_shadows).integer == 3 as i32
             && fogNum == 0 as i32
             && (*ent).e.renderfx & 0x100 as i32 != 0
-            && (*shader).sort == crate::tr_local_h::SS_OPAQUE as i32 as f32
+            && (*shader).sort == SS_OPAQUE as i32 as f32
         {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                crate::src::renderergl1::tr_main::tr.projectionShadowShader
-                    as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                tr.projectionShadowShader
+                    as *mut shader_s,
                 0 as i32,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
         }
         if personalModel as u64 == 0 {
-            crate::src::renderergl1::tr_main::R_AddDrawSurf(
-                surface as *mut libc::c_void as *mut crate::tr_local_h::surfaceType_t,
-                shader as *mut crate::tr_local_h::shader_s,
+            R_AddDrawSurf(
+                surface as *mut libc::c_void as *mut surfaceType_t,
+                shader as *mut shader_s,
                 fogNum,
-                crate::src::qcommon::q_shared::qfalse as i32,
+                qfalse as i32,
             );
         }
-        surface = (surface as *mut crate::src::qcommon::q_shared::byte)
+        surface = (surface as *mut byte)
             .offset((*surface).ofsEnd as isize)
-            as *mut crate::qfiles_h::mdrSurface_t;
+            as *mut mdrSurface_t;
         i += 1
     }
 }
@@ -647,7 +647,7 @@ RB_MDRSurfaceAnim
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut crate::qfiles_h::mdrSurface_t) {
+pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -658,78 +658,78 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut crate::qfiles_h::md
     let mut baseIndex: i32 = 0;
     let mut baseVertex: i32 = 0;
     let mut numVerts: i32 = 0;
-    let mut v: *mut crate::qfiles_h::mdrVertex_t = 0 as *mut crate::qfiles_h::mdrVertex_t;
-    let mut header: *mut crate::qfiles_h::mdrHeader_t = 0 as *mut crate::qfiles_h::mdrHeader_t;
-    let mut frame: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
-    let mut oldFrame: *mut crate::qfiles_h::mdrFrame_t = 0 as *mut crate::qfiles_h::mdrFrame_t;
-    let mut bones: [crate::qfiles_h::mdrBone_t; 128] = [crate::qfiles_h::mdrBone_t {
+    let mut v: *mut mdrVertex_t = 0 as *mut mdrVertex_t;
+    let mut header: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
+    let mut frame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut oldFrame: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
+    let mut bones: [mdrBone_t; 128] = [mdrBone_t {
         matrix: [[0.; 4]; 3],
     }; 128];
-    let mut bonePtr: *mut crate::qfiles_h::mdrBone_t = 0 as *mut crate::qfiles_h::mdrBone_t;
-    let mut bone: *mut crate::qfiles_h::mdrBone_t = 0 as *mut crate::qfiles_h::mdrBone_t;
+    let mut bonePtr: *mut mdrBone_t = 0 as *mut mdrBone_t;
+    let mut bone: *mut mdrBone_t = 0 as *mut mdrBone_t;
     let mut frameSize: i32 = 0;
     // don't lerp if lerping off, or this is the only frame, or the last frame...
     //
-    if (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+    if (*backEnd.currentEntity)
         .e
         .oldframe
-        == (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        == (*backEnd.currentEntity)
             .e
             .frame
     {
         backlerp = 0 as i32 as f32; // if backlerp is 0, lerping is off and frontlerp is never used
         frontlerp = 1 as i32 as f32
     } else {
-        backlerp = (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        backlerp = (*backEnd.currentEntity)
             .e
             .backlerp;
         frontlerp = 1.0f32 - backlerp
     }
-    header = (surface as *mut crate::src::qcommon::q_shared::byte)
-        .offset((*surface).ofsHeader as isize) as *mut crate::qfiles_h::mdrHeader_t;
-    frameSize = &mut *(*(0 as *mut crate::qfiles_h::mdrFrame_t))
+    header = (surface as *mut byte)
+        .offset((*surface).ofsHeader as isize) as *mut mdrHeader_t;
+    frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut crate::qfiles_h::mdrBone_t
-        as crate::stddef_h::size_t as i32;
-    frame = (header as *mut crate::src::qcommon::q_shared::byte)
+        .offset((*header).numBones as isize) as *mut mdrBone_t
+        as size_t as i32;
+    frame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
         .offset(
-            ((*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+            ((*backEnd.currentEntity)
                 .e
                 .frame
                 * frameSize) as isize,
-        ) as *mut crate::qfiles_h::mdrFrame_t;
-    oldFrame = (header as *mut crate::src::qcommon::q_shared::byte)
+        ) as *mut mdrFrame_t;
+    oldFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
         .offset(
-            ((*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+            ((*backEnd.currentEntity)
                 .e
                 .oldframe
                 * frameSize) as isize,
-        ) as *mut crate::qfiles_h::mdrFrame_t;
-    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surface).numVerts >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes + (*surface).numTriangles * 3 as i32
+        ) as *mut mdrFrame_t;
+    if tess.numVertexes + (*surface).numVerts >= 1000 as i32
+        || tess.numIndexes + (*surface).numTriangles * 3 as i32
             >= 6 as i32 * 1000 as i32
     {
-        crate::src::renderergl1::tr_surface::RB_CheckOverflow(
+        RB_CheckOverflow(
             (*surface).numVerts,
             (*surface).numTriangles * 3 as i32,
         );
     }
-    triangles = (surface as *mut crate::src::qcommon::q_shared::byte)
+    triangles = (surface as *mut byte)
         .offset((*surface).ofsTriangles as isize) as *mut i32;
     indexes = (*surface).numTriangles * 3 as i32;
-    baseIndex = crate::src::renderergl1::tr_shade::tess.numIndexes;
-    baseVertex = crate::src::renderergl1::tr_shade::tess.numVertexes;
+    baseIndex = tess.numIndexes;
+    baseVertex = tess.numVertexes;
     // Set up all triangles.
     j = 0 as i32;
     while j < indexes {
-        crate::src::renderergl1::tr_shade::tess.indexes[(baseIndex + j) as usize] =
-            (baseVertex + *triangles.offset(j as isize)) as crate::tr_local_h::glIndex_t;
+        tess.indexes[(baseIndex + j) as usize] =
+            (baseVertex + *triangles.offset(j as isize)) as glIndex_t;
         j += 1
     }
-    crate::src::renderergl1::tr_shade::tess.numIndexes += indexes;
+    tess.numIndexes += indexes;
     //
     // lerp all the needed bones
     //
@@ -750,17 +750,17 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut crate::qfiles_h::md
     // deform the vertexes by the lerped bones
     //
     numVerts = (*surface).numVerts;
-    v = (surface as *mut crate::src::qcommon::q_shared::byte).offset((*surface).ofsVerts as isize)
-        as *mut crate::qfiles_h::mdrVertex_t;
+    v = (surface as *mut byte).offset((*surface).ofsVerts as isize)
+        as *mut mdrVertex_t;
     j = 0 as i32;
     while j < numVerts {
-        let mut tempVert: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut tempNormal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut w: *mut crate::qfiles_h::mdrWeight_t = 0 as *mut crate::qfiles_h::mdrWeight_t;
-        tempVert[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        let mut tempVert: vec3_t = [0.; 3];
+        let mut tempNormal: vec3_t = [0.; 3];
+        let mut w: *mut mdrWeight_t = 0 as *mut mdrWeight_t;
+        tempVert[2 as i32 as usize] = 0 as i32 as vec_t;
         tempVert[1 as i32 as usize] = tempVert[2 as i32 as usize];
         tempVert[0 as i32 as usize] = tempVert[1 as i32 as usize];
-        tempNormal[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tempNormal[2 as i32 as usize] = 0 as i32 as vec_t;
         tempNormal[1 as i32 as usize] = tempNormal[2 as i32 as usize];
         tempNormal[0 as i32 as usize] = tempNormal[1 as i32 as usize];
         w = (*v).weights.as_mut_ptr();
@@ -815,27 +815,27 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut crate::qfiles_h::md
             k += 1;
             w = w.offset(1)
         }
-        crate::src::renderergl1::tr_shade::tess.xyz[(baseVertex + j) as usize][0 as i32 as usize] =
+        tess.xyz[(baseVertex + j) as usize][0 as i32 as usize] =
             tempVert[0 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.xyz[(baseVertex + j) as usize][1 as i32 as usize] =
+        tess.xyz[(baseVertex + j) as usize][1 as i32 as usize] =
             tempVert[1 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.xyz[(baseVertex + j) as usize][2 as i32 as usize] =
+        tess.xyz[(baseVertex + j) as usize][2 as i32 as usize] =
             tempVert[2 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.normal[(baseVertex + j) as usize]
+        tess.normal[(baseVertex + j) as usize]
             [0 as i32 as usize] = tempNormal[0 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.normal[(baseVertex + j) as usize]
+        tess.normal[(baseVertex + j) as usize]
             [1 as i32 as usize] = tempNormal[1 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.normal[(baseVertex + j) as usize]
+        tess.normal[(baseVertex + j) as usize]
             [2 as i32 as usize] = tempNormal[2 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.texCoords[(baseVertex + j) as usize]
+        tess.texCoords[(baseVertex + j) as usize]
             [0 as i32 as usize][0 as i32 as usize] = (*v).texCoords[0 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.texCoords[(baseVertex + j) as usize]
+        tess.texCoords[(baseVertex + j) as usize]
             [0 as i32 as usize][1 as i32 as usize] = (*v).texCoords[1 as i32 as usize];
         v = &mut *(*v).weights.as_mut_ptr().offset((*v).numWeights as isize)
-            as *mut crate::qfiles_h::mdrWeight_t as *mut crate::qfiles_h::mdrVertex_t;
+            as *mut mdrWeight_t as *mut mdrVertex_t;
         j += 1
     }
-    crate::src::renderergl1::tr_shade::tess.numVertexes += (*surface).numVerts;
+    tess.numVertexes += (*surface).numVerts;
 }
 /*
 ===========================================================================

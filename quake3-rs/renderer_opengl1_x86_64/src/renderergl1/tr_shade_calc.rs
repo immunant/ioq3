@@ -520,39 +520,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 // tr_shade_calc.c
 
-unsafe extern "C" fn TableForFunc(mut func: crate::tr_local_h::genFunc_t) -> *mut f32 {
+unsafe extern "C" fn TableForFunc(mut func: genFunc_t) -> *mut f32 {
     match func as u32 {
-        1 => return crate::src::renderergl1::tr_main::tr.sinTable.as_mut_ptr(),
+        1 => return tr.sinTable.as_mut_ptr(),
         3 => {
-            return crate::src::renderergl1::tr_main::tr
+            return tr
                 .triangleTable
                 .as_mut_ptr()
         }
         2 => {
-            return crate::src::renderergl1::tr_main::tr
+            return tr
                 .squareTable
                 .as_mut_ptr()
         }
         4 => {
-            return crate::src::renderergl1::tr_main::tr
+            return tr
                 .sawToothTable
                 .as_mut_ptr()
         }
         5 => {
-            return crate::src::renderergl1::tr_main::tr
+            return tr
                 .inverseSawToothTable
                 .as_mut_ptr()
         }
         0 | _ => {}
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Error
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::ERR_DROP as i32,
+        ERR_DROP as i32,
         b"TableForFunc called with invalid function \'%d\' in shader \'%s\'\x00" as *const u8
             as *const libc::c_char,
         func as u32,
-        (*crate::src::renderergl1::tr_shade::tess.shader)
+        (*tess.shader)
             .name
             .as_mut_ptr(),
     );
@@ -563,19 +563,19 @@ unsafe extern "C" fn TableForFunc(mut func: crate::tr_local_h::genFunc_t) -> *mu
 ** Evaluates a given waveForm_t, referencing backEnd.refdef.time directly
 */
 
-unsafe extern "C" fn EvalWaveForm(mut wf: *const crate::tr_local_h::waveForm_t) -> f32 {
+unsafe extern "C" fn EvalWaveForm(mut wf: *const waveForm_t) -> f32 {
     let mut table: *mut f32 = 0 as *mut f32;
     table = TableForFunc((*wf).func);
     return (*wf).base
         + *table.offset(
             ((((*wf).phase as f64
-                + crate::src::renderergl1::tr_shade::tess.shaderTime * (*wf).frequency as f64)
-                * 1024 as i32 as f64) as crate::stdlib::int64_t
+                + tess.shaderTime * (*wf).frequency as f64)
+                * 1024 as i32 as f64) as int64_t
                 & (1024 as i32 - 1 as i32) as isize) as isize,
         ) * (*wf).amplitude;
 }
 
-unsafe extern "C" fn EvalWaveFormClamped(mut wf: *const crate::tr_local_h::waveForm_t) -> f32 {
+unsafe extern "C" fn EvalWaveFormClamped(mut wf: *const waveForm_t) -> f32 {
     let mut glow: f32 = EvalWaveForm(wf);
     if glow < 0 as i32 as f32 {
         return 0 as i32 as f32;
@@ -591,14 +591,14 @@ unsafe extern "C" fn EvalWaveFormClamped(mut wf: *const crate::tr_local_h::waveF
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcStretchTexCoords(
-    mut wf: *const crate::tr_local_h::waveForm_t,
+    mut wf: *const waveForm_t,
     mut st: *mut f32,
 ) {
     let mut p: f32 = 0.;
-    let mut tmi: crate::tr_local_h::texModInfo_t = crate::tr_local_h::texModInfo_t {
-        type_0: crate::tr_local_h::TMOD_NONE,
-        wave: crate::tr_local_h::waveForm_t {
-            func: crate::tr_local_h::GF_NONE,
+    let mut tmi: texModInfo_t = texModInfo_t {
+        type_0: TMOD_NONE,
+        wave: waveForm_t {
+            func: GF_NONE,
             base: 0.,
             amplitude: 0.,
             phase: 0.,
@@ -634,18 +634,18 @@ RB_CalcDeformVertexes
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut crate::tr_local_h::deformStage_t) {
+pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut deformStage_t) {
     let mut i: i32 = 0;
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
     let mut scale: f32 = 0.;
-    let mut xyz: *mut f32 = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
+    let mut xyz: *mut f32 = tess.xyz.as_mut_ptr() as *mut f32;
     let mut normal: *mut f32 =
-        crate::src::renderergl1::tr_shade::tess.normal.as_mut_ptr() as *mut f32;
+        tess.normal.as_mut_ptr() as *mut f32;
     let mut table: *mut f32 = 0 as *mut f32;
     if (*ds).deformationWave.frequency == 0 as i32 as f32 {
         scale = EvalWaveForm(&mut (*ds).deformationWave);
         i = 0 as i32;
-        while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+        while i < tess.numVertexes {
             offset[0 as i32 as usize] = *normal.offset(0 as i32 as isize) * scale;
             offset[1 as i32 as usize] = *normal.offset(1 as i32 as isize) * scale;
             offset[2 as i32 as usize] = *normal.offset(2 as i32 as isize) * scale;
@@ -659,7 +659,7 @@ pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut crate::tr_local_h::d
     } else {
         table = TableForFunc((*ds).deformationWave.func);
         i = 0 as i32;
-        while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+        while i < tess.numVertexes {
             let mut off: f32 = (*xyz.offset(0 as i32 as isize)
                 + *xyz.offset(1 as i32 as isize)
                 + *xyz.offset(2 as i32 as isize))
@@ -667,9 +667,9 @@ pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut crate::tr_local_h::d
             scale = (*ds).deformationWave.base
                 + *table.offset(
                     (((((*ds).deformationWave.phase + off) as f64
-                        + crate::src::renderergl1::tr_shade::tess.shaderTime
+                        + tess.shaderTime
                             * (*ds).deformationWave.frequency as f64)
-                        * 1024 as i32 as f64) as crate::stdlib::int64_t
+                        * 1024 as i32 as f64) as int64_t
                         & (1024 as i32 - 1 as i32) as isize) as isize,
                 ) * (*ds).deformationWave.amplitude;
             offset[0 as i32 as usize] = *normal.offset(0 as i32 as isize) * scale;
@@ -693,38 +693,38 @@ Wiggle the normals for wavy environment mapping
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_CalcDeformNormals(mut ds: *mut crate::tr_local_h::deformStage_t) {
+pub unsafe extern "C" fn RB_CalcDeformNormals(mut ds: *mut deformStage_t) {
     let mut i: i32 = 0;
     let mut scale: f32 = 0.;
-    let mut xyz: *mut f32 = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
+    let mut xyz: *mut f32 = tess.xyz.as_mut_ptr() as *mut f32;
     let mut normal: *mut f32 =
-        crate::src::renderergl1::tr_shade::tess.normal.as_mut_ptr() as *mut f32;
+        tess.normal.as_mut_ptr() as *mut f32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         scale = 0.98f32;
-        scale = crate::src::renderercommon::tr_noise::R_NoiseGet4f(
+        scale = R_NoiseGet4f(
             *xyz.offset(0 as i32 as isize) * scale,
             *xyz.offset(1 as i32 as isize) * scale,
             *xyz.offset(2 as i32 as isize) * scale,
-            crate::src::renderergl1::tr_shade::tess.shaderTime
+            tess.shaderTime
                 * (*ds).deformationWave.frequency as f64,
         );
         *normal.offset(0 as i32 as isize) += (*ds).deformationWave.amplitude * scale;
         scale = 0.98f32;
-        scale = crate::src::renderercommon::tr_noise::R_NoiseGet4f(
+        scale = R_NoiseGet4f(
             100 as i32 as f32 + *xyz.offset(0 as i32 as isize) * scale,
             *xyz.offset(1 as i32 as isize) * scale,
             *xyz.offset(2 as i32 as isize) * scale,
-            crate::src::renderergl1::tr_shade::tess.shaderTime
+            tess.shaderTime
                 * (*ds).deformationWave.frequency as f64,
         );
         *normal.offset(1 as i32 as isize) += (*ds).deformationWave.amplitude * scale;
         scale = 0.98f32;
-        scale = crate::src::renderercommon::tr_noise::R_NoiseGet4f(
+        scale = R_NoiseGet4f(
             200 as i32 as f32 + *xyz.offset(0 as i32 as isize) * scale,
             *xyz.offset(1 as i32 as isize) * scale,
             *xyz.offset(2 as i32 as isize) * scale,
-            crate::src::renderergl1::tr_shade::tess.shaderTime
+            tess.shaderTime
                 * (*ds).deformationWave.frequency as f64,
         );
         *normal.offset(2 as i32 as isize) += (*ds).deformationWave.amplitude * scale;
@@ -742,25 +742,25 @@ RB_CalcBulgeVertexes
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_CalcBulgeVertexes(mut ds: *mut crate::tr_local_h::deformStage_t) {
+pub unsafe extern "C" fn RB_CalcBulgeVertexes(mut ds: *mut deformStage_t) {
     let mut i: i32 = 0;
-    let mut st: *const f32 = crate::src::renderergl1::tr_shade::tess.texCoords[0 as i32 as usize]
+    let mut st: *const f32 = tess.texCoords[0 as i32 as usize]
         .as_mut_ptr() as *const f32;
-    let mut xyz: *mut f32 = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
+    let mut xyz: *mut f32 = tess.xyz.as_mut_ptr() as *mut f32;
     let mut normal: *mut f32 =
-        crate::src::renderergl1::tr_shade::tess.normal.as_mut_ptr() as *mut f32;
+        tess.normal.as_mut_ptr() as *mut f32;
     let mut now: f64 = 0.;
-    now = crate::src::renderergl1::tr_backend::backEnd.refdef.time as f64
+    now = backEnd.refdef.time as f64
         * 0.001f64
         * (*ds).bulgeSpeed as f64;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        let mut off: crate::stdlib::int64_t = 0;
+    while i < tess.numVertexes {
+        let mut off: int64_t = 0;
         let mut scale: f32 = 0.;
         off = ((1024 as i32 as f64 / (3.14159265358979323846f64 * 2 as i32 as f64)) as f32 as f64
             * ((*st.offset(0 as i32 as isize) * (*ds).bulgeWidth) as f64 + now))
-            as crate::stdlib::int64_t;
-        scale = crate::src::renderergl1::tr_main::tr.sinTable
+            as int64_t;
+        scale = tr.sinTable
             [(off & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*ds).bulgeHeight;
         *xyz.offset(0 as i32 as isize) += *normal.offset(0 as i32 as isize) * scale;
@@ -781,27 +781,27 @@ A deformation that can move an entire surface along a wave path
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RB_CalcMoveVertexes(mut ds: *mut crate::tr_local_h::deformStage_t) {
+pub unsafe extern "C" fn RB_CalcMoveVertexes(mut ds: *mut deformStage_t) {
     let mut i: i32 = 0;
     let mut xyz: *mut f32 = 0 as *mut f32;
     let mut table: *mut f32 = 0 as *mut f32;
     let mut scale: f32 = 0.;
-    let mut offset: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut offset: vec3_t = [0.; 3];
     table = TableForFunc((*ds).deformationWave.func);
     scale = (*ds).deformationWave.base
         + *table.offset(
             ((((*ds).deformationWave.phase as f64
-                + crate::src::renderergl1::tr_shade::tess.shaderTime
+                + tess.shaderTime
                     * (*ds).deformationWave.frequency as f64)
-                * 1024 as i32 as f64) as crate::stdlib::int64_t
+                * 1024 as i32 as f64) as int64_t
                 & (1024 as i32 - 1 as i32) as isize) as isize,
         ) * (*ds).deformationWave.amplitude;
     offset[0 as i32 as usize] = (*ds).moveVector[0 as i32 as usize] * scale;
     offset[1 as i32 as usize] = (*ds).moveVector[1 as i32 as usize] * scale;
     offset[2 as i32 as usize] = (*ds).moveVector[2 as i32 as usize] * scale;
-    xyz = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
+    xyz = tess.xyz.as_mut_ptr() as *mut f32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *xyz.offset(0 as i32 as isize) = *xyz.offset(0 as i32 as isize) + offset[0 as i32 as usize];
         *xyz.offset(1 as i32 as isize) = *xyz.offset(1 as i32 as isize) + offset[1 as i32 as usize];
         *xyz.offset(2 as i32 as isize) = *xyz.offset(2 as i32 as isize) + offset[2 as i32 as usize];
@@ -820,46 +820,46 @@ Change a polygon into a bunch of text polygons
 
 pub unsafe extern "C" fn DeformText(mut text: *const libc::c_char) {
     let mut i: i32 = 0;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut width: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut height: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut width: vec3_t = [0.; 3];
+    let mut height: vec3_t = [0.; 3];
     let mut len: i32 = 0;
     let mut ch: i32 = 0;
-    let mut color: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
+    let mut color: [byte; 4] = [0; 4];
     let mut bottom: f32 = 0.;
     let mut top: f32 = 0.;
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    height[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    height[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    height[2 as i32 as usize] = -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
+    let mut mid: vec3_t = [0.; 3];
+    height[0 as i32 as usize] = 0 as i32 as vec_t;
+    height[1 as i32 as usize] = 0 as i32 as vec_t;
+    height[2 as i32 as usize] = -(1 as i32) as vec_t;
     CrossProduct(
-        crate::src::renderergl1::tr_shade::tess.normal[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        height.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        tess.normal[0 as i32 as usize].as_mut_ptr()
+            as *const vec_t,
+        height.as_mut_ptr() as *const vec_t,
         width.as_mut_ptr(),
     );
     // find the midpoint of the box
-    mid[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    mid[2 as i32 as usize] = 0 as i32 as vec_t;
     mid[1 as i32 as usize] = mid[2 as i32 as usize];
     mid[0 as i32 as usize] = mid[1 as i32 as usize];
     bottom = 999999 as i32 as f32;
     top = -(999999 as i32) as f32;
     i = 0 as i32;
     while i < 4 as i32 {
-        mid[0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz[i as usize]
+        mid[0 as i32 as usize] = tess.xyz[i as usize]
             [0 as i32 as usize]
             + mid[0 as i32 as usize];
-        mid[1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz[i as usize]
+        mid[1 as i32 as usize] = tess.xyz[i as usize]
             [1 as i32 as usize]
             + mid[1 as i32 as usize];
-        mid[2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz[i as usize]
+        mid[2 as i32 as usize] = tess.xyz[i as usize]
             [2 as i32 as usize]
             + mid[2 as i32 as usize];
-        if crate::src::renderergl1::tr_shade::tess.xyz[i as usize][2 as i32 as usize] < bottom {
-            bottom = crate::src::renderergl1::tr_shade::tess.xyz[i as usize][2 as i32 as usize]
+        if tess.xyz[i as usize][2 as i32 as usize] < bottom {
+            bottom = tess.xyz[i as usize][2 as i32 as usize]
         }
-        if crate::src::renderergl1::tr_shade::tess.xyz[i as usize][2 as i32 as usize] > top {
-            top = crate::src::renderergl1::tr_shade::tess.xyz[i as usize][2 as i32 as usize]
+        if tess.xyz[i as usize][2 as i32 as usize] > top {
+            top = tess.xyz[i as usize][2 as i32 as usize]
         }
         i += 1
     }
@@ -867,8 +867,8 @@ pub unsafe extern "C" fn DeformText(mut text: *const libc::c_char) {
     origin[1 as i32 as usize] = mid[1 as i32 as usize] * 0.25f32;
     origin[2 as i32 as usize] = mid[2 as i32 as usize] * 0.25f32;
     // determine the individual character size
-    height[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    height[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    height[0 as i32 as usize] = 0 as i32 as vec_t;
+    height[1 as i32 as usize] = 0 as i32 as vec_t;
     height[2 as i32 as usize] = (top - bottom) * 0.5f32;
     width[0 as i32 as usize] = width[0 as i32 as usize] * (height[2 as i32 as usize] * -0.75f32);
     width[1 as i32 as usize] = width[1 as i32 as usize] * (height[2 as i32 as usize] * -0.75f32);
@@ -882,9 +882,9 @@ pub unsafe extern "C" fn DeformText(mut text: *const libc::c_char) {
     origin[2 as i32 as usize] =
         origin[2 as i32 as usize] + width[2 as i32 as usize] * (len - 1 as i32) as f32;
     // clear the shader indexes
-    crate::src::renderergl1::tr_shade::tess.numIndexes = 0 as i32;
-    crate::src::renderergl1::tr_shade::tess.numVertexes = 0 as i32;
-    color[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+    tess.numIndexes = 0 as i32;
+    tess.numVertexes = 0 as i32;
+    color[3 as i32 as usize] = 255 as i32 as byte;
     color[2 as i32 as usize] = color[3 as i32 as usize];
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
@@ -904,7 +904,7 @@ pub unsafe extern "C" fn DeformText(mut text: *const libc::c_char) {
             frow = row as f32 * 0.0625f32;
             fcol = col as f32 * 0.0625f32;
             size = 0.0625f32;
-            crate::src::renderergl1::tr_surface::RB_AddQuadStampExt(
+            RB_AddQuadStampExt(
                 origin.as_mut_ptr(),
                 width.as_mut_ptr(),
                 height.as_mut_ptr(),
@@ -931,35 +931,35 @@ GlobalVectorToLocal
 */
 
 unsafe extern "C" fn GlobalVectorToLocal(
-    mut in_0: *const crate::src::qcommon::q_shared::vec_t,
-    mut out: *mut crate::src::qcommon::q_shared::vec_t,
+    mut in_0: *const vec_t,
+    mut out: *mut vec_t,
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize)
-        * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+        * backEnd.or.axis[0 as i32 as usize]
             [0 as i32 as usize]
         + *in_0.offset(1 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+            * backEnd.or.axis[0 as i32 as usize]
                 [1 as i32 as usize]
         + *in_0.offset(2 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+            * backEnd.or.axis[0 as i32 as usize]
                 [2 as i32 as usize];
     *out.offset(1 as i32 as isize) = *in_0.offset(0 as i32 as isize)
-        * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+        * backEnd.or.axis[1 as i32 as usize]
             [0 as i32 as usize]
         + *in_0.offset(1 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+            * backEnd.or.axis[1 as i32 as usize]
                 [1 as i32 as usize]
         + *in_0.offset(2 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+            * backEnd.or.axis[1 as i32 as usize]
                 [2 as i32 as usize];
     *out.offset(2 as i32 as isize) = *in_0.offset(0 as i32 as isize)
-        * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+        * backEnd.or.axis[2 as i32 as usize]
             [0 as i32 as usize]
         + *in_0.offset(1 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+            * backEnd.or.axis[2 as i32 as usize]
                 [1 as i32 as usize]
         + *in_0.offset(2 as i32 as isize)
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+            * backEnd.or.axis[2 as i32 as usize]
                 [2 as i32 as usize];
 }
 /*
@@ -975,82 +975,82 @@ unsafe extern "C" fn AutospriteDeform() {
     let mut i: i32 = 0;
     let mut oldVerts: i32 = 0;
     let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut mid: vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut radius: f32 = 0.;
-    let mut left: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut leftDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut upDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    if crate::src::renderergl1::tr_shade::tess.numVertexes & 3 as i32 != 0 {
-        crate::src::renderergl1::tr_main::ri
+    let mut left: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
+    let mut leftDir: vec3_t = [0.; 3];
+    let mut upDir: vec3_t = [0.; 3];
+    if tess.numVertexes & 3 as i32 != 0 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Autosprite shader %s had odd vertex count\n\x00" as *const u8 as *const libc::c_char,
-            (*crate::src::renderergl1::tr_shade::tess.shader)
+            (*tess.shader)
                 .name
                 .as_mut_ptr(),
         );
     }
-    if crate::src::renderergl1::tr_shade::tess.numIndexes
-        != (crate::src::renderergl1::tr_shade::tess.numVertexes >> 2 as i32) * 6 as i32
+    if tess.numIndexes
+        != (tess.numVertexes >> 2 as i32) * 6 as i32
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Autosprite shader %s had odd index count\n\x00" as *const u8 as *const libc::c_char,
-            (*crate::src::renderergl1::tr_shade::tess.shader)
+            (*tess.shader)
                 .name
                 .as_mut_ptr(),
         );
     }
-    oldVerts = crate::src::renderergl1::tr_shade::tess.numVertexes;
-    crate::src::renderergl1::tr_shade::tess.numVertexes = 0 as i32;
-    crate::src::renderergl1::tr_shade::tess.numIndexes = 0 as i32;
-    if crate::src::renderergl1::tr_backend::backEnd.currentEntity
-        != &mut crate::src::renderergl1::tr_main::tr.worldEntity
-            as *mut crate::tr_local_h::trRefEntity_t
+    oldVerts = tess.numVertexes;
+    tess.numVertexes = 0 as i32;
+    tess.numIndexes = 0 as i32;
+    if backEnd.currentEntity
+        != &mut tr.worldEntity
+            as *mut trRefEntity_t
     {
         GlobalVectorToLocal(
-            crate::src::renderergl1::tr_backend::backEnd
+            backEnd
                 .viewParms
                 .or
                 .axis[1 as i32 as usize]
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
             leftDir.as_mut_ptr(),
         );
         GlobalVectorToLocal(
-            crate::src::renderergl1::tr_backend::backEnd
+            backEnd
                 .viewParms
                 .or
                 .axis[2 as i32 as usize]
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
             upDir.as_mut_ptr(),
         );
     } else {
-        leftDir[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        leftDir[0 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[1 as i32 as usize][0 as i32 as usize];
-        leftDir[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        leftDir[1 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[1 as i32 as usize][1 as i32 as usize];
-        leftDir[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        leftDir[2 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[1 as i32 as usize][2 as i32 as usize];
-        upDir[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        upDir[0 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[2 as i32 as usize][0 as i32 as usize];
-        upDir[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        upDir[1 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[2 as i32 as usize][1 as i32 as usize];
-        upDir[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        upDir[2 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[2 as i32 as usize][2 as i32 as usize]
@@ -1058,7 +1058,7 @@ unsafe extern "C" fn AutospriteDeform() {
     i = 0 as i32;
     while i < oldVerts {
         // find the midpoint
-        xyz = crate::src::renderergl1::tr_shade::tess.xyz[i as usize].as_mut_ptr(); // / sqrt(2)
+        xyz = tess.xyz[i as usize].as_mut_ptr(); // / sqrt(2)
         mid[0 as i32 as usize] = 0.25f32
             * (*xyz.offset(0 as i32 as isize)
                 + *xyz.offset(4 as i32 as isize)
@@ -1077,7 +1077,7 @@ unsafe extern "C" fn AutospriteDeform() {
         delta[0 as i32 as usize] = *xyz.offset(0 as i32 as isize) - mid[0 as i32 as usize];
         delta[1 as i32 as usize] = *xyz.offset(1 as i32 as isize) - mid[1 as i32 as usize];
         delta[2 as i32 as usize] = *xyz.offset(2 as i32 as isize) - mid[2 as i32 as usize];
-        radius = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+        radius = VectorLength(delta.as_mut_ptr() as *const vec_t)
             * 0.707f32;
         left[0 as i32 as usize] = leftDir[0 as i32 as usize] * radius;
         left[1 as i32 as usize] = leftDir[1 as i32 as usize] * radius;
@@ -1085,30 +1085,30 @@ unsafe extern "C" fn AutospriteDeform() {
         up[0 as i32 as usize] = upDir[0 as i32 as usize] * radius;
         up[1 as i32 as usize] = upDir[1 as i32 as usize] * radius;
         up[2 as i32 as usize] = upDir[2 as i32 as usize] * radius;
-        if crate::src::renderergl1::tr_backend::backEnd
+        if backEnd
             .viewParms
             .isMirror as u64
             != 0
         {
-            left[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+            left[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
                 - left[0 as i32 as usize];
-            left[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+            left[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
                 - left[1 as i32 as usize];
-            left[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+            left[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
                 - left[2 as i32 as usize]
         }
         // compensate for scale in the axes if necessary
-        if (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        if (*backEnd.currentEntity)
             .e
             .nonNormalizedAxes as u64
             != 0
         {
             let mut axisLength: f32 = 0.;
             axisLength = VectorLength(
-                (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+                (*backEnd.currentEntity)
                     .e
                     .axis[0 as i32 as usize]
-                    .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                    .as_mut_ptr() as *const vec_t,
             );
             if axisLength == 0. {
                 axisLength = 0 as i32 as f32
@@ -1122,11 +1122,11 @@ unsafe extern "C" fn AutospriteDeform() {
             up[1 as i32 as usize] = up[1 as i32 as usize] * axisLength;
             up[2 as i32 as usize] = up[2 as i32 as usize] * axisLength
         }
-        crate::src::renderergl1::tr_surface::RB_AddQuadStamp(
+        RB_AddQuadStamp(
             mid.as_mut_ptr(),
             left.as_mut_ptr(),
             up.as_mut_ptr(),
-            crate::src::renderergl1::tr_shade::tess.vertexColors[i as usize].as_mut_ptr(),
+            tess.vertexColors[i as usize].as_mut_ptr(),
         );
         i += 4 as i32
     }
@@ -1155,53 +1155,53 @@ unsafe extern "C" fn Autosprite2Deform() {
     let mut k: i32 = 0;
     let mut indexes: i32 = 0;
     let mut xyz: *mut f32 = 0 as *mut f32;
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    if crate::src::renderergl1::tr_shade::tess.numVertexes & 3 as i32 != 0 {
-        crate::src::renderergl1::tr_main::ri
+    let mut forward: vec3_t = [0.; 3];
+    if tess.numVertexes & 3 as i32 != 0 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Autosprite2 shader %s had odd vertex count\x00" as *const u8 as *const libc::c_char,
-            (*crate::src::renderergl1::tr_shade::tess.shader)
+            (*tess.shader)
                 .name
                 .as_mut_ptr(),
         );
     }
-    if crate::src::renderergl1::tr_shade::tess.numIndexes
-        != (crate::src::renderergl1::tr_shade::tess.numVertexes >> 2 as i32) * 6 as i32
+    if tess.numIndexes
+        != (tess.numVertexes >> 2 as i32) * 6 as i32
     {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"Autosprite2 shader %s had odd index count\x00" as *const u8 as *const libc::c_char,
-            (*crate::src::renderergl1::tr_shade::tess.shader)
+            (*tess.shader)
                 .name
                 .as_mut_ptr(),
         );
     }
-    if crate::src::renderergl1::tr_backend::backEnd.currentEntity
-        != &mut crate::src::renderergl1::tr_main::tr.worldEntity
-            as *mut crate::tr_local_h::trRefEntity_t
+    if backEnd.currentEntity
+        != &mut tr.worldEntity
+            as *mut trRefEntity_t
     {
         GlobalVectorToLocal(
-            crate::src::renderergl1::tr_backend::backEnd
+            backEnd
                 .viewParms
                 .or
                 .axis[0 as i32 as usize]
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
         );
     } else {
-        forward[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        forward[0 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][0 as i32 as usize];
-        forward[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        forward[1 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][1 as i32 as usize];
-        forward[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd
+        forward[2 as i32 as usize] = backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][2 as i32 as usize]
@@ -1211,16 +1211,16 @@ unsafe extern "C" fn Autosprite2Deform() {
     // the shader abstraction
     i = 0 as i32;
     indexes = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut lengths: [f32; 2] = [0.; 2];
         let mut nums: [i32; 2] = [0; 2];
-        let mut mid: [crate::src::qcommon::q_shared::vec3_t; 2] = [[0.; 3]; 2];
-        let mut major: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut minor: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut mid: [vec3_t; 2] = [[0.; 3]; 2];
+        let mut major: vec3_t = [0.; 3];
+        let mut minor: vec3_t = [0.; 3];
         let mut v1: *mut f32 = 0 as *mut f32;
         let mut v2: *mut f32 = 0 as *mut f32;
         // find the midpoint
-        xyz = crate::src::renderergl1::tr_shade::tess.xyz[i as usize].as_mut_ptr();
+        xyz = tess.xyz[i as usize].as_mut_ptr();
         // identify the two shortest edges
         nums[1 as i32 as usize] = 0 as i32;
         nums[0 as i32 as usize] = nums[1 as i32 as usize];
@@ -1229,7 +1229,7 @@ unsafe extern "C" fn Autosprite2Deform() {
         j = 0 as i32;
         while j < 6 as i32 {
             let mut l: f32 = 0.;
-            let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+            let mut temp: vec3_t = [0.; 3];
             v1 = xyz.offset((4 as i32 * edgeVerts[j as usize][0 as i32 as usize]) as isize);
             v2 = xyz.offset((4 as i32 * edgeVerts[j as usize][1 as i32 as usize]) as isize);
             temp[0 as i32 as usize] = *v1.offset(0 as i32 as isize) - *v2.offset(0 as i32 as isize);
@@ -1274,11 +1274,11 @@ unsafe extern "C" fn Autosprite2Deform() {
             mid[1 as i32 as usize][2 as i32 as usize] - mid[0 as i32 as usize][2 as i32 as usize];
         // cross this with the view direction to get minor axis
         CrossProduct(
-            major.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            forward.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            major.as_mut_ptr() as *const vec_t,
+            forward.as_mut_ptr() as *const vec_t,
             minor.as_mut_ptr(),
         );
-        crate::src::qcommon::q_math::VectorNormalize(minor.as_mut_ptr());
+        VectorNormalize(minor.as_mut_ptr());
         // re-project the points
         j = 0 as i32;
         while j < 2 as i32 {
@@ -1294,9 +1294,9 @@ unsafe extern "C" fn Autosprite2Deform() {
             // is used to determine direction of projection
             k = 0 as i32;
             while k < 5 as i32 {
-                if crate::src::renderergl1::tr_shade::tess.indexes[(indexes + k) as usize]
+                if tess.indexes[(indexes + k) as usize]
                     == (i + edgeVerts[nums[j as usize] as usize][0 as i32 as usize]) as u32
-                    && crate::src::renderergl1::tr_shade::tess.indexes
+                    && tess.indexes
                         [(indexes + k + 1 as i32) as usize]
                         == (i + edgeVerts[nums[j as usize] as usize][1 as i32 as usize]) as u32
                 {
@@ -1347,13 +1347,13 @@ RB_DeformTessGeometry
 
 pub unsafe extern "C" fn RB_DeformTessGeometry() {
     let mut i: i32 = 0;
-    let mut ds: *mut crate::tr_local_h::deformStage_t = 0 as *mut crate::tr_local_h::deformStage_t;
+    let mut ds: *mut deformStage_t = 0 as *mut deformStage_t;
     i = 0 as i32;
-    while i < (*crate::src::renderergl1::tr_shade::tess.shader).numDeforms {
-        ds = &mut *(*crate::src::renderergl1::tr_shade::tess.shader)
+    while i < (*tess.shader).numDeforms {
+        ds = &mut *(*tess.shader)
             .deforms
             .as_mut_ptr()
-            .offset(i as isize) as *mut crate::tr_local_h::deformStage_t;
+            .offset(i as isize) as *mut deformStage_t;
         match (*ds).deformation as u32 {
             2 => {
                 RB_CalcDeformNormals(ds);
@@ -1368,7 +1368,7 @@ pub unsafe extern "C" fn RB_DeformTessGeometry() {
                 RB_CalcMoveVertexes(ds);
             }
             5 => {
-                crate::src::renderergl1::tr_shadows::RB_ProjectionShadowDeform();
+                RB_ProjectionShadowDeform();
             }
             6 => {
                 AutospriteDeform();
@@ -1378,9 +1378,9 @@ pub unsafe extern "C" fn RB_DeformTessGeometry() {
             }
             8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 => {
                 DeformText(
-                    crate::src::renderergl1::tr_backend::backEnd.refdef.text[((*ds).deformation
+                    backEnd.refdef.text[((*ds).deformation
                         as u32)
-                        .wrapping_sub(crate::tr_local_h::DEFORM_TEXT0 as i32 as u32)
+                        .wrapping_sub(DEFORM_TEXT0 as i32 as u32)
                         as usize]
                         .as_mut_ptr(),
                 );
@@ -1406,18 +1406,18 @@ pub unsafe extern "C" fn RB_CalcColorFromEntity(mut dstColors: *mut u8) {
     let mut i: i32 = 0;
     let mut pColors: *mut i32 = dstColors as *mut i32;
     let mut c: i32 = 0;
-    if crate::src::renderergl1::tr_backend::backEnd
+    if backEnd
         .currentEntity
         .is_null()
     {
         return;
     }
-    c = *((*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+    c = *((*backEnd.currentEntity)
         .e
         .shaderRGBA
         .as_mut_ptr() as *mut i32);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *pColors = c;
         i += 1;
         pColors = pColors.offset(1)
@@ -1433,31 +1433,31 @@ pub unsafe extern "C" fn RB_CalcColorFromOneMinusEntity(mut dstColors: *mut u8) 
     let mut pColors: *mut i32 = dstColors as *mut i32;
     let mut invModulate: [u8; 4] = [0; 4];
     let mut c: i32 = 0;
-    if crate::src::renderergl1::tr_backend::backEnd
+    if backEnd
         .currentEntity
         .is_null()
     {
         return;
     }
     invModulate[0 as i32 as usize] = (255 as i32
-        - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        - (*backEnd.currentEntity)
             .e
             .shaderRGBA[0 as i32 as usize] as i32) as u8;
     invModulate[1 as i32 as usize] = (255 as i32
-        - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        - (*backEnd.currentEntity)
             .e
             .shaderRGBA[1 as i32 as usize] as i32) as u8;
     invModulate[2 as i32 as usize] = (255 as i32
-        - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        - (*backEnd.currentEntity)
             .e
             .shaderRGBA[2 as i32 as usize] as i32) as u8;
     invModulate[3 as i32 as usize] = (255 as i32
-        - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+        - (*backEnd.currentEntity)
             .e
             .shaderRGBA[3 as i32 as usize] as i32) as u8;
     c = *(invModulate.as_mut_ptr() as *mut i32);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *pColors = c;
         i += 1;
         pColors = pColors.offset(1)
@@ -1470,7 +1470,7 @@ pub unsafe extern "C" fn RB_CalcColorFromOneMinusEntity(mut dstColors: *mut u8) 
 
 pub unsafe extern "C" fn RB_CalcAlphaFromEntity(mut dstColors: *mut u8) {
     let mut i: i32 = 0;
-    if crate::src::renderergl1::tr_backend::backEnd
+    if backEnd
         .currentEntity
         .is_null()
     {
@@ -1478,8 +1478,8 @@ pub unsafe extern "C" fn RB_CalcAlphaFromEntity(mut dstColors: *mut u8) {
     }
     dstColors = dstColors.offset(3 as i32 as isize);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        *dstColors = (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+    while i < tess.numVertexes {
+        *dstColors = (*backEnd.currentEntity)
             .e
             .shaderRGBA[3 as i32 as usize];
         i += 1;
@@ -1493,7 +1493,7 @@ pub unsafe extern "C" fn RB_CalcAlphaFromEntity(mut dstColors: *mut u8) {
 
 pub unsafe extern "C" fn RB_CalcAlphaFromOneMinusEntity(mut dstColors: *mut u8) {
     let mut i: i32 = 0;
-    if crate::src::renderergl1::tr_backend::backEnd
+    if backEnd
         .currentEntity
         .is_null()
     {
@@ -1501,9 +1501,9 @@ pub unsafe extern "C" fn RB_CalcAlphaFromOneMinusEntity(mut dstColors: *mut u8) 
     }
     dstColors = dstColors.offset(3 as i32 as isize);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *dstColors = (0xff as i32
-            - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+            - (*backEnd.currentEntity)
                 .e
                 .shaderRGBA[3 as i32 as usize] as i32) as u8;
         i += 1;
@@ -1516,41 +1516,41 @@ pub unsafe extern "C" fn RB_CalcAlphaFromOneMinusEntity(mut dstColors: *mut u8) 
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcWaveColor(
-    mut wf: *const crate::tr_local_h::waveForm_t,
+    mut wf: *const waveForm_t,
     mut dstColors: *mut u8,
 ) {
     let mut i: i32 = 0;
     let mut v: i32 = 0;
     let mut glow: f32 = 0.;
     let mut colors: *mut i32 = dstColors as *mut i32;
-    let mut color: [crate::src::qcommon::q_shared::byte; 4] = [0; 4];
-    if (*wf).func as u32 == crate::tr_local_h::GF_NOISE as i32 as u32 {
+    let mut color: [byte; 4] = [0; 4];
+    if (*wf).func as u32 == GF_NOISE as i32 as u32 {
         glow = (*wf).base
-            + crate::src::renderercommon::tr_noise::R_NoiseGet4f(
+            + R_NoiseGet4f(
                 0 as i32 as f32,
                 0 as i32 as f32,
                 0 as i32 as f32,
-                (crate::src::renderergl1::tr_shade::tess.shaderTime + (*wf).phase as f64)
+                (tess.shaderTime + (*wf).phase as f64)
                     * (*wf).frequency as f64,
             ) * (*wf).amplitude
     } else {
-        glow = EvalWaveForm(wf) * crate::src::renderergl1::tr_main::tr.identityLight
+        glow = EvalWaveForm(wf) * tr.identityLight
     }
     if glow < 0 as i32 as f32 {
         glow = 0 as i32 as f32
     } else if glow > 1 as i32 as f32 {
         glow = 1 as i32 as f32
     }
-    v = crate::src::renderergl1::tr_main::ri
+    v = ri
         .ftol
         .expect("non-null function pointer")(255 as i32 as f32 * glow) as i32;
-    color[2 as i32 as usize] = v as crate::src::qcommon::q_shared::byte;
+    color[2 as i32 as usize] = v as byte;
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
-    color[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+    color[3 as i32 as usize] = 255 as i32 as byte;
     v = *(color.as_mut_ptr() as *mut i32);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *colors = v;
         i += 1;
         colors = colors.offset(1)
@@ -1562,7 +1562,7 @@ pub unsafe extern "C" fn RB_CalcWaveColor(
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcWaveAlpha(
-    mut wf: *const crate::tr_local_h::waveForm_t,
+    mut wf: *const waveForm_t,
     mut dstColors: *mut u8,
 ) {
     let mut i: i32 = 0;
@@ -1571,7 +1571,7 @@ pub unsafe extern "C" fn RB_CalcWaveAlpha(
     glow = EvalWaveFormClamped(wf);
     v = (255 as i32 as f32 * glow) as i32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *dstColors.offset(3 as i32 as isize) = v as u8;
         i += 1;
         dstColors = dstColors.offset(4 as i32 as isize)
@@ -1590,9 +1590,9 @@ pub unsafe extern "C" fn RB_CalcModulateColorsByFog(mut colors: *mut u8) {
     // been previously called if the surface was opaque
     RB_CalcFogTexCoords(texCoords[0 as i32 as usize].as_mut_ptr());
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut f: f32 = (1.0f64
-            - crate::src::renderergl1::tr_image::R_FogFactor(
+            - R_FogFactor(
                 texCoords[i as usize][0 as i32 as usize],
                 texCoords[i as usize][1 as i32 as usize],
             ) as f64) as f32;
@@ -1619,9 +1619,9 @@ pub unsafe extern "C" fn RB_CalcModulateAlphasByFog(mut colors: *mut u8) {
     // been previously called if the surface was opaque
     RB_CalcFogTexCoords(texCoords[0 as i32 as usize].as_mut_ptr());
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut f: f32 = (1.0f64
-            - crate::src::renderergl1::tr_image::R_FogFactor(
+            - R_FogFactor(
                 texCoords[i as usize][0 as i32 as usize],
                 texCoords[i as usize][1 as i32 as usize],
             ) as f64) as f32;
@@ -2645,9 +2645,9 @@ pub unsafe extern "C" fn RB_CalcModulateRGBAsByFog(mut colors: *mut u8) {
     // been previously called if the surface was opaque
     RB_CalcFogTexCoords(texCoords[0 as i32 as usize].as_mut_ptr());
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut f: f32 = (1.0f64
-            - crate::src::renderergl1::tr_image::R_FogFactor(
+            - R_FogFactor(
                 texCoords[i as usize][0 as i32 as usize],
                 texCoords[i as usize][1 as i32 as usize],
             ) as f64) as f32;
@@ -2687,57 +2687,57 @@ pub unsafe extern "C" fn RB_CalcFogTexCoords(mut st: *mut f32) {
     let mut s: f32 = 0.;
     let mut t: f32 = 0.;
     let mut eyeT: f32 = 0.;
-    let mut eyeOutside: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut fog: *mut crate::tr_local_h::fog_t = 0 as *mut crate::tr_local_h::fog_t;
-    let mut local: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut fogDistanceVector: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    let mut fogDepthVector: crate::src::qcommon::q_shared::vec4_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut eyeOutside: qboolean =
+        qfalse;
+    let mut fog: *mut fog_t = 0 as *mut fog_t;
+    let mut local: vec3_t = [0.; 3];
+    let mut fogDistanceVector: vec4_t = [0.; 4];
+    let mut fogDepthVector: vec4_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    fog = (*crate::src::renderergl1::tr_main::tr.world)
+    fog = (*tr.world)
         .fogs
-        .offset(crate::src::renderergl1::tr_shade::tess.fogNum as isize);
+        .offset(tess.fogNum as isize);
     // all fogging distance is based on world Z units
-    local[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.origin
+    local[0 as i32 as usize] = backEnd.or.origin
         [0 as i32 as usize]
-        - crate::src::renderergl1::tr_backend::backEnd
+        - backEnd
             .viewParms
             .or
             .origin[0 as i32 as usize];
-    local[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.origin
+    local[1 as i32 as usize] = backEnd.or.origin
         [1 as i32 as usize]
-        - crate::src::renderergl1::tr_backend::backEnd
+        - backEnd
             .viewParms
             .or
             .origin[1 as i32 as usize];
-    local[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.origin
+    local[2 as i32 as usize] = backEnd.or.origin
         [2 as i32 as usize]
-        - crate::src::renderergl1::tr_backend::backEnd
+        - backEnd
             .viewParms
             .or
             .origin[2 as i32 as usize];
     fogDistanceVector[0 as i32 as usize] =
-        -crate::src::renderergl1::tr_backend::backEnd.or.modelMatrix[2 as i32 as usize];
+        -backEnd.or.modelMatrix[2 as i32 as usize];
     fogDistanceVector[1 as i32 as usize] =
-        -crate::src::renderergl1::tr_backend::backEnd.or.modelMatrix[6 as i32 as usize];
+        -backEnd.or.modelMatrix[6 as i32 as usize];
     fogDistanceVector[2 as i32 as usize] =
-        -crate::src::renderergl1::tr_backend::backEnd.or.modelMatrix[10 as i32 as usize];
+        -backEnd.or.modelMatrix[10 as i32 as usize];
     fogDistanceVector[3 as i32 as usize] = local[0 as i32 as usize]
-        * crate::src::renderergl1::tr_backend::backEnd
+        * backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][0 as i32 as usize]
         + local[1 as i32 as usize]
-            * crate::src::renderergl1::tr_backend::backEnd
+            * backEnd
                 .viewParms
                 .or
                 .axis[0 as i32 as usize][1 as i32 as usize]
         + local[2 as i32 as usize]
-            * crate::src::renderergl1::tr_backend::backEnd
+            * backEnd
                 .viewParms
                 .or
                 .axis[0 as i32 as usize][2 as i32 as usize];
@@ -2749,44 +2749,44 @@ pub unsafe extern "C" fn RB_CalcFogTexCoords(mut st: *mut f32) {
     // rotate the gradient vector for this orientation
     if (*fog).hasSurface as u64 != 0 {
         fogDepthVector[0 as i32 as usize] = (*fog).surface[0 as i32 as usize]
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+            * backEnd.or.axis[0 as i32 as usize]
                 [0 as i32 as usize]
             + (*fog).surface[1 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+                * backEnd.or.axis[0 as i32 as usize]
                     [1 as i32 as usize]
             + (*fog).surface[2 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize]
+                * backEnd.or.axis[0 as i32 as usize]
                     [2 as i32 as usize];
         fogDepthVector[1 as i32 as usize] = (*fog).surface[0 as i32 as usize]
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+            * backEnd.or.axis[1 as i32 as usize]
                 [0 as i32 as usize]
             + (*fog).surface[1 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+                * backEnd.or.axis[1 as i32 as usize]
                     [1 as i32 as usize]
             + (*fog).surface[2 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize]
+                * backEnd.or.axis[1 as i32 as usize]
                     [2 as i32 as usize];
         fogDepthVector[2 as i32 as usize] = (*fog).surface[0 as i32 as usize]
-            * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+            * backEnd.or.axis[2 as i32 as usize]
                 [0 as i32 as usize]
             + (*fog).surface[1 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+                * backEnd.or.axis[2 as i32 as usize]
                     [1 as i32 as usize]
             + (*fog).surface[2 as i32 as usize]
-                * crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize]
+                * backEnd.or.axis[2 as i32 as usize]
                     [2 as i32 as usize];
         fogDepthVector[3 as i32 as usize] = -(*fog).surface[3 as i32 as usize]
-            + (crate::src::renderergl1::tr_backend::backEnd.or.origin[0 as i32 as usize]
+            + (backEnd.or.origin[0 as i32 as usize]
                 * (*fog).surface[0 as i32 as usize]
-                + crate::src::renderergl1::tr_backend::backEnd.or.origin[1 as i32 as usize]
+                + backEnd.or.origin[1 as i32 as usize]
                     * (*fog).surface[1 as i32 as usize]
-                + crate::src::renderergl1::tr_backend::backEnd.or.origin[2 as i32 as usize]
+                + backEnd.or.origin[2 as i32 as usize]
                     * (*fog).surface[2 as i32 as usize]);
-        eyeT = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin[0 as i32 as usize]
+        eyeT = backEnd.or.viewOrigin[0 as i32 as usize]
             * fogDepthVector[0 as i32 as usize]
-            + crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin[1 as i32 as usize]
+            + backEnd.or.viewOrigin[1 as i32 as usize]
                 * fogDepthVector[1 as i32 as usize]
-            + crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin[2 as i32 as usize]
+            + backEnd.or.viewOrigin[2 as i32 as usize]
                 * fogDepthVector[2 as i32 as usize]
             + fogDepthVector[3 as i32 as usize]
     } else {
@@ -2796,17 +2796,17 @@ pub unsafe extern "C" fn RB_CalcFogTexCoords(mut st: *mut f32) {
     // see if the viewpoint is outside
     // this is needed for clipping distance even for constant fog
     if eyeT < 0 as i32 as f32 {
-        eyeOutside = crate::src::qcommon::q_shared::qtrue
+        eyeOutside = qtrue
     } else {
-        eyeOutside = crate::src::qcommon::q_shared::qfalse
+        eyeOutside = qfalse
     }
     fogDistanceVector[3 as i32 as usize] = (fogDistanceVector[3 as i32 as usize] as f64
         + 1.0f64 / 512 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     // calculate density for each point
     i = 0 as i32;
-    v = crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize].as_mut_ptr();
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    v = tess.xyz[0 as i32 as usize].as_mut_ptr();
+    while i < tess.numVertexes {
         // calculate the length in fog
         s = *v.offset(0 as i32 as isize) * fogDistanceVector[0 as i32 as usize]
             + *v.offset(1 as i32 as isize) * fogDistanceVector[1 as i32 as usize]
@@ -2849,20 +2849,20 @@ pub unsafe extern "C" fn RB_CalcEnvironmentTexCoords(mut st: *mut f32) {
     let mut i: i32 = 0;
     let mut v: *mut f32 = 0 as *mut f32;
     let mut normal: *mut f32 = 0 as *mut f32;
-    let mut viewer: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut reflected: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut viewer: vec3_t = [0.; 3];
+    let mut reflected: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
-    v = crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize].as_mut_ptr();
-    normal = crate::src::renderergl1::tr_shade::tess.normal[0 as i32 as usize].as_mut_ptr();
+    v = tess.xyz[0 as i32 as usize].as_mut_ptr();
+    normal = tess.normal[0 as i32 as usize].as_mut_ptr();
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        viewer[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+    while i < tess.numVertexes {
+        viewer[0 as i32 as usize] = backEnd.or.viewOrigin
             [0 as i32 as usize]
             - *v.offset(0 as i32 as isize);
-        viewer[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+        viewer[1 as i32 as usize] = backEnd.or.viewOrigin
             [1 as i32 as usize]
             - *v.offset(1 as i32 as isize);
-        viewer[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+        viewer[2 as i32 as usize] = backEnd.or.viewOrigin
             [2 as i32 as usize]
             - *v.offset(2 as i32 as isize);
         VectorNormalizeFast(viewer.as_mut_ptr());
@@ -2891,35 +2891,35 @@ pub unsafe extern "C" fn RB_CalcEnvironmentTexCoords(mut st: *mut f32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcTurbulentTexCoords(
-    mut wf: *const crate::tr_local_h::waveForm_t,
+    mut wf: *const waveForm_t,
     mut st: *mut f32,
 ) {
     let mut i: i32 = 0;
     let mut now: f64 = 0.;
     now = (*wf).phase as f64
-        + crate::src::renderergl1::tr_shade::tess.shaderTime * (*wf).frequency as f64;
+        + tess.shaderTime * (*wf).frequency as f64;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut s: f32 = *st.offset(0 as i32 as isize);
         let mut t: f32 = *st.offset(1 as i32 as isize);
-        *st.offset(0 as i32 as isize) = s + crate::src::renderergl1::tr_main::tr.sinTable
-            [((((crate::src::renderergl1::tr_shade::tess.xyz[i as usize][0 as i32 as usize]
-                + crate::src::renderergl1::tr_shade::tess.xyz[i as usize][2 as i32 as usize])
+        *st.offset(0 as i32 as isize) = s + tr.sinTable
+            [((((tess.xyz[i as usize][0 as i32 as usize]
+                + tess.xyz[i as usize][2 as i32 as usize])
                 as f64
                 * 1.0f64
                 / 128 as i32 as f64
                 * 0.125f64
                 + now)
-                * 1024 as i32 as f64) as crate::stdlib::int64_t
+                * 1024 as i32 as f64) as int64_t
                 & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*wf).amplitude;
-        *st.offset(1 as i32 as isize) = t + crate::src::renderergl1::tr_main::tr.sinTable
-            [(((crate::src::renderergl1::tr_shade::tess.xyz[i as usize][1 as i32 as usize] as f64
+        *st.offset(1 as i32 as isize) = t + tr.sinTable
+            [(((tess.xyz[i as usize][1 as i32 as usize] as f64
                 * 1.0f64
                 / 128 as i32 as f64
                 * 0.125f64
                 + now)
-                * 1024 as i32 as f64) as crate::stdlib::int64_t
+                * 1024 as i32 as f64) as int64_t
                 & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*wf).amplitude;
         i += 1;
@@ -2934,7 +2934,7 @@ pub unsafe extern "C" fn RB_CalcTurbulentTexCoords(
 pub unsafe extern "C" fn RB_CalcScaleTexCoords(mut scale: *const f32, mut st: *mut f32) {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         *st.offset(0 as i32 as isize) *= *scale.offset(0 as i32 as isize);
         *st.offset(1 as i32 as isize) *= *scale.offset(1 as i32 as isize);
         i += 1;
@@ -2948,7 +2948,7 @@ pub unsafe extern "C" fn RB_CalcScaleTexCoords(mut scale: *const f32, mut st: *m
 
 pub unsafe extern "C" fn RB_CalcScrollTexCoords(mut scrollSpeed: *const f32, mut st: *mut f32) {
     let mut i: i32 = 0;
-    let mut timeScale: f64 = crate::src::renderergl1::tr_shade::tess.shaderTime;
+    let mut timeScale: f64 = tess.shaderTime;
     let mut adjustedScrollS: f64 = 0.;
     let mut adjustedScrollT: f64 = 0.;
     adjustedScrollS = *scrollSpeed.offset(0 as i32 as isize) as f64 * timeScale;
@@ -2958,7 +2958,7 @@ pub unsafe extern "C" fn RB_CalcScrollTexCoords(mut scrollSpeed: *const f32, mut
     adjustedScrollS = adjustedScrollS - crate::stdlib::floor(adjustedScrollS);
     adjustedScrollT = adjustedScrollT - crate::stdlib::floor(adjustedScrollT);
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let ref mut fresh11 = *st.offset(0 as i32 as isize);
         *fresh11 = (*fresh11 as f64 + adjustedScrollS) as f32;
         let ref mut fresh12 = *st.offset(1 as i32 as isize);
@@ -2973,12 +2973,12 @@ pub unsafe extern "C" fn RB_CalcScrollTexCoords(mut scrollSpeed: *const f32, mut
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcTransformTexCoords(
-    mut tmi: *const crate::tr_local_h::texModInfo_t,
+    mut tmi: *const texModInfo_t,
     mut st: *mut f32,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
+    while i < tess.numVertexes {
         let mut s: f32 = *st.offset(0 as i32 as isize);
         let mut t: f32 = *st.offset(1 as i32 as isize);
         *st.offset(0 as i32 as isize) = s * (*tmi).matrix[0 as i32 as usize][0 as i32 as usize]
@@ -2997,15 +2997,15 @@ pub unsafe extern "C" fn RB_CalcTransformTexCoords(
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CalcRotateTexCoords(mut degsPerSecond: f32, mut st: *mut f32) {
-    let mut timeScale: f64 = crate::src::renderergl1::tr_shade::tess.shaderTime;
+    let mut timeScale: f64 = tess.shaderTime;
     let mut degs: f64 = 0.;
-    let mut index: crate::stdlib::int64_t = 0;
+    let mut index: int64_t = 0;
     let mut sinValue: f32 = 0.;
     let mut cosValue: f32 = 0.;
-    let mut tmi: crate::tr_local_h::texModInfo_t = crate::tr_local_h::texModInfo_t {
-        type_0: crate::tr_local_h::TMOD_NONE,
-        wave: crate::tr_local_h::waveForm_t {
-            func: crate::tr_local_h::GF_NONE,
+    let mut tmi: texModInfo_t = texModInfo_t {
+        type_0: TMOD_NONE,
+        wave: waveForm_t {
+            func: GF_NONE,
             base: 0.,
             amplitude: 0.,
             phase: 0.,
@@ -3018,10 +3018,10 @@ pub unsafe extern "C" fn RB_CalcRotateTexCoords(mut degsPerSecond: f32, mut st: 
         rotateSpeed: 0.,
     };
     degs = -degsPerSecond as f64 * timeScale;
-    index = (degs * (1024 as i32 as f32 / 360.0f32) as f64) as crate::stdlib::int64_t;
-    sinValue = crate::src::renderergl1::tr_main::tr.sinTable
+    index = (degs * (1024 as i32 as f32 / 360.0f32) as f64) as int64_t;
+    sinValue = tr.sinTable
         [(index & (1024 as i32 - 1 as i32) as isize) as usize];
-    cosValue = crate::src::renderergl1::tr_main::tr.sinTable
+    cosValue = tr.sinTable
         [(index + (1024 as i32 / 4 as i32) as isize & (1024 as i32 - 1 as i32) as isize) as usize];
     tmi.matrix[0 as i32 as usize][0 as i32 as usize] = cosValue;
     tmi.matrix[1 as i32 as usize][0 as i32 as usize] = -sinValue;
@@ -3040,10 +3040,10 @@ pub unsafe extern "C" fn RB_CalcRotateTexCoords(mut degsPerSecond: f32, mut st: 
 */
 #[no_mangle]
 
-pub static mut lightOrigin: crate::src::qcommon::q_shared::vec3_t = [
-    -(960 as i32) as crate::src::qcommon::q_shared::vec_t,
-    1980 as i32 as crate::src::qcommon::q_shared::vec_t,
-    96 as i32 as crate::src::qcommon::q_shared::vec_t,
+pub static mut lightOrigin: vec3_t = [
+    -(960 as i32) as vec_t,
+    1980 as i32 as vec_t,
+    96 as i32 as vec_t,
 ];
 // FIXME: track dynamically
 #[no_mangle]
@@ -3052,17 +3052,17 @@ pub unsafe extern "C" fn RB_CalcSpecularAlpha(mut alphas: *mut u8) {
     let mut i: i32 = 0;
     let mut v: *mut f32 = 0 as *mut f32;
     let mut normal: *mut f32 = 0 as *mut f32;
-    let mut viewer: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut reflected: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut viewer: vec3_t = [0.; 3];
+    let mut reflected: vec3_t = [0.; 3];
     let mut l: f32 = 0.;
     let mut d: f32 = 0.;
     let mut b: i32 = 0;
-    let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut lightDir: vec3_t = [0.; 3];
     let mut numVertexes: i32 = 0;
-    v = crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize].as_mut_ptr();
-    normal = crate::src::renderergl1::tr_shade::tess.normal[0 as i32 as usize].as_mut_ptr();
+    v = tess.xyz[0 as i32 as usize].as_mut_ptr();
+    normal = tess.normal[0 as i32 as usize].as_mut_ptr();
     alphas = alphas.offset(3 as i32 as isize);
-    numVertexes = crate::src::renderergl1::tr_shade::tess.numVertexes;
+    numVertexes = tess.numVertexes;
     i = 0 as i32;
     while i < numVertexes {
         let mut ilength: f32 = 0.;
@@ -3084,16 +3084,16 @@ pub unsafe extern "C" fn RB_CalcSpecularAlpha(mut alphas: *mut u8) {
             *normal.offset(1 as i32 as isize) * 2 as i32 as f32 * d - lightDir[1 as i32 as usize];
         reflected[2 as i32 as usize] =
             *normal.offset(2 as i32 as isize) * 2 as i32 as f32 * d - lightDir[2 as i32 as usize];
-        viewer[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+        viewer[0 as i32 as usize] = backEnd.or.viewOrigin
             [0 as i32 as usize]
             - *v.offset(0 as i32 as isize);
-        viewer[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+        viewer[1 as i32 as usize] = backEnd.or.viewOrigin
             [1 as i32 as usize]
             - *v.offset(1 as i32 as isize);
-        viewer[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.viewOrigin
+        viewer[2 as i32 as usize] = backEnd.or.viewOrigin
             [2 as i32 as usize]
             - *v.offset(2 as i32 as isize);
-        ilength = crate::src::qcommon::q_math::Q_rsqrt(
+        ilength = Q_rsqrt(
             viewer[0 as i32 as usize] * viewer[0 as i32 as usize]
                 + viewer[1 as i32 as usize] * viewer[1 as i32 as usize]
                 + viewer[2 as i32 as usize] * viewer[2 as i32 as usize],
@@ -3131,13 +3131,13 @@ unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
     let mut v: *mut f32 = 0 as *mut f32;
     let mut normal: *mut f32 = 0 as *mut f32;
     let mut incoming: f32 = 0.;
-    let mut ent: *mut crate::tr_local_h::trRefEntity_t = 0 as *mut crate::tr_local_h::trRefEntity_t;
+    let mut ent: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
     let mut ambientLightInt: i32 = 0;
-    let mut ambientLight: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut directedLight: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut ambientLight: vec3_t = [0.; 3];
+    let mut lightDir: vec3_t = [0.; 3];
+    let mut directedLight: vec3_t = [0.; 3];
     let mut numVertexes: i32 = 0;
-    ent = crate::src::renderergl1::tr_backend::backEnd.currentEntity;
+    ent = backEnd.currentEntity;
     ambientLightInt = (*ent).ambientLightInt;
     ambientLight[0 as i32 as usize] = (*ent).ambientLight[0 as i32 as usize];
     ambientLight[1 as i32 as usize] = (*ent).ambientLight[1 as i32 as usize];
@@ -3148,9 +3148,9 @@ unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
     lightDir[0 as i32 as usize] = (*ent).lightDir[0 as i32 as usize];
     lightDir[1 as i32 as usize] = (*ent).lightDir[1 as i32 as usize];
     lightDir[2 as i32 as usize] = (*ent).lightDir[2 as i32 as usize];
-    v = crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize].as_mut_ptr();
-    normal = crate::src::renderergl1::tr_shade::tess.normal[0 as i32 as usize].as_mut_ptr();
-    numVertexes = crate::src::renderergl1::tr_shade::tess.numVertexes;
+    v = tess.xyz[0 as i32 as usize].as_mut_ptr();
+    normal = tess.normal[0 as i32 as usize].as_mut_ptr();
+    numVertexes = tess.numVertexes;
     i = 0 as i32;
     while i < numVertexes {
         incoming = *normal.offset(0 as i32 as isize) * lightDir[0 as i32 as usize]
@@ -3159,7 +3159,7 @@ unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
         if incoming <= 0 as i32 as f32 {
             *(&mut *colors.offset((i * 4 as i32) as isize) as *mut u8 as *mut i32) = ambientLightInt
         } else {
-            j = crate::src::renderergl1::tr_main::ri
+            j = ri
                 .ftol
                 .expect("non-null function pointer")(
                 ambientLight[0 as i32 as usize] + incoming * directedLight[0 as i32 as usize],
@@ -3168,7 +3168,7 @@ unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
                 j = 255 as i32
             }
             *colors.offset((i * 4 as i32 + 0 as i32) as isize) = j as u8;
-            j = crate::src::renderergl1::tr_main::ri
+            j = ri
                 .ftol
                 .expect("non-null function pointer")(
                 ambientLight[1 as i32 as usize] + incoming * directedLight[1 as i32 as usize],
@@ -3177,7 +3177,7 @@ unsafe extern "C" fn RB_CalcDiffuseColor_scalar(mut colors: *mut u8) {
                 j = 255 as i32
             }
             *colors.offset((i * 4 as i32 + 1 as i32) as isize) = j as u8;
-            j = crate::src::renderergl1::tr_main::ri
+            j = ri
                 .ftol
                 .expect("non-null function pointer")(
                 ambientLight[2 as i32 as usize] + incoming * directedLight[2 as i32 as usize],

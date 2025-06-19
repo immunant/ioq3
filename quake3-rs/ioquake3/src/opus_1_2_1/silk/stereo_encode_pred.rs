@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_encode_pred(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     mut ix: *mut [i8; 3],
 )
 /* I    Quantization indices                        */
@@ -45,7 +45,7 @@ pub unsafe extern "C" fn silk_stereo_encode_pred(
     n = 5 as i32 * (*ix.offset(0 as i32 as isize))[2 as i32 as usize] as i32
         + (*ix.offset(1 as i32 as isize))[2 as i32 as usize] as i32;
     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeEnc as *mut ec_ctx,
         n,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_joint_iCDF.as_ptr(),
         8 as i32 as u32,
@@ -53,13 +53,13 @@ pub unsafe extern "C" fn silk_stereo_encode_pred(
     n = 0 as i32;
     while n < 2 as i32 {
         crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-            psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            psRangeEnc as *mut ec_ctx,
             (*ix.offset(n as isize))[0 as i32 as usize] as i32,
             crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF.as_ptr(),
             8 as i32 as u32,
         );
         crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-            psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            psRangeEnc as *mut ec_ctx,
             (*ix.offset(n as isize))[1 as i32 as usize] as i32,
             crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF.as_ptr(),
             8 as i32 as u32,
@@ -131,12 +131,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_encode_mid_only(
-    mut psRangeEnc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut psRangeEnc: *mut ec_enc,
     mut mid_only_flag: i8,
 ) {
     /* Encode flag that only mid channel is coded */
     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-        psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        psRangeEnc as *mut ec_ctx,
         mid_only_flag as i32,
         crate::src::opus_1_2_1::silk::tables_other::silk_stereo_only_code_mid_iCDF.as_ptr(),
         8 as i32 as u32,

@@ -359,7 +359,7 @@ pub mod os_support_h {
     #[inline]
 
     pub unsafe extern "C" fn opus_free(mut ptr: *mut libc::c_void) {
-        ::libc::free(ptr);
+        libc::free(ptr);
     }
     #[inline]
 
@@ -458,7 +458,7 @@ pub use crate::src::opus_1_2_1::src::opus_encoder::os_support_h::opus_free;
 pub struct OpusEncoder {
     pub celt_enc_offset: i32,
     pub silk_enc_offset: i32,
-    pub silk_mode: crate::control_h::silk_EncControlStruct,
+    pub silk_mode: silk_EncControlStruct,
     pub application: i32,
     pub channels: i32,
     pub delay_compensation: i32,
@@ -468,23 +468,23 @@ pub struct OpusEncoder {
     pub max_bandwidth: i32,
     pub user_forced_mode: i32,
     pub voice_ratio: i32,
-    pub Fs: crate::opus_types_h::opus_int32,
+    pub Fs: opus_int32,
     pub use_vbr: i32,
     pub vbr_constraint: i32,
     pub variable_duration: i32,
-    pub bitrate_bps: crate::opus_types_h::opus_int32,
-    pub user_bitrate_bps: crate::opus_types_h::opus_int32,
+    pub bitrate_bps: opus_int32,
+    pub user_bitrate_bps: opus_int32,
     pub lsb_depth: i32,
     pub encoder_buffer: i32,
     pub lfe: i32,
     pub arch: i32,
     pub use_dtx: i32,
-    pub analysis: crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
+    pub analysis: TonalityAnalysisState,
     pub stream_channels: i32,
-    pub hybrid_stereo_width_Q14: crate::opus_types_h::opus_int16,
-    pub variable_HP_smth2_Q15: crate::opus_types_h::opus_int32,
-    pub prev_HB_gain: crate::arch_h::opus_val16,
-    pub hp_mem: [crate::arch_h::opus_val32; 4],
+    pub hybrid_stereo_width_Q14: opus_int16,
+    pub variable_HP_smth2_Q15: opus_int32,
+    pub prev_HB_gain: opus_val16,
+    pub hp_mem: [opus_val32; 4],
     pub mode: i32,
     pub prev_mode: i32,
     pub prev_channels: i32,
@@ -493,30 +493,30 @@ pub struct OpusEncoder {
     pub auto_bandwidth: i32,
     pub silk_bw_switch: i32,
     pub first: i32,
-    pub energy_masking: *mut crate::arch_h::opus_val16,
+    pub energy_masking: *mut opus_val16,
     pub width_mem: StereoWidthState,
-    pub delay_buffer: [crate::arch_h::opus_val16; 960],
+    pub delay_buffer: [opus_val16; 960],
     pub detected_bandwidth: i32,
     pub nb_no_activity_frames: i32,
-    pub peak_signal_energy: crate::arch_h::opus_val32,
+    pub peak_signal_energy: opus_val32,
     pub nonfinal_frame: i32,
-    pub rangeFinal: crate::opus_types_h::opus_uint32,
+    pub rangeFinal: opus_uint32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct StereoWidthState {
-    pub XX: crate::arch_h::opus_val32,
-    pub XY: crate::arch_h::opus_val32,
-    pub YY: crate::arch_h::opus_val32,
-    pub smoothed_width: crate::arch_h::opus_val16,
-    pub max_follower: crate::arch_h::opus_val16,
+    pub XX: opus_val32,
+    pub XY: opus_val32,
+    pub YY: opus_val32,
+    pub smoothed_width: opus_val16,
+    pub max_follower: opus_val16,
 }
 /* Transition tables for the voice and music. First column is the
 middle (memoriless) threshold. The second column is the hysteresis
 (difference with the middle) */
 
-static mut mono_voice_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8] = [
+static mut mono_voice_bandwidth_thresholds: [opus_int32; 8] = [
     10000 as i32,
     1000 as i32,
     11000 as i32,
@@ -527,7 +527,7 @@ static mut mono_voice_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8]
     2000 as i32,
 ];
 
-static mut mono_music_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8] = [
+static mut mono_music_bandwidth_thresholds: [opus_int32; 8] = [
     10000 as i32,
     1000 as i32,
     11000 as i32,
@@ -538,7 +538,7 @@ static mut mono_music_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8]
     2000 as i32,
 ];
 
-static mut stereo_voice_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8] = [
+static mut stereo_voice_bandwidth_thresholds: [opus_int32; 8] = [
     10000 as i32,
     1000 as i32,
     11000 as i32,
@@ -549,7 +549,7 @@ static mut stereo_voice_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 
     2000 as i32,
 ];
 
-static mut stereo_music_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8] = [
+static mut stereo_music_bandwidth_thresholds: [opus_int32; 8] = [
     10000 as i32,
     1000 as i32,
     11000 as i32,
@@ -561,15 +561,15 @@ static mut stereo_music_bandwidth_thresholds: [crate::opus_types_h::opus_int32; 
 ];
 /* Threshold bit-rates for switching between mono and stereo */
 
-static mut stereo_voice_threshold: crate::opus_types_h::opus_int32 = 24000 as i32;
+static mut stereo_voice_threshold: opus_int32 = 24000 as i32;
 
-static mut stereo_music_threshold: crate::opus_types_h::opus_int32 = 24000 as i32;
+static mut stereo_music_threshold: opus_int32 = 24000 as i32;
 /* Threshold bit-rate for switching between SILK/hybrid and CELT-only */
 
-static mut mode_thresholds: [[crate::opus_types_h::opus_int32; 2]; 2] =
+static mut mode_thresholds: [[opus_int32; 2]; 2] =
     [[64000 as i32, 16000 as i32], [36000 as i32, 16000 as i32]];
 
-static mut fec_thresholds: [crate::opus_types_h::opus_int32; 10] = [
+static mut fec_thresholds: [opus_int32; 10] = [
     12000 as i32,
     1000 as i32,
     14000 as i32,
@@ -600,7 +600,7 @@ pub unsafe extern "C" fn opus_encoder_get_size(mut channels: i32) -> i32 {
         return 0 as i32;
     }
     silkEncSizeBytes = align(silkEncSizeBytes);
-    celtEncSizeBytes = crate::src::opus_1_2_1::celt::celt_encoder::celt_encoder_get_size(channels);
+    celtEncSizeBytes = celt_encoder_get_size(channels);
     return align(::std::mem::size_of::<OpusEncoder>() as libc::c_ulong as i32)
         + silkEncSizeBytes
         + celtEncSizeBytes;
@@ -622,7 +622,7 @@ pub unsafe extern "C" fn opus_encoder_get_size(mut channels: i32) -> i32 {
 
 pub unsafe extern "C" fn opus_encoder_init(
     mut st: *mut OpusEncoder,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut channels: i32,
     mut application: i32,
 ) -> i32 {
@@ -667,7 +667,7 @@ pub unsafe extern "C" fn opus_encoder_init(
     ret = crate::src::opus_1_2_1::silk::enc_API::silk_InitEncoder(
         silk_enc,
         (*st).arch,
-        &mut (*st).silk_mode as *mut _ as *mut crate::control_h::silk_EncControlStruct,
+        &mut (*st).silk_mode as *mut _ as *mut silk_EncControlStruct,
     );
     if ret != 0 {
         return -(3 as i32);
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn opus_encoder_init(
     (*st).silk_mode.reducedDependency = 0 as i32;
     /* Create CELT encoder */
     /* Initialize CELT encoder */
-    err = crate::src::opus_1_2_1::celt::celt_encoder::celt_encoder_init(
+    err = celt_encoder_init(
         celt_enc,
         Fs,
         channels,
@@ -726,17 +726,17 @@ pub unsafe extern "C" fn opus_encoder_init(
     /* Delay compensation of 4 ms (2.5 ms for SILK's extra look-ahead
     + 1.5 ms for SILK resamplers and stereo prediction) */
     (*st).delay_compensation = (*st).Fs / 250 as i32; /* Hybrid */
-    (*st).hybrid_stereo_width_Q14 = ((1 as i32) << 14 as i32) as crate::opus_types_h::opus_int16;
+    (*st).hybrid_stereo_width_Q14 = ((1 as i32) << 14 as i32) as opus_int16;
     (*st).prev_HB_gain = 1.0f32;
     (*st).variable_HP_smth2_Q15 = ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-        as crate::opus_types_h::opus_uint32)
-        << 8 as i32) as crate::opus_types_h::opus_int32;
+        as opus_uint32)
+        << 8 as i32) as opus_int32;
     (*st).first = 1 as i32;
     (*st).mode = 1001 as i32;
     (*st).bandwidth = 1105 as i32;
-    crate::src::opus_1_2_1::src::analysis::tonality_analysis_init(
+    tonality_analysis_init(
         &mut (*st).analysis as *mut _
-            as *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
+            as *mut TonalityAnalysisState,
         (*st).Fs,
     );
     (*st).analysis.application = (*st).application;
@@ -777,20 +777,20 @@ unsafe extern "C" fn gen_toc(
 }
 
 unsafe extern "C" fn silk_biquad_float(
-    mut in_0: *const crate::arch_h::opus_val16,
-    mut B_Q28: *const crate::opus_types_h::opus_int32,
-    mut A_Q28: *const crate::opus_types_h::opus_int32,
-    mut S: *mut crate::arch_h::opus_val32,
-    mut out: *mut crate::arch_h::opus_val16,
-    len: crate::opus_types_h::opus_int32,
+    mut in_0: *const opus_val16,
+    mut B_Q28: *const opus_int32,
+    mut A_Q28: *const opus_int32,
+    mut S: *mut opus_val32,
+    mut out: *mut opus_val16,
+    len: opus_int32,
     mut stride: i32,
 ) {
     /* DIRECT FORM II TRANSPOSED (uses 2 element state vector) */
     let mut k: i32 = 0;
-    let mut vout: crate::arch_h::opus_val32 = 0.;
-    let mut inval: crate::arch_h::opus_val32 = 0.;
-    let mut A: [crate::arch_h::opus_val32; 2] = [0.; 2];
-    let mut B: [crate::arch_h::opus_val32; 3] = [0.; 3];
+    let mut vout: opus_val32 = 0.;
+    let mut inval: opus_val32 = 0.;
+    let mut A: [opus_val32; 2] = [0.; 2];
+    let mut B: [opus_val32; 3] = [0.; 3];
     A[0 as i32 as usize] =
         *A_Q28.offset(0 as i32 as isize) as f32 * (1.0f32 / ((1 as i32) << 28 as i32) as f32);
     A[1 as i32 as usize] =
@@ -818,45 +818,45 @@ unsafe extern "C" fn silk_biquad_float(
 }
 
 unsafe extern "C" fn hp_cutoff(
-    mut in_0: *const crate::arch_h::opus_val16,
-    mut cutoff_Hz: crate::opus_types_h::opus_int32,
-    mut out: *mut crate::arch_h::opus_val16,
-    mut hp_mem: *mut crate::arch_h::opus_val32,
+    mut in_0: *const opus_val16,
+    mut cutoff_Hz: opus_int32,
+    mut out: *mut opus_val16,
+    mut hp_mem: *mut opus_val32,
     mut len: i32,
     mut channels: i32,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut _arch: i32,
 ) {
-    let mut B_Q28: [crate::opus_types_h::opus_int32; 3] = [0; 3];
-    let mut A_Q28: [crate::opus_types_h::opus_int32; 2] = [0; 2];
-    let mut Fc_Q19: crate::opus_types_h::opus_int32 = 0;
-    let mut r_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut r_Q22: crate::opus_types_h::opus_int32 = 0;
+    let mut B_Q28: [opus_int32; 3] = [0; 3];
+    let mut A_Q28: [opus_int32; 2] = [0; 2];
+    let mut Fc_Q19: opus_int32 = 0;
+    let mut r_Q28: opus_int32 = 0;
+    let mut r_Q22: opus_int32 = 0;
     Fc_Q19 = (1.5f64 * 3.14159f64 / 1000 as i32 as f64 * ((1 as i32 as i64) << 19 as i32) as f64
-        + 0.5f64) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16
-        as crate::opus_types_h::opus_int32
-        * cutoff_Hz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
+        + 0.5f64) as opus_int32 as opus_int16
+        as opus_int32
+        * cutoff_Hz as opus_int16 as opus_int32
         / (Fs / 1000 as i32);
     r_Q28 = (1.0f64 * ((1 as i32 as i64) << 28 as i32) as f64 + 0.5f64)
-        as crate::opus_types_h::opus_int32
+        as opus_int32
         - (0.92f64 * ((1 as i32 as i64) << 9 as i32) as f64 + 0.5f64)
-            as crate::opus_types_h::opus_int32
+            as opus_int32
             * Fc_Q19;
     /* b = r * [ 1; -2; 1 ]; */
     /* a = [ 1; -2 * r * ( 1 - 0.5 * Fc^2 ); r^2 ]; */
     B_Q28[0 as i32 as usize] = r_Q28;
-    B_Q28[1 as i32 as usize] = ((-r_Q28 as crate::opus_types_h::opus_uint32) << 1 as i32)
-        as crate::opus_types_h::opus_int32;
+    B_Q28[1 as i32 as usize] = ((-r_Q28 as opus_uint32) << 1 as i32)
+        as opus_int32;
     B_Q28[2 as i32 as usize] = r_Q28;
     /* -r * ( 2 - Fc * Fc ); */
     r_Q22 = r_Q28 >> 6 as i32;
     A_Q28[0 as i32 as usize] = (r_Q22 as i64
-        * ((Fc_Q19 as i64 * Fc_Q19 as i64 >> 16 as i32) as crate::opus_types_h::opus_int32
+        * ((Fc_Q19 as i64 * Fc_Q19 as i64 >> 16 as i32) as opus_int32
             - (2.0f64 * ((1 as i32 as i64) << 22 as i32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32) as i64
-        >> 16 as i32) as crate::opus_types_h::opus_int32;
+                as opus_int32) as i64
+        >> 16 as i32) as opus_int32;
     A_Q28[1 as i32 as usize] =
-        (r_Q22 as i64 * r_Q22 as i64 >> 16 as i32) as crate::opus_types_h::opus_int32;
+        (r_Q22 as i64 * r_Q22 as i64 >> 16 as i32) as opus_int32;
     silk_biquad_float(
         in_0,
         B_Q28.as_mut_ptr(),
@@ -880,13 +880,13 @@ unsafe extern "C" fn hp_cutoff(
 }
 
 unsafe extern "C" fn dc_reject(
-    mut in_0: *const crate::arch_h::opus_val16,
-    mut cutoff_Hz: crate::opus_types_h::opus_int32,
-    mut out: *mut crate::arch_h::opus_val16,
-    mut hp_mem: *mut crate::arch_h::opus_val32,
+    mut in_0: *const opus_val16,
+    mut cutoff_Hz: opus_int32,
+    mut out: *mut opus_val16,
+    mut hp_mem: *mut opus_val32,
     mut len: i32,
     mut channels: i32,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
 ) {
     let mut i: i32 = 0;
     let mut coef: f32 = 0.;
@@ -904,12 +904,12 @@ unsafe extern "C" fn dc_reject(
         m3 = *hp_mem.offset(3 as i32 as isize);
         i = 0 as i32;
         while i < len {
-            let mut x0: crate::arch_h::opus_val32 = 0.;
-            let mut x1: crate::arch_h::opus_val32 = 0.;
-            let mut tmp0: crate::arch_h::opus_val32 = 0.;
-            let mut tmp1: crate::arch_h::opus_val32 = 0.;
-            let mut out0: crate::arch_h::opus_val32 = 0.;
-            let mut out1: crate::arch_h::opus_val32 = 0.;
+            let mut x0: opus_val32 = 0.;
+            let mut x1: opus_val32 = 0.;
+            let mut tmp0: opus_val32 = 0.;
+            let mut tmp1: opus_val32 = 0.;
+            let mut out0: opus_val32 = 0.;
+            let mut out1: opus_val32 = 0.;
             x0 = *in_0.offset((2 as i32 * i + 0 as i32) as isize);
             x1 = *in_0.offset((2 as i32 * i + 1 as i32) as isize);
             /* First stage */
@@ -937,9 +937,9 @@ unsafe extern "C" fn dc_reject(
         m1_0 = *hp_mem.offset(1 as i32 as isize);
         i = 0 as i32;
         while i < len {
-            let mut x: crate::arch_h::opus_val32 = 0.;
-            let mut tmp: crate::arch_h::opus_val32 = 0.;
-            let mut y: crate::arch_h::opus_val32 = 0.;
+            let mut x: opus_val32 = 0.;
+            let mut tmp: opus_val32 = 0.;
+            let mut y: opus_val32 = 0.;
             x = *in_0.offset(i as isize);
             /* First stage */
             tmp = x - m0_0;
@@ -956,15 +956,15 @@ unsafe extern "C" fn dc_reject(
 }
 
 unsafe extern "C" fn stereo_fade(
-    mut in_0: *const crate::arch_h::opus_val16,
-    mut out: *mut crate::arch_h::opus_val16,
-    mut g1: crate::arch_h::opus_val16,
-    mut g2: crate::arch_h::opus_val16,
+    mut in_0: *const opus_val16,
+    mut out: *mut opus_val16,
+    mut g1: opus_val16,
+    mut g2: opus_val16,
     mut overlap48: i32,
     mut frame_size: i32,
     mut channels: i32,
-    mut window: *const crate::arch_h::opus_val16,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut window: *const opus_val16,
+    mut Fs: opus_int32,
 ) {
     let mut i: i32 = 0;
     let mut overlap: i32 = 0;
@@ -975,9 +975,9 @@ unsafe extern "C" fn stereo_fade(
     g2 = 1.0f32 - g2;
     i = 0 as i32;
     while i < overlap {
-        let mut diff: crate::arch_h::opus_val32 = 0.;
-        let mut g: crate::arch_h::opus_val16 = 0.;
-        let mut w: crate::arch_h::opus_val16 = 0.;
+        let mut diff: opus_val32 = 0.;
+        let mut g: opus_val16 = 0.;
+        let mut w: opus_val16 = 0.;
         w = *window.offset((i * inc) as isize) * *window.offset((i * inc) as isize);
         g = w * g2 + (1.0f32 - w) * g1;
         diff = 0.5f32
@@ -990,7 +990,7 @@ unsafe extern "C" fn stereo_fade(
         i += 1
     }
     while i < frame_size {
-        let mut diff_0: crate::arch_h::opus_val32 = 0.;
+        let mut diff_0: opus_val32 = 0.;
         diff_0 = 0.5f32
             * (*in_0.offset((i * channels) as isize)
                 - *in_0.offset((i * channels + 1 as i32) as isize));
@@ -1003,15 +1003,15 @@ unsafe extern "C" fn stereo_fade(
 }
 
 unsafe extern "C" fn gain_fade(
-    mut in_0: *const crate::arch_h::opus_val16,
-    mut out: *mut crate::arch_h::opus_val16,
-    mut g1: crate::arch_h::opus_val16,
-    mut g2: crate::arch_h::opus_val16,
+    mut in_0: *const opus_val16,
+    mut out: *mut opus_val16,
+    mut g1: opus_val16,
+    mut g2: opus_val16,
     mut overlap48: i32,
     mut frame_size: i32,
     mut channels: i32,
-    mut window: *const crate::arch_h::opus_val16,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut window: *const opus_val16,
+    mut Fs: opus_int32,
 ) {
     let mut i: i32 = 0;
     let mut inc: i32 = 0;
@@ -1022,8 +1022,8 @@ unsafe extern "C" fn gain_fade(
     if channels == 1 as i32 {
         i = 0 as i32;
         while i < overlap {
-            let mut g: crate::arch_h::opus_val16 = 0.;
-            let mut w: crate::arch_h::opus_val16 = 0.;
+            let mut g: opus_val16 = 0.;
+            let mut w: opus_val16 = 0.;
             w = *window.offset((i * inc) as isize) * *window.offset((i * inc) as isize);
             g = w * g2 + (1.0f32 - w) * g1;
             *out.offset(i as isize) = g * *in_0.offset(i as isize);
@@ -1032,8 +1032,8 @@ unsafe extern "C" fn gain_fade(
     } else {
         i = 0 as i32;
         while i < overlap {
-            let mut g_0: crate::arch_h::opus_val16 = 0.;
-            let mut w_0: crate::arch_h::opus_val16 = 0.;
+            let mut g_0: opus_val16 = 0.;
+            let mut w_0: opus_val16 = 0.;
             w_0 = *window.offset((i * inc) as isize) * *window.offset((i * inc) as isize);
             g_0 = w_0 * g2 + (1.0f32 - w_0) * g1;
             *out.offset((i * 2 as i32) as isize) = g_0 * *in_0.offset((i * 2 as i32) as isize);
@@ -1093,7 +1093,7 @@ unsafe extern "C" fn gain_fade(
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_encoder_create(
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut channels: i32,
     mut application: i32,
     mut error: *mut i32,
@@ -1113,7 +1113,7 @@ pub unsafe extern "C" fn opus_encoder_create(
         }
         return 0 as *mut OpusEncoder;
     }
-    st = opus_alloc(opus_encoder_get_size(channels) as crate::stddef_h::size_t) as *mut OpusEncoder;
+    st = opus_alloc(opus_encoder_get_size(channels) as size_t) as *mut OpusEncoder;
     if st.is_null() {
         if !error.is_null() {
             *error = -(7 as i32)
@@ -1135,7 +1135,7 @@ unsafe extern "C" fn user_bitrate_to_bitrate(
     mut st: *mut OpusEncoder,
     mut frame_size: i32,
     mut max_data_bytes: i32,
-) -> crate::opus_types_h::opus_int32 {
+) -> opus_int32 {
     if frame_size == 0 {
         frame_size = (*st).Fs / 400 as i32
     }
@@ -1151,7 +1151,7 @@ unsafe extern "C" fn user_bitrate_to_bitrate(
 
 pub unsafe extern "C" fn downmix_float(
     mut _x: *const libc::c_void,
-    mut y: *mut crate::arch_h::opus_val32,
+    mut y: *mut opus_val32,
     mut subframe: i32,
     mut offset: i32,
     mut c1: i32,
@@ -1191,20 +1191,20 @@ pub unsafe extern "C" fn downmix_float(
 
 pub unsafe extern "C" fn downmix_int(
     mut _x: *const libc::c_void,
-    mut y: *mut crate::arch_h::opus_val32,
+    mut y: *mut opus_val32,
     mut subframe: i32,
     mut offset: i32,
     mut c1: i32,
     mut c2: i32,
     mut C: i32,
 ) {
-    let mut x: *const crate::opus_types_h::opus_int16 = 0 as *const crate::opus_types_h::opus_int16;
+    let mut x: *const opus_int16 = 0 as *const opus_int16;
     let mut j: i32 = 0;
-    x = _x as *const crate::opus_types_h::opus_int16;
+    x = _x as *const opus_int16;
     j = 0 as i32;
     while j < subframe {
         *y.offset(j as isize) =
-            *x.offset(((j + offset) * C + c1) as isize) as crate::arch_h::opus_val32;
+            *x.offset(((j + offset) * C + c1) as isize) as opus_val32;
         j += 1
     }
     if c2 > -(1 as i32) {
@@ -1231,10 +1231,10 @@ pub unsafe extern "C" fn downmix_int(
 #[no_mangle]
 
 pub unsafe extern "C" fn frame_size_select(
-    mut frame_size: crate::opus_types_h::opus_int32,
+    mut frame_size: opus_int32,
     mut variable_duration: i32,
-    mut Fs: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
+    mut Fs: opus_int32,
+) -> opus_int32 {
     let mut new_size: i32 = 0;
     if frame_size < Fs / 400 as i32 {
         return -(1 as i32);
@@ -1270,30 +1270,30 @@ pub unsafe extern "C" fn frame_size_select(
 #[no_mangle]
 
 pub unsafe extern "C" fn compute_stereo_width(
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut pcm: *const opus_val16,
     mut frame_size: i32,
-    mut Fs: crate::opus_types_h::opus_int32,
+    mut Fs: opus_int32,
     mut mem: *mut StereoWidthState,
-) -> crate::arch_h::opus_val16 {
-    let mut xx: crate::arch_h::opus_val32 = 0.;
-    let mut xy: crate::arch_h::opus_val32 = 0.;
-    let mut yy: crate::arch_h::opus_val32 = 0.;
-    let mut sqrt_xx: crate::arch_h::opus_val16 = 0.;
-    let mut sqrt_yy: crate::arch_h::opus_val16 = 0.;
-    let mut qrrt_xx: crate::arch_h::opus_val16 = 0.;
-    let mut qrrt_yy: crate::arch_h::opus_val16 = 0.;
+) -> opus_val16 {
+    let mut xx: opus_val32 = 0.;
+    let mut xy: opus_val32 = 0.;
+    let mut yy: opus_val32 = 0.;
+    let mut sqrt_xx: opus_val16 = 0.;
+    let mut sqrt_yy: opus_val16 = 0.;
+    let mut qrrt_xx: opus_val16 = 0.;
+    let mut qrrt_yy: opus_val16 = 0.;
     let mut frame_rate: i32 = 0;
     let mut i: i32 = 0;
-    let mut short_alpha: crate::arch_h::opus_val16 = 0.;
+    let mut short_alpha: opus_val16 = 0.;
     frame_rate = Fs / frame_size;
     short_alpha = 1.0f32
-        - 25 as i32 as crate::arch_h::opus_val32 * 1.0f32
+        - 25 as i32 as opus_val32 * 1.0f32
             / (if 50 as i32 > frame_rate {
                 50 as i32
             } else {
                 frame_rate
             }) as f32;
-    yy = 0 as i32 as crate::arch_h::opus_val32;
+    yy = 0 as i32 as opus_val32;
     xy = yy;
     xx = xy;
     /* Unroll by 4. The frame size is always a multiple of 4 *except* for
@@ -1301,11 +1301,11 @@ pub unsafe extern "C" fn compute_stereo_width(
     stupid), we just discard the last two samples. */
     i = 0 as i32;
     while i < frame_size - 3 as i32 {
-        let mut pxx: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
-        let mut pxy: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
-        let mut pyy: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
-        let mut x: crate::arch_h::opus_val16 = 0.;
-        let mut y: crate::arch_h::opus_val16 = 0.;
+        let mut pxx: opus_val32 = 0 as i32 as opus_val32;
+        let mut pxy: opus_val32 = 0 as i32 as opus_val32;
+        let mut pyy: opus_val32 = 0 as i32 as opus_val32;
+        let mut x: opus_val16 = 0.;
+        let mut y: opus_val16 = 0.;
         x = *pcm.offset((2 as i32 * i) as isize);
         y = *pcm.offset((2 as i32 * i + 1 as i32) as isize);
         pxx = x * x;
@@ -1355,9 +1355,9 @@ pub unsafe extern "C" fn compute_stereo_width(
         (*mem).YY
     }) > 8e-4f32
     {
-        let mut corr: crate::arch_h::opus_val16 = 0.;
-        let mut ldiff: crate::arch_h::opus_val16 = 0.;
-        let mut width: crate::arch_h::opus_val16 = 0.;
+        let mut corr: opus_val16 = 0.;
+        let mut ldiff: opus_val16 = 0.;
+        let mut width: opus_val16 = 0.;
         sqrt_xx = crate::stdlib::sqrt((*mem).XX as f64) as f32;
         sqrt_yy = crate::stdlib::sqrt((*mem).YY as f64) as f32;
         qrrt_xx = crate::stdlib::sqrt(sqrt_xx as f64) as f32;
@@ -1384,10 +1384,10 @@ pub unsafe extern "C" fn compute_stereo_width(
             }
     }
     /*printf("%f %f %f %f %f ", corr/(float)Q15ONE, ldiff/(float)Q15ONE, width/(float)Q15ONE, mem->smoothed_width/(float)Q15ONE, mem->max_follower/(float)Q15ONE);*/
-    return if 1.0f32 < 20 as i32 as crate::arch_h::opus_val32 * (*mem).max_follower {
+    return if 1.0f32 < 20 as i32 as opus_val32 * (*mem).max_follower {
         1.0f32
     } else {
-        (20 as i32 as crate::arch_h::opus_val32) * (*mem).max_follower
+        (20 as i32 as opus_val32) * (*mem).max_follower
     };
 }
 
@@ -1397,7 +1397,7 @@ unsafe extern "C" fn decide_fec(
     mut last_fec: i32,
     mut mode: i32,
     mut bandwidth: *mut i32,
-    mut rate: crate::opus_types_h::opus_int32,
+    mut rate: opus_int32,
 ) -> i32 {
     let mut orig_bandwidth: i32 = 0;
     if useInBandFEC == 0 || PacketLoss_perc == 0 as i32 || mode == 1002 as i32 {
@@ -1405,8 +1405,8 @@ unsafe extern "C" fn decide_fec(
     }
     orig_bandwidth = *bandwidth;
     loop {
-        let mut hysteresis: crate::opus_types_h::opus_int32 = 0;
-        let mut LBRR_rate_thres_bps: crate::opus_types_h::opus_int32 = 0;
+        let mut hysteresis: opus_int32 = 0;
+        let mut LBRR_rate_thres_bps: opus_int32 = 0;
         /* Compute threshold for using FEC at the current bandwidth setting */
         LBRR_rate_thres_bps = fec_thresholds[(2 as i32 * (*bandwidth - 1101 as i32)) as usize];
         hysteresis = fec_thresholds[(2 as i32 * (*bandwidth - 1101 as i32) + 1 as i32) as usize];
@@ -1424,9 +1424,9 @@ unsafe extern "C" fn decide_fec(
                     25 as i32
                 }))) as i64
             * (0.01f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16
+                as opus_int32 as opus_int16
                 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            >> 16 as i32) as opus_int32;
         /* If loss <= 5%, we look at whether we have enough rate to enable FEC.
         If loss > 5%, we decrease the bandwidth until we can enable FEC. */
         if rate > LBRR_rate_thres_bps {
@@ -1516,10 +1516,10 @@ unsafe extern "C" fn compute_silk_rate_for_hybrid(
         /* For now, just give 50% of the extra bits to SILK. */
         silk_rate += (rate - rate_table[(i - 1 as i32) as usize][0 as i32 as usize]) / 2 as i32
     } else {
-        let mut lo: crate::opus_types_h::opus_int32 = 0;
-        let mut hi: crate::opus_types_h::opus_int32 = 0;
-        let mut x0: crate::opus_types_h::opus_int32 = 0;
-        let mut x1: crate::opus_types_h::opus_int32 = 0;
+        let mut lo: opus_int32 = 0;
+        let mut hi: opus_int32 = 0;
+        let mut x0: opus_int32 = 0;
+        let mut x1: opus_int32 = 0;
         lo = rate_table[(i - 1 as i32) as usize][entry as usize];
         hi = rate_table[i as usize][entry as usize];
         x0 = rate_table[(i - 1 as i32) as usize][0 as i32 as usize];
@@ -1539,15 +1539,15 @@ unsafe extern "C" fn compute_silk_rate_for_hybrid(
 complexity 10 VBR operation. */
 
 unsafe extern "C" fn compute_equiv_rate(
-    mut bitrate: crate::opus_types_h::opus_int32,
+    mut bitrate: opus_int32,
     mut channels: i32,
     mut frame_rate: i32,
     mut vbr: i32,
     mut mode: i32,
     mut complexity: i32,
     mut loss: i32,
-) -> crate::opus_types_h::opus_int32 {
-    let mut equiv: crate::opus_types_h::opus_int32 = 0;
+) -> opus_int32 {
+    let mut equiv: opus_int32 = 0;
     equiv = bitrate;
     /* Take into account overhead from smaller frames. */
     equiv -= (40 as i32 * channels + 20 as i32) * (frame_rate - 50 as i32);
@@ -1579,26 +1579,26 @@ unsafe extern "C" fn compute_equiv_rate(
 }
 
 unsafe extern "C" fn is_digital_silence(
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut pcm: *const opus_val16,
     mut frame_size: i32,
     mut channels: i32,
     mut lsb_depth: i32,
 ) -> i32 {
     let mut silence: i32 = 0 as i32;
-    let mut sample_max: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+    let mut sample_max: opus_val32 = 0 as i32 as opus_val32;
     sample_max = celt_maxabs16(pcm, frame_size * channels);
     silence = (sample_max
-        <= 1 as i32 as crate::arch_h::opus_val16 / ((1 as i32) << lsb_depth) as f32)
+        <= 1 as i32 as opus_val16 / ((1 as i32) << lsb_depth) as f32)
         as i32;
     return silence;
 }
 
 unsafe extern "C" fn compute_frame_energy(
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut pcm: *const opus_val16,
     mut frame_size: i32,
     mut channels: i32,
     mut _arch: i32,
-) -> crate::arch_h::opus_val32 {
+) -> opus_val32 {
     let mut len: i32 = frame_size * channels;
     return celt_inner_prod_c(pcm, pcm, len) / len as f32;
 }
@@ -1607,15 +1607,15 @@ unsafe extern "C" fn compute_frame_energy(
 unsafe extern "C" fn decide_dtx_mode(
     mut activity_probability: f32,
     mut nb_no_activity_frames: *mut i32,
-    mut peak_signal_energy: crate::arch_h::opus_val32,
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut peak_signal_energy: opus_val32,
+    mut pcm: *const opus_val16,
     mut frame_size: i32,
     mut channels: i32,
     mut is_silence: i32,
     mut arch: i32,
 ) -> i32 {
     let mut is_noise: i32 = 0;
-    let mut noise_energy: crate::arch_h::opus_val32 = 0.;
+    let mut noise_energy: opus_val32 = 0.;
     let mut is_sufficiently_quiet: i32 = 0;
     if is_silence == 0 {
         is_noise = (activity_probability < 0.1f32) as i32;
@@ -1643,15 +1643,15 @@ unsafe extern "C" fn decide_dtx_mode(
 
 unsafe extern "C" fn encode_multiframe_packet(
     mut st: *mut OpusEncoder,
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut pcm: *const opus_val16,
     mut nb_frames: i32,
     mut frame_size: i32,
     mut data: *mut u8,
-    mut out_data_bytes: crate::opus_types_h::opus_int32,
+    mut out_data_bytes: opus_int32,
     mut to_celt: i32,
     mut lsb_depth: i32,
     mut float_api: i32,
-) -> crate::opus_types_h::opus_int32 {
+) -> opus_int32 {
     let mut i: i32 = 0;
     let mut ret: i32 = 0 as i32;
     let mut tmp_data: *mut u8 = 0 as *mut u8;
@@ -1659,12 +1659,12 @@ unsafe extern "C" fn encode_multiframe_packet(
     let mut bak_bandwidth: i32 = 0;
     let mut bak_channels: i32 = 0;
     let mut bak_to_mono: i32 = 0;
-    let mut rp: *mut crate::opus_private_h::OpusRepacketizer =
-        0 as *mut crate::opus_private_h::OpusRepacketizer;
+    let mut rp: *mut OpusRepacketizer =
+        0 as *mut OpusRepacketizer;
     let mut max_header_bytes: i32 = 0;
-    let mut bytes_per_frame: crate::opus_types_h::opus_int32 = 0;
-    let mut cbr_bytes: crate::opus_types_h::opus_int32 = 0;
-    let mut repacketize_len: crate::opus_types_h::opus_int32 = 0;
+    let mut bytes_per_frame: opus_int32 = 0;
+    let mut cbr_bytes: opus_int32 = 0;
+    let mut repacketize_len: opus_int32 = 0;
     let mut tmp_len: i32 = 0;
     /* Worst cases:
      * 2 frames: Code 2 with different compressed sizes
@@ -1699,14 +1699,14 @@ unsafe extern "C" fn encode_multiframe_packet(
     tmp_data = fresh4.as_mut_ptr() as *mut u8;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_private_h::OpusRepacketizer>() as libc::c_ulong)
+        (::std::mem::size_of::<OpusRepacketizer>() as libc::c_ulong)
             .wrapping_mul(1 as i32 as libc::c_ulong) as usize,
     );
-    rp = fresh5.as_mut_ptr() as *mut crate::opus_private_h::OpusRepacketizer;
+    rp = fresh5.as_mut_ptr() as *mut OpusRepacketizer;
 
     crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_init(
-        rp as *mut crate::opus_private_h::OpusRepacketizer,
-    ) as *mut crate::opus_private_h::OpusRepacketizer;
+        rp as *mut OpusRepacketizer,
+    ) as *mut OpusRepacketizer;
     bak_mode = (*st).user_forced_mode;
     bak_bandwidth = (*st).user_bandwidth;
     bak_channels = (*st).force_channels;
@@ -1746,7 +1746,7 @@ unsafe extern "C" fn encode_multiframe_packet(
             return -(3 as i32);
         }
         ret = crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_cat(
-            rp as *mut crate::opus_private_h::OpusRepacketizer,
+            rp as *mut OpusRepacketizer,
             tmp_data.offset((i * bytes_per_frame) as isize),
             tmp_len,
         );
@@ -1755,8 +1755,8 @@ unsafe extern "C" fn encode_multiframe_packet(
         }
         i += 1
     }
-    ret = crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_out_range_impl(
-        rp as *mut crate::opus_private_h::OpusRepacketizer,
+    ret = opus_repacketizer_out_range_impl(
+        rp as *mut OpusRepacketizer,
         0 as i32,
         nb_frames,
         data,
@@ -1776,16 +1776,16 @@ unsafe extern "C" fn encode_multiframe_packet(
 }
 
 unsafe extern "C" fn compute_redundancy_bytes(
-    mut max_data_bytes: crate::opus_types_h::opus_int32,
-    mut bitrate_bps: crate::opus_types_h::opus_int32,
+    mut max_data_bytes: opus_int32,
+    mut bitrate_bps: opus_int32,
     mut frame_rate: i32,
     mut channels: i32,
 ) -> i32 {
     let mut redundancy_bytes_cap: i32 = 0;
     let mut redundancy_bytes: i32 = 0;
-    let mut redundancy_rate: crate::opus_types_h::opus_int32 = 0;
+    let mut redundancy_rate: opus_int32 = 0;
     let mut base_bits: i32 = 0;
-    let mut available_bits: crate::opus_types_h::opus_int32 = 0;
+    let mut available_bits: opus_int32 = 0;
     base_bits = 40 as i32 * channels + 20 as i32;
     /* Equivalent rate for 5 ms frames. */
     redundancy_rate = bitrate_bps + base_bits * (200 as i32 - frame_rate);
@@ -1819,27 +1819,27 @@ unsafe extern "C" fn compute_redundancy_bytes(
 
 pub unsafe extern "C" fn opus_encode_native(
     mut st: *mut OpusEncoder,
-    mut pcm: *const crate::arch_h::opus_val16,
+    mut pcm: *const opus_val16,
     mut frame_size: i32,
     mut data: *mut u8,
-    mut out_data_bytes: crate::opus_types_h::opus_int32,
+    mut out_data_bytes: opus_int32,
     mut lsb_depth: i32,
     mut analysis_pcm: *const libc::c_void,
-    mut analysis_size: crate::opus_types_h::opus_int32,
+    mut analysis_size: opus_int32,
     mut c1: i32,
     mut c2: i32,
     mut analysis_channels: i32,
-    mut downmix: crate::opus_private_h::downmix_func,
+    mut downmix: downmix_func,
     mut float_api: i32,
-) -> crate::opus_types_h::opus_int32 {
+) -> opus_int32 {
     let mut silk_enc: *mut libc::c_void = 0 as *mut libc::c_void; /* Max bitrate we're allowed to use */
     let mut celt_enc: *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder =
         0 as *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder; /* Max number of bytes we're allowed to use */
     let mut i: i32 = 0;
     let mut ret: i32 = 0 as i32;
-    let mut nBytes: crate::opus_types_h::opus_int32 = 0;
-    let mut enc: crate::src::opus_1_2_1::celt::entcode::ec_enc =
-        crate::src::opus_1_2_1::celt::entcode::ec_enc {
+    let mut nBytes: opus_int32 = 0;
+    let mut enc: ec_enc =
+        ec_enc {
             buf: 0 as *mut u8,
             storage: 0,
             end_offs: 0,
@@ -1859,26 +1859,26 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut redundancy: i32 = 0 as i32;
     let mut redundancy_bytes: i32 = 0 as i32;
     let mut celt_to_silk: i32 = 0 as i32;
-    let mut pcm_buf: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
+    let mut pcm_buf: *mut opus_val16 = 0 as *mut opus_val16;
     let mut nb_compr_bytes: i32 = 0;
     let mut to_celt: i32 = 0 as i32;
-    let mut redundant_rng: crate::opus_types_h::opus_uint32 =
-        0 as i32 as crate::opus_types_h::opus_uint32;
+    let mut redundant_rng: opus_uint32 =
+        0 as i32 as opus_uint32;
     let mut cutoff_Hz: i32 = 0;
     let mut hp_freq_smth1: i32 = 0;
     let mut voice_est: i32 = 0;
-    let mut equiv_rate: crate::opus_types_h::opus_int32 = 0;
+    let mut equiv_rate: opus_int32 = 0;
     let mut delay_compensation: i32 = 0;
     let mut frame_rate: i32 = 0;
-    let mut max_rate: crate::opus_types_h::opus_int32 = 0;
+    let mut max_rate: opus_int32 = 0;
     let mut curr_bandwidth: i32 = 0;
-    let mut HB_gain: crate::arch_h::opus_val16 = 0.;
-    let mut max_data_bytes: crate::opus_types_h::opus_int32 = 0;
+    let mut HB_gain: opus_val16 = 0.;
+    let mut max_data_bytes: opus_int32 = 0;
     let mut total_buffer: i32 = 0;
-    let mut stereo_width: crate::arch_h::opus_val16 = 0.;
-    let mut celt_mode: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode =
-        0 as *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
-    let mut analysis_info: crate::celt_h::AnalysisInfo = crate::celt_h::AnalysisInfo {
+    let mut stereo_width: opus_val16 = 0.;
+    let mut celt_mode: *const OpusCustomMode =
+        0 as *const OpusCustomMode;
+    let mut analysis_info: AnalysisInfo = AnalysisInfo {
         valid: 0,
         tonality: 0.,
         tonality_slope: 0.,
@@ -1893,13 +1893,13 @@ pub unsafe extern "C" fn opus_encode_native(
     let mut analysis_read_pos_bak: i32 = -(1 as i32);
     let mut analysis_read_subframe_bak: i32 = -(1 as i32);
     let mut is_silence: i32 = 0 as i32;
-    let mut tmp_prefill: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
+    let mut tmp_prefill: *mut opus_val16 = 0 as *mut opus_val16;
     max_data_bytes = if (1276 as i32) < out_data_bytes {
         1276 as i32
     } else {
         out_data_bytes
     };
-    (*st).rangeFinal = 0 as i32 as crate::opus_types_h::opus_uint32;
+    (*st).rangeFinal = 0 as i32 as opus_uint32;
     if frame_size <= 0 as i32 || max_data_bytes <= 0 as i32 {
         return -(1 as i32);
     }
@@ -1924,11 +1924,11 @@ pub unsafe extern "C" fn opus_encode_native(
     crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
         celt_enc,
         10015 as i32,
-        (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode).offset(
-            (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode)
+        (&mut celt_mode as *mut *const OpusCustomMode).offset(
+            (&mut celt_mode as *mut *const OpusCustomMode)
                 .offset_from(
                     &mut celt_mode
-                        as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+                        as *mut *const OpusCustomMode,
                 ) as isize as isize,
         ),
     );
@@ -1939,10 +1939,10 @@ pub unsafe extern "C" fn opus_encode_native(
         } else {
             analysis_read_pos_bak = (*st).analysis.read_pos;
             analysis_read_subframe_bak = (*st).analysis.read_subframe;
-            crate::src::opus_1_2_1::src::analysis::run_analysis(
+            run_analysis(
                 &mut (*st).analysis as *mut _
-                    as *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
-                celt_mode as *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+                    as *mut TonalityAnalysisState,
+                celt_mode as *const OpusCustomMode,
                 analysis_pcm,
                 analysis_size,
                 frame_size,
@@ -1952,7 +1952,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 (*st).Fs,
                 lsb_depth,
                 downmix,
-                &mut analysis_info as *mut _ as *mut crate::celt_h::AnalysisInfo,
+                &mut analysis_info as *mut _ as *mut AnalysisInfo,
             );
         }
         /* Track the peak signal energy */
@@ -1995,7 +1995,7 @@ pub unsafe extern "C" fn opus_encode_native(
     if (*st).channels == 2 as i32 && (*st).force_channels != 1 as i32 {
         stereo_width = compute_stereo_width(pcm, frame_size, (*st).Fs, &mut (*st).width_mem)
     } else {
-        stereo_width = 0 as i32 as crate::arch_h::opus_val16
+        stereo_width = 0 as i32 as opus_val16
     }
     total_buffer = delay_compensation;
     (*st).bitrate_bps = user_bitrate_to_bitrate(st, frame_size, max_data_bytes);
@@ -2133,7 +2133,7 @@ pub unsafe extern "C" fn opus_encode_native(
     if (*st).force_channels != -(1000 as i32) && (*st).channels == 2 as i32 {
         (*st).stream_channels = (*st).force_channels
     } else if (*st).channels == 2 as i32 {
-        let mut stereo_threshold: crate::opus_types_h::opus_int32 = 0;
+        let mut stereo_threshold: opus_int32 = 0;
         stereo_threshold = stereo_music_threshold
             + (voice_est * voice_est * (stereo_voice_threshold - stereo_music_threshold)
                 >> 14 as i32);
@@ -2165,18 +2165,18 @@ pub unsafe extern "C" fn opus_encode_native(
     if (*st).application == 2051 as i32 {
         (*st).mode = 1002 as i32
     } else if (*st).user_forced_mode == -(1000 as i32) {
-        let mut mode_voice: crate::opus_types_h::opus_int32 = 0;
-        let mut mode_music: crate::opus_types_h::opus_int32 = 0;
-        let mut threshold: crate::opus_types_h::opus_int32 = 0;
+        let mut mode_voice: opus_int32 = 0;
+        let mut mode_music: opus_int32 = 0;
+        let mut threshold: opus_int32 = 0;
         /* Interpolate based on stereo width */
         mode_voice = ((1.0f32 - stereo_width)
             * mode_thresholds[0 as i32 as usize][0 as i32 as usize] as f32
             + stereo_width * mode_thresholds[1 as i32 as usize][0 as i32 as usize] as f32)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         mode_music = ((1.0f32 - stereo_width)
             * mode_thresholds[1 as i32 as usize][1 as i32 as usize] as f32
             + stereo_width * mode_thresholds[1 as i32 as usize][1 as i32 as usize] as f32)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         /* Interpolate based on speech/music probability */
         threshold = mode_music + (voice_est * voice_est * (mode_voice - mode_music) >> 14 as i32);
         /* Bias towards SILK for VoIP because of some useful features */
@@ -2271,8 +2271,8 @@ pub unsafe extern "C" fn opus_encode_native(
         (*st).silk_mode.packetLossPercentage,
     );
     if (*st).mode != 1002 as i32 && (*st).prev_mode == 1002 as i32 {
-        let mut dummy: crate::control_h::silk_EncControlStruct =
-            crate::control_h::silk_EncControlStruct {
+        let mut dummy: silk_EncControlStruct =
+            silk_EncControlStruct {
                 nChannelsAPI: 0,
                 nChannelsInternal: 0,
                 API_sampleRate: 0,
@@ -2302,17 +2302,17 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::silk::enc_API::silk_InitEncoder(
             silk_enc,
             (*st).arch,
-            &mut dummy as *mut _ as *mut crate::control_h::silk_EncControlStruct,
+            &mut dummy as *mut _ as *mut silk_EncControlStruct,
         );
         prefill = 1 as i32
     }
     /* Automatic (rate-dependent) bandwidth selection */
     if (*st).mode == 1002 as i32 || (*st).first != 0 || (*st).silk_mode.allowBandwidthSwitch != 0 {
-        let mut voice_bandwidth_thresholds: *const crate::opus_types_h::opus_int32 =
-            0 as *const crate::opus_types_h::opus_int32;
-        let mut music_bandwidth_thresholds: *const crate::opus_types_h::opus_int32 =
-            0 as *const crate::opus_types_h::opus_int32;
-        let mut bandwidth_thresholds: [crate::opus_types_h::opus_int32; 8] = [0; 8];
+        let mut voice_bandwidth_thresholds: *const opus_int32 =
+            0 as *const opus_int32;
+        let mut music_bandwidth_thresholds: *const opus_int32 =
+            0 as *const opus_int32;
+        let mut bandwidth_thresholds: [opus_int32; 8] = [0; 8];
         let mut bandwidth: i32 = 1105 as i32;
         if (*st).channels == 2 as i32 && (*st).force_channels != 1 as i32 {
             voice_bandwidth_thresholds = stereo_voice_bandwidth_thresholds.as_ptr();
@@ -2522,26 +2522,26 @@ pub unsafe extern "C" fn opus_encode_native(
     }) - 1 as i32;
     data = data.offset(1 as i32 as isize);
     crate::src::opus_1_2_1::celt::entenc::ec_enc_init(
-        &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+        &mut enc as *mut _ as *mut ec_ctx,
         data,
-        (max_data_bytes - 1 as i32) as crate::opus_types_h::opus_uint32,
+        (max_data_bytes - 1 as i32) as opus_uint32,
     );
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul(((total_buffer + frame_size) * (*st).channels) as libc::c_ulong)
             as usize,
     );
-    pcm_buf = fresh7.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    pcm_buf = fresh7.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memcpy(
         pcm_buf as *mut libc::c_void,
         &mut *(*st)
             .delay_buffer
             .as_mut_ptr()
             .offset((((*st).encoder_buffer - total_buffer) * (*st).channels) as isize)
-            as *mut crate::arch_h::opus_val16 as *const libc::c_void,
+            as *mut opus_val16 as *const libc::c_void,
         ((total_buffer * (*st).channels) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_add(
                 (0 as i32 as isize
                     * pcm_buf.offset_from(
@@ -2553,10 +2553,10 @@ pub unsafe extern "C" fn opus_encode_native(
     );
     if (*st).mode == 1002 as i32 {
         hp_freq_smth1 = ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-            as crate::opus_types_h::opus_uint32)
-            << 8 as i32) as crate::opus_types_h::opus_int32
+            as opus_uint32)
+            << 8 as i32) as opus_int32
     } else {
-        hp_freq_smth1 = (*(silk_enc as *mut crate::structs_FLP_h::silk_encoder)).state_Fxx
+        hp_freq_smth1 = (*(silk_enc as *mut silk_encoder)).state_Fxx
             [0 as i32 as usize]
             .sCmn
             .variable_HP_smth1_Q15
@@ -2564,9 +2564,9 @@ pub unsafe extern "C" fn opus_encode_native(
     (*st).variable_HP_smth2_Q15 = ((*st).variable_HP_smth2_Q15 as i64
         + ((hp_freq_smth1 - (*st).variable_HP_smth2_Q15) as i64
             * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
-                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16
+                as opus_int32 as opus_int16
                 as i64
-            >> 16 as i32)) as crate::opus_types_h::opus_int32;
+            >> 16 as i32)) as opus_int32;
     /* convert from log scale to Hertz */
     cutoff_Hz = crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(
         (*st).variable_HP_smth2_Q15 >> 8 as i32,
@@ -2594,7 +2594,7 @@ pub unsafe extern "C" fn opus_encode_native(
         );
     }
     if float_api != 0 {
-        let mut sum: crate::arch_h::opus_val32 = 0.;
+        let mut sum: opus_val32 = 0.;
         sum = celt_inner_prod_c(
             &mut *pcm_buf.offset((total_buffer * (*st).channels) as isize),
             &mut *pcm_buf.offset((total_buffer * (*st).channels) as isize),
@@ -2605,13 +2605,13 @@ pub unsafe extern "C" fn opus_encode_native(
         if !(sum < 1e9f32) || celt_isnan(sum) != 0 {
             crate::stdlib::memset(
                 &mut *pcm_buf.offset((total_buffer * (*st).channels) as isize)
-                    as *mut crate::arch_h::opus_val16 as *mut libc::c_void,
+                    as *mut opus_val16 as *mut libc::c_void,
                 0 as i32,
                 ((frame_size * (*st).channels) as libc::c_ulong).wrapping_mul(
-                    ::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong,
+                    ::std::mem::size_of::<opus_val16>() as libc::c_ulong,
                 ),
             );
-            (*st).hp_mem[3 as i32 as usize] = 0 as i32 as crate::arch_h::opus_val32;
+            (*st).hp_mem[3 as i32 as usize] = 0 as i32 as opus_val32;
             (*st).hp_mem[2 as i32 as usize] = (*st).hp_mem[3 as i32 as usize];
             (*st).hp_mem[1 as i32 as usize] = (*st).hp_mem[2 as i32 as usize];
             (*st).hp_mem[0 as i32 as usize] = (*st).hp_mem[1 as i32 as usize]
@@ -2620,16 +2620,16 @@ pub unsafe extern "C" fn opus_encode_native(
     /* SILK processing */
     HB_gain = 1.0f32;
     if (*st).mode != 1002 as i32 {
-        let mut total_bitRate: crate::opus_types_h::opus_int32 = 0;
-        let mut celt_rate: crate::opus_types_h::opus_int32 = 0;
-        let mut pcm_silk: *mut crate::opus_types_h::opus_int16 =
-            0 as *mut crate::opus_types_h::opus_int16;
+        let mut total_bitRate: opus_int32 = 0;
+        let mut celt_rate: opus_int32 = 0;
+        let mut pcm_silk: *mut opus_int16 =
+            0 as *mut opus_int16;
         let mut fresh8 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+            (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
                 .wrapping_mul(((*st).channels * frame_size) as libc::c_ulong) as usize,
         );
-        pcm_silk = fresh8.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+        pcm_silk = fresh8.as_mut_ptr() as *mut opus_int16;
         /* Distribute bits between SILK and CELT */
         total_bitRate = 8 as i32 * bytes_target * frame_rate;
         if (*st).mode == 1001 as i32 {
@@ -2652,25 +2652,25 @@ pub unsafe extern "C" fn opus_encode_native(
         }
         /* Surround masking for SILK */
         if !(*st).energy_masking.is_null() && (*st).use_vbr != 0 && (*st).lfe == 0 {
-            let mut mask_sum: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
-            let mut masking_depth: crate::arch_h::opus_val16 = 0.;
-            let mut rate_offset: crate::opus_types_h::opus_int32 = 0;
+            let mut mask_sum: opus_val32 = 0 as i32 as opus_val32;
+            let mut masking_depth: opus_val16 = 0.;
+            let mut rate_offset: opus_int32 = 0;
             let mut c: i32 = 0;
             let mut end: i32 = 17 as i32;
-            let mut srate: crate::opus_types_h::opus_int16 =
-                16000 as i32 as crate::opus_types_h::opus_int16;
+            let mut srate: opus_int16 =
+                16000 as i32 as opus_int16;
             if (*st).bandwidth == 1101 as i32 {
                 end = 13 as i32;
-                srate = 8000 as i32 as crate::opus_types_h::opus_int16
+                srate = 8000 as i32 as opus_int16
             } else if (*st).bandwidth == 1102 as i32 {
                 end = 15 as i32;
-                srate = 12000 as i32 as crate::opus_types_h::opus_int16
+                srate = 12000 as i32 as opus_int16
             }
             c = 0 as i32;
             while c < (*st).channels {
                 i = 0 as i32;
                 while i < end {
-                    let mut mask: crate::arch_h::opus_val16 = 0.;
+                    let mut mask: opus_val16 = 0.;
                     mask = if (if *(*st).energy_masking.offset((21 as i32 * c + i) as isize)
                         < 0.5f32
                     {
@@ -2698,8 +2698,8 @@ pub unsafe extern "C" fn opus_encode_native(
             /* Conservative rate reduction, we cut the masking in half */
             masking_depth = mask_sum / end as f32 * (*st).channels as f32;
             masking_depth += 0.2f32;
-            rate_offset = (srate as crate::arch_h::opus_val32 * masking_depth)
-                as crate::opus_types_h::opus_int32;
+            rate_offset = (srate as opus_val32 * masking_depth)
+                as opus_int32;
             rate_offset = if rate_offset > -(2 as i32) * (*st).silk_mode.bitRate / 3 as i32 {
                 rate_offset
             } else {
@@ -2730,7 +2730,7 @@ pub unsafe extern "C" fn opus_encode_native(
         }
         (*st).silk_mode.maxInternalSampleRate = 16000 as i32;
         if (*st).mode == 1000 as i32 {
-            let mut effective_max_rate: crate::opus_types_h::opus_int32 = max_rate;
+            let mut effective_max_rate: opus_int32 = max_rate;
             if frame_rate > 50 as i32 {
                 effective_max_rate = effective_max_rate * 2 as i32 / 3 as i32
             }
@@ -2776,7 +2776,7 @@ pub unsafe extern "C" fn opus_encode_native(
         } else if (*st).mode == 1001 as i32 {
             /* Constrained VBR. */
             /* Compute SILK bitrate corresponding to the max total bits available */
-            let mut maxBitRate: crate::opus_types_h::opus_int32 = compute_silk_rate_for_hybrid(
+            let mut maxBitRate: opus_int32 = compute_silk_rate_for_hybrid(
                 (*st).silk_mode.maxBits * (*st).Fs / frame_size,
                 curr_bandwidth,
                 ((*st).Fs == 50 as i32 * frame_size) as i32,
@@ -2786,7 +2786,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (*st).silk_mode.maxBits = maxBitRate * frame_size / (*st).Fs
         }
         if prefill != 0 {
-            let mut zero: crate::opus_types_h::opus_int32 = 0 as i32;
+            let mut zero: opus_int32 = 0 as i32;
             let mut prefill_offset: i32 = 0;
             /* Use a smooth onset for the SILK prefill to avoid the encoder trying to encode
             a discontinuity. The exact location is what we need to avoid leaving any "gap"
@@ -2805,7 +2805,7 @@ pub unsafe extern "C" fn opus_encode_native(
                     .delay_buffer
                     .as_mut_ptr()
                     .offset(prefill_offset as isize),
-                0 as i32 as crate::arch_h::opus_val16,
+                0 as i32 as opus_val16,
                 1.0f32,
                 (*celt_mode).overlap,
                 (*st).Fs / 400 as i32,
@@ -2818,7 +2818,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 0 as i32,
                 (prefill_offset as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_val16>() as libc::c_ulong
                     ),
             );
             i = 0 as i32;
@@ -2828,11 +2828,11 @@ pub unsafe extern "C" fn opus_encode_native(
             }
             crate::src::opus_1_2_1::silk::enc_API::silk_Encode(
                 silk_enc,
-                &mut (*st).silk_mode as *mut _ as *mut crate::control_h::silk_EncControlStruct,
+                &mut (*st).silk_mode as *mut _ as *mut silk_EncControlStruct,
                 pcm_silk,
                 (*st).encoder_buffer,
-                0 as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
-                    as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                0 as *mut ec_enc
+                    as *mut ec_ctx,
                 &mut zero,
                 1 as i32,
             );
@@ -2845,10 +2845,10 @@ pub unsafe extern "C" fn opus_encode_native(
         }
         ret = crate::src::opus_1_2_1::silk::enc_API::silk_Encode(
             silk_enc,
-            &mut (*st).silk_mode as *mut _ as *mut crate::control_h::silk_EncControlStruct,
+            &mut (*st).silk_mode as *mut _ as *mut silk_EncControlStruct,
             pcm_silk,
             frame_size,
-            &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            &mut enc as *mut _ as *mut ec_ctx,
             &mut nBytes,
             0 as i32,
         );
@@ -2870,7 +2870,7 @@ pub unsafe extern "C" fn opus_encode_native(
         (*st).silk_mode.opusCanSwitch =
             ((*st).silk_mode.switchReady != 0 && (*st).nonfinal_frame == 0) as i32;
         if nBytes == 0 as i32 {
-            (*st).rangeFinal = 0 as i32 as crate::opus_types_h::opus_uint32;
+            (*st).rangeFinal = 0 as i32 as opus_uint32;
             *data.offset(-(1 as i32) as isize) = gen_toc(
                 (*st).mode,
                 (*st).Fs / frame_size,
@@ -2917,7 +2917,7 @@ pub unsafe extern "C" fn opus_encode_native(
         -(1 as i32),
     );
     if (*st).mode != 1000 as i32 {
-        let mut celt_pred: crate::arch_h::opus_val32 = 2 as i32 as crate::arch_h::opus_val32;
+        let mut celt_pred: opus_val32 = 2 as i32 as opus_val32;
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             4006 as i32,
@@ -2925,12 +2925,12 @@ pub unsafe extern "C" fn opus_encode_native(
         );
         /* We may still decide to disable prediction later */
         if (*st).silk_mode.reducedDependency != 0 {
-            celt_pred = 0 as i32 as crate::arch_h::opus_val32
+            celt_pred = 0 as i32 as opus_val32
         }
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             10002 as i32,
-            celt_pred as crate::opus_types_h::opus_int32,
+            celt_pred as opus_int32,
         );
         if (*st).mode == 1001 as i32 {
             if (*st).use_vbr != 0 {
@@ -2965,20 +2965,20 @@ pub unsafe extern "C" fn opus_encode_native(
     }
     let mut fresh9 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul(((*st).channels * (*st).Fs / 400 as i32) as libc::c_ulong)
             as usize,
     );
-    tmp_prefill = fresh9.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    tmp_prefill = fresh9.as_mut_ptr() as *mut opus_val16;
     if (*st).mode != 1000 as i32 && (*st).mode != (*st).prev_mode && (*st).prev_mode > 0 as i32 {
         crate::stdlib::memcpy(
             tmp_prefill as *mut libc::c_void,
             &mut *(*st).delay_buffer.as_mut_ptr().offset(
                 (((*st).encoder_buffer - total_buffer - (*st).Fs / 400 as i32) * (*st).channels)
                     as isize,
-            ) as *mut crate::arch_h::opus_val16 as *const libc::c_void,
+            ) as *mut opus_val16 as *const libc::c_void,
             (((*st).channels * (*st).Fs / 400 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize
                         * tmp_prefill.offset_from(&mut *(*st).delay_buffer.as_mut_ptr().offset(
@@ -2995,10 +2995,10 @@ pub unsafe extern "C" fn opus_encode_native(
                 .delay_buffer
                 .as_mut_ptr()
                 .offset(((*st).channels * frame_size) as isize)
-                as *mut crate::arch_h::opus_val16 as *const libc::c_void,
+                as *mut opus_val16 as *const libc::c_void,
             (((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer))
                 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (*st).delay_buffer.as_mut_ptr().offset_from(
@@ -3012,17 +3012,17 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::stdlib::memcpy(
             &mut *(*st).delay_buffer.as_mut_ptr().offset(
                 ((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer)) as isize,
-            ) as *mut crate::arch_h::opus_val16 as *mut libc::c_void,
-            &mut *pcm_buf.offset(0 as i32 as isize) as *mut crate::arch_h::opus_val16
+            ) as *mut opus_val16 as *mut libc::c_void,
+            &mut *pcm_buf.offset(0 as i32 as isize) as *mut opus_val16
                 as *const libc::c_void,
             (((frame_size + total_buffer) * (*st).channels) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (&mut *(*st).delay_buffer.as_mut_ptr().offset(
                             ((*st).channels * ((*st).encoder_buffer - frame_size - total_buffer))
                                 as isize,
-                        ) as *mut crate::arch_h::opus_val16)
+                        ) as *mut opus_val16)
                             .offset_from(&mut *pcm_buf.offset(0 as i32 as isize))
                             as isize) as libc::c_ulong,
                 ),
@@ -3032,9 +3032,9 @@ pub unsafe extern "C" fn opus_encode_native(
             (*st).delay_buffer.as_mut_ptr() as *mut libc::c_void,
             &mut *pcm_buf.offset(
                 ((frame_size + total_buffer - (*st).encoder_buffer) * (*st).channels) as isize,
-            ) as *mut crate::arch_h::opus_val16 as *const libc::c_void,
+            ) as *mut opus_val16 as *const libc::c_void,
             (((*st).encoder_buffer * (*st).channels) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize
                         * (*st)
@@ -3086,10 +3086,10 @@ pub unsafe extern "C" fn opus_encode_native(
         if ((*st).hybrid_stereo_width_Q14 as i32) < (1 as i32) << 14 as i32
             || (*st).silk_mode.stereoWidth_Q14 < (1 as i32) << 14 as i32
         {
-            let mut g1: crate::arch_h::opus_val16 = 0.;
-            let mut g2: crate::arch_h::opus_val16 = 0.;
-            g1 = (*st).hybrid_stereo_width_Q14 as crate::arch_h::opus_val16;
-            g2 = (*st).silk_mode.stereoWidth_Q14 as crate::arch_h::opus_val16;
+            let mut g1: opus_val16 = 0.;
+            let mut g2: opus_val16 = 0.;
+            g1 = (*st).hybrid_stereo_width_Q14 as opus_val16;
+            g2 = (*st).silk_mode.stereoWidth_Q14 as opus_val16;
             g1 *= 1.0f32 / 16384 as i32 as f32;
             g2 *= 1.0f32 / 16384 as i32 as f32;
             stereo_fade(
@@ -3104,7 +3104,7 @@ pub unsafe extern "C" fn opus_encode_native(
                 (*st).Fs,
             );
             (*st).hybrid_stereo_width_Q14 =
-                (*st).silk_mode.stereoWidth_Q14 as crate::opus_types_h::opus_int16
+                (*st).silk_mode.stereoWidth_Q14 as opus_int16
         }
     }
     if (*st).mode != 1002 as i32
@@ -3114,7 +3114,7 @@ pub unsafe extern "C" fn opus_encode_native(
         /* For SILK mode, the redundancy is inferred from the length */
         if (*st).mode == 1001 as i32 {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                &mut enc as *mut _ as *mut ec_ctx,
                 redundancy,
                 12 as i32 as u32,
             );
@@ -3122,7 +3122,7 @@ pub unsafe extern "C" fn opus_encode_native(
         if redundancy != 0 {
             let mut max_redundancy: i32 = 0;
             crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                &mut enc as *mut _ as *mut ec_ctx,
                 celt_to_silk,
                 1 as i32 as u32,
             );
@@ -3157,9 +3157,9 @@ pub unsafe extern "C" fn opus_encode_native(
             };
             if (*st).mode == 1001 as i32 {
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_uint(
-                    &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    (redundancy_bytes - 2 as i32) as crate::opus_types_h::opus_uint32,
-                    256 as i32 as crate::opus_types_h::opus_uint32,
+                    &mut enc as *mut _ as *mut ec_ctx,
+                    (redundancy_bytes - 2 as i32) as opus_uint32,
+                    256 as i32 as opus_uint32,
                 );
             }
         }
@@ -3176,30 +3176,30 @@ pub unsafe extern "C" fn opus_encode_native(
     if (*st).mode == 1000 as i32 {
         ret = ec_tell(&mut enc) + 7 as i32 >> 3 as i32;
         crate::src::opus_1_2_1::celt::entenc::ec_enc_done(
-            &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            &mut enc as *mut _ as *mut ec_ctx,
         );
         nb_compr_bytes = ret
     } else {
         nb_compr_bytes = max_data_bytes - 1 as i32 - redundancy_bytes;
         crate::src::opus_1_2_1::celt::entenc::ec_enc_shrink(
-            &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-            nb_compr_bytes as crate::opus_types_h::opus_uint32,
+            &mut enc as *mut _ as *mut ec_ctx,
+            nb_compr_bytes as opus_uint32,
         );
     }
     if redundancy != 0 || (*st).mode != 1000 as i32 {
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             10022 as i32,
-            (&mut analysis_info as *mut crate::celt_h::AnalysisInfo).offset(
-                (&mut analysis_info as *mut crate::celt_h::AnalysisInfo).offset_from(
-                    &mut analysis_info as *mut crate::celt_h::AnalysisInfo
-                        as *const crate::celt_h::AnalysisInfo,
+            (&mut analysis_info as *mut AnalysisInfo).offset(
+                (&mut analysis_info as *mut AnalysisInfo).offset_from(
+                    &mut analysis_info as *mut AnalysisInfo
+                        as *const AnalysisInfo,
                 ) as isize as isize,
             ),
         );
     }
     if (*st).mode == 1001 as i32 {
-        let mut info: crate::celt_h::SILKInfo = crate::celt_h::SILKInfo {
+        let mut info: SILKInfo = SILKInfo {
             signalType: 0,
             offset: 0,
         };
@@ -3208,9 +3208,9 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             10028 as i32,
-            (&mut info as *mut crate::celt_h::SILKInfo).offset(
-                (&mut info as *mut crate::celt_h::SILKInfo).offset_from(
-                    &mut info as *mut crate::celt_h::SILKInfo as *const crate::celt_h::SILKInfo,
+            (&mut info as *mut SILKInfo).offset(
+                (&mut info as *mut SILKInfo).offset_from(
+                    &mut info as *mut SILKInfo as *const SILKInfo,
                 ) as isize as isize,
             ),
         );
@@ -3218,10 +3218,10 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             10028 as i32,
-            (0 as *mut libc::c_void as *mut crate::celt_h::SILKInfo).offset(
-                (0 as *mut libc::c_void as *mut crate::celt_h::SILKInfo).offset_from(
-                    0 as *mut libc::c_void as *mut crate::celt_h::SILKInfo
-                        as *const crate::celt_h::SILKInfo,
+            (0 as *mut libc::c_void as *mut SILKInfo).offset(
+                (0 as *mut libc::c_void as *mut SILKInfo).offset_from(
+                    0 as *mut libc::c_void as *mut SILKInfo
+                        as *const SILKInfo,
                 ) as isize as isize,
             ),
         );
@@ -3244,14 +3244,14 @@ pub unsafe extern "C" fn opus_encode_native(
             4002 as i32,
             -(1 as i32),
         );
-        err = crate::src::opus_1_2_1::celt::celt_encoder::celt_encode_with_ec(
+        err = celt_encode_with_ec(
             celt_enc,
             pcm_buf,
             (*st).Fs / 200 as i32,
             data.offset(nb_compr_bytes as isize),
             redundancy_bytes,
-            0 as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
-                as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            0 as *mut ec_enc
+                as *mut ec_ctx,
         );
         if err < 0 as i32 {
             return -(3 as i32);
@@ -3259,9 +3259,9 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             4031 as i32,
-            (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
-                    .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+            (&mut redundant_rng as *mut opus_uint32).offset(
+                (&mut redundant_rng as *mut opus_uint32)
+                    .offset_from(&mut redundant_rng as *mut opus_uint32)
                     as isize as isize,
             ),
         );
@@ -3280,14 +3280,14 @@ pub unsafe extern "C" fn opus_encode_native(
                 4028 as i32,
             );
             /* Prefilling */
-            crate::src::opus_1_2_1::celt::celt_encoder::celt_encode_with_ec(
+            celt_encode_with_ec(
                 celt_enc,
                 tmp_prefill,
                 (*st).Fs / 400 as i32,
                 dummy_0.as_mut_ptr(),
                 2 as i32,
-                0 as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
-                    as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                0 as *mut ec_enc
+                    as *mut ec_ctx,
             );
             crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                 celt_enc,
@@ -3314,13 +3314,13 @@ pub unsafe extern "C" fn opus_encode_native(
                 4006 as i32,
                 (*st).use_vbr,
             );
-            ret = crate::src::opus_1_2_1::celt::celt_encoder::celt_encode_with_ec(
+            ret = celt_encode_with_ec(
                 celt_enc,
                 pcm_buf,
                 frame_size,
                 0 as *mut u8,
                 nb_compr_bytes,
-                &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                &mut enc as *mut _ as *mut ec_ctx,
             );
             if ret < 0 as i32 {
                 return -(3 as i32);
@@ -3381,28 +3381,28 @@ pub unsafe extern "C" fn opus_encode_native(
             /* Shrink packet to what the encoder actually used. */
             nb_compr_bytes = ret;
             crate::src::opus_1_2_1::celt::entenc::ec_enc_shrink(
-                &mut enc as *mut _ as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                nb_compr_bytes as crate::opus_types_h::opus_uint32,
+                &mut enc as *mut _ as *mut ec_ctx,
+                nb_compr_bytes as opus_uint32,
             );
         }
         /* NOTE: We could speed this up slightly (at the expense of code size) by just adding a function that prefills the buffer */
-        crate::src::opus_1_2_1::celt::celt_encoder::celt_encode_with_ec(
+        celt_encode_with_ec(
             celt_enc,
             pcm_buf.offset(((*st).channels * (frame_size - N2 - N4)) as isize),
             N4,
             dummy_1.as_mut_ptr(),
             2 as i32,
-            0 as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
-                as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            0 as *mut ec_enc
+                as *mut ec_ctx,
         );
-        err_0 = crate::src::opus_1_2_1::celt::celt_encoder::celt_encode_with_ec(
+        err_0 = celt_encode_with_ec(
             celt_enc,
             pcm_buf.offset(((*st).channels * (frame_size - N2)) as isize),
             N2,
             data.offset(nb_compr_bytes as isize),
             redundancy_bytes,
-            0 as *mut crate::src::opus_1_2_1::celt::entcode::ec_enc
-                as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            0 as *mut ec_enc
+                as *mut ec_ctx,
         );
         if err_0 < 0 as i32 {
             return -(3 as i32);
@@ -3410,9 +3410,9 @@ pub unsafe extern "C" fn opus_encode_native(
         crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
             celt_enc,
             4031 as i32,
-            (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
-                    .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+            (&mut redundant_rng as *mut opus_uint32).offset(
+                (&mut redundant_rng as *mut opus_uint32)
+                    .offset_from(&mut redundant_rng as *mut opus_uint32)
                     as isize as isize,
             ),
         );
@@ -3447,7 +3447,7 @@ pub unsafe extern "C" fn opus_encode_native(
             (*st).arch,
         ) != 0
         {
-            (*st).rangeFinal = 0 as i32 as crate::opus_types_h::opus_uint32;
+            (*st).rangeFinal = 0 as i32 as opus_uint32;
             *data.offset(0 as i32 as isize) = gen_toc(
                 (*st).mode,
                 (*st).Fs / frame_size,
@@ -3465,7 +3465,7 @@ pub unsafe extern "C" fn opus_encode_native(
         }
         *data.offset(1 as i32 as isize) = 0 as i32 as u8;
         ret = 1 as i32;
-        (*st).rangeFinal = 0 as i32 as crate::opus_types_h::opus_uint32
+        (*st).rangeFinal = 0 as i32 as opus_uint32
     } else if (*st).mode == 1000 as i32 && redundancy == 0 {
         /*When in LPC only mode it's perfectly
         reasonable to strip off trailing zero bytes as
@@ -3521,11 +3521,11 @@ pub unsafe extern "C" fn opus_encode_native(
 
 pub unsafe extern "C" fn opus_encode(
     mut st: *mut OpusEncoder,
-    mut pcm: *const crate::opus_types_h::opus_int16,
+    mut pcm: *const opus_int16,
     mut analysis_frame_size: i32,
     mut data: *mut u8,
-    mut max_data_bytes: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
+    mut max_data_bytes: opus_int32,
+) -> opus_int32 {
     let mut i: i32 = 0;
     let mut ret: i32 = 0;
     let mut frame_size: i32 = 0;
@@ -3562,7 +3562,7 @@ pub unsafe extern "C" fn opus_encode(
             downmix_int
                 as unsafe extern "C" fn(
                     _: *const libc::c_void,
-                    _: *mut crate::arch_h::opus_val32,
+                    _: *mut opus_val32,
                     _: i32,
                     _: i32,
                     _: i32,
@@ -3614,8 +3614,8 @@ pub unsafe extern "C" fn opus_encode_float(
     mut pcm: *const f32,
     mut analysis_frame_size: i32,
     mut data: *mut u8,
-    mut out_data_bytes: crate::opus_types_h::opus_int32,
-) -> crate::opus_types_h::opus_int32 {
+    mut out_data_bytes: opus_int32,
+) -> opus_int32 {
     let mut frame_size: i32 = 0;
     frame_size = frame_size_select(analysis_frame_size, (*st).variable_duration, (*st).Fs);
     return opus_encode_native(
@@ -3634,7 +3634,7 @@ pub unsafe extern "C" fn opus_encode_float(
             downmix_float
                 as unsafe extern "C" fn(
                     _: *const libc::c_void,
-                    _: *mut crate::arch_h::opus_val32,
+                    _: *mut opus_val32,
                     _: i32,
                     _: i32,
                     _: i32,
@@ -3674,8 +3674,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
         as *mut crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder;
     match request {
         4000 => {
-            let mut value: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value != 2048 as i32 && value != 2049 as i32 && value != 2051 as i32
                 || (*st).first == 0 && (*st).application != value
             {
@@ -3687,9 +3687,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             current_block = 12032176231992402880;
         }
         4001 => {
-            let mut value_0: *mut crate::opus_types_h::opus_int32 =
+            let mut value_0: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_0.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3698,8 +3698,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4002 => {
-            let mut value_1: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_1: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_1 != -(1000 as i32) && value_1 != -(1 as i32) {
                 if value_1 <= 0 as i32 {
                     current_block = 18078460720374183796;
@@ -3723,9 +3723,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4003 => {
-            let mut value_2: *mut crate::opus_types_h::opus_int32 =
+            let mut value_2: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_2.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3734,8 +3734,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4022 => {
-            let mut value_3: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_3: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if (value_3 < 1 as i32 || value_3 > (*st).channels) && value_3 != -(1000 as i32) {
                 current_block = 18078460720374183796;
             } else {
@@ -3744,9 +3744,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4023 => {
-            let mut value_4: *mut crate::opus_types_h::opus_int32 =
+            let mut value_4: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_4.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3755,8 +3755,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4004 => {
-            let mut value_5: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_5: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_5 < 1101 as i32 || value_5 > 1105 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3772,9 +3772,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4005 => {
-            let mut value_6: *mut crate::opus_types_h::opus_int32 =
+            let mut value_6: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_6.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3783,8 +3783,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4008 => {
-            let mut value_7: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_7: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if (value_7 < 1101 as i32 || value_7 > 1105 as i32) && value_7 != -(1000 as i32) {
                 current_block = 18078460720374183796;
             } else {
@@ -3800,9 +3800,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4009 => {
-            let mut value_8: *mut crate::opus_types_h::opus_int32 =
+            let mut value_8: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_8.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3811,8 +3811,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4016 => {
-            let mut value_9: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_9: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_9 < 0 as i32 || value_9 > 1 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3821,9 +3821,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4017 => {
-            let mut value_10: *mut crate::opus_types_h::opus_int32 =
+            let mut value_10: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_10.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3832,8 +3832,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4010 => {
-            let mut value_11: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_11: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_11 < 0 as i32 || value_11 > 10 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3847,9 +3847,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4011 => {
-            let mut value_12: *mut crate::opus_types_h::opus_int32 =
+            let mut value_12: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_12.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3858,8 +3858,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4012 => {
-            let mut value_13: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_13: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_13 < 0 as i32 || value_13 > 1 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3868,9 +3868,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4013 => {
-            let mut value_14: *mut crate::opus_types_h::opus_int32 =
+            let mut value_14: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_14.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3879,8 +3879,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4014 => {
-            let mut value_15: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_15: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_15 < 0 as i32 || value_15 > 100 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3894,9 +3894,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4015 => {
-            let mut value_16: *mut crate::opus_types_h::opus_int32 =
+            let mut value_16: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_16.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3905,8 +3905,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4006 => {
-            let mut value_17: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_17: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_17 < 0 as i32 || value_17 > 1 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3916,9 +3916,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4007 => {
-            let mut value_18: *mut crate::opus_types_h::opus_int32 =
+            let mut value_18: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_18.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3927,8 +3927,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         11018 => {
-            let mut value_19: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_19: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_19 < -(1 as i32) || value_19 > 100 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3937,9 +3937,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         11019 => {
-            let mut value_20: *mut crate::opus_types_h::opus_int32 =
+            let mut value_20: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_20.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3948,8 +3948,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4020 => {
-            let mut value_21: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_21: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_21 < 0 as i32 || value_21 > 1 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3958,9 +3958,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4021 => {
-            let mut value_22: *mut crate::opus_types_h::opus_int32 =
+            let mut value_22: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_22.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3969,8 +3969,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4024 => {
-            let mut value_23: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_23: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_23 != -(1000 as i32) && value_23 != 3001 as i32 && value_23 != 3002 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -3979,9 +3979,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4025 => {
-            let mut value_24: *mut crate::opus_types_h::opus_int32 =
+            let mut value_24: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_24.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -3990,9 +3990,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4027 => {
-            let mut value_25: *mut crate::opus_types_h::opus_int32 =
+            let mut value_25: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_25.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4004,9 +4004,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4029 => {
-            let mut value_26: *mut crate::opus_types_h::opus_int32 =
+            let mut value_26: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_26.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4015,9 +4015,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4031 => {
-            let mut value_27: *mut crate::opus_types_h::opus_uint32 =
+            let mut value_27: *mut opus_uint32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_uint32>();
+                    .arg::<*mut opus_uint32>();
             if value_27.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4026,8 +4026,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4036 => {
-            let mut value_28: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_28: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_28 < 8 as i32 || value_28 > 24 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -4036,9 +4036,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4037 => {
-            let mut value_29: *mut crate::opus_types_h::opus_int32 =
+            let mut value_29: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_29.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4047,8 +4047,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4040 => {
-            let mut value_30: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_30: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_30 != 5000 as i32
                 && value_30 != 5001 as i32
                 && value_30 != 5002 as i32
@@ -4072,9 +4072,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4041 => {
-            let mut value_31: *mut crate::opus_types_h::opus_int32 =
+            let mut value_31: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_31.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4083,8 +4083,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4042 => {
-            let mut value_32: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_32: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_32 > 1 as i32 || value_32 < 0 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -4093,9 +4093,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4043 => {
-            let mut value_33: *mut crate::opus_types_h::opus_int32 =
+            let mut value_33: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_33.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4104,8 +4104,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4046 => {
-            let mut value_34: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_34: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if value_34 < 0 as i32 || value_34 > 1 as i32 {
                 current_block = 18078460720374183796;
             } else {
@@ -4118,9 +4118,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         4047 => {
-            let mut value_35: *mut crate::opus_types_h::opus_int32 =
+            let mut value_35: *mut opus_int32 =
                 ap.as_va_list()
-                    .arg::<*mut crate::opus_types_h::opus_int32>();
+                    .arg::<*mut opus_int32>();
             if value_35.is_null() {
                 current_block = 18078460720374183796;
             } else {
@@ -4134,8 +4134,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
         }
         4028 => {
             let mut silk_enc: *mut libc::c_void = 0 as *mut libc::c_void;
-            let mut dummy: crate::control_h::silk_EncControlStruct =
-                crate::control_h::silk_EncControlStruct {
+            let mut dummy: silk_EncControlStruct =
+                silk_EncControlStruct {
                     nChannelsAPI: 0,
                     nChannelsInternal: 0,
                     API_sampleRate: 0,
@@ -4165,9 +4165,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
             silk_enc = (st as *mut libc::c_char).offset((*st).silk_enc_offset as isize)
                 as *mut libc::c_void;
-            crate::src::opus_1_2_1::src::analysis::tonality_analysis_reset(
+            tonality_analysis_reset(
                 &mut (*st).analysis as *mut _
-                    as *mut crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState,
+                    as *mut TonalityAnalysisState,
             );
             start = &mut (*st).stream_channels as *mut i32 as *mut libc::c_char;
             crate::stdlib::memset(
@@ -4186,24 +4186,24 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             crate::src::opus_1_2_1::silk::enc_API::silk_InitEncoder(
                 silk_enc,
                 (*st).arch,
-                &mut dummy as *mut _ as *mut crate::control_h::silk_EncControlStruct,
+                &mut dummy as *mut _ as *mut silk_EncControlStruct,
             );
             (*st).stream_channels = (*st).channels;
             (*st).hybrid_stereo_width_Q14 =
-                ((1 as i32) << 14 as i32) as crate::opus_types_h::opus_int16;
+                ((1 as i32) << 14 as i32) as opus_int16;
             (*st).prev_HB_gain = 1.0f32;
             (*st).first = 1 as i32;
             (*st).mode = 1001 as i32;
             (*st).bandwidth = 1105 as i32;
             (*st).variable_HP_smth2_Q15 =
                 ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-                    as crate::opus_types_h::opus_uint32)
-                    << 8 as i32) as crate::opus_types_h::opus_int32;
+                    as opus_uint32)
+                    << 8 as i32) as opus_int32;
             current_block = 12032176231992402880;
         }
         11002 => {
-            let mut value_36: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_36: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             if (value_36 < 1000 as i32 || value_36 > 1002 as i32) && value_36 != -(1000 as i32) {
                 current_block = 18078460720374183796;
             } else {
@@ -4212,8 +4212,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             }
         }
         10024 => {
-            let mut value_37: crate::opus_types_h::opus_int32 =
-                ap.as_va_list().arg::<crate::opus_types_h::opus_int32>();
+            let mut value_37: opus_int32 =
+                ap.as_va_list().arg::<opus_int32>();
             (*st).lfe = value_37;
             ret = crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                 celt_enc,
@@ -4223,8 +4223,8 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             current_block = 12032176231992402880;
         }
         10026 => {
-            let mut value_38: *mut crate::arch_h::opus_val16 =
-                ap.as_va_list().arg::<*mut crate::arch_h::opus_val16>();
+            let mut value_38: *mut opus_val16 =
+                ap.as_va_list().arg::<*mut opus_val16>();
             (*st).energy_masking = value_38;
             ret = crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl(
                 celt_enc,
@@ -4234,9 +4234,9 @@ pub unsafe extern "C" fn opus_encoder_ctl(
             current_block = 12032176231992402880;
         }
         10015 => {
-            let mut value_39: *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode = ap
+            let mut value_39: *mut *const OpusCustomMode = ap
                 .as_va_list()
-                .arg::<*mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode>();
+                .arg::<*mut *const OpusCustomMode>();
             if value_39.is_null() {
                 current_block = 18078460720374183796;
             } else {

@@ -127,7 +127,7 @@ Written by Jean-Marc Valin */
 /* Mean energy in each band quantized in Q4 and converted back to float */
 #[no_mangle]
 
-pub static mut eMeans: [crate::arch_h::opus_val16; 25] = [
+pub static mut eMeans: [opus_val16; 25] = [
     6.437500f32,
     6.250000f32,
     5.750000f32,
@@ -156,22 +156,22 @@ pub static mut eMeans: [crate::arch_h::opus_val16; 25] = [
 ];
 /* prediction coefficients: 0.9, 0.8, 0.65, 0.5 */
 
-static mut pred_coef: [crate::arch_h::opus_val16; 4] = [
-    (29440 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (26112 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (21248 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (16384 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
+static mut pred_coef: [opus_val16; 4] = [
+    (29440 as i32 as f64 / 32768.0f64) as opus_val16,
+    (26112 as i32 as f64 / 32768.0f64) as opus_val16,
+    (21248 as i32 as f64 / 32768.0f64) as opus_val16,
+    (16384 as i32 as f64 / 32768.0f64) as opus_val16,
 ];
 
-static mut beta_coef: [crate::arch_h::opus_val16; 4] = [
-    (30147 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (22282 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (12124 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
-    (6554 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16,
+static mut beta_coef: [opus_val16; 4] = [
+    (30147 as i32 as f64 / 32768.0f64) as opus_val16,
+    (22282 as i32 as f64 / 32768.0f64) as opus_val16,
+    (12124 as i32 as f64 / 32768.0f64) as opus_val16,
+    (6554 as i32 as f64 / 32768.0f64) as opus_val16,
 ];
 
-static mut beta_intra: crate::arch_h::opus_val16 =
-    (4915 as i32 as f64 / 32768.0f64) as crate::arch_h::opus_val16;
+static mut beta_intra: opus_val16 =
+    (4915 as i32 as f64 / 32768.0f64) as opus_val16;
 /*Parameters of the Laplace-like probability models used for the coarse energy.
 There is one pair of parameters for each frame size, prediction type
  (inter/intra), and band number.
@@ -544,21 +544,21 @@ static mut e_prob_model: [[[u8; 42]; 2]; 4] = [
 static mut small_energy_icdf: [u8; 3] = [2 as i32 as u8, 1 as i32 as u8, 0 as i32 as u8];
 
 unsafe extern "C" fn loss_distortion(
-    mut eBands: *const crate::arch_h::opus_val16,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
+    mut eBands: *const opus_val16,
+    mut oldEBands: *mut opus_val16,
     mut start: i32,
     mut end: i32,
     mut len: i32,
     mut C: i32,
-) -> crate::arch_h::opus_val32 {
+) -> opus_val32 {
     let mut c: i32 = 0;
     let mut i: i32 = 0;
-    let mut dist: crate::arch_h::opus_val32 = 0 as i32 as crate::arch_h::opus_val32;
+    let mut dist: opus_val32 = 0 as i32 as opus_val32;
     c = 0 as i32;
     loop {
         i = start;
         while i < end {
-            let mut d: crate::arch_h::opus_val16 =
+            let mut d: opus_val16 =
                 *eBands.offset((i + c * len) as isize) - *oldEBands.offset((i + c * len) as isize);
             dist = dist + d * d;
             i += 1
@@ -576,40 +576,40 @@ unsafe extern "C" fn loss_distortion(
 }
 
 unsafe extern "C" fn quant_coarse_energy_impl(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut eBands: *const crate::arch_h::opus_val16,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
-    mut budget: crate::opus_types_h::opus_int32,
-    mut tell: crate::opus_types_h::opus_int32,
+    mut eBands: *const opus_val16,
+    mut oldEBands: *mut opus_val16,
+    mut budget: opus_int32,
+    mut tell: opus_int32,
     mut prob_model: *const u8,
-    mut error: *mut crate::arch_h::opus_val16,
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut error: *mut opus_val16,
+    mut enc: *mut ec_enc,
     mut C: i32,
     mut LM: i32,
     mut intra: i32,
-    mut max_decay: crate::arch_h::opus_val16,
+    mut max_decay: opus_val16,
     mut lfe: i32,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut c: i32 = 0;
     let mut badness: i32 = 0 as i32;
-    let mut prev: [crate::arch_h::opus_val32; 2] = [
-        0 as i32 as crate::arch_h::opus_val32,
-        0 as i32 as crate::arch_h::opus_val32,
+    let mut prev: [opus_val32; 2] = [
+        0 as i32 as opus_val32,
+        0 as i32 as opus_val32,
     ];
-    let mut coef: crate::arch_h::opus_val16 = 0.;
-    let mut beta: crate::arch_h::opus_val16 = 0.;
+    let mut coef: opus_val16 = 0.;
+    let mut beta: opus_val16 = 0.;
     if tell + 3 as i32 <= budget {
         crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-            enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            enc as *mut ec_ctx,
             intra,
             3 as i32 as u32,
         );
     }
     if intra != 0 {
-        coef = 0 as i32 as crate::arch_h::opus_val16;
+        coef = 0 as i32 as opus_val16;
         beta = beta_intra
     } else {
         beta = beta_coef[LM as usize];
@@ -623,12 +623,12 @@ unsafe extern "C" fn quant_coarse_energy_impl(
             let mut bits_left: i32 = 0;
             let mut qi: i32 = 0;
             let mut qi0: i32 = 0;
-            let mut q: crate::arch_h::opus_val32 = 0.;
-            let mut x: crate::arch_h::opus_val16 = 0.;
-            let mut f: crate::arch_h::opus_val32 = 0.;
-            let mut tmp: crate::arch_h::opus_val32 = 0.;
-            let mut oldE: crate::arch_h::opus_val16 = 0.;
-            let mut decay_bound: crate::arch_h::opus_val16 = 0.;
+            let mut q: opus_val32 = 0.;
+            let mut x: opus_val16 = 0.;
+            let mut f: opus_val32 = 0.;
+            let mut tmp: opus_val32 = 0.;
+            let mut oldE: opus_val16 = 0.;
+            let mut decay_bound: opus_val16 = 0.;
             x = *eBands.offset((i + c * (*m).nbEBands) as isize);
             oldE = if -9.0f32 > *oldEBands.offset((i + c * (*m).nbEBands) as isize) {
                 -9.0f32
@@ -671,7 +671,7 @@ unsafe extern "C" fn quant_coarse_energy_impl(
                 let mut pi: i32 = 0;
                 pi = 2 as i32 * (if i < 20 as i32 { i } else { 20 as i32 });
                 crate::src::opus_1_2_1::celt::laplace::ec_laplace_encode(
-                    enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    enc as *mut ec_ctx,
                     &mut qi,
                     ((*prob_model.offset(pi as isize) as i32) << 7 as i32) as u32,
                     (*prob_model.offset((pi + 1 as i32) as isize) as i32) << 6 as i32,
@@ -685,7 +685,7 @@ unsafe extern "C" fn quant_coarse_energy_impl(
                     1 as i32
                 };
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
-                    enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    enc as *mut ec_ctx,
                     2 as i32 * qi ^ -((qi < 0 as i32) as i32),
                     small_energy_icdf.as_ptr(),
                     2 as i32 as u32,
@@ -693,7 +693,7 @@ unsafe extern "C" fn quant_coarse_energy_impl(
             } else if budget - tell >= 1 as i32 {
                 qi = if (0 as i32) < qi { 0 as i32 } else { qi };
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
-                    enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    enc as *mut ec_ctx,
                     -qi,
                     1 as i32 as u32,
                 );
@@ -701,8 +701,8 @@ unsafe extern "C" fn quant_coarse_energy_impl(
                 qi = -(1 as i32)
             }
             *error.offset((i + c * (*m).nbEBands) as isize) = f - qi as f32;
-            badness += ::libc::abs(qi0 - qi);
-            q = qi as crate::arch_h::opus_val32;
+            badness += libc::abs(qi0 - qi);
+            q = qi as opus_val32;
             tmp = coef * oldE + prev[c as usize] + q;
             *oldEBands.offset((i + c * (*m).nbEBands) as isize) = tmp;
             prev[c as usize] = prev[c as usize] + q - beta * q;
@@ -718,30 +718,30 @@ unsafe extern "C" fn quant_coarse_energy_impl(
 #[no_mangle]
 
 pub unsafe extern "C" fn quant_coarse_energy(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
     mut effEnd: i32,
-    mut eBands: *const crate::arch_h::opus_val16,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
-    mut budget: crate::opus_types_h::opus_uint32,
-    mut error: *mut crate::arch_h::opus_val16,
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut eBands: *const opus_val16,
+    mut oldEBands: *mut opus_val16,
+    mut budget: opus_uint32,
+    mut error: *mut opus_val16,
+    mut enc: *mut ec_enc,
     mut C: i32,
     mut LM: i32,
     mut nbAvailableBytes: i32,
     mut force_intra: i32,
-    mut delayedIntra: *mut crate::arch_h::opus_val32,
+    mut delayedIntra: *mut opus_val32,
     mut two_pass: i32,
     mut loss_rate: i32,
     mut lfe: i32,
 ) {
     let mut intra: i32 = 0;
-    let mut max_decay: crate::arch_h::opus_val16 = 0.;
-    let mut oldEBands_intra: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
-    let mut error_intra: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
-    let mut enc_start_state: crate::src::opus_1_2_1::celt::entcode::ec_enc =
-        crate::src::opus_1_2_1::celt::entcode::ec_enc {
+    let mut max_decay: opus_val16 = 0.;
+    let mut oldEBands_intra: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut error_intra: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut enc_start_state: ec_enc =
+        ec_enc {
             buf: 0 as *mut u8,
             storage: 0,
             end_offs: 0,
@@ -755,18 +755,18 @@ pub unsafe extern "C" fn quant_coarse_energy(
             rem: 0,
             error: 0,
         };
-    let mut tell: crate::opus_types_h::opus_uint32 = 0;
+    let mut tell: opus_uint32 = 0;
     let mut badness1: i32 = 0 as i32;
-    let mut intra_bias: crate::opus_types_h::opus_int32 = 0;
-    let mut new_distortion: crate::arch_h::opus_val32 = 0.;
+    let mut intra_bias: opus_int32 = 0;
+    let mut new_distortion: opus_val32 = 0.;
     intra = (force_intra != 0
         || two_pass == 0
             && *delayedIntra > (2 as i32 * C * (end - start)) as f32
             && nbAvailableBytes > (end - start) * C) as i32;
     intra_bias = (budget as f32 * *delayedIntra * loss_rate as f32 / (C * 512 as i32) as f32)
-        as crate::opus_types_h::opus_int32;
+        as opus_int32;
     new_distortion = loss_distortion(eBands, oldEBands, start, effEnd, (*m).nbEBands, C);
-    tell = ec_tell(enc) as crate::opus_types_h::opus_uint32;
+    tell = ec_tell(enc) as opus_uint32;
     if tell.wrapping_add(3 as i32 as u32) > budget {
         intra = 0 as i32;
         two_pass = intra
@@ -785,21 +785,21 @@ pub unsafe extern "C" fn quant_coarse_energy(
     enc_start_state = *enc;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul((C * (*m).nbEBands) as libc::c_ulong) as usize,
     );
-    oldEBands_intra = fresh0.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    oldEBands_intra = fresh0.as_mut_ptr() as *mut opus_val16;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul((C * (*m).nbEBands) as libc::c_ulong) as usize,
     );
-    error_intra = fresh1.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    error_intra = fresh1.as_mut_ptr() as *mut opus_val16;
     crate::stdlib::memcpy(
         oldEBands_intra as *mut libc::c_void,
         oldEBands as *const libc::c_void,
         ((C * (*m).nbEBands) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_add(
                 (0 as i32 as isize * oldEBands_intra.offset_from(oldEBands) as isize)
                     as libc::c_ulong,
@@ -812,8 +812,8 @@ pub unsafe extern "C" fn quant_coarse_energy(
             end,
             eBands,
             oldEBands_intra,
-            budget as crate::opus_types_h::opus_int32,
-            tell as crate::opus_types_h::opus_int32,
+            budget as opus_int32,
+            tell as opus_int32,
             e_prob_model[LM as usize][1 as i32 as usize].as_ptr(),
             error_intra,
             enc,
@@ -826,8 +826,8 @@ pub unsafe extern "C" fn quant_coarse_energy(
     }
     if intra == 0 {
         let mut intra_buf: *mut u8 = 0 as *mut u8;
-        let mut enc_intra_state: crate::src::opus_1_2_1::celt::entcode::ec_enc =
-            crate::src::opus_1_2_1::celt::entcode::ec_enc {
+        let mut enc_intra_state: ec_enc =
+            ec_enc {
                 buf: 0 as *mut u8,
                 storage: 0,
                 end_offs: 0,
@@ -841,22 +841,22 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 rem: 0,
                 error: 0,
             };
-        let mut tell_intra: crate::opus_types_h::opus_int32 = 0;
-        let mut nstart_bytes: crate::opus_types_h::opus_uint32 = 0;
-        let mut nintra_bytes: crate::opus_types_h::opus_uint32 = 0;
-        let mut save_bytes: crate::opus_types_h::opus_uint32 = 0;
+        let mut tell_intra: opus_int32 = 0;
+        let mut nstart_bytes: opus_uint32 = 0;
+        let mut nintra_bytes: opus_uint32 = 0;
+        let mut save_bytes: opus_uint32 = 0;
         let mut badness2: i32 = 0;
         let mut intra_bits: *mut u8 = 0 as *mut u8;
-        tell_intra = crate::src::opus_1_2_1::celt::entcode::ec_tell_frac(
-            enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-        ) as crate::opus_types_h::opus_int32;
+        tell_intra = ec_tell_frac(
+            enc as *mut ec_ctx,
+        ) as opus_int32;
         enc_intra_state = *enc;
         nstart_bytes = ec_range_bytes(&mut enc_start_state);
         nintra_bytes = ec_range_bytes(&mut enc_intra_state);
         intra_buf = ec_get_buffer(&mut enc_intra_state).offset(nstart_bytes as isize);
         save_bytes = nintra_bytes.wrapping_sub(nstart_bytes);
         if save_bytes == 0 as i32 as u32 {
-            save_bytes = 0 as i32 as crate::opus_types_h::opus_uint32
+            save_bytes = 0 as i32 as opus_uint32
         }
         let mut fresh2 = ::std::vec::from_elem(
             0,
@@ -882,8 +882,8 @@ pub unsafe extern "C" fn quant_coarse_energy(
             end,
             eBands,
             oldEBands,
-            budget as crate::opus_types_h::opus_int32,
-            tell as crate::opus_types_h::opus_int32,
+            budget as opus_int32,
+            tell as opus_int32,
             e_prob_model[LM as usize][intra as usize].as_ptr(),
             error,
             enc,
@@ -896,9 +896,9 @@ pub unsafe extern "C" fn quant_coarse_energy(
         if two_pass != 0
             && (badness1 < badness2
                 || badness1 == badness2
-                    && crate::src::opus_1_2_1::celt::entcode::ec_tell_frac(
-                        enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    ) as crate::opus_types_h::opus_int32
+                    && ec_tell_frac(
+                        enc as *mut ec_ctx,
+                    ) as opus_int32
                         + intra_bias
                         > tell_intra)
         {
@@ -919,7 +919,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 oldEBands_intra as *const libc::c_void,
                 ((C * (*m).nbEBands) as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_val16>() as libc::c_ulong
                     )
                     .wrapping_add(
                         (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
@@ -931,7 +931,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 error_intra as *const libc::c_void,
                 ((C * (*m).nbEBands) as libc::c_ulong)
                     .wrapping_mul(
-                        ::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong
+                        ::std::mem::size_of::<opus_val16>() as libc::c_ulong
                     )
                     .wrapping_add(
                         (0 as i32 as isize * error.offset_from(error_intra) as isize)
@@ -945,7 +945,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             oldEBands as *mut libc::c_void,
             oldEBands_intra as *const libc::c_void,
             ((C * (*m).nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
                         as libc::c_ulong,
@@ -955,7 +955,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             error as *mut libc::c_void,
             error_intra as *const libc::c_void,
             ((C * (*m).nbEBands) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize * error.offset_from(error_intra) as isize) as libc::c_ulong,
                 ),
@@ -971,13 +971,13 @@ pub unsafe extern "C" fn quant_coarse_energy(
 #[no_mangle]
 
 pub unsafe extern "C" fn quant_fine_energy(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
-    mut error: *mut crate::arch_h::opus_val16,
+    mut oldEBands: *mut opus_val16,
+    mut error: *mut opus_val16,
     mut fine_quant: *mut i32,
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut enc: *mut ec_enc,
     mut C: i32,
 ) {
     let mut i: i32 = 0;
@@ -985,13 +985,13 @@ pub unsafe extern "C" fn quant_fine_energy(
     /* Encode finer resolution */
     i = start;
     while i < end {
-        let mut frac: crate::opus_types_h::opus_int16 =
-            ((1 as i32) << *fine_quant.offset(i as isize)) as crate::opus_types_h::opus_int16;
+        let mut frac: opus_int16 =
+            ((1 as i32) << *fine_quant.offset(i as isize)) as opus_int16;
         if !(*fine_quant.offset(i as isize) <= 0 as i32) {
             c = 0 as i32;
             loop {
                 let mut q2: i32 = 0;
-                let mut offset: crate::arch_h::opus_val16 = 0.;
+                let mut offset: opus_val16 = 0.;
                 q2 = crate::stdlib::floor(
                     ((*error.offset((i + c * (*m).nbEBands) as isize) + 0.5f32)
                         * frac as i32 as f32) as f64,
@@ -1003,8 +1003,8 @@ pub unsafe extern "C" fn quant_fine_energy(
                     q2 = 0 as i32
                 }
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bits(
-                    enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    q2 as crate::opus_types_h::opus_uint32,
+                    enc as *mut ec_ctx,
+                    q2 as opus_uint32,
                     *fine_quant.offset(i as isize) as u32,
                 );
                 offset = (q2 as f32 + 0.5f32)
@@ -1028,15 +1028,15 @@ pub unsafe extern "C" fn quant_fine_energy(
 #[no_mangle]
 
 pub unsafe extern "C" fn quant_energy_finalise(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
-    mut error: *mut crate::arch_h::opus_val16,
+    mut oldEBands: *mut opus_val16,
+    mut error: *mut opus_val16,
     mut fine_quant: *mut i32,
     mut fine_priority: *mut i32,
     mut bits_left: i32,
-    mut enc: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
+    mut enc: *mut ec_enc,
     mut C: i32,
 ) {
     let mut i: i32 = 0;
@@ -1053,15 +1053,15 @@ pub unsafe extern "C" fn quant_energy_finalise(
                 c = 0 as i32;
                 loop {
                     let mut q2: i32 = 0;
-                    let mut offset: crate::arch_h::opus_val16 = 0.;
+                    let mut offset: opus_val16 = 0.;
                     q2 = if *error.offset((i + c * (*m).nbEBands) as isize) < 0 as i32 as f32 {
                         0 as i32
                     } else {
                         1 as i32
                     };
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_bits(
-                        enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                        q2 as crate::opus_types_h::opus_uint32,
+                        enc as *mut ec_ctx,
+                        q2 as opus_uint32,
                         1 as i32 as u32,
                     );
                     offset = (q2 as f32 - 0.5f32)
@@ -1087,42 +1087,42 @@ pub unsafe extern "C" fn quant_energy_finalise(
 #[no_mangle]
 
 pub unsafe extern "C" fn unquant_coarse_energy(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
+    mut oldEBands: *mut opus_val16,
     mut intra: i32,
-    mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut dec: *mut ec_dec,
     mut C: i32,
     mut LM: i32,
 ) {
     let mut prob_model: *const u8 = e_prob_model[LM as usize][intra as usize].as_ptr();
     let mut i: i32 = 0;
     let mut c: i32 = 0;
-    let mut prev: [crate::arch_h::opus_val32; 2] = [
-        0 as i32 as crate::arch_h::opus_val32,
-        0 as i32 as crate::arch_h::opus_val32,
+    let mut prev: [opus_val32; 2] = [
+        0 as i32 as opus_val32,
+        0 as i32 as opus_val32,
     ];
-    let mut coef: crate::arch_h::opus_val16 = 0.;
-    let mut beta: crate::arch_h::opus_val16 = 0.;
-    let mut budget: crate::opus_types_h::opus_int32 = 0;
-    let mut tell: crate::opus_types_h::opus_int32 = 0;
+    let mut coef: opus_val16 = 0.;
+    let mut beta: opus_val16 = 0.;
+    let mut budget: opus_int32 = 0;
+    let mut tell: opus_int32 = 0;
     if intra != 0 {
-        coef = 0 as i32 as crate::arch_h::opus_val16;
+        coef = 0 as i32 as opus_val16;
         beta = beta_intra
     } else {
         beta = beta_coef[LM as usize];
         coef = pred_coef[LM as usize]
     }
-    budget = (*dec).storage.wrapping_mul(8 as i32 as u32) as crate::opus_types_h::opus_int32;
+    budget = (*dec).storage.wrapping_mul(8 as i32 as u32) as opus_int32;
     /* Decode at a fixed coarse resolution */
     i = start;
     while i < end {
         c = 0 as i32;
         loop {
             let mut qi: i32 = 0;
-            let mut q: crate::arch_h::opus_val32 = 0.;
-            let mut tmp: crate::arch_h::opus_val32 = 0.;
+            let mut q: opus_val32 = 0.;
+            let mut tmp: opus_val32 = 0.;
             /* It would be better to express this invariant as a
             test on C at function entry, but that isn't enough
             to make the static analyzer happy. */
@@ -1131,26 +1131,26 @@ pub unsafe extern "C" fn unquant_coarse_energy(
                 let mut pi: i32 = 0;
                 pi = 2 as i32 * (if i < 20 as i32 { i } else { 20 as i32 });
                 qi = crate::src::opus_1_2_1::celt::laplace::ec_laplace_decode(
-                    dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    dec as *mut ec_ctx,
                     ((*prob_model.offset(pi as isize) as i32) << 7 as i32) as u32,
                     (*prob_model.offset((pi + 1 as i32) as isize) as i32) << 6 as i32,
                 )
             } else if budget - tell >= 2 as i32 {
                 qi = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                    dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    dec as *mut ec_ctx,
                     small_energy_icdf.as_ptr(),
                     2 as i32 as u32,
                 );
                 qi = qi >> 1 as i32 ^ -(qi & 1 as i32)
             } else if budget - tell >= 1 as i32 {
                 qi = -crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp(
-                    dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    dec as *mut ec_ctx,
                     1 as i32 as u32,
                 )
             } else {
                 qi = -(1 as i32)
             }
-            q = qi as crate::arch_h::opus_val32;
+            q = qi as opus_val32;
             *oldEBands.offset((i + c * (*m).nbEBands) as isize) =
                 if -9.0f32 > *oldEBands.offset((i + c * (*m).nbEBands) as isize) {
                     -9.0f32
@@ -1171,12 +1171,12 @@ pub unsafe extern "C" fn unquant_coarse_energy(
 #[no_mangle]
 
 pub unsafe extern "C" fn unquant_fine_energy(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
+    mut oldEBands: *mut opus_val16,
     mut fine_quant: *mut i32,
-    mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut dec: *mut ec_dec,
     mut C: i32,
 ) {
     let mut i: i32 = 0;
@@ -1188,9 +1188,9 @@ pub unsafe extern "C" fn unquant_fine_energy(
             c = 0 as i32;
             loop {
                 let mut q2: i32 = 0;
-                let mut offset: crate::arch_h::opus_val16 = 0.;
+                let mut offset: opus_val16 = 0.;
                 q2 = crate::src::opus_1_2_1::celt::entdec::ec_dec_bits(
-                    dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                    dec as *mut ec_ctx,
                     *fine_quant.offset(i as isize) as u32,
                 ) as i32;
                 offset = (q2 as f32 + 0.5f32)
@@ -1211,14 +1211,14 @@ pub unsafe extern "C" fn unquant_fine_energy(
 #[no_mangle]
 
 pub unsafe extern "C" fn unquant_energy_finalise(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut start: i32,
     mut end: i32,
-    mut oldEBands: *mut crate::arch_h::opus_val16,
+    mut oldEBands: *mut opus_val16,
     mut fine_quant: *mut i32,
     mut fine_priority: *mut i32,
     mut bits_left: i32,
-    mut dec: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
+    mut dec: *mut ec_dec,
     mut C: i32,
 ) {
     let mut i: i32 = 0;
@@ -1235,9 +1235,9 @@ pub unsafe extern "C" fn unquant_energy_finalise(
                 c = 0 as i32;
                 loop {
                     let mut q2: i32 = 0;
-                    let mut offset: crate::arch_h::opus_val16 = 0.;
+                    let mut offset: opus_val16 = 0.;
                     q2 = crate::src::opus_1_2_1::celt::entdec::ec_dec_bits(
-                        dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                        dec as *mut ec_ctx,
                         1 as i32 as u32,
                     ) as i32;
                     offset = (q2 as f32 - 0.5f32)
@@ -1288,11 +1288,11 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn amp2Log2(
-    mut m: *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
+    mut m: *const OpusCustomMode,
     mut effEnd: i32,
     mut end: i32,
-    mut bandE: *mut crate::arch_h::celt_ener,
-    mut bandLogE: *mut crate::arch_h::opus_val16,
+    mut bandE: *mut celt_ener,
+    mut bandLogE: *mut opus_val16,
     mut C: i32,
 ) {
     let mut c: i32 = 0;

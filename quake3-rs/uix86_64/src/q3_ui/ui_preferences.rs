@@ -37,39 +37,39 @@ pub use crate::ui_local_h::menutext_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct preferences_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub crosshair: crate::ui_local_h::menulist_s,
-    pub simpleitems: crate::ui_local_h::menuradiobutton_s,
-    pub brass: crate::ui_local_h::menuradiobutton_s,
-    pub wallmarks: crate::ui_local_h::menuradiobutton_s,
-    pub dynamiclights: crate::ui_local_h::menuradiobutton_s,
-    pub identifytarget: crate::ui_local_h::menuradiobutton_s,
-    pub highqualitysky: crate::ui_local_h::menuradiobutton_s,
-    pub synceveryframe: crate::ui_local_h::menuradiobutton_s,
-    pub forcemodel: crate::ui_local_h::menuradiobutton_s,
-    pub drawteamoverlay: crate::ui_local_h::menulist_s,
-    pub allowdownload: crate::ui_local_h::menuradiobutton_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub crosshairShader: [crate::src::qcommon::q_shared::qhandle_t; 10],
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub crosshair: menulist_s,
+    pub simpleitems: menuradiobutton_s,
+    pub brass: menuradiobutton_s,
+    pub wallmarks: menuradiobutton_s,
+    pub dynamiclights: menuradiobutton_s,
+    pub identifytarget: menuradiobutton_s,
+    pub highqualitysky: menuradiobutton_s,
+    pub synceveryframe: menuradiobutton_s,
+    pub forcemodel: menuradiobutton_s,
+    pub drawteamoverlay: menulist_s,
+    pub allowdownload: menuradiobutton_s,
+    pub back: menubitmap_s,
+    pub crosshairShader: [qhandle_t; 10],
 }
 
 static mut s_preferences: preferences_t = preferences_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -79,8 +79,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -91,8 +91,8 @@ static mut s_preferences: preferences_t = preferences_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -102,8 +102,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -118,8 +118,8 @@ static mut s_preferences: preferences_t = preferences_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -129,8 +129,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -145,8 +145,8 @@ static mut s_preferences: preferences_t = preferences_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    crosshair: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    crosshair: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -156,8 +156,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -174,8 +174,8 @@ static mut s_preferences: preferences_t = preferences_t {
         columns: 0,
         separation: 0,
     },
-    simpleitems: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    simpleitems: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -185,8 +185,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -195,8 +195,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    brass: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    brass: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -206,8 +206,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -216,8 +216,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    wallmarks: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    wallmarks: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -227,8 +227,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -237,8 +237,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    dynamiclights: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    dynamiclights: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -248,8 +248,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -258,8 +258,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    identifytarget: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    identifytarget: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -269,8 +269,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -279,8 +279,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    highqualitysky: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    highqualitysky: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -290,8 +290,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -300,8 +300,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    synceveryframe: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    synceveryframe: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -311,8 +311,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -321,8 +321,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    forcemodel: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    forcemodel: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -332,8 +332,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -342,8 +342,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    drawteamoverlay: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    drawteamoverlay: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -353,8 +353,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -371,8 +371,8 @@ static mut s_preferences: preferences_t = preferences_t {
         columns: 0,
         separation: 0,
     },
-    allowdownload: crate::ui_local_h::menuradiobutton_s {
-        generic: crate::ui_local_h::menucommon_s {
+    allowdownload: menuradiobutton_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -382,8 +382,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -392,8 +392,8 @@ static mut s_preferences: preferences_t = preferences_t {
         },
         curvalue: 0,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -403,8 +403,8 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -431,42 +431,42 @@ static mut teamoverlay_names: [*const libc::c_char; 5] = [
 ];
 
 unsafe extern "C" fn Preferences_SetMenuItems() {
-    s_preferences.crosshair.curvalue = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.crosshair.curvalue = trap_Cvar_VariableValue(
         b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char,
     ) as i32
         % 10 as i32;
-    s_preferences.simpleitems.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.simpleitems.curvalue = (trap_Cvar_VariableValue(
         b"cg_simpleItems\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.brass.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.brass.curvalue = (trap_Cvar_VariableValue(
         b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.wallmarks.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.wallmarks.curvalue = (trap_Cvar_VariableValue(
         b"cg_marks\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.identifytarget.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.identifytarget.curvalue = (trap_Cvar_VariableValue(
         b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.dynamiclights.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.dynamiclights.curvalue = (trap_Cvar_VariableValue(
         b"r_dynamiclight\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.highqualitysky.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.highqualitysky.curvalue = (trap_Cvar_VariableValue(
         b"r_fastsky\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32 as f32) as i32;
-    s_preferences.synceveryframe.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.synceveryframe.curvalue = (trap_Cvar_VariableValue(
         b"r_finish\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.forcemodel.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue(
         b"cg_forcemodel\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
-    s_preferences.drawteamoverlay.curvalue = crate::src::qcommon::q_shared::Com_Clamp(
+    s_preferences.drawteamoverlay.curvalue = Com_Clamp(
         0 as i32 as f32,
         3 as i32 as f32,
-        crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+        trap_Cvar_VariableValue(
             b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char,
         ),
     ) as i32;
-    s_preferences.allowdownload.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    s_preferences.allowdownload.curvalue = (trap_Cvar_VariableValue(
         b"cl_allowDownload\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
 }
@@ -475,85 +475,85 @@ unsafe extern "C" fn Preferences_Event(mut ptr: *mut libc::c_void, mut notificat
     if notification != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         127 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char,
                 s_preferences.crosshair.curvalue as f32,
             );
         }
         128 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_simpleItems\x00" as *const u8 as *const libc::c_char,
                 s_preferences.simpleitems.curvalue as f32,
             );
         }
         129 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_fastsky\x00" as *const u8 as *const libc::c_char,
                 (s_preferences.highqualitysky.curvalue == 0) as i32 as f32,
             );
         }
         130 => {
             if s_preferences.brass.curvalue != 0 {
-                crate::src::ui::ui_syscalls::trap_Cvar_Reset(
+                trap_Cvar_Reset(
                     b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
                 );
             } else {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
                     0 as i32 as f32,
                 );
             }
         }
         131 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_marks\x00" as *const u8 as *const libc::c_char,
                 s_preferences.wallmarks.curvalue as f32,
             );
         }
         132 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_dynamiclight\x00" as *const u8 as *const libc::c_char,
                 s_preferences.dynamiclights.curvalue as f32,
             );
         }
         133 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char,
                 s_preferences.identifytarget.curvalue as f32,
             );
         }
         134 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"r_finish\x00" as *const u8 as *const libc::c_char,
                 s_preferences.synceveryframe.curvalue as f32,
             );
         }
         135 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_forcemodel\x00" as *const u8 as *const libc::c_char,
                 s_preferences.forcemodel.curvalue as f32,
             );
         }
         136 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char,
                 s_preferences.drawteamoverlay.curvalue as f32,
             );
         }
         137 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"cl_allowDownload\x00" as *const u8 as *const libc::c_char,
                 s_preferences.allowdownload.curvalue as f32,
             );
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"sv_allowDownload\x00" as *const u8 as *const libc::c_char,
                 s_preferences.allowdownload.curvalue as f32,
             );
         }
         138 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         _ => {}
     };
@@ -565,39 +565,39 @@ Crosshair_Draw
 */
 
 unsafe extern "C" fn Crosshair_Draw(mut self_0: *mut libc::c_void) {
-    let mut s: *mut crate::ui_local_h::menulist_s = 0 as *mut crate::ui_local_h::menulist_s;
+    let mut s: *mut menulist_s = 0 as *mut menulist_s;
     let mut color: *mut f32 = 0 as *mut f32;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut style: i32 = 0;
-    let mut focus: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    s = self_0 as *mut crate::ui_local_h::menulist_s;
+    let mut focus: qboolean = qfalse;
+    s = self_0 as *mut menulist_s;
     x = (*s).generic.x;
     y = (*s).generic.y;
     style = 0x10 as i32;
     focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
     if (*s).generic.flags & 0x2000 as i32 as u32 != 0 {
-        color = crate::src::q3_ui::ui_qmenu::text_color_disabled.as_mut_ptr()
+        color = text_color_disabled.as_mut_ptr()
     } else if focus as u64 != 0 {
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr();
+        color = text_color_highlight.as_mut_ptr();
         style |= 0x4000 as i32
     } else if (*s).generic.flags & 0x1 as i32 as u32 != 0 {
-        color = crate::src::q3_ui::ui_qmenu::text_color_highlight.as_mut_ptr();
+        color = text_color_highlight.as_mut_ptr();
         style |= 0x1000 as i32
     } else {
-        color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr()
+        color = text_color_normal.as_mut_ptr()
     }
     if focus as u64 != 0 {
         // draw cursor
-        crate::src::q3_ui::ui_atoms::UI_FillRect(
+        UI_FillRect(
             (*s).generic.left as f32,
             (*s).generic.top as f32,
             ((*s).generic.right - (*s).generic.left + 1 as i32) as f32,
             ((*s).generic.bottom - (*s).generic.top + 1 as i32) as f32,
-            crate::src::q3_ui::ui_qmenu::listbar_color.as_mut_ptr(),
+            listbar_color.as_mut_ptr(),
         );
-        crate::src::q3_ui::ui_atoms::UI_DrawChar(
+        UI_DrawChar(
             x,
             y,
             13 as i32,
@@ -605,7 +605,7 @@ unsafe extern "C" fn Crosshair_Draw(mut self_0: *mut libc::c_void) {
             color,
         );
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         x - 8 as i32,
         y,
         (*s).generic.name,
@@ -615,7 +615,7 @@ unsafe extern "C" fn Crosshair_Draw(mut self_0: *mut libc::c_void) {
     if (*s).curvalue == 0 {
         return;
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
+    UI_DrawHandlePic(
         (x + 8 as i32) as f32,
         (y - 4 as i32) as f32,
         24 as i32 as f32,
@@ -632,14 +632,14 @@ unsafe extern "C" fn Preferences_MenuInit() {
         ::std::mem::size_of::<preferences_t>() as libc::c_ulong,
     );
     Preferences_Cache();
-    s_preferences.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    s_preferences.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_preferences.menu.wrapAround = qtrue;
+    s_preferences.menu.fullscreen = qtrue;
     s_preferences.banner.generic.type_0 = 10 as i32;
     s_preferences.banner.generic.x = 320 as i32;
     s_preferences.banner.generic.y = 16 as i32;
     s_preferences.banner.string =
         b"GAME OPTIONS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    s_preferences.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    s_preferences.banner.color = color_white.as_mut_ptr();
     s_preferences.banner.style = 0x1 as i32;
     s_preferences.framel.generic.type_0 = 6 as i32;
     s_preferences.framel.generic.name =
@@ -790,74 +790,74 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.back.height = 64 as i32;
     s_preferences.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.crosshair as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.crosshair as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.simpleitems as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.simpleitems as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.wallmarks as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.wallmarks as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.brass as *mut crate::ui_local_h::menuradiobutton_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.brass as *mut menuradiobutton_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.dynamiclights as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.dynamiclights as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.identifytarget as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.identifytarget as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.highqualitysky as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.highqualitysky as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.synceveryframe as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.synceveryframe as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.forcemodel as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.forcemodel as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.drawteamoverlay as *mut crate::ui_local_h::menulist_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.drawteamoverlay as *mut menulist_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.allowdownload as *mut crate::ui_local_h::menuradiobutton_s
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.allowdownload as *mut menuradiobutton_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut s_preferences.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
+        &mut s_preferences.back as *mut menubitmap_s as *mut libc::c_void,
     );
     Preferences_SetMenuItems();
 }
@@ -870,23 +870,23 @@ Preferences_Cache
 
 pub unsafe extern "C" fn Preferences_Cache() {
     let mut n: i32 = 0;
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
     n = 0 as i32;
     while n < 10 as i32 {
         s_preferences.crosshairShader[n as usize] =
-            crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
-                crate::src::qcommon::q_shared::va(
+            trap_R_RegisterShaderNoMip(
+                va(
                     b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     'a' as i32 + n,
@@ -990,7 +990,7 @@ UI_PreferencesMenu
 
 pub unsafe extern "C" fn UI_PreferencesMenu() {
     Preferences_MenuInit();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_preferences.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
     );
 }

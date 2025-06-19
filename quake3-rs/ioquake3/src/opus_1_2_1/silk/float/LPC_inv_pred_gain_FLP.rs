@@ -73,7 +73,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_FLP(
     mut A: *const f32,
-    mut order: crate::opus_types_h::opus_int32,
+    mut order: opus_int32,
 ) -> f32
 /* I    prediction order                                            */ {
     let mut k: i32 = 0;

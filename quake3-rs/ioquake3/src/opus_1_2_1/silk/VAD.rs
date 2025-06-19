@@ -216,7 +216,7 @@ pub use crate::src::opus_1_2_1::silk::VAD::SigProc_FIX_h::silk_min_int;
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_VAD_Init(
-    mut psSilk_VAD: *mut crate::structs_h::silk_VAD_state,
+    mut psSilk_VAD: *mut silk_VAD_state,
 ) -> i32
 /* I/O  Pointer to Silk VAD state                   */ {
     let mut b: i32 = 0;
@@ -225,7 +225,7 @@ pub unsafe extern "C" fn silk_VAD_Init(
     crate::stdlib::memset(
         psSilk_VAD as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::structs_h::silk_VAD_state>() as libc::c_ulong,
+        ::std::mem::size_of::<silk_VAD_state>() as libc::c_ulong,
     );
     /* init noise levels */
     /* Initialize array with approx pink noise levels (psd proportional to inverse of frequency) */
@@ -254,7 +254,7 @@ pub unsafe extern "C" fn silk_VAD_Init(
 }
 /* Weighting factors for tilt measure */
 
-static mut tiltWeights: [crate::opus_types_h::opus_int32; 4] =
+static mut tiltWeights: [opus_int32; 4] =
     [30000 as i32, 6000 as i32, -(12000 as i32), -(12000 as i32)];
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
@@ -454,8 +454,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut pIn: *const crate::opus_types_h::opus_int16,
+    mut psEncC: *mut silk_encoder_state,
+    mut pIn: *const opus_int16,
 ) -> i32
 /* I    PCM input                                   */ {
     let mut SA_Q15: i32 = 0;
@@ -470,17 +470,17 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     let mut i: i32 = 0;
     let mut b: i32 = 0;
     let mut s: i32 = 0;
-    let mut sumSquared: crate::opus_types_h::opus_int32 = 0;
-    let mut smooth_coef_Q16: crate::opus_types_h::opus_int32 = 0;
-    let mut HPstateTmp: crate::opus_types_h::opus_int16 = 0;
-    let mut X: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
-    let mut Xnrg: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut NrgToNoiseRatio_Q8: [crate::opus_types_h::opus_int32; 4] = [0; 4];
-    let mut speech_nrg: crate::opus_types_h::opus_int32 = 0;
-    let mut x_tmp: crate::opus_types_h::opus_int32 = 0;
+    let mut sumSquared: opus_int32 = 0;
+    let mut smooth_coef_Q16: opus_int32 = 0;
+    let mut HPstateTmp: opus_int16 = 0;
+    let mut X: *mut opus_int16 = 0 as *mut opus_int16;
+    let mut Xnrg: [opus_int32; 4] = [0; 4];
+    let mut NrgToNoiseRatio_Q8: [opus_int32; 4] = [0; 4];
+    let mut speech_nrg: opus_int32 = 0;
+    let mut x_tmp: opus_int32 = 0;
     let mut X_offset: [i32; 4] = [0; 4];
     let mut ret: i32 = 0 as i32;
-    let mut psSilk_VAD: *mut crate::structs_h::silk_VAD_state = &mut (*psEncC).sVAD;
+    let mut psSilk_VAD: *mut silk_VAD_state = &mut (*psEncC).sVAD;
     /* Safety checks */
     /* **********************/
     /* Filter and Decimate */
@@ -503,13 +503,13 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     X_offset[3 as i32 as usize] = X_offset[2 as i32 as usize] + decimated_framelength2;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul((X_offset[3 as i32 as usize] + decimated_framelength1) as libc::c_ulong)
             as usize,
     );
-    X = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    X = fresh0.as_mut_ptr() as *mut opus_int16;
     /* 0-8 kHz to 0-4 kHz and 4-8 kHz */
-    crate::src::opus_1_2_1::silk::ana_filt_bank_1::silk_ana_filt_bank_1(
+    silk_ana_filt_bank_1(
         pIn,
         &mut *(*psSilk_VAD)
             .AnaState
@@ -520,7 +520,7 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
         (*psEncC).frame_length,
     );
     /* 0-4 kHz to 0-2 kHz and 2-4 kHz */
-    crate::src::opus_1_2_1::silk::ana_filt_bank_1::silk_ana_filt_bank_1(
+    silk_ana_filt_bank_1(
         X,
         &mut *(*psSilk_VAD)
             .AnaState1
@@ -531,7 +531,7 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
         decimated_framelength1,
     );
     /* 0-2 kHz to 0-1 kHz and 1-2 kHz */
-    crate::src::opus_1_2_1::silk::ana_filt_bank_1::silk_ana_filt_bank_1(
+    silk_ana_filt_bank_1(
         X,
         &mut *(*psSilk_VAD)
             .AnaState2
@@ -546,19 +546,19 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     /* ********************************************/
     *X.offset((decimated_framelength - 1 as i32) as isize) =
         (*X.offset((decimated_framelength - 1 as i32) as isize) as i32 >> 1 as i32)
-            as crate::opus_types_h::opus_int16;
+            as opus_int16;
     HPstateTmp = *X.offset((decimated_framelength - 1 as i32) as isize);
     i = decimated_framelength - 1 as i32;
     while i > 0 as i32 {
         *X.offset((i - 1 as i32) as isize) = (*X.offset((i - 1 as i32) as isize) as i32 >> 1 as i32)
-            as crate::opus_types_h::opus_int16;
+            as opus_int16;
         let ref mut fresh1 = *X.offset(i as isize);
         *fresh1 = (*fresh1 as i32 - *X.offset((i - 1 as i32) as isize) as i32)
-            as crate::opus_types_h::opus_int16;
+            as opus_int16;
         i -= 1
     }
     let ref mut fresh2 = *X.offset(0 as i32 as isize);
-    *fresh2 = (*fresh2 as i32 - (*psSilk_VAD).HPstate as i32) as crate::opus_types_h::opus_int16;
+    *fresh2 = (*fresh2 as i32 - (*psSilk_VAD).HPstate as i32) as opus_int16;
     (*psSilk_VAD).HPstate = HPstateTmp;
     /* ************************************/
     /* Calculate the energy in each band */
@@ -584,15 +584,15 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
                 x_tmp = *X.offset((X_offset[b as usize] + i + dec_subframe_offset) as isize) as i32
                     >> 3 as i32;
                 sumSquared = sumSquared
-                    + x_tmp as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                        * x_tmp as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32;
+                    + x_tmp as opus_int16 as opus_int32
+                        * x_tmp as opus_int16
+                            as opus_int32;
                 i += 1
             }
             /* Add/saturate summed energy of current subframe */
             if s < ((1 as i32) << 2 as i32) - 1 as i32 {
-                Xnrg[b as usize] = if (Xnrg[b as usize] as crate::opus_types_h::opus_uint32)
-                    .wrapping_add(sumSquared as crate::opus_types_h::opus_uint32)
+                Xnrg[b as usize] = if (Xnrg[b as usize] as opus_uint32)
+                    .wrapping_add(sumSquared as opus_uint32)
                     & 0x80000000 as u32
                     != 0
                 {
@@ -602,8 +602,8 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
                 }
             } else {
                 /* Look-ahead subframe */
-                Xnrg[b as usize] = if (Xnrg[b as usize] as crate::opus_types_h::opus_uint32)
-                    .wrapping_add((sumSquared >> 1 as i32) as crate::opus_types_h::opus_uint32)
+                Xnrg[b as usize] = if (Xnrg[b as usize] as opus_uint32)
+                    .wrapping_add((sumSquared >> 1 as i32) as opus_uint32)
                     & 0x80000000 as u32
                     != 0
                 {
@@ -622,8 +622,8 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     /* Noise estimation */
     /* *******************/
     silk_VAD_GetNoiseLevels(
-        &mut *Xnrg.as_mut_ptr().offset(0 as i32 as isize) as *mut crate::opus_types_h::opus_int32
-            as *const crate::opus_types_h::opus_int32,
+        &mut *Xnrg.as_mut_ptr().offset(0 as i32 as isize) as *mut opus_int32
+            as *const opus_int32,
         psSilk_VAD,
     );
     /* **********************************************/
@@ -638,8 +638,8 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
             /* Divide, with sufficient resolution */
             if Xnrg[b as usize] as u32 & 0xff800000 as u32 == 0 as i32 as u32 {
                 NrgToNoiseRatio_Q8[b as usize] =
-                    ((Xnrg[b as usize] as crate::opus_types_h::opus_uint32) << 8 as i32)
-                        as crate::opus_types_h::opus_int32
+                    ((Xnrg[b as usize] as opus_uint32) << 8 as i32)
+                        as opus_int32
                         / ((*psSilk_VAD).NL[b as usize] + 1 as i32)
             } else {
                 NrgToNoiseRatio_Q8[b as usize] =
@@ -647,25 +647,25 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
             }
             /* Convert to log domain */
             SNR_Q7 =
-                crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(NrgToNoiseRatio_Q8[b as usize])
+                silk_lin2log(NrgToNoiseRatio_Q8[b as usize])
                     - 8 as i32 * 128 as i32;
             /* Sum-of-squares */
             sumSquared = sumSquared
-                + SNR_Q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                    * SNR_Q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32; /* Q14 */
+                + SNR_Q7 as opus_int16 as opus_int32
+                    * SNR_Q7 as opus_int16 as opus_int32; /* Q14 */
             /* Tilt measure */
             if speech_nrg < (1 as i32) << 20 as i32 {
                 /* Scale down SNR value for small subband speech energies */
-                SNR_Q7 = (((silk_SQRT_APPROX(speech_nrg) as crate::opus_types_h::opus_uint32)
-                    << 6 as i32) as crate::opus_types_h::opus_int32
+                SNR_Q7 = (((silk_SQRT_APPROX(speech_nrg) as opus_uint32)
+                    << 6 as i32) as opus_int32
                     as i64
-                    * SNR_Q7 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * SNR_Q7 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
             }
             input_tilt = (input_tilt as i64
                 + (tiltWeights[b as usize] as i64
-                    * SNR_Q7 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32
+                    * SNR_Q7 as opus_int16 as i64
+                    >> 16 as i32)) as opus_int32
         } else {
             NrgToNoiseRatio_Q8[b as usize] = 256 as i32
         }
@@ -675,21 +675,21 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     sumSquared = sumSquared / 4 as i32; /* Q14 */
     /* Root-mean-square approximation, scale to dBs, and write to output pointer */
     pSNR_dB_Q7 =
-        (3 as i32 * silk_SQRT_APPROX(sumSquared)) as crate::opus_types_h::opus_int16 as i32; /* Q7 */
+        (3 as i32 * silk_SQRT_APPROX(sumSquared)) as opus_int16 as i32; /* Q7 */
     /* ********************************/
     /* Speech Probability Estimation */
     /* ********************************/
-    SA_Q15 = crate::src::opus_1_2_1::silk::sigm_Q15::silk_sigm_Q15(
-        (45000 as i32 as i64 * pSNR_dB_Q7 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32
+    SA_Q15 = silk_sigm_Q15(
+        (45000 as i32 as i64 * pSNR_dB_Q7 as opus_int16 as i64 >> 16 as i32)
+            as opus_int32
             - 128 as i32,
     );
     /* *************************/
     /* Frequency Tilt Measure */
     /* *************************/
-    (*psEncC).input_tilt_Q15 = (((crate::src::opus_1_2_1::silk::sigm_Q15::silk_sigm_Q15(input_tilt)
-        - 16384 as i32) as crate::opus_types_h::opus_uint32)
-        << 1 as i32) as crate::opus_types_h::opus_int32;
+    (*psEncC).input_tilt_Q15 = (((silk_sigm_Q15(input_tilt)
+        - 16384 as i32) as opus_uint32)
+        << 1 as i32) as opus_int32;
     /* *************************************************/
     /* Scale the sigmoid output based on power levels */
     /* *************************************************/
@@ -706,11 +706,11 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
         SA_Q15 = SA_Q15 >> 1 as i32
     } else if speech_nrg < 32768 as i32 {
         if (*psEncC).frame_length == 10 as i32 * (*psEncC).fs_kHz {
-            speech_nrg = (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 16 as i32
+            speech_nrg = (((if 0x80000000 as u32 as opus_int32 >> 16 as i32
                 > 0x7fffffff as i32 >> 16 as i32
             {
-                (if speech_nrg > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 16 as i32 {
-                    (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 16 as i32
+                (if speech_nrg > 0x80000000 as u32 as opus_int32 >> 16 as i32 {
+                    (0x80000000 as u32 as opus_int32) >> 16 as i32
                 } else {
                     (if speech_nrg < 0x7fffffff as i32 >> 16 as i32 {
                         (0x7fffffff as i32) >> 16 as i32
@@ -723,21 +723,21 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
                     (0x7fffffff as i32) >> 16 as i32
                 } else {
                     (if speech_nrg
-                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 16 as i32
+                        < 0x80000000 as u32 as opus_int32 >> 16 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 16 as i32
+                        (0x80000000 as u32 as opus_int32) >> 16 as i32
                     } else {
                         speech_nrg
                     })
                 })
-            }) as crate::opus_types_h::opus_uint32)
-                << 16 as i32) as crate::opus_types_h::opus_int32
+            }) as opus_uint32)
+                << 16 as i32) as opus_int32
         } else {
-            speech_nrg = (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 15 as i32
+            speech_nrg = (((if 0x80000000 as u32 as opus_int32 >> 15 as i32
                 > 0x7fffffff as i32 >> 15 as i32
             {
-                (if speech_nrg > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 15 as i32 {
-                    (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 15 as i32
+                (if speech_nrg > 0x80000000 as u32 as opus_int32 >> 15 as i32 {
+                    (0x80000000 as u32 as opus_int32) >> 15 as i32
                 } else {
                     (if speech_nrg < 0x7fffffff as i32 >> 15 as i32 {
                         (0x7fffffff as i32) >> 15 as i32
@@ -750,21 +750,21 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
                     (0x7fffffff as i32) >> 15 as i32
                 } else {
                     (if speech_nrg
-                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 15 as i32
+                        < 0x80000000 as u32 as opus_int32 >> 15 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 15 as i32
+                        (0x80000000 as u32 as opus_int32) >> 15 as i32
                     } else {
                         speech_nrg
                     })
                 })
-            }) as crate::opus_types_h::opus_uint32)
-                << 15 as i32) as crate::opus_types_h::opus_int32
+            }) as opus_uint32)
+                << 15 as i32) as opus_int32
         }
         /* square-root */
         speech_nrg = silk_SQRT_APPROX(speech_nrg);
         SA_Q15 = ((32768 as i32 + speech_nrg) as i64
-            * SA_Q15 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
+            * SA_Q15 as opus_int16 as i64
+            >> 16 as i32) as opus_int32
     }
     /* Copy the resulting speech activity in Q8 */
     (*psEncC).speech_activity_Q8 = silk_min_int(SA_Q15 >> 7 as i32, 0xff as i32);
@@ -773,9 +773,9 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
     /* **********************************/
     /* Smoothing coefficient */
     smooth_coef_Q16 = (4096 as i32 as i64
-        * (SA_Q15 as i64 * SA_Q15 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16 as i64
-        >> 16 as i32) as crate::opus_types_h::opus_int32;
+        * (SA_Q15 as i64 * SA_Q15 as opus_int16 as i64 >> 16 as i32)
+            as opus_int32 as opus_int16 as i64
+        >> 16 as i32) as opus_int32;
     if (*psEncC).frame_length == 10 as i32 * (*psEncC).fs_kHz {
         smooth_coef_Q16 >>= 1 as i32
     }
@@ -785,17 +785,17 @@ pub unsafe extern "C" fn silk_VAD_GetSA_Q8_c(
         (*psSilk_VAD).NrgRatioSmth_Q8[b as usize] = ((*psSilk_VAD).NrgRatioSmth_Q8[b as usize]
             as i64
             + ((NrgToNoiseRatio_Q8[b as usize] - (*psSilk_VAD).NrgRatioSmth_Q8[b as usize]) as i64
-                * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
+                * smooth_coef_Q16 as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         /* signal to noise ratio in dB per band */
         SNR_Q7 = 3 as i32
-            * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(
+            * (silk_lin2log(
                 (*psSilk_VAD).NrgRatioSmth_Q8[b as usize],
             ) - 8 as i32 * 128 as i32);
         /* quality = sigmoid( 0.25 * ( SNR_dB - 16 ) ); */
         (*psEncC).input_quality_bands_Q15[b as usize] =
-            crate::src::opus_1_2_1::silk::sigm_Q15::silk_sigm_Q15(
+            silk_sigm_Q15(
                 SNR_Q7 - 16 as i32 * 128 as i32 >> 4 as i32,
             );
         b += 1
@@ -835,15 +835,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #[inline]
 
 unsafe extern "C" fn silk_VAD_GetNoiseLevels(
-    mut pX: *const crate::opus_types_h::opus_int32,
-    mut psSilk_VAD: *mut crate::structs_h::silk_VAD_state,
+    mut pX: *const opus_int32,
+    mut psSilk_VAD: *mut silk_VAD_state,
 )
 /* I/O  Pointer to Silk VAD state                   */
 {
     let mut k: i32 = 0;
-    let mut nl: crate::opus_types_h::opus_int32 = 0;
-    let mut nrg: crate::opus_types_h::opus_int32 = 0;
-    let mut inv_nrg: crate::opus_types_h::opus_int32 = 0;
+    let mut nl: opus_int32 = 0;
+    let mut nrg: opus_int32 = 0;
+    let mut inv_nrg: opus_int32 = 0;
     let mut coef: i32 = 0;
     let mut min_coef: i32 = 0;
     /* Initially faster smoothing */
@@ -858,8 +858,8 @@ unsafe extern "C" fn silk_VAD_GetNoiseLevels(
         /* Get old noise level estimate for current band */
         nl = (*psSilk_VAD).NL[k as usize];
         /* Add bias */
-        nrg = if (*pX.offset(k as isize) as crate::opus_types_h::opus_uint32).wrapping_add(
-            (*psSilk_VAD).NoiseLevelBias[k as usize] as crate::opus_types_h::opus_uint32,
+        nrg = if (*pX.offset(k as isize) as opus_uint32).wrapping_add(
+            (*psSilk_VAD).NoiseLevelBias[k as usize] as opus_uint32,
         ) & 0x80000000 as u32
             != 0
         {
@@ -871,26 +871,26 @@ unsafe extern "C" fn silk_VAD_GetNoiseLevels(
         inv_nrg = 0x7fffffff as i32 / nrg;
         /* Less update when subband energy is high */
         if nrg
-            > ((nl as crate::opus_types_h::opus_uint32) << 3 as i32)
-                as crate::opus_types_h::opus_int32
+            > ((nl as opus_uint32) << 3 as i32)
+                as opus_int32
         {
             coef = 1024 as i32 >> 3 as i32
         } else if nrg < nl {
             coef = 1024 as i32
         } else {
-            coef = ((inv_nrg as i64 * nl as i64 >> 16 as i32) as crate::opus_types_h::opus_int32
+            coef = ((inv_nrg as i64 * nl as i64 >> 16 as i32) as opus_int32
                 as i64
-                * ((1024 as i32) << 1 as i32) as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * ((1024 as i32) << 1 as i32) as opus_int16 as i64
+                >> 16 as i32) as opus_int32
         }
         /* Initially faster smoothing */
         coef = silk_max_int(coef, min_coef);
         /* Smooth inverse energies */
         (*psSilk_VAD).inv_NL[k as usize] = ((*psSilk_VAD).inv_NL[k as usize] as i64
             + ((inv_nrg - (*psSilk_VAD).inv_NL[k as usize]) as i64
-                * coef as crate::opus_types_h::opus_int16 as i64
+                * coef as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         /* Compute noise level by inverting again */
         nl = 0x7fffffff as i32 / (*psSilk_VAD).inv_NL[k as usize];
         /* Limit noise levels (guarantee 7 bits of head room) */

@@ -121,18 +121,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_bwexpander_32(
-    mut ar: *mut crate::opus_types_h::opus_int32,
+    mut ar: *mut opus_int32,
     d: i32,
-    mut chirp_Q16: crate::opus_types_h::opus_int32,
+    mut chirp_Q16: opus_int32,
 )
 /* I    Chirp factor in Q16                                         */
 {
     let mut i: i32 = 0;
-    let mut chirp_minus_one_Q16: crate::opus_types_h::opus_int32 = chirp_Q16 - 65536 as i32;
+    let mut chirp_minus_one_Q16: opus_int32 = chirp_Q16 - 65536 as i32;
     i = 0 as i32;
     while i < d - 1 as i32 {
         *ar.offset(i as isize) = (chirp_Q16 as i64 * *ar.offset(i as isize) as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         chirp_Q16 += if 16 as i32 == 1 as i32 {
             (chirp_Q16 * chirp_minus_one_Q16 >> 1 as i32)
                 + (chirp_Q16 * chirp_minus_one_Q16 & 1 as i32)
@@ -143,5 +143,5 @@ pub unsafe extern "C" fn silk_bwexpander_32(
     }
     *ar.offset((d - 1 as i32) as isize) = (chirp_Q16 as i64
         * *ar.offset((d - 1 as i32) as isize) as i64
-        >> 16 as i32) as crate::opus_types_h::opus_int32;
+        >> 16 as i32) as opus_int32;
 }

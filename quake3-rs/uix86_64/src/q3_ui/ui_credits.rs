@@ -23,7 +23,7 @@ pub use crate::ui_local_h::menuframework_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct creditsmenu_t {
-    pub menu: crate::ui_local_h::menuframework_s,
+    pub menu: menuframework_s,
     pub frame: i32,
 }
 
@@ -359,7 +359,7 @@ pub unsafe extern "C" fn UI_CreditMenu() {
     s_credits.menu.draw = Some(UI_CreditMenu_Draw as unsafe extern "C" fn() -> ());
     s_credits.menu.key = Some(UI_CreditMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_credits.menu.fullscreen = qtrue;
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
+    UI_PushMenu(
         &mut s_credits.menu as *mut _ as *mut _tag_menuframework,
     );
 }

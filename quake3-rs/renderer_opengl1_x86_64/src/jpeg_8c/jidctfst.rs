@@ -158,35 +158,35 @@ pub use crate::jpeglib_h::J_DITHER_MODE;
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_idct_ifast(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
-    mut coef_block: crate::jpeglib_h::JCOEFPTR,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_col: crate::jmorecfg_h::JDIMENSION,
+    mut cinfo: j_decompress_ptr,
+    mut compptr: *mut jpeg_component_info,
+    mut coef_block: JCOEFPTR,
+    mut output_buf: JSAMPARRAY,
+    mut output_col: JDIMENSION,
 ) {
-    let mut tmp0: crate::jdct_h::DCTELEM = 0; /* buffers data between passes */
-    let mut tmp1: crate::jdct_h::DCTELEM = 0;
-    let mut tmp2: crate::jdct_h::DCTELEM = 0;
-    let mut tmp3: crate::jdct_h::DCTELEM = 0;
-    let mut tmp4: crate::jdct_h::DCTELEM = 0;
-    let mut tmp5: crate::jdct_h::DCTELEM = 0;
-    let mut tmp6: crate::jdct_h::DCTELEM = 0;
-    let mut tmp7: crate::jdct_h::DCTELEM = 0;
-    let mut tmp10: crate::jdct_h::DCTELEM = 0;
-    let mut tmp11: crate::jdct_h::DCTELEM = 0;
-    let mut tmp12: crate::jdct_h::DCTELEM = 0;
-    let mut tmp13: crate::jdct_h::DCTELEM = 0;
-    let mut z5: crate::jdct_h::DCTELEM = 0;
-    let mut z10: crate::jdct_h::DCTELEM = 0;
-    let mut z11: crate::jdct_h::DCTELEM = 0;
-    let mut z12: crate::jdct_h::DCTELEM = 0;
-    let mut z13: crate::jdct_h::DCTELEM = 0;
-    let mut inptr: crate::jpeglib_h::JCOEFPTR = 0 as *mut crate::jmorecfg_h::JCOEF;
-    let mut quantptr: *mut crate::jdct_h::IFAST_MULT_TYPE =
-        0 as *mut crate::jdct_h::IFAST_MULT_TYPE;
+    let mut tmp0: DCTELEM = 0; /* buffers data between passes */
+    let mut tmp1: DCTELEM = 0;
+    let mut tmp2: DCTELEM = 0;
+    let mut tmp3: DCTELEM = 0;
+    let mut tmp4: DCTELEM = 0;
+    let mut tmp5: DCTELEM = 0;
+    let mut tmp6: DCTELEM = 0;
+    let mut tmp7: DCTELEM = 0;
+    let mut tmp10: DCTELEM = 0;
+    let mut tmp11: DCTELEM = 0;
+    let mut tmp12: DCTELEM = 0;
+    let mut tmp13: DCTELEM = 0;
+    let mut z5: DCTELEM = 0;
+    let mut z10: DCTELEM = 0;
+    let mut z11: DCTELEM = 0;
+    let mut z12: DCTELEM = 0;
+    let mut z13: DCTELEM = 0;
+    let mut inptr: JCOEFPTR = 0 as *mut JCOEF;
+    let mut quantptr: *mut IFAST_MULT_TYPE =
+        0 as *mut IFAST_MULT_TYPE;
     let mut wsptr: *mut i32 = 0 as *mut i32;
-    let mut outptr: crate::jpeglib_h::JSAMPROW = 0 as *mut crate::jmorecfg_h::JSAMPLE;
-    let mut range_limit: *mut crate::jmorecfg_h::JSAMPLE =
+    let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
+    let mut range_limit: *mut JSAMPLE =
         (*cinfo).sample_range_limit.offset(128 as i32 as isize);
     let mut ctr: i32 = 0;
     let mut workspace: [i32; 64] = [0; 64];
@@ -194,7 +194,7 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
     /* for IDESCALE */
     /* Pass 1: process columns from input, store into work array. */
     inptr = coef_block;
-    quantptr = (*compptr).dct_table as *mut crate::jdct_h::IFAST_MULT_TYPE;
+    quantptr = (*compptr).dct_table as *mut IFAST_MULT_TYPE;
     wsptr = workspace.as_mut_ptr();
     ctr = 8 as i32;
     while ctr > 0 as i32 {
@@ -216,7 +216,7 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
         {
             /* AC terms all zero */
             let mut dcval: i32 = *inptr.offset((8 as i32 * 0 as i32) as isize)
-                as crate::jdct_h::IFAST_MULT_TYPE
+                as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 0 as i32) as isize); /* advance pointers to next column */
             *wsptr.offset((8 as i32 * 0 as i32) as isize) = dcval;
             *wsptr.offset((8 as i32 * 1 as i32) as isize) = dcval;
@@ -231,47 +231,47 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             wsptr = wsptr.offset(1)
         } else {
             /* Even part */
-            tmp0 = *inptr.offset((8 as i32 * 0 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp0 = *inptr.offset((8 as i32 * 0 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 0 as i32) as isize); /* phase 3 */
-            tmp1 = *inptr.offset((8 as i32 * 2 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp1 = *inptr.offset((8 as i32 * 2 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 2 as i32) as isize); /* phases 5-3 */
-            tmp2 = *inptr.offset((8 as i32 * 4 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp2 = *inptr.offset((8 as i32 * 4 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 4 as i32) as isize); /* 2*c4 */
-            tmp3 = *inptr.offset((8 as i32 * 6 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp3 = *inptr.offset((8 as i32 * 6 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 6 as i32) as isize); /* phase 2 */
             tmp10 = tmp0 + tmp2;
             tmp11 = tmp0 - tmp2;
             tmp13 = tmp1 + tmp3;
-            tmp12 = ((tmp1 - tmp3) as isize * 362 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM
+            tmp12 = ((tmp1 - tmp3) as isize * 362 as i32 as INT32 >> 8 as i32)
+                as DCTELEM
                 - tmp13;
             tmp0 = tmp10 + tmp13;
             tmp3 = tmp10 - tmp13;
             tmp1 = tmp11 + tmp12;
             tmp2 = tmp11 - tmp12;
             /* Odd part */
-            tmp4 = *inptr.offset((8 as i32 * 1 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp4 = *inptr.offset((8 as i32 * 1 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 1 as i32) as isize); /* phase 6 */
-            tmp5 = *inptr.offset((8 as i32 * 3 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp5 = *inptr.offset((8 as i32 * 3 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 3 as i32) as isize); /* phase 5 */
-            tmp6 = *inptr.offset((8 as i32 * 5 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp6 = *inptr.offset((8 as i32 * 5 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 5 as i32) as isize); /* 2*c4 */
-            tmp7 = *inptr.offset((8 as i32 * 7 as i32) as isize) as crate::jdct_h::IFAST_MULT_TYPE
+            tmp7 = *inptr.offset((8 as i32 * 7 as i32) as isize) as IFAST_MULT_TYPE
                 * *quantptr.offset((8 as i32 * 7 as i32) as isize); /* 2*c2 */
             z13 = tmp6 + tmp5; /* 2*(c2-c6) */
             z10 = tmp6 - tmp5; /* -2*(c2+c6) */
             z11 = tmp4 + tmp7; /* phase 2 */
             z12 = tmp4 - tmp7; /* advance pointers to next column */
             tmp7 = z11 + z13;
-            tmp11 = ((z11 - z13) as isize * 362 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM;
-            z5 = ((z10 + z12) as isize * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM;
-            tmp10 = (z12 as isize * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM
+            tmp11 = ((z11 - z13) as isize * 362 as i32 as INT32 >> 8 as i32)
+                as DCTELEM;
+            z5 = ((z10 + z12) as isize * 473 as i32 as INT32 >> 8 as i32)
+                as DCTELEM;
+            tmp10 = (z12 as isize * 277 as i32 as INT32 >> 8 as i32)
+                as DCTELEM
                 - z5;
-            tmp12 = (z10 as isize * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
-                as crate::jdct_h::DCTELEM
+            tmp12 = (z10 as isize * -(669 as i32 as INT32) >> 8 as i32)
+                as DCTELEM
                 + z5;
             tmp6 = tmp12 - tmp7;
             tmp5 = tmp11 - tmp6;
@@ -314,7 +314,7 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             && *wsptr.offset(7 as i32 as isize) == 0 as i32
         {
             /* AC terms all zero */
-            let mut dcval_0: crate::jmorecfg_h::JSAMPLE = *range_limit.offset(
+            let mut dcval_0: JSAMPLE = *range_limit.offset(
                 (*wsptr.offset(0 as i32 as isize) >> 2 as i32 + 3 as i32
                     & 255 as i32 * 4 as i32 + 3 as i32) as isize,
             ); /* advance pointer to next row */
@@ -333,8 +333,8 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             tmp11 = *wsptr.offset(0 as i32 as isize) - *wsptr.offset(4 as i32 as isize);
             tmp13 = *wsptr.offset(2 as i32 as isize) + *wsptr.offset(6 as i32 as isize);
             tmp12 = ((*wsptr.offset(2 as i32 as isize) - *wsptr.offset(6 as i32 as isize)) as isize
-                * 362 as i32 as crate::jmorecfg_h::INT32
-                >> 8 as i32) as crate::jdct_h::DCTELEM
+                * 362 as i32 as INT32
+                >> 8 as i32) as DCTELEM
                 - tmp13;
             tmp0 = tmp10 + tmp13;
             tmp3 = tmp10 - tmp13;
@@ -346,15 +346,15 @@ pub unsafe extern "C" fn jpeg_idct_ifast(
             z11 = *wsptr.offset(1 as i32 as isize) + *wsptr.offset(7 as i32 as isize); /* 2*c2 */
             z12 = *wsptr.offset(1 as i32 as isize) - *wsptr.offset(7 as i32 as isize); /* 2*(c2-c6) */
             tmp7 = z11 + z13; /* -2*(c2+c6) */
-            tmp11 = ((z11 - z13) as isize * 362 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM; /* phase 2 */
-            z5 = ((z10 + z12) as isize * 473 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM;
-            tmp10 = (z12 as isize * 277 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
-                as crate::jdct_h::DCTELEM
+            tmp11 = ((z11 - z13) as isize * 362 as i32 as INT32 >> 8 as i32)
+                as DCTELEM; /* phase 2 */
+            z5 = ((z10 + z12) as isize * 473 as i32 as INT32 >> 8 as i32)
+                as DCTELEM;
+            tmp10 = (z12 as isize * 277 as i32 as INT32 >> 8 as i32)
+                as DCTELEM
                 - z5;
-            tmp12 = (z10 as isize * -(669 as i32 as crate::jmorecfg_h::INT32) >> 8 as i32)
-                as crate::jdct_h::DCTELEM
+            tmp12 = (z10 as isize * -(669 as i32 as INT32) >> 8 as i32)
+                as DCTELEM
                 + z5;
             tmp6 = tmp12 - tmp7;
             tmp5 = tmp11 - tmp6;

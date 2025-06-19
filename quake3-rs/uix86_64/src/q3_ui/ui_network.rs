@@ -30,16 +30,16 @@ pub use crate::ui_local_h::menutext_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct networkOptionsInfo_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub graphics: crate::ui_local_h::menutext_s,
-    pub display: crate::ui_local_h::menutext_s,
-    pub sound: crate::ui_local_h::menutext_s,
-    pub network: crate::ui_local_h::menutext_s,
-    pub rate: crate::ui_local_h::menulist_s,
-    pub back: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub graphics: menutext_s,
+    pub display: menutext_s,
+    pub sound: menutext_s,
+    pub network: menutext_s,
+    pub rate: menulist_s,
+    pub back: menubitmap_s,
 }
 
 static mut rate_items: [*const libc::c_char; 6] = [
@@ -52,19 +52,19 @@ static mut rate_items: [*const libc::c_char; 6] = [
 ];
 
 static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -74,8 +74,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -86,8 +86,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -97,8 +97,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -113,8 +113,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -124,8 +124,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -140,8 +140,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    graphics: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    graphics: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -151,8 +151,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -163,8 +163,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    display: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    display: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -174,8 +174,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -186,8 +186,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    sound: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    sound: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -197,8 +197,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -209,8 +209,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    network: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    network: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -220,8 +220,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -232,8 +232,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    rate: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    rate: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -243,8 +243,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -261,8 +261,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
         columns: 0,
         separation: 0,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -272,8 +272,8 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -299,49 +299,49 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Event(mut ptr: *mut libc::c_void, mut
     if event != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         10 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_video::UI_GraphicsOptionsMenu();
+            UI_PopMenu();
+            UI_GraphicsOptionsMenu();
         }
         11 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_display::UI_DisplayOptionsMenu();
+            UI_PopMenu();
+            UI_DisplayOptionsMenu();
         }
         12 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_sound::UI_SoundOptionsMenu();
+            UI_PopMenu();
+            UI_SoundOptionsMenu();
         }
         14 => {
             if networkOptionsInfo.rate.curvalue == 0 as i32 {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"rate\x00" as *const u8 as *const libc::c_char,
                     2500 as i32 as f32,
                 );
             } else if networkOptionsInfo.rate.curvalue == 1 as i32 {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"rate\x00" as *const u8 as *const libc::c_char,
                     3000 as i32 as f32,
                 );
             } else if networkOptionsInfo.rate.curvalue == 2 as i32 {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"rate\x00" as *const u8 as *const libc::c_char,
                     4000 as i32 as f32,
                 );
             } else if networkOptionsInfo.rate.curvalue == 3 as i32 {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"rate\x00" as *const u8 as *const libc::c_char,
                     5000 as i32 as f32,
                 );
             } else if networkOptionsInfo.rate.curvalue == 4 as i32 {
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"rate\x00" as *const u8 as *const libc::c_char,
                     25000 as i32 as f32,
                 );
             }
         }
         15 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         13 | _ => {}
     };
@@ -361,15 +361,15 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
         ::std::mem::size_of::<networkOptionsInfo_t>() as libc::c_ulong,
     );
     UI_NetworkOptionsMenu_Cache();
-    networkOptionsInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    networkOptionsInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    networkOptionsInfo.menu.wrapAround = qtrue;
+    networkOptionsInfo.menu.fullscreen = qtrue;
     networkOptionsInfo.banner.generic.type_0 = 10 as i32;
     networkOptionsInfo.banner.generic.flags = 0x8 as i32 as u32;
     networkOptionsInfo.banner.generic.x = 320 as i32;
     networkOptionsInfo.banner.generic.y = 16 as i32;
     networkOptionsInfo.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    networkOptionsInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    networkOptionsInfo.banner.color = color_white.as_mut_ptr();
     networkOptionsInfo.banner.style = 0x1 as i32;
     networkOptionsInfo.framel.generic.type_0 = 6 as i32;
     networkOptionsInfo.framel.generic.name =
@@ -398,7 +398,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     networkOptionsInfo.graphics.style = 0x2 as i32;
-    networkOptionsInfo.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    networkOptionsInfo.graphics.color = color_red.as_mut_ptr();
     networkOptionsInfo.display.generic.type_0 = 9 as i32;
     networkOptionsInfo.display.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.display.generic.id = 11 as i32;
@@ -410,7 +410,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     networkOptionsInfo.display.style = 0x2 as i32;
-    networkOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    networkOptionsInfo.display.color = color_red.as_mut_ptr();
     networkOptionsInfo.sound.generic.type_0 = 9 as i32;
     networkOptionsInfo.sound.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.sound.generic.id = 12 as i32;
@@ -422,7 +422,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     networkOptionsInfo.sound.style = 0x2 as i32;
-    networkOptionsInfo.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    networkOptionsInfo.sound.color = color_red.as_mut_ptr();
     networkOptionsInfo.network.generic.type_0 = 9 as i32;
     networkOptionsInfo.network.generic.flags = 0x10 as i32 as u32;
     networkOptionsInfo.network.generic.id = 13 as i32;
@@ -434,7 +434,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     networkOptionsInfo.network.style = 0x2 as i32;
-    networkOptionsInfo.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    networkOptionsInfo.network.color = color_red.as_mut_ptr();
     y = 240 as i32 - 1 as i32 * (16 as i32 + 2 as i32);
     networkOptionsInfo.rate.generic.type_0 = 3 as i32;
     networkOptionsInfo.rate.generic.name = b"Data Rate:\x00" as *const u8 as *const libc::c_char;
@@ -460,43 +460,43 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.back.height = 64 as i32;
     networkOptionsInfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.graphics as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.graphics as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.display as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.display as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.sound as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.sound as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.network as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.network as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.rate as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.rate as *mut menulist_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    rate = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    rate = trap_Cvar_VariableValue(
         b"rate\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     if rate <= 2500 as i32 {
@@ -519,16 +519,16 @@ UI_NetworkOptionsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_NetworkOptionsMenu_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -702,11 +702,11 @@ UI_NetworkOptionsMenu
 
 pub unsafe extern "C" fn UI_NetworkOptionsMenu() {
     UI_NetworkOptionsMenu_Init();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_SetCursorToItem(
-        &mut networkOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut networkOptionsInfo.network as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_SetCursorToItem(
+        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut networkOptionsInfo.network as *mut menutext_s as *mut libc::c_void,
     );
 }

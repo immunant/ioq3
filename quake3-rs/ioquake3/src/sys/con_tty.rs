@@ -112,15 +112,15 @@ extern "C" {
     =============================================================
     */
     #[no_mangle]
-    pub static mut stdinIsATTY: crate::src::qcommon::q_shared::qboolean;
+    pub static mut stdinIsATTY: qboolean;
 }
 
-static mut stdin_active: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut stdin_active: qboolean =
+    qfalse;
 // general flag to tell about tty console mode
 
-static mut ttycon_on: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+static mut ttycon_on: qboolean =
+    qfalse;
 
 static mut ttycon_hide: i32 = 0 as i32;
 
@@ -131,7 +131,7 @@ static mut TTY_erase: i32 = 0;
 
 static mut TTY_eof: i32 = 0;
 
-static mut TTY_tc: ::libc::termios = ::libc::termios {
+static mut TTY_tc: termios = termios {
     c_iflag: 0,
     c_oflag: 0,
     c_cflag: 0,
@@ -142,14 +142,14 @@ static mut TTY_tc: ::libc::termios = ::libc::termios {
     c_ospeed: 0,
 };
 
-static mut TTY_con: crate::qcommon_h::field_t = crate::qcommon_h::field_t {
+static mut TTY_con: field_t = field_t {
     cursor: 0,
     scroll: 0,
     widthInChars: 0,
     buffer: [0; 256],
 };
 
-static mut ttyEditLines: [crate::qcommon_h::field_t; 32] = [crate::qcommon_h::field_t {
+static mut ttyEditLines: [field_t; 32] = [field_t {
     cursor: 0,
     scroll: 0,
     widthInChars: 0,
@@ -177,19 +177,19 @@ unsafe extern "C" fn CON_Back() {
     crate::stdlib::write(
         1 as i32,
         &mut key as *mut libc::c_char as *const libc::c_void,
-        1 as i32 as crate::stddef_h::size_t,
+        1 as i32 as size_t,
     );
     key = ' ' as i32 as libc::c_char;
     crate::stdlib::write(
         1 as i32,
         &mut key as *mut libc::c_char as *const libc::c_void,
-        1 as i32 as crate::stddef_h::size_t,
+        1 as i32 as size_t,
     );
     key = '\u{8}' as i32 as libc::c_char;
     crate::stdlib::write(
         1 as i32,
         &mut key as *mut libc::c_char as *const libc::c_void,
-        1 as i32 as crate::stddef_h::size_t,
+        1 as i32 as size_t,
     );
 }
 /*
@@ -249,7 +249,7 @@ unsafe extern "C" fn CON_Show() {
                     crate::stdlib::write(
                         1 as i32,
                         TTY_con.buffer.as_mut_ptr().offset(i as isize) as *const libc::c_void,
-                        1 as i32 as crate::stddef_h::size_t,
+                        1 as i32 as size_t,
                     );
                     i += 1
                 }
@@ -269,17 +269,17 @@ Never exit without calling this, or your terminal will be left in a pretty bad s
 pub unsafe extern "C" fn CON_Shutdown() {
     if ttycon_on as u64 != 0 {
         CON_Hide();
-        ::libc::tcsetattr(
+        libc::tcsetattr(
             0 as i32,
             1 as i32,
-            &mut TTY_tc as *mut _ as *const ::libc::termios,
+            &mut TTY_tc as *mut _ as *const termios,
         );
     }
     // Restore blocking to stdin reads
-    ::libc::fcntl(
+    libc::fcntl(
         0 as i32,
         4 as i32,
-        ::libc::fcntl(0 as i32, 3 as i32, 0 as i32) & !(0o4000 as i32),
+        libc::fcntl(0 as i32, 3 as i32, 0 as i32) & !(0o4000 as i32),
     );
 }
 /*
@@ -289,7 +289,7 @@ Hist_Add
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Hist_Add(mut field: *mut crate::qcommon_h::field_t) {
+pub unsafe extern "C" fn Hist_Add(mut field: *mut field_t) {
     let mut i: i32 = 0;
     // Don't save blank lines in history.
     if (*field).cursor == 0 {
@@ -315,15 +315,15 @@ Hist_Prev
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Hist_Prev() -> *mut crate::qcommon_h::field_t {
+pub unsafe extern "C" fn Hist_Prev() -> *mut field_t {
     let mut hist_prev: i32 = 0;
     hist_prev = hist_current + 1 as i32;
     if hist_prev >= hist_count {
-        return 0 as *mut crate::qcommon_h::field_t;
+        return 0 as *mut field_t;
     }
     hist_current += 1;
     return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize)
-        as *mut crate::qcommon_h::field_t;
+        as *mut field_t;
 }
 /*
 ==================
@@ -332,15 +332,15 @@ Hist_Next
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Hist_Next() -> *mut crate::qcommon_h::field_t {
+pub unsafe extern "C" fn Hist_Next() -> *mut field_t {
     if hist_current >= 0 as i32 {
         hist_current -= 1
     }
     if hist_current == -(1 as i32) {
-        return 0 as *mut crate::qcommon_h::field_t;
+        return 0 as *mut field_t;
     }
     return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize)
-        as *mut crate::qcommon_h::field_t;
+        as *mut field_t;
 }
 /*
 ==================
@@ -364,7 +364,7 @@ Initialize the console input (tty mode if possible)
 #[no_mangle]
 
 pub unsafe extern "C" fn CON_Init() {
-    let mut tc: ::libc::termios = ::libc::termios {
+    let mut tc: termios = termios {
         c_iflag: 0,
         c_oflag: 0,
         c_cflag: 0,
@@ -376,37 +376,37 @@ pub unsafe extern "C" fn CON_Init() {
     };
     // If the process is backgrounded (running non interactively)
     // then SIGTTIN or SIGTOU is emitted, if not caught, turns into a SIGSTP
-    crate::stdlib::signal(
+    signal(
         21 as i32,
-        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(1 as i32 as isize),
+        ::std::mem::transmute::<isize, __sighandler_t>(1 as i32 as isize),
     );
-    crate::stdlib::signal(
+    signal(
         22 as i32,
-        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(1 as i32 as isize),
+        ::std::mem::transmute::<isize, __sighandler_t>(1 as i32 as isize),
     );
     // If SIGCONT is received, reinitialize console
-    crate::stdlib::signal(
+    signal(
         18 as i32,
         Some(CON_SigCont as unsafe extern "C" fn(_: i32) -> ()),
     );
     // Make stdin reads non-blocking
-    ::libc::fcntl(
+    libc::fcntl(
         0 as i32,
         4 as i32,
-        ::libc::fcntl(0 as i32, 3 as i32, 0 as i32) | 0o4000 as i32,
+        libc::fcntl(0 as i32, 3 as i32, 0 as i32) | 0o4000 as i32,
     );
     if stdinIsATTY as u64 == 0 {
-        crate::src::qcommon::common::Com_Printf(
+        Com_Printf(
             b"tty console mode disabled\n\x00" as *const u8 as *const libc::c_char,
         );
-        ttycon_on = crate::src::qcommon::q_shared::qfalse;
-        stdin_active = crate::src::qcommon::q_shared::qtrue;
+        ttycon_on = qfalse;
+        stdin_active = qtrue;
         return;
     }
-    crate::src::qcommon::common::Field_Clear(
-        &mut TTY_con as *mut _ as *mut crate::qcommon_h::field_t,
+    Field_Clear(
+        &mut TTY_con as *mut _ as *mut field_t,
     );
-    ::libc::tcgetattr(0 as i32, &mut TTY_tc as *mut _ as *mut ::libc::termios);
+    libc::tcgetattr(0 as i32, &mut TTY_tc as *mut _ as *mut termios);
     TTY_erase = TTY_tc.c_cc[2 as i32 as usize] as i32;
     TTY_eof = TTY_tc.c_cc[4 as i32 as usize] as i32;
     tc = TTY_tc;
@@ -424,14 +424,14 @@ pub unsafe extern "C" fn CON_Init() {
     INPCK enable input parity checking
     */
     tc.c_iflag &= !(0o40 as i32 | 0o20 as i32) as u32; // Mark as hidden, so prompt is shown in CON_Show
-    tc.c_cc[6 as i32 as usize] = 1 as i32 as crate::stdlib::cc_t;
-    tc.c_cc[5 as i32 as usize] = 0 as i32 as crate::stdlib::cc_t;
-    ::libc::tcsetattr(
+    tc.c_cc[6 as i32 as usize] = 1 as i32 as cc_t;
+    tc.c_cc[5 as i32 as usize] = 0 as i32 as cc_t;
+    libc::tcsetattr(
         0 as i32,
         1 as i32,
-        &mut tc as *mut _ as *const ::libc::termios,
+        &mut tc as *mut _ as *const termios,
     );
-    ttycon_on = crate::src::qcommon::q_shared::qtrue;
+    ttycon_on = qtrue;
     ttycon_hide = 1 as i32;
     CON_Show();
 }
@@ -447,12 +447,12 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
     static mut text: [libc::c_char; 256] = [0; 256];
     let mut avail: i32 = 0;
     let mut key: libc::c_char = 0;
-    let mut history: *mut crate::qcommon_h::field_t = 0 as *mut crate::qcommon_h::field_t;
+    let mut history: *mut field_t = 0 as *mut field_t;
     if ttycon_on as u64 != 0 {
         avail = crate::stdlib::read(
             0 as i32,
             &mut key as *mut libc::c_char as *mut libc::c_void,
-            1 as i32 as crate::stddef_h::size_t,
+            1 as i32 as size_t,
         ) as i32;
         if avail != -(1 as i32) {
             // we have something
@@ -470,9 +470,9 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             if key as i32 != 0 && (key as i32) < ' ' as i32 {
                 if key as i32 == '\n' as i32 {
                     // if not in the game explicitly prepend a slash if needed
-                    if crate::src::client::cl_main::clc.state as u32
-                        != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
-                        && (*crate::src::qcommon::common::con_autochat).integer != 0
+                    if clc.state as u32
+                        != CA_ACTIVE as i32 as u32
+                        && (*con_autochat).integer != 0
                         && TTY_con.cursor != 0
                         && TTY_con.buffer[0 as i32 as usize] as i32 != '/' as i32
                         && TTY_con.buffer[0 as i32 as usize] as i32 != '\\' as i32
@@ -490,14 +490,14 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     if TTY_con.buffer[0 as i32 as usize] as i32 == '/' as i32
                         || TTY_con.buffer[0 as i32 as usize] as i32 == '\\' as i32
                     {
-                        crate::src::qcommon::q_shared::Q_strncpyz(
+                        Q_strncpyz(
                             text.as_mut_ptr(),
                             TTY_con.buffer.as_mut_ptr().offset(1 as i32 as isize),
                             ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                         );
                     } else if TTY_con.cursor != 0 {
-                        if (*crate::src::qcommon::common::con_autochat).integer != 0 {
-                            crate::src::qcommon::q_shared::Com_sprintf(
+                        if (*con_autochat).integer != 0 {
+                            Com_sprintf(
                                 text.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
                                     as i32,
@@ -505,7 +505,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                 TTY_con.buffer.as_mut_ptr(),
                             );
                         } else {
-                            crate::src::qcommon::q_shared::Q_strncpyz(
+                            Q_strncpyz(
                                 text.as_mut_ptr(),
                                 TTY_con.buffer.as_mut_ptr(),
                                 ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
@@ -518,21 +518,21 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     // push it in history
                     Hist_Add(&mut TTY_con);
                     CON_Hide();
-                    crate::src::qcommon::common::Com_Printf(
+                    Com_Printf(
                         b"%s%s\n\x00" as *const u8 as *const libc::c_char,
                         b"tty]\x00" as *const u8 as *const libc::c_char,
                         TTY_con.buffer.as_mut_ptr(),
                     );
-                    crate::src::qcommon::common::Field_Clear(
-                        &mut TTY_con as *mut _ as *mut crate::qcommon_h::field_t,
+                    Field_Clear(
+                        &mut TTY_con as *mut _ as *mut field_t,
                     );
                     CON_Show();
                     return text.as_mut_ptr();
                 }
                 if key as i32 == '\t' as i32 {
                     CON_Hide();
-                    crate::src::qcommon::common::Field_AutoComplete(
-                        &mut TTY_con as *mut _ as *mut crate::qcommon_h::field_t,
+                    Field_AutoComplete(
+                        &mut TTY_con as *mut _ as *mut field_t,
                     );
                     CON_Show();
                     return 0 as *mut libc::c_char;
@@ -540,7 +540,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 avail = crate::stdlib::read(
                     0 as i32,
                     &mut key as *mut libc::c_char as *mut libc::c_void,
-                    1 as i32 as crate::stddef_h::size_t,
+                    1 as i32 as size_t,
                 ) as i32;
                 if avail != -(1 as i32) {
                     // VT 100 keys
@@ -548,7 +548,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         avail = crate::stdlib::read(
                             0 as i32,
                             &mut key as *mut libc::c_char as *mut libc::c_void,
-                            1 as i32 as crate::stddef_h::size_t,
+                            1 as i32 as size_t,
                         ) as i32;
                         if avail != -(1 as i32) {
                             match key as i32 {
@@ -559,7 +559,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                         TTY_con = *history;
                                         CON_Show();
                                     }
-                                    ::libc::tcflush(0 as i32, 0 as i32);
+                                    libc::tcflush(0 as i32, 0 as i32);
                                     return 0 as *mut libc::c_char;
                                 }
                                 66 => {
@@ -568,13 +568,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                     if !history.is_null() {
                                         TTY_con = *history
                                     } else {
-                                        crate::src::qcommon::common::Field_Clear(
+                                        Field_Clear(
                                             &mut TTY_con as *mut _
-                                                as *mut crate::qcommon_h::field_t,
+                                                as *mut field_t,
                                         );
                                     }
                                     CON_Show();
-                                    ::libc::tcflush(0 as i32, 0 as i32);
+                                    libc::tcflush(0 as i32, 0 as i32);
                                     return 0 as *mut libc::c_char;
                                 }
                                 67 => return 0 as *mut libc::c_char,
@@ -584,13 +584,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         }
                     }
                 }
-                crate::src::qcommon::common::Com_DPrintf(
+                Com_DPrintf(
                     b"droping ISCTL sequence: %d, TTY_erase: %d\n\x00" as *const u8
                         as *const libc::c_char,
                     key as i32,
                     TTY_erase,
                 );
-                ::libc::tcflush(0 as i32, 0 as i32);
+                libc::tcflush(0 as i32, 0 as i32);
                 return 0 as *mut libc::c_char;
             }
             if TTY_con.cursor as libc::c_ulong
@@ -606,17 +606,17 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             crate::stdlib::write(
                 1 as i32,
                 &mut key as *mut libc::c_char as *const libc::c_void,
-                1 as i32 as crate::stddef_h::size_t,
+                1 as i32 as size_t,
             );
         } // stdin
         return 0 as *mut libc::c_char;
     } else {
         if stdin_active as u64 != 0 {
             let mut len: i32 = 0;
-            let mut fdset: crate::stdlib::fd_set = crate::stdlib::fd_set {
+            let mut fdset: fd_set = fd_set {
                 __fds_bits: [0; 16],
             };
-            let mut timeout: ::libc::timeval = ::libc::timeval {
+            let mut timeout: timeval = timeval {
                 tv_sec: 0,
                 tv_usec: 0,
             };
@@ -626,10 +626,10 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             let fresh1;
             let fresh2 = &mut __d1;
             let fresh3;
-            let fresh4 = (::std::mem::size_of::<crate::stdlib::fd_set>() as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong);
+            let fresh4 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
+                .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
             let fresh5 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
-                as *mut crate::stdlib::__fd_mask;
+                as *mut __fd_mask;
             asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as i32), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
@@ -639,30 +639,30 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
             fdset.__fds_bits[(0 as i32
                 / (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
                 as usize] |= ((1 as libc::c_ulong)
                 << 0 as i32
                     % (8 as i32
-                        * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                            as i32)) as crate::stdlib::__fd_mask;
-            timeout.tv_sec = (0 as i32 as crate::stdlib::__time_t) as libc::time_t;
-            timeout.tv_usec = (0 as i32 as crate::stdlib::__suseconds_t) as libc::suseconds_t;
-            if crate::stdlib::select(
+                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
+                            as i32)) as __fd_mask;
+            timeout.tv_sec = (0 as i32 as __time_t) as libc::time_t;
+            timeout.tv_usec = (0 as i32 as __suseconds_t) as libc::suseconds_t;
+            if select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
-                0 as *mut crate::stdlib::fd_set,
-                0 as *mut crate::stdlib::fd_set,
+                0 as *mut fd_set,
+                0 as *mut fd_set,
                 &mut timeout,
             ) == -(1 as i32)
                 || !(fdset.__fds_bits[(0 as i32
                     / (8 as i32
-                        * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
+                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
                             as i32)) as usize]
                     & ((1 as libc::c_ulong)
                         << 0 as i32
                             % (8 as i32
-                                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                                    as i32)) as crate::stdlib::__fd_mask
+                                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
+                                    as i32)) as __fd_mask
                     != 0 as i32 as isize)
             {
                 return 0 as *mut libc::c_char;
@@ -674,7 +674,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             ) as i32;
             if len == 0 as i32 {
                 // eof!
-                stdin_active = crate::src::qcommon::q_shared::qfalse; // rip off the /n and terminate
+                stdin_active = qfalse; // rip off the /n and terminate
                 return 0 as *mut libc::c_char;
             }
             if len < 1 as i32 {
@@ -721,12 +721,12 @@ pub unsafe extern "C" fn CON_Print(mut msg: *const libc::c_char) {
         return;
     }
     CON_Hide();
-    if !crate::src::qcommon::common::com_ansiColor.is_null()
-        && (*crate::src::qcommon::common::com_ansiColor).integer != 0
+    if !com_ansiColor.is_null()
+        && (*com_ansiColor).integer != 0
     {
         crate::src::sys::sys_main::Sys_AnsiColorPrint(msg);
     } else {
-        crate::stdlib::fputs(msg, crate::stdlib::stderr);
+        fputs(msg, stderr);
     }
     if ttycon_on as u64 == 0 {
         // CON_Hide didn't do anything.

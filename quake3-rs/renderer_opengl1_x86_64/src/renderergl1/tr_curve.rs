@@ -149,9 +149,9 @@ LerpDrawVert
 */
 
 unsafe extern "C" fn LerpDrawVert(
-    mut a: *mut crate::qfiles_h::drawVert_t,
-    mut b: *mut crate::qfiles_h::drawVert_t,
-    mut out: *mut crate::qfiles_h::drawVert_t,
+    mut a: *mut drawVert_t,
+    mut b: *mut drawVert_t,
+    mut out: *mut drawVert_t,
 ) {
     (*out).xyz[0 as i32 as usize] =
         0.5f32 * ((*a).xyz[0 as i32 as usize] + (*b).xyz[0 as i32 as usize]);
@@ -169,16 +169,16 @@ unsafe extern "C" fn LerpDrawVert(
         0.5f32 * ((*a).lightmap[1 as i32 as usize] + (*b).lightmap[1 as i32 as usize]);
     (*out).color[0 as i32 as usize] = ((*a).color[0 as i32 as usize] as i32
         + (*b).color[0 as i32 as usize] as i32
-        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as byte;
     (*out).color[1 as i32 as usize] = ((*a).color[1 as i32 as usize] as i32
         + (*b).color[1 as i32 as usize] as i32
-        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as byte;
     (*out).color[2 as i32 as usize] = ((*a).color[2 as i32 as usize] as i32
         + (*b).color[2 as i32 as usize] as i32
-        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as byte;
     (*out).color[3 as i32 as usize] = ((*a).color[3 as i32 as usize] as i32
         + (*b).color[3 as i32 as usize] as i32
-        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as byte;
 }
 /*
 ============
@@ -189,11 +189,11 @@ Transpose
 unsafe extern "C" fn Transpose(
     mut width: i32,
     mut height: i32,
-    mut ctrl: *mut [crate::qfiles_h::drawVert_t; 65],
+    mut ctrl: *mut [drawVert_t; 65],
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut temp: crate::qfiles_h::drawVert_t = crate::qfiles_h::drawVert_t {
+    let mut temp: drawVert_t = drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -249,27 +249,27 @@ Handles all the complicated wrapping and degenerate cases
 unsafe extern "C" fn MakeMeshNormals(
     mut width: i32,
     mut height: i32,
-    mut ctrl: *mut [crate::qfiles_h::drawVert_t; 65],
+    mut ctrl: *mut [drawVert_t; 65],
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut dist: i32 = 0;
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut sum: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut base: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut normal: vec3_t = [0.; 3];
+    let mut sum: vec3_t = [0.; 3];
+    let mut base: vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut dv: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut around: [crate::src::qcommon::q_shared::vec3_t; 8] = [[0.; 3]; 8];
-    let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut good: [crate::src::qcommon::q_shared::qboolean; 8] =
-        [crate::src::qcommon::q_shared::qfalse; 8];
-    let mut wrapWidth: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut wrapHeight: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut around: [vec3_t; 8] = [[0.; 3]; 8];
+    let mut temp: vec3_t = [0.; 3];
+    let mut good: [qboolean; 8] =
+        [qfalse; 8];
+    let mut wrapWidth: qboolean =
+        qfalse;
+    let mut wrapHeight: qboolean =
+        qfalse;
     let mut len: f32 = 0.;
     static mut neighbors: [[i32; 2]; 8] = [
         [0 as i32, 1 as i32],
@@ -281,7 +281,7 @@ unsafe extern "C" fn MakeMeshNormals(
         [-(1 as i32), 0 as i32],
         [-(1 as i32), 1 as i32],
     ];
-    wrapWidth = crate::src::qcommon::q_shared::qfalse;
+    wrapWidth = qfalse;
     i = 0 as i32;
     while i < height {
         delta[0 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize].xyz
@@ -294,16 +294,16 @@ unsafe extern "C" fn MakeMeshNormals(
             [2 as i32 as usize]
             - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz[2 as i32 as usize];
         len =
-            VectorLengthSquared(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+            VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
         if len as f64 > 1.0f64 {
             break;
         }
         i += 1
     }
     if i == height {
-        wrapWidth = crate::src::qcommon::q_shared::qtrue
+        wrapWidth = qtrue
     }
-    wrapHeight = crate::src::qcommon::q_shared::qfalse;
+    wrapHeight = qfalse;
     i = 0 as i32;
     while i < width {
         delta[0 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize].xyz
@@ -316,31 +316,31 @@ unsafe extern "C" fn MakeMeshNormals(
             [2 as i32 as usize]
             - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz[2 as i32 as usize];
         len =
-            VectorLengthSquared(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+            VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
         if len as f64 > 1.0f64 {
             break;
         }
         i += 1
     }
     if i == width {
-        wrapHeight = crate::src::qcommon::q_shared::qtrue
+        wrapHeight = qtrue
     }
     i = 0 as i32;
     while i < width {
         j = 0 as i32;
         while j < height {
             dv = &mut *(*ctrl.offset(j as isize)).as_mut_ptr().offset(i as isize)
-                as *mut crate::qfiles_h::drawVert_t;
+                as *mut drawVert_t;
             base[0 as i32 as usize] = (*dv).xyz[0 as i32 as usize];
             base[1 as i32 as usize] = (*dv).xyz[1 as i32 as usize];
             base[2 as i32 as usize] = (*dv).xyz[2 as i32 as usize];
             k = 0 as i32;
             while k < 8 as i32 {
                 around[k as usize][2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    0 as i32 as vec_t;
                 around[k as usize][1 as i32 as usize] = around[k as usize][2 as i32 as usize];
                 around[k as usize][0 as i32 as usize] = around[k as usize][1 as i32 as usize];
-                good[k as usize] = crate::src::qcommon::q_shared::qfalse;
+                good[k as usize] = qfalse;
                 dist = 1 as i32;
                 while dist <= 3 as i32 {
                     x = i + neighbors[k as usize][0 as i32 as usize] * dist;
@@ -371,15 +371,15 @@ unsafe extern "C" fn MakeMeshNormals(
                     temp[2 as i32 as usize] = (*ctrl.offset(y as isize))[x as usize].xyz
                         [2 as i32 as usize]
                         - base[2 as i32 as usize];
-                    if crate::src::qcommon::q_math::VectorNormalize2(
-                        temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                    if VectorNormalize2(
+                        temp.as_mut_ptr() as *const vec_t,
                         temp.as_mut_ptr(),
                     ) == 0 as i32 as f32
                     {
                         dist += 1
                     // degenerate edge, get more dist
                     } else {
-                        good[k as usize] = crate::src::qcommon::q_shared::qtrue;
+                        good[k as usize] = qtrue;
                         around[k as usize][0 as i32 as usize] = temp[0 as i32 as usize];
                         around[k as usize][1 as i32 as usize] = temp[1 as i32 as usize];
                         around[k as usize][2 as i32 as usize] = temp[2 as i32 as usize];
@@ -389,7 +389,7 @@ unsafe extern "C" fn MakeMeshNormals(
                 }
                 k += 1
             }
-            sum[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            sum[2 as i32 as usize] = 0 as i32 as vec_t;
             sum[1 as i32 as usize] = sum[2 as i32 as usize];
             sum[0 as i32 as usize] = sum[1 as i32 as usize];
             k = 0 as i32;
@@ -399,13 +399,13 @@ unsafe extern "C" fn MakeMeshNormals(
                 {
                     CrossProduct(
                         around[(k + 1 as i32 & 7 as i32) as usize].as_mut_ptr()
-                            as *const crate::src::qcommon::q_shared::vec_t,
+                            as *const vec_t,
                         around[k as usize].as_mut_ptr()
-                            as *const crate::src::qcommon::q_shared::vec_t,
+                            as *const vec_t,
                         normal.as_mut_ptr(),
                     );
-                    if !(crate::src::qcommon::q_math::VectorNormalize2(
-                        normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                    if !(VectorNormalize2(
+                        normal.as_mut_ptr() as *const vec_t,
                         normal.as_mut_ptr(),
                     ) == 0 as i32 as f32)
                     {
@@ -420,8 +420,8 @@ unsafe extern "C" fn MakeMeshNormals(
             //if ( count == 0 ) {
             //	printf("bad normal\n");
             //}
-            crate::src::qcommon::q_math::VectorNormalize2(
-                sum.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            VectorNormalize2(
+                sum.as_mut_ptr() as *const vec_t,
                 (*dv).normal.as_mut_ptr(),
             );
             j += 1
@@ -438,11 +438,11 @@ InvertCtrl
 unsafe extern "C" fn InvertCtrl(
     mut width: i32,
     mut height: i32,
-    mut ctrl: *mut [crate::qfiles_h::drawVert_t; 65],
+    mut ctrl: *mut [drawVert_t; 65],
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut temp: crate::qfiles_h::drawVert_t = crate::qfiles_h::drawVert_t {
+    let mut temp: drawVert_t = drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -500,20 +500,20 @@ PutPointsOnCurve
 */
 
 unsafe extern "C" fn PutPointsOnCurve(
-    mut ctrl: *mut [crate::qfiles_h::drawVert_t; 65],
+    mut ctrl: *mut [drawVert_t; 65],
     mut width: i32,
     mut height: i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut prev: crate::qfiles_h::drawVert_t = crate::qfiles_h::drawVert_t {
+    let mut prev: drawVert_t = drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
         normal: [0.; 3],
         color: [0; 4],
     };
-    let mut next: crate::qfiles_h::drawVert_t = crate::qfiles_h::drawVert_t {
+    let mut next: drawVert_t = drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -585,25 +585,25 @@ R_CreateSurfaceGridMesh
 pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     mut width: i32,
     mut height: i32,
-    mut ctrl: *mut [crate::qfiles_h::drawVert_t; 65],
+    mut ctrl: *mut [drawVert_t; 65],
     mut errorTable: *mut [f32; 65],
-) -> *mut crate::tr_local_h::srfGridMesh_t {
+) -> *mut srfGridMesh_t {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut size: i32 = 0;
-    let mut vert: *mut crate::qfiles_h::drawVert_t = 0 as *mut crate::qfiles_h::drawVert_t;
-    let mut tmpVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut grid: *mut crate::tr_local_h::srfGridMesh_t =
-        0 as *mut crate::tr_local_h::srfGridMesh_t;
+    let mut vert: *mut drawVert_t = 0 as *mut drawVert_t;
+    let mut tmpVec: vec3_t = [0.; 3];
+    let mut grid: *mut srfGridMesh_t =
+        0 as *mut srfGridMesh_t;
     // copy the results out to a grid
     size = ((width * height - 1 as i32) as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<crate::qfiles_h::drawVert_t>() as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<crate::tr_local_h::srfGridMesh_t>() as libc::c_ulong)
+        .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
+        .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong)
         as i32;
     grid = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(size)
-        as *mut crate::tr_local_h::srfGridMesh_t;
+        as *mut srfGridMesh_t;
     crate::stdlib::memset(grid as *mut libc::c_void, 0 as i32, size as libc::c_ulong);
     (*grid).widthLodError = crate::src::renderergl1::tr_main::ri
         .Malloc
@@ -625,8 +625,8 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     );
     (*grid).width = width;
     (*grid).height = height;
-    (*grid).surfaceType = crate::tr_local_h::SF_GRID;
-    crate::src::qcommon::q_math::ClearBounds(
+    (*grid).surfaceType = SF_GRID;
+    ClearBounds(
         (*grid).meshBounds[0 as i32 as usize].as_mut_ptr(),
         (*grid).meshBounds[1 as i32 as usize].as_mut_ptr(),
     );
@@ -635,10 +635,10 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
         j = 0 as i32;
         while j < height {
             vert = &mut *(*grid).verts.as_mut_ptr().offset((j * width + i) as isize)
-                as *mut crate::qfiles_h::drawVert_t;
+                as *mut drawVert_t;
             *vert = (*ctrl.offset(j as isize))[i as usize];
-            crate::src::qcommon::q_math::AddPointToBounds(
-                (*vert).xyz.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            AddPointToBounds(
+                (*vert).xyz.as_mut_ptr() as *const vec_t,
                 (*grid).meshBounds[0 as i32 as usize].as_mut_ptr(),
                 (*grid).meshBounds[1 as i32 as usize].as_mut_ptr(),
             );
@@ -666,7 +666,7 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     tmpVec[2 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize][2 as i32 as usize]
         - (*grid).localOrigin[2 as i32 as usize];
     (*grid).meshRadius =
-        VectorLength(tmpVec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+        VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
     (*grid).lodOrigin[0 as i32 as usize] = (*grid).localOrigin[0 as i32 as usize];
     (*grid).lodOrigin[1 as i32 as usize] = (*grid).localOrigin[1 as i32 as usize];
     (*grid).lodOrigin[2 as i32 as usize] = (*grid).localOrigin[2 as i32 as usize];
@@ -681,7 +681,7 @@ R_FreeSurfaceGridMesh
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_FreeSurfaceGridMesh(mut grid: *mut crate::tr_local_h::srfGridMesh_t) {
+pub unsafe extern "C" fn R_FreeSurfaceGridMesh(mut grid: *mut srfGridMesh_t) {
     crate::src::renderergl1::tr_main::ri
         .Free
         .expect("non-null function pointer")((*grid).widthLodError as *mut libc::c_void);
@@ -702,77 +702,77 @@ R_SubdividePatchToGrid
 pub unsafe extern "C" fn R_SubdividePatchToGrid(
     mut width: i32,
     mut height: i32,
-    mut points: *mut crate::qfiles_h::drawVert_t,
-) -> *mut crate::tr_local_h::srfGridMesh_t {
+    mut points: *mut drawVert_t,
+) -> *mut srfGridMesh_t {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
-    let mut prev: crate::qfiles_h::drawVert_t = {
-        let mut init = crate::qfiles_h::drawVert_t {
+    let mut prev: drawVert_t = {
+        let mut init = drawVert_t {
             xyz: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             color: [
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
             ],
         };
         init
     };
-    let mut next: crate::qfiles_h::drawVert_t = {
-        let mut init = crate::qfiles_h::drawVert_t {
+    let mut next: drawVert_t = {
+        let mut init = drawVert_t {
             xyz: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             color: [
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
             ],
         };
         init
     };
-    let mut mid: crate::qfiles_h::drawVert_t = {
-        let mut init = crate::qfiles_h::drawVert_t {
+    let mut mid: drawVert_t = {
+        let mut init = drawVert_t {
             xyz: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
             ],
             color: [
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
-                0 as i32 as crate::src::qcommon::q_shared::byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
+                0 as i32 as byte,
             ],
         };
         init
@@ -781,7 +781,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     let mut maxLen: f32 = 0.;
     let mut dir: i32 = 0;
     let mut t: i32 = 0;
-    let mut ctrl: [[crate::qfiles_h::drawVert_t; 65]; 65] = [[crate::qfiles_h::drawVert_t {
+    let mut ctrl: [[drawVert_t; 65]; 65] = [[drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -814,10 +814,10 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
             maxLen = 0 as i32 as f32;
             i = 0 as i32;
             while i < height {
-                let mut midxyz: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                let mut midxyz2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                let mut dir_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                let mut projected: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+                let mut midxyz: vec3_t = [0.; 3];
+                let mut midxyz2: vec3_t = [0.; 3];
+                let mut dir_0: vec3_t = [0.; 3];
+                let mut projected: vec3_t = [0.; 3];
                 let mut d: f32 = 0.;
                 // calculate the point on the curve
                 l = 0 as i32;
@@ -848,7 +848,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 dir_0[2 as i32 as usize] = ctrl[i as usize][(j + 2 as i32) as usize].xyz
                     [2 as i32 as usize]
                     - ctrl[i as usize][j as usize].xyz[2 as i32 as usize];
-                crate::src::qcommon::q_math::VectorNormalize(dir_0.as_mut_ptr());
+                VectorNormalize(dir_0.as_mut_ptr());
                 d = midxyz[0 as i32 as usize] * dir_0[0 as i32 as usize]
                     + midxyz[1 as i32 as usize] * dir_0[1 as i32 as usize]
                     + midxyz[2 as i32 as usize] * dir_0[2 as i32 as usize];
@@ -862,7 +862,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 midxyz2[2 as i32 as usize] =
                     midxyz[2 as i32 as usize] - projected[2 as i32 as usize];
                 len = VectorLengthSquared(
-                    midxyz2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                    midxyz2.as_mut_ptr() as *const vec_t
                 );
                 if len > maxLen {
                     maxLen = len
@@ -877,7 +877,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 errorTable[dir as usize][(j + 1 as i32) as usize] = 1.0f32 / maxLen
             // see if we want to insert subdivided columns
             // can't subdivide any more
-            } else if maxLen <= (*crate::src::renderergl1::tr_init::r_subdivisions).value {
+            } else if maxLen <= (*r_subdivisions).value {
                 errorTable[dir as usize][(j + 1 as i32) as usize] = 1.0f32 / maxLen
             // didn't need subdivision
             } else {
@@ -988,18 +988,18 @@ R_GridInsertColumn
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GridInsertColumn(
-    mut grid: *mut crate::tr_local_h::srfGridMesh_t,
+    mut grid: *mut srfGridMesh_t,
     mut column: i32,
     mut row: i32,
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
     mut loderror: f32,
-) -> *mut crate::tr_local_h::srfGridMesh_t {
+) -> *mut srfGridMesh_t {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut width: i32 = 0;
     let mut height: i32 = 0;
     let mut oldwidth: i32 = 0;
-    let mut ctrl: [[crate::qfiles_h::drawVert_t; 65]; 65] = [[crate::qfiles_h::drawVert_t {
+    let mut ctrl: [[drawVert_t; 65]; 65] = [[drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -1008,11 +1008,11 @@ pub unsafe extern "C" fn R_GridInsertColumn(
     }; 65]; 65];
     let mut errorTable: [[f32; 65]; 2] = [[0.; 65]; 2];
     let mut lodRadius: f32 = 0.;
-    let mut lodOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut lodOrigin: vec3_t = [0.; 3];
     oldwidth = 0 as i32;
     width = (*grid).width + 1 as i32;
     if width > 65 as i32 {
-        return 0 as *mut crate::tr_local_h::srfGridMesh_t;
+        return 0 as *mut srfGridMesh_t;
     }
     height = (*grid).height;
     i = 0 as i32;
@@ -1464,18 +1464,18 @@ R_GridInsertRow
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GridInsertRow(
-    mut grid: *mut crate::tr_local_h::srfGridMesh_t,
+    mut grid: *mut srfGridMesh_t,
     mut row: i32,
     mut column: i32,
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
     mut loderror: f32,
-) -> *mut crate::tr_local_h::srfGridMesh_t {
+) -> *mut srfGridMesh_t {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut width: i32 = 0;
     let mut height: i32 = 0;
     let mut oldheight: i32 = 0;
-    let mut ctrl: [[crate::qfiles_h::drawVert_t; 65]; 65] = [[crate::qfiles_h::drawVert_t {
+    let mut ctrl: [[drawVert_t; 65]; 65] = [[drawVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         lightmap: [0.; 2],
@@ -1484,12 +1484,12 @@ pub unsafe extern "C" fn R_GridInsertRow(
     }; 65]; 65];
     let mut errorTable: [[f32; 65]; 2] = [[0.; 65]; 2];
     let mut lodRadius: f32 = 0.;
-    let mut lodOrigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut lodOrigin: vec3_t = [0.; 3];
     oldheight = 0 as i32;
     width = (*grid).width;
     height = (*grid).height + 1 as i32;
     if height > 65 as i32 {
-        return 0 as *mut crate::tr_local_h::srfGridMesh_t;
+        return 0 as *mut srfGridMesh_t;
     }
     i = 0 as i32;
     while i < height {

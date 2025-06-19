@@ -109,7 +109,7 @@ pub type bot_goalstate_t = bot_goalstate_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_goalstate_s {
-    pub itemweightconfig: *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+    pub itemweightconfig: *mut weightconfig_s,
     pub itemweightindex: *mut i32,
     pub client: i32,
     pub lastreachabilityarea: i32,
@@ -140,8 +140,8 @@ pub struct iteminfo_s {
     pub type_0: i32,
     pub index: i32,
     pub respawntime: f32,
-    pub mins: crate::src::qcommon::q_shared::vec3_t,
-    pub maxs: crate::src::qcommon::q_shared::vec3_t,
+    pub mins: vec3_t,
+    pub maxs: vec3_t,
     pub number: i32,
 }
 //weight config
@@ -173,7 +173,7 @@ pub type maplocation_t = maplocation_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct maplocation_s {
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
     pub areanum: i32,
     pub name: [libc::c_char; 128],
     pub next: *mut maplocation_s,
@@ -188,9 +188,9 @@ pub struct levelitem_s {
     pub iteminfo: i32,
     pub flags: i32,
     pub weight: f32,
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
     pub goalareanum: i32,
-    pub goalorigin: crate::src::qcommon::q_shared::vec3_t,
+    pub goalorigin: vec3_t,
     pub entitynum: i32,
     pub timeout: f32,
     pub prev: *mut levelitem_s,
@@ -212,7 +212,7 @@ pub type campspot_t = campspot_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct campspot_s {
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
     pub areanum: i32,
     pub name: [libc::c_char; 128],
     pub range: f32,
@@ -238,21 +238,21 @@ pub const GT_FFA: C2RustUnnamed_3 = 0;
 // Initialized in run_static_initializers
 #[no_mangle]
 
-pub static mut iteminfo_fields: [crate::src::botlib::l_struct::fielddef_t; 9] =
-    [crate::src::botlib::l_struct::fielddef_t {
+pub static mut iteminfo_fields: [fielddef_t; 9] =
+    [fielddef_t {
         name: 0 as *mut libc::c_char,
         offset: 0,
         type_0: 0,
         maxarray: 0,
         floatmin: 0.,
         floatmax: 0.,
-        substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+        substruct: 0 as *mut structdef_s,
     }; 9];
 #[no_mangle]
 
-pub static mut iteminfo_struct: crate::src::botlib::l_struct::structdef_t = unsafe {
+pub static mut iteminfo_struct: structdef_t = unsafe {
     {
-        let mut init = crate::src::botlib::l_struct::structdef_s {
+        let mut init = structdef_s {
             size: ::std::mem::size_of::<iteminfo_t>() as libc::c_ulong as i32,
             fields: iteminfo_fields.as_ptr() as *mut _,
         };
@@ -296,9 +296,9 @@ pub static mut g_gametype: i32 = 0 as i32;
 //additional dropped item weight
 #[no_mangle]
 
-pub static mut droppedweight: *mut crate::src::botlib::l_libvar::libvar_t = 0
-    as *const crate::src::botlib::l_libvar::libvar_t
-    as *mut crate::src::botlib::l_libvar::libvar_t;
+pub static mut droppedweight: *mut libvar_t = 0
+    as *const libvar_t
+    as *mut libvar_t;
 //========================================================================
 //
 // Parameter:				-
@@ -355,10 +355,10 @@ pub unsafe extern "C" fn BotInterbreedGoalFuzzyLogic(
     if p1.is_null() || p2.is_null() || c.is_null() {
         return;
     }
-    crate::src::botlib::be_ai_weight::InterbreedWeightConfigs(
-        (*p1).itemweightconfig as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
-        (*p2).itemweightconfig as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
-        (*c).itemweightconfig as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+    InterbreedWeightConfigs(
+        (*p1).itemweightconfig as *mut weightconfig_s,
+        (*p2).itemweightconfig as *mut weightconfig_s,
+        (*c).itemweightconfig as *mut weightconfig_s,
     );
 }
 //save the goal fuzzy logic to disk
@@ -396,8 +396,8 @@ pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(mut goalstate: i32, mut _range:
     if gs.is_null() {
         return;
     }
-    crate::src::botlib::be_ai_weight::EvolveWeightConfig(
-        (*gs).itemweightconfig as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+    EvolveWeightConfig(
+        (*gs).itemweightconfig as *mut weightconfig_s,
     );
 }
 //end of the function BotMutateGoalFuzzyLogic
@@ -411,7 +411,7 @@ pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(mut goalstate: i32, mut _range:
 
 pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut itemconfig_t {
     let mut max_iteminfo: i32 = 0; //end if
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -421,14 +421,14 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut path: [libc::c_char; 64] = [0; 64];
-    let mut source: *mut crate::src::botlib::l_precomp::source_t =
-        0 as *mut crate::src::botlib::l_precomp::source_t;
+    let mut source: *mut source_t =
+        0 as *mut source_t;
     let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
     let mut ii: *mut iteminfo_t = 0 as *mut iteminfo_t;
-    max_iteminfo = crate::src::botlib::l_libvar::LibVarValue(
+    max_iteminfo = LibVarValue(
         b"max_iteminfo\x00" as *const u8 as *const libc::c_char,
         b"256\x00" as *const u8 as *const libc::c_char,
     ) as i32;
@@ -441,21 +441,21 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             max_iteminfo,
         );
         max_iteminfo = 256 as i32;
-        crate::src::botlib::l_libvar::LibVarSet(
+        LibVarSet(
             b"max_iteminfo\x00" as *const u8 as *const libc::c_char,
             b"256\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         path.as_mut_ptr(),
         filename,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::botlib::l_precomp::PC_SetBaseFolder(
+    PC_SetBaseFolder(
         b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    source = crate::src::botlib::l_precomp::LoadSourceFile(path.as_mut_ptr())
-        as *mut crate::src::botlib::l_precomp::source_s;
+    source = LoadSourceFile(path.as_mut_ptr())
+        as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -478,27 +478,27 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
         as *mut iteminfo_t;
     (*ic).numiteminfo = 0 as i32;
     //parse the item config file
-    while crate::src::botlib::l_precomp::PC_ReadToken(
-        source as *mut crate::src::botlib::l_precomp::source_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    while PC_ReadToken(
+        source as *mut source_s,
+        &mut token as *mut _ as *mut token_s,
     ) != 0
     {
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"iteminfo\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             //end while
             if (*ic).numiteminfo >= max_iteminfo {
-                crate::src::botlib::l_precomp::SourceError(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                SourceError(
+                    source as *mut source_s,
                     b"more than %d item info defined\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     max_iteminfo,
                 ); //end if
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void); //end if
-                crate::src::botlib::l_precomp::FreeSource(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                FreeSource(
+                    source as *mut source_s,
                 ); //end if
                 return 0 as *mut itemconfig_t;
             } //end if
@@ -508,56 +508,56 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
                 0 as i32,
                 ::std::mem::size_of::<iteminfo_t>() as libc::c_ulong,
             );
-            if crate::src::botlib::l_precomp::PC_ExpectTokenType(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            if PC_ExpectTokenType(
+                source as *mut source_s,
                 1 as i32,
                 0 as i32,
-                &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                &mut token as *mut _ as *mut token_s,
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-                crate::src::botlib::l_precomp::FreeSource(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                FreeSource(
+                    source as *mut source_s,
                 );
                 return 0 as *mut itemconfig_t;
             }
-            crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            StripDoubleQuotes(token.string.as_mut_ptr());
+            Q_strncpyz(
                 (*ii).classname.as_mut_ptr(),
                 token.string.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
-            if crate::src::botlib::l_struct::ReadStructure(
-                source as *mut crate::src::botlib::l_precomp::source_s,
-                &mut iteminfo_struct as *mut _ as *mut crate::src::botlib::l_struct::structdef_s,
+            if ReadStructure(
+                source as *mut source_s,
+                &mut iteminfo_struct as *mut _ as *mut structdef_s,
                 ii as *mut libc::c_char,
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-                crate::src::botlib::l_precomp::FreeSource(
-                    source as *mut crate::src::botlib::l_precomp::source_s,
+                FreeSource(
+                    source as *mut source_s,
                 );
                 return 0 as *mut itemconfig_t;
             }
             (*ii).number = (*ic).numiteminfo;
             (*ic).numiteminfo += 1
         } else {
-            crate::src::botlib::l_precomp::SourceError(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            SourceError(
+                source as *mut source_s,
                 b"unknown definition %s\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
             crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-            crate::src::botlib::l_precomp::FreeSource(
-                source as *mut crate::src::botlib::l_precomp::source_s,
+            FreeSource(
+                source as *mut source_s,
             );
             return 0 as *mut itemconfig_t;
         }
         //end else
     }
-    crate::src::botlib::l_precomp::FreeSource(
-        source as *mut crate::src::botlib::l_precomp::source_s,
+    FreeSource(
+        source as *mut source_s,
     );
     //
     if (*ic).numiteminfo == 0 {
@@ -588,7 +588,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
 #[no_mangle]
 
 pub unsafe extern "C" fn ItemWeightIndex(
-    mut iwc: *mut crate::src::botlib::be_ai_weight::weightconfig_t,
+    mut iwc: *mut weightconfig_t,
     mut ic: *mut itemconfig_t,
 ) -> *mut i32 {
     let mut index: *mut i32 = 0 as *mut i32;
@@ -600,8 +600,8 @@ pub unsafe extern "C" fn ItemWeightIndex(
     ) as *mut i32; //end for
     i = 0 as i32;
     while i < (*ic).numiteminfo {
-        *index.offset(i as isize) = crate::src::botlib::be_ai_weight::FindFuzzyWeight(
-            iwc as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+        *index.offset(i as isize) = FindFuzzyWeight(
+            iwc as *mut weightconfig_s,
             (*(*ic).iteminfo.offset(i as isize)).classname.as_mut_ptr(),
         );
         if *index.offset(i as isize) < 0 as i32 {
@@ -632,7 +632,7 @@ pub unsafe extern "C" fn InitLevelItemHeap() {
     if !levelitemheap.is_null() {
         crate::src::botlib::l_memory::FreeMemory(levelitemheap as *mut libc::c_void);
     }
-    max_levelitems = crate::src::botlib::l_libvar::LibVarValue(
+    max_levelitems = LibVarValue(
         b"max_levelitems\x00" as *const u8 as *const libc::c_char,
         b"256\x00" as *const u8 as *const libc::c_char,
     ) as i32;
@@ -789,7 +789,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
         ) == 0)
         {
             //map locations
-            if ::libc::strcmp(
+            if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"target_location\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -814,7 +814,7 @@ pub unsafe extern "C" fn BotInitInfoEntities() {
                 (*ml).next = maplocations;
                 maplocations = ml;
                 numlocations += 1
-            } else if ::libc::strcmp(
+            } else if libc::strcmp(
                 classname.as_mut_ptr(),
                 b"info_camp\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -913,18 +913,18 @@ pub unsafe extern "C" fn BotInitLevelItems() {
     let mut spawnflags: i32 = 0;
     let mut value: i32 = 0;
     let mut classname: [libc::c_char; 128] = [0; 128];
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
     let mut ent: i32 = 0;
     let mut goalareanum: i32 = 0;
     let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
     let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -933,7 +933,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -989,7 +989,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
             //
             i = 0 as i32; //end for
             while i < (*ic).numiteminfo {
-                if ::libc::strcmp(
+                if libc::strcmp(
                     classname.as_mut_ptr(),
                     (*(*ic).iteminfo.offset(i as isize)).classname.as_mut_ptr(),
                 ) == 0
@@ -1042,7 +1042,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
                             end.as_mut_ptr(),
                             -(1 as i32),
                             1 as i32 | 0x10000 as i32,
-                        ) as crate::botlib_h::bsp_trace_s;
+                        ) as bsp_trace_s;
                         //end if
                         if trace.fraction >= 1 as i32 as f32 {
                             //if the item not near the ground
@@ -1123,7 +1123,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
                         if value != 0 {
                             (*li).flags |= 8 as i32
                         }
-                        if ::libc::strcmp(
+                        if libc::strcmp(
                             classname.as_mut_ptr(),
                             b"item_botroam\x00" as *const u8 as *const libc::c_char,
                         ) == 0
@@ -1233,7 +1233,7 @@ pub unsafe extern "C" fn BotGoalName(mut number: i32, mut name: *mut libc::c_cha
     li = levelitems; //end for
     while !li.is_null() {
         if (*li).number == number {
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 name,
                 (*(*itemconfig).iteminfo.offset((*li).iteminfo as isize))
                     .name
@@ -1245,7 +1245,7 @@ pub unsafe extern "C" fn BotGoalName(mut number: i32, mut name: *mut libc::c_cha
         li = (*li).next
         //end for
     }
-    ::libc::strcpy(name, b"\x00" as *const u8 as *const libc::c_char);
+    libc::strcpy(name, b"\x00" as *const u8 as *const libc::c_char);
 }
 //reset avoid goals
 //end of the function BotGoalName
@@ -1519,7 +1519,7 @@ pub unsafe extern "C" fn BotGetLevelItemGoal(
             6057473163062296781 => {
                 if !((*li).flags & 8 as i32 != 0) {
                     //
-                    if crate::src::qcommon::q_shared::Q_stricmp(
+                    if Q_stricmp(
                         name,
                         (*(*itemconfig).iteminfo.offset((*li).iteminfo as isize))
                             .name
@@ -1581,19 +1581,19 @@ pub unsafe extern "C" fn BotGetMapLocationGoal(
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
     let mut ml: *mut maplocation_t = 0 as *mut maplocation_t; //end for
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
     ];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut maxs: vec3_t = [
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
     ];
     ml = maplocations;
     while !ml.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp((*ml).name.as_mut_ptr(), name) == 0 {
+        if Q_stricmp((*ml).name.as_mut_ptr(), name) == 0 {
             (*goal).areanum = (*ml).areanum;
             (*goal).origin[0 as i32 as usize] = (*ml).origin[0 as i32 as usize];
             (*goal).origin[1 as i32 as usize] = (*ml).origin[1 as i32 as usize];
@@ -1608,12 +1608,12 @@ pub unsafe extern "C" fn BotGetMapLocationGoal(
             (*goal).number = 0 as i32;
             (*goal).flags = 0 as i32;
             (*goal).iteminfo = 0 as i32;
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         ml = (*ml).next
         //end if
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //get the next camp spot in the map
 //end of the function BotGetMapLocationGoal
@@ -1631,15 +1631,15 @@ pub unsafe extern "C" fn BotGetNextCampSpotGoal(
 ) -> i32 {
     let mut i: i32 = 0; //end for
     let mut cs: *mut campspot_t = 0 as *mut campspot_t;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t,
+    let mut mins: vec3_t = [
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
+        -(8 as i32) as vec_t,
     ];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
-        8 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut maxs: vec3_t = [
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
+        8 as i32 as vec_t,
     ];
     if num < 0 as i32 {
         num = 0 as i32
@@ -1683,7 +1683,7 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
     let mut ent: i32 = 0;
     let mut modelindex: i32 = 0;
     let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
-    let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {
+    let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
         flags: 0,
@@ -1708,7 +1708,7 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     ic = itemconfig;
     if itemconfig.is_null() {
         return;
@@ -1723,7 +1723,7 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
             //get info about the entity
             crate::src::botlib::be_aas_entity::AAS_EntityInfo(
                 ent,
-                &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
+                &mut entinfo as *mut _ as *mut aas_entityinfo_s,
             );
             //if the entity is still moving
             if !(entinfo.origin[0 as i32 as usize] != entinfo.lastvisorigin[0 as i32 as usize]
@@ -1739,7 +1739,7 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
                         (*li).origin[1 as i32 as usize] - entinfo.origin[1 as i32 as usize];
                     dir[2 as i32 as usize] =
                         (*li).origin[2 as i32 as usize] - entinfo.origin[2 as i32 as usize];
-                    if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
+                    if VectorLength(dir.as_mut_ptr() as *const vec_t)
                         < 30 as i32 as f32
                     {
                         //end if
@@ -1760,10 +1760,10 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
     let mut ent: i32 = 0;
     let mut i: i32 = 0;
     let mut modelindex: i32 = 0;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
     let mut nextli: *mut levelitem_t = 0 as *mut levelitem_t;
-    let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {
+    let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
         flags: 0,
@@ -1821,7 +1821,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
                 //get info about the entity
                 crate::src::botlib::be_aas_entity::AAS_EntityInfo(
                     ent,
-                    &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
+                    &mut entinfo as *mut _ as *mut aas_entityinfo_s,
                 );
                 //FIXME: don't do this
                 //skip all floating items for now
@@ -1927,7 +1927,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
                                                 [2 as i32 as usize]
                                                 - entinfo.origin[2 as i32 as usize];
                                             if VectorLength(dir.as_mut_ptr()
-                                                as *const crate::src::qcommon::q_shared::vec_t)
+                                                as *const vec_t)
                                                 < 30 as i32 as f32
                                             {
                                                 //end if
@@ -2169,10 +2169,10 @@ pub unsafe extern "C" fn BotGetTopGoal(
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*gs).goalstacktop == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::stdlib::memcpy(
         goal as *mut libc::c_void,
@@ -2183,7 +2183,7 @@ pub unsafe extern "C" fn BotGetTopGoal(
             as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *const libc::c_void,
         ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
     );
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //get the second goal on the stack
 //end of the function BotGetTopGoal
@@ -2202,10 +2202,10 @@ pub unsafe extern "C" fn BotGetSecondGoal(
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*gs).goalstacktop <= 1 as i32 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     crate::stdlib::memcpy(
         goal as *mut libc::c_void,
@@ -2216,7 +2216,7 @@ pub unsafe extern "C" fn BotGetSecondGoal(
             as *mut crate::src::botlib::be_ai_goal::bot_goal_t as *const libc::c_void,
         ::std::mem::size_of::<crate::src::botlib::be_ai_goal::bot_goal_t>() as libc::c_ulong,
     );
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //choose the best long term goal item for the bot
 //end of the function BotGetSecondGoal
@@ -2231,7 +2231,7 @@ pub unsafe extern "C" fn BotGetSecondGoal(
 
 pub unsafe extern "C" fn BotChooseLTGItem(
     mut goalstate: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut inventory: *mut i32,
     mut travelflags: i32,
 ) -> i32 {
@@ -2259,10 +2259,10 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*gs).itemweightconfig.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //get the area the bot is in
     areanum = crate::src::botlib::be_ai_move::BotReachabilityArea(origin, (*gs).client);
@@ -2276,12 +2276,12 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     (*gs).lastreachabilityarea = areanum;
     //if still in solid
     if areanum == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //the item configuration
     ic = itemconfig;
     if itemconfig.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //best weight and item so far
     bestweight = 0 as i32 as f32;
@@ -2325,10 +2325,10 @@ pub unsafe extern "C" fn BotChooseLTGItem(
                                 as *mut iteminfo_t;
                             weightnum = *(*gs).itemweightindex.offset((*iteminfo).number as isize);
                             if !(weightnum < 0 as i32) {
-                                weight = crate::src::botlib::be_ai_weight::FuzzyWeightUndecided(
+                                weight = FuzzyWeightUndecided(
                                     inventory,
                                     (*gs).itemweightconfig
-                                        as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+                                        as *mut weightconfig_s,
                                     weightnum,
                                 );
                                 //UNDECIDEDFUZZY
@@ -2403,7 +2403,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
                     } //end if
                 } //end if
                 */
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //create a bot goal for this item
     iteminfo = &mut *(*ic).iteminfo.offset((*bestitem).iteminfo as isize) as *mut iteminfo_t;
@@ -2445,7 +2445,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
     //push the goal on the stack
     BotPushGoal(goalstate, &mut goal);
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //choose the best nearby goal item for the bot
 //the item may not be further away from the current bot position than maxtime
@@ -2462,7 +2462,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
 
 pub unsafe extern "C" fn BotChooseNBGItem(
     mut goalstate: i32,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut inventory: *mut i32,
     mut travelflags: i32,
     mut ltg: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
@@ -2493,10 +2493,10 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     if (*gs).itemweightconfig.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //get the area the bot is in
     areanum = crate::src::botlib::be_ai_move::BotReachabilityArea(origin, (*gs).client);
@@ -2510,7 +2510,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     (*gs).lastreachabilityarea = areanum;
     //if still in solid
     if areanum == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     if !ltg.is_null() {
@@ -2526,7 +2526,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     //the item configuration
     ic = itemconfig;
     if itemconfig.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //best weight and item so far
     bestweight = 0 as i32 as f32;
@@ -2571,10 +2571,10 @@ pub unsafe extern "C" fn BotChooseNBGItem(
                             weightnum = *(*gs).itemweightindex.offset((*iteminfo).number as isize);
                             if !(weightnum < 0 as i32) {
                                 //
-                                weight = crate::src::botlib::be_ai_weight::FuzzyWeightUndecided(
+                                weight = FuzzyWeightUndecided(
                                     inventory,
                                     (*gs).itemweightconfig
-                                        as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+                                        as *mut weightconfig_s,
                                     weightnum,
                                 );
                                 //UNDECIDEDFUZZY
@@ -2640,7 +2640,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     //if the travel back is possible and doesn't take too long
     //if no goal item found
     if bestitem.is_null() {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //create a bot goal for this item
     iteminfo = &mut *(*ic).iteminfo.offset((*bestitem).iteminfo as isize) as *mut iteminfo_t;
@@ -2682,7 +2682,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
     //push the goal on the stack
     BotPushGoal(goalstate, &mut goal);
     //
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //returns true if the bot touches the goal
 //end of the function BotChooseNBGItem
@@ -2695,23 +2695,23 @@ pub unsafe extern "C" fn BotChooseNBGItem(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotTouchingGoal(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
     let mut i: i32 = 0; //{4, 4, 10};
-    let mut boxmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //{-4, -4, 0};
-    let mut boxmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut absmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut safety_maxs: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut boxmins: vec3_t = [0.; 3]; //{-4, -4, 0};
+    let mut boxmaxs: vec3_t = [0.; 3];
+    let mut absmins: vec3_t = [0.; 3];
+    let mut absmaxs: vec3_t = [0.; 3];
+    let mut safety_maxs: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
-    let mut safety_mins: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut safety_mins: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
     ];
     crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox(
         2 as i32,
@@ -2742,11 +2742,11 @@ pub unsafe extern "C" fn BotTouchingGoal(
         if *origin.offset(i as isize) < absmins[i as usize]
             || *origin.offset(i as isize) > absmaxs[i as usize]
         {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //returns true if the goal should be visible but isn't
 //end of the function BotTouchingGoal
@@ -2760,11 +2760,11 @@ pub unsafe extern "C" fn BotTouchingGoal(
 
 pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
     mut viewer: i32,
-    mut eye: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _viewangles: *mut crate::src::qcommon::q_shared::vec_t,
+    mut eye: *mut vec_t,
+    mut _viewangles: *mut vec_t,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> i32 {
-    let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {
+    let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
         valid: 0,
         type_0: 0,
         flags: 0,
@@ -2789,12 +2789,12 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut trace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -2803,7 +2803,7 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -2811,54 +2811,54 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
         contents: 0,
         ent: 0,
     };
-    let mut middle: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut middle: vec3_t = [0.; 3];
     if (*goal).flags & 1 as i32 == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //
     middle[0 as i32 as usize] = (*goal).mins[0 as i32 as usize] + (*goal).mins[0 as i32 as usize];
     middle[1 as i32 as usize] = (*goal).mins[1 as i32 as usize] + (*goal).mins[1 as i32 as usize];
     middle[2 as i32 as usize] = (*goal).mins[2 as i32 as usize] + (*goal).mins[2 as i32 as usize];
     middle[0 as i32 as usize] =
-        (middle[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (middle[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     middle[1 as i32 as usize] =
-        (middle[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (middle[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
     middle[2 as i32 as usize] =
-        (middle[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (middle[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     middle[0 as i32 as usize] = (*goal).origin[0 as i32 as usize] + middle[0 as i32 as usize];
     middle[1 as i32 as usize] = (*goal).origin[1 as i32 as usize] + middle[1 as i32 as usize];
     middle[2 as i32 as usize] = (*goal).origin[2 as i32 as usize] + middle[2 as i32 as usize];
     //
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         eye,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
         middle.as_mut_ptr(),
         viewer,
         1 as i32,
-    ) as crate::botlib_h::bsp_trace_s;
+    ) as bsp_trace_s;
     //if the goal middle point is visible
     if trace.fraction >= 1 as i32 as f32 {
         //end if
         //the goal entity number doesn't have to be valid
         //just assume it's valid
         if (*goal).entitynum <= 0 as i32 {
-            return crate::src::qcommon::q_shared::qfalse as i32;
+            return qfalse as i32;
         }
         //
         //if the entity data isn't valid
         crate::src::botlib::be_aas_entity::AAS_EntityInfo(
             (*goal).entitynum,
-            &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
+            &mut entinfo as *mut _ as *mut aas_entityinfo_s,
         );
         //NOTE: for some wacko reason entities are sometimes
         // not updated
         //if (!entinfo.valid) return qtrue;
         if (entinfo.ltime as f64) < crate::src::botlib::be_aas_main::AAS_Time() as f64 - 0.5f64 {
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //reset the whole goal state, but keep the item weights
 //end of the function BotItemGoalInVisButNotVisible
@@ -2906,8 +2906,8 @@ pub unsafe extern "C" fn BotLoadItemWeights(
         return 9 as i32;
     }
     //load the weight configuration
-    (*gs).itemweightconfig = crate::src::botlib::be_ai_weight::ReadWeightConfig(filename)
-        as *mut crate::src::botlib::be_ai_weight::weightconfig_s; //end if
+    (*gs).itemweightconfig = ReadWeightConfig(filename)
+        as *mut weightconfig_s; //end if
     if (*gs).itemweightconfig.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -2944,8 +2944,8 @@ pub unsafe extern "C" fn BotFreeItemWeights(mut goalstate: i32) {
         return;
     }
     if !(*gs).itemweightconfig.is_null() {
-        crate::src::botlib::be_ai_weight::FreeWeightConfig(
-            (*gs).itemweightconfig as *mut crate::src::botlib::be_ai_weight::weightconfig_s,
+        FreeWeightConfig(
+            (*gs).itemweightconfig as *mut weightconfig_s,
         );
     }
     if !(*gs).itemweightindex.is_null() {
@@ -3028,12 +3028,12 @@ pub unsafe extern "C" fn BotFreeGoalState(mut handle: i32) {
 pub unsafe extern "C" fn BotSetupGoalAI() -> i32 {
     let mut filename: *mut libc::c_char = 0 as *mut libc::c_char;
     //check if teamplay is on
-    g_gametype = crate::src::botlib::l_libvar::LibVarValue(
+    g_gametype = LibVarValue(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     //item configuration file
-    filename = crate::src::botlib::l_libvar::LibVarString(
+    filename = LibVarString(
         b"itemconfig\x00" as *const u8 as *const libc::c_char,
         b"items.c\x00" as *const u8 as *const libc::c_char,
     );
@@ -3050,10 +3050,10 @@ pub unsafe extern "C" fn BotSetupGoalAI() -> i32 {
         return 10 as i32;
     }
     //
-    droppedweight = crate::src::botlib::l_libvar::LibVar(
+    droppedweight = LibVar(
         b"droppedweight\x00" as *const u8 as *const libc::c_char,
         b"1000\x00" as *const u8 as *const libc::c_char,
-    ) as *mut crate::src::botlib::l_libvar::libvar_s;
+    ) as *mut libvar_s;
     //everything went ok
     return 0 as i32;
 }
@@ -3094,120 +3094,120 @@ pub unsafe extern "C" fn BotShutdownGoalAI() {
 unsafe extern "C" fn run_static_initializers() {
     iteminfo_fields = [
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).name as *mut [libc::c_char; 80]
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).model as *mut [libc::c_char; 80]
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"modelindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).modelindex as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as size_t
                     as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"index\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as crate::stddef_h::size_t
+                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as size_t
                     as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"respawntime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).respawntime as *mut f32
-                    as crate::stddef_h::size_t as i32,
+                    as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"mins\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).mins
-                    as *mut crate::src::qcommon::q_shared::vec3_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec3_t
+                    as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: b"maxs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut iteminfo_t)).maxs
-                    as *mut crate::src::qcommon::q_shared::vec3_t
-                    as crate::stddef_h::size_t as i32,
+                    as *mut vec3_t
+                    as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },
         {
-            let mut init = crate::src::botlib::l_struct::fielddef_s {
+            let mut init = fielddef_s {
                 name: 0 as *mut libc::c_char,
                 offset: 0 as i32,
                 type_0: 0 as i32,
                 maxarray: 0,
                 floatmin: 0.,
                 floatmax: 0.,
-                substruct: 0 as *mut crate::src::botlib::l_struct::structdef_s,
+                substruct: 0 as *mut structdef_s,
             };
             init
         },

@@ -497,15 +497,15 @@ pub use crate::src::game::g_utils::G_UseTargets;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct pushed_t {
-    pub ent: *mut crate::g_local_h::gentity_t,
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
-    pub angles: crate::src::qcommon::q_shared::vec3_t,
+    pub ent: *mut gentity_t,
+    pub origin: vec3_t,
+    pub angles: vec3_t,
     pub deltayaw: f32,
 }
 #[no_mangle]
 
 pub static mut pushed: [pushed_t; 1024] = [pushed_t {
-    ent: 0 as *const crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_t,
+    ent: 0 as *const gentity_t as *mut gentity_t,
     origin: [0.; 3],
     angles: [0.; 3],
     deltayaw: 0.,
@@ -522,14 +522,14 @@ G_TestEntityPosition
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TestEntityPosition(
-    mut ent: *mut crate::g_local_h::gentity_t,
-) -> *mut crate::g_local_h::gentity_t {
-    let mut tr: crate::src::qcommon::q_shared::trace_t = crate::src::qcommon::q_shared::trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    mut ent: *mut gentity_t,
+) -> *mut gentity_t {
+    let mut tr: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -547,32 +547,32 @@ pub unsafe extern "C" fn G_TestEntityPosition(
         mask = 1 as i32
     }
     if !(*ent).client.is_null() {
-        crate::src::game::g_syscalls::trap_Trace(
-            &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-            (*(*ent).client).ps.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).r.mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).r.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*(*ent).client).ps.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        trap_Trace(
+            &mut tr as *mut _ as *mut trace_t,
+            (*(*ent).client).ps.origin.as_mut_ptr() as *const vec_t,
+            (*ent).r.mins.as_mut_ptr() as *const vec_t,
+            (*ent).r.maxs.as_mut_ptr() as *const vec_t,
+            (*(*ent).client).ps.origin.as_mut_ptr() as *const vec_t,
             (*ent).s.number,
             mask,
         );
     } else {
-        crate::src::game::g_syscalls::trap_Trace(
-            &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-            (*ent).s.pos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).r.mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).r.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*ent).s.pos.trBase.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        trap_Trace(
+            &mut tr as *mut _ as *mut trace_t,
+            (*ent).s.pos.trBase.as_mut_ptr() as *const vec_t,
+            (*ent).r.mins.as_mut_ptr() as *const vec_t,
+            (*ent).r.maxs.as_mut_ptr() as *const vec_t,
+            (*ent).s.pos.trBase.as_mut_ptr() as *const vec_t,
             (*ent).s.number,
             mask,
         );
     }
     if tr.startsolid as u64 != 0 {
-        return &mut *crate::src::game::g_main::g_entities
+        return &mut *g_entities
             .as_mut_ptr()
-            .offset(tr.entityNum as isize) as *mut crate::g_local_h::gentity_t;
+            .offset(tr.entityNum as isize) as *mut gentity_t;
     }
-    return 0 as *mut crate::g_local_h::gentity_t;
+    return 0 as *mut gentity_t;
 }
 /*
 ================
@@ -582,11 +582,11 @@ G_CreateRotationMatrix
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CreateRotationMatrix(
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut angles: *mut vec_t,
+    mut matrix: *mut vec3_t,
 ) {
-    crate::src::qcommon::q_math::AngleVectors(
-        angles as *const crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        angles as *const vec_t,
         (*matrix.offset(0 as i32 as isize)).as_mut_ptr(),
         (*matrix.offset(1 as i32 as isize)).as_mut_ptr(),
         (*matrix.offset(2 as i32 as isize)).as_mut_ptr(),
@@ -601,8 +601,8 @@ G_TransposeMatrix
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TransposeMatrix(
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut transpose: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut matrix: *mut vec3_t,
+    mut transpose: *mut vec3_t,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -624,10 +624,10 @@ G_RotatePoint
 #[no_mangle]
 
 pub unsafe extern "C" fn G_RotatePoint(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
-    mut matrix: *mut crate::src::qcommon::q_shared::vec3_t,
+    mut point: *mut vec_t,
+    mut matrix: *mut vec3_t,
 ) {
-    let mut tvec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut tvec: vec3_t = [0.; 3];
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
     tvec[2 as i32 as usize] = *point.offset(2 as i32 as isize);
@@ -654,21 +654,21 @@ Returns qfalse if the move is blocked
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TryPushingEntity(
-    mut check: *mut crate::g_local_h::gentity_t,
-    mut pusher: *mut crate::g_local_h::gentity_t,
-    mut move_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut amove: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut matrix: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
-    let mut transpose: [crate::src::qcommon::q_shared::vec3_t; 3] = [[0.; 3]; 3];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut block: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    mut check: *mut gentity_t,
+    mut pusher: *mut gentity_t,
+    mut move_0: *mut vec_t,
+    mut amove: *mut vec_t,
+) -> qboolean {
+    let mut matrix: [vec3_t; 3] = [[0.; 3]; 3];
+    let mut transpose: [vec3_t; 3] = [[0.; 3]; 3];
+    let mut org: vec3_t = [0.; 3];
+    let mut org2: vec3_t = [0.; 3];
+    let mut move2: vec3_t = [0.; 3];
+    let mut block: *mut gentity_t = 0 as *mut gentity_t;
     // EF_MOVER_STOP will just stop when contacting another entity
     // instead of pushing it, but entities can still ride on top of it
     if (*pusher).s.eFlags & 0x400 as i32 != 0 && (*check).s.groundEntityNum != (*pusher).s.number {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // save off the old position
     if pushed_p
@@ -676,7 +676,7 @@ pub unsafe extern "C" fn G_TryPushingEntity(
             .as_mut_ptr()
             .offset(((1 as i32) << 10 as i32) as isize) as *mut pushed_t
     {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"pushed_p > &pushed[MAX_GENTITIES]\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -770,8 +770,8 @@ pub unsafe extern "C" fn G_TryPushingEntity(
             (*check).r.currentOrigin[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize];
             (*check).r.currentOrigin[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize]
         }
-        crate::src::game::g_syscalls::trap_LinkEntity(check as *mut crate::g_local_h::gentity_s);
-        return crate::src::qcommon::q_shared::qtrue;
+        trap_LinkEntity(check as *mut gentity_s);
+        return qtrue;
     }
     // if it is ok to leave in the old position, do it
     // this is only relevant for riding entities, not pushed
@@ -800,10 +800,10 @@ pub unsafe extern "C" fn G_TryPushingEntity(
     if block.is_null() {
         (*check).s.groundEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
         pushed_p = pushed_p.offset(-1);
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
     // blocked
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ==================
@@ -813,16 +813,16 @@ G_CheckProxMinePosition
 #[no_mangle]
 
 pub unsafe extern "C" fn G_CheckProxMinePosition(
-    mut check: *mut crate::g_local_h::gentity_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut tr: crate::src::qcommon::q_shared::trace_t = crate::src::qcommon::q_shared::trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    mut check: *mut gentity_t,
+) -> qboolean {
+    let mut start: vec3_t = [0.; 3];
+    let mut end: vec3_t = [0.; 3];
+    let mut tr: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -835,32 +835,32 @@ pub unsafe extern "C" fn G_CheckProxMinePosition(
     };
     start[0 as i32 as usize] = ((*check).s.pos.trBase[0 as i32 as usize] as f64
         + (*check).movedir[0 as i32 as usize] as f64 * 0.125f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     start[1 as i32 as usize] = ((*check).s.pos.trBase[1 as i32 as usize] as f64
         + (*check).movedir[1 as i32 as usize] as f64 * 0.125f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     start[2 as i32 as usize] = ((*check).s.pos.trBase[2 as i32 as usize] as f64
         + (*check).movedir[2 as i32 as usize] as f64 * 0.125f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     end[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize]
         + (*check).movedir[0 as i32 as usize] * 2 as i32 as f32;
     end[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize]
         + (*check).movedir[1 as i32 as usize] * 2 as i32 as f32;
     end[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize]
         + (*check).movedir[2 as i32 as usize] * 2 as i32 as f32;
-    crate::src::game::g_syscalls::trap_Trace(
-        &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-        start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *const crate::src::qcommon::q_shared::vec_t,
-        end.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    trap_Trace(
+        &mut tr as *mut _ as *mut trace_t,
+        start.as_mut_ptr() as *const vec_t,
+        0 as *const vec_t,
+        0 as *const vec_t,
+        end.as_mut_ptr() as *const vec_t,
         (*check).s.number,
         1 as i32,
     );
     if tr.startsolid as u32 != 0 || tr.fraction < 1 as i32 as f32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ==================
@@ -870,27 +870,27 @@ G_TryPushingProxMine
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TryPushingProxMine(
-    mut check: *mut crate::g_local_h::gentity_t,
-    mut pusher: *mut crate::g_local_h::gentity_t,
-    mut move_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut amove: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut org2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut move2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    mut check: *mut gentity_t,
+    mut pusher: *mut gentity_t,
+    mut move_0: *mut vec_t,
+    mut amove: *mut vec_t,
+) -> qboolean {
+    let mut forward: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3];
+    let mut org2: vec3_t = [0.; 3];
+    let mut move2: vec3_t = [0.; 3];
     let mut ret: i32 = 0;
     // we need this for pushing things later
-    org[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
+    org[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
         - *amove.offset(0 as i32 as isize);
-    org[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
+    org[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
         - *amove.offset(1 as i32 as isize);
-    org[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
+    org[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
         - *amove.offset(2 as i32 as isize);
-    crate::src::qcommon::q_math::AngleVectors(
-        org.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        org.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
         up.as_mut_ptr(),
@@ -932,9 +932,9 @@ pub unsafe extern "C" fn G_TryPushingProxMine(
         (*check).r.currentOrigin[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize];
         (*check).r.currentOrigin[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize];
         (*check).r.currentOrigin[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize];
-        crate::src::game::g_syscalls::trap_LinkEntity(check as *mut crate::g_local_h::gentity_s);
+        trap_LinkEntity(check as *mut gentity_s);
     }
-    return ret as crate::src::qcommon::q_shared::qboolean;
+    return ret as qboolean;
 }
 /*
 ============
@@ -948,22 +948,22 @@ If qfalse is returned, *obstacle will be the blocking entity
 #[no_mangle]
 
 pub unsafe extern "C" fn G_MoverPush(
-    mut pusher: *mut crate::g_local_h::gentity_t,
-    mut move_0: *mut crate::src::qcommon::q_shared::vec_t,
-    mut amove: *mut crate::src::qcommon::q_shared::vec_t,
-    mut obstacle: *mut *mut crate::g_local_h::gentity_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut pusher: *mut gentity_t,
+    mut move_0: *mut vec_t,
+    mut amove: *mut vec_t,
+    mut obstacle: *mut *mut gentity_t,
+) -> qboolean {
     let mut i: i32 = 0;
     let mut e: i32 = 0;
-    let mut check: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut check: *mut gentity_t = 0 as *mut gentity_t;
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     let mut p: *mut pushed_t = 0 as *mut pushed_t;
     let mut entityList: [i32; 1024] = [0; 1024];
     let mut listedEntities: i32 = 0;
-    let mut totalMins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut totalMaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    *obstacle = 0 as *mut crate::g_local_h::gentity_t;
+    let mut totalMins: vec3_t = [0.; 3];
+    let mut totalMaxs: vec3_t = [0.; 3];
+    *obstacle = 0 as *mut gentity_t;
     // mins/maxs are the bounds at the destination
     // totalMins / totalMaxs are the bounds for the entire move
     if (*pusher).r.currentAngles[0 as i32 as usize] != 0.
@@ -974,9 +974,9 @@ pub unsafe extern "C" fn G_MoverPush(
         || *amove.offset(2 as i32 as isize) != 0.
     {
         let mut radius: f32 = 0.;
-        radius = crate::src::qcommon::q_math::RadiusFromBounds(
-            (*pusher).r.mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (*pusher).r.maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        radius = RadiusFromBounds(
+            (*pusher).r.mins.as_mut_ptr() as *const vec_t,
+            (*pusher).r.maxs.as_mut_ptr() as *const vec_t,
         );
         i = 0 as i32;
         while i < 3 as i32 {
@@ -1012,10 +1012,10 @@ pub unsafe extern "C" fn G_MoverPush(
         }
     }
     // unlink the pusher so we don't get it in the entityList
-    crate::src::game::g_syscalls::trap_UnlinkEntity(pusher as *mut crate::g_local_h::gentity_s);
-    listedEntities = crate::src::game::g_syscalls::trap_EntitiesInBox(
-        totalMins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        totalMaxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    trap_UnlinkEntity(pusher as *mut gentity_s);
+    listedEntities = trap_EntitiesInBox(
+        totalMins.as_mut_ptr() as *const vec_t,
+        totalMaxs.as_mut_ptr() as *const vec_t,
         entityList.as_mut_ptr(),
         (1 as i32) << 10 as i32,
     );
@@ -1032,18 +1032,18 @@ pub unsafe extern "C" fn G_MoverPush(
         (*pusher).r.currentAngles[1 as i32 as usize] + *amove.offset(1 as i32 as isize);
     (*pusher).r.currentAngles[2 as i32 as usize] =
         (*pusher).r.currentAngles[2 as i32 as usize] + *amove.offset(2 as i32 as isize);
-    crate::src::game::g_syscalls::trap_LinkEntity(pusher as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(pusher as *mut gentity_s);
     let mut current_block_46: u64;
     // see if any solid entities are inside the final position
     e = 0 as i32;
     while e < listedEntities {
-        check = &mut *crate::src::game::g_main::g_entities
+        check = &mut *g_entities
             .as_mut_ptr()
             .offset(*entityList.as_mut_ptr().offset(e as isize) as isize)
-            as *mut crate::g_local_h::gentity_t;
+            as *mut gentity_t;
         // only push items and players
-        if !((*check).s.eType != crate::bg_public_h::ET_ITEM as i32
-            && (*check).s.eType != crate::bg_public_h::ET_PLAYER as i32
+        if !((*check).s.eType != ET_ITEM as i32
+            && (*check).s.eType != ET_PLAYER as i32
             && (*check).physicsObject as u64 == 0)
         {
             // if the entity is standing on the pusher, it will definitely be moved
@@ -1076,19 +1076,19 @@ pub unsafe extern "C" fn G_MoverPush(
                         // the move was blocked an entity
                         // bobbing entities are instant-kill and never get blocked
                         if (*pusher).s.pos.trType as u32
-                            == crate::src::qcommon::q_shared::TR_SINE as i32 as u32
+                            == TR_SINE as i32 as u32
                             || (*pusher).s.apos.trType as u32
-                                == crate::src::qcommon::q_shared::TR_SINE as i32 as u32
+                                == TR_SINE as i32 as u32
                         {
-                            crate::src::game::g_combat::G_Damage(
-                                check as *mut crate::g_local_h::gentity_s,
-                                pusher as *mut crate::g_local_h::gentity_s,
-                                pusher as *mut crate::g_local_h::gentity_s,
-                                0 as *mut crate::src::qcommon::q_shared::vec_t,
-                                0 as *mut crate::src::qcommon::q_shared::vec_t,
+                            G_Damage(
+                                check as *mut gentity_s,
+                                pusher as *mut gentity_s,
+                                pusher as *mut gentity_s,
+                                0 as *mut vec_t,
+                                0 as *mut vec_t,
                                 99999 as i32,
                                 0 as i32,
-                                crate::bg_public_h::MOD_CRUSH as i32,
+                                MOD_CRUSH as i32,
                             );
                         } else {
                             // save off the obstacle so we can call the block function (crush, etc)
@@ -1120,12 +1120,12 @@ pub unsafe extern "C" fn G_MoverPush(
                                     (*(*(*p).ent).client).ps.origin[2 as i32 as usize] =
                                         (*p).origin[2 as i32 as usize]
                                 }
-                                crate::src::game::g_syscalls::trap_LinkEntity(
-                                    (*p).ent as *mut crate::g_local_h::gentity_s,
+                                trap_LinkEntity(
+                                    (*p).ent as *mut gentity_s,
                                 );
                                 p = p.offset(-1)
                             }
-                            return crate::src::qcommon::q_shared::qfalse;
+                            return qfalse;
                         }
                     }
                 }
@@ -1133,7 +1133,7 @@ pub unsafe extern "C" fn G_MoverPush(
         }
         e += 1
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =================
@@ -1142,14 +1142,14 @@ G_MoverTeam
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut move_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut amove: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut part: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut obstacle: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    obstacle = 0 as *mut crate::g_local_h::gentity_t;
+pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut gentity_t) {
+    let mut move_0: vec3_t = [0.; 3];
+    let mut amove: vec3_t = [0.; 3];
+    let mut part: *mut gentity_t = 0 as *mut gentity_t;
+    let mut obstacle: *mut gentity_t = 0 as *mut gentity_t;
+    let mut origin: vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
+    obstacle = 0 as *mut gentity_t;
     // make sure all team slaves can move before committing
     // any moves or calling any think functions
     // if the move is blocked, all moved objects will be backed out
@@ -1157,14 +1157,14 @@ pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut crate::g_local_h::gentity_t) 
     part = ent;
     while !part.is_null() {
         // get current position
-        crate::src::game::bg_misc::BG_EvaluateTrajectory(
-            &mut (*part).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-            crate::src::game::g_main::level.time,
+        BG_EvaluateTrajectory(
+            &mut (*part).s.pos as *mut _ as *const trajectory_t,
+            level.time,
             origin.as_mut_ptr(),
         );
-        crate::src::game::bg_misc::BG_EvaluateTrajectory(
-            &mut (*part).s.apos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-            crate::src::game::g_main::level.time,
+        BG_EvaluateTrajectory(
+            &mut (*part).s.apos as *mut _ as *const trajectory_t,
+            level.time,
             angles.as_mut_ptr(),
         );
         move_0[0 as i32 as usize] =
@@ -1189,20 +1189,20 @@ pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut crate::g_local_h::gentity_t) 
         part = ent;
         while !part.is_null() {
             (*part).s.pos.trTime +=
-                crate::src::game::g_main::level.time - crate::src::game::g_main::level.previousTime;
+                level.time - level.previousTime;
             (*part).s.apos.trTime +=
-                crate::src::game::g_main::level.time - crate::src::game::g_main::level.previousTime;
-            crate::src::game::bg_misc::BG_EvaluateTrajectory(
-                &mut (*part).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-                crate::src::game::g_main::level.time,
+                level.time - level.previousTime;
+            BG_EvaluateTrajectory(
+                &mut (*part).s.pos as *mut _ as *const trajectory_t,
+                level.time,
                 (*part).r.currentOrigin.as_mut_ptr(),
             );
-            crate::src::game::bg_misc::BG_EvaluateTrajectory(
-                &mut (*part).s.apos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-                crate::src::game::g_main::level.time,
+            BG_EvaluateTrajectory(
+                &mut (*part).s.apos as *mut _ as *const trajectory_t,
+                level.time,
                 (*part).r.currentAngles.as_mut_ptr(),
             );
-            crate::src::game::g_syscalls::trap_LinkEntity(part as *mut crate::g_local_h::gentity_s);
+            trap_LinkEntity(part as *mut gentity_s);
             part = (*part).teamchain
         }
         // if the pusher has a "blocked" function, call it
@@ -1216,9 +1216,9 @@ pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut crate::g_local_h::gentity_t) 
     while !part.is_null() {
         // call the reached function if time is at or past end point
         if (*part).s.pos.trType as u32
-            == crate::src::qcommon::q_shared::TR_LINEAR_STOP as i32 as u32
+            == TR_LINEAR_STOP as i32 as u32
         {
-            if crate::src::game::g_main::level.time
+            if level.time
                 >= (*part).s.pos.trTime + (*part).s.pos.trDuration
             {
                 if (*part).reached.is_some() {
@@ -1237,20 +1237,20 @@ G_RunMover
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_RunMover(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn G_RunMover(mut ent: *mut gentity_t) {
     // if not a team captain, don't do anything, because
     // the captain will handle everything
     if (*ent).flags & 0x400 as i32 != 0 {
         return;
     }
     // if stationary at one of the positions, don't move anything
-    if (*ent).s.pos.trType as u32 != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-        || (*ent).s.apos.trType as u32 != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
+    if (*ent).s.pos.trType as u32 != TR_STATIONARY as i32 as u32
+        || (*ent).s.apos.trType as u32 != TR_STATIONARY as i32 as u32
     {
         G_MoverTeam(ent);
     }
     // check think function
-    crate::src::game::g_main::G_RunThink(ent as *mut crate::g_local_h::gentity_s);
+    G_RunThink(ent as *mut gentity_s);
 }
 /*
 ============================================================================
@@ -1269,11 +1269,11 @@ SetMoverState
 #[no_mangle]
 
 pub unsafe extern "C" fn SetMoverState(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut moverState: crate::g_local_h::moverState_t,
+    mut ent: *mut gentity_t,
+    mut moverState: moverState_t,
     mut time: i32,
 ) {
-    let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut delta: vec3_t = [0.; 3];
     let mut f: f32 = 0.;
     (*ent).moverState = moverState;
     (*ent).s.pos.trTime = time;
@@ -1282,13 +1282,13 @@ pub unsafe extern "C" fn SetMoverState(
             (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize];
             (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize];
             (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize];
-            (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY
+            (*ent).s.pos.trType = TR_STATIONARY
         }
         1 => {
             (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize];
             (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize];
             (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize];
-            (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY
+            (*ent).s.pos.trType = TR_STATIONARY
         }
         2 => {
             (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize];
@@ -1304,7 +1304,7 @@ pub unsafe extern "C" fn SetMoverState(
             (*ent).s.pos.trDelta[0 as i32 as usize] = delta[0 as i32 as usize] * f;
             (*ent).s.pos.trDelta[1 as i32 as usize] = delta[1 as i32 as usize] * f;
             (*ent).s.pos.trDelta[2 as i32 as usize] = delta[2 as i32 as usize] * f;
-            (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR_STOP
+            (*ent).s.pos.trType = TR_LINEAR_STOP
         }
         3 => {
             (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize];
@@ -1320,16 +1320,16 @@ pub unsafe extern "C" fn SetMoverState(
             (*ent).s.pos.trDelta[0 as i32 as usize] = delta[0 as i32 as usize] * f;
             (*ent).s.pos.trDelta[1 as i32 as usize] = delta[1 as i32 as usize] * f;
             (*ent).s.pos.trDelta[2 as i32 as usize] = delta[2 as i32 as usize] * f;
-            (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR_STOP
+            (*ent).s.pos.trType = TR_LINEAR_STOP
         }
         _ => {}
     }
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
-        &mut (*ent).s.pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
-        crate::src::game::g_main::level.time,
+    BG_EvaluateTrajectory(
+        &mut (*ent).s.pos as *mut _ as *const trajectory_t,
+        level.time,
         (*ent).r.currentOrigin.as_mut_ptr(),
     );
-    crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(ent as *mut gentity_s);
 }
 /*
 ================
@@ -1342,14 +1342,14 @@ in the same amount of time
 #[no_mangle]
 
 pub unsafe extern "C" fn MatchTeam(
-    mut teamLeader: *mut crate::g_local_h::gentity_t,
+    mut teamLeader: *mut gentity_t,
     mut moverState: i32,
     mut time: i32,
 ) {
-    let mut slave: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut slave: *mut gentity_t = 0 as *mut gentity_t;
     slave = teamLeader;
     while !slave.is_null() {
-        SetMoverState(slave, moverState as crate::g_local_h::moverState_t, time);
+        SetMoverState(slave, moverState as moverState_t, time);
         slave = (*slave).teamchain
     }
 }
@@ -1360,19 +1360,19 @@ ReturnToPos1
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ReturnToPos1(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn ReturnToPos1(mut ent: *mut gentity_t) {
     MatchTeam(
         ent,
-        crate::g_local_h::MOVER_2TO1 as i32,
-        crate::src::game::g_main::level.time,
+        MOVER_2TO1 as i32,
+        level.time,
     );
     // looping sound
     (*ent).s.loopSound = (*ent).soundLoop;
     // starting sound
     if (*ent).sound2to1 != 0 {
-        crate::src::game::g_utils::G_AddEvent(
-            ent as *mut crate::g_local_h::gentity_s,
-            crate::bg_public_h::EV_GENERAL_SOUND as i32,
+        G_AddEvent(
+            ent as *mut gentity_s,
+            EV_GENERAL_SOUND as i32,
             (*ent).sound2to1,
         );
     };
@@ -1384,60 +1384,60 @@ Reached_BinaryMover
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut gentity_t) {
     // stop the looping sound
     (*ent).s.loopSound = (*ent).soundLoop;
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_1TO2 as i32 as u32 {
+    if (*ent).moverState as u32 == MOVER_1TO2 as i32 as u32 {
         // reached pos2
         SetMoverState(
             ent,
-            crate::g_local_h::MOVER_POS2,
-            crate::src::game::g_main::level.time,
+            MOVER_POS2,
+            level.time,
         );
         // play sound
         if (*ent).soundPos2 != 0 {
-            crate::src::game::g_utils::G_AddEvent(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_GENERAL_SOUND as i32,
+            G_AddEvent(
+                ent as *mut gentity_s,
+                EV_GENERAL_SOUND as i32,
                 (*ent).soundPos2,
             );
         }
         // return to pos1 after a delay
         (*ent).think =
-            Some(ReturnToPos1 as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-        (*ent).nextthink = (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
+            Some(ReturnToPos1 as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*ent).nextthink = (level.time as f32 + (*ent).wait) as i32;
         // fire targets
         if (*ent).activator.is_null() {
             (*ent).activator = ent
         }
-        crate::src::game::g_utils::G_UseTargets(
-            ent as *mut crate::g_local_h::gentity_s,
-            (*ent).activator as *mut crate::g_local_h::gentity_s,
+        G_UseTargets(
+            ent as *mut gentity_s,
+            (*ent).activator as *mut gentity_s,
         );
-    } else if (*ent).moverState as u32 == crate::g_local_h::MOVER_2TO1 as i32 as u32 {
+    } else if (*ent).moverState as u32 == MOVER_2TO1 as i32 as u32 {
         // reached pos1
         SetMoverState(
             ent,
-            crate::g_local_h::MOVER_POS1,
-            crate::src::game::g_main::level.time,
+            MOVER_POS1,
+            level.time,
         );
         // play sound
         if (*ent).soundPos1 != 0 {
-            crate::src::game::g_utils::G_AddEvent(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_GENERAL_SOUND as i32,
+            G_AddEvent(
+                ent as *mut gentity_s,
+                EV_GENERAL_SOUND as i32,
                 (*ent).soundPos1,
             );
         }
         // close areaportals
         if (*ent).teammaster == ent || (*ent).teammaster.is_null() {
-            crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::src::qcommon::q_shared::qfalse,
+            trap_AdjustAreaPortalState(
+                ent as *mut gentity_s,
+                qfalse,
             );
         }
     } else {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"Reached_BinaryMover: bad moverState\x00" as *const u8 as *const libc::c_char,
         );
     };
@@ -1450,9 +1450,9 @@ Use_BinaryMover
 #[no_mangle]
 
 pub unsafe extern "C" fn Use_BinaryMover(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
     let mut total: i32 = 0;
     let mut partial: i32 = 0;
@@ -1462,19 +1462,19 @@ pub unsafe extern "C" fn Use_BinaryMover(
         return;
     }
     (*ent).activator = activator;
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
+    if (*ent).moverState as u32 == MOVER_POS1 as i32 as u32 {
         // start moving 50 msec later, becase if this was player
         // triggered, level.time hasn't been advanced yet
         MatchTeam(
             ent,
-            crate::g_local_h::MOVER_1TO2 as i32,
-            crate::src::game::g_main::level.time + 50 as i32,
+            MOVER_1TO2 as i32,
+            level.time + 50 as i32,
         );
         // starting sound
         if (*ent).sound1to2 != 0 {
-            crate::src::game::g_utils::G_AddEvent(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_GENERAL_SOUND as i32,
+            G_AddEvent(
+                ent as *mut gentity_s,
+                EV_GENERAL_SOUND as i32,
                 (*ent).sound1to2,
             );
         }
@@ -1482,55 +1482,55 @@ pub unsafe extern "C" fn Use_BinaryMover(
         (*ent).s.loopSound = (*ent).soundLoop;
         // open areaportal
         if (*ent).teammaster == ent || (*ent).teammaster.is_null() {
-            crate::src::game::g_syscalls::trap_AdjustAreaPortalState(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::src::qcommon::q_shared::qtrue,
+            trap_AdjustAreaPortalState(
+                ent as *mut gentity_s,
+                qtrue,
             );
         }
         return;
     }
     // if all the way up, just delay before coming down
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS2 as i32 as u32 {
-        (*ent).nextthink = (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
+    if (*ent).moverState as u32 == MOVER_POS2 as i32 as u32 {
+        (*ent).nextthink = (level.time as f32 + (*ent).wait) as i32;
         return;
     }
     // only partway down before reversing
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_2TO1 as i32 as u32 {
+    if (*ent).moverState as u32 == MOVER_2TO1 as i32 as u32 {
         total = (*ent).s.pos.trDuration;
-        partial = crate::src::game::g_main::level.time - (*ent).s.pos.trTime;
+        partial = level.time - (*ent).s.pos.trTime;
         if partial > total {
             partial = total
         }
         MatchTeam(
             ent,
-            crate::g_local_h::MOVER_1TO2 as i32,
-            crate::src::game::g_main::level.time - (total - partial),
+            MOVER_1TO2 as i32,
+            level.time - (total - partial),
         );
         if (*ent).sound1to2 != 0 {
-            crate::src::game::g_utils::G_AddEvent(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_GENERAL_SOUND as i32,
+            G_AddEvent(
+                ent as *mut gentity_s,
+                EV_GENERAL_SOUND as i32,
                 (*ent).sound1to2,
             );
         }
         return;
     }
     // only partway up before reversing
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_1TO2 as i32 as u32 {
+    if (*ent).moverState as u32 == MOVER_1TO2 as i32 as u32 {
         total = (*ent).s.pos.trDuration;
-        partial = crate::src::game::g_main::level.time - (*ent).s.pos.trTime;
+        partial = level.time - (*ent).s.pos.trTime;
         if partial > total {
             partial = total
         }
         MatchTeam(
             ent,
-            crate::g_local_h::MOVER_2TO1 as i32,
-            crate::src::game::g_main::level.time - (total - partial),
+            MOVER_2TO1 as i32,
+            level.time - (total - partial),
         );
         if (*ent).sound2to1 != 0 {
-            crate::src::game::g_utils::G_AddEvent(
-                ent as *mut crate::g_local_h::gentity_s,
-                crate::bg_public_h::EV_GENERAL_SOUND as i32,
+            G_AddEvent(
+                ent as *mut gentity_s,
+                EV_GENERAL_SOUND as i32,
                 (*ent).sound2to1,
             );
         }
@@ -1547,38 +1547,38 @@ so the movement delta can be calculated
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn InitMover(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut move_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn InitMover(mut ent: *mut gentity_t) {
+    let mut move_0: vec3_t = [0.; 3];
     let mut distance: f32 = 0.;
     let mut light: f32 = 0.;
-    let mut color: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut lightSet: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut colorSet: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut color: vec3_t = [0.; 3];
+    let mut lightSet: qboolean =
+        qfalse;
+    let mut colorSet: qboolean =
+        qfalse;
     let mut sound: *mut libc::c_char = 0 as *mut libc::c_char;
     // if the "model2" key is set, use a separate model
     // for drawing, but clip against the brushes
     if !(*ent).model2.is_null() {
-        (*ent).s.modelindex2 = crate::src::game::g_utils::G_ModelIndex((*ent).model2)
+        (*ent).s.modelindex2 = G_ModelIndex((*ent).model2)
     }
     // if the "loopsound" key is set, use a constant looping sound when moving
-    if crate::src::game::g_spawn::G_SpawnString(
+    if G_SpawnString(
         b"noise\x00" as *const u8 as *const libc::c_char,
         b"100\x00" as *const u8 as *const libc::c_char,
         &mut sound,
     ) as u64
         != 0
     {
-        (*ent).s.loopSound = crate::src::game::g_utils::G_SoundIndex(sound)
+        (*ent).s.loopSound = G_SoundIndex(sound)
     }
     // if the "color" or "light" keys are set, setup constantLight
-    lightSet = crate::src::game::g_spawn::G_SpawnFloat(
+    lightSet = G_SpawnFloat(
         b"light\x00" as *const u8 as *const libc::c_char,
         b"100\x00" as *const u8 as *const libc::c_char,
         &mut light,
     );
-    colorSet = crate::src::game::g_spawn::G_SpawnVector(
+    colorSet = G_SpawnVector(
         b"color\x00" as *const u8 as *const libc::c_char,
         b"1 1 1\x00" as *const u8 as *const libc::c_char,
         color.as_mut_ptr(),
@@ -1609,22 +1609,22 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut crate::g_local_h::gentity_t) {
     (*ent).use_0 = Some(
         Use_BinaryMover
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     (*ent).reached = Some(
-        Reached_BinaryMover as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+        Reached_BinaryMover as unsafe extern "C" fn(_: *mut gentity_t) -> (),
     );
-    (*ent).moverState = crate::g_local_h::MOVER_POS1;
+    (*ent).moverState = MOVER_POS1;
     (*ent).r.svFlags = 0x80 as i32;
-    (*ent).s.eType = crate::bg_public_h::ET_MOVER as i32;
+    (*ent).s.eType = ET_MOVER as i32;
     (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize];
     (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize];
     (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize];
-    crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
-    (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY;
+    trap_LinkEntity(ent as *mut gentity_s);
+    (*ent).s.pos.trType = TR_STATIONARY;
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize];
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize];
     (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize];
@@ -1632,7 +1632,7 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut crate::g_local_h::gentity_t) {
     move_0[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
     move_0[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
     move_0[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
-    distance = VectorLength(move_0.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    distance = VectorLength(move_0.as_mut_ptr() as *const vec_t);
     if (*ent).speed == 0. {
         (*ent).speed = 100 as i32 as f32
     }
@@ -1662,38 +1662,38 @@ Blocked_Door
 #[no_mangle]
 
 pub unsafe extern "C" fn Blocked_Door(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
 ) {
     // remove anything other than a client
     if (*other).client.is_null() {
         // except CTF flags!!!!
-        if (*other).s.eType == crate::bg_public_h::ET_ITEM as i32
-            && (*(*other).item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
+        if (*other).s.eType == ET_ITEM as i32
+            && (*(*other).item).giType as u32 == IT_TEAM as i32 as u32
         {
             crate::src::game::g_team::Team_DroppedFlagThink(
-                other as *mut crate::g_local_h::gentity_s,
+                other as *mut gentity_s,
             );
             return;
         }
 
-        crate::src::game::g_utils::G_TempEntity(
+        G_TempEntity(
             (*other).s.origin.as_mut_ptr(),
-            crate::bg_public_h::EV_ITEM_POP as i32,
-        ) as *mut crate::g_local_h::gentity_s;
-        crate::src::game::g_utils::G_FreeEntity(other as *mut crate::g_local_h::gentity_s);
+            EV_ITEM_POP as i32,
+        ) as *mut gentity_s;
+        G_FreeEntity(other as *mut gentity_s);
         return;
     }
     if (*ent).damage != 0 {
-        crate::src::game::g_combat::G_Damage(
-            other as *mut crate::g_local_h::gentity_s,
-            ent as *mut crate::g_local_h::gentity_s,
-            ent as *mut crate::g_local_h::gentity_s,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+        G_Damage(
+            other as *mut gentity_s,
+            ent as *mut gentity_s,
+            ent as *mut gentity_s,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
             (*ent).damage,
             0 as i32,
-            crate::bg_public_h::MOD_CRUSH as i32,
+            MOD_CRUSH as i32,
         );
     }
     if (*ent).spawnflags & 4 as i32 != 0 {
@@ -1710,14 +1710,14 @@ Touch_DoorTriggerSpectator
 */
 
 unsafe extern "C" fn Touch_DoorTriggerSpectator(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     let mut axis: i32 = 0;
     let mut doorMin: f32 = 0.;
     let mut doorMax: f32 = 0.;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
     axis = (*ent).count;
     // the constants below relate to constants in Think_SpawnNewDoorTrigger()
     doorMin = (*ent).r.absmin[axis as usize] + 100 as i32 as f32;
@@ -1735,10 +1735,10 @@ unsafe extern "C" fn Touch_DoorTriggerSpectator(
     } else {
         origin[axis as usize] = doorMax + 10 as i32 as f32
     }
-    crate::src::game::g_misc::TeleportPlayer(
-        other as *mut crate::g_local_h::gentity_s,
+    TeleportPlayer(
+        other as *mut gentity_s,
         origin.as_mut_ptr(),
-        crate::src::game::g_utils::tv(10000000.0f64 as f32, 0 as i32 as f32, 0 as i32 as f32),
+        tv(10000000.0f64 as f32, 0 as i32 as f32, 0 as i32 as f32),
     );
 }
 /*
@@ -1749,21 +1749,21 @@ Touch_DoorTrigger
 #[no_mangle]
 
 pub unsafe extern "C" fn Touch_DoorTrigger(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut trace: *mut trace_t,
 ) {
     if !(*other).client.is_null()
         && (*(*other).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+            == TEAM_SPECTATOR as i32 as u32
     {
         // if the door is not open and not opening
-        if (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_1TO2 as i32 as u32
-            && (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_POS2 as i32 as u32
+        if (*(*ent).parent).moverState as u32 != MOVER_1TO2 as i32 as u32
+            && (*(*ent).parent).moverState as u32 != MOVER_POS2 as i32 as u32
         {
             Touch_DoorTriggerSpectator(ent, other, trace);
         }
-    } else if (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_1TO2 as i32 as u32 {
+    } else if (*(*ent).parent).moverState as u32 != MOVER_1TO2 as i32 as u32 {
         Use_BinaryMover((*ent).parent, ent, other);
     };
 }
@@ -1777,10 +1777,10 @@ a trigger that encloses all of them
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut other: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut gentity_t) {
+    let mut other: *mut gentity_t = 0 as *mut gentity_t;
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     let mut i: i32 = 0;
     let mut best: i32 = 0;
     if ent.is_null() {
@@ -1789,7 +1789,7 @@ pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut crate::g_local_
     // set all of the slaves as shootable
     other = ent;
     while !other.is_null() {
-        (*other).takedamage = crate::src::qcommon::q_shared::qtrue;
+        (*other).takedamage = qtrue;
         other = (*other).teamchain
     }
     // find the bounds of everything on the team
@@ -1801,13 +1801,13 @@ pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut crate::g_local_
     maxs[2 as i32 as usize] = (*ent).r.absmax[2 as i32 as usize];
     other = (*ent).teamchain;
     while !other.is_null() {
-        crate::src::qcommon::q_math::AddPointToBounds(
-            (*other).r.absmin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AddPointToBounds(
+            (*other).r.absmin.as_mut_ptr() as *const vec_t,
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        crate::src::qcommon::q_math::AddPointToBounds(
-            (*other).r.absmax.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        AddPointToBounds(
+            (*other).r.absmax.as_mut_ptr() as *const vec_t,
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
@@ -1825,7 +1825,7 @@ pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut crate::g_local_
     maxs[best as usize] += 120 as i32 as f32;
     mins[best as usize] -= 120 as i32 as f32;
     // create a trigger with this size
-    other = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
+    other = G_Spawn() as *mut gentity_s;
     (*other).classname =
         b"door_trigger\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*other).r.mins[0 as i32 as usize] = mins[0 as i32 as usize];
@@ -1839,27 +1839,27 @@ pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut crate::g_local_
     (*other).touch = Some(
         Touch_DoorTrigger
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
     // remember the thinnest axis
     (*other).count = best;
-    crate::src::game::g_syscalls::trap_LinkEntity(other as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(other as *mut gentity_s);
     MatchTeam(
         ent,
         (*ent).moverState as i32,
-        crate::src::game::g_main::level.time,
+        level.time,
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Think_MatchTeam(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn Think_MatchTeam(mut ent: *mut gentity_t) {
     MatchTeam(
         ent,
         (*ent).moverState as i32,
-        crate::src::game::g_main::level.time,
+        level.time,
     );
 }
 /*QUAKED func_door (0 .5 .8) ? START_OPEN x CRUSHER
@@ -1880,17 +1880,17 @@ NOMONSTER	monsters will not trigger this door
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut abs_movedir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn SP_func_door(mut ent: *mut gentity_t) {
+    let mut abs_movedir: vec3_t = [0.; 3];
     let mut distance: f32 = 0.;
-    let mut size: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut size: vec3_t = [0.; 3];
     let mut lip: f32 = 0.;
-    (*ent).sound2to1 = crate::src::game::g_utils::G_SoundIndex(
+    (*ent).sound2to1 = G_SoundIndex(
         b"sound/movers/doors/dr1_strt.wav\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
     (*ent).sound1to2 = (*ent).sound2to1;
-    (*ent).soundPos2 = crate::src::game::g_utils::G_SoundIndex(
+    (*ent).soundPos2 = G_SoundIndex(
         b"sound/movers/doors/dr1_end.wav\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
@@ -1898,8 +1898,8 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
     (*ent).blocked = Some(
         Blocked_Door
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     // default speed of 400
@@ -1912,13 +1912,13 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
     }
     (*ent).wait *= 1000 as i32 as f32;
     // default lip of 8 units
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"lip\x00" as *const u8 as *const libc::c_char,
         b"8\x00" as *const u8 as *const libc::c_char,
         &mut lip,
     );
     // default damage of 2 points
-    crate::src::game::g_spawn::G_SpawnInt(
+    G_SpawnInt(
         b"dmg\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).damage,
@@ -1928,20 +1928,20 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
     (*ent).pos1[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
     (*ent).pos1[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // calculate second position
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
-    crate::src::game::g_utils::G_SetMovedir(
+    G_SetMovedir(
         (*ent).s.angles.as_mut_ptr(),
         (*ent).movedir.as_mut_ptr(),
     );
     abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
     size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
     size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
@@ -1957,7 +1957,7 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
         (*ent).pos1[2 as i32 as usize] + (*ent).movedir[2 as i32 as usize] * distance;
     // if "start_open", reverse position 1 and 2
     if (*ent).spawnflags & 1 as i32 != 0 {
-        let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut temp: vec3_t = [0.; 3];
         temp[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize];
         temp[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize];
         temp[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize];
@@ -1969,26 +1969,26 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
         (*ent).pos1[2 as i32 as usize] = temp[2 as i32 as usize]
     }
     InitMover(ent);
-    (*ent).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+    (*ent).nextthink = level.time + 100 as i32;
     if (*ent).flags & 0x400 as i32 == 0 {
         let mut health: i32 = 0;
-        crate::src::game::g_spawn::G_SpawnInt(
+        G_SpawnInt(
             b"health\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
             &mut health,
         );
         if health != 0 {
-            (*ent).takedamage = crate::src::qcommon::q_shared::qtrue
+            (*ent).takedamage = qtrue
         }
         if !(*ent).targetname.is_null() || health != 0 {
             // non touch/shoot doors
             (*ent).think = Some(
-                Think_MatchTeam as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                Think_MatchTeam as unsafe extern "C" fn(_: *mut gentity_t) -> (),
             )
         } else {
             (*ent).think = Some(
                 Think_SpawnNewDoorTrigger
-                    as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+                    as unsafe extern "C" fn(_: *mut gentity_t) -> (),
             )
         }
     };
@@ -2010,18 +2010,18 @@ Don't allow decent if a living player is on it
 #[no_mangle]
 
 pub unsafe extern "C" fn Touch_Plat(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     if (*other).client.is_null()
-        || (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32
+        || (*(*other).client).ps.stats[STAT_HEALTH as i32 as usize] <= 0 as i32
     {
         return;
     }
     // delay return-to-pos1 by one second
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS2 as i32 as u32 {
-        (*ent).nextthink = crate::src::game::g_main::level.time + 1000 as i32
+    if (*ent).moverState as u32 == MOVER_POS2 as i32 as u32 {
+        (*ent).nextthink = level.time + 1000 as i32
     };
 }
 /*
@@ -2034,14 +2034,14 @@ If the plat is at the bottom position, start it going up
 #[no_mangle]
 
 pub unsafe extern "C" fn Touch_PlatCenterTrigger(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     if (*other).client.is_null() {
         return;
     }
-    if (*(*ent).parent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
+    if (*(*ent).parent).moverState as u32 == MOVER_POS1 as i32 as u32 {
         Use_BinaryMover((*ent).parent, ent, other);
     };
 }
@@ -2056,21 +2056,21 @@ not just sit on top of it.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut trigger: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut tmin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut tmax: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut gentity_t) {
+    let mut trigger: *mut gentity_t = 0 as *mut gentity_t;
+    let mut tmin: vec3_t = [0.; 3];
+    let mut tmax: vec3_t = [0.; 3];
     // the middle trigger will be a thin trigger just
     // above the starting position
-    trigger = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
+    trigger = G_Spawn() as *mut gentity_s;
     (*trigger).classname =
         b"plat_trigger\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*trigger).touch = Some(
         Touch_PlatCenterTrigger
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     );
     (*trigger).r.contents = 0x40000000 as i32;
@@ -2089,13 +2089,13 @@ pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut crate::g_local_h::gentit
     if tmax[0 as i32 as usize] <= tmin[0 as i32 as usize] {
         tmin[0 as i32 as usize] = ((*ent).pos1[0 as i32 as usize] as f64
             + ((*ent).r.mins[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         tmax[0 as i32 as usize] = tmin[0 as i32 as usize] + 1 as i32 as f32
     }
     if tmax[1 as i32 as usize] <= tmin[1 as i32 as usize] {
         tmin[1 as i32 as usize] = ((*ent).pos1[1 as i32 as usize] as f64
             + ((*ent).r.mins[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize]) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         tmax[1 as i32 as usize] = tmin[1 as i32 as usize] + 1 as i32 as f32
     }
     (*trigger).r.mins[0 as i32 as usize] = tmin[0 as i32 as usize];
@@ -2104,7 +2104,7 @@ pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut crate::g_local_h::gentit
     (*trigger).r.maxs[0 as i32 as usize] = tmax[0 as i32 as usize];
     (*trigger).r.maxs[1 as i32 as usize] = tmax[1 as i32 as usize];
     (*trigger).r.maxs[2 as i32 as usize] = tmax[2 as i32 as usize];
-    crate::src::game::g_syscalls::trap_LinkEntity(trigger as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(trigger as *mut gentity_s);
 }
 /*QUAKED func_plat (0 .5 .8) ?
 Plats are always drawn in the extended position so they will light correctly.
@@ -2119,49 +2119,49 @@ Plats are always drawn in the extended position so they will light correctly.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_plat(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_func_plat(mut ent: *mut gentity_t) {
     let mut lip: f32 = 0.;
     let mut height: f32 = 0.;
-    (*ent).sound2to1 = crate::src::game::g_utils::G_SoundIndex(
+    (*ent).sound2to1 = G_SoundIndex(
         b"sound/movers/plats/pt1_strt.wav\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
     (*ent).sound1to2 = (*ent).sound2to1;
-    (*ent).soundPos2 = crate::src::game::g_utils::G_SoundIndex(
+    (*ent).soundPos2 = G_SoundIndex(
         b"sound/movers/plats/pt1_end.wav\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
     (*ent).soundPos1 = (*ent).soundPos2;
-    (*ent).s.angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.angles[2 as i32 as usize] = 0 as i32 as vec_t;
     (*ent).s.angles[1 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
     (*ent).s.angles[0 as i32 as usize] = (*ent).s.angles[1 as i32 as usize];
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"speed\x00" as *const u8 as *const libc::c_char,
         b"200\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).speed,
     );
-    crate::src::game::g_spawn::G_SpawnInt(
+    G_SpawnInt(
         b"dmg\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).damage,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"wait\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).wait,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"lip\x00" as *const u8 as *const libc::c_char,
         b"8\x00" as *const u8 as *const libc::c_char,
         &mut lip,
     );
     (*ent).wait = 1000 as i32 as f32;
     // create second position
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
-    if crate::src::game::g_spawn::G_SpawnFloat(
+    if G_SpawnFloat(
         b"height\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut height,
@@ -2184,16 +2184,16 @@ pub unsafe extern "C" fn SP_func_plat(mut ent: *mut crate::g_local_h::gentity_t)
     (*ent).touch = Some(
         Touch_Plat
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::src::qcommon::q_shared::trace_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
+                _: *mut trace_t,
             ) -> (),
     ); // so it can be treated as a door
     (*ent).blocked = Some(
         Blocked_Door
             as unsafe extern "C" fn(
-                _: *mut crate::g_local_h::gentity_t,
-                _: *mut crate::g_local_h::gentity_t,
+                _: *mut gentity_t,
+                _: *mut gentity_t,
             ) -> (),
     );
     (*ent).parent = ent;
@@ -2218,14 +2218,14 @@ Touch_Button
 #[no_mangle]
 
 pub unsafe extern "C" fn Touch_Button(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut ent: *mut gentity_t,
+    mut other: *mut gentity_t,
+    mut _trace: *mut trace_t,
 ) {
     if (*other).client.is_null() {
         return;
     }
-    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
+    if (*ent).moverState as u32 == MOVER_POS1 as i32 as u32 {
         Use_BinaryMover(ent, other, other);
     };
 }
@@ -2244,12 +2244,12 @@ When a button is touched, it moves some distance in the direction of its angle, 
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_button(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut abs_movedir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn SP_func_button(mut ent: *mut gentity_t) {
+    let mut abs_movedir: vec3_t = [0.; 3];
     let mut distance: f32 = 0.;
-    let mut size: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut size: vec3_t = [0.; 3];
     let mut lip: f32 = 0.;
-    (*ent).sound1to2 = crate::src::game::g_utils::G_SoundIndex(
+    (*ent).sound1to2 = G_SoundIndex(
         b"sound/movers/switches/butn2.wav\x00" as *const u8 as *const libc::c_char
             as *mut libc::c_char,
     );
@@ -2265,25 +2265,25 @@ pub unsafe extern "C" fn SP_func_button(mut ent: *mut crate::g_local_h::gentity_
     (*ent).pos1[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
     (*ent).pos1[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // calculate second position
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"lip\x00" as *const u8 as *const libc::c_char,
         b"4\x00" as *const u8 as *const libc::c_char,
         &mut lip,
     );
-    crate::src::game::g_utils::G_SetMovedir(
+    G_SetMovedir(
         (*ent).s.angles.as_mut_ptr(),
         (*ent).movedir.as_mut_ptr(),
     );
     abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
     size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
     size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
@@ -2299,15 +2299,15 @@ pub unsafe extern "C" fn SP_func_button(mut ent: *mut crate::g_local_h::gentity_
         (*ent).pos1[2 as i32 as usize] + (*ent).movedir[2 as i32 as usize] * distance;
     if (*ent).health != 0 {
         // shootable button
-        (*ent).takedamage = crate::src::qcommon::q_shared::qtrue
+        (*ent).takedamage = qtrue
     } else {
         // touchable button
         (*ent).touch = Some(
             Touch_Button
                 as unsafe extern "C" fn(
-                    _: *mut crate::g_local_h::gentity_t,
-                    _: *mut crate::g_local_h::gentity_t,
-                    _: *mut crate::src::qcommon::q_shared::trace_t,
+                    _: *mut gentity_t,
+                    _: *mut gentity_t,
+                    _: *mut trace_t,
                 ) -> (),
         )
     }
@@ -2322,9 +2322,9 @@ The wait time at a corner has completed, so start moving again
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Think_BeginMoving(mut ent: *mut crate::g_local_h::gentity_t) {
-    (*ent).s.pos.trTime = crate::src::game::g_main::level.time;
-    (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_LINEAR_STOP;
+pub unsafe extern "C" fn Think_BeginMoving(mut ent: *mut gentity_t) {
+    (*ent).s.pos.trTime = level.time;
+    (*ent).s.pos.trType = TR_LINEAR_STOP;
 }
 /*
 ===============
@@ -2333,10 +2333,10 @@ Reached_Train
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut next: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+pub unsafe extern "C" fn Reached_Train(mut ent: *mut gentity_t) {
+    let mut next: *mut gentity_t = 0 as *mut gentity_t;
     let mut speed: f32 = 0.;
-    let mut move_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut move_0: vec3_t = [0.; 3];
     let mut length: f32 = 0.;
     // copy the appropriate values
     next = (*ent).nextTrain;
@@ -2345,9 +2345,9 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
         // just stop
     }
     // fire all other targets
-    crate::src::game::g_utils::G_UseTargets(
-        next as *mut crate::g_local_h::gentity_s,
-        0 as *mut crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_s,
+    G_UseTargets(
+        next as *mut gentity_s,
+        0 as *mut gentity_t as *mut gentity_s,
     );
     // set the new trajectory
     (*ent).nextTrain = (*next).nextTrain;
@@ -2371,7 +2371,7 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
     move_0[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
     move_0[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
     move_0[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
-    length = VectorLength(move_0.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
+    length = VectorLength(move_0.as_mut_ptr() as *const vec_t);
     (*ent).s.pos.trDuration = (length * 1000 as i32 as f32 / speed) as i32;
     // Tequila comment: Be sure to send to clients after any fast move case
     (*ent).r.svFlags &= !(0x1 as i32);
@@ -2394,17 +2394,17 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
     // start it going
     SetMoverState(
         ent,
-        crate::g_local_h::MOVER_1TO2,
-        crate::src::game::g_main::level.time,
+        MOVER_1TO2,
+        level.time,
     );
     // if there is a "wait" value on the target, don't start moving yet
     if (*next).wait != 0. {
-        (*ent).nextthink = (crate::src::game::g_main::level.time as f32
+        (*ent).nextthink = (level.time as f32
             + (*next).wait * 1000 as i32 as f32) as i32;
         (*ent).think = Some(
-            Think_BeginMoving as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+            Think_BeginMoving as unsafe extern "C" fn(_: *mut gentity_t) -> (),
         );
-        (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY
+        (*ent).s.pos.trType = TR_STATIONARY
     };
 }
 /*
@@ -2416,36 +2416,36 @@ Link all the corners together
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut crate::g_local_h::gentity_t) {
-    let mut path: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut next: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut start: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    (*ent).nextTrain = crate::src::game::g_utils::G_Find(
-        0 as *mut crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_s,
-        &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetname as *mut *mut libc::c_char
-            as crate::stddef_h::size_t as i32,
+pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
+    let mut path: *mut gentity_t = 0 as *mut gentity_t;
+    let mut next: *mut gentity_t = 0 as *mut gentity_t;
+    let mut start: *mut gentity_t = 0 as *mut gentity_t;
+    (*ent).nextTrain = G_Find(
+        0 as *mut gentity_t as *mut gentity_s,
+        &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
+            as size_t as i32,
         (*ent).target,
-    ) as *mut crate::g_local_h::gentity_s;
+    ) as *mut gentity_s;
     if (*ent).nextTrain.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"func_train at %s with an unfound target\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_utils::vtos(
-                (*ent).r.absmin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+            vtos(
+                (*ent).r.absmin.as_mut_ptr() as *const vec_t
             ),
         );
         return;
     }
-    start = 0 as *mut crate::g_local_h::gentity_t;
+    start = 0 as *mut gentity_t;
     path = (*ent).nextTrain;
     while path != start {
         if start.is_null() {
             start = path
         }
         if (*path).target.is_null() {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"Train corner at %s without a target\n\x00" as *const u8 as *const libc::c_char,
-                crate::src::game::g_utils::vtos(
-                    (*path).s.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+                vtos(
+                    (*path).s.origin.as_mut_ptr() as *const vec_t
                 ),
             );
             return;
@@ -2453,24 +2453,24 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut crate::g_local_h:
         // find a path_corner among the targets
         // there may also be other targets that get fired when the corner
         // is reached
-        next = 0 as *mut crate::g_local_h::gentity_t;
+        next = 0 as *mut gentity_t;
         loop {
-            next = crate::src::game::g_utils::G_Find(
-                next as *mut crate::g_local_h::gentity_s,
-                &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetname as *mut *mut libc::c_char
-                    as crate::stddef_h::size_t as i32,
+            next = G_Find(
+                next as *mut gentity_s,
+                &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
+                    as size_t as i32,
                 (*path).target,
-            ) as *mut crate::g_local_h::gentity_s;
+            ) as *mut gentity_s;
             if next.is_null() {
-                crate::src::game::g_main::G_Printf(
+                G_Printf(
                     b"Train corner at %s without a target path_corner\n\x00" as *const u8
                         as *const libc::c_char,
-                    crate::src::game::g_utils::vtos((*path).s.origin.as_mut_ptr()
-                        as *const crate::src::qcommon::q_shared::vec_t),
+                    vtos((*path).s.origin.as_mut_ptr()
+                        as *const vec_t),
                 );
                 return;
             }
-            if !(::libc::strcmp(
+            if !(libc::strcmp(
                 (*next).classname,
                 b"path_corner\x00" as *const u8 as *const libc::c_char,
             ) != 0)
@@ -2492,15 +2492,15 @@ Target: next path corner and other targets to fire
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_path_corner(mut self_0: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_path_corner(mut self_0: *mut gentity_t) {
     if (*self_0).targetname.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"path_corner with no targetname at %s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_utils::vtos(
-                (*self_0).s.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+            vtos(
+                (*self_0).s.origin.as_mut_ptr() as *const vec_t
             ),
         );
-        crate::src::game::g_utils::G_FreeEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(self_0 as *mut gentity_s);
         return;
     };
     // path corners don't need to be linked in
@@ -2519,8 +2519,8 @@ The train spawns at the first target it is pointing at.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_train(mut self_0: *mut crate::g_local_h::gentity_t) {
-    (*self_0).s.angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+pub unsafe extern "C" fn SP_func_train(mut self_0: *mut gentity_t) {
+    (*self_0).s.angles[2 as i32 as usize] = 0 as i32 as vec_t;
     (*self_0).s.angles[1 as i32 as usize] = (*self_0).s.angles[2 as i32 as usize];
     (*self_0).s.angles[0 as i32 as usize] = (*self_0).s.angles[1 as i32 as usize];
     if (*self_0).spawnflags & 4 as i32 != 0 {
@@ -2532,27 +2532,27 @@ pub unsafe extern "C" fn SP_func_train(mut self_0: *mut crate::g_local_h::gentit
         (*self_0).speed = 100 as i32 as f32
     }
     if (*self_0).target.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"func_train without a target at %s\n\x00" as *const u8 as *const libc::c_char,
-            crate::src::game::g_utils::vtos(
-                (*self_0).r.absmin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
+            vtos(
+                (*self_0).r.absmin.as_mut_ptr() as *const vec_t
             ),
         );
-        crate::src::game::g_utils::G_FreeEntity(self_0 as *mut crate::g_local_h::gentity_s);
+        G_FreeEntity(self_0 as *mut gentity_s);
         return;
     }
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        self_0 as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        self_0 as *mut gentity_s,
         (*self_0).model,
     );
     InitMover(self_0);
     (*self_0).reached =
-        Some(Reached_Train as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
+        Some(Reached_Train as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     // start trains on the second frame, to make sure their targets have had
     // a chance to spawn
-    (*self_0).nextthink = crate::src::game::g_main::level.time + 100 as i32;
+    (*self_0).nextthink = level.time + 100 as i32;
     (*self_0).think = Some(
-        Think_SetupTrainTargets as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
+        Think_SetupTrainTargets as unsafe extern "C" fn(_: *mut gentity_t) -> (),
     );
 }
 /*
@@ -2570,9 +2570,9 @@ A bmodel that just sits there, doing nothing.  Can be used for conditional walls
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_static(mut ent: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+pub unsafe extern "C" fn SP_func_static(mut ent: *mut gentity_t) {
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
     InitMover(ent);
@@ -2603,12 +2603,12 @@ check either the X_AXIS or Y_AXIS box to change that.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut gentity_t) {
     if (*ent).speed == 0. {
         (*ent).speed = 100 as i32 as f32
     }
     // set the axis of rotation
-    (*ent).s.apos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
+    (*ent).s.apos.trType = TR_LINEAR;
     if (*ent).spawnflags & 4 as i32 != 0 {
         (*ent).s.apos.trDelta[2 as i32 as usize] = (*ent).speed
     } else if (*ent).spawnflags & 8 as i32 != 0 {
@@ -2619,8 +2619,8 @@ pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut crate::g_local_h::gentit
     if (*ent).damage == 0 {
         (*ent).damage = 2 as i32
     }
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
     InitMover(ent);
@@ -2633,7 +2633,7 @@ pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut crate::g_local_h::gentit
     (*ent).r.currentAngles[0 as i32 as usize] = (*ent).s.apos.trBase[0 as i32 as usize];
     (*ent).r.currentAngles[1 as i32 as usize] = (*ent).s.apos.trBase[1 as i32 as usize];
     (*ent).r.currentAngles[2 as i32 as usize] = (*ent).s.apos.trBase[2 as i32 as usize];
-    crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(ent as *mut gentity_s);
 }
 /*
 ===============================================================================
@@ -2654,31 +2654,31 @@ Normally bobs on the Z axis
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_bobbing(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_func_bobbing(mut ent: *mut gentity_t) {
     let mut height: f32 = 0.;
     let mut phase: f32 = 0.;
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"speed\x00" as *const u8 as *const libc::c_char,
         b"4\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).speed,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"height\x00" as *const u8 as *const libc::c_char,
         b"32\x00" as *const u8 as *const libc::c_char,
         &mut height,
     );
-    crate::src::game::g_spawn::G_SpawnInt(
+    G_SpawnInt(
         b"dmg\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).damage,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"phase\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut phase,
     );
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
     InitMover(ent);
@@ -2690,7 +2690,7 @@ pub unsafe extern "C" fn SP_func_bobbing(mut ent: *mut crate::g_local_h::gentity
     (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     (*ent).s.pos.trDuration = ((*ent).speed * 1000 as i32 as f32) as i32;
     (*ent).s.pos.trTime = ((*ent).s.pos.trDuration as f32 * phase) as i32;
-    (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_SINE;
+    (*ent).s.pos.trType = TR_SINE;
     // set the axis of bobbing
     if (*ent).spawnflags & 1 as i32 != 0 {
         (*ent).s.pos.trDelta[0 as i32 as usize] = height
@@ -2720,28 +2720,28 @@ Pendulum frequency is a physical constant based on the length of the beam and gr
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut gentity_t) {
     let mut freq: f32 = 0.;
     let mut length: f32 = 0.;
     let mut phase: f32 = 0.;
     let mut speed: f32 = 0.;
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"speed\x00" as *const u8 as *const libc::c_char,
         b"30\x00" as *const u8 as *const libc::c_char,
         &mut speed,
     );
-    crate::src::game::g_spawn::G_SpawnInt(
+    G_SpawnInt(
         b"dmg\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         &mut (*ent).damage,
     );
-    crate::src::game::g_spawn::G_SpawnFloat(
+    G_SpawnFloat(
         b"phase\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut phase,
     );
-    crate::src::game::g_syscalls::trap_SetBrushModel(
-        ent as *mut crate::g_local_h::gentity_s,
+    trap_SetBrushModel(
+        ent as *mut gentity_s,
         (*ent).model,
     );
     // find pendulum length
@@ -2751,7 +2751,7 @@ pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut crate::g_local_h::gentit
     }
     freq = (1 as i32 as f64 / (3.14159265358979323846f64 * 2 as i32 as f64)
         * crate::stdlib::sqrt(
-            (crate::src::game::g_main::g_gravity.value / (3 as i32 as f32 * length)) as f64,
+            (g_gravity.value / (3 as i32 as f32 * length)) as f64,
         )) as f32;
     (*ent).s.pos.trDuration = (1000 as i32 as f32 / freq) as i32;
     InitMover(ent);
@@ -2766,6 +2766,6 @@ pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut crate::g_local_h::gentit
     (*ent).s.apos.trBase[2 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
     (*ent).s.apos.trDuration = (1000 as i32 as f32 / freq) as i32;
     (*ent).s.apos.trTime = ((*ent).s.apos.trDuration as f32 * phase) as i32;
-    (*ent).s.apos.trType = crate::src::qcommon::q_shared::TR_SINE;
+    (*ent).s.apos.trType = TR_SINE;
     (*ent).s.apos.trDelta[2 as i32 as usize] = speed;
 }

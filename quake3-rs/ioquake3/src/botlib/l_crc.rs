@@ -284,7 +284,7 @@ pub unsafe extern "C" fn CRC_Init(mut crcvalue: *mut u16) {
 
 pub unsafe extern "C" fn CRC_ProcessByte(
     mut crcvalue: *mut u16,
-    mut data: crate::src::qcommon::q_shared::byte,
+    mut data: byte,
 ) {
     *crcvalue = ((*crcvalue as i32) << 8 as i32
         ^ crctable[(*crcvalue as i32 >> 8 as i32 ^ data as i32) as usize] as i32)

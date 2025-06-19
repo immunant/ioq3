@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 
@@ -356,81 +356,81 @@ static mut s_shaderText: *mut libc::c_char = 0 as *const libc::c_char as *mut li
 // the shader is parsed into these global variables, then copied into
 // dynamically allocated memory if it is valid.
 
-static mut stages: [crate::tr_local_h::shaderStage_t; 8] = [crate::tr_local_h::shaderStage_t {
-    active: crate::src::qcommon::q_shared::qfalse,
-    bundle: [crate::tr_local_h::textureBundle_t {
-        image: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 8],
+static mut stages: [shaderStage_t; 8] = [shaderStage_t {
+    active: qfalse,
+    bundle: [textureBundle_t {
+        image: [0 as *const image_t as *mut image_t; 8],
         numImageAnimations: 0,
         imageAnimationSpeed: 0.,
-        tcGen: crate::tr_local_h::TCGEN_BAD,
+        tcGen: TCGEN_BAD,
         tcGenVectors: [[0.; 3]; 2],
         numTexMods: 0,
-        texMods: 0 as *const crate::tr_local_h::texModInfo_t
-            as *mut crate::tr_local_h::texModInfo_t,
+        texMods: 0 as *const texModInfo_t
+            as *mut texModInfo_t,
         videoMapHandle: 0,
-        isLightmap: crate::src::qcommon::q_shared::qfalse,
-        isVideoMap: crate::src::qcommon::q_shared::qfalse,
+        isLightmap: qfalse,
+        isVideoMap: qfalse,
     }; 2],
-    rgbWave: crate::tr_local_h::waveForm_t {
-        func: crate::tr_local_h::GF_NONE,
+    rgbWave: waveForm_t {
+        func: GF_NONE,
         base: 0.,
         amplitude: 0.,
         phase: 0.,
         frequency: 0.,
     },
-    rgbGen: crate::tr_local_h::CGEN_BAD,
-    alphaWave: crate::tr_local_h::waveForm_t {
-        func: crate::tr_local_h::GF_NONE,
+    rgbGen: CGEN_BAD,
+    alphaWave: waveForm_t {
+        func: GF_NONE,
         base: 0.,
         amplitude: 0.,
         phase: 0.,
         frequency: 0.,
     },
-    alphaGen: crate::tr_local_h::AGEN_IDENTITY,
+    alphaGen: AGEN_IDENTITY,
     constantColor: [0; 4],
     stateBits: 0,
-    adjustColorsForFog: crate::tr_local_h::ACFF_NONE,
-    isDetail: crate::src::qcommon::q_shared::qfalse,
+    adjustColorsForFog: ACFF_NONE,
+    isDetail: qfalse,
 }; 8];
 
-static mut shader: crate::tr_local_h::shader_t = crate::tr_local_h::shader_t {
+static mut shader: shader_t = shader_t {
     name: [0; 64],
     lightmapIndex: 0,
     index: 0,
     sortedIndex: 0,
     sort: 0.,
-    defaultShader: crate::src::qcommon::q_shared::qfalse,
-    explicitlyDefined: crate::src::qcommon::q_shared::qfalse,
+    defaultShader: qfalse,
+    explicitlyDefined: qfalse,
     surfaceFlags: 0,
     contentFlags: 0,
-    entityMergable: crate::src::qcommon::q_shared::qfalse,
-    isSky: crate::src::qcommon::q_shared::qfalse,
-    sky: crate::tr_local_h::skyParms_t {
+    entityMergable: qfalse,
+    isSky: qfalse,
+    sky: skyParms_t {
         cloudHeight: 0.,
-        outerbox: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 6],
-        innerbox: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 6],
+        outerbox: [0 as *const image_t as *mut image_t; 6],
+        innerbox: [0 as *const image_t as *mut image_t; 6],
     },
-    fogParms: crate::tr_local_h::fogParms_t {
+    fogParms: fogParms_t {
         color: [0.; 3],
         depthForOpaque: 0.,
     },
     portalRange: 0.,
     multitextureEnv: 0,
-    cullType: crate::tr_local_h::CT_FRONT_SIDED,
-    polygonOffset: crate::src::qcommon::q_shared::qfalse,
-    noMipMaps: crate::src::qcommon::q_shared::qfalse,
-    noPicMip: crate::src::qcommon::q_shared::qfalse,
-    fogPass: crate::tr_local_h::FP_NONE,
-    needsNormal: crate::src::qcommon::q_shared::qfalse,
-    needsST1: crate::src::qcommon::q_shared::qfalse,
-    needsST2: crate::src::qcommon::q_shared::qfalse,
-    needsColor: crate::src::qcommon::q_shared::qfalse,
+    cullType: CT_FRONT_SIDED,
+    polygonOffset: qfalse,
+    noMipMaps: qfalse,
+    noPicMip: qfalse,
+    fogPass: FP_NONE,
+    needsNormal: qfalse,
+    needsST1: qfalse,
+    needsST2: qfalse,
+    needsColor: qfalse,
     numDeforms: 0,
-    deforms: [crate::tr_local_h::deformStage_t {
-        deformation: crate::tr_local_h::DEFORM_NONE,
+    deforms: [deformStage_t {
+        deformation: DEFORM_NONE,
         moveVector: [0.; 3],
-        deformationWave: crate::tr_local_h::waveForm_t {
-            func: crate::tr_local_h::GF_NONE,
+        deformationWave: waveForm_t {
+            func: GF_NONE,
             base: 0.,
             amplitude: 0.,
             phase: 0.,
@@ -442,19 +442,19 @@ static mut shader: crate::tr_local_h::shader_t = crate::tr_local_h::shader_t {
         bulgeSpeed: 0.,
     }; 3],
     numUnfoggedPasses: 0,
-    stages: [0 as *const crate::tr_local_h::shaderStage_t as *mut crate::tr_local_h::shaderStage_t;
+    stages: [0 as *const shaderStage_t as *mut shaderStage_t;
         8],
     optimalStageIteratorFunc: None,
     clampTime: 0.,
     timeOffset: 0.,
-    remappedShader: 0 as *const crate::tr_local_h::shader_s as *mut crate::tr_local_h::shader_s,
-    next: 0 as *const crate::tr_local_h::shader_s as *mut crate::tr_local_h::shader_s,
+    remappedShader: 0 as *const shader_s as *mut shader_s,
+    next: 0 as *const shader_s as *mut shader_s,
 };
 
-static mut texMods: [[crate::tr_local_h::texModInfo_t; 4]; 8] = [[crate::tr_local_h::texModInfo_t {
-    type_0: crate::tr_local_h::TMOD_NONE,
-    wave: crate::tr_local_h::waveForm_t {
-        func: crate::tr_local_h::GF_NONE,
+static mut texMods: [[texModInfo_t; 4]; 8] = [[texModInfo_t {
+    type_0: TMOD_NONE,
+    wave: waveForm_t {
+        func: GF_NONE,
         base: 0.,
         amplitude: 0.,
         phase: 0.,
@@ -467,8 +467,8 @@ static mut texMods: [[crate::tr_local_h::texModInfo_t; 4]; 8] = [[crate::tr_loca
     rotateSpeed: 0.,
 }; 4]; 8];
 
-static mut hashTable: [*mut crate::tr_local_h::shader_t; 1024] =
-    [0 as *const crate::tr_local_h::shader_t as *mut crate::tr_local_h::shader_t; 1024];
+static mut hashTable: [*mut shader_t; 1024] =
+    [0 as *const shader_t as *mut shader_t; 1024];
 
 static mut shaderTextHashTable: [*mut *mut libc::c_char; 2048] =
     [0 as *const *mut libc::c_char as *mut *mut libc::c_char; 2048];
@@ -493,13 +493,13 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
+                        *(*__ctype_tolower_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_tolower_loc())
+                __res = *(*__ctype_tolower_loc())
                     .offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
@@ -529,34 +529,34 @@ pub unsafe extern "C" fn R_RemapShader(
 ) {
     let mut strippedName: [libc::c_char; 64] = [0; 64];
     let mut hash: i32 = 0;
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut sh2: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    let mut h: crate::src::qcommon::q_shared::qhandle_t = 0;
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
+    let mut sh2: *mut shader_t = 0 as *mut shader_t;
+    let mut h: qhandle_t = 0;
     sh = R_FindShaderByName(shaderName);
-    if sh.is_null() || sh == crate::src::renderergl1::tr_main::tr.defaultShader {
+    if sh.is_null() || sh == tr.defaultShader {
         h = RE_RegisterShaderLightMap(shaderName, 0 as i32);
         sh = R_GetShaderByHandle(h)
     }
-    if sh.is_null() || sh == crate::src::renderergl1::tr_main::tr.defaultShader {
-        crate::src::renderergl1::tr_main::ri
+    if sh.is_null() || sh == tr.defaultShader {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: R_RemapShader: shader %s not found\n\x00" as *const u8
                 as *const libc::c_char,
             shaderName,
         );
     }
     sh2 = R_FindShaderByName(newShaderName);
-    if sh2.is_null() || sh2 == crate::src::renderergl1::tr_main::tr.defaultShader {
+    if sh2.is_null() || sh2 == tr.defaultShader {
         h = RE_RegisterShaderLightMap(newShaderName, 0 as i32);
         sh2 = R_GetShaderByHandle(h)
     }
-    if sh2.is_null() || sh2 == crate::src::renderergl1::tr_main::tr.defaultShader {
-        crate::src::renderergl1::tr_main::ri
+    if sh2.is_null() || sh2 == tr.defaultShader {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: R_RemapShader: new shader %s not found\n\x00" as *const u8
                 as *const libc::c_char,
             newShaderName,
@@ -564,7 +564,7 @@ pub unsafe extern "C" fn R_RemapShader(
     }
     // remap all the shaders with the given name
     // even tho they might have different lightmaps
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         shaderName,
         strippedName.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -572,7 +572,7 @@ pub unsafe extern "C" fn R_RemapShader(
     hash = generateHashValue(strippedName.as_mut_ptr(), 1024 as i32) as i32;
     sh = hashTable[hash as usize];
     while !sh.is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             (*sh).name.as_mut_ptr(),
             strippedName.as_mut_ptr(),
         ) == 0 as i32
@@ -580,7 +580,7 @@ pub unsafe extern "C" fn R_RemapShader(
             if sh != sh2 {
                 (*sh).remappedShader = sh2
             } else {
-                (*sh).remappedShader = 0 as *mut crate::tr_local_h::shader_s
+                (*sh).remappedShader = 0 as *mut shader_s
             }
         }
         sh = (*sh).next
@@ -599,57 +599,57 @@ unsafe extern "C" fn ParseVector(
     mut text: *mut *mut libc::c_char,
     mut count: i32,
     mut v: *mut f32,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     // FIXME: spaces are currently required after parens, should change parseext...
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
-    if ::libc::strcmp(token, b"(\x00" as *const u8 as *const libc::c_char) != 0 {
-        crate::src::renderergl1::tr_main::ri
+        COM_ParseExt(text, qfalse);
+    if libc::strcmp(token, b"(\x00" as *const u8 as *const libc::c_char) != 0 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing parenthesis in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     i = 0 as i32;
     while i < count {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) == 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing vector element in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         *v.offset(i as isize) = atof(token) as f32;
         i += 1
     }
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
-    if ::libc::strcmp(token, b")\x00" as *const u8 as *const libc::c_char) != 0 {
-        crate::src::renderergl1::tr_main::ri
+        COM_ParseExt(text, qfalse);
+    if libc::strcmp(token, b")\x00" as *const u8 as *const libc::c_char) != 0 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing parenthesis in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -658,21 +658,21 @@ NameToAFunc
 */
 
 unsafe extern "C" fn NameToAFunc(mut funcname: *const libc::c_char) -> u32 {
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         funcname,
         b"GT0\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return 0x10000000 as i32 as u32;
     } else {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             funcname,
             b"LT128\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             return 0x20000000 as i32 as u32;
         } else {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 funcname,
                 b"GE128\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -681,10 +681,10 @@ unsafe extern "C" fn NameToAFunc(mut funcname: *const libc::c_char) -> u32 {
             }
         }
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+        PRINT_WARNING as i32,
         b"WARNING: invalid alphaFunc name \'%s\' in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
         funcname,
@@ -699,56 +699,56 @@ NameToSrcBlendMode
 */
 
 unsafe extern "C" fn NameToSrcBlendMode(mut name: *const libc::c_char) -> i32 {
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         name,
         b"GL_ONE\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return 0x2 as i32;
     } else {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             name,
             b"GL_ZERO\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             return 0x1 as i32;
         } else {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 name,
                 b"GL_DST_COLOR\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 return 0x3 as i32;
             } else {
-                if crate::src::qcommon::q_shared::Q_stricmp(
+                if Q_stricmp(
                     name,
                     b"GL_ONE_MINUS_DST_COLOR\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     return 0x4 as i32;
                 } else {
-                    if crate::src::qcommon::q_shared::Q_stricmp(
+                    if Q_stricmp(
                         name,
                         b"GL_SRC_ALPHA\x00" as *const u8 as *const libc::c_char,
                     ) == 0
                     {
                         return 0x5 as i32;
                     } else {
-                        if crate::src::qcommon::q_shared::Q_stricmp(
+                        if Q_stricmp(
                             name,
                             b"GL_ONE_MINUS_SRC_ALPHA\x00" as *const u8 as *const libc::c_char,
                         ) == 0
                         {
                             return 0x6 as i32;
                         } else {
-                            if crate::src::qcommon::q_shared::Q_stricmp(
+                            if Q_stricmp(
                                 name,
                                 b"GL_DST_ALPHA\x00" as *const u8 as *const libc::c_char,
                             ) == 0
                             {
                                 return 0x7 as i32;
                             } else {
-                                if crate::src::qcommon::q_shared::Q_stricmp(
+                                if Q_stricmp(
                                     name,
                                     b"GL_ONE_MINUS_DST_ALPHA\x00" as *const u8
                                         as *const libc::c_char,
@@ -756,7 +756,7 @@ unsafe extern "C" fn NameToSrcBlendMode(mut name: *const libc::c_char) -> i32 {
                                 {
                                     return 0x8 as i32;
                                 } else {
-                                    if crate::src::qcommon::q_shared::Q_stricmp(
+                                    if Q_stricmp(
                                         name,
                                         b"GL_SRC_ALPHA_SATURATE\x00" as *const u8
                                             as *const libc::c_char,
@@ -772,10 +772,10 @@ unsafe extern "C" fn NameToSrcBlendMode(mut name: *const libc::c_char) -> i32 {
             }
         }
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+        PRINT_WARNING as i32,
         b"WARNING: unknown blend mode \'%s\' in shader \'%s\', substituting GL_ONE\n\x00"
             as *const u8 as *const libc::c_char,
         name,
@@ -790,56 +790,56 @@ NameToDstBlendMode
 */
 
 unsafe extern "C" fn NameToDstBlendMode(mut name: *const libc::c_char) -> i32 {
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         name,
         b"GL_ONE\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
         return 0x20 as i32;
     } else {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             name,
             b"GL_ZERO\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             return 0x10 as i32;
         } else {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 name,
                 b"GL_SRC_ALPHA\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 return 0x50 as i32;
             } else {
-                if crate::src::qcommon::q_shared::Q_stricmp(
+                if Q_stricmp(
                     name,
                     b"GL_ONE_MINUS_SRC_ALPHA\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     return 0x60 as i32;
                 } else {
-                    if crate::src::qcommon::q_shared::Q_stricmp(
+                    if Q_stricmp(
                         name,
                         b"GL_DST_ALPHA\x00" as *const u8 as *const libc::c_char,
                     ) == 0
                     {
                         return 0x70 as i32;
                     } else {
-                        if crate::src::qcommon::q_shared::Q_stricmp(
+                        if Q_stricmp(
                             name,
                             b"GL_ONE_MINUS_DST_ALPHA\x00" as *const u8 as *const libc::c_char,
                         ) == 0
                         {
                             return 0x80 as i32;
                         } else {
-                            if crate::src::qcommon::q_shared::Q_stricmp(
+                            if Q_stricmp(
                                 name,
                                 b"GL_SRC_COLOR\x00" as *const u8 as *const libc::c_char,
                             ) == 0
                             {
                                 return 0x30 as i32;
                             } else {
-                                if crate::src::qcommon::q_shared::Q_stricmp(
+                                if Q_stricmp(
                                     name,
                                     b"GL_ONE_MINUS_SRC_COLOR\x00" as *const u8
                                         as *const libc::c_char,
@@ -854,10 +854,10 @@ unsafe extern "C" fn NameToDstBlendMode(mut name: *const libc::c_char) -> i32 {
             }
         }
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+        PRINT_WARNING as i32,
         b"WARNING: unknown blend mode \'%s\' in shader \'%s\', substituting GL_ONE\n\x00"
             as *const u8 as *const libc::c_char,
         name,
@@ -873,64 +873,64 @@ NameToGenFunc
 
 unsafe extern "C" fn NameToGenFunc(
     mut funcname: *const libc::c_char,
-) -> crate::tr_local_h::genFunc_t {
-    if crate::src::qcommon::q_shared::Q_stricmp(
+) -> genFunc_t {
+    if Q_stricmp(
         funcname,
         b"sin\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        return crate::tr_local_h::GF_SIN;
+        return GF_SIN;
     } else {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             funcname,
             b"square\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            return crate::tr_local_h::GF_SQUARE;
+            return GF_SQUARE;
         } else {
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 funcname,
                 b"triangle\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                return crate::tr_local_h::GF_TRIANGLE;
+                return GF_TRIANGLE;
             } else {
-                if crate::src::qcommon::q_shared::Q_stricmp(
+                if Q_stricmp(
                     funcname,
                     b"sawtooth\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
-                    return crate::tr_local_h::GF_SAWTOOTH;
+                    return GF_SAWTOOTH;
                 } else {
-                    if crate::src::qcommon::q_shared::Q_stricmp(
+                    if Q_stricmp(
                         funcname,
                         b"inversesawtooth\x00" as *const u8 as *const libc::c_char,
                     ) == 0
                     {
-                        return crate::tr_local_h::GF_INVERSE_SAWTOOTH;
+                        return GF_INVERSE_SAWTOOTH;
                     } else {
-                        if crate::src::qcommon::q_shared::Q_stricmp(
+                        if Q_stricmp(
                             funcname,
                             b"noise\x00" as *const u8 as *const libc::c_char,
                         ) == 0
                         {
-                            return crate::tr_local_h::GF_NOISE;
+                            return GF_NOISE;
                         }
                     }
                 }
             }
         }
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+        PRINT_WARNING as i32,
         b"WARNING: invalid genfunc name \'%s\' in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
         funcname,
         shader.name.as_mut_ptr(),
     );
-    return crate::tr_local_h::GF_SIN;
+    return GF_SIN;
 }
 /*
 ===================
@@ -940,16 +940,16 @@ ParseWaveForm
 
 unsafe extern "C" fn ParseWaveForm(
     mut text: *mut *mut libc::c_char,
-    mut wave: *mut crate::tr_local_h::waveForm_t,
+    mut wave: *mut waveForm_t,
 ) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -958,12 +958,12 @@ unsafe extern "C" fn ParseWaveForm(
     (*wave).func = NameToGenFunc(token);
     // BASE, AMP, PHASE, FREQ
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -972,12 +972,12 @@ unsafe extern "C" fn ParseWaveForm(
     }
     (*wave).base = atof(token) as f32;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -986,12 +986,12 @@ unsafe extern "C" fn ParseWaveForm(
     }
     (*wave).amplitude = atof(token) as f32;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -1000,12 +1000,12 @@ unsafe extern "C" fn ParseWaveForm(
     }
     (*wave).phase = atof(token) as f32;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -1022,16 +1022,16 @@ ParseTexMod
 
 unsafe extern "C" fn ParseTexMod(
     mut _text: *mut libc::c_char,
-    mut stage: *mut crate::tr_local_h::shaderStage_t,
+    mut stage: *mut shaderStage_t,
 ) {
     let mut token: *const libc::c_char = 0 as *const libc::c_char;
     let mut text: *mut *mut libc::c_char = &mut _text;
-    let mut tmi: *mut crate::tr_local_h::texModInfo_t = 0 as *mut crate::tr_local_h::texModInfo_t;
+    let mut tmi: *mut texModInfo_t = 0 as *mut texModInfo_t;
     if (*stage).bundle[0 as i32 as usize].numTexMods == 4 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Error
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::ERR_DROP as i32,
+            ERR_DROP as i32,
             b"ERROR: too many tcMod stages in shader \'%s\'\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -1040,27 +1040,27 @@ unsafe extern "C" fn ParseTexMod(
     tmi = &mut *(*(*stage).bundle.as_mut_ptr().offset(0 as i32 as isize))
         .texMods
         .offset((*(*stage).bundle.as_mut_ptr().offset(0 as i32 as isize)).numTexMods as isize)
-        as *mut crate::tr_local_h::texModInfo_t;
+        as *mut texModInfo_t;
     (*stage).bundle[0 as i32 as usize].numTexMods += 1;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     //
     // turb
     //
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"turb\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1068,15 +1068,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.base = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1084,15 +1084,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.amplitude = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1100,15 +1100,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.phase = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1116,21 +1116,21 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.frequency = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_TURBULENT
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_TURBULENT
+    } else if Q_stricmp(
         token,
         b"scale\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing scale parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1138,15 +1138,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scale[0 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing scale parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1154,21 +1154,21 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scale[1 as i32 as usize] = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_SCALE
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_SCALE
+    } else if Q_stricmp(
         token,
         b"scroll\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing scale scroll parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1176,15 +1176,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scroll[0 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing scale scroll parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1192,21 +1192,21 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scroll[1 as i32 as usize] = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_SCROLL
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_SCROLL
+    } else if Q_stricmp(
         token,
         b"stretch\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1214,15 +1214,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.func = NameToGenFunc(token);
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1230,15 +1230,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.base = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1246,15 +1246,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.amplitude = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1262,15 +1262,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.phase = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1278,21 +1278,21 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.frequency = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_STRETCH
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_STRETCH
+    } else if Q_stricmp(
         token,
         b"transform\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1300,15 +1300,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[0 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1316,15 +1316,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[0 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1332,15 +1332,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[1 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1348,15 +1348,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[1 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1364,15 +1364,15 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).translate[0 as i32 as usize] = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1380,21 +1380,21 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).translate[1 as i32 as usize] = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_TRANSFORM
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_TRANSFORM
+    } else if Q_stricmp(
         token,
         b"rotate\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing tcMod rotate parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -1402,18 +1402,18 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).rotateSpeed = atof(token) as f32;
-        (*tmi).type_0 = crate::tr_local_h::TMOD_ROTATE
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        (*tmi).type_0 = TMOD_ROTATE
+    } else if Q_stricmp(
         token,
         b"entityTranslate\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        (*tmi).type_0 = crate::tr_local_h::TMOD_ENTITY_TRANSLATE
+        (*tmi).type_0 = TMOD_ENTITY_TRANSLATE
     } else {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: unknown tcMod \'%s\' in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             token,
@@ -1446,29 +1446,29 @@ ParseStage
 */
 
 unsafe extern "C" fn ParseStage(
-    mut stage: *mut crate::tr_local_h::shaderStage_t,
+    mut stage: *mut shaderStage_t,
     mut text: *mut *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut depthMaskBits: i32 = 0x100 as i32;
     let mut blendSrcBits: i32 = 0 as i32;
     let mut blendDstBits: i32 = 0 as i32;
     let mut atestBits: i32 = 0 as i32;
     let mut depthFuncBits: i32 = 0 as i32;
-    let mut depthMaskExplicit: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    (*stage).active = crate::src::qcommon::q_shared::qtrue;
+    let mut depthMaskExplicit: qboolean =
+        qfalse;
+    (*stage).active = qtrue;
     loop {
         token =
-            crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qtrue);
+            COM_ParseExt(text, qtrue);
         if *token.offset(0 as i32 as isize) == 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: no matching \'}\' found\n\x00" as *const u8 as *const libc::c_char,
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         if *token.offset(0 as i32 as isize) as i32 == '}' as i32 {
             break;
@@ -1476,149 +1476,149 @@ unsafe extern "C" fn ParseStage(
         //
         // map <name>
         //
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             token,
             b"map\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'map\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 token,
                 b"$whiteimage\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    crate::src::renderergl1::tr_main::tr.whiteImage
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                    tr.whiteImage
+            } else if Q_stricmp(
                 token,
                 b"$lightmap\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 (*stage).bundle[0 as i32 as usize].isLightmap =
-                    crate::src::qcommon::q_shared::qtrue;
+                    qtrue;
                 if shader.lightmapIndex < 0 as i32
-                    || crate::src::renderergl1::tr_main::tr.lightmaps.is_null()
+                    || tr.lightmaps.is_null()
                 {
                     (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                        crate::src::renderergl1::tr_main::tr.whiteImage
+                        tr.whiteImage
                 } else {
                     (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                        *crate::src::renderergl1::tr_main::tr
+                        *tr
                             .lightmaps
                             .offset(shader.lightmapIndex as isize)
                 }
             } else {
-                let mut type_0: crate::tr_common_h::imgType_t =
-                    crate::tr_common_h::IMGTYPE_COLORALPHA;
-                let mut flags: crate::tr_common_h::imgFlags_t = crate::tr_common_h::IMGFLAG_NONE;
+                let mut type_0: imgType_t =
+                    IMGTYPE_COLORALPHA;
+                let mut flags: imgFlags_t = IMGFLAG_NONE;
                 if shader.noMipMaps as u64 == 0 {
-                    flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                        flags as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                    flags = ::std::mem::transmute::<u32, imgFlags_t>(
+                        flags as u32 | IMGFLAG_MIPMAP as i32 as u32,
                     )
                 }
                 if shader.noPicMip as u64 == 0 {
-                    flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                        flags as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                    flags = ::std::mem::transmute::<u32, imgFlags_t>(
+                        flags as u32 | IMGFLAG_PICMIP as i32 as u32,
                     )
                 }
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    crate::src::renderergl1::tr_image::R_FindImageFile(token, type_0, flags)
-                        as *mut crate::tr_common_h::image_s;
+                    R_FindImageFile(token, type_0, flags)
+                        as *mut image_s;
                 if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-                    crate::src::renderergl1::tr_main::ri
+                    ri
                         .Printf
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                        PRINT_WARNING as i32,
                         b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                             as *const u8 as *const libc::c_char,
                         token,
                         shader.name.as_mut_ptr(),
                     );
-                    return crate::src::qcommon::q_shared::qfalse;
+                    return qfalse;
                 }
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"clampmap\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            let mut type_1: crate::tr_common_h::imgType_t = crate::tr_common_h::IMGTYPE_COLORALPHA;
-            let mut flags_0: crate::tr_common_h::imgFlags_t =
-                crate::tr_common_h::IMGFLAG_CLAMPTOEDGE;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            let mut type_1: imgType_t = IMGTYPE_COLORALPHA;
+            let mut flags_0: imgFlags_t =
+                IMGFLAG_CLAMPTOEDGE;
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'clampmap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             if shader.noMipMaps as u64 == 0 {
-                flags_0 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                    flags_0 as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                flags_0 = ::std::mem::transmute::<u32, imgFlags_t>(
+                    flags_0 as u32 | IMGFLAG_MIPMAP as i32 as u32,
                 )
             }
             if shader.noPicMip as u64 == 0 {
-                flags_0 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                    flags_0 as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                flags_0 = ::std::mem::transmute::<u32, imgFlags_t>(
+                    flags_0 as u32 | IMGFLAG_PICMIP as i32 as u32,
                 )
             }
             (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                crate::src::renderergl1::tr_image::R_FindImageFile(token, type_1, flags_0)
-                    as *mut crate::tr_common_h::image_s;
+                R_FindImageFile(token, type_1, flags_0)
+                    as *mut image_s;
             if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     token,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"animMap\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             let mut totalImages: i32 = 0 as i32;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'animMap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             (*stage).bundle[0 as i32 as usize].imageAnimationSpeed = atof(token) as f32;
             loop
@@ -1631,51 +1631,51 @@ unsafe extern "C" fn ParseStage(
             // parse up to MAX_IMAGE_ANIMATIONS animations
             {
                 let mut num: i32 = 0;
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                token = COM_ParseExt(
                     text,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
                 if *token.offset(0 as i32 as isize) == 0 {
                     break;
                 }
                 num = (*stage).bundle[0 as i32 as usize].numImageAnimations;
                 if num < 8 as i32 {
-                    let mut flags_1: crate::tr_common_h::imgFlags_t =
-                        crate::tr_common_h::IMGFLAG_NONE;
+                    let mut flags_1: imgFlags_t =
+                        IMGFLAG_NONE;
                     if shader.noMipMaps as u64 == 0 {
-                        flags_1 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                            flags_1 as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                        flags_1 = ::std::mem::transmute::<u32, imgFlags_t>(
+                            flags_1 as u32 | IMGFLAG_MIPMAP as i32 as u32,
                         )
                     }
                     if shader.noPicMip as u64 == 0 {
-                        flags_1 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                            flags_1 as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                        flags_1 = ::std::mem::transmute::<u32, imgFlags_t>(
+                            flags_1 as u32 | IMGFLAG_PICMIP as i32 as u32,
                         )
                     }
                     (*stage).bundle[0 as i32 as usize].image[num as usize] =
-                        crate::src::renderergl1::tr_image::R_FindImageFile(
+                        R_FindImageFile(
                             token,
-                            crate::tr_common_h::IMGTYPE_COLORALPHA,
+                            IMGTYPE_COLORALPHA,
                             flags_1,
-                        ) as *mut crate::tr_common_h::image_s;
+                        ) as *mut image_s;
                     if (*stage).bundle[0 as i32 as usize].image[num as usize].is_null() {
-                        crate::src::renderergl1::tr_main::ri
+                        ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                            PRINT_WARNING as i32,
                             b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                                 as *const u8 as *const libc::c_char,
                             token,
                             shader.name.as_mut_ptr(),
                         );
-                        return crate::src::qcommon::q_shared::qfalse;
+                        return qfalse;
                     }
                     (*stage).bundle[0 as i32 as usize].numImageAnimations += 1
                 }
                 totalImages += 1
             }
             if totalImages > 8 as i32 {
-                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+                ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
                                                               b"WARNING: ignoring excess images for \'animMap\' (found %d, max is %d) in shader \'%s\'\n\x00"
                                                                   as *const u8
@@ -1686,28 +1686,28 @@ unsafe extern "C" fn ParseStage(
                                                                   i32,
                                                               shader.name.as_mut_ptr());
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"videoMap\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'videoMap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             (*stage).bundle[0 as i32 as usize].videoMapHandle =
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .CIN_PlayCinematic
                     .expect("non-null function pointer")(
                     token,
@@ -1719,12 +1719,12 @@ unsafe extern "C" fn ParseStage(
                 );
             if (*stage).bundle[0 as i32 as usize].videoMapHandle != -(1 as i32) {
                 (*stage).bundle[0 as i32 as usize].isVideoMap =
-                    crate::src::qcommon::q_shared::qtrue;
+                    qtrue;
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    crate::src::renderergl1::tr_main::tr.scratchImage
+                    tr.scratchImage
                         [(*stage).bundle[0 as i32 as usize].videoMapHandle as usize]
             } else {
-                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+                ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
                                                               b"WARNING: could not load \'%s\' for \'videoMap\' keyword in shader \'%s\'\n\x00"
                                                                   as *const u8
@@ -1733,90 +1733,90 @@ unsafe extern "C" fn ParseStage(
                                                               token,
                                                               shader.name.as_mut_ptr());
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"alphaFunc\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'alphaFunc\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             atestBits = NameToAFunc(token) as i32
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"depthfunc\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'depthfunc\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            if crate::src::qcommon::q_shared::Q_stricmp(
+            if Q_stricmp(
                 token,
                 b"lequal\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 depthFuncBits = 0 as i32
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"equal\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 depthFuncBits = 0x20000 as i32
             } else {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: unknown depthfunc \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     token,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"detail\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            (*stage).isDetail = crate::src::qcommon::q_shared::qtrue
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            (*stage).isDetail = qtrue
+        } else if Q_stricmp(
             token,
             b"blendfunc\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parm for blendFunc in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
@@ -1836,21 +1836,21 @@ unsafe extern "C" fn ParseStage(
                 // or blendfunc <add|filter|blend>
                 //
                 // check for "simple" blends first
-                if crate::src::qcommon::q_shared::Q_stricmp(
+                if Q_stricmp(
                     token,
                     b"add\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     blendSrcBits = 0x2 as i32;
                     blendDstBits = 0x20 as i32
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     token,
                     b"filter\x00" as *const u8 as *const libc::c_char,
                 ) == 0
                 {
                     blendSrcBits = 0x3 as i32;
                     blendDstBits = 0x10 as i32
-                } else if crate::src::qcommon::q_shared::Q_stricmp(
+                } else if Q_stricmp(
                     token,
                     b"blend\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -1860,15 +1860,15 @@ unsafe extern "C" fn ParseStage(
                 } else {
                     // complex double blends
                     blendSrcBits = NameToSrcBlendMode(token);
-                    token = crate::src::qcommon::q_shared::COM_ParseExt(
+                    token = COM_ParseExt(
                         text,
-                        crate::src::qcommon::q_shared::qfalse,
+                        qfalse,
                     );
                     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                        crate::src::renderergl1::tr_main::ri
+                        ri
                             .Printf
                             .expect("non-null function pointer")(
-                            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                            PRINT_WARNING as i32,
                             b"WARNING: missing parm for blendFunc in shader \'%s\'\n\x00"
                                 as *const u8 as *const libc::c_char,
                             shader.name.as_mut_ptr(),
@@ -1883,199 +1883,199 @@ unsafe extern "C" fn ParseStage(
                     depthMaskBits = 0 as i32
                 }
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"rgbGen\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameters for rgbGen in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"wave\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 ParseWaveForm(text, &mut (*stage).rgbWave);
-                (*stage).rgbGen = crate::tr_local_h::CGEN_WAVEFORM
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_WAVEFORM
+            } else if Q_stricmp(
                 token,
                 b"const\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                let mut color: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                color[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                let mut color: vec3_t = [0.; 3];
+                color[2 as i32 as usize] = 0 as i32 as vec_t;
                 color[1 as i32 as usize] = color[2 as i32 as usize];
                 color[0 as i32 as usize] = color[1 as i32 as usize];
                 ParseVector(text, 3 as i32, color.as_mut_ptr());
                 (*stage).constantColor[0 as i32 as usize] = (255 as i32 as f32
                     * color[0 as i32 as usize])
-                    as crate::src::qcommon::q_shared::byte;
+                    as byte;
                 (*stage).constantColor[1 as i32 as usize] = (255 as i32 as f32
                     * color[1 as i32 as usize])
-                    as crate::src::qcommon::q_shared::byte;
+                    as byte;
                 (*stage).constantColor[2 as i32 as usize] = (255 as i32 as f32
                     * color[2 as i32 as usize])
-                    as crate::src::qcommon::q_shared::byte;
-                (*stage).rgbGen = crate::tr_local_h::CGEN_CONST
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                    as byte;
+                (*stage).rgbGen = CGEN_CONST
+            } else if Q_stricmp(
                 token,
                 b"identity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_IDENTITY
+            } else if Q_stricmp(
                 token,
                 b"identityLighting\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_IDENTITY_LIGHTING
+            } else if Q_stricmp(
                 token,
                 b"entity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_ENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_ENTITY
+            } else if Q_stricmp(
                 token,
                 b"oneMinusEntity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_ONE_MINUS_ENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_ONE_MINUS_ENTITY
+            } else if Q_stricmp(
                 token,
                 b"vertex\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_VERTEX;
+                (*stage).rgbGen = CGEN_VERTEX;
                 if (*stage).alphaGen as u32 == 0 as i32 as u32 {
-                    (*stage).alphaGen = crate::tr_local_h::AGEN_VERTEX
+                    (*stage).alphaGen = AGEN_VERTEX
                 }
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"exactVertex\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_EXACT_VERTEX
+            } else if Q_stricmp(
                 token,
                 b"lightingDiffuse\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).rgbGen = CGEN_LIGHTING_DIFFUSE
+            } else if Q_stricmp(
                 token,
                 b"oneMinusVertex\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).rgbGen = crate::tr_local_h::CGEN_ONE_MINUS_VERTEX
+                (*stage).rgbGen = CGEN_ONE_MINUS_VERTEX
             } else {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: unknown rgbGen parameter \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     token,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"alphaGen\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parameters for alphaGen in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"wave\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 ParseWaveForm(text, &mut (*stage).alphaWave);
-                (*stage).alphaGen = crate::tr_local_h::AGEN_WAVEFORM
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_WAVEFORM
+            } else if Q_stricmp(
                 token,
                 b"const\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                token = COM_ParseExt(
                     text,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
                 (*stage).constantColor[3 as i32 as usize] =
-                    (255 as i32 as f64 * atof(token)) as crate::src::qcommon::q_shared::byte;
-                (*stage).alphaGen = crate::tr_local_h::AGEN_CONST
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                    (255 as i32 as f64 * atof(token)) as byte;
+                (*stage).alphaGen = AGEN_CONST
+            } else if Q_stricmp(
                 token,
                 b"identity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_IDENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_IDENTITY
+            } else if Q_stricmp(
                 token,
                 b"entity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_ENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_ENTITY
+            } else if Q_stricmp(
                 token,
                 b"oneMinusEntity\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_ONE_MINUS_ENTITY
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_ONE_MINUS_ENTITY
+            } else if Q_stricmp(
                 token,
                 b"vertex\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_VERTEX
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_VERTEX
+            } else if Q_stricmp(
                 token,
                 b"lightingSpecular\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_LIGHTING_SPECULAR
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_LIGHTING_SPECULAR
+            } else if Q_stricmp(
                 token,
                 b"oneMinusVertex\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_ONE_MINUS_VERTEX
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).alphaGen = AGEN_ONE_MINUS_VERTEX
+            } else if Q_stricmp(
                 token,
                 b"portal\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).alphaGen = crate::tr_local_h::AGEN_PORTAL;
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                (*stage).alphaGen = AGEN_PORTAL;
+                token = COM_ParseExt(
                     text,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
                 if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
                     shader.portalRange = 256 as i32 as f32;
-                    crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING
+                    ri.Printf.expect("non-null function pointer")(PRINT_WARNING
                                                                       as
                                                                       i32,
                                                                   b"WARNING: missing range parameter for alphaGen portal in shader \'%s\', defaulting to 256\n\x00"
@@ -2088,62 +2088,62 @@ unsafe extern "C" fn ParseStage(
                     shader.portalRange = atof(token) as f32
                 }
             } else {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: unknown alphaGen parameter \'%s\' in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     token,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"texgen\x00" as *const u8 as *const libc::c_char,
         ) == 0
-            || crate::src::qcommon::q_shared::Q_stricmp(
+            || Q_stricmp(
                 token,
                 b"tcGen\x00" as *const u8 as *const libc::c_char,
             ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing texgen parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"environment\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
                 (*stage).bundle[0 as i32 as usize].tcGen =
-                    crate::tr_local_h::TCGEN_ENVIRONMENT_MAPPED
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                    TCGEN_ENVIRONMENT_MAPPED
+            } else if Q_stricmp(
                 token,
                 b"lightmap\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_LIGHTMAP
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_LIGHTMAP
+            } else if Q_stricmp(
                 token,
                 b"texture\x00" as *const u8 as *const libc::c_char,
             ) == 0
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     token,
                     b"base\x00" as *const u8 as *const libc::c_char,
                 ) == 0
             {
-                (*stage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_TEXTURE
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_TEXTURE
+            } else if Q_stricmp(
                 token,
                 b"vector\x00" as *const u8 as *const libc::c_char,
             ) == 0
@@ -2158,18 +2158,18 @@ unsafe extern "C" fn ParseStage(
                     3 as i32,
                     (*stage).bundle[0 as i32 as usize].tcGenVectors[1 as i32 as usize].as_mut_ptr(),
                 );
-                (*stage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_VECTOR
+                (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_VECTOR
             } else {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: unknown texgen parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"tcMod\x00" as *const u8 as *const libc::c_char,
         ) == 0
@@ -2178,43 +2178,43 @@ unsafe extern "C" fn ParseStage(
                 *::std::mem::transmute::<&[u8; 1024],
                                          &mut [libc::c_char; 1024]>(b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00");
             loop {
-                token = crate::src::qcommon::q_shared::COM_ParseExt(
+                token = COM_ParseExt(
                     text,
-                    crate::src::qcommon::q_shared::qfalse,
+                    qfalse,
                 );
                 if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
                     break;
                 }
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     buffer.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     token,
                 );
-                crate::src::qcommon::q_shared::Q_strcat(
+                Q_strcat(
                     buffer.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     b" \x00" as *const u8 as *const libc::c_char,
                 );
             }
             ParseTexMod(buffer.as_mut_ptr(), stage);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"depthwrite\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             depthMaskBits = 0x100 as i32;
-            depthMaskExplicit = crate::src::qcommon::q_shared::qtrue
+            depthMaskExplicit = qtrue
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: unknown parameter \'%s\' in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 token,
                 shader.name.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     //
@@ -2235,11 +2235,11 @@ unsafe extern "C" fn ParseStage(
     //
     // if cgen isn't explicitly specified, use either identity or identitylighting
     //
-    if (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_BAD as i32 as u32 {
+    if (*stage).rgbGen as u32 == CGEN_BAD as i32 as u32 {
         if blendSrcBits == 0 as i32 || blendSrcBits == 0x2 as i32 || blendSrcBits == 0x5 as i32 {
-            (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
+            (*stage).rgbGen = CGEN_IDENTITY_LIGHTING
         } else {
-            (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY
+            (*stage).rgbGen = CGEN_IDENTITY
         }
     }
     //
@@ -2251,11 +2251,11 @@ unsafe extern "C" fn ParseStage(
         depthMaskBits = 0x100 as i32
     }
     // decide which agens we can skip
-    if (*stage).alphaGen as u32 == crate::tr_local_h::AGEN_IDENTITY as i32 as u32 {
-        if (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
-            || (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_LIGHTING_DIFFUSE as i32 as u32
+    if (*stage).alphaGen as u32 == AGEN_IDENTITY as i32 as u32 {
+        if (*stage).rgbGen as u32 == CGEN_IDENTITY as i32 as u32
+            || (*stage).rgbGen as u32 == CGEN_LIGHTING_DIFFUSE as i32 as u32
         {
-            (*stage).alphaGen = crate::tr_local_h::AGEN_SKIP
+            (*stage).alphaGen = AGEN_SKIP
         }
     }
     //
@@ -2263,7 +2263,7 @@ unsafe extern "C" fn ParseStage(
     //
     (*stage).stateBits =
         (depthMaskBits | blendSrcBits | blendDstBits | atestBits | depthFuncBits) as u32;
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 ===============
@@ -2282,14 +2282,14 @@ deformVertexes text[0-7]
 
 unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut ds: *mut crate::tr_local_h::deformStage_t = 0 as *mut crate::tr_local_h::deformStage_t;
+    let mut ds: *mut deformStage_t = 0 as *mut deformStage_t;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing deform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -2297,10 +2297,10 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         return;
     }
     if shader.numDeforms == 3 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: MAX_SHADER_DEFORMS in \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
@@ -2309,33 +2309,33 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
     ds = &mut *shader
         .deforms
         .as_mut_ptr()
-        .offset(shader.numDeforms as isize) as *mut crate::tr_local_h::deformStage_t;
+        .offset(shader.numDeforms as isize) as *mut deformStage_t;
     shader.numDeforms += 1;
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"projectionShadow\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        (*ds).deformation = crate::tr_local_h::DEFORM_PROJECTION_SHADOW;
+        (*ds).deformation = DEFORM_PROJECTION_SHADOW;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"autosprite\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        (*ds).deformation = crate::tr_local_h::DEFORM_AUTOSPRITE;
+        (*ds).deformation = DEFORM_AUTOSPRITE;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"autosprite2\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        (*ds).deformation = crate::tr_local_h::DEFORM_AUTOSPRITE2;
+        (*ds).deformation = DEFORM_AUTOSPRITE2;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmpn(
+    if Q_stricmpn(
         token,
         b"text\x00" as *const u8 as *const libc::c_char,
         4 as i32,
@@ -2347,23 +2347,23 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             n = 0 as i32
         }
         (*ds).deformation =
-            (crate::tr_local_h::DEFORM_TEXT0 as i32 + n) as crate::tr_local_h::deform_t;
+            (DEFORM_TEXT0 as i32 + n) as deform_t;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"bulge\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2371,15 +2371,15 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).bulgeWidth = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2387,15 +2387,15 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).bulgeHeight = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2403,23 +2403,23 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).bulgeSpeed = atof(token) as f32;
-        (*ds).deformation = crate::tr_local_h::DEFORM_BULGE;
+        (*ds).deformation = DEFORM_BULGE;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"wave\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2430,33 +2430,33 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             (*ds).deformationSpread = (1.0f32 as f64 / atof(token)) as f32
         } else {
             (*ds).deformationSpread = 100.0f32;
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: illegal div value of 0 in deformVertexes command for shader \'%s\'\n\x00"
                     as *const u8 as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
         }
         ParseWaveForm(text, &mut (*ds).deformationWave);
-        (*ds).deformation = crate::tr_local_h::DEFORM_WAVE;
+        (*ds).deformation = DEFORM_WAVE;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"normal\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2464,15 +2464,15 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).deformationWave.amplitude = atof(token) as f32;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             text,
-            crate::src::qcommon::q_shared::qfalse,
+            qfalse,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -2480,10 +2480,10 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).deformationWave.frequency = atof(token) as f32;
-        (*ds).deformation = crate::tr_local_h::DEFORM_NORMALS;
+        (*ds).deformation = DEFORM_NORMALS;
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"move\x00" as *const u8 as *const libc::c_char,
     ) == 0
@@ -2491,32 +2491,32 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         let mut i: i32 = 0;
         i = 0 as i32;
         while i < 3 as i32 {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
                 return;
             }
-            (*ds).moveVector[i as usize] = atof(token) as crate::src::qcommon::q_shared::vec_t;
+            (*ds).moveVector[i as usize] = atof(token) as vec_t;
             i += 1
         }
         ParseWaveForm(text, &mut (*ds).deformationWave);
-        (*ds).deformation = crate::tr_local_h::DEFORM_MOVE;
+        (*ds).deformation = DEFORM_MOVE;
         return;
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+        PRINT_WARNING as i32,
         b"WARNING: unknown deformVertexes subtype \'%s\' found in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
         token,
@@ -2543,53 +2543,53 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
     ];
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut i: i32 = 0;
-    let mut imgFlags: crate::tr_common_h::imgFlags_t = (crate::tr_common_h::IMGFLAG_MIPMAP as i32
-        | crate::tr_common_h::IMGFLAG_PICMIP as i32)
-        as crate::tr_common_h::imgFlags_t;
+    let mut imgFlags: imgFlags_t = (IMGFLAG_MIPMAP as i32
+        | IMGFLAG_PICMIP as i32)
+        as imgFlags_t;
     // outerbox
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
         return;
     }
-    if ::libc::strcmp(token, b"-\x00" as *const u8 as *const libc::c_char) != 0 {
+    if libc::strcmp(token, b"-\x00" as *const u8 as *const libc::c_char) != 0 {
         i = 0 as i32;
         while i < 6 as i32 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 pathname.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                 b"%s_%s.tga\x00" as *const u8 as *const libc::c_char,
                 token,
                 suf[i as usize],
             );
-            shader.sky.outerbox[i as usize] = crate::src::renderergl1::tr_image::R_FindImageFile(
+            shader.sky.outerbox[i as usize] = R_FindImageFile(
                 pathname.as_mut_ptr(),
-                crate::tr_common_h::IMGTYPE_COLORALPHA,
-                (imgFlags as u32 | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32)
-                    as crate::tr_common_h::imgFlags_t,
-            ) as *mut crate::tr_common_h::image_s;
+                IMGTYPE_COLORALPHA,
+                (imgFlags as u32 | IMGFLAG_CLAMPTOEDGE as i32 as u32)
+                    as imgFlags_t,
+            ) as *mut image_s;
             if shader.sky.outerbox[i as usize].is_null() {
-                shader.sky.outerbox[i as usize] = crate::src::renderergl1::tr_main::tr.defaultImage
+                shader.sky.outerbox[i as usize] = tr.defaultImage
             }
             i += 1
         }
     }
     // cloudheight
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -2600,43 +2600,43 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
     if shader.sky.cloudHeight == 0. {
         shader.sky.cloudHeight = 512 as i32 as f32
     }
-    crate::src::renderergl1::tr_sky::R_InitSkyTexCoords(shader.sky.cloudHeight);
+    R_InitSkyTexCoords(shader.sky.cloudHeight);
     // innerbox
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
         return;
     }
-    if ::libc::strcmp(token, b"-\x00" as *const u8 as *const libc::c_char) != 0 {
+    if libc::strcmp(token, b"-\x00" as *const u8 as *const libc::c_char) != 0 {
         i = 0 as i32;
         while i < 6 as i32 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 pathname.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                 b"%s_%s.tga\x00" as *const u8 as *const libc::c_char,
                 token,
                 suf[i as usize],
             );
-            shader.sky.innerbox[i as usize] = crate::src::renderergl1::tr_image::R_FindImageFile(
+            shader.sky.innerbox[i as usize] = R_FindImageFile(
                 pathname.as_mut_ptr(),
-                crate::tr_common_h::IMGTYPE_COLORALPHA,
+                IMGTYPE_COLORALPHA,
                 imgFlags,
-            ) as *mut crate::tr_common_h::image_s;
+            ) as *mut image_s;
             if shader.sky.innerbox[i as usize].is_null() {
-                shader.sky.innerbox[i as usize] = crate::src::renderergl1::tr_main::tr.defaultImage
+                shader.sky.innerbox[i as usize] = tr.defaultImage
             }
             i += 1
         }
     }
-    shader.isSky = crate::src::qcommon::q_shared::qtrue;
+    shader.isSky = qtrue;
 }
 /*
 =================
@@ -2648,72 +2648,72 @@ ParseSort
 pub unsafe extern "C" fn ParseSort(mut text: *mut *mut libc::c_char) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: missing sort parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
         return;
     }
-    if crate::src::qcommon::q_shared::Q_stricmp(
+    if Q_stricmp(
         token,
         b"portal\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_PORTAL as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_PORTAL as i32 as f32
+    } else if Q_stricmp(
         token,
         b"sky\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_ENVIRONMENT as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_ENVIRONMENT as i32 as f32
+    } else if Q_stricmp(
         token,
         b"opaque\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_OPAQUE as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_OPAQUE as i32 as f32
+    } else if Q_stricmp(
         token,
         b"decal\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_DECAL as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_DECAL as i32 as f32
+    } else if Q_stricmp(
         token,
         b"seeThrough\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_SEE_THROUGH as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_SEE_THROUGH as i32 as f32
+    } else if Q_stricmp(
         token,
         b"banner\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_BANNER as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_BANNER as i32 as f32
+    } else if Q_stricmp(
         token,
         b"additive\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_BLEND1 as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_BLEND1 as i32 as f32
+    } else if Q_stricmp(
         token,
         b"nearest\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_NEAREST as i32 as f32
-    } else if crate::src::qcommon::q_shared::Q_stricmp(
+        shader.sort = SS_NEAREST as i32 as f32
+    } else if Q_stricmp(
         token,
         b"underwater\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
-        shader.sort = crate::tr_local_h::SS_UNDERWATER as i32 as f32
+        shader.sort = SS_UNDERWATER as i32 as f32
     } else {
         shader.sort = atof(token) as f32
     };
@@ -3025,10 +3025,10 @@ unsafe extern "C" fn ParseSurfaceParm(mut text: *mut *mut libc::c_char) {
         as i32;
     let mut i: i32 = 0;
     token =
-        crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
+        COM_ParseExt(text, qfalse);
     i = 0 as i32;
     while i < numInfoParms {
-        if crate::src::qcommon::q_shared::Q_stricmp(token, infoParms[i as usize].name) == 0 {
+        if Q_stricmp(token, infoParms[i as usize].name) == 0 {
             shader.surfaceFlags |= infoParms[i as usize].surfaceFlags;
             shader.contentFlags |= infoParms[i as usize].contents;
             break;
@@ -3049,36 +3049,36 @@ will optimize it.
 
 unsafe extern "C" fn ParseShader(
     mut text: *mut *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: i32 = 0;
     s = 0 as i32;
-    token = crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qtrue);
+    token = COM_ParseExt(text, qtrue);
     if *token.offset(0 as i32 as isize) as i32 != '{' as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: expecting \'{\', found \'%s\' instead in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             token,
             shader.name.as_mut_ptr(),
         );
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     loop {
         token =
-            crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qtrue);
+            COM_ParseExt(text, qtrue);
         if *token.offset(0 as i32 as isize) == 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: no concluding \'}\' in shader %s\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
         // end of shader definition
         if *token.offset(0 as i32 as isize) as i32 == '}' as i32 {
@@ -3087,164 +3087,164 @@ unsafe extern "C" fn ParseShader(
         // stage definition
         if *token.offset(0 as i32 as isize) as i32 == '{' as i32 {
             if s >= 8 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: too many stages in shader %s (max is %i)\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                     8 as i32,
                 );
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             if ParseStage(&mut *stages.as_mut_ptr().offset(s as isize), text) as u64 == 0 {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            stages[s as usize].active = crate::src::qcommon::q_shared::qtrue;
+            stages[s as usize].active = qtrue;
             s += 1
-        } else if crate::src::qcommon::q_shared::Q_stricmpn(
+        } else if Q_stricmpn(
             token,
             b"qer\x00" as *const u8 as *const libc::c_char,
             3 as i32,
         ) == 0
         {
-            crate::src::qcommon::q_shared::SkipRestOfLine(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            SkipRestOfLine(text);
+        } else if Q_stricmp(
             token,
             b"q3map_sun\x00" as *const u8 as *const libc::c_char,
         ) == 0
-            || crate::src::qcommon::q_shared::Q_stricmp(
+            || Q_stricmp(
                 token,
                 b"q3map_sunExt\x00" as *const u8 as *const libc::c_char,
             ) == 0
         {
             let mut a: f32 = 0.;
             let mut b: f32 = 0.;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            crate::src::renderergl1::tr_main::tr.sunLight[0 as i32 as usize] =
-                atof(token) as crate::src::qcommon::q_shared::vec_t;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            tr.sunLight[0 as i32 as usize] =
+                atof(token) as vec_t;
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            crate::src::renderergl1::tr_main::tr.sunLight[1 as i32 as usize] =
-                atof(token) as crate::src::qcommon::q_shared::vec_t;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            tr.sunLight[1 as i32 as usize] =
+                atof(token) as vec_t;
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-            crate::src::renderergl1::tr_main::tr.sunLight[2 as i32 as usize] =
-                atof(token) as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_math::VectorNormalize(
-                crate::src::renderergl1::tr_main::tr.sunLight.as_mut_ptr(),
+            tr.sunLight[2 as i32 as usize] =
+                atof(token) as vec_t;
+            VectorNormalize(
+                tr.sunLight.as_mut_ptr(),
             );
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             a = atof(token) as f32;
-            crate::src::renderergl1::tr_main::tr.sunLight[0 as i32 as usize] =
-                crate::src::renderergl1::tr_main::tr.sunLight[0 as i32 as usize] * a;
-            crate::src::renderergl1::tr_main::tr.sunLight[1 as i32 as usize] =
-                crate::src::renderergl1::tr_main::tr.sunLight[1 as i32 as usize] * a;
-            crate::src::renderergl1::tr_main::tr.sunLight[2 as i32 as usize] =
-                crate::src::renderergl1::tr_main::tr.sunLight[2 as i32 as usize] * a;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            tr.sunLight[0 as i32 as usize] =
+                tr.sunLight[0 as i32 as usize] * a;
+            tr.sunLight[1 as i32 as usize] =
+                tr.sunLight[1 as i32 as usize] * a;
+            tr.sunLight[2 as i32 as usize] =
+                tr.sunLight[2 as i32 as usize] * a;
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             a = atof(token) as f32;
             a = ((a / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             b = atof(token) as f32;
             b = ((b / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
-            crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] =
+            tr.sunDirection[0 as i32 as usize] =
                 (crate::stdlib::cos(a as f64) * crate::stdlib::cos(b as f64))
-                    as crate::src::qcommon::q_shared::vec_t;
-            crate::src::renderergl1::tr_main::tr.sunDirection[1 as i32 as usize] =
+                    as vec_t;
+            tr.sunDirection[1 as i32 as usize] =
                 (crate::stdlib::sin(a as f64) * crate::stdlib::cos(b as f64))
-                    as crate::src::qcommon::q_shared::vec_t;
-            crate::src::renderergl1::tr_main::tr.sunDirection[2 as i32 as usize] =
-                crate::stdlib::sin(b as f64) as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_shared::SkipRestOfLine(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+                    as vec_t;
+            tr.sunDirection[2 as i32 as usize] =
+                crate::stdlib::sin(b as f64) as vec_t;
+            SkipRestOfLine(text);
+        } else if Q_stricmp(
             token,
             b"deformVertexes\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             ParseDeform(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"tesssize\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            crate::src::qcommon::q_shared::SkipRestOfLine(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            SkipRestOfLine(text);
+        } else if Q_stricmp(
             token,
             b"clampTime\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) != 0 {
                 shader.clampTime = atof(token)
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmpn(
+        } else if Q_stricmpn(
             token,
             b"q3map\x00" as *const u8 as *const libc::c_char,
             5 as i32,
         ) == 0
         {
-            crate::src::qcommon::q_shared::SkipRestOfLine(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            SkipRestOfLine(text);
+        } else if Q_stricmp(
             token,
             b"surfaceParm\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             ParseSurfaceParm(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"nomipmaps\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            shader.noMipMaps = crate::src::qcommon::q_shared::qtrue;
-            shader.noPicMip = crate::src::qcommon::q_shared::qtrue
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            shader.noMipMaps = qtrue;
+            shader.noPicMip = qtrue
+        } else if Q_stricmp(
             token,
             b"nopicmip\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            shader.noPicMip = crate::src::qcommon::q_shared::qtrue
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            shader.noPicMip = qtrue
+        } else if Q_stricmp(
             token,
             b"polygonOffset\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            shader.polygonOffset = crate::src::qcommon::q_shared::qtrue
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            shader.polygonOffset = qtrue
+        } else if Q_stricmp(
             token,
             b"entityMergable\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            shader.entityMergable = crate::src::qcommon::q_shared::qtrue
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            shader.entityMergable = qtrue
+        } else if Q_stricmp(
             token,
             b"fogParms\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             if ParseVector(text, 3 as i32, shader.fogParms.color.as_mut_ptr()) as u64 == 0 {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
-            if (*crate::src::renderergl1::tr_init::r_greyscale).integer != 0 {
+            if (*r_greyscale).integer != 0 {
                 let mut luminance: f32 = 0.;
                 luminance = 0.2126f32 * shader.fogParms.color[0 as i32 as usize]
                     + 0.7152f32 * shader.fogParms.color[1 as i32 as usize]
@@ -3252,30 +3252,30 @@ unsafe extern "C" fn ParseShader(
                 shader.fogParms.color[0 as i32 as usize] = luminance;
                 shader.fogParms.color[1 as i32 as usize] = luminance;
                 shader.fogParms.color[2 as i32 as usize] = luminance
-            } else if (*crate::src::renderergl1::tr_init::r_greyscale).value != 0. {
+            } else if (*r_greyscale).value != 0. {
                 let mut luminance_0: f32 = 0.;
                 luminance_0 = 0.2126f32 * shader.fogParms.color[0 as i32 as usize]
                     + 0.7152f32 * shader.fogParms.color[1 as i32 as usize]
                     + 0.0722f32 * shader.fogParms.color[2 as i32 as usize];
                 shader.fogParms.color[0 as i32 as usize] = shader.fogParms.color[0 as i32 as usize]
-                    * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
-                    + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
+                    * (1.0f32 - (*r_greyscale).value)
+                    + luminance_0 * (*r_greyscale).value;
                 shader.fogParms.color[1 as i32 as usize] = shader.fogParms.color[1 as i32 as usize]
-                    * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
-                    + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
+                    * (1.0f32 - (*r_greyscale).value)
+                    + luminance_0 * (*r_greyscale).value;
                 shader.fogParms.color[2 as i32 as usize] = shader.fogParms.color[2 as i32 as usize]
-                    * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
-                    + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value
+                    * (1.0f32 - (*r_greyscale).value)
+                    + luminance_0 * (*r_greyscale).value
             }
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) == 0 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing parm for \'fogParms\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
                     shader.name.as_mut_ptr(),
@@ -3295,103 +3295,103 @@ unsafe extern "C" fn ParseShader(
                 // shader calcs (not the surface function) reference the entity color or scroll
                 // fogParms
                 // skip any old gradient directions
-                crate::src::qcommon::q_shared::SkipRestOfLine(text);
+                SkipRestOfLine(text);
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"portal\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            shader.sort = crate::tr_local_h::SS_PORTAL as i32 as f32
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+            shader.sort = SS_PORTAL as i32 as f32
+        } else if Q_stricmp(
             token,
             b"skyparms\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             ParseSkyParms(text);
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"light\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            crate::src::qcommon::q_shared::COM_ParseExt(
+            COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"cull\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 text,
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
             );
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: missing cull parms in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+            } else if Q_stricmp(
                 token,
                 b"none\x00" as *const u8 as *const libc::c_char,
             ) == 0
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     token,
                     b"twosided\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     token,
                     b"disable\x00" as *const u8 as *const libc::c_char,
                 ) == 0
             {
-                shader.cullType = crate::tr_local_h::CT_TWO_SIDED
-            } else if crate::src::qcommon::q_shared::Q_stricmp(
+                shader.cullType = CT_TWO_SIDED
+            } else if Q_stricmp(
                 token,
                 b"back\x00" as *const u8 as *const libc::c_char,
             ) == 0
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     token,
                     b"backside\x00" as *const u8 as *const libc::c_char,
                 ) == 0
-                || crate::src::qcommon::q_shared::Q_stricmp(
+                || Q_stricmp(
                     token,
                     b"backsided\x00" as *const u8 as *const libc::c_char,
                 ) == 0
             {
-                shader.cullType = crate::tr_local_h::CT_BACK_SIDED
+                shader.cullType = CT_BACK_SIDED
             } else {
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b"WARNING: invalid cull parm \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     token,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if crate::src::qcommon::q_shared::Q_stricmp(
+        } else if Q_stricmp(
             token,
             b"sort\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
             ParseSort(text);
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"WARNING: unknown general shader parameter \'%s\' in \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
                 token,
                 shader.name.as_mut_ptr(),
             );
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     // portal
@@ -3403,10 +3403,10 @@ unsafe extern "C" fn ParseShader(
     // ignore shaders that don't have any stages, unless it is a sky or fog
     //
     if s == 0 as i32 && shader.isSky as u64 == 0 && shader.contentFlags & 64 as i32 == 0 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    shader.explicitlyDefined = crate::src::qcommon::q_shared::qtrue;
-    return crate::src::qcommon::q_shared::qtrue;
+    shader.explicitlyDefined = qtrue;
+    return qtrue;
 }
 /*
 ========================================================================================
@@ -3426,18 +3426,18 @@ otherwise set to the generic stage function
 
 unsafe extern "C" fn ComputeStageIteratorFunc() {
     shader.optimalStageIteratorFunc = Some(
-        crate::src::renderergl1::tr_shade::RB_StageIteratorGeneric as unsafe extern "C" fn() -> (),
+        RB_StageIteratorGeneric as unsafe extern "C" fn() -> (),
     );
     //
     // see if this should go into the sky path
     //
     if shader.isSky as u64 != 0 {
         shader.optimalStageIteratorFunc = Some(
-            crate::src::renderergl1::tr_sky::RB_StageIteratorSky as unsafe extern "C" fn() -> (),
+            RB_StageIteratorSky as unsafe extern "C" fn() -> (),
         );
         return;
     }
-    if (*crate::src::renderergl1::tr_init::r_ignoreFastPath).integer != 0 {
+    if (*r_ignoreFastPath).integer != 0 {
         return;
     }
     //
@@ -3445,19 +3445,19 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
     //
     if shader.numUnfoggedPasses == 1 as i32 {
         if stages[0 as i32 as usize].rgbGen as u32
-            == crate::tr_local_h::CGEN_LIGHTING_DIFFUSE as i32 as u32
+            == CGEN_LIGHTING_DIFFUSE as i32 as u32
         {
             if stages[0 as i32 as usize].alphaGen as u32
-                == crate::tr_local_h::AGEN_IDENTITY as i32 as u32
+                == AGEN_IDENTITY as i32 as u32
             {
                 if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
-                    == crate::tr_local_h::TCGEN_TEXTURE as i32 as u32
+                    == TCGEN_TEXTURE as i32 as u32
                 {
                     if shader.polygonOffset as u64 == 0 {
                         if shader.multitextureEnv == 0 {
                             if shader.numDeforms == 0 {
                                 shader.optimalStageIteratorFunc =
-                                    Some(crate::src::renderergl1::tr_shade::RB_StageIteratorVertexLitTexture as
+                                    Some(RB_StageIteratorVertexLitTexture as
                                              unsafe extern "C" fn() -> ());
                                 return;
                             }
@@ -3471,20 +3471,20 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
     // see if this can go into an optimized LM, multitextured path
     //
     if shader.numUnfoggedPasses == 1 as i32 {
-        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == CGEN_IDENTITY as i32 as u32
             && stages[0 as i32 as usize].alphaGen as u32
-                == crate::tr_local_h::AGEN_IDENTITY as i32 as u32
+                == AGEN_IDENTITY as i32 as u32
         {
             if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
-                == crate::tr_local_h::TCGEN_TEXTURE as i32 as u32
+                == TCGEN_TEXTURE as i32 as u32
                 && stages[0 as i32 as usize].bundle[1 as i32 as usize].tcGen as u32
-                    == crate::tr_local_h::TCGEN_LIGHTMAP as i32 as u32
+                    == TCGEN_LIGHTMAP as i32 as u32
             {
                 if shader.polygonOffset as u64 == 0 {
                     if shader.numDeforms == 0 {
                         if shader.multitextureEnv != 0 {
                             shader.optimalStageIteratorFunc =
-                                Some(crate::src::renderergl1::tr_shade::RB_StageIteratorLightmappedMultitexture
+                                Some(RB_StageIteratorLightmappedMultitexture
                                          as unsafe extern "C" fn() -> ())
                         }
                     }
@@ -3586,39 +3586,39 @@ FIXME: I think modulated add + modulated add collapses incorrectly
 =================
 */
 
-unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn CollapseMultitexture() -> qboolean {
     let mut abits: i32 = 0;
     let mut bbits: i32 = 0;
     let mut i: i32 = 0;
-    let mut tmpBundle: crate::tr_local_h::textureBundle_t = crate::tr_local_h::textureBundle_t {
-        image: [0 as *const crate::tr_common_h::image_t as *mut crate::tr_common_h::image_t; 8],
+    let mut tmpBundle: textureBundle_t = textureBundle_t {
+        image: [0 as *const image_t as *mut image_t; 8],
         numImageAnimations: 0,
         imageAnimationSpeed: 0.,
-        tcGen: crate::tr_local_h::TCGEN_BAD,
+        tcGen: TCGEN_BAD,
         tcGenVectors: [[0.; 3]; 2],
         numTexMods: 0,
-        texMods: 0 as *const crate::tr_local_h::texModInfo_t
-            as *mut crate::tr_local_h::texModInfo_t,
+        texMods: 0 as *const texModInfo_t
+            as *mut texModInfo_t,
         videoMapHandle: 0,
-        isLightmap: crate::src::qcommon::q_shared::qfalse,
-        isVideoMap: crate::src::qcommon::q_shared::qfalse,
+        isLightmap: qfalse,
+        isVideoMap: qfalse,
     };
     if crate::src::sdl::sdl_glimp::qglActiveTextureARB.is_none() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // make sure both stages are active
     if stages[0 as i32 as usize].active as u64 == 0 || stages[1 as i32 as usize].active as u64 == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // on voodoo2, don't combine different tmus
-    if crate::src::renderergl1::tr_init::glConfig.driverType as u32
-        == crate::tr_types_h::GLDRV_VOODOO as i32 as u32
+    if glConfig.driverType as u32
+        == GLDRV_VOODOO as i32 as u32
     {
         if (*stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
             == (*stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     abits = stages[0 as i32 as usize].stateBits as i32;
@@ -3627,7 +3627,7 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
     if abits & !(0xf0 as i32 | 0xf as i32 | 0x100 as i32)
         != bbits & !(0xf0 as i32 | 0xf as i32 | 0x100 as i32)
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     abits &= 0xf0 as i32 | 0xf as i32;
     bbits &= 0xf0 as i32 | 0xf as i32;
@@ -3641,48 +3641,48 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
     }
     // nothing found
     if collapse[i as usize].blendA == -(1 as i32) {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // GL_ADD is a separate extension
     if collapse[i as usize].multitextureEnv == 0x104 as i32
-        && crate::src::renderergl1::tr_init::glConfig.textureEnvAddAvailable as u64 == 0
+        && glConfig.textureEnvAddAvailable as u64 == 0
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // make sure waveforms have identical parameters
     if stages[0 as i32 as usize].rgbGen as u32 != stages[1 as i32 as usize].rgbGen as u32
         || stages[0 as i32 as usize].alphaGen as u32 != stages[1 as i32 as usize].alphaGen as u32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // an add collapse can only have identity colors
     if collapse[i as usize].multitextureEnv == 0x104 as i32
-        && stages[0 as i32 as usize].rgbGen as u32 != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+        && stages[0 as i32 as usize].rgbGen as u32 != CGEN_IDENTITY as i32 as u32
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32 {
+    if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
             &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).rgbWave
-                as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
+                as *mut waveForm_t as *const libc::c_void,
             &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).rgbWave
-                as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
-            ::std::mem::size_of::<crate::tr_local_h::waveForm_t>() as libc::c_ulong,
+                as *mut waveForm_t as *const libc::c_void,
+            ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
         ) != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
-    if stages[0 as i32 as usize].alphaGen as u32 == crate::tr_local_h::AGEN_WAVEFORM as i32 as u32 {
+    if stages[0 as i32 as usize].alphaGen as u32 == AGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
             &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).alphaWave
-                as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
+                as *mut waveForm_t as *const libc::c_void,
             &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).alphaWave
-                as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
-            ::std::mem::size_of::<crate::tr_local_h::waveForm_t>() as libc::c_ulong,
+                as *mut waveForm_t as *const libc::c_void,
+            ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
         ) != 0
         {
-            return crate::src::qcommon::q_shared::qfalse;
+            return qfalse;
         }
     }
     // make sure that lightmaps are in bundle 1 for 3dfx
@@ -3703,20 +3703,20 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
     // move down subsequent shaders
     //
     crate::stdlib::memmove(
-        &mut *stages.as_mut_ptr().offset(1 as i32 as isize) as *mut crate::tr_local_h::shaderStage_t
+        &mut *stages.as_mut_ptr().offset(1 as i32 as isize) as *mut shaderStage_t
             as *mut libc::c_void,
-        &mut *stages.as_mut_ptr().offset(2 as i32 as isize) as *mut crate::tr_local_h::shaderStage_t
+        &mut *stages.as_mut_ptr().offset(2 as i32 as isize) as *mut shaderStage_t
             as *const libc::c_void,
-        (::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong)
+        (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
             .wrapping_mul((8 as i32 - 2 as i32) as libc::c_ulong),
     );
     crate::stdlib::memset(
         &mut *stages.as_mut_ptr().offset((8 as i32 - 1 as i32) as isize)
-            as *mut crate::tr_local_h::shaderStage_t as *mut libc::c_void,
+            as *mut shaderStage_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong,
+        ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
     );
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 /*
 =============
@@ -3731,12 +3731,12 @@ sortedIndex.
 */
 
 unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
-    let mut cmdList: *mut crate::tr_local_h::renderCommandList_t =
-        &mut (*crate::src::renderergl1::tr_backend::backEndData).commands;
+    let mut cmdList: *mut renderCommandList_t =
+        &mut (*backEndData).commands;
     if !cmdList.is_null() {
         let mut curCmd: *const libc::c_void = (*cmdList).cmds.as_mut_ptr() as *const libc::c_void;
         loop {
-            curCmd = ((curCmd as crate::stdlib::intptr_t as libc::c_ulong)
+            curCmd = ((curCmd as intptr_t as libc::c_ulong)
                 .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
                 .wrapping_sub(1 as i32 as libc::c_ulong)
                 & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
@@ -3744,34 +3744,34 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                 as *mut libc::c_void;
             match *(curCmd as *const i32) {
                 1 => {
-                    let mut sc_cmd: *const crate::tr_local_h::setColorCommand_t =
-                        curCmd as *const crate::tr_local_h::setColorCommand_t;
+                    let mut sc_cmd: *const setColorCommand_t =
+                        curCmd as *const setColorCommand_t;
                     curCmd = sc_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 2 => {
-                    let mut sp_cmd: *const crate::tr_local_h::stretchPicCommand_t =
-                        curCmd as *const crate::tr_local_h::stretchPicCommand_t;
+                    let mut sp_cmd: *const stretchPicCommand_t =
+                        curCmd as *const stretchPicCommand_t;
                     curCmd = sp_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 3 => {
                     let mut i: i32 = 0;
-                    let mut drawSurf: *mut crate::tr_local_h::drawSurf_t =
-                        0 as *mut crate::tr_local_h::drawSurf_t;
-                    let mut shader_0: *mut crate::tr_local_h::shader_t =
-                        0 as *mut crate::tr_local_h::shader_t;
+                    let mut drawSurf: *mut drawSurf_t =
+                        0 as *mut drawSurf_t;
+                    let mut shader_0: *mut shader_t =
+                        0 as *mut shader_t;
                     let mut fogNum: i32 = 0;
                     let mut entityNum: i32 = 0;
                     let mut dlightMap: i32 = 0;
                     let mut sortedIndex: i32 = 0;
-                    let mut ds_cmd: *const crate::tr_local_h::drawSurfsCommand_t =
-                        curCmd as *const crate::tr_local_h::drawSurfsCommand_t;
+                    let mut ds_cmd: *const drawSurfsCommand_t =
+                        curCmd as *const drawSurfsCommand_t;
                     i = 0 as i32;
                     drawSurf = (*ds_cmd).drawSurfs;
                     while i < (*ds_cmd).numDrawSurfs {
-                        crate::src::renderergl1::tr_main::R_DecomposeSort(
+                        R_DecomposeSort(
                             (*drawSurf).sort,
                             &mut entityNum,
-                            &mut shader_0 as *mut _ as *mut *mut crate::tr_local_h::shader_s,
+                            &mut shader_0 as *mut _ as *mut *mut shader_s,
                             &mut fogNum,
                             &mut dlightMap,
                         );
@@ -3791,13 +3791,13 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                     curCmd = ds_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 4 => {
-                    let mut db_cmd: *const crate::tr_local_h::drawBufferCommand_t =
-                        curCmd as *const crate::tr_local_h::drawBufferCommand_t;
+                    let mut db_cmd: *const drawBufferCommand_t =
+                        curCmd as *const drawBufferCommand_t;
                     curCmd = db_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 5 => {
-                    let mut sb_cmd: *const crate::tr_local_h::swapBuffersCommand_t =
-                        curCmd as *const crate::tr_local_h::swapBuffersCommand_t;
+                    let mut sb_cmd: *const swapBuffersCommand_t =
+                        curCmd as *const swapBuffersCommand_t;
                     curCmd = sb_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 0 | _ => return,
@@ -3820,18 +3820,18 @@ Sets shader->sortedIndex
 unsafe extern "C" fn SortNewShader() {
     let mut i: i32 = 0;
     let mut sort: f32 = 0.;
-    let mut newShader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    newShader = crate::src::renderergl1::tr_main::tr.shaders
-        [(crate::src::renderergl1::tr_main::tr.numShaders - 1 as i32) as usize];
+    let mut newShader: *mut shader_t = 0 as *mut shader_t;
+    newShader = tr.shaders
+        [(tr.numShaders - 1 as i32) as usize];
     sort = (*newShader).sort;
-    i = crate::src::renderergl1::tr_main::tr.numShaders - 2 as i32;
+    i = tr.numShaders - 2 as i32;
     while i >= 0 as i32 {
-        if (*crate::src::renderergl1::tr_main::tr.sortedShaders[i as usize]).sort <= sort {
+        if (*tr.sortedShaders[i as usize]).sort <= sort {
             break;
         }
-        crate::src::renderergl1::tr_main::tr.sortedShaders[(i + 1 as i32) as usize] =
-            crate::src::renderergl1::tr_main::tr.sortedShaders[i as usize];
-        (*crate::src::renderergl1::tr_main::tr.sortedShaders[(i + 1 as i32) as usize])
+        tr.sortedShaders[(i + 1 as i32) as usize] =
+            tr.sortedShaders[i as usize];
+        (*tr.sortedShaders[(i + 1 as i32) as usize])
             .sortedIndex += 1;
         i -= 1
     }
@@ -3839,7 +3839,7 @@ unsafe extern "C" fn SortNewShader() {
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=493
     FixRenderCommandList(i + 1 as i32);
     (*newShader).sortedIndex = i + 1 as i32;
-    crate::src::renderergl1::tr_main::tr.sortedShaders[(i + 1 as i32) as usize] = newShader;
+    tr.sortedShaders[(i + 1 as i32) as usize] = newShader;
 }
 /*
 ====================
@@ -3847,66 +3847,66 @@ GeneratePermanentShader
 ====================
 */
 
-unsafe extern "C" fn GeneratePermanentShader() -> *mut crate::tr_local_h::shader_t {
-    let mut newShader: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
+    let mut newShader: *mut shader_t = 0 as *mut shader_t;
     let mut i: i32 = 0;
     let mut b: i32 = 0;
     let mut size: i32 = 0;
     let mut hash: i32 = 0;
-    if crate::src::renderergl1::tr_main::tr.numShaders == (1 as i32) << 14 as i32 {
-        crate::src::renderergl1::tr_main::ri
+    if tr.numShaders == (1 as i32) << 14 as i32 {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: GeneratePermanentShader - MAX_SHADERS hit\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
-    newShader = crate::src::renderergl1::tr_main::ri
+    newShader = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        ::std::mem::size_of::<crate::tr_local_h::shader_t>() as libc::c_ulong as i32,
-        crate::src::qcommon::q_shared::h_low,
-    ) as *mut crate::tr_local_h::shader_t;
+        ::std::mem::size_of::<shader_t>() as libc::c_ulong as i32,
+        h_low,
+    ) as *mut shader_t;
     *newShader = shader;
-    if shader.sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32 {
-        (*newShader).fogPass = crate::tr_local_h::FP_EQUAL
+    if shader.sort <= SS_OPAQUE as i32 as f32 {
+        (*newShader).fogPass = FP_EQUAL
     } else if shader.contentFlags & 64 as i32 != 0 {
-        (*newShader).fogPass = crate::tr_local_h::FP_LE
+        (*newShader).fogPass = FP_LE
     }
-    crate::src::renderergl1::tr_main::tr.shaders
-        [crate::src::renderergl1::tr_main::tr.numShaders as usize] = newShader;
-    (*newShader).index = crate::src::renderergl1::tr_main::tr.numShaders;
-    crate::src::renderergl1::tr_main::tr.sortedShaders
-        [crate::src::renderergl1::tr_main::tr.numShaders as usize] = newShader;
-    (*newShader).sortedIndex = crate::src::renderergl1::tr_main::tr.numShaders;
-    crate::src::renderergl1::tr_main::tr.numShaders += 1;
+    tr.shaders
+        [tr.numShaders as usize] = newShader;
+    (*newShader).index = tr.numShaders;
+    tr.sortedShaders
+        [tr.numShaders as usize] = newShader;
+    (*newShader).sortedIndex = tr.numShaders;
+    tr.numShaders += 1;
     i = 0 as i32;
     while i < (*newShader).numUnfoggedPasses {
         if stages[i as usize].active as u64 == 0 {
             break;
         }
-        (*newShader).stages[i as usize] = crate::src::renderergl1::tr_main::ri
+        (*newShader).stages[i as usize] = ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
-            ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong as i32,
-            crate::src::qcommon::q_shared::h_low,
-        ) as *mut crate::tr_local_h::shaderStage_t;
+            ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong as i32,
+            h_low,
+        ) as *mut shaderStage_t;
         *(*newShader).stages[i as usize] = stages[i as usize];
         b = 0 as i32;
         while b < 2 as i32 {
             size = ((*(*newShader).stages[i as usize]).bundle[b as usize].numTexMods
                 as libc::c_ulong)
                 .wrapping_mul(
-                    ::std::mem::size_of::<crate::tr_local_h::texModInfo_t>() as libc::c_ulong
+                    ::std::mem::size_of::<texModInfo_t>() as libc::c_ulong
                 ) as i32;
             (*(*newShader).stages[i as usize]).bundle[b as usize].texMods =
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Hunk_Alloc
                     .expect("non-null function pointer")(
-                    size, crate::src::qcommon::q_shared::h_low
-                ) as *mut crate::tr_local_h::texModInfo_t;
+                    size, h_low
+                ) as *mut texModInfo_t;
             crate::stdlib::memcpy(
                 (*(*newShader).stages[i as usize]).bundle[b as usize].texMods as *mut libc::c_void,
                 stages[i as usize].bundle[b as usize].texMods as *const libc::c_void,
@@ -3934,21 +3934,21 @@ what it is supposed to look like.
 
 unsafe extern "C" fn VertexLightingCollapse() {
     let mut stage: i32 = 0;
-    let mut bestStage: *mut crate::tr_local_h::shaderStage_t =
-        0 as *mut crate::tr_local_h::shaderStage_t;
+    let mut bestStage: *mut shaderStage_t =
+        0 as *mut shaderStage_t;
     let mut bestImageRank: i32 = 0;
     let mut rank: i32 = 0;
     // if we aren't opaque, just use the first pass
-    if shader.sort == crate::tr_local_h::SS_OPAQUE as i32 as f32 {
+    if shader.sort == SS_OPAQUE as i32 as f32 {
         // pick the best texture for the single pass
         bestStage = &mut *stages.as_mut_ptr().offset(0 as i32 as isize)
-            as *mut crate::tr_local_h::shaderStage_t;
+            as *mut shaderStage_t;
         bestImageRank = -(999999 as i32);
         stage = 0 as i32;
         while stage < 8 as i32 {
-            let mut pStage: *mut crate::tr_local_h::shaderStage_t =
+            let mut pStage: *mut shaderStage_t =
                 &mut *stages.as_mut_ptr().offset(stage as isize)
-                    as *mut crate::tr_local_h::shaderStage_t;
+                    as *mut shaderStage_t;
             if (*pStage).active as u64 == 0 {
                 break;
             }
@@ -3957,16 +3957,16 @@ unsafe extern "C" fn VertexLightingCollapse() {
                 rank -= 100 as i32
             }
             if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                != crate::tr_local_h::TCGEN_TEXTURE as i32 as u32
+                != TCGEN_TEXTURE as i32 as u32
             {
                 rank -= 5 as i32
             }
             if (*pStage).bundle[0 as i32 as usize].numTexMods != 0 {
                 rank -= 5 as i32
             }
-            if (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+            if (*pStage).rgbGen as u32 != CGEN_IDENTITY as i32 as u32
                 && (*pStage).rgbGen as u32
-                    != crate::tr_local_h::CGEN_IDENTITY_LIGHTING as i32 as u32
+                    != CGEN_IDENTITY_LIGHTING as i32 as u32
             {
                 rank -= 3 as i32
             }
@@ -3981,11 +3981,11 @@ unsafe extern "C" fn VertexLightingCollapse() {
         stages[0 as i32 as usize].stateBits &= !(0xf0 as i32 | 0xf as i32) as u32;
         stages[0 as i32 as usize].stateBits |= 0x100 as i32 as u32;
         if shader.lightmapIndex == -(1 as i32) {
-            stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE
+            stages[0 as i32 as usize].rgbGen = CGEN_LIGHTING_DIFFUSE
         } else {
-            stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX
+            stages[0 as i32 as usize].rgbGen = CGEN_EXACT_VERTEX
         }
-        stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP
+        stages[0 as i32 as usize].alphaGen = AGEN_SKIP
     } else {
         // don't use a lightmap (tesla coils)
         if stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap as u64 != 0 {
@@ -3993,45 +3993,45 @@ unsafe extern "C" fn VertexLightingCollapse() {
         }
         // if we were in a cross-fade cgen, hack it to normal
         if stages[0 as i32 as usize].rgbGen as u32
-            == crate::tr_local_h::CGEN_ONE_MINUS_ENTITY as i32 as u32
+            == CGEN_ONE_MINUS_ENTITY as i32 as u32
             || stages[1 as i32 as usize].rgbGen as u32
-                == crate::tr_local_h::CGEN_ONE_MINUS_ENTITY as i32 as u32
+                == CGEN_ONE_MINUS_ENTITY as i32 as u32
         {
-            stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
+            stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
-        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
             && stages[0 as i32 as usize].rgbWave.func as u32
-                == crate::tr_local_h::GF_SAWTOOTH as i32 as u32
+                == GF_SAWTOOTH as i32 as u32
             && (stages[1 as i32 as usize].rgbGen as u32
-                == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+                == CGEN_WAVEFORM as i32 as u32
                 && stages[1 as i32 as usize].rgbWave.func as u32
-                    == crate::tr_local_h::GF_INVERSE_SAWTOOTH as i32 as u32)
+                    == GF_INVERSE_SAWTOOTH as i32 as u32)
         {
-            stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
+            stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
-        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
             && stages[0 as i32 as usize].rgbWave.func as u32
-                == crate::tr_local_h::GF_INVERSE_SAWTOOTH as i32 as u32
+                == GF_INVERSE_SAWTOOTH as i32 as u32
             && (stages[1 as i32 as usize].rgbGen as u32
-                == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+                == CGEN_WAVEFORM as i32 as u32
                 && stages[1 as i32 as usize].rgbWave.func as u32
-                    == crate::tr_local_h::GF_SAWTOOTH as i32 as u32)
+                    == GF_SAWTOOTH as i32 as u32)
         {
-            stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
+            stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
     }
     stage = 1 as i32;
     while stage < 8 as i32 {
-        let mut pStage_0: *mut crate::tr_local_h::shaderStage_t =
+        let mut pStage_0: *mut shaderStage_t =
             &mut *stages.as_mut_ptr().offset(stage as isize)
-                as *mut crate::tr_local_h::shaderStage_t;
+                as *mut shaderStage_t;
         if (*pStage_0).active as u64 == 0 {
             break;
         }
         crate::stdlib::memset(
             pStage_0 as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong,
+            ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
         );
         stage += 1
     }
@@ -4046,16 +4046,16 @@ unsafe extern "C" fn InitShader(mut name: *const libc::c_char, mut lightmapIndex
     let mut i: i32 = 0;
     // clear the global shader
     crate::stdlib::memset(
-        &mut shader as *mut crate::tr_local_h::shader_t as *mut libc::c_void,
+        &mut shader as *mut shader_t as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::tr_local_h::shader_t>() as libc::c_ulong,
+        ::std::mem::size_of::<shader_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut stages as *mut [crate::tr_local_h::shaderStage_t; 8] as *mut libc::c_void,
+        &mut stages as *mut [shaderStage_t; 8] as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[crate::tr_local_h::shaderStage_t; 8]>() as libc::c_ulong,
+        ::std::mem::size_of::<[shaderStage_t; 8]>() as libc::c_ulong,
     );
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         shader.name.as_mut_ptr(),
         name,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -4076,50 +4076,50 @@ from the current global working shader
 =========================
 */
 
-unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
+unsafe extern "C" fn FinishShader() -> *mut shader_t {
     let mut stage: i32 = 0;
-    let mut hasLightmapStage: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut vertexLightmap: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    hasLightmapStage = crate::src::qcommon::q_shared::qfalse;
-    vertexLightmap = crate::src::qcommon::q_shared::qfalse;
+    let mut hasLightmapStage: qboolean =
+        qfalse;
+    let mut vertexLightmap: qboolean =
+        qfalse;
+    hasLightmapStage = qfalse;
+    vertexLightmap = qfalse;
     //
     // set sky stuff appropriate
     //
     if shader.isSky as u64 != 0 {
-        shader.sort = crate::tr_local_h::SS_ENVIRONMENT as i32 as f32
+        shader.sort = SS_ENVIRONMENT as i32 as f32
     }
     //
     // set polygon offset
     //
     if shader.polygonOffset as u32 != 0 && shader.sort == 0. {
-        shader.sort = crate::tr_local_h::SS_DECAL as i32 as f32
+        shader.sort = SS_DECAL as i32 as f32
     }
     //
     // set appropriate stage information
     //
     stage = 0 as i32;
     while stage < 8 as i32 {
-        let mut pStage: *mut crate::tr_local_h::shaderStage_t =
+        let mut pStage: *mut shaderStage_t =
             &mut *stages.as_mut_ptr().offset(stage as isize)
-                as *mut crate::tr_local_h::shaderStage_t;
+                as *mut shaderStage_t;
         if (*pStage).active as u64 == 0 {
             break;
         }
         // check for a missing texture
         if (*pStage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                PRINT_WARNING as i32,
                 b"Shader %s has a stage with no image\n\x00" as *const u8 as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
-            (*pStage).active = crate::src::qcommon::q_shared::qfalse;
+            (*pStage).active = qfalse;
             stage += 1
         } else if (*pStage).isDetail as u32 != 0
-            && (*crate::src::renderergl1::tr_init::r_detailTextures).integer == 0
+            && (*r_detailTextures).integer == 0
         {
             let mut index: i32 = 0;
             index = stage + 1 as i32;
@@ -4133,7 +4133,7 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                 crate::stdlib::memmove(
                     pStage as *mut libc::c_void,
                     pStage.offset(1 as i32 as isize) as *const libc::c_void,
-                    (::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong)
+                    (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
                         .wrapping_mul((index - stage) as libc::c_ulong),
                 );
             } else {
@@ -4141,17 +4141,17 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                     crate::stdlib::memmove(
                         pStage as *mut libc::c_void,
                         pStage.offset(1 as i32 as isize) as *const libc::c_void,
-                        (::std::mem::size_of::<crate::tr_local_h::shaderStage_t>()
+                        (::std::mem::size_of::<shaderStage_t>()
                             as libc::c_ulong)
                             .wrapping_mul((index - stage - 1 as i32) as libc::c_ulong),
                     );
                 }
                 crate::stdlib::memset(
                     &mut *stages.as_mut_ptr().offset((index - 1 as i32) as isize)
-                        as *mut crate::tr_local_h::shaderStage_t
+                        as *mut shaderStage_t
                         as *mut libc::c_void,
                     0 as i32,
-                    ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong,
+                    ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
                 );
             }
         } else {
@@ -4163,15 +4163,15 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
             //
             if (*pStage).bundle[0 as i32 as usize].isLightmap as u64 != 0 {
                 if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                    == crate::tr_local_h::TCGEN_BAD as i32 as u32
+                    == TCGEN_BAD as i32 as u32
                 {
-                    (*pStage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_LIGHTMAP
+                    (*pStage).bundle[0 as i32 as usize].tcGen = TCGEN_LIGHTMAP
                 }
-                hasLightmapStage = crate::src::qcommon::q_shared::qtrue
+                hasLightmapStage = qtrue
             } else if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                == crate::tr_local_h::TCGEN_BAD as i32 as u32
+                == TCGEN_BAD as i32 as u32
             {
-                (*pStage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_TEXTURE
+                (*pStage).bundle[0 as i32 as usize].tcGen = TCGEN_TEXTURE
             }
             // not a true lightmap but we want to leave existing
             // behaviour in place and not print out a warning
@@ -4195,11 +4195,11 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                 if blendSrcBits == 0x2 as i32 && blendDstBits == 0x20 as i32
                     || blendSrcBits == 0x1 as i32 && blendDstBits == 0x40 as i32
                 {
-                    (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_RGB
+                    (*pStage).adjustColorsForFog = ACFF_MODULATE_RGB
                 } else if blendSrcBits == 0x5 as i32 && blendDstBits == 0x60 as i32 {
-                    (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_ALPHA
+                    (*pStage).adjustColorsForFog = ACFF_MODULATE_ALPHA
                 } else if blendSrcBits == 0x2 as i32 && blendDstBits == 0x60 as i32 {
-                    (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_RGBA
+                    (*pStage).adjustColorsForFog = ACFF_MODULATE_RGBA
                 }
                 // strict blend
                 // premultiplied alpha
@@ -4207,9 +4207,9 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                 if shader.sort == 0. {
                     // see through item, like a grill or grate
                     if (*pStage).stateBits & 0x100 as i32 as u32 != 0 {
-                        shader.sort = crate::tr_local_h::SS_SEE_THROUGH as i32 as f32
+                        shader.sort = SS_SEE_THROUGH as i32 as f32
                     } else {
-                        shader.sort = crate::tr_local_h::SS_BLEND0 as i32 as f32
+                        shader.sort = SS_BLEND0 as i32 as f32
                     }
                 }
             }
@@ -4219,20 +4219,20 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
     // there are times when you will need to manually apply a sort to
     // opaque alpha tested shaders that have later blend passes
     if shader.sort == 0. {
-        shader.sort = crate::tr_local_h::SS_OPAQUE as i32 as f32
+        shader.sort = SS_OPAQUE as i32 as f32
     }
     //
     // if we are in r_vertexLight mode, never use a lightmap texture
     //
     if stage > 1 as i32
-        && ((*crate::src::renderergl1::tr_init::r_vertexLight).integer != 0
-            && (*crate::src::renderergl1::tr_init::r_uiFullScreen).integer == 0
-            || crate::src::renderergl1::tr_init::glConfig.hardwareType as u32
-                == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32)
+        && ((*r_vertexLight).integer != 0
+            && (*r_uiFullScreen).integer == 0
+            || glConfig.hardwareType as u32
+                == GLHW_PERMEDIA2 as i32 as u32)
     {
         VertexLightingCollapse();
         stage = 1 as i32;
-        hasLightmapStage = crate::src::qcommon::q_shared::qfalse
+        hasLightmapStage = qfalse
     }
     //
     // look for multitexture potential
@@ -4242,19 +4242,19 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
     }
     if shader.lightmapIndex >= 0 as i32 && hasLightmapStage as u64 == 0 {
         if vertexLightmap as u64 != 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                PRINT_DEVELOPER as i32,
                 b"WARNING: shader \'%s\' has VERTEX forced lightmap!\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+                PRINT_DEVELOPER as i32,
                 b"WARNING: shader \'%s\' has lightmap but no lightmap stage!\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
@@ -4268,7 +4268,7 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
     shader.numUnfoggedPasses = stage;
     // fogonly shaders don't have any normal passes
     if stage == 0 as i32 && shader.isSky as u64 == 0 {
-        shader.sort = crate::tr_local_h::SS_FOG as i32 as f32
+        shader.sort = SS_FOG as i32 as f32
     }
     // determine which stage iterator function is appropriate
     ComputeStageIteratorFunc();
@@ -4300,11 +4300,11 @@ unsafe extern "C" fn FindShaderInShaderText(
         i = 0 as i32;
         while !(*shaderTextHashTable[hash as usize].offset(i as isize)).is_null() {
             p = *shaderTextHashTable[hash as usize].offset(i as isize);
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 &mut p,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
-            if crate::src::qcommon::q_shared::Q_stricmp(token, shadername) == 0 {
+            if Q_stricmp(token, shadername) == 0 {
                 return p;
             }
             i += 1
@@ -4317,18 +4317,18 @@ unsafe extern "C" fn FindShaderInShaderText(
     loop
     // look for label
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             &mut p,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
         }
-        if crate::src::qcommon::q_shared::Q_stricmp(token, shadername) == 0 {
+        if Q_stricmp(token, shadername) == 0 {
             return p;
         } else {
             // skip the definition
-            crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 0 as i32);
+            SkipBracedSection(&mut p, 0 as i32);
         }
     }
     return 0 as *mut libc::c_char;
@@ -4345,14 +4345,14 @@ default shader if the real one can't be found.
 
 pub unsafe extern "C" fn R_FindShaderByName(
     mut name: *const libc::c_char,
-) -> *mut crate::tr_local_h::shader_t {
+) -> *mut shader_t {
     let mut strippedName: [libc::c_char; 64] = [0; 64];
     let mut hash: i32 = 0;
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     if name.is_null() || *name.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         name,
         strippedName.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -4367,7 +4367,7 @@ pub unsafe extern "C" fn R_FindShaderByName(
         // then a default shader is created with lightmapIndex == LIGHTMAP_NONE, so we
         // have to check all default shaders otherwise for every call to R_FindShader
         // with that same strippedName a new default shader is created.
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             (*sh).name.as_mut_ptr(),
             strippedName.as_mut_ptr(),
         ) == 0 as i32
@@ -4377,7 +4377,7 @@ pub unsafe extern "C" fn R_FindShaderByName(
         }
         sh = (*sh).next
     }
-    return crate::src::renderergl1::tr_main::tr.defaultShader;
+    return tr.defaultShader;
 }
 /*
 ===============
@@ -4412,28 +4412,28 @@ most world construction surfaces.
 pub unsafe extern "C" fn R_FindShader(
     mut name: *const libc::c_char,
     mut lightmapIndex: i32,
-    mut mipRawImage: crate::src::qcommon::q_shared::qboolean,
-) -> *mut crate::tr_local_h::shader_t {
+    mut mipRawImage: qboolean,
+) -> *mut shader_t {
     let mut strippedName: [libc::c_char; 64] = [0; 64];
     let mut hash: i32 = 0;
     let mut shaderText: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut image: *mut crate::tr_common_h::image_t = 0 as *mut crate::tr_common_h::image_t;
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut image: *mut image_t = 0 as *mut image_t;
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     if *name.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
     // use (fullbright) vertex lighting if the bsp file doesn't have
     // lightmaps
     if lightmapIndex >= 0 as i32
-        && lightmapIndex >= crate::src::renderergl1::tr_main::tr.numLightmaps
+        && lightmapIndex >= tr.numLightmaps
     {
         lightmapIndex = -(3 as i32)
     } else if lightmapIndex < -(4 as i32) {
         // negative lightmap indexes cause stray pointers (think tr.lightmaps[lightmapIndex])
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: shader \'%s\' has invalid lightmap index of %d\n\x00" as *const u8
                 as *const libc::c_char,
             name,
@@ -4441,7 +4441,7 @@ pub unsafe extern "C" fn R_FindShader(
         );
         lightmapIndex = -(3 as i32)
     }
-    crate::src::qcommon::q_shared::COM_StripExtension(
+    COM_StripExtension(
         name,
         strippedName.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -4457,7 +4457,7 @@ pub unsafe extern "C" fn R_FindShader(
         // have to check all default shaders otherwise for every call to R_FindShader
         // with that same strippedName a new default shader is created.
         if ((*sh).lightmapIndex == lightmapIndex || (*sh).defaultShader as u32 != 0)
-            && crate::src::qcommon::q_shared::Q_stricmp(
+            && Q_stricmp(
                 (*sh).name.as_mut_ptr(),
                 strippedName.as_mut_ptr(),
             ) == 0
@@ -4469,10 +4469,10 @@ pub unsafe extern "C" fn R_FindShader(
     }
     InitShader(strippedName.as_mut_ptr(), lightmapIndex);
     // FIXME: set these "need" values appropriately
-    shader.needsNormal = crate::src::qcommon::q_shared::qtrue;
-    shader.needsST1 = crate::src::qcommon::q_shared::qtrue;
-    shader.needsST2 = crate::src::qcommon::q_shared::qtrue;
-    shader.needsColor = crate::src::qcommon::q_shared::qtrue;
+    shader.needsNormal = qtrue;
+    shader.needsST1 = qtrue;
+    shader.needsST2 = qtrue;
+    shader.needsColor = qtrue;
     //
     // attempt to define shader from an explicit parameter file
     //
@@ -4480,18 +4480,18 @@ pub unsafe extern "C" fn R_FindShader(
     if !shaderText.is_null() {
         // enable this when building a pak file to get a global list
         // of all explicit shaders
-        if (*crate::src::renderergl1::tr_init::r_printShaders).integer != 0 {
-            crate::src::renderergl1::tr_main::ri
+        if (*r_printShaders).integer != 0 {
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"*SHADER* %s\n\x00" as *const u8 as *const libc::c_char,
                 name,
             );
         }
         if ParseShader(&mut shaderText) as u64 == 0 {
             // had errors, so use default shader
-            shader.defaultShader = crate::src::qcommon::q_shared::qtrue
+            shader.defaultShader = qtrue
         }
         sh = FinishShader();
         return sh;
@@ -4500,33 +4500,33 @@ pub unsafe extern "C" fn R_FindShader(
     // if not defined in the in-memory shader descriptions,
     // look for a single supported image file
     //
-    let mut flags: crate::tr_common_h::imgFlags_t = crate::tr_common_h::IMGFLAG_NONE;
-    flags = crate::tr_common_h::IMGFLAG_NONE;
+    let mut flags: imgFlags_t = IMGFLAG_NONE;
+    flags = IMGFLAG_NONE;
     if mipRawImage as u64 != 0 {
-        flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
+        flags = ::std::mem::transmute::<u32, imgFlags_t>(
             flags as u32
-                | (crate::tr_common_h::IMGFLAG_MIPMAP as i32
-                    | crate::tr_common_h::IMGFLAG_PICMIP as i32) as u32,
+                | (IMGFLAG_MIPMAP as i32
+                    | IMGFLAG_PICMIP as i32) as u32,
         )
     } else {
-        flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-            flags as u32 | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32,
+        flags = ::std::mem::transmute::<u32, imgFlags_t>(
+            flags as u32 | IMGFLAG_CLAMPTOEDGE as i32 as u32,
         )
     }
-    image = crate::src::renderergl1::tr_image::R_FindImageFile(
+    image = R_FindImageFile(
         name,
-        crate::tr_common_h::IMGTYPE_COLORALPHA,
+        IMGTYPE_COLORALPHA,
         flags,
-    ) as *mut crate::tr_common_h::image_s;
+    ) as *mut image_s;
     if image.is_null() {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"Couldn\'t find image file for shader %s\n\x00" as *const u8 as *const libc::c_char,
             name,
         );
-        shader.defaultShader = crate::src::qcommon::q_shared::qtrue;
+        shader.defaultShader = qtrue;
         return FinishShader();
     }
     //
@@ -4535,49 +4535,49 @@ pub unsafe extern "C" fn R_FindShader(
     if shader.lightmapIndex == -(1 as i32) {
         // dynamic colors at vertexes
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_LIGHTING_DIFFUSE;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(3 as i32) {
         // explicit colors at vertexes
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX;
-        stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_EXACT_VERTEX;
+        stages[0 as i32 as usize].alphaGen = AGEN_SKIP;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(4 as i32) {
         // GUI elements
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_VERTEX;
-        stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_VERTEX;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_VERTEX;
+        stages[0 as i32 as usize].alphaGen = AGEN_VERTEX;
         stages[0 as i32 as usize].stateBits = (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
     } else if shader.lightmapIndex == -(2 as i32) {
         // fullbright level
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.whiteImage;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING;
+            tr.whiteImage;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
         stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+        stages[1 as i32 as usize].active = qtrue;
+        stages[1 as i32 as usize].rgbGen = CGEN_IDENTITY;
         stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     } else {
         // two pass lightmap
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            *crate::src::renderergl1::tr_main::tr
+            *tr
                 .lightmaps
                 .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
         stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
-            crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+            qtrue;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY;
         // for identitylight
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
         stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+        stages[1 as i32 as usize].active = qtrue;
+        stages[1 as i32 as usize].rgbGen = CGEN_IDENTITY;
         stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     }
     return FinishShader();
@@ -4587,16 +4587,16 @@ pub unsafe extern "C" fn R_FindShader(
 pub unsafe extern "C" fn RE_RegisterShaderFromImage(
     mut name: *const libc::c_char,
     mut lightmapIndex: i32,
-    mut image: *mut crate::tr_common_h::image_t,
-    mut _mipRawImage: crate::src::qcommon::q_shared::qboolean,
-) -> crate::src::qcommon::q_shared::qhandle_t {
+    mut image: *mut image_t,
+    mut _mipRawImage: qboolean,
+) -> qhandle_t {
     let mut hash: i32 = 0;
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     hash = generateHashValue(name, 1024 as i32) as i32;
     // probably not necessary since this function
     // only gets called from tr_font.c with lightmapIndex == LIGHTMAP_2D
     // but better safe than sorry.
-    if lightmapIndex >= crate::src::renderergl1::tr_main::tr.numLightmaps {
+    if lightmapIndex >= tr.numLightmaps {
         lightmapIndex = -(2 as i32)
     }
     //
@@ -4609,7 +4609,7 @@ pub unsafe extern "C" fn RE_RegisterShaderFromImage(
         // have to check all default shaders otherwise for every call to R_FindShader
         // with that same strippedName a new default shader is created.
         if ((*sh).lightmapIndex == lightmapIndex || (*sh).defaultShader as u32 != 0)
-            && crate::src::qcommon::q_shared::Q_stricmp((*sh).name.as_mut_ptr(), name) == 0
+            && Q_stricmp((*sh).name.as_mut_ptr(), name) == 0
         {
             // match found
             return (*sh).index;
@@ -4618,59 +4618,59 @@ pub unsafe extern "C" fn RE_RegisterShaderFromImage(
     }
     InitShader(name, lightmapIndex);
     // FIXME: set these "need" values appropriately
-    shader.needsNormal = crate::src::qcommon::q_shared::qtrue;
-    shader.needsST1 = crate::src::qcommon::q_shared::qtrue;
-    shader.needsST2 = crate::src::qcommon::q_shared::qtrue;
-    shader.needsColor = crate::src::qcommon::q_shared::qtrue;
+    shader.needsNormal = qtrue;
+    shader.needsST1 = qtrue;
+    shader.needsST2 = qtrue;
+    shader.needsColor = qtrue;
     //
     // create the default shading commands
     //
     if shader.lightmapIndex == -(1 as i32) {
         // dynamic colors at vertexes
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_LIGHTING_DIFFUSE;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(3 as i32) {
         // explicit colors at vertexes
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX;
-        stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_EXACT_VERTEX;
+        stages[0 as i32 as usize].alphaGen = AGEN_SKIP;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(4 as i32) {
         // GUI elements
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_VERTEX;
-        stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_VERTEX;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_VERTEX;
+        stages[0 as i32 as usize].alphaGen = AGEN_VERTEX;
         stages[0 as i32 as usize].stateBits = (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
     } else if shader.lightmapIndex == -(2 as i32) {
         // fullbright level
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            crate::src::renderergl1::tr_main::tr.whiteImage;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING;
+            tr.whiteImage;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
         stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+        stages[1 as i32 as usize].active = qtrue;
+        stages[1 as i32 as usize].rgbGen = CGEN_IDENTITY;
         stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     } else {
         // two pass lightmap
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            *crate::src::renderergl1::tr_main::tr
+            *tr
                 .lightmaps
                 .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
         stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
-            crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+            qtrue;
+        stages[0 as i32 as usize].active = qtrue;
+        stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY;
         // for identitylight
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
         stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
-        stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
-        stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
+        stages[1 as i32 as usize].active = qtrue;
+        stages[1 as i32 as usize].rgbGen = CGEN_IDENTITY;
         stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     }
     sh = FinishShader();
@@ -4692,18 +4692,18 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 pub unsafe extern "C" fn RE_RegisterShaderLightMap(
     mut name: *const libc::c_char,
     mut lightmapIndex: i32,
-) -> crate::src::qcommon::q_shared::qhandle_t {
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+) -> qhandle_t {
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
-    sh = R_FindShader(name, lightmapIndex, crate::src::qcommon::q_shared::qtrue);
+    sh = R_FindShader(name, lightmapIndex, qtrue);
     // we want to return 0 if the shader failed to
     // load for some reason, but R_FindShader should
     // still keep a name allocated for it, so if
@@ -4729,18 +4729,18 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 
 pub unsafe extern "C" fn RE_RegisterShader(
     mut name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qhandle_t {
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+) -> qhandle_t {
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
-    sh = R_FindShader(name, -(4 as i32), crate::src::qcommon::q_shared::qtrue);
+    sh = R_FindShader(name, -(4 as i32), qtrue);
     // we want to return 0 if the shader failed to
     // load for some reason, but R_FindShader should
     // still keep a name allocated for it, so if
@@ -4815,18 +4815,18 @@ For menu graphics that should never be picmiped
 
 pub unsafe extern "C" fn RE_RegisterShaderNoMip(
     mut name: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qhandle_t {
-    let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
+) -> qhandle_t {
+    let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
-    sh = R_FindShader(name, -(4 as i32), crate::src::qcommon::q_shared::qfalse);
+    sh = R_FindShader(name, -(4 as i32), qfalse);
     // we want to return 0 if the shader failed to
     // load for some reason, but R_FindShader should
     // still keep a name allocated for it, so if
@@ -4848,31 +4848,31 @@ it and returns a valid (possibly default) shader_t to be used internally.
 #[no_mangle]
 
 pub unsafe extern "C" fn R_GetShaderByHandle(
-    mut hShader: crate::src::qcommon::q_shared::qhandle_t,
-) -> *mut crate::tr_local_h::shader_t {
+    mut hShader: qhandle_t,
+) -> *mut shader_t {
     if hShader < 0 as i32 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"R_GetShaderByHandle: out of range hShader \'%d\'\n\x00" as *const u8
                 as *const libc::c_char,
             hShader,
         );
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
-    if hShader >= crate::src::renderergl1::tr_main::tr.numShaders {
-        crate::src::renderergl1::tr_main::ri
+    if hShader >= tr.numShaders {
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"R_GetShaderByHandle: out of range hShader \'%d\'\n\x00" as *const u8
                 as *const libc::c_char,
             hShader,
         );
-        return crate::src::renderergl1::tr_main::tr.defaultShader;
+        return tr.defaultShader;
     }
-    return crate::src::renderergl1::tr_main::tr.shaders[hShader as usize];
+    return tr.shaders[hShader as usize];
 }
 /*
 ===============
@@ -4887,160 +4887,160 @@ A second parameter will cause it to print in sorted order
 pub unsafe extern "C" fn R_ShaderList_f() {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    let mut shader_0: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    crate::src::renderergl1::tr_main::ri
+    let mut shader_0: *mut shader_t = 0 as *mut shader_t;
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"-----------------------\n\x00" as *const u8 as *const libc::c_char,
     );
     count = 0 as i32;
     i = 0 as i32;
-    while i < crate::src::renderergl1::tr_main::tr.numShaders {
-        if crate::src::renderergl1::tr_main::ri
+    while i < tr.numShaders {
+        if ri
             .Cmd_Argc
             .expect("non-null function pointer")()
             > 1 as i32
         {
-            shader_0 = crate::src::renderergl1::tr_main::tr.sortedShaders[i as usize]
+            shader_0 = tr.sortedShaders[i as usize]
         } else {
-            shader_0 = crate::src::renderergl1::tr_main::tr.shaders[i as usize]
+            shader_0 = tr.shaders[i as usize]
         }
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_ALL as i32,
+            PRINT_ALL as i32,
             b"%i \x00" as *const u8 as *const libc::c_char,
             (*shader_0).numUnfoggedPasses,
         );
         if (*shader_0).lightmapIndex >= 0 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"L \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"  \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).multitextureEnv == 0x104 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"MT(a) \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).multitextureEnv == 0x2100 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"MT(m) \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).multitextureEnv == 0x2101 as i32 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"MT(d) \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"      \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).explicitlyDefined as u64 != 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"E \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"  \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).optimalStageIteratorFunc
             == Some(
-                crate::src::renderergl1::tr_shade::RB_StageIteratorGeneric
+                RB_StageIteratorGeneric
                     as unsafe extern "C" fn() -> (),
             )
         {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"gen \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
             == Some(
-                crate::src::renderergl1::tr_sky::RB_StageIteratorSky
+                RB_StageIteratorSky
                     as unsafe extern "C" fn() -> (),
             )
         {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"sky \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
             == Some(
-                crate::src::renderergl1::tr_shade::RB_StageIteratorLightmappedMultitexture
+                RB_StageIteratorLightmappedMultitexture
                     as unsafe extern "C" fn() -> (),
             )
         {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"lmmt\x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
             == Some(
-                crate::src::renderergl1::tr_shade::RB_StageIteratorVertexLitTexture
+                RB_StageIteratorVertexLitTexture
                     as unsafe extern "C" fn() -> (),
             )
         {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"vlt \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b"    \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).defaultShader as u64 != 0 {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b": %s (DEFAULTED)\n\x00" as *const u8 as *const libc::c_char,
                 (*shader_0).name.as_mut_ptr(),
             );
         } else {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Printf
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::PRINT_ALL as i32,
+                PRINT_ALL as i32,
                 b": %s\n\x00" as *const u8 as *const libc::c_char,
                 (*shader_0).name.as_mut_ptr(),
             );
@@ -5048,17 +5048,17 @@ pub unsafe extern "C" fn R_ShaderList_f() {
         count += 1;
         i += 1
     }
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"%i total shaders\n\x00" as *const u8 as *const libc::c_char,
         count,
     );
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"------------------\n\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -9178,7 +9178,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     let mut sum: isize = 0 as i32 as isize;
     let mut summand: isize = 0;
     // scan for shader files
-    shaderFiles = crate::src::renderergl1::tr_main::ri
+    shaderFiles = ri
         .FS_ListFiles
         .expect("non-null function pointer")(
         b"scripts\x00" as *const u8 as *const libc::c_char,
@@ -9186,10 +9186,10 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         &mut numShaderFiles,
     );
     if shaderFiles.is_null() || numShaderFiles == 0 {
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+            PRINT_WARNING as i32,
             b"WARNING: no shader files found\n\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -9201,20 +9201,20 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     i = 0 as i32;
     while i < numShaderFiles {
         let mut filename: [libc::c_char; 64] = [0; 64];
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             filename.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"scripts/%s\x00" as *const u8 as *const libc::c_char,
             *shaderFiles.offset(i as isize),
         );
-        crate::src::renderergl1::tr_main::ri
+        ri
             .Printf
             .expect("non-null function pointer")(
-            crate::src::qcommon::q_shared::PRINT_DEVELOPER as i32,
+            PRINT_DEVELOPER as i32,
             b"...loading \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        summand = crate::src::renderergl1::tr_main::ri
+        summand = ri
             .FS_ReadFile
             .expect("non-null function pointer")(
             filename.as_mut_ptr(),
@@ -9222,39 +9222,39 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                 as *mut *mut libc::c_void,
         );
         if buffers[i as usize].is_null() {
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .Error
                 .expect("non-null function pointer")(
-                crate::src::qcommon::q_shared::ERR_DROP as i32,
+                ERR_DROP as i32,
                 b"Couldn\'t load %s\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
             );
         }
         // Do a simple check on the shader structure in that file to make sure one bad shader file cannot fuck up all other shaders.
         p = buffers[i as usize];
-        crate::src::qcommon::q_shared::COM_BeginParseSession(filename.as_mut_ptr());
+        COM_BeginParseSession(filename.as_mut_ptr());
         loop {
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            token = COM_ParseExt(
                 &mut p,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
             if *token == 0 {
                 break;
             }
-            crate::src::qcommon::q_shared::Q_strncpyz(
+            Q_strncpyz(
                 shaderName.as_mut_ptr(),
                 token,
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
-            shaderLine = crate::src::qcommon::q_shared::COM_GetCurrentParseLine();
-            token = crate::src::qcommon::q_shared::COM_ParseExt(
+            shaderLine = COM_GetCurrentParseLine();
+            token = COM_ParseExt(
                 &mut p,
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
             );
             if *token.offset(0 as i32 as isize) as i32 != '{' as i32
                 || *token.offset(1 as i32 as isize) as i32 != '\u{0}' as i32
             {
-                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+                ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
                                                               b"WARNING: Ignoring shader file %s. Shader \"%s\" on line %d missing opening brace\x00"
                                                                   as *const u8
@@ -9264,22 +9264,22 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                                                               shaderName.as_mut_ptr(),
                                                               shaderLine);
                 if *token.offset(0 as i32 as isize) != 0 {
-                    crate::src::renderergl1::tr_main::ri
+                    ri
                         .Printf
                         .expect("non-null function pointer")(
-                        crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                        PRINT_WARNING as i32,
                         b" (found \"%s\" on line %d)\x00" as *const u8 as *const libc::c_char,
                         token,
-                        crate::src::qcommon::q_shared::COM_GetCurrentParseLine(),
+                        COM_GetCurrentParseLine(),
                     );
                 }
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .Printf
                     .expect("non-null function pointer")(
-                    crate::src::qcommon::q_shared::PRINT_WARNING as i32,
+                    PRINT_WARNING as i32,
                     b".\n\x00" as *const u8 as *const libc::c_char,
                 );
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .FS_FreeFile
                     .expect("non-null function pointer")(
                     buffers[i as usize] as *mut libc::c_void
@@ -9287,11 +9287,11 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                 buffers[i as usize] = 0 as *mut libc::c_char;
                 break;
             } else {
-                if !(crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 1 as i32) as u64 == 0)
+                if !(SkipBracedSection(&mut p, 1 as i32) as u64 == 0)
                 {
                     continue;
                 }
-                crate::src::renderergl1::tr_main::ri.Printf.expect("non-null function pointer")(crate::src::qcommon::q_shared::PRINT_WARNING as
+                ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
                                                               b"WARNING: Ignoring shader file %s. Shader \"%s\" on line %d missing closing brace.\n\x00"
                                                                   as *const u8
@@ -9300,7 +9300,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                                                               filename.as_mut_ptr(),
                                                               shaderName.as_mut_ptr(),
                                                               shaderLine);
-                crate::src::renderergl1::tr_main::ri
+                ri
                     .FS_FreeFile
                     .expect("non-null function pointer")(
                     buffers[i as usize] as *mut libc::c_void
@@ -9315,11 +9315,11 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         i += 1
     }
     // build single large buffer
-    s_shaderText = crate::src::renderergl1::tr_main::ri
+    s_shaderText = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (sum + (numShaderFiles * 2 as i32) as isize) as i32,
-        crate::src::qcommon::q_shared::h_low,
+        h_low,
     ) as *mut libc::c_char;
     *s_shaderText.offset(0 as i32 as isize) = '\u{0}' as i32 as libc::c_char;
     textEnd = s_shaderText;
@@ -9327,10 +9327,10 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     i = numShaderFiles - 1 as i32;
     while i >= 0 as i32 {
         if !buffers[i as usize].is_null() {
-            ::libc::strcat(textEnd, buffers[i as usize]);
-            ::libc::strcat(textEnd, b"\n\x00" as *const u8 as *const libc::c_char);
+            libc::strcat(textEnd, buffers[i as usize]);
+            libc::strcat(textEnd, b"\n\x00" as *const u8 as *const libc::c_char);
             textEnd = textEnd.offset(crate::stdlib::strlen(textEnd) as isize);
-            crate::src::renderergl1::tr_main::ri
+            ri
                 .FS_FreeFile
                 .expect("non-null function pointer")(
                 buffers[i as usize] as *mut libc::c_void
@@ -9338,9 +9338,9 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         }
         i -= 1
     }
-    crate::src::qcommon::q_shared::COM_Compress(s_shaderText);
+    COM_Compress(s_shaderText);
     // free up memory
-    crate::src::renderergl1::tr_main::ri
+    ri
         .FS_FreeFileList
         .expect("non-null function pointer")(shaderFiles);
     crate::stdlib::memset(
@@ -9353,9 +9353,9 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     loop
     // look for shader names
     {
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             &mut p,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
@@ -9363,16 +9363,16 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         hash = generateHashValue(token, 2048 as i32) as i32;
         shaderTextHashTableSizes[hash as usize] += 1;
         size += 1;
-        crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 0 as i32);
+        SkipBracedSection(&mut p, 0 as i32);
     }
     size += 2048 as i32;
-    hashMem = crate::src::renderergl1::tr_main::ri
+    hashMem = ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
         (size as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
             as i32,
-        crate::src::qcommon::q_shared::h_low,
+        h_low,
     ) as *mut libc::c_char;
     i = 0 as i32;
     while i < 2048 as i32 {
@@ -9394,9 +9394,9 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     // look for shader names
     {
         oldp = p;
-        token = crate::src::qcommon::q_shared::COM_ParseExt(
+        token = COM_ParseExt(
             &mut p,
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
@@ -9406,7 +9406,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         shaderTextHashTableSizes[hash as usize] = shaderTextHashTableSizes[hash as usize] + 1;
         let ref mut fresh1 = *shaderTextHashTable[hash as usize].offset(fresh0 as isize);
         *fresh1 = oldp;
-        crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 0 as i32);
+        SkipBracedSection(&mut p, 0 as i32);
     }
 }
 /*
@@ -9416,55 +9416,55 @@ CreateInternalShaders
 */
 
 unsafe extern "C" fn CreateInternalShaders() {
-    crate::src::renderergl1::tr_main::tr.numShaders = 0 as i32;
+    tr.numShaders = 0 as i32;
     // init the default shader
     InitShader(
         b"<default>\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
     );
     stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-        crate::src::renderergl1::tr_main::tr.defaultImage;
-    stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
+        tr.defaultImage;
+    stages[0 as i32 as usize].active = qtrue;
     stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
-    crate::src::renderergl1::tr_main::tr.defaultShader = FinishShader();
+    tr.defaultShader = FinishShader();
     // shadow shader is just a marker
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         shader.name.as_mut_ptr(),
         b"<stencil shadow>\x00" as *const u8 as *const libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    shader.sort = crate::tr_local_h::SS_STENCIL_SHADOW as i32 as f32;
-    crate::src::renderergl1::tr_main::tr.shadowShader = FinishShader();
+    shader.sort = SS_STENCIL_SHADOW as i32 as f32;
+    tr.shadowShader = FinishShader();
 }
 
 unsafe extern "C" fn CreateExternalShaders() {
-    crate::src::renderergl1::tr_main::tr.projectionShadowShader = R_FindShader(
+    tr.projectionShadowShader = R_FindShader(
         b"projectionShadow\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
-    crate::src::renderergl1::tr_main::tr.flareShader = R_FindShader(
+    tr.flareShader = R_FindShader(
         b"flareShader\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
     // Hack to make fogging work correctly on flares. Fog colors are calculated
     // in tr_flare.c already.
-    if (*crate::src::renderergl1::tr_main::tr.flareShader).defaultShader as u64 == 0 {
+    if (*tr.flareShader).defaultShader as u64 == 0 {
         let mut index: i32 = 0;
         index = 0 as i32;
-        while index < (*crate::src::renderergl1::tr_main::tr.flareShader).numUnfoggedPasses {
-            (*(*crate::src::renderergl1::tr_main::tr.flareShader).stages[index as usize])
-                .adjustColorsForFog = crate::tr_local_h::ACFF_NONE;
-            (*(*crate::src::renderergl1::tr_main::tr.flareShader).stages[index as usize])
+        while index < (*tr.flareShader).numUnfoggedPasses {
+            (*(*tr.flareShader).stages[index as usize])
+                .adjustColorsForFog = ACFF_NONE;
+            (*(*tr.flareShader).stages[index as usize])
                 .stateBits |= 0x10000 as i32 as u32;
             index += 1
         }
     }
-    crate::src::renderergl1::tr_main::tr.sunShader = R_FindShader(
+    tr.sunShader = R_FindShader(
         b"sun\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
 }
 /*
@@ -9797,16 +9797,16 @@ R_InitShaders
 #[no_mangle]
 
 pub unsafe extern "C" fn R_InitShaders() {
-    crate::src::renderergl1::tr_main::ri
+    ri
         .Printf
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_shared::PRINT_ALL as i32,
+        PRINT_ALL as i32,
         b"Initializing Shaders\n\x00" as *const u8 as *const libc::c_char,
     );
     crate::stdlib::memset(
         hashTable.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<[*mut crate::tr_local_h::shader_t; 1024]>() as libc::c_ulong,
+        ::std::mem::size_of::<[*mut shader_t; 1024]>() as libc::c_ulong,
     );
     CreateInternalShaders();
     ScanAndLoadShaderFiles();

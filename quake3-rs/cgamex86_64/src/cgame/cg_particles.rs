@@ -33,7 +33,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 
@@ -41,7 +41,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -191,15 +191,15 @@ pub struct particle_s {
     pub next: *mut particle_s,
     pub time: f32,
     pub endtime: f32,
-    pub org: crate::src::qcommon::q_shared::vec3_t,
-    pub vel: crate::src::qcommon::q_shared::vec3_t,
-    pub accel: crate::src::qcommon::q_shared::vec3_t,
+    pub org: vec3_t,
+    pub vel: vec3_t,
+    pub accel: vec3_t,
     pub color: i32,
     pub colorvel: f32,
     pub alpha: f32,
     pub alphavel: f32,
     pub type_0: i32,
-    pub pshader: crate::src::qcommon::q_shared::qhandle_t,
+    pub pshader: qhandle_t,
     pub height: f32,
     pub width: f32,
     pub endheight: f32,
@@ -207,9 +207,9 @@ pub struct particle_s {
     pub start: f32,
     pub end: f32,
     pub startfade: f32,
-    pub rotate: crate::src::qcommon::q_shared::qboolean,
+    pub rotate: qboolean,
     pub snum: i32,
-    pub link: crate::src::qcommon::q_shared::qboolean,
+    pub link: qboolean,
     pub shaderAnim: i32,
     pub roll: i32,
     pub accumroll: i32,
@@ -286,7 +286,7 @@ static mut shaderAnimNames: [*mut libc::c_char; 32] = [
     0 as *const libc::c_char as *mut libc::c_char,
 ];
 
-static mut shaderAnims: [[crate::src::qcommon::q_shared::qhandle_t; 64]; 32] = [[0; 64]; 32];
+static mut shaderAnims: [[qhandle_t; 64]; 32] = [[0; 64]; 32];
 
 static mut shaderAnimCounts: [i32; 32] = [
     23 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -327,9 +327,9 @@ pub static mut particles: [cparticle_t; 1024] = [cparticle_t {
     start: 0.,
     end: 0.,
     startfade: 0.,
-    rotate: crate::src::qcommon::q_shared::qfalse,
+    rotate: qfalse,
     snum: 0,
-    link: crate::src::qcommon::q_shared::qfalse,
+    link: qfalse,
     shaderAnim: 0,
     roll: 0,
     accumroll: 0,
@@ -339,26 +339,26 @@ pub static mut particles: [cparticle_t; 1024] = [cparticle_t {
 pub static mut cl_numparticles: i32 = 1024 as i32;
 #[no_mangle]
 
-pub static mut initparticles: crate::src::qcommon::q_shared::qboolean =
-    crate::src::qcommon::q_shared::qfalse;
+pub static mut initparticles: qboolean =
+    qfalse;
 #[no_mangle]
 
-pub static mut vforward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut vforward: vec3_t = [0.; 3];
 #[no_mangle]
 
-pub static mut vright: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut vright: vec3_t = [0.; 3];
 #[no_mangle]
 
-pub static mut vup: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut vup: vec3_t = [0.; 3];
 #[no_mangle]
 
-pub static mut rforward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut rforward: vec3_t = [0.; 3];
 #[no_mangle]
 
-pub static mut rright: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut rright: vec3_t = [0.; 3];
 #[no_mangle]
 
-pub static mut rup: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub static mut rup: vec3_t = [0.; 3];
 #[no_mangle]
 
 pub static mut oldtime: f32 = 0.;
@@ -387,7 +387,7 @@ pub unsafe extern "C" fn CG_ClearParticles() {
         i += 1
     }
     particles[(cl_numparticles - 1 as i32) as usize].next = 0 as *mut particle_s;
-    oldtime = crate::src::cgame::cg_main::cg.time as f32;
+    oldtime = cg.time as f32;
     // Ridah, init the shaderAnims
     i = 0 as i32;
     while !shaderAnimNames[i as usize].is_null() {
@@ -395,8 +395,8 @@ pub unsafe extern "C" fn CG_ClearParticles() {
         j = 0 as i32;
         while j < shaderAnimCounts[i as usize] {
             shaderAnims[i as usize][j as usize] =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
-                    crate::src::qcommon::q_shared::va(
+                trap_R_RegisterShader(
+                    va(
                         b"%s%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         shaderAnimNames[i as usize],
                         j + 1 as i32,
@@ -408,7 +408,7 @@ pub unsafe extern "C" fn CG_ClearParticles() {
     }
     numShaderAnims = i;
     // done.
-    initparticles = crate::src::qcommon::q_shared::qtrue;
+    initparticles = qtrue;
 }
 /*
 =====================
@@ -419,11 +419,11 @@ CG_AddParticleToScene
 
 pub unsafe extern "C" fn CG_AddParticleToScene(
     mut p: *mut cparticle_t,
-    mut org: *mut crate::src::qcommon::q_shared::vec_t,
+    mut org: *mut vec_t,
     mut _alpha: f32,
 ) {
-    let mut point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut verts: [crate::tr_types_h::polyVert_t; 4] = [crate::tr_types_h::polyVert_t {
+    let mut point: vec3_t = [0.; 3];
+    let mut verts: [polyVert_t; 4] = [polyVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         modulate: [0; 4],
@@ -434,14 +434,14 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
     let mut time2: f32 = 0.;
     let mut ratio: f32 = 0.;
     let mut invratio: f32 = 0.;
-    let mut color: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut TRIverts: [crate::tr_types_h::polyVert_t; 3] = [crate::tr_types_h::polyVert_t {
+    let mut color: vec3_t = [0.; 3];
+    let mut TRIverts: [polyVert_t; 3] = [polyVert_t {
         xyz: [0.; 3],
         st: [0.; 2],
         modulate: [0; 4],
     }; 3];
-    let mut rright2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut rup2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut rright2: vec3_t = [0.; 3];
+    let mut rup2: vec3_t = [0.; 3];
     if (*p).type_0 == P_WEATHER as i32
         || (*p).type_0 == P_WEATHER_TURBULENT as i32
         || (*p).type_0 == P_WEATHER_FLURRY as i32
@@ -452,34 +452,34 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         if (*p).type_0 != P_WEATHER_FLURRY as i32 {
             if (*p).type_0 == P_BUBBLE as i32 || (*p).type_0 == P_BUBBLE_TURBULENT as i32 {
                 if *org.offset(2 as i32 as isize) > (*p).end {
-                    (*p).time = crate::src::cgame::cg_main::cg.time as f32; // Ridah, fixes rare snow flakes that flicker on the ground
+                    (*p).time = cg.time as f32; // Ridah, fixes rare snow flakes that flicker on the ground
                     (*p).org[0 as i32 as usize] = *org.offset(0 as i32 as isize); // Ridah, fixes rare snow flakes that flicker on the ground
                     (*p).org[1 as i32 as usize] = *org.offset(1 as i32 as isize);
                     (*p).org[2 as i32 as usize] = *org.offset(2 as i32 as isize);
                     (*p).org[2 as i32 as usize] = ((*p).start as f64
                         + 2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                 as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     if (*p).type_0 == P_BUBBLE_TURBULENT as i32 {
                         (*p).vel[0 as i32 as usize] = (2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                 as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                            as vec_t;
                         (*p).vel[1 as i32 as usize] = (2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                 as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
-                            as crate::src::qcommon::q_shared::vec_t
+                            as vec_t
                     }
                 }
             } else if *org.offset(2 as i32 as isize) < (*p).end {
-                (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+                (*p).time = cg.time as f32;
                 (*p).org[0 as i32 as usize] = *org.offset(0 as i32 as isize);
                 (*p).org[1 as i32 as usize] = *org.offset(1 as i32 as isize);
                 (*p).org[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -488,15 +488,15 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
                 }
                 if (*p).type_0 == P_WEATHER_TURBULENT as i32 {
                     (*p).vel[0 as i32 as usize] = (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                             - 0.5f64)
                         * 16 as i32 as f64)
-                        as crate::src::qcommon::q_shared::vec_t;
+                        as vec_t;
                     (*p).vel[1 as i32 as usize] = (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                             - 0.5f64)
                         * 16 as i32 as f64)
-                        as crate::src::qcommon::q_shared::vec_t
+                        as vec_t
                 }
             }
             // Rafael snow pvs check
@@ -507,11 +507,11 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         }
         // Ridah, had to do this or MAX_POLYS is being exceeded in village1.bsp
         if Distance(
-            (*crate::src::cgame::cg_main::cg.snap)
+            (*cg.snap)
                 .ps
                 .origin
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            org as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
+            org as *const vec_t,
         ) > 1024 as i32 as f32
         {
             return;
@@ -536,13 +536,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
             verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte;
+                (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * -(*p).height;
             point[1 as i32 as usize] =
@@ -561,13 +561,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
             verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte;
+                (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * (*p).height;
             point[1 as i32 as usize] =
@@ -586,13 +586,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
             verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte;
+                (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * (*p).height;
             point[1 as i32 as usize] =
@@ -611,13 +611,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
             verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte
+                (255 as i32 as f32 * (*p).alpha) as byte
         } else {
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * -(*p).height;
@@ -637,13 +637,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[0 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             TRIverts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
             TRIverts[0 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[0 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[0 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[0 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte;
+                (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * (*p).height;
             point[1 as i32 as usize] =
@@ -662,13 +662,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             TRIverts[1 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
             TRIverts[1 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[1 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[1 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[1 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte;
+                (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + vup[0 as i32 as usize] * (*p).height;
             point[1 as i32 as usize] =
@@ -687,36 +687,36 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[2 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             TRIverts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
             TRIverts[2 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[2 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[2 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
+                255 as i32 as byte;
             TRIverts[2 as i32 as usize].modulate[3 as i32 as usize] =
-                (255 as i32 as f32 * (*p).alpha) as crate::src::qcommon::q_shared::byte
+                (255 as i32 as f32 * (*p).alpha) as byte
         }
     } else if (*p).type_0 == P_SPRITE as i32 {
-        let mut rr: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut ru: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut rotate_ang: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        color[0 as i32 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-        color[1 as i32 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-        color[2 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
-        time = crate::src::cgame::cg_main::cg.time as f32 - (*p).time;
+        let mut rr: vec3_t = [0.; 3];
+        let mut ru: vec3_t = [0.; 3];
+        let mut rotate_ang: vec3_t = [0.; 3];
+        color[0 as i32 as usize] = 1.0f64 as vec_t;
+        color[1 as i32 as usize] = 1.0f64 as vec_t;
+        color[2 as i32 as usize] = 0.5f64 as vec_t;
+        time = cg.time as f32 - (*p).time;
         time2 = (*p).endtime - (*p).time;
         ratio = time / time2;
         width = (*p).width + ratio * ((*p).endwidth - (*p).width);
         height = (*p).height + ratio * ((*p).endheight - (*p).height);
         if (*p).roll != 0 {
-            crate::src::qcommon::q_math::vectoangles(
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            vectoangles(
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
+                    as *const vec_t,
                 rotate_ang.as_mut_ptr(),
             );
             rotate_ang[2 as i32 as usize] += (*p).roll as f32;
-            crate::src::qcommon::q_math::AngleVectors(
-                rotate_ang.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            AngleVectors(
+                rotate_ang.as_mut_ptr() as *const vec_t,
+                0 as *mut vec_t,
                 rr.as_mut_ptr(),
                 ru.as_mut_ptr(),
             );
@@ -750,13 +750,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru[0 as i32 as usize] * (2 as i32 as f32 * height);
@@ -778,13 +778,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + rr[0 as i32 as usize] * (2 as i32 as f32 * width);
@@ -806,13 +806,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru[0 as i32 as usize] * (-(2 as i32) as f32 * height);
@@ -834,22 +834,22 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte
+            255 as i32 as byte
     } else if (*p).type_0 == P_SMOKE as i32 || (*p).type_0 == P_SMOKE_IMPACT as i32 {
         // create a front rotating facing polygon
         if (*p).type_0 == P_SMOKE_IMPACT as i32
             && Distance(
-                (*crate::src::cgame::cg_main::cg.snap)
+                (*cg.snap)
                     .ps
                     .origin
-                    .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                org as *const crate::src::qcommon::q_shared::vec_t,
+                    .as_mut_ptr() as *const vec_t,
+                org as *const vec_t,
             ) > 1024 as i32 as f32
         {
             return;
@@ -863,11 +863,11 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             let mut greyit: f32 = 0.;
             let mut val: f32 = 0.;
             len = Distance(
-                (*crate::src::cgame::cg_main::cg.snap)
+                (*cg.snap)
                     .ps
                     .origin
-                    .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                org as *const crate::src::qcommon::q_shared::vec_t,
+                    .as_mut_ptr() as *const vec_t,
+                org as *const vec_t,
             );
             if len == 0. {
                 len = 1 as i32 as f32
@@ -881,16 +881,16 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             color[1 as i32 as usize] = greyit;
             color[2 as i32 as usize] = greyit
         } else {
-            color[0 as i32 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-            color[1 as i32 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-            color[2 as i32 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t
+            color[0 as i32 as usize] = 1.0f64 as vec_t;
+            color[1 as i32 as usize] = 1.0f64 as vec_t;
+            color[2 as i32 as usize] = 1.0f64 as vec_t
         }
-        time = crate::src::cgame::cg_main::cg.time as f32 - (*p).time;
+        time = cg.time as f32 - (*p).time;
         time2 = (*p).endtime - (*p).time;
         ratio = time / time2;
-        if crate::src::cgame::cg_main::cg.time as f32 > (*p).startfade {
+        if cg.time as f32 > (*p).startfade {
             invratio = 1 as i32 as f32
-                - (crate::src::cgame::cg_main::cg.time as f32 - (*p).startfade)
+                - (cg.time as f32 - (*p).startfade)
                     / ((*p).endtime - (*p).startfade);
             if (*p).color == 3 as i32 {
                 let mut fval: f32 = 0.;
@@ -906,8 +906,8 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         } else {
             invratio = 1 as i32 as f32 * (*p).alpha
         }
-        if crate::src::cgame::cg_main::cgs.glconfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
+        if cgs.glconfig.hardwareType as u32
+            == GLHW_RAGEPRO as i32 as u32
         {
             invratio = 1 as i32 as f32
         }
@@ -917,18 +917,18 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         width = (*p).width + ratio * ((*p).endwidth - (*p).width);
         height = (*p).height + ratio * ((*p).endheight - (*p).height);
         if (*p).type_0 != P_SMOKE_IMPACT as i32 {
-            let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-            crate::src::qcommon::q_math::vectoangles(
-                rforward.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            let mut temp: vec3_t = [0.; 3];
+            vectoangles(
+                rforward.as_mut_ptr() as *const vec_t,
                 temp.as_mut_ptr(),
             );
             (*p).accumroll += (*p).roll;
             temp[2 as i32 as usize] = (temp[2 as i32 as usize] as f64
                 + (*p).accumroll as f64 * 0.1f64)
-                as crate::src::qcommon::q_shared::vec_t;
-            crate::src::qcommon::q_math::AngleVectors(
-                temp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+                as vec_t;
+            AngleVectors(
+                temp.as_mut_ptr() as *const vec_t,
+                0 as *mut vec_t,
                 rright2.as_mut_ptr(),
                 rup2.as_mut_ptr(),
             );
@@ -973,13 +973,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * invratio) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * invratio) as byte;
         if (*p).rotate as u64 != 0 {
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + rup2[0 as i32 as usize] * -height;
@@ -1012,13 +1012,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * invratio) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * invratio) as byte;
         if (*p).rotate as u64 != 0 {
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + rup2[0 as i32 as usize] * height;
@@ -1051,13 +1051,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * invratio) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * invratio) as byte;
         if (*p).rotate as u64 != 0 {
             point[0 as i32 as usize] =
                 *org.offset(0 as i32 as isize) + rup2[0 as i32 as usize] * height;
@@ -1091,34 +1091,34 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * invratio) as crate::src::qcommon::q_shared::byte
+            (255 as i32 as f32 * invratio) as byte
     } else if (*p).type_0 == P_BLEED as i32 {
-        let mut rr_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut ru_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut rotate_ang_0: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut rr_0: vec3_t = [0.; 3];
+        let mut ru_0: vec3_t = [0.; 3];
+        let mut rotate_ang_0: vec3_t = [0.; 3];
         let mut alpha_0: f32 = 0.;
         alpha_0 = (*p).alpha;
-        if crate::src::cgame::cg_main::cgs.glconfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
+        if cgs.glconfig.hardwareType as u32
+            == GLHW_RAGEPRO as i32 as u32
         {
             alpha_0 = 1 as i32 as f32
         }
         if (*p).roll != 0 {
-            crate::src::qcommon::q_math::vectoangles(
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            vectoangles(
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
+                    as *const vec_t,
                 rotate_ang_0.as_mut_ptr(),
             );
             rotate_ang_0[2 as i32 as usize] += (*p).roll as f32;
-            crate::src::qcommon::q_math::AngleVectors(
-                rotate_ang_0.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            AngleVectors(
+                rotate_ang_0.as_mut_ptr() as *const vec_t,
+                0 as *mut vec_t,
                 rr_0.as_mut_ptr(),
                 ru_0.as_mut_ptr(),
             );
@@ -1145,13 +1145,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as crate::src::qcommon::q_shared::byte;
+            111 as i32 as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as crate::src::qcommon::q_shared::byte;
+            19 as i32 as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as crate::src::qcommon::q_shared::byte;
+            9 as i32 as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * alpha_0) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
             *org.offset(0 as i32 as isize) + ru_0[0 as i32 as usize] * -(*p).height;
         point[1 as i32 as usize] =
@@ -1167,13 +1167,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as crate::src::qcommon::q_shared::byte;
+            111 as i32 as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as crate::src::qcommon::q_shared::byte;
+            19 as i32 as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as crate::src::qcommon::q_shared::byte;
+            9 as i32 as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * alpha_0) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
             *org.offset(0 as i32 as isize) + ru_0[0 as i32 as usize] * (*p).height;
         point[1 as i32 as usize] =
@@ -1189,13 +1189,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as crate::src::qcommon::q_shared::byte;
+            111 as i32 as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as crate::src::qcommon::q_shared::byte;
+            19 as i32 as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as crate::src::qcommon::q_shared::byte;
+            9 as i32 as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * alpha_0) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
             *org.offset(0 as i32 as isize) + ru_0[0 as i32 as usize] * (*p).height;
         point[1 as i32 as usize] =
@@ -1211,26 +1211,26 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as crate::src::qcommon::q_shared::byte;
+            111 as i32 as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as crate::src::qcommon::q_shared::byte;
+            19 as i32 as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as crate::src::qcommon::q_shared::byte;
+            9 as i32 as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * alpha_0) as crate::src::qcommon::q_shared::byte
+            (255 as i32 as f32 * alpha_0) as byte
     } else if (*p).type_0 == P_FLAT_SCALEUP as i32 {
         let mut sinR: f32 = 0.;
         let mut cosR: f32 = 0.;
         if (*p).color == 2 as i32 {
-            color[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-            color[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-            color[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t
+            color[0 as i32 as usize] = 1 as i32 as vec_t;
+            color[1 as i32 as usize] = 1 as i32 as vec_t;
+            color[2 as i32 as usize] = 1 as i32 as vec_t
         } else {
-            color[0 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
-            color[1 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
-            color[2 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t
+            color[0 as i32 as usize] = 0.5f64 as vec_t;
+            color[1 as i32 as usize] = 0.5f64 as vec_t;
+            color[2 as i32 as usize] = 0.5f64 as vec_t
         }
-        time = crate::src::cgame::cg_main::cg.time as f32 - (*p).time;
+        time = cg.time as f32 - (*p).time;
         time2 = (*p).endtime - (*p).time;
         ratio = time / time2;
         width = (*p).width + ratio * ((*p).endwidth - (*p).width);
@@ -1255,13 +1255,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[1 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1270,13 +1270,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[2 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1285,13 +1285,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[3 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1300,13 +1300,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            (255 as i32 as f32 * color[0 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            (255 as i32 as f32 * color[1 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            (255 as i32 as f32 * color[2 as i32 as usize]) as crate::src::qcommon::q_shared::byte;
+            (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte
+            255 as i32 as byte
     } else if (*p).type_0 == P_FLAT as i32 {
         verts[0 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[0 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
@@ -1316,13 +1316,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[1 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1331,13 +1331,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[2 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1346,13 +1346,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[3 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1361,20 +1361,20 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte
+            255 as i32 as byte
     } else if (*p).type_0 == P_ANIM as i32 {
-        let mut rr_1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut ru_1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        let mut rotate_ang_1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+        let mut rr_1: vec3_t = [0.; 3];
+        let mut ru_1: vec3_t = [0.; 3];
+        let mut rotate_ang_1: vec3_t = [0.; 3];
         let mut i: i32 = 0;
         let mut j: i32 = 0;
-        time = crate::src::cgame::cg_main::cg.time as f32 - (*p).time;
+        time = cg.time as f32 - (*p).time;
         time2 = (*p).endtime - (*p).time;
         ratio = time / time2;
         if ratio >= 1.0f32 {
@@ -1385,11 +1385,11 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         // Ridah
         // if we are "inside" this sprite, don't draw
         if (Distance(
-            (*crate::src::cgame::cg_main::cg.snap)
+            (*cg.snap)
                 .ps
                 .origin
-                .as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            org as *const crate::src::qcommon::q_shared::vec_t,
+                .as_mut_ptr() as *const vec_t,
+            org as *const vec_t,
         ) as f64)
             < width as f64 / 1.5f64
         {
@@ -1400,15 +1400,15 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             as i32;
         (*p).pshader = shaderAnims[i as usize][j as usize];
         if (*p).roll != 0 {
-            crate::src::qcommon::q_math::vectoangles(
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const crate::src::qcommon::q_shared::vec_t,
+            vectoangles(
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
+                    as *const vec_t,
                 rotate_ang_1.as_mut_ptr(),
             );
             rotate_ang_1[2 as i32 as usize] += (*p).roll as f32;
-            crate::src::qcommon::q_math::AngleVectors(
-                rotate_ang_1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            AngleVectors(
+                rotate_ang_1.as_mut_ptr() as *const vec_t,
+                0 as *mut vec_t,
                 rr_1.as_mut_ptr(),
                 ru_1.as_mut_ptr(),
             );
@@ -1442,13 +1442,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru_1[0 as i32 as usize] * (2 as i32 as f32 * height);
@@ -1470,13 +1470,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + rr_1[0 as i32 as usize] * (2 as i32 as f32 * width);
@@ -1498,13 +1498,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru_1[0 as i32 as usize] * (-(2 as i32) as f32 * height);
@@ -1526,13 +1526,13 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
         verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+            255 as i32 as byte;
         verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte
+            255 as i32 as byte
     }
     // done.
     if (*p).pshader == 0 {
@@ -1544,16 +1544,16 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         || (*p).type_0 == P_WEATHER_TURBULENT as i32
         || (*p).type_0 == P_WEATHER_FLURRY as i32
     {
-        crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene(
+        trap_R_AddPolyToScene(
             (*p).pshader,
             3 as i32,
-            TRIverts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
+            TRIverts.as_mut_ptr() as *const polyVert_t,
         );
     } else {
-        crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene(
+        trap_R_AddPolyToScene(
             (*p).pshader,
             4 as i32,
-            verts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
+            verts.as_mut_ptr() as *const polyVert_t,
         );
     };
 }
@@ -1573,54 +1573,54 @@ pub unsafe extern "C" fn CG_AddParticles() {
     let mut alpha: f32 = 0.;
     let mut time: f32 = 0.;
     let mut time2: f32 = 0.;
-    let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut org: vec3_t = [0.; 3];
     let mut active: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut tail: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut rotate_ang: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut rotate_ang: vec3_t = [0.; 3];
     if initparticles as u64 == 0 {
         CG_ClearParticles();
     }
     vforward[0 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
+        cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
     vforward[1 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize];
+        cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize];
     vforward[2 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
+        cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
     vright[0 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize];
+        cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize];
     vright[1 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize];
+        cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize];
     vright[2 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+        cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
     vup[0 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize];
+        cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize];
     vup[1 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize];
+        cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize];
     vup[2 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
-    crate::src::qcommon::q_math::vectoangles(
-        crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
+    vectoangles(
+        cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
+            as *const vec_t,
         rotate_ang.as_mut_ptr(),
     );
-    roll = (roll as f64 + (crate::src::cgame::cg_main::cg.time as f32 - oldtime) as f64 * 0.1f64)
+    roll = (roll as f64 + (cg.time as f32 - oldtime) as f64 * 0.1f64)
         as f32;
     rotate_ang[2 as i32 as usize] = (rotate_ang[2 as i32 as usize] as f64 + roll as f64 * 0.9f64)
-        as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::AngleVectors(
-        rotate_ang.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        as vec_t;
+    AngleVectors(
+        rotate_ang.as_mut_ptr() as *const vec_t,
         rforward.as_mut_ptr(),
         rright.as_mut_ptr(),
         rup.as_mut_ptr(),
     );
-    oldtime = crate::src::cgame::cg_main::cg.time as f32;
+    oldtime = cg.time as f32;
     active = 0 as *mut cparticle_t;
     tail = 0 as *mut cparticle_t;
     let mut current_block_54: u64;
     p = active_particles;
     while !p.is_null() {
         next = (*p).next;
-        time = ((crate::src::cgame::cg_main::cg.time as f32 - (*p).time) as f64 * 0.001f64) as f32;
+        time = ((cg.time as f32 - (*p).time) as f64 * 0.001f64) as f32;
         alpha = (*p).alpha + time * (*p).alphavel;
         if alpha <= 0 as i32 as f32 {
             // faded out
@@ -1635,7 +1635,7 @@ pub unsafe extern "C" fn CG_AddParticles() {
                 || (*p).type_0 == P_BLEED as i32
                 || (*p).type_0 == P_SMOKE_IMPACT as i32
             {
-                if crate::src::cgame::cg_main::cg.time as f32 > (*p).endtime {
+                if cg.time as f32 > (*p).endtime {
                     (*p).next = free_particles;
                     free_particles = p;
                     (*p).type_0 = 0 as i32;
@@ -1652,7 +1652,7 @@ pub unsafe extern "C" fn CG_AddParticles() {
                 12599329904712511516 => {}
                 _ => {
                     if (*p).type_0 == P_WEATHER_FLURRY as i32 {
-                        if crate::src::cgame::cg_main::cg.time as f32 > (*p).endtime {
+                        if cg.time as f32 > (*p).endtime {
                             (*p).next = free_particles;
                             free_particles = p;
                             (*p).type_0 = 0 as i32;
@@ -1669,7 +1669,7 @@ pub unsafe extern "C" fn CG_AddParticles() {
                         12599329904712511516 => {}
                         _ => {
                             if (*p).type_0 == P_FLAT_SCALEUP_FADE as i32 {
-                                if crate::src::cgame::cg_main::cg.time as f32 > (*p).endtime {
+                                if cg.time as f32 > (*p).endtime {
                                     (*p).next = free_particles;
                                     free_particles = p;
                                     (*p).type_0 = 0 as i32;
@@ -1739,13 +1739,13 @@ CG_AddParticles
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleSnowFlurry(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut pshader: qhandle_t,
+    mut cent: *mut centity_t,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut turb: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qtrue;
+    let mut turb: qboolean = qtrue;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleSnowFlurry pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1756,16 +1756,16 @@ pub unsafe extern "C" fn CG_ParticleSnowFlurry(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).color = 0 as i32;
     (*p).alpha = 0.90f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).start = (*cent).currentState.origin2[0 as i32 as usize];
     (*p).end = (*cent).currentState.origin2[1 as i32 as usize];
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + (*cent).currentState.time) as f32;
-    (*p).startfade = (crate::src::cgame::cg_main::cg.time + (*cent).currentState.time2) as f32;
+    (*p).endtime = (cg.time + (*cent).currentState.time) as f32;
+    (*p).startfade = (cg.time + (*cent).currentState.time2) as f32;
     (*p).pshader = pshader;
-    if ::libc::rand() % 100 as i32 > 90 as i32 {
+    if rand() % 100 as i32 > 90 as i32 {
         (*p).height = 32 as i32 as f32;
         (*p).width = 32 as i32 as f32;
         (*p).alpha = 0.10f32
@@ -1773,58 +1773,58 @@ pub unsafe extern "C" fn CG_ParticleSnowFlurry(
         (*p).height = 1 as i32 as f32;
         (*p).width = 1 as i32 as f32
     }
-    (*p).vel[2 as i32 as usize] = -(20 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[2 as i32 as usize] = -(20 as i32) as vec_t;
     (*p).type_0 = P_WEATHER_FLURRY as i32;
     if turb as u64 != 0 {
-        (*p).vel[2 as i32 as usize] = -(10 as i32) as crate::src::qcommon::q_shared::vec_t
+        (*p).vel[2 as i32 as usize] = -(10 as i32) as vec_t
     }
     (*p).org[0 as i32 as usize] = (*cent).currentState.origin[0 as i32 as usize];
     (*p).org[1 as i32 as usize] = (*cent).currentState.origin[1 as i32 as usize];
     (*p).org[2 as i32 as usize] = (*cent).currentState.origin[2 as i32 as usize];
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
     (*p).vel[0 as i32 as usize] = ((*p).vel[0 as i32 as usize] as f64
         + (((*cent).currentState.angles[0 as i32 as usize] * 32 as i32 as f32) as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 16 as i32 as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).vel[1 as i32 as usize] = ((*p).vel[1 as i32 as usize] as f64
         + (((*cent).currentState.angles[1 as i32 as usize] * 32 as i32 as f32) as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 16 as i32 as f64))
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).vel[2 as i32 as usize] += (*cent).currentState.angles[2 as i32 as usize];
     if turb as u64 != 0 {
         (*p).accel[0 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 16 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).accel[1 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 16 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t
+            as vec_t
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleSnow(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut origin2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pshader: qhandle_t,
+    mut origin: *mut vec_t,
+    mut origin2: *mut vec_t,
     mut turb: i32,
     mut range: f32,
     mut snum: i32,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1835,7 +1835,7 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).color = 0 as i32;
     (*p).alpha = 0.40f32;
     (*p).alphavel = 0 as i32 as f32;
@@ -1844,11 +1844,11 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     (*p).pshader = pshader;
     (*p).height = 1 as i32 as f32;
     (*p).width = 1 as i32 as f32;
-    (*p).vel[2 as i32 as usize] = -(50 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[2 as i32 as usize] = -(50 as i32) as vec_t;
     if turb != 0 {
         (*p).type_0 = P_WEATHER_TURBULENT as i32;
         (*p).vel[2 as i32 as usize] =
-            (-(50 as i32) as f64 * 1.3f64) as crate::src::qcommon::q_shared::vec_t
+            (-(50 as i32) as f64 * 1.3f64) as vec_t
     } else {
         (*p).type_0 = P_WEATHER as i32
     }
@@ -1857,44 +1857,44 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     (*p).org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     (*p).org[0 as i32 as usize] = ((*p).org[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * range as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).org[1 as i32 as usize] = ((*p).org[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * range as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * ((*p).start - (*p).end) as f64)
-        as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
     if turb != 0 {
         (*p).vel[0 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 16 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 16 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t
+            as vec_t
     }
     // Rafael snow pvs check
     (*p).snum = snum;
-    (*p).link = crate::src::qcommon::q_shared::qtrue;
+    (*p).link = qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleBubble(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut origin2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pshader: qhandle_t,
+    mut origin: *mut vec_t,
+    mut origin2: *mut vec_t,
     mut turb: i32,
     mut range: f32,
     mut snum: i32,
@@ -1902,7 +1902,7 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut randsize: f32 = 0.;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1913,7 +1913,7 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).color = 0 as i32;
     (*p).alpha = 0.40f32;
     (*p).alphavel = 0 as i32 as f32;
@@ -1922,19 +1922,19 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     (*p).pshader = pshader;
     randsize = (1 as i32 as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 0.5f64) as f32;
     (*p).height = randsize;
     (*p).width = randsize;
     (*p).vel[2 as i32 as usize] = (50 as i32 as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 10 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     if turb != 0 {
         (*p).type_0 = P_BUBBLE_TURBULENT as i32;
         (*p).vel[2 as i32 as usize] =
-            (50 as i32 as f64 * 1.3f64) as crate::src::qcommon::q_shared::vec_t
+            (50 as i32 as f64 * 1.3f64) as vec_t
     } else {
         (*p).type_0 = P_BUBBLE as i32
     }
@@ -1943,49 +1943,49 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     (*p).org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     (*p).org[0 as i32 as usize] = ((*p).org[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * range as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).org[1 as i32 as usize] = ((*p).org[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * range as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * ((*p).start - (*p).end) as f64)
-        as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
     if turb != 0 {
         (*p).vel[0 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 4 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 4 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t
+            as vec_t
     }
     // Rafael snow pvs check
     (*p).snum = snum;
-    (*p).link = crate::src::qcommon::q_shared::qtrue;
+    (*p).link = qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleSmoke(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut pshader: qhandle_t,
+    mut cent: *mut centity_t,
 ) {
     // using cent->density = enttime
     //		 cent->frame = startfade
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleSmoke == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1996,16 +1996,16 @@ pub unsafe extern "C" fn CG_ParticleSmoke(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + (*cent).currentState.time) as f32;
-    (*p).startfade = (crate::src::cgame::cg_main::cg.time + (*cent).currentState.time2) as f32;
+    (*p).time = cg.time as f32;
+    (*p).endtime = (cg.time + (*cent).currentState.time) as f32;
+    (*p).startfade = (cg.time + (*cent).currentState.time2) as f32;
     (*p).color = 0 as i32;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).start = (*cent).currentState.origin[2 as i32 as usize];
     (*p).end = (*cent).currentState.origin2[2 as i32 as usize];
     (*p).pshader = pshader;
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
+    (*p).rotate = qfalse;
     (*p).height = 8 as i32 as f32;
     (*p).width = 8 as i32 as f32;
     (*p).endheight = 32 as i32 as f32;
@@ -2014,26 +2014,26 @@ pub unsafe extern "C" fn CG_ParticleSmoke(
     (*p).org[0 as i32 as usize] = (*cent).currentState.origin[0 as i32 as usize];
     (*p).org[1 as i32 as usize] = (*cent).currentState.origin[1 as i32 as usize];
     (*p).org[2 as i32 as usize] = (*cent).currentState.origin[2 as i32 as usize];
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).vel[2 as i32 as usize] = 5 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[2 as i32 as usize] = 5 as i32 as vec_t;
     if (*cent).currentState.frame == 1 as i32 {
         // reverse gravity
         (*p).vel[2 as i32 as usize] *= -(1 as i32) as f32
     }
     (*p).roll = (8 as i32 as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 4 as i32 as f64) as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleBulletDebris(
-    mut org: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vel: *mut crate::src::qcommon::q_shared::vec_t,
+    mut org: *mut vec_t,
+    mut vel: *mut vec_t,
     mut duration: i32,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
@@ -2044,9 +2044,9 @@ pub unsafe extern "C" fn CG_ParticleBulletDebris(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + duration) as f32;
-    (*p).startfade = (crate::src::cgame::cg_main::cg.time + duration / 2 as i32) as f32;
+    (*p).time = cg.time as f32;
+    (*p).endtime = (cg.time + duration) as f32;
+    (*p).startfade = (cg.time + duration / 2 as i32) as f32;
     (*p).color = 3 as i32;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
@@ -2054,7 +2054,7 @@ pub unsafe extern "C" fn CG_ParticleBulletDebris(
     (*p).width = 0.5f64 as f32;
     (*p).endheight = 0.5f64 as f32;
     (*p).endwidth = 0.5f64 as f32;
-    (*p).pshader = crate::src::cgame::cg_main::cgs.media.tracerShader;
+    (*p).pshader = cgs.media.tracerShader;
     (*p).type_0 = P_SMOKE as i32;
     (*p).org[0 as i32 as usize] = *org.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *org.offset(1 as i32 as isize);
@@ -2062,10 +2062,10 @@ pub unsafe extern "C" fn CG_ParticleBulletDebris(
     (*p).vel[0 as i32 as usize] = *vel.offset(0 as i32 as isize);
     (*p).vel[1 as i32 as usize] = *vel.offset(1 as i32 as isize);
     (*p).vel[2 as i32 as usize] = *vel.offset(2 as i32 as isize);
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = -(60 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = -(60 as i32) as vec_t;
     (*p).vel[2 as i32 as usize] += -(20 as i32) as f32;
 }
 /*
@@ -2077,8 +2077,8 @@ CG_ParticleExplosion
 
 pub unsafe extern "C" fn CG_ParticleExplosion(
     mut animStr: *mut libc::c_char,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vel: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
+    mut vel: *mut vec_t,
     mut duration: i32,
     mut sizeStart: i32,
     mut sizeEnd: i32,
@@ -2086,7 +2086,7 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut anim: i32 = 0;
     if animStr < 10 as i32 as *mut libc::c_char {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_ParticleExplosion: animStr is probably an index rather than a string\x00"
                 as *const u8 as *const libc::c_char,
         );
@@ -2094,13 +2094,13 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     // find the animation string
     anim = 0 as i32; // for sprites that are stretch in either direction
     while !shaderAnimNames[anim as usize].is_null() {
-        if crate::src::qcommon::q_shared::Q_stricmp(animStr, shaderAnimNames[anim as usize]) == 0 {
+        if Q_stricmp(animStr, shaderAnimNames[anim as usize]) == 0 {
             break;
         }
         anim += 1
     }
     if shaderAnimNames[anim as usize].is_null() {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_ParticleExplosion: unknown animation string: %s\x00" as *const u8
                 as *const libc::c_char,
             animStr,
@@ -2113,7 +2113,7 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).alpha = 0.5f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     if duration < 0 as i32 {
@@ -2121,7 +2121,7 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
         (*p).roll = 0 as i32
     } else {
         (*p).roll = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 179 as i32 as f64) as i32
     }
     (*p).shaderAnim = anim;
@@ -2129,7 +2129,7 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     (*p).height = sizeStart as f32 * shaderAnimSTRatio[anim as usize];
     (*p).endheight = sizeEnd as f32;
     (*p).endwidth = sizeEnd as f32 * shaderAnimSTRatio[anim as usize];
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + duration) as f32;
+    (*p).endtime = (cg.time + duration) as f32;
     (*p).type_0 = P_ANIM as i32;
     (*p).org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -2137,14 +2137,14 @@ pub unsafe extern "C" fn CG_ParticleExplosion(
     (*p).vel[0 as i32 as usize] = *vel.offset(0 as i32 as isize);
     (*p).vel[1 as i32 as usize] = *vel.offset(1 as i32 as isize);
     (*p).vel[2 as i32 as usize] = *vel.offset(2 as i32 as isize);
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
 }
 // Rafael Shrapnel
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddParticleShrapnel(mut _le: *mut crate::cg_local_h::localEntity_t) {}
+pub unsafe extern "C" fn CG_AddParticleShrapnel(mut _le: *mut localEntity_t) {}
 // done.
 #[no_mangle]
 
@@ -2153,19 +2153,19 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
     let mut str: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut type_0: i32 = 0;
-    let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut origin2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut origin: vec3_t = [0.; 3];
+    let mut origin2: vec3_t = [0.; 3];
     let mut i: i32 = 0;
     let mut range: f32 = 0 as i32 as f32;
     let mut turb: i32 = 0;
     let mut numparticles: i32 = 0;
     let mut snum: i32 = 0;
-    str = crate::src::cgame::cg_main::CG_ConfigString(num) as *mut libc::c_char;
+    str = CG_ConfigString(num) as *mut libc::c_char;
     if *str.offset(0 as i32 as isize) == 0 {
         return 0 as i32;
     }
     // returns type 128 64 or 32
-    token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
+    token = COM_Parse(&mut str);
     type_0 = atoi(token);
     if type_0 == 1 as i32 {
         range = 128 as i32 as f32
@@ -2186,27 +2186,27 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
     }
     i = 0 as i32;
     while i < 3 as i32 {
-        token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
-        origin[i as usize] = atof(token) as crate::src::qcommon::q_shared::vec_t;
+        token = COM_Parse(&mut str);
+        origin[i as usize] = atof(token) as vec_t;
         i += 1
     }
     i = 0 as i32;
     while i < 3 as i32 {
-        token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
-        origin2[i as usize] = atof(token) as crate::src::qcommon::q_shared::vec_t;
+        token = COM_Parse(&mut str);
+        origin2[i as usize] = atof(token) as vec_t;
         i += 1
     }
-    token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
+    token = COM_Parse(&mut str);
     numparticles = atoi(token);
-    token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
+    token = COM_Parse(&mut str);
     turb = atoi(token);
-    token = crate::src::qcommon::q_shared::COM_Parse(&mut str);
+    token = COM_Parse(&mut str);
     snum = atoi(token);
     i = 0 as i32;
     while i < numparticles {
         if type_0 >= 4 as i32 {
             CG_ParticleBubble(
-                crate::src::cgame::cg_main::cgs.media.waterBubbleShader,
+                cgs.media.waterBubbleShader,
                 origin.as_mut_ptr(),
                 origin2.as_mut_ptr(),
                 turb,
@@ -2215,7 +2215,7 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
             );
         } else {
             CG_ParticleSnow(
-                crate::src::cgame::cg_main::cgs.media.waterBubbleShader,
+                cgs.media.waterBubbleShader,
                 origin.as_mut_ptr(),
                 origin2.as_mut_ptr(),
                 turb,
@@ -2230,8 +2230,8 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_SnowLink(
-    mut cent: *mut crate::cg_local_h::centity_t,
-    mut particleOn: crate::src::qcommon::q_shared::qboolean,
+    mut cent: *mut centity_t,
+    mut particleOn: qboolean,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
@@ -2243,9 +2243,9 @@ pub unsafe extern "C" fn CG_SnowLink(
         if (*p).type_0 == P_WEATHER as i32 || (*p).type_0 == P_WEATHER_TURBULENT as i32 {
             if (*p).snum == id {
                 if particleOn as u64 != 0 {
-                    (*p).link = crate::src::qcommon::q_shared::qtrue
+                    (*p).link = qtrue
                 } else {
-                    (*p).link = crate::src::qcommon::q_shared::qfalse
+                    (*p).link = qfalse
                 }
             }
         }
@@ -2255,12 +2255,12 @@ pub unsafe extern "C" fn CG_SnowLink(
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleImpactSmokePuff(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pshader: qhandle_t,
+    mut origin: *mut vec_t,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleImpactSmokePuff pshader == ZERO!\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2272,44 +2272,44 @@ pub unsafe extern "C" fn CG_ParticleImpactSmokePuff(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).alpha = 0.25f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).roll = (2.0f64
-        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
         * 179 as i32 as f64) as i32;
     (*p).pshader = pshader;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + 1000 as i32) as f32;
-    (*p).startfade = (crate::src::cgame::cg_main::cg.time + 100 as i32) as f32;
-    (*p).width = (::libc::rand() % 4 as i32 + 8 as i32) as f32;
-    (*p).height = (::libc::rand() % 4 as i32 + 8 as i32) as f32;
+    (*p).endtime = (cg.time + 1000 as i32) as f32;
+    (*p).startfade = (cg.time + 100 as i32) as f32;
+    (*p).width = (rand() % 4 as i32 + 8 as i32) as f32;
+    (*p).height = (rand() % 4 as i32 + 8 as i32) as f32;
     (*p).endheight = (*p).height * 2 as i32 as f32;
     (*p).endwidth = (*p).width * 2 as i32 as f32;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + 500 as i32) as f32;
+    (*p).endtime = (cg.time + 500 as i32) as f32;
     (*p).type_0 = P_SMOKE_IMPACT as i32;
     (*p).org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*p).org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    (*p).vel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[2 as i32 as usize] = 20 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[2 as i32 as usize] = 20 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).rotate = crate::src::qcommon::q_shared::qtrue;
+    (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[2 as i32 as usize] = 20 as i32 as vec_t;
+    (*p).accel[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).accel[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).accel[2 as i32 as usize] = 20 as i32 as vec_t;
+    (*p).rotate = qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Particle_Bleed(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pshader: qhandle_t,
+    mut start: *mut vec_t,
+    mut _dir: *mut vec_t,
     mut fleshEntityNum: i32,
     mut duration: i32,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_Particle_Bleed pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2320,52 +2320,52 @@ pub unsafe extern "C" fn CG_Particle_Bleed(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).roll = 0 as i32;
     (*p).pshader = pshader;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + duration) as f32;
+    (*p).endtime = (cg.time + duration) as f32;
     if fleshEntityNum != 0 {
-        (*p).startfade = crate::src::cgame::cg_main::cg.time as f32
+        (*p).startfade = cg.time as f32
     } else {
-        (*p).startfade = (crate::src::cgame::cg_main::cg.time + 100 as i32) as f32
+        (*p).startfade = (cg.time + 100 as i32) as f32
     }
     (*p).width = 4 as i32 as f32;
     (*p).height = 4 as i32 as f32;
-    (*p).endheight = (4 as i32 + ::libc::rand() % 3 as i32) as f32;
+    (*p).endheight = (4 as i32 + rand() % 3 as i32) as f32;
     (*p).endwidth = (*p).endheight;
     (*p).type_0 = P_SMOKE as i32;
     (*p).org[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*p).org[2 as i32 as usize] = *start.offset(2 as i32 as isize);
-    (*p).vel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[2 as i32 as usize] = -(20 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[2 as i32 as usize] = -(20 as i32) as vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-    (*p).roll = ::libc::rand() % 179 as i32;
+    (*p).rotate = qfalse;
+    (*p).roll = rand() % 179 as i32;
     (*p).color = 2 as i32;
     (*p).alpha = 0.75f64 as f32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Particle_OilParticle(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut pshader: qhandle_t,
+    mut cent: *mut centity_t,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut time: i32 = 0;
     let mut time2: i32 = 0;
     let mut ratio: f32 = 0.;
     let mut duration: f32 = 1500 as i32 as f32;
-    time = crate::src::cgame::cg_main::cg.time;
-    time2 = crate::src::cgame::cg_main::cg.time + (*cent).currentState.time;
+    time = cg.time;
+    time2 = cg.time + (*cent).currentState.time;
     ratio = 1 as i32 as f32 - time as f32 / time2 as f32;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_Particle_OilParticle == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2376,12 +2376,12 @@ pub unsafe extern "C" fn CG_Particle_OilParticle(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).roll = 0 as i32;
     (*p).pshader = pshader;
-    (*p).endtime = crate::src::cgame::cg_main::cg.time as f32 + duration;
+    (*p).endtime = cg.time as f32 + duration;
     (*p).startfade = (*p).endtime;
     (*p).width = 1 as i32 as f32;
     (*p).height = 3 as i32 as f32;
@@ -2397,23 +2397,23 @@ pub unsafe extern "C" fn CG_Particle_OilParticle(
         (*cent).currentState.origin2[1 as i32 as usize] * (16 as i32 as f32 * ratio);
     (*p).vel[2 as i32 as usize] = (*cent).currentState.origin2[2 as i32 as usize];
     (*p).snum = 1.0f32 as i32;
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).accel[2 as i32 as usize] = -(20 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-    (*p).roll = ::libc::rand() % 179 as i32;
+    (*p).accel[2 as i32 as usize] = -(20 as i32) as vec_t;
+    (*p).rotate = qfalse;
+    (*p).roll = rand() % 179 as i32;
     (*p).alpha = 0.75f64 as f32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_Particle_OilSlick(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut pshader: qhandle_t,
+    mut cent: *mut centity_t,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_Particle_OilSlick == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2424,12 +2424,12 @@ pub unsafe extern "C" fn CG_Particle_OilSlick(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     if (*cent).currentState.angles2[2 as i32 as usize] != 0. {
-        (*p).endtime = crate::src::cgame::cg_main::cg.time as f32
+        (*p).endtime = cg.time as f32
             + (*cent).currentState.angles2[2 as i32 as usize]
     } else {
-        (*p).endtime = (crate::src::cgame::cg_main::cg.time + 60000 as i32) as f32
+        (*p).endtime = (cg.time + 60000 as i32) as f32
     }
     (*p).startfade = (*p).endtime;
     (*p).alpha = 1.0f64 as f32;
@@ -2457,29 +2457,29 @@ pub unsafe extern "C" fn CG_Particle_OilSlick(
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + (0.55f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 0.5f64))
-        as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
+    (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[2 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-    (*p).roll = ::libc::rand() % 179 as i32;
+    (*p).rotate = qfalse;
+    (*p).roll = rand() % 179 as i32;
     (*p).alpha = 0.75f64 as f32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut crate::cg_local_h::centity_t) {
+pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut centity_t) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut id: i32 = 0;
     id = 1.0f32 as i32;
     if id == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_OilSlickRevove NULL id\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2488,7 +2488,7 @@ pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut crate::cg_local_h::ce
         next = (*p).next;
         if (*p).type_0 == P_FLAT_SCALEUP as i32 {
             if (*p).snum == id {
-                (*p).endtime = (crate::src::cgame::cg_main::cg.time + 100 as i32) as f32;
+                (*p).endtime = (cg.time + 100 as i32) as f32;
                 (*p).startfade = (*p).endtime;
                 (*p).type_0 = P_FLAT_SCALEUP_FADE as i32
             }
@@ -2499,26 +2499,26 @@ pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut crate::cg_local_h::ce
 #[no_mangle]
 
 pub unsafe extern "C" fn ValidBloodPool(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut this_pos: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut x_pos: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut center_pos: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut end_pos: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    mut start: *mut vec_t,
+) -> qboolean {
+    let mut angles: vec3_t = [0.; 3];
+    let mut right: vec3_t = [0.; 3];
+    let mut up: vec3_t = [0.; 3];
+    let mut this_pos: vec3_t = [0.; 3];
+    let mut x_pos: vec3_t = [0.; 3];
+    let mut center_pos: vec3_t = [0.; 3];
+    let mut end_pos: vec3_t = [0.; 3];
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut fwidth: i32 = 0;
     let mut fheight: i32 = 0;
-    let mut trace: crate::src::qcommon::q_shared::trace_t =
-        crate::src::qcommon::q_shared::trace_t {
-            allsolid: crate::src::qcommon::q_shared::qfalse,
-            startsolid: crate::src::qcommon::q_shared::qfalse,
+    let mut trace: trace_t =
+        trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
             fraction: 0.,
             endpos: [0.; 3],
-            plane: crate::src::qcommon::q_shared::cplane_t {
+            plane: cplane_t {
                 normal: [0.; 3],
                 dist: 0.,
                 type_0: 0,
@@ -2529,31 +2529,31 @@ pub unsafe extern "C" fn ValidBloodPool(
             contents: 0,
             entityNum: 0,
         };
-    let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut normal: vec3_t = [0.; 3];
     fwidth = 16 as i32;
     fheight = 16 as i32;
-    normal[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    normal[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    normal[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::qcommon::q_math::vectoangles(
-        normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    normal[0 as i32 as usize] = 0 as i32 as vec_t;
+    normal[1 as i32 as usize] = 0 as i32 as vec_t;
+    normal[2 as i32 as usize] = 1 as i32 as vec_t;
+    vectoangles(
+        normal.as_mut_ptr() as *const vec_t,
         angles.as_mut_ptr(),
     );
-    crate::src::qcommon::q_math::AngleVectors(
-        angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        angles.as_mut_ptr() as *const vec_t,
+        0 as *mut vec_t,
         right.as_mut_ptr(),
         up.as_mut_ptr(),
     );
     center_pos[0 as i32 as usize] = (*start.offset(0 as i32 as isize) as f64
         + normal[0 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     center_pos[1 as i32 as usize] = (*start.offset(1 as i32 as isize) as f64
         + normal[1 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     center_pos[2 as i32 as usize] = (*start.offset(2 as i32 as isize) as f64
         + normal[2 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     x = -fwidth / 2 as i32;
     while x < fwidth {
         x_pos[0 as i32 as usize] =
@@ -2572,48 +2572,48 @@ pub unsafe extern "C" fn ValidBloodPool(
                 x_pos[2 as i32 as usize] + up[2 as i32 as usize] * y as f32;
             end_pos[0 as i32 as usize] = (this_pos[0 as i32 as usize] as f64
                 + normal[0 as i32 as usize] as f64 * (-0.5f64 * 2 as i32 as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             end_pos[1 as i32 as usize] = (this_pos[1 as i32 as usize] as f64
                 + normal[1 as i32 as usize] as f64 * (-0.5f64 * 2 as i32 as f64))
-                as crate::src::qcommon::q_shared::vec_t;
+                as vec_t;
             end_pos[2 as i32 as usize] = (this_pos[2 as i32 as usize] as f64
                 + normal[2 as i32 as usize] as f64 * (-0.5f64 * 2 as i32 as f64))
-                as crate::src::qcommon::q_shared::vec_t;
-            crate::src::cgame::cg_predict::CG_Trace(
-                &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-                this_pos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *const crate::src::qcommon::q_shared::vec_t,
-                0 as *const crate::src::qcommon::q_shared::vec_t,
-                end_pos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+                as vec_t;
+            CG_Trace(
+                &mut trace as *mut _ as *mut trace_t,
+                this_pos.as_mut_ptr() as *const vec_t,
+                0 as *const vec_t,
+                0 as *const vec_t,
+                end_pos.as_mut_ptr() as *const vec_t,
                 -(1 as i32),
                 1 as i32,
             );
             if trace.entityNum < ((1 as i32) << 10 as i32) - 2 as i32 {
                 // may only land on world
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             if !(trace.startsolid as u64 == 0 && trace.fraction < 1 as i32 as f32) {
-                return crate::src::qcommon::q_shared::qfalse;
+                return qfalse;
             }
             y += fheight
         }
         x += fwidth
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_BloodPool(
-    mut _le: *mut crate::cg_local_h::localEntity_t,
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut tr: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _le: *mut localEntity_t,
+    mut pshader: qhandle_t,
+    mut tr: *mut trace_t,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
-    let mut legit: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
-    let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut legit: qboolean = qfalse;
+    let mut start: vec3_t = [0.; 3];
     let mut rndSize: f32 = 0.;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_BloodPool pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2631,15 +2631,15 @@ pub unsafe extern "C" fn CG_BloodPool(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + 3000 as i32) as f32;
+    (*p).time = cg.time as f32;
+    (*p).endtime = (cg.time + 3000 as i32) as f32;
     (*p).startfade = (*p).endtime;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
     (*p).roll = 0 as i32;
     (*p).pshader = pshader;
     rndSize = (0.4f64
-        + ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 * 0.6f64)
+        + ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 * 0.6f64)
         as f32;
     (*p).width = 8 as i32 as f32 * rndSize;
     (*p).height = 8 as i32 as f32 * rndSize;
@@ -2649,43 +2649,43 @@ pub unsafe extern "C" fn CG_BloodPool(
     (*p).org[0 as i32 as usize] = start[0 as i32 as usize];
     (*p).org[1 as i32 as usize] = start[1 as i32 as usize];
     (*p).org[2 as i32 as usize] = start[2 as i32 as usize];
-    (*p).vel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).vel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).vel[2 as i32 as usize] = 0 as i32 as vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-    (*p).roll = ::libc::rand() % 179 as i32;
+    (*p).rotate = qfalse;
+    (*p).roll = rand() % 179 as i32;
     (*p).alpha = 0.75f64 as f32;
     (*p).color = 2 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleBloodCloud(
-    mut _cent: *mut crate::cg_local_h::centity_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _cent: *mut centity_t,
+    mut origin: *mut vec_t,
+    mut dir: *mut vec_t,
 ) {
     let mut length: f32 = 0.;
     let mut dist: f32 = 0.;
     let mut crittersize: f32 = 0.;
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut point: vec3_t = [0.; 3];
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut i: i32 = 0;
     dist = 0 as i32 as f32;
-    length = VectorLength(dir as *const crate::src::qcommon::q_shared::vec_t);
-    crate::src::qcommon::q_math::vectoangles(
-        dir as *const crate::src::qcommon::q_shared::vec_t,
+    length = VectorLength(dir as *const vec_t);
+    vectoangles(
+        dir as *const vec_t,
         angles.as_mut_ptr(),
     );
-    crate::src::qcommon::q_math::AngleVectors(
-        angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
     );
     crittersize = 32 as i32 as f32;
     if length != 0. {
@@ -2712,17 +2712,17 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
         free_particles = (*p).next;
         (*p).next = active_particles;
         active_particles = p;
-        (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+        (*p).time = cg.time as f32;
         (*p).alpha = 1.0f64 as f32;
         (*p).alphavel = 0 as i32 as f32;
         (*p).roll = 0 as i32;
-        (*p).pshader = crate::src::cgame::cg_main::cgs.media.smokePuffShader;
-        (*p).endtime = ((crate::src::cgame::cg_main::cg.time + 350 as i32) as f64
+        (*p).pshader = cgs.media.smokePuffShader;
+        (*p).endtime = ((cg.time + 350 as i32) as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 100 as i32 as f64) as f32;
-        (*p).startfade = crate::src::cgame::cg_main::cg.time as f32;
+        (*p).startfade = cg.time as f32;
         (*p).width = 32 as i32 as f32;
         (*p).height = 32 as i32 as f32;
         (*p).endheight = 32 as i32 as f32;
@@ -2731,14 +2731,14 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
         (*p).org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
         (*p).org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
         (*p).org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-        (*p).vel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*p).vel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*p).vel[2 as i32 as usize] = -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
-        (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
+        (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
+        (*p).vel[2 as i32 as usize] = -(1 as i32) as vec_t;
+        (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
         (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
         (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-        (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-        (*p).roll = ::libc::rand() % 179 as i32;
+        (*p).rotate = qfalse;
+        (*p).roll = rand() % 179 as i32;
         (*p).color = 2 as i32;
         (*p).alpha = 0.75f64 as f32;
         i += 1
@@ -2747,8 +2747,8 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleSparks(
-    mut org: *mut crate::src::qcommon::q_shared::vec_t,
-    mut vel: *mut crate::src::qcommon::q_shared::vec_t,
+    mut org: *mut vec_t,
+    mut vel: *mut vec_t,
     mut duration: i32,
     mut x: f32,
     mut y: f32,
@@ -2762,9 +2762,9 @@ pub unsafe extern "C" fn CG_ParticleSparks(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
-    (*p).endtime = (crate::src::cgame::cg_main::cg.time + duration) as f32;
-    (*p).startfade = (crate::src::cgame::cg_main::cg.time + duration / 2 as i32) as f32;
+    (*p).time = cg.time as f32;
+    (*p).endtime = (cg.time + duration) as f32;
+    (*p).startfade = (cg.time + duration / 2 as i32) as f32;
     (*p).color = 3 as i32;
     (*p).alpha = 0.4f32;
     (*p).alphavel = 0 as i32 as f32;
@@ -2772,81 +2772,81 @@ pub unsafe extern "C" fn CG_ParticleSparks(
     (*p).width = 0.5f64 as f32;
     (*p).endheight = 0.5f64 as f32;
     (*p).endwidth = 0.5f64 as f32;
-    (*p).pshader = crate::src::cgame::cg_main::cgs.media.tracerShader;
+    (*p).pshader = cgs.media.tracerShader;
     (*p).type_0 = P_SMOKE as i32;
     (*p).org[0 as i32 as usize] = *org.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *org.offset(1 as i32 as isize);
     (*p).org[2 as i32 as usize] = *org.offset(2 as i32 as isize);
     (*p).org[0 as i32 as usize] = ((*p).org[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * x as f64) as crate::src::qcommon::q_shared::vec_t;
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * x as f64) as vec_t;
     (*p).org[1 as i32 as usize] = ((*p).org[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * y as f64) as crate::src::qcommon::q_shared::vec_t;
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * y as f64) as vec_t;
     (*p).vel[0 as i32 as usize] = *vel.offset(0 as i32 as isize);
     (*p).vel[1 as i32 as usize] = *vel.offset(1 as i32 as isize);
     (*p).vel[2 as i32 as usize] = *vel.offset(2 as i32 as isize);
-    (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
     (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
     (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
     (*p).vel[0 as i32 as usize] = ((*p).vel[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 4 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).vel[1 as i32 as usize] = ((*p).vel[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 4 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).vel[2 as i32 as usize] = ((*p).vel[2 as i32 as usize] as f64
         + (20 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 10 as i32 as f64)
             * speed as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).accel[0 as i32 as usize] = (2.0f64
-        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
         * 4 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
     (*p).accel[1 as i32 as usize] = (2.0f64
-        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
         * 4 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        as vec_t;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleDust(
-    mut _cent: *mut crate::cg_local_h::centity_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _cent: *mut centity_t,
+    mut origin: *mut vec_t,
+    mut dir: *mut vec_t,
 ) {
     let mut length: f32 = 0.;
     let mut dist: f32 = 0.;
     let mut crittersize: f32 = 0.;
-    let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut forward: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut angles: vec3_t = [0.; 3];
+    let mut forward: vec3_t = [0.; 3];
+    let mut point: vec3_t = [0.; 3];
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut i: i32 = 0;
     dist = 0 as i32 as f32;
     *dir.offset(0 as i32 as isize) = -*dir.offset(0 as i32 as isize);
     *dir.offset(1 as i32 as isize) = -*dir.offset(1 as i32 as isize);
     *dir.offset(2 as i32 as isize) = -*dir.offset(2 as i32 as isize);
-    length = VectorLength(dir as *const crate::src::qcommon::q_shared::vec_t);
-    crate::src::qcommon::q_math::vectoangles(
-        dir as *const crate::src::qcommon::q_shared::vec_t,
+    length = VectorLength(dir as *const vec_t);
+    vectoangles(
+        dir as *const vec_t,
         angles.as_mut_ptr(),
     );
-    crate::src::qcommon::q_math::AngleVectors(
-        angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    AngleVectors(
+        angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
-        0 as *mut crate::src::qcommon::q_shared::vec_t,
+        0 as *mut vec_t,
+        0 as *mut vec_t,
     );
     crittersize = 32 as i32 as f32;
     if length != 0. {
@@ -2873,26 +2873,26 @@ pub unsafe extern "C" fn CG_ParticleDust(
         free_particles = (*p).next;
         (*p).next = active_particles;
         active_particles = p;
-        (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+        (*p).time = cg.time as f32;
         (*p).alpha = 5.0f64 as f32;
         (*p).alphavel = 0 as i32 as f32;
         (*p).roll = 0 as i32;
-        (*p).pshader = crate::src::cgame::cg_main::cgs.media.smokePuffShader;
+        (*p).pshader = cgs.media.smokePuffShader;
         // RF, stay around for long enough to expand and dissipate naturally
         if length != 0. {
-            (*p).endtime = ((crate::src::cgame::cg_main::cg.time + 4500 as i32) as f64
+            (*p).endtime = ((cg.time + 4500 as i32) as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * 3500 as i32 as f64) as f32
         } else {
-            (*p).endtime = ((crate::src::cgame::cg_main::cg.time + 750 as i32) as f64
+            (*p).endtime = ((cg.time + 750 as i32) as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * 500 as i32 as f64) as f32
         }
-        (*p).startfade = crate::src::cgame::cg_main::cg.time as f32;
+        (*p).startfade = cg.time as f32;
         (*p).width = 32 as i32 as f32;
         (*p).height = 32 as i32 as f32;
         // RF, expand while falling
@@ -2909,31 +2909,31 @@ pub unsafe extern "C" fn CG_ParticleDust(
         (*p).org[1 as i32 as usize] = point[1 as i32 as usize];
         (*p).org[2 as i32 as usize] = point[2 as i32 as usize];
         (*p).vel[0 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 6 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 6 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).vel[2 as i32 as usize] =
-            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 20 as i32 as f32;
+            (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 20 as i32 as f32;
         // RF, add some gravity/randomness
         (*p).accel[0 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 3 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).accel[1 as i32 as usize] = (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 3 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+            as vec_t;
         (*p).accel[2 as i32 as usize] =
-            (-(40 as i32) as f64 * 0.4f64) as crate::src::qcommon::q_shared::vec_t;
-        (*p).accel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (-(40 as i32) as f64 * 0.4f64) as vec_t;
+        (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
         (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
         (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];
-        (*p).rotate = crate::src::qcommon::q_shared::qfalse;
-        (*p).roll = ::libc::rand() % 179 as i32;
+        (*p).rotate = qfalse;
+        (*p).roll = rand() % 179 as i32;
         (*p).alpha = 0.75f64 as f32;
         i += 1
     }
@@ -2941,15 +2941,15 @@ pub unsafe extern "C" fn CG_ParticleDust(
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_ParticleMisc(
-    mut pshader: crate::src::qcommon::q_shared::qhandle_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut pshader: qhandle_t,
+    mut origin: *mut vec_t,
     mut size: i32,
     mut duration: i32,
     mut _alpha: f32,
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"CG_ParticleImpactSmokePuff pshader == ZERO!\n\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2961,17 +2961,17 @@ pub unsafe extern "C" fn CG_ParticleMisc(
     free_particles = (*p).next;
     (*p).next = active_particles;
     active_particles = p;
-    (*p).time = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).time = cg.time as f32;
     (*p).alpha = 1.0f64 as f32;
     (*p).alphavel = 0 as i32 as f32;
-    (*p).roll = ::libc::rand() % 179 as i32;
+    (*p).roll = rand() % 179 as i32;
     (*p).pshader = pshader;
     if duration > 0 as i32 {
-        (*p).endtime = (crate::src::cgame::cg_main::cg.time + duration) as f32
+        (*p).endtime = (cg.time + duration) as f32
     } else {
         (*p).endtime = duration as f32
     }
-    (*p).startfade = crate::src::cgame::cg_main::cg.time as f32;
+    (*p).startfade = cg.time as f32;
     (*p).width = size as f32;
     (*p).height = size as f32;
     (*p).endheight = size as f32;
@@ -2980,5 +2980,5 @@ pub unsafe extern "C" fn CG_ParticleMisc(
     (*p).org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*p).org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*p).org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    (*p).rotate = crate::src::qcommon::q_shared::qfalse;
+    (*p).rotate = qfalse;
 }

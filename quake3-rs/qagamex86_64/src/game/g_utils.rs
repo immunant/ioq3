@@ -509,13 +509,13 @@ pub unsafe extern "C" fn AddRemap(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < remapCount {
-        if crate::src::qcommon::q_shared::Q_stricmp(
+        if Q_stricmp(
             oldShader,
             remappedShaders[i as usize].oldShader.as_mut_ptr(),
         ) == 0 as i32
         {
             // found it, just update this one
-            ::libc::strcpy(
+            libc::strcpy(
                 remappedShaders[i as usize].newShader.as_mut_ptr(),
                 newShader,
             );
@@ -525,11 +525,11 @@ pub unsafe extern "C" fn AddRemap(
         i += 1
     }
     if remapCount < 128 as i32 {
-        ::libc::strcpy(
+        libc::strcpy(
             remappedShaders[remapCount as usize].newShader.as_mut_ptr(),
             newShader,
         );
-        ::libc::strcpy(
+        libc::strcpy(
             remappedShaders[remapCount as usize].oldShader.as_mut_ptr(),
             oldShader,
         );
@@ -550,7 +550,7 @@ pub unsafe extern "C" fn BuildShaderStateConfig() -> *const libc::c_char {
     );
     i = 0 as i32;
     while i < remapCount {
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             out.as_mut_ptr(),
             64 as i32 * 2 as i32 + 5 as i32,
             b"%s=%s:%5.2f@\x00" as *const u8 as *const libc::c_char,
@@ -558,7 +558,7 @@ pub unsafe extern "C" fn BuildShaderStateConfig() -> *const libc::c_char {
             remappedShaders[i as usize].newShader.as_mut_ptr(),
             remappedShaders[i as usize].timeOffset as f64,
         );
-        crate::src::qcommon::q_shared::Q_strcat(
+        Q_strcat(
             buff.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             out.as_mut_ptr(),
@@ -586,7 +586,7 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
     mut name: *mut libc::c_char,
     mut start: i32,
     mut max: i32,
-    mut create: crate::src::qcommon::q_shared::qboolean,
+    mut create: qboolean,
 ) -> i32 {
     let mut i: i32 = 0;
     let mut s: [libc::c_char; 1024] = [0; 1024];
@@ -595,7 +595,7 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
     }
     i = 1 as i32;
     while i < max {
-        crate::src::game::g_syscalls::trap_GetConfigstring(
+        trap_GetConfigstring(
             start + i,
             s.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -603,7 +603,7 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
         if s[0 as i32 as usize] == 0 {
             break;
         }
-        if ::libc::strcmp(s.as_mut_ptr(), name) == 0 {
+        if libc::strcmp(s.as_mut_ptr(), name) == 0 {
             return i;
         }
         i += 1
@@ -612,11 +612,11 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
         return 0 as i32;
     }
     if i == max {
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"G_FindConfigstringIndex: overflow\x00" as *const u8 as *const libc::c_char,
         );
     }
-    crate::src::game::g_syscalls::trap_SetConfigstring(start + i, name);
+    trap_SetConfigstring(start + i, name);
     return i;
 }
 #[no_mangle]
@@ -626,7 +626,7 @@ pub unsafe extern "C" fn G_ModelIndex(mut name: *mut libc::c_char) -> i32 {
         name,
         32 as i32,
         256 as i32,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
 }
 #[no_mangle]
@@ -636,7 +636,7 @@ pub unsafe extern "C" fn G_SoundIndex(mut name: *mut libc::c_char) -> i32 {
         name,
         32 as i32 + 256 as i32,
         256 as i32,
-        crate::src::qcommon::q_shared::qtrue,
+        qtrue,
     );
 }
 //=====================================================================
@@ -650,25 +650,25 @@ Broadcasts a command to only a specific team
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TeamCommand(
-    mut team: crate::bg_public_h::team_t,
+    mut team: team_t,
     mut cmd: *mut libc::c_char,
 ) {
     let mut i: i32 = 0;
     i = 0 as i32;
-    while i < crate::src::game::g_main::level.maxclients {
-        if (*crate::src::game::g_main::level.clients.offset(i as isize))
+    while i < level.maxclients {
+        if (*level.clients.offset(i as isize))
             .pers
             .connected as u32
-            == crate::g_local_h::CON_CONNECTED as i32 as u32
+            == CON_CONNECTED as i32 as u32
         {
-            if (*crate::src::game::g_main::level.clients.offset(i as isize))
+            if (*level.clients.offset(i as isize))
                 .sess
                 .sessionTeam as u32
                 == team as u32
             {
-                crate::src::game::g_syscalls::trap_SendServerCommand(
+                trap_SendServerCommand(
                     i,
-                    crate::src::qcommon::q_shared::va(
+                    va(
                         b"%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         cmd,
                     ),
@@ -693,55 +693,55 @@ NULL will be returned if the end of the list is reached.
 #[no_mangle]
 
 pub unsafe extern "C" fn G_Find(
-    mut from: *mut crate::g_local_h::gentity_t,
+    mut from: *mut gentity_t,
     mut fieldofs: i32,
     mut match_0: *const libc::c_char,
-) -> *mut crate::g_local_h::gentity_t {
+) -> *mut gentity_t {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     if from.is_null() {
-        from = crate::src::game::g_main::g_entities.as_mut_ptr()
+        from = g_entities.as_mut_ptr()
     } else {
         from = from.offset(1)
     }
     while from
-        < &mut *crate::src::game::g_main::g_entities
+        < &mut *g_entities
             .as_mut_ptr()
-            .offset(crate::src::game::g_main::level.num_entities as isize)
-            as *mut crate::g_local_h::gentity_t
+            .offset(level.num_entities as isize)
+            as *mut gentity_t
     {
         if !((*from).inuse as u64 == 0) {
-            s = *((from as *mut crate::src::qcommon::q_shared::byte).offset(fieldofs as isize)
+            s = *((from as *mut byte).offset(fieldofs as isize)
                 as *mut *mut libc::c_char);
             if !s.is_null() {
-                if crate::src::qcommon::q_shared::Q_stricmp(s, match_0) == 0 {
+                if Q_stricmp(s, match_0) == 0 {
                     return from;
                 }
             }
         }
         from = from.offset(1)
     }
-    return 0 as *mut crate::g_local_h::gentity_t;
+    return 0 as *mut gentity_t;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn G_PickTarget(
     mut targetname: *mut libc::c_char,
-) -> *mut crate::g_local_h::gentity_t {
-    let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+) -> *mut gentity_t {
+    let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     let mut num_choices: i32 = 0 as i32;
-    let mut choice: [*mut crate::g_local_h::gentity_t; 32] =
-        [0 as *mut crate::g_local_h::gentity_t; 32];
+    let mut choice: [*mut gentity_t; 32] =
+        [0 as *mut gentity_t; 32];
     if targetname.is_null() {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"G_PickTarget called with NULL targetname\n\x00" as *const u8 as *const libc::c_char,
         );
-        return 0 as *mut crate::g_local_h::gentity_t;
+        return 0 as *mut gentity_t;
     }
     loop {
         ent = G_Find(
             ent,
-            &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetname as *mut *mut libc::c_char
-                as crate::stddef_h::size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
+                as size_t as i32,
             targetname,
         );
         if ent.is_null() {
@@ -755,13 +755,13 @@ pub unsafe extern "C" fn G_PickTarget(
         }
     }
     if num_choices == 0 {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"G_PickTarget: target %s not found\n\x00" as *const u8 as *const libc::c_char,
             targetname,
         );
-        return 0 as *mut crate::g_local_h::gentity_t;
+        return 0 as *mut gentity_t;
     }
-    return choice[(::libc::rand() % num_choices) as usize];
+    return choice[(libc::rand() % num_choices) as usize];
 }
 /*
 ==============================
@@ -777,41 +777,41 @@ match (string)self.target and call their .use function
 #[no_mangle]
 
 pub unsafe extern "C" fn G_UseTargets(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
+    mut activator: *mut gentity_t,
 ) {
-    let mut t: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut t: *mut gentity_t = 0 as *mut gentity_t;
     if ent.is_null() {
         return;
     }
     if !(*ent).targetShaderName.is_null() && !(*ent).targetShaderNewName.is_null() {
-        let mut f: f32 = (crate::src::game::g_main::level.time as f64 * 0.001f64) as f32;
+        let mut f: f32 = (level.time as f64 * 0.001f64) as f32;
         AddRemap((*ent).targetShaderName, (*ent).targetShaderNewName, f);
-        crate::src::game::g_syscalls::trap_SetConfigstring(24 as i32, BuildShaderStateConfig());
+        trap_SetConfigstring(24 as i32, BuildShaderStateConfig());
     }
     if (*ent).target.is_null() {
         return;
     }
-    t = 0 as *mut crate::g_local_h::gentity_t;
+    t = 0 as *mut gentity_t;
     loop {
         t = G_Find(
             t,
-            &mut (*(0 as *mut crate::g_local_h::gentity_t)).targetname as *mut *mut libc::c_char
-                as crate::stddef_h::size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
+                as size_t as i32,
             (*ent).target,
         );
         if t.is_null() {
             break;
         }
         if t == ent {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"WARNING: Entity used itself.\n\x00" as *const u8 as *const libc::c_char,
             );
         } else if (*t).use_0.is_some() {
             (*t).use_0.expect("non-null function pointer")(t, ent, activator);
         }
         if (*ent).inuse as u64 == 0 {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"entity was removed while using targets\n\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -830,7 +830,7 @@ for making temporary vectors for function calls
 
 pub unsafe extern "C" fn tv(mut x: f32, mut y: f32, mut z: f32) -> *mut f32 {
     static mut index: i32 = 0;
-    static mut vecs: [crate::src::qcommon::q_shared::vec3_t; 8] = [[0.; 3]; 8];
+    static mut vecs: [vec3_t; 8] = [[0.; 3]; 8];
     let mut v: *mut f32 = 0 as *mut f32;
     // use an array so that multiple tempvectors won't collide
     // for a while
@@ -852,7 +852,7 @@ for printing vectors
 #[no_mangle]
 
 pub unsafe extern "C" fn vtos(
-    mut v: *const crate::src::qcommon::q_shared::vec_t,
+    mut v: *const vec_t,
 ) -> *mut libc::c_char {
     static mut index: i32 = 0;
     static mut str: [[libc::c_char; 32]; 8] = [[0; 32]; 8];
@@ -860,7 +860,7 @@ pub unsafe extern "C" fn vtos(
     // use an array so that multiple vtos won't collide
     s = str[index as usize].as_mut_ptr();
     index = index + 1 as i32 & 7 as i32;
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         s,
         32 as i32,
         b"(%i %i %i)\x00" as *const u8 as *const libc::c_char,
@@ -883,62 +883,62 @@ instead of an orientation.
 #[no_mangle]
 
 pub unsafe extern "C" fn G_SetMovedir(
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
-    mut movedir: *mut crate::src::qcommon::q_shared::vec_t,
+    mut angles: *mut vec_t,
+    mut movedir: *mut vec_t,
 ) {
-    static mut VEC_UP: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    static mut VEC_UP: vec3_t = [
+        0 as i32 as vec_t,
+        -(1 as i32) as vec_t,
+        0 as i32 as vec_t,
     ];
-    static mut MOVEDIR_UP: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    static mut MOVEDIR_UP: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
-    static mut VEC_DOWN: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(2 as i32) as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
+    static mut VEC_DOWN: vec3_t = [
+        0 as i32 as vec_t,
+        -(2 as i32) as vec_t,
+        0 as i32 as vec_t,
     ];
-    static mut MOVEDIR_DOWN: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        -(1 as i32) as crate::src::qcommon::q_shared::vec_t,
+    static mut MOVEDIR_DOWN: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        -(1 as i32) as vec_t,
     ];
     if VectorCompare(
-        angles as *const crate::src::qcommon::q_shared::vec_t,
-        VEC_UP.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        angles as *const vec_t,
+        VEC_UP.as_mut_ptr() as *const vec_t,
     ) != 0
     {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_UP[0 as i32 as usize];
         *movedir.offset(1 as i32 as isize) = MOVEDIR_UP[1 as i32 as usize];
         *movedir.offset(2 as i32 as isize) = MOVEDIR_UP[2 as i32 as usize]
     } else if VectorCompare(
-        angles as *const crate::src::qcommon::q_shared::vec_t,
-        VEC_DOWN.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        angles as *const vec_t,
+        VEC_DOWN.as_mut_ptr() as *const vec_t,
     ) != 0
     {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_DOWN[0 as i32 as usize];
         *movedir.offset(1 as i32 as isize) = MOVEDIR_DOWN[1 as i32 as usize];
         *movedir.offset(2 as i32 as isize) = MOVEDIR_DOWN[2 as i32 as usize]
     } else {
-        crate::src::qcommon::q_math::AngleVectors(
-            angles as *const crate::src::qcommon::q_shared::vec_t,
+        AngleVectors(
+            angles as *const vec_t,
             movedir,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+            0 as *mut vec_t,
+            0 as *mut vec_t,
         );
     }
     let ref mut fresh1 = *angles.offset(2 as i32 as isize);
-    *fresh1 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *fresh1 = 0 as i32 as vec_t;
     let ref mut fresh2 = *angles.offset(1 as i32 as isize);
     *fresh2 = *fresh1;
     *angles.offset(0 as i32 as isize) = *fresh2;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vectoyaw(mut vec: *const crate::src::qcommon::q_shared::vec_t) -> f32 {
+pub unsafe extern "C" fn vectoyaw(mut vec: *const vec_t) -> f32 {
     let mut yaw: f32 = 0.;
     if *vec.offset(1 as i32 as isize) == 0 as i32 as f32
         && *vec.offset(0 as i32 as isize) == 0 as i32 as f32
@@ -964,11 +964,11 @@ pub unsafe extern "C" fn vectoyaw(mut vec: *const crate::src::qcommon::q_shared:
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn G_InitGentity(mut e: *mut crate::g_local_h::gentity_t) {
-    (*e).inuse = crate::src::qcommon::q_shared::qtrue;
+pub unsafe extern "C" fn G_InitGentity(mut e: *mut gentity_t) {
+    (*e).inuse = qtrue;
     (*e).classname = b"noclass\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*e).s.number =
-        e.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
+        e.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*e).r.ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
 }
 /*
@@ -988,26 +988,26 @@ angles and bad trails.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_Spawn() -> *mut crate::g_local_h::gentity_t {
+pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
     let mut i: i32 = 0; // shut up warning
     let mut force: i32 = 0;
-    let mut e: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    e = 0 as *mut crate::g_local_h::gentity_t;
+    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    e = 0 as *mut gentity_t;
     force = 0 as i32;
     while force < 2 as i32 {
         // if we go through all entities and can't find one to free,
         // override the normal minimum times before use
-        e = &mut *crate::src::game::g_main::g_entities
+        e = &mut *g_entities
             .as_mut_ptr()
-            .offset(64 as i32 as isize) as *mut crate::g_local_h::gentity_t;
+            .offset(64 as i32 as isize) as *mut gentity_t;
         i = 64 as i32;
-        while i < crate::src::game::g_main::level.num_entities {
+        while i < level.num_entities {
             if !((*e).inuse as u64 != 0) {
                 // the first couple seconds of server time can involve a lot of
                 // freeing and allocating, so relax the replacement policy
                 if !(force == 0
-                    && (*e).freetime > crate::src::game::g_main::level.startTime + 2000 as i32
-                    && crate::src::game::g_main::level.time - (*e).freetime < 1000 as i32)
+                    && (*e).freetime > level.startTime + 2000 as i32
+                    && level.time - (*e).freetime < 1000 as i32)
                 {
                     // reuse this slot
                     G_InitGentity(e);
@@ -1017,37 +1017,37 @@ pub unsafe extern "C" fn G_Spawn() -> *mut crate::g_local_h::gentity_t {
             i += 1;
             e = e.offset(1)
         }
-        if crate::src::game::g_main::level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
+        if level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
             break;
         }
         force += 1
     }
-    if crate::src::game::g_main::level.num_entities == ((1 as i32) << 10 as i32) - 2 as i32 {
+    if level.num_entities == ((1 as i32) << 10 as i32) - 2 as i32 {
         i = 0 as i32;
         while i < (1 as i32) << 10 as i32 {
-            crate::src::game::g_main::G_Printf(
+            G_Printf(
                 b"%4i: %s\n\x00" as *const u8 as *const libc::c_char,
                 i,
-                crate::src::game::g_main::g_entities[i as usize].classname,
+                g_entities[i as usize].classname,
             );
             i += 1
         }
-        crate::src::game::g_main::G_Error(
+        G_Error(
             b"G_Spawn: no free entities\x00" as *const u8 as *const libc::c_char,
         );
     }
     // open up a new slot
-    crate::src::game::g_main::level.num_entities += 1;
+    level.num_entities += 1;
     // let the server system know that there are more entities
-    crate::src::game::g_syscalls::trap_LocateGameData(
-        crate::src::game::g_main::level.gentities as *mut crate::g_local_h::gentity_s,
-        crate::src::game::g_main::level.num_entities,
-        ::std::mem::size_of::<crate::g_local_h::gentity_t>() as libc::c_ulong as i32,
-        &mut (*crate::src::game::g_main::level
+    trap_LocateGameData(
+        level.gentities as *mut gentity_s,
+        level.num_entities,
+        ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
+        &mut (*level
             .clients
             .offset(0 as i32 as isize))
-        .ps as *mut _ as *mut crate::src::qcommon::q_shared::playerState_s,
-        ::std::mem::size_of::<crate::g_local_h::gclient_s>() as libc::c_ulong as i32,
+        .ps as *mut _ as *mut playerState_s,
+        ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
     );
     G_InitGentity(e);
     return e;
@@ -1059,27 +1059,27 @@ G_EntitiesFree
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_EntitiesFree() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn G_EntitiesFree() -> qboolean {
     let mut i: i32 = 0;
-    let mut e: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    if crate::src::game::g_main::level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
+    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    if level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
         // can open a new slot if needed
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    e = &mut *crate::src::game::g_main::g_entities
+    e = &mut *g_entities
         .as_mut_ptr()
-        .offset(64 as i32 as isize) as *mut crate::g_local_h::gentity_t;
+        .offset(64 as i32 as isize) as *mut gentity_t;
     i = 64 as i32;
-    while i < crate::src::game::g_main::level.num_entities {
+    while i < level.num_entities {
         if (*e).inuse as u64 != 0 {
             i += 1;
             e = e.offset(1)
         } else {
             // slot available
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 =================
@@ -1090,19 +1090,19 @@ Marks the entity as free
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_FreeEntity(mut ed: *mut crate::g_local_h::gentity_t) {
-    crate::src::game::g_syscalls::trap_UnlinkEntity(ed as *mut crate::g_local_h::gentity_s); // unlink from world
+pub unsafe extern "C" fn G_FreeEntity(mut ed: *mut gentity_t) {
+    trap_UnlinkEntity(ed as *mut gentity_s); // unlink from world
     if (*ed).neverFree as u64 != 0 {
         return;
     }
     crate::stdlib::memset(
         ed as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::g_local_h::gentity_t>() as libc::c_ulong,
+        ::std::mem::size_of::<gentity_t>() as libc::c_ulong,
     );
     (*ed).classname = b"freed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*ed).freetime = crate::src::game::g_main::level.time;
-    (*ed).inuse = crate::src::qcommon::q_shared::qfalse;
+    (*ed).freetime = level.time;
+    (*ed).inuse = qfalse;
 }
 /*
 =================
@@ -1116,29 +1116,29 @@ must be taken if the origin is right on a surface (snap towards start vector fir
 #[no_mangle]
 
 pub unsafe extern "C" fn G_TempEntity(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut origin: *mut vec_t,
     mut event: i32,
-) -> *mut crate::g_local_h::gentity_t {
-    let mut e: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut snapped: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+) -> *mut gentity_t {
+    let mut e: *mut gentity_t = 0 as *mut gentity_t;
+    let mut snapped: vec3_t = [0.; 3];
     e = G_Spawn();
-    (*e).s.eType = crate::bg_public_h::ET_EVENTS as i32 + event;
+    (*e).s.eType = ET_EVENTS as i32 + event;
     (*e).classname = b"tempEntity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*e).eventTime = crate::src::game::g_main::level.time;
-    (*e).freeAfterEvent = crate::src::qcommon::q_shared::qtrue;
+    (*e).eventTime = level.time;
+    (*e).freeAfterEvent = qtrue;
     snapped[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     snapped[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     snapped[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     snapped[0 as i32 as usize] =
-        snapped[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        snapped[0 as i32 as usize] as i32 as vec_t;
     snapped[1 as i32 as usize] =
-        snapped[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        snapped[1 as i32 as usize] as i32 as vec_t;
     snapped[2 as i32 as usize] =
-        snapped[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        snapped[2 as i32 as usize] as i32 as vec_t;
     // save network bandwidth
     G_SetOrigin(e, snapped.as_mut_ptr());
     // find cluster for PVS
-    crate::src::game::g_syscalls::trap_LinkEntity(e as *mut crate::g_local_h::gentity_s);
+    trap_LinkEntity(e as *mut gentity_s);
     return e;
 }
 /*
@@ -1158,13 +1158,13 @@ of ent.  Ent should be unlinked before calling this!
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_KillBox(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn G_KillBox(mut ent: *mut gentity_t) {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touch: [i32; 1024] = [0; 1024];
-    let mut hit: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut hit: *mut gentity_t = 0 as *mut gentity_t;
+    let mut mins: vec3_t = [0.; 3];
+    let mut maxs: vec3_t = [0.; 3];
     mins[0 as i32 as usize] =
         (*(*ent).client).ps.origin[0 as i32 as usize] + (*ent).r.mins[0 as i32 as usize];
     mins[1 as i32 as usize] =
@@ -1177,29 +1177,29 @@ pub unsafe extern "C" fn G_KillBox(mut ent: *mut crate::g_local_h::gentity_t) {
         (*(*ent).client).ps.origin[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize];
     maxs[2 as i32 as usize] =
         (*(*ent).client).ps.origin[2 as i32 as usize] + (*ent).r.maxs[2 as i32 as usize];
-    num = crate::src::game::g_syscalls::trap_EntitiesInBox(
-        mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    num = trap_EntitiesInBox(
+        mins.as_mut_ptr() as *const vec_t,
+        maxs.as_mut_ptr() as *const vec_t,
         touch.as_mut_ptr(),
         (1 as i32) << 10 as i32,
     );
     i = 0 as i32;
     while i < num {
-        hit = &mut *crate::src::game::g_main::g_entities
+        hit = &mut *g_entities
             .as_mut_ptr()
             .offset(*touch.as_mut_ptr().offset(i as isize) as isize)
-            as *mut crate::g_local_h::gentity_t;
+            as *mut gentity_t;
         if !(*hit).client.is_null() {
             // nail it
-            crate::src::game::g_combat::G_Damage(
-                hit as *mut crate::g_local_h::gentity_s,
-                ent as *mut crate::g_local_h::gentity_s,
-                ent as *mut crate::g_local_h::gentity_s,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            G_Damage(
+                hit as *mut gentity_s,
+                ent as *mut gentity_s,
+                ent as *mut gentity_s,
+                0 as *mut vec_t,
+                0 as *mut vec_t,
                 100000 as i32,
                 0x8 as i32,
-                crate::bg_public_h::MOD_TELEFRAG as i32,
+                MOD_TELEFRAG as i32,
             );
         }
         i += 1
@@ -1218,17 +1218,17 @@ Adds an event+parm and twiddles the event counter
 #[no_mangle]
 
 pub unsafe extern "C" fn G_AddPredictableEvent(
-    mut ent: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
     mut event: i32,
     mut eventParm: i32,
 ) {
     if (*ent).client.is_null() {
         return;
     }
-    crate::src::game::bg_misc::BG_AddPredictableEventToPlayerstate(
+    BG_AddPredictableEventToPlayerstate(
         event,
         eventParm,
-        &mut (*(*ent).client).ps as *mut _ as *mut crate::src::qcommon::q_shared::playerState_s,
+        &mut (*(*ent).client).ps as *mut _ as *mut playerState_s,
     );
 }
 /*
@@ -1241,13 +1241,13 @@ Adds an event+parm and twiddles the event counter
 #[no_mangle]
 
 pub unsafe extern "C" fn G_AddEvent(
-    mut ent: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
     mut event: i32,
     mut eventParm: i32,
 ) {
     let mut bits: i32 = 0;
     if event == 0 {
-        crate::src::game::g_main::G_Printf(
+        G_Printf(
             b"G_AddEvent: zero event added for entity %i\n\x00" as *const u8 as *const libc::c_char,
             (*ent).s.number,
         );
@@ -1259,14 +1259,14 @@ pub unsafe extern "C" fn G_AddEvent(
         bits = bits + 0x100 as i32 & (0x100 as i32 | 0x200 as i32);
         (*(*ent).client).ps.externalEvent = event | bits;
         (*(*ent).client).ps.externalEventParm = eventParm;
-        (*(*ent).client).ps.externalEventTime = crate::src::game::g_main::level.time
+        (*(*ent).client).ps.externalEventTime = level.time
     } else {
         bits = (*ent).s.event & (0x100 as i32 | 0x200 as i32);
         bits = bits + 0x100 as i32 & (0x100 as i32 | 0x200 as i32);
         (*ent).s.event = event | bits;
         (*ent).s.eventParm = eventParm
     }
-    (*ent).eventTime = crate::src::game::g_main::level.time;
+    (*ent).eventTime = level.time;
 }
 /*
 =============
@@ -1276,14 +1276,14 @@ G_Sound
 #[no_mangle]
 
 pub unsafe extern "C" fn G_Sound(
-    mut ent: *mut crate::g_local_h::gentity_t,
+    mut ent: *mut gentity_t,
     mut _channel: i32,
     mut soundIndex: i32,
 ) {
-    let mut te: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
+    let mut te: *mut gentity_t = 0 as *mut gentity_t;
     te = G_TempEntity(
         (*ent).r.currentOrigin.as_mut_ptr(),
-        crate::bg_public_h::EV_GENERAL_SOUND as i32,
+        EV_GENERAL_SOUND as i32,
     );
     (*te).s.eventParm = soundIndex;
 }
@@ -1298,16 +1298,16 @@ Sets the pos trajectory for a fixed position
 #[no_mangle]
 
 pub unsafe extern "C" fn G_SetOrigin(
-    mut ent: *mut crate::g_local_h::gentity_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut ent: *mut gentity_t,
+    mut origin: *mut vec_t,
 ) {
     (*ent).s.pos.trBase[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*ent).s.pos.trBase[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*ent).s.pos.trBase[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY;
+    (*ent).s.pos.trType = TR_STATIONARY;
     (*ent).s.pos.trTime = 0 as i32;
     (*ent).s.pos.trDuration = 0 as i32;
-    (*ent).s.pos.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.pos.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
     (*ent).s.pos.trDelta[1 as i32 as usize] = (*ent).s.pos.trDelta[2 as i32 as usize];
     (*ent).s.pos.trDelta[0 as i32 as usize] = (*ent).s.pos.trDelta[1 as i32 as usize];
     (*ent).r.currentOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
@@ -1325,17 +1325,17 @@ DebugLine
 #[no_mangle]
 
 pub unsafe extern "C" fn DebugLine(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut end: *mut vec_t,
     mut color: i32,
 ) -> i32 {
-    let mut points: [crate::src::qcommon::q_shared::vec3_t; 4] = [[0.; 3]; 4];
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut cross: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut up: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        1 as i32 as crate::src::qcommon::q_shared::vec_t,
+    let mut points: [vec3_t; 4] = [[0.; 3]; 4];
+    let mut dir: vec3_t = [0.; 3];
+    let mut cross: vec3_t = [0.; 3];
+    let mut up: vec3_t = [
+        0 as i32 as vec_t,
+        0 as i32 as vec_t,
+        1 as i32 as vec_t,
     ];
     let mut dot: f32 = 0.;
     points[0 as i32 as usize][0 as i32 as usize] = *start.offset(0 as i32 as isize);
@@ -1355,22 +1355,22 @@ pub unsafe extern "C" fn DebugLine(
     dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-    crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
+    VectorNormalize(dir.as_mut_ptr());
     dot = dir[0 as i32 as usize] * up[0 as i32 as usize]
         + dir[1 as i32 as usize] * up[1 as i32 as usize]
         + dir[2 as i32 as usize] * up[2 as i32 as usize];
     if dot as f64 > 0.99f64 || (dot as f64) < -0.99f64 {
-        cross[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
-        cross[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        cross[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
+        cross[0 as i32 as usize] = 1 as i32 as vec_t;
+        cross[1 as i32 as usize] = 0 as i32 as vec_t;
+        cross[2 as i32 as usize] = 0 as i32 as vec_t
     } else {
         CrossProduct(
-            dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            dir.as_mut_ptr() as *const vec_t,
+            up.as_mut_ptr() as *const vec_t,
             cross.as_mut_ptr(),
         );
     }
-    crate::src::qcommon::q_math::VectorNormalize(cross.as_mut_ptr());
+    VectorNormalize(cross.as_mut_ptr());
     points[0 as i32 as usize][0 as i32 as usize] =
         points[0 as i32 as usize][0 as i32 as usize] + cross[0 as i32 as usize] * 2 as i32 as f32;
     points[0 as i32 as usize][1 as i32 as usize] =
@@ -1395,7 +1395,7 @@ pub unsafe extern "C" fn DebugLine(
         points[3 as i32 as usize][1 as i32 as usize] + cross[1 as i32 as usize] * 2 as i32 as f32;
     points[3 as i32 as usize][2 as i32 as usize] =
         points[3 as i32 as usize][2 as i32 as usize] + cross[2 as i32 as usize] * 2 as i32 as f32;
-    return crate::src::game::g_syscalls::trap_DebugPolygonCreate(
+    return trap_DebugPolygonCreate(
         color,
         4 as i32,
         points.as_mut_ptr(),

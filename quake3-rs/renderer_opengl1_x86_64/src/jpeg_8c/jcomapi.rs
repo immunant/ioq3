@@ -92,7 +92,7 @@ pub use crate::jpeglib_h::J_DITHER_MODE;
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_abort(mut cinfo: crate::jpeglib_h::j_common_ptr) {
+pub unsafe extern "C" fn jpeg_abort(mut cinfo: j_common_ptr) {
     let mut pool: i32 = 0;
     /* Do nothing if called on a not-initialized or destroyed JPEG object. */
     if (*cinfo).mem.is_null() {
@@ -117,8 +117,8 @@ pub unsafe extern "C" fn jpeg_abort(mut cinfo: crate::jpeglib_h::j_common_ptr) {
         /* Try to keep application from accessing now-deleted marker list.
          * A bit kludgy to do it here, but this is the most central place.
          */
-        let ref mut fresh0 = (*(cinfo as crate::jpeglib_h::j_decompress_ptr)).marker_list;
-        *fresh0 = 0 as crate::jpeglib_h::jpeg_saved_marker_ptr
+        let ref mut fresh0 = (*(cinfo as j_decompress_ptr)).marker_list;
+        *fresh0 = 0 as jpeg_saved_marker_ptr
     } else {
         (*cinfo).global_state = 100 as i32
     };
@@ -173,7 +173,7 @@ pub unsafe extern "C" fn jpeg_abort(mut cinfo: crate::jpeglib_h::j_common_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_destroy(mut cinfo: crate::jpeglib_h::j_common_ptr) {
+pub unsafe extern "C" fn jpeg_destroy(mut cinfo: j_common_ptr) {
     /* We need only tell the memory manager to release everything. */
     /* NB: mem pointer is NULL if memory mgr failed to initialize. */
     if !(*cinfo).mem.is_null() {
@@ -184,7 +184,7 @@ pub unsafe extern "C" fn jpeg_destroy(mut cinfo: crate::jpeglib_h::j_common_ptr)
         )
         .expect("non-null function pointer")(cinfo); /* be safe if jpeg_destroy is called twice */
     }
-    (*cinfo).mem = 0 as *mut crate::jpeglib_h::jpeg_memory_mgr;
+    (*cinfo).mem = 0 as *mut jpeg_memory_mgr;
     (*cinfo).global_state = 0 as i32;
     /* mark it destroyed */
 }
@@ -195,9 +195,9 @@ pub unsafe extern "C" fn jpeg_destroy(mut cinfo: crate::jpeglib_h::j_common_ptr)
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_alloc_quant_table(
-    mut cinfo: crate::jpeglib_h::j_common_ptr,
-) -> *mut crate::jpeglib_h::JQUANT_TBL {
-    let mut tbl: *mut crate::jpeglib_h::JQUANT_TBL = 0 as *mut crate::jpeglib_h::JQUANT_TBL; /* make sure this is false in any new table */
+    mut cinfo: j_common_ptr,
+) -> *mut JQUANT_TBL {
+    let mut tbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL; /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -206,8 +206,8 @@ pub unsafe extern "C" fn jpeg_alloc_quant_table(
     .expect("non-null function pointer")(
         cinfo,
         0 as i32,
-        ::std::mem::size_of::<crate::jpeglib_h::JQUANT_TBL>() as libc::c_ulong,
-    ) as *mut crate::jpeglib_h::JQUANT_TBL;
+        ::std::mem::size_of::<JQUANT_TBL>() as libc::c_ulong,
+    ) as *mut JQUANT_TBL;
     (*tbl).sent_table = 0 as i32;
     return tbl;
 }
@@ -242,9 +242,9 @@ pub unsafe extern "C" fn jpeg_alloc_quant_table(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_alloc_huff_table(
-    mut cinfo: crate::jpeglib_h::j_common_ptr,
-) -> *mut crate::jpeglib_h::JHUFF_TBL {
-    let mut tbl: *mut crate::jpeglib_h::JHUFF_TBL = 0 as *mut crate::jpeglib_h::JHUFF_TBL; /* make sure this is false in any new table */
+    mut cinfo: j_common_ptr,
+) -> *mut JHUFF_TBL {
+    let mut tbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL; /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -253,8 +253,8 @@ pub unsafe extern "C" fn jpeg_alloc_huff_table(
     .expect("non-null function pointer")(
         cinfo,
         0 as i32,
-        ::std::mem::size_of::<crate::jpeglib_h::JHUFF_TBL>() as libc::c_ulong,
-    ) as *mut crate::jpeglib_h::JHUFF_TBL;
+        ::std::mem::size_of::<JHUFF_TBL>() as libc::c_ulong,
+    ) as *mut JHUFF_TBL;
     (*tbl).sent_table = 0 as i32;
     return tbl;
 }

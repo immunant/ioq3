@@ -89,7 +89,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_quant_pred(
-    mut pred_Q13: *mut crate::opus_types_h::opus_int32,
+    mut pred_Q13: *mut opus_int32,
     mut ix: *mut [i8; 3],
 )
 /* O    Quantization indices                        */
@@ -97,12 +97,12 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut n: i32 = 0;
-    let mut low_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut step_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut lvl_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut err_min_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut err_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut quant_pred_Q13: crate::opus_types_h::opus_int32 = 0 as i32;
+    let mut low_Q13: opus_int32 = 0;
+    let mut step_Q13: opus_int32 = 0;
+    let mut lvl_Q13: opus_int32 = 0;
+    let mut err_min_Q13: opus_int32 = 0;
+    let mut err_Q13: opus_int32 = 0;
+    let mut quant_pred_Q13: opus_int32 = 0 as i32;
     /* Quantize */
     n = 0 as i32;
     while n < 2 as i32 {
@@ -111,21 +111,21 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
         i = 0 as i32;
         's_23: while i < 16 as i32 - 1 as i32 {
             low_Q13 = crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
-                [i as usize] as crate::opus_types_h::opus_int32;
+                [i as usize] as opus_int32;
             step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
                 [(i + 1 as i32) as usize] as i32
                 - low_Q13) as i64
                 * (0.5f64 / 5 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                    as crate::opus_types_h::opus_int32
-                    as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32;
+                    as opus_int32
+                    as opus_int16 as i64
+                >> 16 as i32) as opus_int32;
             j = 0 as i32;
             while j < 5 as i32 {
                 lvl_Q13 = low_Q13
-                    + step_Q13 as crate::opus_types_h::opus_int16
-                        as crate::opus_types_h::opus_int32
-                        * (2 as i32 * j + 1 as i32) as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32;
+                    + step_Q13 as opus_int16
+                        as opus_int32
+                        * (2 as i32 * j + 1 as i32) as opus_int16
+                            as opus_int32;
                 err_Q13 = if *pred_Q13.offset(n as isize) - lvl_Q13 > 0 as i32 {
                     (*pred_Q13.offset(n as isize)) - lvl_Q13
                 } else {

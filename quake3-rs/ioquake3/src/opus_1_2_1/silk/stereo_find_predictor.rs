@@ -287,30 +287,30 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_stereo_find_predictor(
-    mut ratio_Q14: *mut crate::opus_types_h::opus_int32,
-    mut x: *const crate::opus_types_h::opus_int16,
-    mut y: *const crate::opus_types_h::opus_int16,
-    mut mid_res_amp_Q0: *mut crate::opus_types_h::opus_int32,
+    mut ratio_Q14: *mut opus_int32,
+    mut x: *const opus_int16,
+    mut y: *const opus_int16,
+    mut mid_res_amp_Q0: *mut opus_int32,
     mut length: i32,
     mut smooth_coef_Q16: i32,
-) -> crate::opus_types_h::opus_int32
+) -> opus_int32
 /* I    Smoothing coefficient                       */ {
     let mut scale: i32 = 0;
     let mut scale1: i32 = 0;
     let mut scale2: i32 = 0;
-    let mut nrgx: crate::opus_types_h::opus_int32 = 0;
-    let mut nrgy: crate::opus_types_h::opus_int32 = 0;
-    let mut corr: crate::opus_types_h::opus_int32 = 0;
-    let mut pred_Q13: crate::opus_types_h::opus_int32 = 0;
-    let mut pred2_Q10: crate::opus_types_h::opus_int32 = 0;
+    let mut nrgx: opus_int32 = 0;
+    let mut nrgy: opus_int32 = 0;
+    let mut corr: opus_int32 = 0;
+    let mut pred_Q13: opus_int32 = 0;
+    let mut pred2_Q10: opus_int32 = 0;
     /* Find  predictor */
-    crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+    silk_sum_sqr_shift(
         &mut nrgx,
         &mut scale1,
         x,
         length,
     ); /* make even */
-    crate::src::opus_1_2_1::silk::sum_sqr_shift::silk_sum_sqr_shift(
+    silk_sum_sqr_shift(
         &mut nrgy,
         &mut scale2,
         y,
@@ -321,7 +321,7 @@ pub unsafe extern "C" fn silk_stereo_find_predictor(
     nrgy = nrgy >> scale - scale2;
     nrgx = nrgx >> scale - scale1;
     nrgx = silk_max_int(nrgx, 1 as i32);
-    corr = crate::src::opus_1_2_1::silk::inner_prod_aligned::silk_inner_prod_aligned_scale(
+    corr = silk_inner_prod_aligned_scale(
         x, y, scale, length,
     );
     pred_Q13 = silk_DIV32_varQ(corr, nrgx, 13 as i32);
@@ -340,8 +340,8 @@ pub unsafe extern "C" fn silk_stereo_find_predictor(
     } else {
         pred_Q13
     };
-    pred2_Q10 = (pred_Q13 as i64 * pred_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-        as crate::opus_types_h::opus_int32;
+    pred2_Q10 = (pred_Q13 as i64 * pred_Q13 as opus_int16 as i64 >> 16 as i32)
+        as opus_int32;
     /* Faster update for signals with large prediction parameters */
     smooth_coef_Q16 = silk_max_int(
         smooth_coef_Q16,
@@ -354,28 +354,28 @@ pub unsafe extern "C" fn silk_stereo_find_predictor(
     /* Smoothed mid and residual norms */
     scale = scale >> 1 as i32;
     *mid_res_amp_Q0.offset(0 as i32 as isize) = (*mid_res_amp_Q0.offset(0 as i32 as isize) as i64
-        + ((((silk_SQRT_APPROX(nrgx) as crate::opus_types_h::opus_uint32) << scale)
-            as crate::opus_types_h::opus_int32
+        + ((((silk_SQRT_APPROX(nrgx) as opus_uint32) << scale)
+            as opus_int32
             - *mid_res_amp_Q0.offset(0 as i32 as isize)) as i64
-            * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
+            * smooth_coef_Q16 as opus_int16 as i64
             >> 16 as i32))
-        as crate::opus_types_h::opus_int32;
+        as opus_int32;
     /* Residual energy = nrgy - 2 * pred * corr + pred^2 * nrgx */
     nrgy = nrgy
-        - (((corr as i64 * pred_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32)
-            << 3 as i32 + 1 as i32) as crate::opus_types_h::opus_int32;
+        - (((corr as i64 * pred_Q13 as opus_int16 as i64 >> 16 as i32)
+            as opus_int32 as opus_uint32)
+            << 3 as i32 + 1 as i32) as opus_int32;
     nrgy = nrgy
-        + (((nrgx as i64 * pred2_Q10 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32)
-            << 6 as i32) as crate::opus_types_h::opus_int32;
+        + (((nrgx as i64 * pred2_Q10 as opus_int16 as i64 >> 16 as i32)
+            as opus_int32 as opus_uint32)
+            << 6 as i32) as opus_int32;
     *mid_res_amp_Q0.offset(1 as i32 as isize) = (*mid_res_amp_Q0.offset(1 as i32 as isize) as i64
-        + ((((silk_SQRT_APPROX(nrgy) as crate::opus_types_h::opus_uint32) << scale)
-            as crate::opus_types_h::opus_int32
+        + ((((silk_SQRT_APPROX(nrgy) as opus_uint32) << scale)
+            as opus_int32
             - *mid_res_amp_Q0.offset(1 as i32 as isize)) as i64
-            * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
+            * smooth_coef_Q16 as opus_int16 as i64
             >> 16 as i32))
-        as crate::opus_types_h::opus_int32;
+        as opus_int32;
     /* Ratio of smoothed residual and mid norms */
     *ratio_Q14 = silk_DIV32_varQ(
         *mid_res_amp_Q0.offset(1 as i32 as isize),

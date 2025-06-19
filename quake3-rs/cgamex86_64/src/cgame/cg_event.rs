@@ -466,27 +466,27 @@ pub unsafe extern "C" fn CG_PlaceString(mut rank: i32) -> *const libc::c_char {
     } else if rank == 13 as i32 {
         s = b"13th\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else if rank % 10 as i32 == 1 as i32 {
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%ist\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             rank,
         )
     } else if rank % 10 as i32 == 2 as i32 {
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%ind\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             rank,
         )
     } else if rank % 10 as i32 == 3 as i32 {
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%ird\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             rank,
         )
     } else {
-        s = crate::src::qcommon::q_shared::va(
+        s = va(
             b"%ith\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             rank,
         )
     }
-    crate::src::qcommon::q_shared::Com_sprintf(
+    Com_sprintf(
         str.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"%s%s\x00" as *const u8 as *const libc::c_char,
@@ -501,7 +501,7 @@ CG_Obituary
 =============
 */
 
-unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::entityState_t) {
+unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     let mut mod_0: i32 = 0;
     let mut target: i32 = 0;
     let mut attacker: i32 = 0;
@@ -511,43 +511,43 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
     let mut attackerInfo: *const libc::c_char = 0 as *const libc::c_char;
     let mut targetName: [libc::c_char; 32] = [0; 32];
     let mut attackerName: [libc::c_char; 32] = [0; 32];
-    let mut gender: crate::bg_public_h::gender_t = crate::bg_public_h::GENDER_MALE;
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut gender: gender_t = GENDER_MALE;
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     target = (*ent).otherEntityNum;
     attacker = (*ent).otherEntityNum2;
     mod_0 = (*ent).eventParm;
     if target < 0 as i32 || target >= 64 as i32 {
-        crate::src::cgame::cg_main::CG_Error(
+        CG_Error(
             b"CG_Obituary: target out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
-    ci = &mut *crate::src::cgame::cg_main::cgs
+    ci = &mut *cgs
         .clientinfo
         .as_mut_ptr()
-        .offset(target as isize) as *mut crate::cg_local_h::clientInfo_t;
+        .offset(target as isize) as *mut clientInfo_t;
     if attacker < 0 as i32 || attacker >= 64 as i32 {
         attacker = ((1 as i32) << 10 as i32) - 2 as i32;
         attackerInfo = 0 as *const libc::c_char
     } else {
-        attackerInfo = crate::src::cgame::cg_main::CG_ConfigString(
+        attackerInfo = CG_ConfigString(
             32 as i32 + 256 as i32 + 256 as i32 + attacker,
         )
     }
     targetInfo =
-        crate::src::cgame::cg_main::CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + target);
+        CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + target);
     if targetInfo.is_null() {
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         targetName.as_mut_ptr(),
-        crate::src::qcommon::q_shared::Info_ValueForKey(
+        Info_ValueForKey(
             targetInfo,
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
         (::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
             .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
     );
-    ::libc::strcat(
+    libc::strcat(
         targetName.as_mut_ptr(),
         b"^7\x00" as *const u8 as *const libc::c_char,
     );
@@ -581,10 +581,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
         gender = (*ci).gender;
         match mod_0 {
             5 => {
-                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
+                if gender as u32 == GENDER_FEMALE as i32 as u32 {
                     message = b"tripped on her own grenade\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
+                } else if gender as u32 == GENDER_NEUTER as i32 as u32 {
                     message = b"tripped on its own grenade\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -593,10 +593,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                 }
             }
             7 => {
-                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
+                if gender as u32 == GENDER_FEMALE as i32 as u32 {
                     message = b"blew herself up\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
+                } else if gender as u32 == GENDER_NEUTER as i32 as u32 {
                     message = b"blew itself up\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -605,10 +605,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                 }
             }
             9 => {
-                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
+                if gender as u32 == GENDER_FEMALE as i32 as u32 {
                     message = b"melted herself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
+                } else if gender as u32 == GENDER_NEUTER as i32 as u32 {
                     message = b"melted itself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -621,10 +621,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                     as *mut libc::c_char
             }
             _ => {
-                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
+                if gender as u32 == GENDER_FEMALE as i32 as u32 {
                     message = b"killed herself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
+                } else if gender as u32 == GENDER_NEUTER as i32 as u32 {
                     message = b"killed itself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -635,7 +635,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
         }
     }
     if !message.is_null() {
-        crate::src::cgame::cg_main::CG_Printf(
+        CG_Printf(
             b"%s %s.\n\x00" as *const u8 as *const libc::c_char,
             targetName.as_mut_ptr(),
             message,
@@ -643,30 +643,30 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
         return;
     }
     // check for kill messages from the current clientNum
-    if attacker == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+    if attacker == (*cg.snap).ps.clientNum {
         let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-        if (crate::src::cgame::cg_main::cgs.gametype as u32)
-            < crate::bg_public_h::GT_TEAM as i32 as u32
+        if (cgs.gametype as u32)
+            < GT_TEAM as i32 as u32
         {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"You fragged %s\n%s place with %i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 targetName.as_mut_ptr(),
                 CG_PlaceString(
-                    (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                    (*cg.snap).ps.persistant
+                        [PERS_RANK as i32 as usize]
                         + 1 as i32,
                 ),
-                (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                    [crate::bg_public_h::PERS_SCORE as i32 as usize],
+                (*cg.snap).ps.persistant
+                    [PERS_SCORE as i32 as usize],
             )
         } else {
-            s = crate::src::qcommon::q_shared::va(
+            s = va(
                 b"You fragged %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 targetName.as_mut_ptr(),
             )
         }
-        crate::src::cgame::cg_draw::CG_CenterPrint(
+        CG_CenterPrint(
             s,
             (480 as i32 as f64 * 0.30f64) as i32,
             16 as i32,
@@ -676,28 +676,28 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
     // check for double client messages
     if attackerInfo.is_null() {
         attacker = ((1 as i32) << 10 as i32) - 2 as i32;
-        ::libc::strcpy(
+        libc::strcpy(
             attackerName.as_mut_ptr(),
             b"noname\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             attackerName.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 attackerInfo,
                 b"n\x00" as *const u8 as *const libc::c_char,
             ),
             (::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
                 .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
         );
-        ::libc::strcat(
+        libc::strcat(
             attackerName.as_mut_ptr(),
             b"^7\x00" as *const u8 as *const libc::c_char,
         );
         // check for kill messages about the current clientNum
-        if target == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-            crate::src::qcommon::q_shared::Q_strncpyz(
-                crate::src::cgame::cg_main::cg.killerName.as_mut_ptr(),
+        if target == (*cg.snap).ps.clientNum {
+            Q_strncpyz(
+                cg.killerName.as_mut_ptr(),
                 attackerName.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
@@ -780,7 +780,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
             }
         }
         if !message.is_null() {
-            crate::src::cgame::cg_main::CG_Printf(
+            CG_Printf(
                 b"%s %s %s%s\n\x00" as *const u8 as *const libc::c_char,
                 targetName.as_mut_ptr(),
                 message,
@@ -791,7 +791,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
         }
     }
     // we don't know what it was
-    crate::src::cgame::cg_main::CG_Printf(
+    CG_Printf(
         b"%s died.\n\x00" as *const u8 as *const libc::c_char,
         targetName.as_mut_ptr(),
     );
@@ -803,33 +803,33 @@ CG_UseItem
 ===============
 */
 
-unsafe extern "C" fn CG_UseItem(mut cent: *mut crate::cg_local_h::centity_t) {
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut itemNum: i32 = 0;
     let mut clientNum: i32 = 0;
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    let mut es: *mut entityState_t =
+        0 as *mut entityState_t;
     es = &mut (*cent).currentState;
     itemNum =
-        ((*es).event & !(0x100 as i32 | 0x200 as i32)) - crate::bg_public_h::EV_USE_ITEM0 as i32;
-    if itemNum < 0 as i32 || itemNum > crate::bg_public_h::HI_NUM_HOLDABLE as i32 {
+        ((*es).event & !(0x100 as i32 | 0x200 as i32)) - EV_USE_ITEM0 as i32;
+    if itemNum < 0 as i32 || itemNum > HI_NUM_HOLDABLE as i32 {
         itemNum = 0 as i32
     }
     // print a message if the local player
-    if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+    if (*es).number == (*cg.snap).ps.clientNum {
         if itemNum == 0 {
-            crate::src::cgame::cg_draw::CG_CenterPrint(
+            CG_CenterPrint(
                 b"No item to use\x00" as *const u8 as *const libc::c_char,
                 (480 as i32 as f64 * 0.30f64) as i32,
                 16 as i32,
             );
         } else {
-            item = crate::src::game::bg_misc::BG_FindItemForHoldable(
-                itemNum as crate::bg_public_h::holdable_t,
-            ) as *mut crate::bg_public_h::gitem_s;
-            crate::src::cgame::cg_draw::CG_CenterPrint(
-                crate::src::qcommon::q_shared::va(
+            item = BG_FindItemForHoldable(
+                itemNum as holdable_t,
+            ) as *mut gitem_s;
+            CG_CenterPrint(
+                va(
                     b"Use %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     (*item).pickup_name,
                 ),
@@ -843,26 +843,26 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut crate::cg_local_h::centity_t) {
         2 => {
             clientNum = (*cent).currentState.clientNum;
             if clientNum >= 0 as i32 && clientNum < 64 as i32 {
-                ci = &mut *crate::src::cgame::cg_main::cgs
+                ci = &mut *cgs
                     .clientinfo
                     .as_mut_ptr()
                     .offset(clientNum as isize)
-                    as *mut crate::cg_local_h::clientInfo_t;
-                (*ci).medkitUsageTime = crate::src::cgame::cg_main::cg.time
+                    as *mut clientInfo_t;
+                (*ci).medkitUsageTime = cg.time
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                crate::src::cgame::cg_main::cgs.media.medkitSound,
+                CHAN_BODY as i32,
+                cgs.media.medkitSound,
             );
         }
         0 | _ => {
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                crate::src::cgame::cg_main::cgs.media.useNothingSound,
+                CHAN_BODY as i32,
+                cgs.media.useNothingSound,
             );
         }
     };
@@ -876,26 +876,26 @@ A new item was picked up this frame
 */
 
 unsafe extern "C" fn CG_ItemPickup(mut itemNum: i32) {
-    crate::src::cgame::cg_main::cg.itemPickup = itemNum;
-    crate::src::cgame::cg_main::cg.itemPickupTime = crate::src::cgame::cg_main::cg.time;
-    crate::src::cgame::cg_main::cg.itemPickupBlendTime = crate::src::cgame::cg_main::cg.time;
+    cg.itemPickup = itemNum;
+    cg.itemPickupTime = cg.time;
+    cg.itemPickupBlendTime = cg.time;
     // see if it should be the grabbed weapon
-    if (*crate::src::game::bg_misc::bg_itemlist
+    if (*bg_itemlist
         .as_mut_ptr()
         .offset(itemNum as isize))
     .giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
+        == IT_WEAPON as i32 as u32
     {
         // select it immediately
-        if crate::src::cgame::cg_main::cg_autoswitch.integer != 0
-            && (*crate::src::game::bg_misc::bg_itemlist
+        if cg_autoswitch.integer != 0
+            && (*bg_itemlist
                 .as_mut_ptr()
                 .offset(itemNum as isize))
             .giTag
-                != crate::bg_public_h::WP_MACHINEGUN as i32
+                != WP_MACHINEGUN as i32
         {
-            crate::src::cgame::cg_main::cg.weaponSelectTime = crate::src::cgame::cg_main::cg.time;
-            crate::src::cgame::cg_main::cg.weaponSelect = (*crate::src::game::bg_misc::bg_itemlist
+            cg.weaponSelectTime = cg.time;
+            cg.weaponSelect = (*bg_itemlist
                 .as_mut_ptr()
                 .offset(itemNum as isize))
             .giTag
@@ -911,8 +911,8 @@ Returns waterlevel for entity origin
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity_t) -> i32 {
-    let mut point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut centity_t) -> i32 {
+    let mut point: vec3_t = [0.; 3];
     let mut contents: i32 = 0;
     let mut sample1: i32 = 0;
     let mut sample2: i32 = 0;
@@ -920,8 +920,8 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity
     let mut waterlevel: i32 = 0;
     let mut viewheight: i32 = 0;
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == crate::bg_public_h::LEGS_WALKCR as i32
-        || anim == crate::bg_public_h::LEGS_IDLECR as i32
+    if anim == LEGS_WALKCR as i32
+        || anim == LEGS_IDLECR as i32
     {
         viewheight = 12 as i32
     } else {
@@ -935,8 +935,8 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity
     point[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
     point[2 as i32 as usize] =
         (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + 1 as i32 as f32;
-    contents = crate::src::cgame::cg_predict::CG_PointContents(
-        point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+    contents = CG_PointContents(
+        point.as_mut_ptr() as *const vec_t,
         -(1 as i32),
     );
     if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
@@ -945,16 +945,16 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity
         waterlevel = 1 as i32;
         point[2 as i32 as usize] =
             (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample1 as f32;
-        contents = crate::src::cgame::cg_predict::CG_PointContents(
-            point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        contents = CG_PointContents(
+            point.as_mut_ptr() as *const vec_t,
             -(1 as i32),
         );
         if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
             waterlevel = 2 as i32;
             point[2 as i32 as usize] =
                 (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample2 as f32;
-            contents = crate::src::cgame::cg_predict::CG_PointContents(
-                point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            contents = CG_PointContents(
+                point.as_mut_ptr() as *const vec_t,
                 -(1 as i32),
             );
             if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
@@ -974,12 +974,12 @@ Also called by playerstate transition
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_PainEvent(
-    mut cent: *mut crate::cg_local_h::centity_t,
+    mut cent: *mut centity_t,
     mut health: i32,
 ) {
     let mut snd: *mut libc::c_char = 0 as *mut libc::c_char;
     // don't do more than two pain sounds a second
-    if crate::src::cgame::cg_main::cg.time - (*cent).pe.painTime < 500 as i32 {
+    if cg.time - (*cent).pe.painTime < 500 as i32 {
         return;
     }
     if health < 25 as i32 {
@@ -993,37 +993,37 @@ pub unsafe extern "C" fn CG_PainEvent(
     }
     // play a gurp sound instead of a normal pain sound
     if CG_WaterLevel(cent) == 3 as i32 {
-        if ::libc::rand() & 1 as i32 != 0 {
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+        if libc::rand() & 1 as i32 != 0 {
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*cent).currentState.number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*cent).currentState.number,
                     b"sound/player/gurp1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         } else {
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*cent).currentState.number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*cent).currentState.number,
                     b"sound/player/gurp2.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         }
     } else {
-        crate::src::cgame::cg_syscalls::trap_S_StartSound(
-            0 as *mut crate::src::qcommon::q_shared::vec_t,
+        trap_S_StartSound(
+            0 as *mut vec_t,
             (*cent).currentState.number,
-            crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-            crate::src::cgame::cg_players::CG_CustomSound((*cent).currentState.number, snd),
+            CHAN_VOICE as i32,
+            CG_CustomSound((*cent).currentState.number, snd),
         );
     }
     // save pain time for programitic twitch animation
-    (*cent).pe.painTime = crate::src::cgame::cg_main::cg.time;
+    (*cent).pe.painTime = cg.time;
     (*cent).pe.painDirection ^= 1 as i32;
 }
 /*
@@ -1037,28 +1037,28 @@ also called by CG_CheckPlayerstateEvents
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_EntityEvent(
-    mut cent: *mut crate::cg_local_h::centity_t,
-    mut position: *mut crate::src::qcommon::q_shared::vec_t,
+    mut cent: *mut centity_t,
+    mut position: *mut vec_t,
 ) {
-    let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
-        0 as *mut crate::src::qcommon::q_shared::entityState_t;
+    let mut es: *mut entityState_t =
+        0 as *mut entityState_t;
     let mut event: i32 = 0;
-    let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
+    let mut dir: vec3_t = [0.; 3];
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut clientNum: i32 = 0;
-    let mut ci: *mut crate::cg_local_h::clientInfo_t = 0 as *mut crate::cg_local_h::clientInfo_t;
+    let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     es = &mut (*cent).currentState;
     event = (*es).event & !(0x100 as i32 | 0x200 as i32);
-    if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-        crate::src::cgame::cg_main::CG_Printf(
+    if cg_debugEvents.integer != 0 {
+        CG_Printf(
             b"ent:%3i  event:%3i \x00" as *const u8 as *const libc::c_char,
             (*es).number,
             event,
         );
     }
     if event == 0 {
-        if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-            crate::src::cgame::cg_main::CG_Printf(
+        if cg_debugEvents.integer != 0 {
+            CG_Printf(
                 b"ZEROEVENT\n\x00" as *const u8 as *const libc::c_char,
             );
         }
@@ -1068,176 +1068,176 @@ pub unsafe extern "C" fn CG_EntityEvent(
     if clientNum < 0 as i32 || clientNum >= 64 as i32 {
         clientNum = 0 as i32
     }
-    ci = &mut *crate::src::cgame::cg_main::cgs
+    ci = &mut *cgs
         .clientinfo
         .as_mut_ptr()
-        .offset(clientNum as isize) as *mut crate::cg_local_h::clientInfo_t;
+        .offset(clientNum as isize) as *mut clientInfo_t;
     match event {
         1 => {
             //
             // movement generated events
             //
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FOOTSTEP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cg_footsteps.integer != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cg_footsteps.integer != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.footsteps[(*ci).footsteps as usize]
-                        [(::libc::rand() & 3 as i32) as usize],
+                    CHAN_BODY as i32,
+                    cgs.media.footsteps[(*ci).footsteps as usize]
+                        [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         2 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FOOTSTEP_METAL\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cg_footsteps.integer != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cg_footsteps.integer != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.footsteps
-                        [crate::cg_local_h::FOOTSTEP_METAL as i32 as usize]
-                        [(::libc::rand() & 3 as i32) as usize],
+                    CHAN_BODY as i32,
+                    cgs.media.footsteps
+                        [FOOTSTEP_METAL as i32 as usize]
+                        [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         3 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FOOTSPLASH\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cg_footsteps.integer != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cg_footsteps.integer != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.footsteps
-                        [crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize]
-                        [(::libc::rand() & 3 as i32) as usize],
+                    CHAN_BODY as i32,
+                    cgs.media.footsteps
+                        [FOOTSTEP_SPLASH as i32 as usize]
+                        [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         4 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FOOTWADE\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cg_footsteps.integer != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cg_footsteps.integer != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.footsteps
-                        [crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize]
-                        [(::libc::rand() & 3 as i32) as usize],
+                    CHAN_BODY as i32,
+                    cgs.media.footsteps
+                        [FOOTSTEP_SPLASH as i32 as usize]
+                        [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         5 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_SWIM\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cg_footsteps.integer != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cg_footsteps.integer != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.footsteps
-                        [crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize]
-                        [(::libc::rand() & 3 as i32) as usize],
+                    CHAN_BODY as i32,
+                    cgs.media.footsteps
+                        [FOOTSTEP_SPLASH as i32 as usize]
+                        [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         10 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FALL_SHORT\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.landSound,
+                CHAN_AUTO as i32,
+                cgs.media.landSound,
             );
             if clientNum
-                == crate::src::cgame::cg_main::cg
+                == cg
                     .predictedPlayerState
                     .clientNum
             {
                 // smooth landing z changes
-                crate::src::cgame::cg_main::cg.landChange = -(8 as i32) as f32;
-                crate::src::cgame::cg_main::cg.landTime = crate::src::cgame::cg_main::cg.time
+                cg.landChange = -(8 as i32) as f32;
+                cg.landTime = cg.time
             }
         }
         11 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FALL_MEDIUM\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             // use normal pain sound
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*pain100_1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
             if clientNum
-                == crate::src::cgame::cg_main::cg
+                == cg
                     .predictedPlayerState
                     .clientNum
             {
                 // smooth landing z changes
-                crate::src::cgame::cg_main::cg.landChange = -(16 as i32) as f32; // don't play a pain sound right after this
-                crate::src::cgame::cg_main::cg.landTime = crate::src::cgame::cg_main::cg.time
+                cg.landChange = -(16 as i32) as f32; // don't play a pain sound right after this
+                cg.landTime = cg.time
             }
         }
         12 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FALL_FAR\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_AUTO as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*fall1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
-            (*cent).pe.painTime = crate::src::cgame::cg_main::cg.time;
+            (*cent).pe.painTime = cg.time;
             if clientNum
-                == crate::src::cgame::cg_main::cg
+                == cg
                     .predictedPlayerState
                     .clientNum
             {
                 // smooth landing z changes
-                crate::src::cgame::cg_main::cg.landChange = -(24 as i32) as f32;
-                crate::src::cgame::cg_main::cg.landTime = crate::src::cgame::cg_main::cg.time
+                cg.landChange = -(24 as i32) as f32;
+                cg.landTime = cg.time
             }
         }
         6 | 7 | 8 | 9 => {
             // smooth out step up transitions
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_STEP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -1245,240 +1245,240 @@ pub unsafe extern "C" fn CG_EntityEvent(
             let mut delta: i32 = 0;
             let mut step: i32 = 0;
             if !(clientNum
-                != crate::src::cgame::cg_main::cg
+                != cg
                     .predictedPlayerState
                     .clientNum)
             {
                 // if we are interpolating, we don't need to smooth steps
-                if !(crate::src::cgame::cg_main::cg.demoPlayback as u32 != 0
-                    || (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0
-                    || crate::src::cgame::cg_main::cg_nopredict.integer != 0
-                    || crate::src::cgame::cg_main::cg_synchronousClients.integer != 0)
+                if !(cg.demoPlayback as u32 != 0
+                    || (*cg.snap).ps.pm_flags & 4096 as i32 != 0
+                    || cg_nopredict.integer != 0
+                    || cg_synchronousClients.integer != 0)
                 {
                     // check for stepping up before a previous step is completed
-                    delta = crate::src::cgame::cg_main::cg.time
-                        - crate::src::cgame::cg_main::cg.stepTime;
+                    delta = cg.time
+                        - cg.stepTime;
                     if delta < 200 as i32 {
-                        oldStep = crate::src::cgame::cg_main::cg.stepChange
+                        oldStep = cg.stepChange
                             * (200 as i32 - delta) as f32
                             / 200 as i32 as f32
                     } else {
                         oldStep = 0 as i32 as f32
                     }
                     // add this amount
-                    step = 4 as i32 * (event - crate::bg_public_h::EV_STEP_4 as i32 + 1 as i32);
-                    crate::src::cgame::cg_main::cg.stepChange = oldStep + step as f32;
-                    if crate::src::cgame::cg_main::cg.stepChange > 32 as i32 as f32 {
-                        crate::src::cgame::cg_main::cg.stepChange = 32 as i32 as f32
+                    step = 4 as i32 * (event - EV_STEP_4 as i32 + 1 as i32);
+                    cg.stepChange = oldStep + step as f32;
+                    if cg.stepChange > 32 as i32 as f32 {
+                        cg.stepChange = 32 as i32 as f32
                     }
-                    crate::src::cgame::cg_main::cg.stepTime = crate::src::cgame::cg_main::cg.time
+                    cg.stepTime = cg.time
                 }
             }
         }
         13 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_JUMP_PAD\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             //		CG_Printf( "EV_JUMP_PAD w/effect #%i\n", es->eventParm );
-            let mut up: crate::src::qcommon::q_shared::vec3_t = [
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                0 as i32 as crate::src::qcommon::q_shared::vec_t,
-                1 as i32 as crate::src::qcommon::q_shared::vec_t,
+            let mut up: vec3_t = [
+                0 as i32 as vec_t,
+                0 as i32 as vec_t,
+                1 as i32 as vec_t,
             ];
 
-            crate::src::cgame::cg_effects::CG_SmokePuff(
-                (*cent).lerpOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-                up.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+            CG_SmokePuff(
+                (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
+                up.as_mut_ptr() as *const vec_t,
                 32 as i32 as f32,
                 1 as i32 as f32,
                 1 as i32 as f32,
                 1 as i32 as f32,
                 0.33f32,
                 1000 as i32 as f32,
-                crate::src::cgame::cg_main::cg.time,
+                cg.time,
                 0 as i32,
-                crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32,
-                crate::src::cgame::cg_main::cgs.media.smokePuffShader,
-            ) as *mut crate::cg_local_h::localEntity_s;
+                LEF_PUFF_DONT_SCALE as i32,
+                cgs.media.smokePuffShader,
+            ) as *mut localEntity_s;
             // boing sound at origin, jump sound on player
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
+            trap_S_StartSound(
                 (*cent).lerpOrigin.as_mut_ptr(),
                 -(1 as i32),
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_main::cgs.media.jumpPadSound,
+                CHAN_VOICE as i32,
+                cgs.media.jumpPadSound,
             ); // player predicted
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*jump1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         }
         14 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_JUMP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*jump1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         }
         76 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_TAUNT\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_VOICE as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*taunt.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         }
         15 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_WATER_TOUCH\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.watrInSound,
+                CHAN_AUTO as i32,
+                cgs.media.watrInSound,
             );
         }
         16 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_WATER_LEAVE\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.watrOutSound,
+                CHAN_AUTO as i32,
+                cgs.media.watrOutSound,
             );
         }
         17 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_WATER_UNDER\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.watrUnSound,
+                CHAN_AUTO as i32,
+                cgs.media.watrUnSound,
             );
         }
         18 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_WATER_CLEAR\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_players::CG_CustomSound(
+                CHAN_AUTO as i32,
+                CG_CustomSound(
                     (*es).number,
                     b"*gasp.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
         }
         19 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
+            let mut item: *mut gitem_t = 0 as *mut gitem_t;
             let mut index: i32 = 0;
             index = (*es).eventParm;
-            if !(index < 1 as i32 || index >= crate::src::game::bg_misc::bg_numItems) {
-                item = &mut *crate::src::game::bg_misc::bg_itemlist
+            if !(index < 1 as i32 || index >= bg_numItems) {
+                item = &mut *bg_itemlist
                     .as_mut_ptr()
                     .offset(index as isize)
-                    as *mut crate::bg_public_h::gitem_t;
+                    as *mut gitem_t;
                 // powerups and team items will have a separate global sound, this one
                 // will be played at prediction time
-                if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
-                    || (*item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
+                if (*item).giType as u32 == IT_POWERUP as i32 as u32
+                    || (*item).giType as u32 == IT_TEAM as i32 as u32
                 {
-                    crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                        0 as *mut crate::src::qcommon::q_shared::vec_t,
+                    trap_S_StartSound(
+                        0 as *mut vec_t,
                         (*es).number,
-                        crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                        crate::src::cgame::cg_main::cgs.media.n_healthSound,
+                        CHAN_AUTO as i32,
+                        cgs.media.n_healthSound,
                     );
                 } else if !((*item).giType as u32
-                    == crate::bg_public_h::IT_PERSISTANT_POWERUP as i32 as u32)
+                    == IT_PERSISTANT_POWERUP as i32 as u32)
                 {
-                    crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                        0 as *mut crate::src::qcommon::q_shared::vec_t,
+                    trap_S_StartSound(
+                        0 as *mut vec_t,
                         (*es).number,
-                        crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                        crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                        CHAN_AUTO as i32,
+                        trap_S_RegisterSound(
                             (*item).pickup_sound,
-                            crate::src::qcommon::q_shared::qfalse,
+                            qfalse,
                         ),
                     );
                 }
                 // show icon and name on status bar
-                if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+                if (*es).number == (*cg.snap).ps.clientNum {
                     CG_ItemPickup(index); // player predicted
                 }
             }
         }
         20 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GLOBAL_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            let mut item_0: *mut crate::bg_public_h::gitem_t =
-                0 as *mut crate::bg_public_h::gitem_t;
+            let mut item_0: *mut gitem_t =
+                0 as *mut gitem_t;
             let mut index_0: i32 = 0;
             index_0 = (*es).eventParm;
-            if !(index_0 < 1 as i32 || index_0 >= crate::src::game::bg_misc::bg_numItems) {
-                item_0 = &mut *crate::src::game::bg_misc::bg_itemlist
+            if !(index_0 < 1 as i32 || index_0 >= bg_numItems) {
+                item_0 = &mut *bg_itemlist
                     .as_mut_ptr()
                     .offset(index_0 as isize)
-                    as *mut crate::bg_public_h::gitem_t;
+                    as *mut gitem_t;
                 // powerup pickups are global
                 if !(*item_0).pickup_sound.is_null() {
-                    crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                        0 as *mut crate::src::qcommon::q_shared::vec_t,
-                        (*crate::src::cgame::cg_main::cg.snap).ps.clientNum,
-                        crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                        crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                    trap_S_StartSound(
+                        0 as *mut vec_t,
+                        (*cg.snap).ps.clientNum,
+                        CHAN_AUTO as i32,
+                        trap_S_RegisterSound(
                             (*item_0).pickup_sound,
-                            crate::src::qcommon::q_shared::qfalse,
+                            qfalse,
                         ),
                     );
                 }
                 // show icon and name on status bar
-                if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+                if (*es).number == (*cg.snap).ps.clientNum {
                     CG_ItemPickup(index_0);
                 }
             }
@@ -1487,160 +1487,160 @@ pub unsafe extern "C" fn CG_EntityEvent(
             //
             // weapon events
             //
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_NOAMMO\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             //		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.noAmmoSound );
-            if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_weapons::CG_OutOfAmmoChange();
+            if (*es).number == (*cg.snap).ps.clientNum {
+                CG_OutOfAmmoChange();
             }
         }
         22 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_CHANGE_WEAPON\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.selectSound,
+                CHAN_AUTO as i32,
+                cgs.media.selectSound,
             );
         }
         23 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_FIRE_WEAPON\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_weapons::CG_FireWeapon(cent as *mut crate::cg_local_h::centity_s);
+            CG_FireWeapon(cent as *mut centity_s);
         }
         24 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM0\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         25 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM1\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         26 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM2\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         27 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM3\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         28 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM4\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         29 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM5\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         30 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM6\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         31 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM7\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         32 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM8\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         33 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM9\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         34 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM10\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         35 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM11\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         36 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM12\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         37 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM13\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         38 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM14\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             CG_UseItem(cent);
         }
         39 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_USE_ITEM15\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -1651,89 +1651,89 @@ pub unsafe extern "C" fn CG_EntityEvent(
             //
             // other events
             //
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_PLAYER_TELEPORT_IN\n\x00" as *const u8 as *const libc::c_char,
                 ); // scale up from this
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.teleInSound,
+                CHAN_AUTO as i32,
+                cgs.media.teleInSound,
             );
-            crate::src::cgame::cg_effects::CG_SpawnEffect(position);
+            CG_SpawnEffect(position);
         }
         43 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_PLAYER_TELEPORT_OUT\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.teleOutSound,
+                CHAN_AUTO as i32,
+                cgs.media.teleOutSound,
             );
-            crate::src::cgame::cg_effects::CG_SpawnEffect(position);
+            CG_SpawnEffect(position);
         }
         41 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_ITEM_POP\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.respawnSound,
+                CHAN_AUTO as i32,
+                cgs.media.respawnSound,
             );
         }
         40 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_ITEM_RESPAWN\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            (*cent).miscTime = crate::src::cgame::cg_main::cg.time;
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            (*cent).miscTime = cg.time;
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                crate::src::cgame::cg_main::cgs.media.respawnSound,
+                CHAN_AUTO as i32,
+                cgs.media.respawnSound,
             );
         }
         44 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GRENADE_BOUNCE\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if ::libc::rand() & 1 as i32 != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if libc::rand() & 1 as i32 != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                    crate::src::cgame::cg_main::cgs.media.hgrenb1aSound,
+                    CHAN_AUTO as i32,
+                    cgs.media.hgrenb1aSound,
                 );
             } else {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                    crate::src::cgame::cg_main::cgs.media.hgrenb2aSound,
+                    CHAN_AUTO as i32,
+                    cgs.media.hgrenb2aSound,
                 );
             }
         }
         65 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_SCOREPLUM\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_effects::CG_ScorePlum(
+            CG_ScorePlum(
                 (*cent).currentState.otherEntityNum,
                 (*cent).lerpOrigin.as_mut_ptr(),
                 (*cent).currentState.time,
@@ -1743,13 +1743,13 @@ pub unsafe extern "C" fn CG_EntityEvent(
             //
             // missile impacts
             //
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_MISSILE_HIT\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::qcommon::q_math::ByteToDir((*es).eventParm, dir.as_mut_ptr());
-            crate::src::cgame::cg_weapons::CG_MissileHitPlayer(
+            ByteToDir((*es).eventParm, dir.as_mut_ptr());
+            CG_MissileHitPlayer(
                 (*es).weapon,
                 position,
                 dir.as_mut_ptr(),
@@ -1757,279 +1757,279 @@ pub unsafe extern "C" fn CG_EntityEvent(
             );
         }
         51 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_MISSILE_MISS\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::qcommon::q_math::ByteToDir((*es).eventParm, dir.as_mut_ptr());
-            crate::src::cgame::cg_weapons::CG_MissileHitWall(
+            ByteToDir((*es).eventParm, dir.as_mut_ptr());
+            CG_MissileHitWall(
                 (*es).weapon,
                 0 as i32,
                 position,
                 dir.as_mut_ptr(),
-                crate::cg_local_h::IMPACTSOUND_DEFAULT,
+                IMPACTSOUND_DEFAULT,
             );
         }
         52 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_MISSILE_MISS_METAL\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::qcommon::q_math::ByteToDir((*es).eventParm, dir.as_mut_ptr());
-            crate::src::cgame::cg_weapons::CG_MissileHitWall(
+            ByteToDir((*es).eventParm, dir.as_mut_ptr());
+            CG_MissileHitWall(
                 (*es).weapon,
                 0 as i32,
                 position,
                 dir.as_mut_ptr(),
-                crate::cg_local_h::IMPACTSOUND_METAL,
+                IMPACTSOUND_METAL,
             );
         }
         53 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_RAILTRAIL\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            (*cent).currentState.weapon = crate::bg_public_h::WP_RAILGUN as i32;
-            if (*es).clientNum == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum
-                && crate::src::cgame::cg_main::cg.renderingThirdPerson as u64 == 0
+            (*cent).currentState.weapon = WP_RAILGUN as i32;
+            if (*es).clientNum == (*cg.snap).ps.clientNum
+                && cg.renderingThirdPerson as u64 == 0
             {
-                if crate::src::cgame::cg_main::cg_drawGun.integer == 2 as i32 {
+                if cg_drawGun.integer == 2 as i32 {
                     (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [0 as i32 as usize]
                             * 8 as i32 as f32;
                     (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [1 as i32 as usize]
                             * 8 as i32 as f32;
                     (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [2 as i32 as usize]
                             * 8 as i32 as f32
-                } else if crate::src::cgame::cg_main::cg_drawGun.integer == 3 as i32 {
+                } else if cg_drawGun.integer == 3 as i32 {
                     (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [0 as i32 as usize]
                             * 4 as i32 as f32;
                     (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [1 as i32 as usize]
                             * 4 as i32 as f32;
                     (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
-                        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize]
                             [2 as i32 as usize]
                             * 4 as i32 as f32
                 }
             }
-            crate::src::cgame::cg_weapons::CG_RailTrail(
-                ci as *mut crate::cg_local_h::clientInfo_t,
+            CG_RailTrail(
+                ci as *mut clientInfo_t,
                 (*es).origin2.as_mut_ptr(),
                 (*es).pos.trBase.as_mut_ptr(),
             );
             // if the end was on a nomark surface, don't make an explosion
             if (*es).eventParm != 255 as i32 {
-                crate::src::qcommon::q_math::ByteToDir((*es).eventParm, dir.as_mut_ptr());
-                crate::src::cgame::cg_weapons::CG_MissileHitWall(
+                ByteToDir((*es).eventParm, dir.as_mut_ptr());
+                CG_MissileHitWall(
                     (*es).weapon,
                     (*es).clientNum,
                     position,
                     dir.as_mut_ptr(),
-                    crate::cg_local_h::IMPACTSOUND_DEFAULT,
+                    IMPACTSOUND_DEFAULT,
                 );
             }
         }
         49 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_BULLET_HIT_WALL\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::qcommon::q_math::ByteToDir((*es).eventParm, dir.as_mut_ptr());
-            crate::src::cgame::cg_weapons::CG_Bullet(
+            ByteToDir((*es).eventParm, dir.as_mut_ptr());
+            CG_Bullet(
                 (*es).pos.trBase.as_mut_ptr(),
                 (*es).otherEntityNum,
                 dir.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qfalse,
+                qfalse,
                 ((1 as i32) << 10 as i32) - 2 as i32,
             );
         }
         48 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_BULLET_HIT_FLESH\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_weapons::CG_Bullet(
+            CG_Bullet(
                 (*es).pos.trBase.as_mut_ptr(),
                 (*es).otherEntityNum,
                 dir.as_mut_ptr(),
-                crate::src::qcommon::q_shared::qtrue,
+                qtrue,
                 (*es).eventParm,
             );
         }
         54 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_SHOTGUN\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_weapons::CG_ShotgunFire(
-                es as *mut crate::src::qcommon::q_shared::entityState_s,
+            CG_ShotgunFire(
+                es as *mut entityState_s,
             );
         }
         45 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GENERAL_SOUND\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cgs.gameSounds[(*es).eventParm as usize] != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+            if cgs.gameSounds[(*es).eventParm as usize] != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                    crate::src::cgame::cg_main::cgs.gameSounds[(*es).eventParm as usize],
+                    CHAN_VOICE as i32,
+                    cgs.gameSounds[(*es).eventParm as usize],
                 );
             } else {
-                s = crate::src::cgame::cg_main::CG_ConfigString(
+                s = CG_ConfigString(
                     32 as i32 + 256 as i32 + (*es).eventParm,
                 );
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                    crate::src::cgame::cg_players::CG_CustomSound((*es).number, s),
+                    CHAN_VOICE as i32,
+                    CG_CustomSound((*es).number, s),
                 );
             }
         }
         46 => {
             // play from the player's head so it never diminishes
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GLOBAL_SOUND\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if crate::src::cgame::cg_main::cgs.gameSounds[(*es).eventParm as usize] != 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
-                    (*crate::src::cgame::cg_main::cg.snap).ps.clientNum,
-                    crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                    crate::src::cgame::cg_main::cgs.gameSounds[(*es).eventParm as usize],
+            if cgs.gameSounds[(*es).eventParm as usize] != 0 {
+                trap_S_StartSound(
+                    0 as *mut vec_t,
+                    (*cg.snap).ps.clientNum,
+                    CHAN_AUTO as i32,
+                    cgs.gameSounds[(*es).eventParm as usize],
                 );
             } else {
-                s = crate::src::cgame::cg_main::CG_ConfigString(
+                s = CG_ConfigString(
                     32 as i32 + 256 as i32 + (*es).eventParm,
                 );
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
-                    (*crate::src::cgame::cg_main::cg.snap).ps.clientNum,
-                    crate::src::qcommon::q_shared::CHAN_AUTO as i32,
-                    crate::src::cgame::cg_players::CG_CustomSound((*es).number, s),
+                trap_S_StartSound(
+                    0 as *mut vec_t,
+                    (*cg.snap).ps.clientNum,
+                    CHAN_AUTO as i32,
+                    CG_CustomSound((*es).number, s),
                 );
             }
         }
         47 => {
             // play from the player's head so it never diminishes
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GLOBAL_TEAM_SOUND\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             match (*es).eventParm {
                 0 => {
                     // CTF: red team captured the blue flag, 1FCTF: red team captured the neutral flag
-                    if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                        == crate::bg_public_h::TEAM_RED as i32
+                    if (*cg.snap).ps.persistant
+                        [PERS_TEAM as i32 as usize]
+                        == TEAM_RED as i32
                     {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.captureYourTeamSound,
+                        CG_AddBufferedSound(
+                            cgs.media.captureYourTeamSound,
                         );
                     } else {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.captureOpponentSound,
+                        CG_AddBufferedSound(
+                            cgs.media.captureOpponentSound,
                         );
                     }
                 }
                 1 => {
                     // CTF: blue team captured the red flag, 1FCTF: blue team captured the neutral flag
-                    if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                        == crate::bg_public_h::TEAM_BLUE as i32
+                    if (*cg.snap).ps.persistant
+                        [PERS_TEAM as i32 as usize]
+                        == TEAM_BLUE as i32
                     {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.captureYourTeamSound,
+                        CG_AddBufferedSound(
+                            cgs.media.captureYourTeamSound,
                         );
                     } else {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.captureOpponentSound,
+                        CG_AddBufferedSound(
+                            cgs.media.captureOpponentSound,
                         );
                     }
                 }
                 2 => {
                     // CTF: blue flag returned, 1FCTF: never used
-                    if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                        == crate::bg_public_h::TEAM_RED as i32
+                    if (*cg.snap).ps.persistant
+                        [PERS_TEAM as i32 as usize]
+                        == TEAM_RED as i32
                     {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.returnYourTeamSound,
+                        CG_AddBufferedSound(
+                            cgs.media.returnYourTeamSound,
                         );
                     } else {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.returnOpponentSound,
+                        CG_AddBufferedSound(
+                            cgs.media.returnOpponentSound,
                         );
                     }
                     //
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.blueFlagReturnedSound,
+                    CG_AddBufferedSound(
+                        cgs.media.blueFlagReturnedSound,
                     );
                 }
                 3 => {
                     // CTF red flag returned, 1FCTF: neutral flag returned
-                    if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                        [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                        == crate::bg_public_h::TEAM_BLUE as i32
+                    if (*cg.snap).ps.persistant
+                        [PERS_TEAM as i32 as usize]
+                        == TEAM_BLUE as i32
                     {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.returnYourTeamSound,
+                        CG_AddBufferedSound(
+                            cgs.media.returnYourTeamSound,
                         );
                     } else {
-                        crate::src::cgame::cg_view::CG_AddBufferedSound(
-                            crate::src::cgame::cg_main::cgs.media.returnOpponentSound,
+                        CG_AddBufferedSound(
+                            cgs.media.returnOpponentSound,
                         );
                     }
                     //
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.redFlagReturnedSound,
+                    CG_AddBufferedSound(
+                        cgs.media.redFlagReturnedSound,
                     );
                 }
                 4 => {
                     // CTF: red team took blue flag, 1FCTF: blue team took the neutral flag
                     // if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-                    if !((*crate::src::cgame::cg_main::cg.snap).ps.powerups
-                        [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
+                    if !((*cg.snap).ps.powerups
+                        [PW_BLUEFLAG as i32 as usize]
                         != 0
-                        || (*crate::src::cgame::cg_main::cg.snap).ps.powerups
-                            [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+                        || (*cg.snap).ps.powerups
+                            [PW_NEUTRALFLAG as i32 as usize]
                             != 0)
                     {
-                        if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                            == crate::bg_public_h::TEAM_BLUE as i32
+                        if (*cg.snap).ps.persistant
+                            [PERS_TEAM as i32 as usize]
+                            == TEAM_BLUE as i32
                         {
-                            crate::src::cgame::cg_view::CG_AddBufferedSound(
-                                crate::src::cgame::cg_main::cgs.media.enemyTookYourFlagSound,
+                            CG_AddBufferedSound(
+                                cgs.media.enemyTookYourFlagSound,
                             );
-                        } else if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                            == crate::bg_public_h::TEAM_RED as i32
+                        } else if (*cg.snap).ps.persistant
+                            [PERS_TEAM as i32 as usize]
+                            == TEAM_RED as i32
                         {
-                            crate::src::cgame::cg_view::CG_AddBufferedSound(
-                                crate::src::cgame::cg_main::cgs
+                            CG_AddBufferedSound(
+                                cgs
                                     .media
                                     .yourTeamTookEnemyFlagSound,
                             );
@@ -2039,26 +2039,26 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 5 => {
                     // CTF: blue team took the red flag, 1FCTF red team took the neutral flag
                     // if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-                    if !((*crate::src::cgame::cg_main::cg.snap).ps.powerups
-                        [crate::bg_public_h::PW_REDFLAG as i32 as usize]
+                    if !((*cg.snap).ps.powerups
+                        [PW_REDFLAG as i32 as usize]
                         != 0
-                        || (*crate::src::cgame::cg_main::cg.snap).ps.powerups
-                            [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+                        || (*cg.snap).ps.powerups
+                            [PW_NEUTRALFLAG as i32 as usize]
                             != 0)
                     {
-                        if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                            == crate::bg_public_h::TEAM_RED as i32
+                        if (*cg.snap).ps.persistant
+                            [PERS_TEAM as i32 as usize]
+                            == TEAM_RED as i32
                         {
-                            crate::src::cgame::cg_view::CG_AddBufferedSound(
-                                crate::src::cgame::cg_main::cgs.media.enemyTookYourFlagSound,
+                            CG_AddBufferedSound(
+                                cgs.media.enemyTookYourFlagSound,
                             );
-                        } else if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
-                            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-                            == crate::bg_public_h::TEAM_BLUE as i32
+                        } else if (*cg.snap).ps.persistant
+                            [PERS_TEAM as i32 as usize]
+                            == TEAM_BLUE as i32
                         {
-                            crate::src::cgame::cg_view::CG_AddBufferedSound(
-                                crate::src::cgame::cg_main::cgs
+                            CG_AddBufferedSound(
+                                cgs
                                     .media
                                     .yourTeamTookEnemyFlagSound,
                             );
@@ -2066,28 +2066,28 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     }
                 }
                 8 => {
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.redScoredSound,
+                    CG_AddBufferedSound(
+                        cgs.media.redScoredSound,
                     );
                 }
                 9 => {
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.blueScoredSound,
+                    CG_AddBufferedSound(
+                        cgs.media.blueScoredSound,
                     );
                 }
                 10 => {
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.redLeadsSound,
+                    CG_AddBufferedSound(
+                        cgs.media.redLeadsSound,
                     );
                 }
                 11 => {
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.blueLeadsSound,
+                    CG_AddBufferedSound(
+                        cgs.media.blueLeadsSound,
                     );
                 }
                 12 => {
-                    crate::src::cgame::cg_view::CG_AddBufferedSound(
-                        crate::src::cgame::cg_main::cgs.media.teamsTiedSound,
+                    CG_AddBufferedSound(
+                        cgs.media.teamsTiedSound,
                     );
                 }
                 _ => {}
@@ -2096,50 +2096,50 @@ pub unsafe extern "C" fn CG_EntityEvent(
         56 => {
             // local player sounds are triggered in CG_CheckLocalSounds,
             // so ignore events on the player
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_PAIN\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*cent).currentState.number != (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
+            if (*cent).currentState.number != (*cg.snap).ps.clientNum {
                 CG_PainEvent(cent, (*es).eventParm);
             }
         }
         57 | 58 | 59 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_DEATHx\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
             if CG_WaterLevel(cent) == 3 as i32 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                    crate::src::cgame::cg_players::CG_CustomSound(
+                    CHAN_VOICE as i32,
+                    CG_CustomSound(
                         (*es).number,
                         b"*drown.wav\x00" as *const u8 as *const libc::c_char,
                     ),
                 );
             } else {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_VOICE as i32,
-                    crate::src::cgame::cg_players::CG_CustomSound(
+                    CHAN_VOICE as i32,
+                    CG_CustomSound(
                         (*es).number,
-                        crate::src::qcommon::q_shared::va(
+                        va(
                             b"*death%i.wav\x00" as *const u8 as *const libc::c_char
                                 as *mut libc::c_char,
-                            event - crate::bg_public_h::EV_DEATH1 as i32 + 1 as i32,
+                            event - EV_DEATH1 as i32 + 1 as i32,
                         ),
                     ),
                 );
             }
         }
         60 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_OBITUARY\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -2149,60 +2149,60 @@ pub unsafe extern "C" fn CG_EntityEvent(
             //
             // powerup events
             //
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_POWERUP_QUAD\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_main::cg.powerupActive = crate::bg_public_h::PW_QUAD as i32;
-                crate::src::cgame::cg_main::cg.powerupTime = crate::src::cgame::cg_main::cg.time
+            if (*es).number == (*cg.snap).ps.clientNum {
+                cg.powerupActive = PW_QUAD as i32;
+                cg.powerupTime = cg.time
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_ITEM as i32,
-                crate::src::cgame::cg_main::cgs.media.quadSound,
+                CHAN_ITEM as i32,
+                cgs.media.quadSound,
             );
         }
         62 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_POWERUP_BATTLESUIT\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_main::cg.powerupActive =
-                    crate::bg_public_h::PW_BATTLESUIT as i32;
-                crate::src::cgame::cg_main::cg.powerupTime = crate::src::cgame::cg_main::cg.time
+            if (*es).number == (*cg.snap).ps.clientNum {
+                cg.powerupActive =
+                    PW_BATTLESUIT as i32;
+                cg.powerupTime = cg.time
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_ITEM as i32,
-                crate::src::cgame::cg_main::cgs.media.protectSound,
+                CHAN_ITEM as i32,
+                cgs.media.protectSound,
             );
         }
         63 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_POWERUP_REGEN\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_main::cg.powerupActive = crate::bg_public_h::PW_REGEN as i32;
-                crate::src::cgame::cg_main::cg.powerupTime = crate::src::cgame::cg_main::cg.time
+            if (*es).number == (*cg.snap).ps.clientNum {
+                cg.powerupActive = PW_REGEN as i32;
+                cg.powerupTime = cg.time
             }
-            crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                0 as *mut crate::src::qcommon::q_shared::vec_t,
+            trap_S_StartSound(
+                0 as *mut vec_t,
                 (*es).number,
-                crate::src::qcommon::q_shared::CHAN_ITEM as i32,
-                crate::src::cgame::cg_main::cgs.media.regenSound,
+                CHAN_ITEM as i32,
+                cgs.media.regenSound,
             );
         }
         64 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_GIB_PLAYER\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -2210,39 +2210,39 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // with the kamikaze sound, downside is that the gib sound will also
             // not be played when someone is gibbed while just carrying the kamikaze
             if (*es).eFlags & 0x200 as i32 == 0 {
-                crate::src::cgame::cg_syscalls::trap_S_StartSound(
-                    0 as *mut crate::src::qcommon::q_shared::vec_t,
+                trap_S_StartSound(
+                    0 as *mut vec_t,
                     (*es).number,
-                    crate::src::qcommon::q_shared::CHAN_BODY as i32,
-                    crate::src::cgame::cg_main::cgs.media.gibSound,
+                    CHAN_BODY as i32,
+                    cgs.media.gibSound,
                 );
             }
-            crate::src::cgame::cg_effects::CG_GibPlayer((*cent).lerpOrigin.as_mut_ptr());
+            CG_GibPlayer((*cent).lerpOrigin.as_mut_ptr());
         }
         75 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_STOPLOOPINGSOUND\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_syscalls::trap_S_StopLoopingSound((*es).number);
+            trap_S_StopLoopingSound((*es).number);
             (*es).loopSound = 0 as i32
         }
         74 => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"EV_DEBUG_LINE\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_ents::CG_Beam(cent as *mut crate::cg_local_h::centity_s);
+            CG_Beam(cent as *mut centity_s);
         }
         _ => {
-            if crate::src::cgame::cg_main::cg_debugEvents.integer != 0 {
-                crate::src::cgame::cg_main::CG_Printf(
+            if cg_debugEvents.integer != 0 {
+                CG_Printf(
                     b"UNKNOWN\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
-            crate::src::cgame::cg_main::CG_Error(
+            CG_Error(
                 b"Unknown event: %i\x00" as *const u8 as *const libc::c_char,
                 event,
             );
@@ -2477,9 +2477,9 @@ CG_CheckEvents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut crate::cg_local_h::centity_t) {
+pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut centity_t) {
     // check for event-only entities
-    if (*cent).currentState.eType > crate::bg_public_h::ET_EVENTS as i32 {
+    if (*cent).currentState.eType > ET_EVENTS as i32 {
         if (*cent).previousEvent != 0 {
             return;
             // already fired
@@ -2490,7 +2490,7 @@ pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut crate::cg_local_h::centit
         }
         (*cent).previousEvent = 1 as i32;
         (*cent).currentState.event =
-            (*cent).currentState.eType - crate::bg_public_h::ET_EVENTS as i32
+            (*cent).currentState.eType - ET_EVENTS as i32
     } else {
         // check for events riding with another entity
         if (*cent).currentState.event == (*cent).previousEvent {
@@ -2502,14 +2502,14 @@ pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut crate::cg_local_h::centit
         }
     }
     // calculate the position at exactly the frame time
-    crate::src::game::bg_misc::BG_EvaluateTrajectory(
+    BG_EvaluateTrajectory(
         &mut (*cent).currentState.pos as *mut _
-            as *const crate::src::qcommon::q_shared::trajectory_t,
-        (*crate::src::cgame::cg_main::cg.snap).serverTime,
+            as *const trajectory_t,
+        (*cg.snap).serverTime,
         (*cent).lerpOrigin.as_mut_ptr(),
     );
-    crate::src::cgame::cg_ents::CG_SetEntitySoundPosition(
-        cent as *mut crate::cg_local_h::centity_s,
+    CG_SetEntitySoundPosition(
+        cent as *mut centity_s,
     );
     CG_EntityEvent(cent, (*cent).lerpOrigin.as_mut_ptr());
 }

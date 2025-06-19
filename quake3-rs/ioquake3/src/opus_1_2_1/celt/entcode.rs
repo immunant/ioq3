@@ -122,7 +122,7 @@ followed by a lookup to determine the exact transition thresholds. */
 
 pub unsafe extern "C" fn ec_tell_frac(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-) -> crate::opus_types_h::opus_uint32 {
+) -> opus_uint32 {
     static mut correction: [u32; 8] = [
         35733 as i32 as u32,
         38967 as i32 as u32,
@@ -133,11 +133,11 @@ pub unsafe extern "C" fn ec_tell_frac(
         60097 as i32 as u32,
         65535 as i32 as u32,
     ];
-    let mut nbits: crate::opus_types_h::opus_uint32 = 0;
-    let mut r: crate::opus_types_h::opus_uint32 = 0;
+    let mut nbits: opus_uint32 = 0;
+    let mut r: opus_uint32 = 0;
     let mut l: i32 = 0;
     let mut b: u32 = 0;
-    nbits = ((*_this).nbits_total << 3 as i32) as crate::opus_types_h::opus_uint32;
+    nbits = ((*_this).nbits_total << 3 as i32) as opus_uint32;
     l = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
         - (*_this).rng.leading_zeros() as i32;
     r = (*_this).rng >> l - 16 as i32;

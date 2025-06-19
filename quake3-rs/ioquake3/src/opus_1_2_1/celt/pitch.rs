@@ -207,21 +207,21 @@ Written by Jean-Marc Valin */
 */
 
 unsafe extern "C" fn find_best_pitch(
-    mut xcorr: *mut crate::arch_h::opus_val32,
-    mut y: *mut crate::arch_h::opus_val16,
+    mut xcorr: *mut opus_val32,
+    mut y: *mut opus_val16,
     mut len: i32,
     mut max_pitch: i32,
     mut best_pitch: *mut i32,
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut Syy: crate::arch_h::opus_val32 = 1 as i32 as crate::arch_h::opus_val32;
-    let mut best_num: [crate::arch_h::opus_val16; 2] = [0.; 2];
-    let mut best_den: [crate::arch_h::opus_val32; 2] = [0.; 2];
-    best_num[0 as i32 as usize] = -(1 as i32) as crate::arch_h::opus_val16;
-    best_num[1 as i32 as usize] = -(1 as i32) as crate::arch_h::opus_val16;
-    best_den[0 as i32 as usize] = 0 as i32 as crate::arch_h::opus_val32;
-    best_den[1 as i32 as usize] = 0 as i32 as crate::arch_h::opus_val32;
+    let mut Syy: opus_val32 = 1 as i32 as opus_val32;
+    let mut best_num: [opus_val16; 2] = [0.; 2];
+    let mut best_den: [opus_val32; 2] = [0.; 2];
+    best_num[0 as i32 as usize] = -(1 as i32) as opus_val16;
+    best_num[1 as i32 as usize] = -(1 as i32) as opus_val16;
+    best_den[0 as i32 as usize] = 0 as i32 as opus_val32;
+    best_den[1 as i32 as usize] = 0 as i32 as opus_val32;
     *best_pitch.offset(0 as i32 as isize) = 0 as i32;
     *best_pitch.offset(1 as i32 as isize) = 1 as i32;
     j = 0 as i32;
@@ -232,8 +232,8 @@ unsafe extern "C" fn find_best_pitch(
     i = 0 as i32;
     while i < max_pitch {
         if *xcorr.offset(i as isize) > 0 as i32 as f32 {
-            let mut num: crate::arch_h::opus_val16 = 0.;
-            let mut xcorr16: crate::arch_h::opus_val32 = 0.;
+            let mut num: opus_val16 = 0.;
+            let mut xcorr16: opus_val32 = 0.;
             xcorr16 = *xcorr.offset(i as isize);
             /* Considering the range of xcorr16, this should avoid both underflows
             and overflows (inf) when squaring xcorr16 */
@@ -266,23 +266,23 @@ unsafe extern "C" fn find_best_pitch(
 }
 
 unsafe extern "C" fn celt_fir5(
-    mut x: *const crate::arch_h::opus_val16,
-    mut num: *const crate::arch_h::opus_val16,
-    mut y: *mut crate::arch_h::opus_val16,
+    mut x: *const opus_val16,
+    mut num: *const opus_val16,
+    mut y: *mut opus_val16,
     mut N: i32,
-    mut mem: *mut crate::arch_h::opus_val16,
+    mut mem: *mut opus_val16,
 ) {
     let mut i: i32 = 0;
-    let mut num0: crate::arch_h::opus_val16 = 0.;
-    let mut num1: crate::arch_h::opus_val16 = 0.;
-    let mut num2: crate::arch_h::opus_val16 = 0.;
-    let mut num3: crate::arch_h::opus_val16 = 0.;
-    let mut num4: crate::arch_h::opus_val16 = 0.;
-    let mut mem0: crate::arch_h::opus_val32 = 0.;
-    let mut mem1: crate::arch_h::opus_val32 = 0.;
-    let mut mem2: crate::arch_h::opus_val32 = 0.;
-    let mut mem3: crate::arch_h::opus_val32 = 0.;
-    let mut mem4: crate::arch_h::opus_val32 = 0.;
+    let mut num0: opus_val16 = 0.;
+    let mut num1: opus_val16 = 0.;
+    let mut num2: opus_val16 = 0.;
+    let mut num3: opus_val16 = 0.;
+    let mut num4: opus_val16 = 0.;
+    let mut mem0: opus_val32 = 0.;
+    let mut mem1: opus_val32 = 0.;
+    let mut mem2: opus_val32 = 0.;
+    let mut mem3: opus_val32 = 0.;
+    let mut mem4: opus_val32 = 0.;
     num0 = *num.offset(0 as i32 as isize);
     num1 = *num.offset(1 as i32 as isize);
     num2 = *num.offset(2 as i32 as isize);
@@ -295,7 +295,7 @@ unsafe extern "C" fn celt_fir5(
     mem4 = *mem.offset(4 as i32 as isize);
     i = 0 as i32;
     while i < N {
-        let mut sum: crate::arch_h::opus_val32 = *x.offset(i as isize);
+        let mut sum: opus_val32 = *x.offset(i as isize);
         sum = sum + num0 * mem0;
         sum = sum + num1 * mem1;
         sum = sum + num2 * mem2;
@@ -318,25 +318,25 @@ unsafe extern "C" fn celt_fir5(
 #[no_mangle]
 
 pub unsafe extern "C" fn pitch_downsample(
-    mut x: *mut *mut crate::arch_h::celt_sig,
-    mut x_lp: *mut crate::arch_h::opus_val16,
+    mut x: *mut *mut celt_sig,
+    mut x_lp: *mut opus_val16,
     mut len: i32,
     mut C: i32,
     mut arch: i32,
 ) {
     let mut i: i32 = 0;
-    let mut ac: [crate::arch_h::opus_val32; 5] = [0.; 5];
-    let mut tmp: crate::arch_h::opus_val16 = 1.0f32;
-    let mut lpc: [crate::arch_h::opus_val16; 4] = [0.; 4];
-    let mut mem: [crate::arch_h::opus_val16; 5] = [
-        0 as i32 as crate::arch_h::opus_val16,
-        0 as i32 as crate::arch_h::opus_val16,
-        0 as i32 as crate::arch_h::opus_val16,
-        0 as i32 as crate::arch_h::opus_val16,
-        0 as i32 as crate::arch_h::opus_val16,
+    let mut ac: [opus_val32; 5] = [0.; 5];
+    let mut tmp: opus_val16 = 1.0f32;
+    let mut lpc: [opus_val16; 4] = [0.; 4];
+    let mut mem: [opus_val16; 5] = [
+        0 as i32 as opus_val16,
+        0 as i32 as opus_val16,
+        0 as i32 as opus_val16,
+        0 as i32 as opus_val16,
+        0 as i32 as opus_val16,
     ];
-    let mut lpc2: [crate::arch_h::opus_val16; 5] = [0.; 5];
-    let mut c1: crate::arch_h::opus_val16 = 0.8f32;
+    let mut lpc2: [opus_val16; 5] = [0.; 5];
+    let mut c1: opus_val16 = 0.8f32;
     i = 1 as i32;
     while i < len >> 1 as i32 {
         *x_lp.offset(i as isize) = 0.5f32
@@ -369,7 +369,7 @@ pub unsafe extern "C" fn pitch_downsample(
     crate::src::opus_1_2_1::celt::celt_lpc::_celt_autocorr(
         x_lp,
         ac.as_mut_ptr(),
-        0 as *const crate::arch_h::opus_val16,
+        0 as *const opus_val16,
         0 as i32,
         4 as i32,
         len >> 1 as i32,
@@ -415,9 +415,9 @@ vectorization and passing around an arch flag aren't worth it.*/
 #[no_mangle]
 
 pub unsafe extern "C" fn celt_pitch_xcorr_c(
-    mut _x: *const crate::arch_h::opus_val16,
-    mut _y: *const crate::arch_h::opus_val16,
-    mut xcorr: *mut crate::arch_h::opus_val32,
+    mut _x: *const opus_val16,
+    mut _y: *const opus_val16,
+    mut xcorr: *mut opus_val32,
     mut len: i32,
     mut max_pitch: i32,
     mut _arch: i32,
@@ -431,11 +431,11 @@ pub unsafe extern "C" fn celt_pitch_xcorr_c(
     Since it's hard to put asserts in assembly, put them here.*/
     i = 0 as i32;
     while i < max_pitch - 3 as i32 {
-        let mut sum: [crate::arch_h::opus_val32; 4] = [
-            0 as i32 as crate::arch_h::opus_val32,
-            0 as i32 as crate::arch_h::opus_val32,
-            0 as i32 as crate::arch_h::opus_val32,
-            0 as i32 as crate::arch_h::opus_val32,
+        let mut sum: [opus_val32; 4] = [
+            0 as i32 as opus_val32,
+            0 as i32 as opus_val32,
+            0 as i32 as opus_val32,
+            0 as i32 as opus_val32,
         ];
         xcorr_kernel_c(_x, _y.offset(i as isize), sum.as_mut_ptr(), len);
         *xcorr.offset(i as isize) = sum[0 as i32 as usize];
@@ -446,7 +446,7 @@ pub unsafe extern "C" fn celt_pitch_xcorr_c(
     }
     /* In case max_pitch isn't a multiple of 4, do non-unrolled version. */
     while i < max_pitch {
-        let mut sum_0: crate::arch_h::opus_val32 = 0.;
+        let mut sum_0: opus_val32 = 0.;
         sum_0 = celt_inner_prod_c(_x, _y.offset(i as isize), len);
         *xcorr.offset(i as isize) = sum_0;
         i += 1
@@ -455,8 +455,8 @@ pub unsafe extern "C" fn celt_pitch_xcorr_c(
 #[no_mangle]
 
 pub unsafe extern "C" fn pitch_search(
-    mut x_lp: *const crate::arch_h::opus_val16,
-    mut y: *mut crate::arch_h::opus_val16,
+    mut x_lp: *const opus_val16,
+    mut y: *mut opus_val16,
     mut len: i32,
     mut max_pitch: i32,
     mut pitch: *mut i32,
@@ -466,29 +466,29 @@ pub unsafe extern "C" fn pitch_search(
     let mut j: i32 = 0;
     let mut lag: i32 = 0;
     let mut best_pitch: [i32; 2] = [0 as i32, 0 as i32];
-    let mut x_lp4: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
-    let mut y_lp4: *mut crate::arch_h::opus_val16 = 0 as *mut crate::arch_h::opus_val16;
-    let mut xcorr: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
+    let mut x_lp4: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut y_lp4: *mut opus_val16 = 0 as *mut opus_val16;
+    let mut xcorr: *mut opus_val32 = 0 as *mut opus_val32;
     let mut offset: i32 = 0;
     lag = len + max_pitch;
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul((len >> 2 as i32) as libc::c_ulong) as usize,
     );
-    x_lp4 = fresh21.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    x_lp4 = fresh21.as_mut_ptr() as *mut opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
             .wrapping_mul((lag >> 2 as i32) as libc::c_ulong) as usize,
     );
-    y_lp4 = fresh22.as_mut_ptr() as *mut crate::arch_h::opus_val16;
+    y_lp4 = fresh22.as_mut_ptr() as *mut opus_val16;
     let mut fresh23 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
             .wrapping_mul((max_pitch >> 1 as i32) as libc::c_ulong) as usize,
     );
-    xcorr = fresh23.as_mut_ptr() as *mut crate::arch_h::opus_val32;
+    xcorr = fresh23.as_mut_ptr() as *mut opus_val32;
     /* Downsample by 2 again */
     j = 0 as i32;
     while j < len >> 2 as i32 {
@@ -519,10 +519,10 @@ pub unsafe extern "C" fn pitch_search(
     /* Finer search with 2x decimation */
     i = 0 as i32;
     while i < max_pitch >> 1 as i32 {
-        let mut sum: crate::arch_h::opus_val32 = 0.;
-        *xcorr.offset(i as isize) = 0 as i32 as crate::arch_h::opus_val32;
-        if !(::libc::abs(i - 2 as i32 * best_pitch[0 as i32 as usize]) > 2 as i32
-            && ::libc::abs(i - 2 as i32 * best_pitch[1 as i32 as usize]) > 2 as i32)
+        let mut sum: opus_val32 = 0.;
+        *xcorr.offset(i as isize) = 0 as i32 as opus_val32;
+        if !(libc::abs(i - 2 as i32 * best_pitch[0 as i32 as usize]) > 2 as i32
+            && libc::abs(i - 2 as i32 * best_pitch[1 as i32 as usize]) > 2 as i32)
         {
             sum = celt_inner_prod_c(x_lp, y.offset(i as isize), len >> 1 as i32);
             *xcorr.offset(i as isize) = if -(1 as i32) as f32 > sum {
@@ -544,9 +544,9 @@ pub unsafe extern "C" fn pitch_search(
     if best_pitch[0 as i32 as usize] > 0 as i32
         && best_pitch[0 as i32 as usize] < (max_pitch >> 1 as i32) - 1 as i32
     {
-        let mut a: crate::arch_h::opus_val32 = 0.;
-        let mut b: crate::arch_h::opus_val32 = 0.;
-        let mut c: crate::arch_h::opus_val32 = 0.;
+        let mut a: opus_val32 = 0.;
+        let mut b: opus_val32 = 0.;
+        let mut c: opus_val32 = 0.;
         a = *xcorr.offset((best_pitch[0 as i32 as usize] - 1 as i32) as isize);
         b = *xcorr.offset(best_pitch[0 as i32 as usize] as isize);
         c = *xcorr.offset((best_pitch[0 as i32 as usize] + 1 as i32) as isize);
@@ -564,10 +564,10 @@ pub unsafe extern "C" fn pitch_search(
 }
 
 unsafe extern "C" fn compute_pitch_gain(
-    mut xy: crate::arch_h::opus_val32,
-    mut xx: crate::arch_h::opus_val32,
-    mut yy: crate::arch_h::opus_val32,
-) -> crate::arch_h::opus_val16 {
+    mut xy: opus_val32,
+    mut xx: opus_val32,
+    mut yy: opus_val32,
+) -> opus_val16 {
     return xy / crate::stdlib::sqrt((1 as i32 as f32 + xx * yy) as f64) as f32;
 }
 
@@ -609,32 +609,32 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn remove_doubling(
-    mut x: *mut crate::arch_h::opus_val16,
+    mut x: *mut opus_val16,
     mut maxperiod: i32,
     mut minperiod: i32,
     mut N: i32,
     mut T0_: *mut i32,
     mut prev_period: i32,
-    mut prev_gain: crate::arch_h::opus_val16,
+    mut prev_gain: opus_val16,
     mut _arch: i32,
-) -> crate::arch_h::opus_val16 {
+) -> opus_val16 {
     let mut k: i32 = 0;
     let mut i: i32 = 0;
     let mut T: i32 = 0;
     let mut T0: i32 = 0;
-    let mut g: crate::arch_h::opus_val16 = 0.;
-    let mut g0: crate::arch_h::opus_val16 = 0.;
-    let mut pg: crate::arch_h::opus_val16 = 0.;
-    let mut xy: crate::arch_h::opus_val32 = 0.;
-    let mut xx: crate::arch_h::opus_val32 = 0.;
-    let mut yy: crate::arch_h::opus_val32 = 0.;
-    let mut xy2: crate::arch_h::opus_val32 = 0.;
-    let mut xcorr: [crate::arch_h::opus_val32; 3] = [0.; 3];
-    let mut best_xy: crate::arch_h::opus_val32 = 0.;
-    let mut best_yy: crate::arch_h::opus_val32 = 0.;
+    let mut g: opus_val16 = 0.;
+    let mut g0: opus_val16 = 0.;
+    let mut pg: opus_val16 = 0.;
+    let mut xy: opus_val32 = 0.;
+    let mut xx: opus_val32 = 0.;
+    let mut yy: opus_val32 = 0.;
+    let mut xy2: opus_val32 = 0.;
+    let mut xcorr: [opus_val32; 3] = [0.; 3];
+    let mut best_xy: opus_val32 = 0.;
+    let mut best_yy: opus_val32 = 0.;
     let mut offset: i32 = 0;
     let mut minperiod0: i32 = 0;
-    let mut yy_lookup: *mut crate::arch_h::opus_val32 = 0 as *mut crate::arch_h::opus_val32;
+    let mut yy_lookup: *mut opus_val32 = 0 as *mut opus_val32;
     minperiod0 = minperiod;
     maxperiod /= 2 as i32;
     minperiod /= 2 as i32;
@@ -649,10 +649,10 @@ pub unsafe extern "C" fn remove_doubling(
     T = T0;
     let mut fresh24 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_val32>() as libc::c_ulong)
             .wrapping_mul((maxperiod + 1 as i32) as libc::c_ulong) as usize,
     );
-    yy_lookup = fresh24.as_mut_ptr() as *mut crate::arch_h::opus_val32;
+    yy_lookup = fresh24.as_mut_ptr() as *mut opus_val32;
     dual_inner_prod_c(x, x, x.offset(-(T0 as isize)), N, &mut xx, &mut xy);
     *yy_lookup.offset(0 as i32 as isize) = xx;
     yy = xx;
@@ -677,12 +677,12 @@ pub unsafe extern "C" fn remove_doubling(
     while k <= 15 as i32 {
         let mut T1: i32 = 0;
         let mut T1b: i32 = 0;
-        let mut g1: crate::arch_h::opus_val16 = 0.;
-        let mut cont: crate::arch_h::opus_val16 = 0 as i32 as crate::arch_h::opus_val16;
-        let mut thresh: crate::arch_h::opus_val16 = 0.;
+        let mut g1: opus_val16 = 0.;
+        let mut cont: opus_val16 = 0 as i32 as opus_val16;
+        let mut thresh: opus_val16 = 0.;
         T1 = celt_udiv(
-            (2 as i32 * T0 + k) as crate::opus_types_h::opus_uint32,
-            (2 as i32 * k) as crate::opus_types_h::opus_uint32,
+            (2 as i32 * T0 + k) as opus_uint32,
+            (2 as i32 * k) as opus_uint32,
         ) as i32;
         if T1 < minperiod {
             break;
@@ -696,8 +696,8 @@ pub unsafe extern "C" fn remove_doubling(
             }
         } else {
             T1b = celt_udiv(
-                (2 as i32 * second_check[k as usize] * T0 + k) as crate::opus_types_h::opus_uint32,
-                (2 as i32 * k) as crate::opus_types_h::opus_uint32,
+                (2 as i32 * second_check[k as usize] * T0 + k) as opus_uint32,
+                (2 as i32 * k) as opus_uint32,
             ) as i32
         }
         dual_inner_prod_c(
@@ -711,12 +711,12 @@ pub unsafe extern "C" fn remove_doubling(
         xy = 0.5f32 * (xy + xy2);
         yy = 0.5f32 * (*yy_lookup.offset(T1 as isize) + *yy_lookup.offset(T1b as isize));
         g1 = compute_pitch_gain(xy, xx, yy);
-        if ::libc::abs(T1 - prev_period) <= 1 as i32 {
+        if libc::abs(T1 - prev_period) <= 1 as i32 {
             cont = prev_gain
-        } else if ::libc::abs(T1 - prev_period) <= 2 as i32 && 5 as i32 * k * k < T0 {
+        } else if libc::abs(T1 - prev_period) <= 2 as i32 && 5 as i32 * k * k < T0 {
             cont = 0.5f32 * prev_gain
         } else {
-            cont = 0 as i32 as crate::arch_h::opus_val16
+            cont = 0 as i32 as opus_val16
         }
         thresh = if 0.3f32 > 0.7f32 * g0 - cont {
             0.3f32

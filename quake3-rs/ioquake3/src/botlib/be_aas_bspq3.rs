@@ -4,7 +4,7 @@ pub mod stdlib_float_h {
     #[inline]
 
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> f64 {
-        return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
+        return libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
 }
 
@@ -12,7 +12,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -92,7 +92,7 @@ extern "C" {
      *
      *****************************************************************************/
     #[no_mangle]
-    pub static mut botimport: crate::botlib_h::botlib_import_t;
+    pub static mut botimport: botlib_import_t;
 }
 //id Software BSP data
 
@@ -153,19 +153,19 @@ pub static mut bspworld: bsp_t = bsp_t {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_Trace(
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut end: *mut vec_t,
     mut passent: i32,
     mut contentmask: i32,
-) -> crate::botlib_h::bsp_trace_t {
-    let mut bsptrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+) -> bsp_trace_t {
+    let mut bsptrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -174,7 +174,7 @@ pub unsafe extern "C" fn AAS_Trace(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -204,7 +204,7 @@ pub unsafe extern "C" fn AAS_Trace(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_PointContents(
-    mut point: *mut crate::src::qcommon::q_shared::vec_t,
+    mut point: *mut vec_t,
 ) -> i32 {
     return botimport.PointContents.expect("non-null function pointer")(point);
 }
@@ -219,19 +219,19 @@ pub unsafe extern "C" fn AAS_PointContents(
 
 pub unsafe extern "C" fn AAS_EntityCollision(
     mut entnum: i32,
-    mut start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut boxmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut boxmaxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut end: *mut crate::src::qcommon::q_shared::vec_t,
+    mut start: *mut vec_t,
+    mut boxmins: *mut vec_t,
+    mut boxmaxs: *mut vec_t,
+    mut end: *mut vec_t,
     mut contentmask: i32,
-    mut trace: *mut crate::botlib_h::bsp_trace_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    let mut enttrace: crate::botlib_h::bsp_trace_t = crate::botlib_h::bsp_trace_t {
-        allsolid: crate::src::qcommon::q_shared::qfalse,
-        startsolid: crate::src::qcommon::q_shared::qfalse,
+    mut trace: *mut bsp_trace_t,
+) -> qboolean {
+    let mut enttrace: bsp_trace_t = bsp_trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
         fraction: 0.,
         endpos: [0.; 3],
-        plane: crate::src::qcommon::q_shared::cplane_t {
+        plane: cplane_t {
             normal: [0.; 3],
             dist: 0.,
             type_0: 0,
@@ -240,7 +240,7 @@ pub unsafe extern "C" fn AAS_EntityCollision(
         },
         exp_dist: 0.,
         sidenum: 0,
-        surface: crate::botlib_h::bsp_surface_t {
+        surface: bsp_surface_t {
             name: [0; 16],
             flags: 0,
             value: 0,
@@ -260,12 +260,12 @@ pub unsafe extern "C" fn AAS_EntityCollision(
     if enttrace.fraction < (*trace).fraction {
         crate::stdlib::memcpy(
             trace as *mut libc::c_void,
-            &mut enttrace as *mut crate::botlib_h::bsp_trace_t as *const libc::c_void,
-            ::std::mem::size_of::<crate::botlib_h::bsp_trace_t>() as libc::c_ulong,
+            &mut enttrace as *mut bsp_trace_t as *const libc::c_void,
+            ::std::mem::size_of::<bsp_trace_t>() as libc::c_ulong,
         );
-        return crate::src::qcommon::q_shared::qtrue;
+        return qtrue;
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 //end of the function AAS_EntityCollision
 //===========================================================================
@@ -278,11 +278,11 @@ pub unsafe extern "C" fn AAS_EntityCollision(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_inPVS(
-    mut p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut p2: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
+    mut p1: *mut vec_t,
+    mut p2: *mut vec_t,
+) -> qboolean {
     return botimport.inPVS.expect("non-null function pointer")(p1, p2)
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
 }
 //end of the function AAS_InPVS
 //===========================================================================
@@ -295,10 +295,10 @@ pub unsafe extern "C" fn AAS_inPVS(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_inPHS(
-    mut _p1: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _p2: *mut crate::src::qcommon::q_shared::vec_t,
-) -> crate::src::qcommon::q_shared::qboolean {
-    return crate::src::qcommon::q_shared::qtrue;
+    mut _p1: *mut vec_t,
+    mut _p2: *mut vec_t,
+) -> qboolean {
+    return qtrue;
 }
 //end of the function AAS_inPHS
 //===========================================================================
@@ -311,10 +311,10 @@ pub unsafe extern "C" fn AAS_inPHS(
 
 pub unsafe extern "C" fn AAS_BSPModelMinsMaxsOrigin(
     mut modelnum: i32,
-    mut angles: *mut crate::src::qcommon::q_shared::vec_t,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut angles: *mut vec_t,
+    mut mins: *mut vec_t,
+    mut maxs: *mut vec_t,
+    mut origin: *mut vec_t,
 ) {
     botimport
         .BSPModelMinsMaxsOrigin
@@ -331,7 +331,7 @@ pub unsafe extern "C" fn AAS_BSPModelMinsMaxsOrigin(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_UnlinkFromBSPLeaves(
-    mut _leaves: *mut crate::be_aas_def_h::bsp_link_t,
+    mut _leaves: *mut bsp_link_t,
 ) {
 }
 //end of the function AAS_UnlinkFromBSPLeaves
@@ -344,12 +344,12 @@ pub unsafe extern "C" fn AAS_UnlinkFromBSPLeaves(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BSPLinkEntity(
-    mut _absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _absmins: *mut vec_t,
+    mut _absmaxs: *mut vec_t,
     mut _entnum: i32,
     mut _modelnum: i32,
-) -> *mut crate::be_aas_def_h::bsp_link_t {
-    return 0 as *mut crate::be_aas_def_h::bsp_link_t;
+) -> *mut bsp_link_t {
+    return 0 as *mut bsp_link_t;
 }
 //end of the function AAS_BSPLinkEntity
 //===========================================================================
@@ -361,8 +361,8 @@ pub unsafe extern "C" fn AAS_BSPLinkEntity(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BoxEntities(
-    mut _absmins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _absmaxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _absmins: *mut vec_t,
+    mut _absmaxs: *mut vec_t,
     mut _list: *mut i32,
     mut _maxcount: i32,
 ) -> i32 {
@@ -400,9 +400,9 @@ pub unsafe extern "C" fn AAS_BSPEntityInRange(mut ent: i32) -> i32 {
             b"bsp entity out of range\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         ); //end if
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function AAS_BSPEntityInRange
 //===========================================================================
@@ -422,19 +422,19 @@ pub unsafe extern "C" fn AAS_ValueForBSPEpairKey(
     let mut epair: *mut bsp_epair_t = 0 as *mut bsp_epair_t; //end for
     *value.offset(0 as i32 as isize) = '\u{0}' as i32 as libc::c_char;
     if AAS_BSPEntityInRange(ent) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     epair = bspworld.entities[ent as usize].epairs;
     while !epair.is_null() {
-        if ::libc::strcmp((*epair).key, key) == 0 {
+        if libc::strcmp((*epair).key, key) == 0 {
             crate::stdlib::strncpy(value, (*epair).value, (size - 1 as i32) as libc::c_ulong);
             *value.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
-            return crate::src::qcommon::q_shared::qtrue as i32;
+            return qtrue as i32;
         }
         epair = (*epair).next
         //end if
     }
-    return crate::src::qcommon::q_shared::qfalse as i32;
+    return qfalse as i32;
 }
 //end of the function AAS_FindBSPEpair
 //===========================================================================
@@ -448,35 +448,35 @@ pub unsafe extern "C" fn AAS_ValueForBSPEpairKey(
 pub unsafe extern "C" fn AAS_VectorForBSPEpairKey(
     mut ent: i32,
     mut key: *mut libc::c_char,
-    mut v: *mut crate::src::qcommon::q_shared::vec_t,
+    mut v: *mut vec_t,
 ) -> i32 {
     let mut buf: [libc::c_char; 128] = [0; 128];
     let mut v1: f64 = 0.;
     let mut v2: f64 = 0.;
     let mut v3: f64 = 0.;
     let ref mut fresh0 = *v.offset(2 as i32 as isize);
-    *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *fresh0 = 0 as i32 as vec_t;
     let ref mut fresh1 = *v.offset(1 as i32 as isize);
     *fresh1 = *fresh0;
     *v.offset(0 as i32 as isize) = *fresh1;
     if AAS_ValueForBSPEpairKey(ent, key, buf.as_mut_ptr(), 128 as i32) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     //scanf into doubles, then assign, so it is vec_t size independent
     v3 = 0 as i32 as f64;
     v2 = v3;
     v1 = v2;
-    ::libc::sscanf(
+    libc::sscanf(
         buf.as_mut_ptr(),
         b"%lf %lf %lf\x00" as *const u8 as *const libc::c_char,
         &mut v1 as *mut f64,
         &mut v2 as *mut f64,
         &mut v3 as *mut f64,
     );
-    *v.offset(0 as i32 as isize) = v1 as crate::src::qcommon::q_shared::vec_t;
-    *v.offset(1 as i32 as isize) = v2 as crate::src::qcommon::q_shared::vec_t;
-    *v.offset(2 as i32 as isize) = v3 as crate::src::qcommon::q_shared::vec_t;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    *v.offset(0 as i32 as isize) = v1 as vec_t;
+    *v.offset(1 as i32 as isize) = v2 as vec_t;
+    *v.offset(2 as i32 as isize) = v3 as vec_t;
+    return qtrue as i32;
 }
 //end of the function AAS_VectorForBSPEpairKey
 //===========================================================================
@@ -495,10 +495,10 @@ pub unsafe extern "C" fn AAS_FloatForBSPEpairKey(
     let mut buf: [libc::c_char; 128] = [0; 128];
     *value = 0 as i32 as f32;
     if AAS_ValueForBSPEpairKey(ent, key, buf.as_mut_ptr(), 128 as i32) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     *value = atof(buf.as_mut_ptr()) as f32;
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //unlink the given entity from the bsp tree leaves
 //link the given entity to the bsp tree leaves of the given model
@@ -548,10 +548,10 @@ pub unsafe extern "C" fn AAS_IntForBSPEpairKey(
     let mut buf: [libc::c_char; 128] = [0; 128];
     *value = 0 as i32;
     if AAS_ValueForBSPEpairKey(ent, key, buf.as_mut_ptr(), 128 as i32) == 0 {
-        return crate::src::qcommon::q_shared::qfalse as i32;
+        return qfalse as i32;
     }
     *value = atoi(buf.as_mut_ptr());
-    return crate::src::qcommon::q_shared::qtrue as i32;
+    return qtrue as i32;
 }
 //end of the function AAS_IntForBSPEpairKey
 //===========================================================================
@@ -598,9 +598,9 @@ pub unsafe extern "C" fn AAS_FreeBSPEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ParseBSPEntities() {
-    let mut script: *mut crate::src::botlib::l_script::script_t =
-        0 as *mut crate::src::botlib::l_script::script_t; //SCFL_PRIMITIVE);
-    let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
+    let mut script: *mut script_t =
+        0 as *mut script_t; //SCFL_PRIMITIVE);
+    let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
         subtype: 0,
@@ -610,39 +610,39 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
         endwhitespace_p: 0 as *mut libc::c_char,
         line: 0,
         linescrossed: 0,
-        next: 0 as *mut crate::src::botlib::l_script::token_s,
+        next: 0 as *mut token_s,
     };
     let mut ent: *mut bsp_entity_t = 0 as *mut bsp_entity_t;
     let mut epair: *mut bsp_epair_t = 0 as *mut bsp_epair_t;
-    script = crate::src::botlib::l_script::LoadScriptMemory(
+    script = LoadScriptMemory(
         bspworld.dentdata,
         bspworld.entdatasize,
         b"entdata\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ) as *mut crate::src::botlib::l_script::script_s;
-    crate::src::botlib::l_script::SetScriptFlags(
-        script as *mut crate::src::botlib::l_script::script_s,
+    ) as *mut script_s;
+    SetScriptFlags(
+        script as *mut script_s,
         0x4 as i32 | 0x8 as i32,
     );
     bspworld.numentities = 1 as i32;
     //end if
-    while crate::src::botlib::l_script::PS_ReadToken(
-        script as *mut crate::src::botlib::l_script::script_s,
-        &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+    while PS_ReadToken(
+        script as *mut script_s,
+        &mut token as *mut _ as *mut token_s,
     ) != 0
     {
-        if ::libc::strcmp(
+        if libc::strcmp(
             token.string.as_mut_ptr(),
             b"{\x00" as *const u8 as *const libc::c_char,
         ) != 0
         {
-            crate::src::botlib::l_script::ScriptError(
-                script as *mut crate::src::botlib::l_script::script_s,
+            ScriptError(
+                script as *mut script_s,
                 b"invalid %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             ); //end while
             AAS_FreeBSPEntities(); //end if
-            crate::src::botlib::l_script::FreeScript(
-                script as *mut crate::src::botlib::l_script::script_s,
+            FreeScript(
+                script as *mut script_s,
             ); //end if
             return;
         } //end while
@@ -660,12 +660,12 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 .offset(bspworld.numentities as isize) as *mut bsp_entity_t;
             bspworld.numentities += 1;
             (*ent).epairs = 0 as *mut bsp_epair_t;
-            while crate::src::botlib::l_script::PS_ReadToken(
-                script as *mut crate::src::botlib::l_script::script_s,
-                &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+            while PS_ReadToken(
+                script as *mut script_s,
+                &mut token as *mut _ as *mut token_s,
             ) != 0
             {
-                if ::libc::strcmp(
+                if libc::strcmp(
                     token.string.as_mut_ptr(),
                     b"}\x00" as *const u8 as *const libc::c_char,
                 ) == 0
@@ -679,61 +679,61 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 (*epair).next = (*ent).epairs;
                 (*ent).epairs = epair;
                 if token.type_0 != 1 as i32 {
-                    crate::src::botlib::l_script::ScriptError(
-                        script as *mut crate::src::botlib::l_script::script_s,
+                    ScriptError(
+                        script as *mut script_s,
                         b"invalid %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         token.string.as_mut_ptr(),
                     );
                     AAS_FreeBSPEntities();
-                    crate::src::botlib::l_script::FreeScript(
-                        script as *mut crate::src::botlib::l_script::script_s,
+                    FreeScript(
+                        script as *mut script_s,
                     );
                     return;
                 }
-                crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
+                StripDoubleQuotes(token.string.as_mut_ptr());
                 (*epair).key = crate::src::botlib::l_memory::GetHunkMemory(
                     crate::stdlib::strlen(token.string.as_mut_ptr())
                         .wrapping_add(1 as i32 as libc::c_ulong),
                 ) as *mut libc::c_char;
-                ::libc::strcpy((*epair).key, token.string.as_mut_ptr());
-                if crate::src::botlib::l_script::PS_ExpectTokenType(
-                    script as *mut crate::src::botlib::l_script::script_s,
+                libc::strcpy((*epair).key, token.string.as_mut_ptr());
+                if PS_ExpectTokenType(
+                    script as *mut script_s,
                     1 as i32,
                     0 as i32,
-                    &mut token as *mut _ as *mut crate::src::botlib::l_script::token_s,
+                    &mut token as *mut _ as *mut token_s,
                 ) == 0
                 {
                     AAS_FreeBSPEntities();
-                    crate::src::botlib::l_script::FreeScript(
-                        script as *mut crate::src::botlib::l_script::script_s,
+                    FreeScript(
+                        script as *mut script_s,
                     );
                     return;
                 }
-                crate::src::botlib::l_script::StripDoubleQuotes(token.string.as_mut_ptr());
+                StripDoubleQuotes(token.string.as_mut_ptr());
                 (*epair).value = crate::src::botlib::l_memory::GetHunkMemory(
                     crate::stdlib::strlen(token.string.as_mut_ptr())
                         .wrapping_add(1 as i32 as libc::c_ulong),
                 ) as *mut libc::c_char;
-                ::libc::strcpy((*epair).value, token.string.as_mut_ptr());
+                libc::strcpy((*epair).value, token.string.as_mut_ptr());
             }
-            if ::libc::strcmp(
+            if libc::strcmp(
                 token.string.as_mut_ptr(),
                 b"}\x00" as *const u8 as *const libc::c_char,
             ) != 0
             {
-                crate::src::botlib::l_script::ScriptError(
-                    script as *mut crate::src::botlib::l_script::script_s,
+                ScriptError(
+                    script as *mut script_s,
                     b"missing }\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 );
                 AAS_FreeBSPEntities();
-                crate::src::botlib::l_script::FreeScript(
-                    script as *mut crate::src::botlib::l_script::script_s,
+                FreeScript(
+                    script as *mut script_s,
                 );
                 return;
             }
         }
     }
-    crate::src::botlib::l_script::FreeScript(script as *mut crate::src::botlib::l_script::script_s);
+    FreeScript(script as *mut script_s);
 }
 //end of the function AAS_ParseBSPEntities
 //===========================================================================
@@ -745,9 +745,9 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_BSPTraceLight(
-    mut _start: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _end: *mut crate::src::qcommon::q_shared::vec_t,
-    mut _endpos: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _start: *mut vec_t,
+    mut _end: *mut vec_t,
+    mut _endpos: *mut vec_t,
     mut _red: *mut i32,
     mut _green: *mut i32,
     mut _blue: *mut i32,
@@ -772,7 +772,7 @@ pub unsafe extern "C" fn AAS_DumpBSPData() {
     bspworld.dentdata = 0 as *mut libc::c_char;
     bspworld.entdatasize = 0 as i32;
     //
-    bspworld.loaded = crate::src::qcommon::q_shared::qfalse as i32;
+    bspworld.loaded = qfalse as i32;
     crate::stdlib::memset(
         &mut bspworld as *mut bsp_t as *mut libc::c_void,
         0 as i32,
@@ -862,7 +862,7 @@ pub unsafe extern "C" fn AAS_LoadBSPFile() -> i32 {
         bspworld.entdatasize as libc::c_ulong,
     );
     AAS_ParseBSPEntities();
-    bspworld.loaded = crate::src::qcommon::q_shared::qtrue as i32;
+    bspworld.loaded = qtrue as i32;
     return 0 as i32;
 }
 //end of the function AAS_LoadBSPFile

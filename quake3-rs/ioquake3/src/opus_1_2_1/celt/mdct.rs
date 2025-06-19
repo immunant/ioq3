@@ -66,7 +66,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     mut l: *const crate::src::opus_1_2_1::celt::mdct::mdct_lookup,
     mut in_0: *mut f32,
     mut out: *mut f32,
-    mut window: *const crate::arch_h::opus_val16,
+    mut window: *const opus_val16,
     mut overlap: i32,
     mut shift: i32,
     mut stride: i32,
@@ -77,12 +77,12 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     let mut N2: i32 = 0;
     let mut N4: i32 = 0;
     let mut f: *mut f32 = 0 as *mut f32;
-    let mut f2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-        0 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
-    let mut st: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state =
+    let mut f2: *mut kiss_fft_cpx =
+        0 as *mut kiss_fft_cpx;
+    let mut st: *const kiss_fft_state =
         (*l).kfft[shift as usize];
     let mut trig: *const f32 = 0 as *const f32;
-    let mut scale: crate::arch_h::opus_val16 = 0.;
+    let mut scale: opus_val16 = 0.;
     scale = (*st).scale;
     N = (*l).n;
     trig = (*l).trig;
@@ -101,11 +101,11 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     f = fresh0.as_mut_ptr() as *mut f32;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx>()
+        (::std::mem::size_of::<kiss_fft_cpx>()
             as libc::c_ulong)
             .wrapping_mul(N4 as libc::c_ulong) as usize,
     );
-    f2 = fresh1.as_mut_ptr() as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx;
+    f2 = fresh1.as_mut_ptr() as *mut kiss_fft_cpx;
     /* Consider the input to be composed of four blocks: [a, b, c, d] */
     /* Window, shuffle, fold */
     /* Temp pointers to make it really clear to the compiler what we're doing */
@@ -115,8 +115,8 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
         .offset(-(1 as i32 as isize))
         .offset((overlap >> 1 as i32) as isize);
     let mut yp: *mut f32 = f;
-    let mut wp1: *const crate::arch_h::opus_val16 = window.offset((overlap >> 1 as i32) as isize);
-    let mut wp2: *const crate::arch_h::opus_val16 = window
+    let mut wp1: *const opus_val16 = window.offset((overlap >> 1 as i32) as isize);
+    let mut wp2: *const opus_val16 = window
         .offset((overlap >> 1 as i32) as isize)
         .offset(-(1 as i32 as isize));
     i = 0 as i32;
@@ -167,8 +167,8 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     let mut t: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
     i = 0 as i32;
     while i < N4 {
-        let mut yc: crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
-            crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx { r: 0., i: 0. };
+        let mut yc: kiss_fft_cpx =
+            kiss_fft_cpx { r: 0., i: 0. };
         let mut t0: f32 = 0.;
         let mut t1: f32 = 0.;
         let mut re: f32 = 0.;
@@ -193,13 +193,13 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
         i += 1
     }
     /* N/4 complex FFT, does not downscale anymore */
-    crate::src::opus_1_2_1::celt::kiss_fft::opus_fft_impl(
-        st as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
-        f2 as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
+    opus_fft_impl(
+        st as *const kiss_fft_state,
+        f2 as *mut kiss_fft_cpx,
     );
     /* Post-rotate */
     /* Temp pointers to make it really clear to the compiler what we're doing */
-    let mut fp: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx = f2;
+    let mut fp: *const kiss_fft_cpx = f2;
     let mut yp1: *mut f32 = out;
     let mut yp2: *mut f32 = out.offset((stride * (N2 - 1 as i32)) as isize);
     let mut t_0: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
@@ -267,7 +267,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     mut l: *const crate::src::opus_1_2_1::celt::mdct::mdct_lookup,
     mut in_0: *mut f32,
     mut out: *mut f32,
-    mut window: *const crate::arch_h::opus_val16,
+    mut window: *const opus_val16,
     mut overlap: i32,
     mut shift: i32,
     mut stride: i32,
@@ -294,7 +294,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     let mut xp2: *const f32 = in_0.offset((stride * (N2 - 1 as i32)) as isize);
     let mut yp: *mut f32 = out.offset((overlap >> 1 as i32) as isize);
     let mut t: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
-    let mut bitrev: *const crate::opus_types_h::opus_int16 = (*(*l).kfft[shift as usize]).bitrev;
+    let mut bitrev: *const opus_int16 = (*(*l).kfft[shift as usize]).bitrev;
     i = 0 as i32;
     while i < N4 {
         let mut rev: i32 = 0;
@@ -313,11 +313,11 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
         xp2 = xp2.offset(-((2 as i32 * stride) as isize));
         i += 1
     }
-    crate::src::opus_1_2_1::celt::kiss_fft::opus_fft_impl(
-        (*l).kfft[shift as usize] as *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state,
+    opus_fft_impl(
+        (*l).kfft[shift as usize] as *const kiss_fft_state,
         out.offset((overlap >> 1 as i32) as isize)
-            as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx
-            as *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
+            as *mut kiss_fft_cpx
+            as *mut kiss_fft_cpx,
     );
     /* Post-rotate and de-shuffle from both ends of the buffer at once to make
     it in-place. */
@@ -364,8 +364,8 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     /* Mirror on both sides for TDAC */
     let mut xp1_0: *mut f32 = out.offset(overlap as isize).offset(-(1 as i32 as isize));
     let mut yp1_0: *mut f32 = out;
-    let mut wp1: *const crate::arch_h::opus_val16 = window;
-    let mut wp2: *const crate::arch_h::opus_val16 =
+    let mut wp1: *const opus_val16 = window;
+    let mut wp2: *const opus_val16 =
         window.offset(overlap as isize).offset(-(1 as i32 as isize));
     i = 0 as i32;
     while i < overlap / 2 as i32 {

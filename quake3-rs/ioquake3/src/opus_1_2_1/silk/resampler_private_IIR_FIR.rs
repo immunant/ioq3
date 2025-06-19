@@ -43,63 +43,63 @@ POSSIBILITY OF SUCH DAMAGE.
 #[inline]
 
 unsafe extern "C" fn silk_resampler_private_IIR_FIR_INTERPOL(
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut buf: *mut crate::opus_types_h::opus_int16,
-    mut max_index_Q16: crate::opus_types_h::opus_int32,
-    mut index_increment_Q16: crate::opus_types_h::opus_int32,
-) -> *mut crate::opus_types_h::opus_int16 {
-    let mut index_Q16: crate::opus_types_h::opus_int32 = 0;
-    let mut res_Q15: crate::opus_types_h::opus_int32 = 0;
-    let mut buf_ptr: *mut crate::opus_types_h::opus_int16 =
-        0 as *mut crate::opus_types_h::opus_int16;
-    let mut table_index: crate::opus_types_h::opus_int32 = 0;
+    mut out: *mut opus_int16,
+    mut buf: *mut opus_int16,
+    mut max_index_Q16: opus_int32,
+    mut index_increment_Q16: opus_int32,
+) -> *mut opus_int16 {
+    let mut index_Q16: opus_int32 = 0;
+    let mut res_Q15: opus_int32 = 0;
+    let mut buf_ptr: *mut opus_int16 =
+        0 as *mut opus_int16;
+    let mut table_index: opus_int32 = 0;
     /* Interpolate upsampled signal and store in output array */
     index_Q16 = 0 as i32;
     while index_Q16 < max_index_Q16 {
         table_index = ((index_Q16 & 0xffff as i32) as i64
-            * 12 as i32 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+            * 12 as i32 as opus_int16 as i64
+            >> 16 as i32) as opus_int32;
         buf_ptr = &mut *buf.offset((index_Q16 >> 16 as i32) as isize)
-            as *mut crate::opus_types_h::opus_int16;
-        res_Q15 = *buf_ptr.offset(0 as i32 as isize) as crate::opus_types_h::opus_int32
+            as *mut opus_int16;
+        res_Q15 = *buf_ptr.offset(0 as i32 as isize) as opus_int32
             * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                 [table_index as usize][0 as i32 as usize]
-                as crate::opus_types_h::opus_int32;
+                as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(1 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(1 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [table_index as usize][1 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(2 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(2 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [table_index as usize][2 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(3 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(3 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [table_index as usize][3 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(4 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(4 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [(11 as i32 - table_index) as usize][3 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(5 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(5 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [(11 as i32 - table_index) as usize][2 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(6 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(6 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [(11 as i32 - table_index) as usize][1 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         res_Q15 = res_Q15
-            + *buf_ptr.offset(7 as i32 as isize) as crate::opus_types_h::opus_int32
+            + *buf_ptr.offset(7 as i32 as isize) as opus_int32
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_resampler_frac_FIR_12
                     [(11 as i32 - table_index) as usize][0 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    as opus_int32;
         let fresh0 = out;
         out = out.offset(1);
         *fresh0 = if (if 15 as i32 == 1 as i32 {
@@ -113,14 +113,14 @@ unsafe extern "C" fn silk_resampler_private_IIR_FIR_INTERPOL(
             (res_Q15 >> 1 as i32) + (res_Q15 & 1 as i32)
         } else {
             ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+        }) < 0x8000 as i32 as opus_int16 as i32
         {
-            0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+            0x8000 as i32 as opus_int16 as i32
         } else if 15 as i32 == 1 as i32 {
             (res_Q15 >> 1 as i32) + (res_Q15 & 1 as i32)
         } else {
             ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        } as crate::opus_types_h::opus_int16;
+        } as opus_int16;
         index_Q16 += index_increment_Q16
     }
     return out;
@@ -158,29 +158,29 @@ POSSIBILITY OF SUCH DAMAGE.
 
 pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
     mut SS: *mut libc::c_void,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut inLen: crate::opus_types_h::opus_int32,
+    mut out: *mut opus_int16,
+    mut in_0: *const opus_int16,
+    mut inLen: opus_int32,
 )
 /* I    Number of input samples     */
 {
-    let mut S: *mut crate::resampler_structs_h::silk_resampler_state_struct =
-        SS as *mut crate::resampler_structs_h::silk_resampler_state_struct;
-    let mut nSamplesIn: crate::opus_types_h::opus_int32 = 0;
-    let mut max_index_Q16: crate::opus_types_h::opus_int32 = 0;
-    let mut index_increment_Q16: crate::opus_types_h::opus_int32 = 0;
-    let mut buf: *mut crate::opus_types_h::opus_int16 = 0 as *mut crate::opus_types_h::opus_int16;
+    let mut S: *mut silk_resampler_state_struct =
+        SS as *mut silk_resampler_state_struct;
+    let mut nSamplesIn: opus_int32 = 0;
+    let mut max_index_Q16: opus_int32 = 0;
+    let mut index_increment_Q16: opus_int32 = 0;
+    let mut buf: *mut opus_int16 = 0 as *mut opus_int16;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
+        (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
             .wrapping_mul((2 as i32 * (*S).batchSize + 8 as i32) as libc::c_ulong) as usize,
     );
-    buf = fresh1.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
+    buf = fresh1.as_mut_ptr() as *mut opus_int16;
     /* Copy buffered samples to start of buffer */
     crate::stdlib::memcpy(buf as *mut libc::c_void,
            (*S).sFIR.i16_0.as_mut_ptr() as *const libc::c_void,
            (8 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
     /* Iterate over blocks of frameSizeIn input samples */
     index_increment_Q16 = (*S).invRatio_Q16;
@@ -197,8 +197,8 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
             in_0,
             nSamplesIn,
         ); /* + 1 because 2x upsampling */
-        max_index_Q16 = ((nSamplesIn as crate::opus_types_h::opus_uint32) << 16 as i32 + 1 as i32)
-            as crate::opus_types_h::opus_int32;
+        max_index_Q16 = ((nSamplesIn as opus_uint32) << 16 as i32 + 1 as i32)
+            as opus_int32;
         out = silk_resampler_private_IIR_FIR_INTERPOL(out, buf, max_index_Q16, index_increment_Q16);
         in_0 = in_0.offset(nSamplesIn as isize);
         inLen -= nSamplesIn;
@@ -209,17 +209,17 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
             &mut *buf.offset((nSamplesIn << 1 as i32) as isize)
-                as *mut crate::opus_types_h::opus_int16 as *const libc::c_void,
+                as *mut opus_int16 as *const libc::c_void,
             (8 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                crate::opus_types_h::opus_int16,
+                opus_int16,
             >() as libc::c_ulong),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
     crate::stdlib::memcpy((*S).sFIR.i16_0.as_mut_ptr() as *mut libc::c_void,
            &mut *buf.offset((nSamplesIn << 1 as i32) as isize) as
-               *mut crate::opus_types_h::opus_int16 as *const libc::c_void,
+               *mut opus_int16 as *const libc::c_void,
            (8 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<crate::opus_types_h::opus_int16>()
+                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
                                                 as libc::c_ulong));
 }

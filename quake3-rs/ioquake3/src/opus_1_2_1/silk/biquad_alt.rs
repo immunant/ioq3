@@ -43,23 +43,23 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_biquad_alt_stride1(
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut B_Q28: *const crate::opus_types_h::opus_int32,
-    mut A_Q28: *const crate::opus_types_h::opus_int32,
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    len: crate::opus_types_h::opus_int32,
+    mut in_0: *const opus_int16,
+    mut B_Q28: *const opus_int32,
+    mut A_Q28: *const opus_int32,
+    mut S: *mut opus_int32,
+    mut out: *mut opus_int16,
+    len: opus_int32,
 )
 /* I     signal length (must be even)                               */
 {
     /* DIRECT FORM II TRANSPOSED (uses 2 element state vector) */
     let mut k: i32 = 0;
-    let mut inval: crate::opus_types_h::opus_int32 = 0;
-    let mut A0_U_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A0_L_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A1_U_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A1_L_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut out32_Q14: crate::opus_types_h::opus_int32 = 0;
+    let mut inval: opus_int32 = 0;
+    let mut A0_U_Q28: opus_int32 = 0;
+    let mut A0_L_Q28: opus_int32 = 0;
+    let mut A1_U_Q28: opus_int32 = 0;
+    let mut A1_L_Q28: opus_int32 = 0;
+    let mut out32_Q14: opus_int32 = 0;
     /* Negate A_Q28 values and split in two parts */
     A0_L_Q28 = -*A_Q28.offset(0 as i32 as isize) & 0x3fff as i32; /* lower part */
     A0_U_Q28 = -*A_Q28.offset(0 as i32 as isize) >> 14 as i32; /* upper part */
@@ -68,69 +68,69 @@ pub unsafe extern "C" fn silk_biquad_alt_stride1(
     k = 0 as i32;
     while k < len {
         /* S[ 0 ], S[ 1 ]: Q12 */
-        inval = *in_0.offset(k as isize) as crate::opus_types_h::opus_int32;
+        inval = *in_0.offset(k as isize) as opus_int32;
         out32_Q14 = (((*S.offset(0 as i32 as isize) as i64
             + (*B_Q28.offset(0 as i32 as isize) as i64
-                * inval as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 2 as i32) as crate::opus_types_h::opus_int32;
+                * inval as opus_int16 as i64
+                >> 16 as i32)) as opus_int32
+            as opus_uint32)
+            << 2 as i32) as opus_int32;
         *S.offset(0 as i32 as isize) = *S.offset(1 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
-                ((out32_Q14 as i64 * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
-                    + ((out32_Q14 as i64 * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                    + ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
-                (((out32_Q14 as i64 * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                (((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
             });
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
-            + (out32_Q14 as i64 * A0_U_Q28 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            + (out32_Q14 as i64 * A0_U_Q28 as opus_int16 as i64 >> 16 as i32))
+            as opus_int32;
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
             + (*B_Q28.offset(1 as i32 as isize) as i64
-                * inval as crate::opus_types_h::opus_int16 as i64
+                * inval as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(1 as i32 as isize) = if 14 as i32 == 1 as i32 {
-            ((out32_Q14 as i64 * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+            ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 1 as i32)
-                + ((out32_Q14 as i64 * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                + ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
-            (((out32_Q14 as i64 * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
-                as crate::opus_types_h::opus_int32
+            (((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
-            + (out32_Q14 as i64 * A1_U_Q28 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            + (out32_Q14 as i64 * A1_U_Q28 as opus_int16 as i64 >> 16 as i32))
+            as opus_int32;
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
             + (*B_Q28.offset(2 as i32 as isize) as i64
-                * inval as crate::opus_types_h::opus_int16 as i64
+                * inval as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         /* Scale back to Q0 and saturate */
         *out.offset(k as isize) =
             if out32_Q14 + ((1 as i32) << 14 as i32) - 1 as i32 >> 14 as i32 > 0x7fff as i32 {
                 0x7fff as i32
             } else if (out32_Q14 + ((1 as i32) << 14 as i32) - 1 as i32 >> 14 as i32)
-                < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else {
                 (out32_Q14 + ((1 as i32) << 14 as i32) - 1 as i32) >> 14 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
         k += 1
     }
 }
@@ -209,22 +209,22 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
-    mut in_0: *const crate::opus_types_h::opus_int16,
-    mut B_Q28: *const crate::opus_types_h::opus_int32,
-    mut A_Q28: *const crate::opus_types_h::opus_int32,
-    mut S: *mut crate::opus_types_h::opus_int32,
-    mut out: *mut crate::opus_types_h::opus_int16,
-    len: crate::opus_types_h::opus_int32,
+    mut in_0: *const opus_int16,
+    mut B_Q28: *const opus_int32,
+    mut A_Q28: *const opus_int32,
+    mut S: *mut opus_int32,
+    mut out: *mut opus_int16,
+    len: opus_int32,
 )
 /* I     signal length (must be even)                               */
 {
     /* DIRECT FORM II TRANSPOSED (uses 2 element state vector) */
     let mut k: i32 = 0;
-    let mut A0_U_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A0_L_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A1_U_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut A1_L_Q28: crate::opus_types_h::opus_int32 = 0;
-    let mut out32_Q14: [crate::opus_types_h::opus_int32; 2] = [0; 2];
+    let mut A0_U_Q28: opus_int32 = 0;
+    let mut A0_L_Q28: opus_int32 = 0;
+    let mut A1_U_Q28: opus_int32 = 0;
+    let mut A1_L_Q28: opus_int32 = 0;
+    let mut out32_Q14: [opus_int32; 2] = [0; 2];
     /* Negate A_Q28 values and split in two parts */
     A0_L_Q28 = -*A_Q28.offset(0 as i32 as isize) & 0x3fff as i32; /* lower part */
     A0_U_Q28 = -*A_Q28.offset(0 as i32 as isize) >> 14 as i32; /* upper part */
@@ -237,30 +237,30 @@ pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
             + (*B_Q28.offset(0 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 2 as i32) as crate::opus_types_h::opus_int32;
+            as opus_int32
+            as opus_uint32)
+            << 2 as i32) as opus_int32;
         out32_Q14[1 as i32 as usize] = (((*S.offset(2 as i32 as isize) as i64
             + (*B_Q28.offset(0 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
-            << 2 as i32) as crate::opus_types_h::opus_int32;
+            as opus_int32
+            as opus_uint32)
+            << 2 as i32) as opus_int32;
         *S.offset(0 as i32 as isize) = *S.offset(1 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
                 ((out32_Q14[0 as i32 as usize] as i64
-                    * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + ((out32_Q14[0 as i32 as usize] as i64
-                        * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        * A0_L_Q28 as opus_int16 as i64
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 (((out32_Q14[0 as i32 as usize] as i64
-                    * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
@@ -268,95 +268,95 @@ pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
         *S.offset(2 as i32 as isize) = *S.offset(3 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
                 ((out32_Q14[1 as i32 as usize] as i64
-                    * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 1 as i32)
                     + ((out32_Q14[1 as i32 as usize] as i64
-                        * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                        >> 16 as i32) as crate::opus_types_h::opus_int32
+                        * A0_L_Q28 as opus_int16 as i64
+                        >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
                 (((out32_Q14[1 as i32 as usize] as i64
-                    * A0_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A0_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
             });
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
             + (out32_Q14[0 as i32 as usize] as i64
-                * A0_U_Q28 as crate::opus_types_h::opus_int16 as i64
+                * A0_U_Q28 as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(2 as i32 as isize) = (*S.offset(2 as i32 as isize) as i64
             + (out32_Q14[1 as i32 as usize] as i64
-                * A0_U_Q28 as crate::opus_types_h::opus_int16 as i64
+                * A0_U_Q28 as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
             + (*B_Q28.offset(1 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(2 as i32 as isize) = (*S.offset(2 as i32 as isize) as i64
             + (*B_Q28.offset(1 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(1 as i32 as isize) = if 14 as i32 == 1 as i32 {
             ((out32_Q14[0 as i32 as usize] as i64
-                * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * A1_L_Q28 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((out32_Q14[0 as i32 as usize] as i64
-                    * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A1_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((out32_Q14[0 as i32 as usize] as i64
-                * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * A1_L_Q28 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *S.offset(3 as i32 as isize) = if 14 as i32 == 1 as i32 {
             ((out32_Q14[1 as i32 as usize] as i64
-                * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * A1_L_Q28 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
                 >> 1 as i32)
                 + ((out32_Q14[1 as i32 as usize] as i64
-                    * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                    >> 16 as i32) as crate::opus_types_h::opus_int32
+                    * A1_L_Q28 as opus_int16 as i64
+                    >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
             (((out32_Q14[1 as i32 as usize] as i64
-                * A1_L_Q28 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
+                * A1_L_Q28 as opus_int16 as i64
+                >> 16 as i32) as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
             + (out32_Q14[0 as i32 as usize] as i64
-                * A1_U_Q28 as crate::opus_types_h::opus_int16 as i64
+                * A1_U_Q28 as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(3 as i32 as isize) = (*S.offset(3 as i32 as isize) as i64
             + (out32_Q14[1 as i32 as usize] as i64
-                * A1_U_Q28 as crate::opus_types_h::opus_int16 as i64
+                * A1_U_Q28 as opus_int16 as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
             + (*B_Q28.offset(2 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         *S.offset(3 as i32 as isize) = (*S.offset(3 as i32 as isize) as i64
             + (*B_Q28.offset(2 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
                 >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+            as opus_int32;
         /* Scale back to Q0 and saturate */
         *out.offset((2 as i32 * k + 0 as i32) as isize) =
             if out32_Q14[0 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32 >> 14 as i32
@@ -365,12 +365,12 @@ pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
                 0x7fff as i32
             } else if (out32_Q14[0 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32
                 >> 14 as i32)
-                < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else {
                 (out32_Q14[0 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32) >> 14 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
         *out.offset((2 as i32 * k + 1 as i32) as isize) =
             if out32_Q14[1 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32 >> 14 as i32
                 > 0x7fff as i32
@@ -378,12 +378,12 @@ pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
                 0x7fff as i32
             } else if (out32_Q14[1 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32
                 >> 14 as i32)
-                < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                < 0x8000 as i32 as opus_int16 as i32
             {
-                0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
+                0x8000 as i32 as opus_int16 as i32
             } else {
                 (out32_Q14[1 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32) >> 14 as i32
-            } as crate::opus_types_h::opus_int16;
+            } as opus_int16;
         k += 1
     }
 }

@@ -4,7 +4,7 @@ pub mod stdlib_h {
     #[inline]
 
     pub unsafe extern "C" fn atoi(mut __nptr: *const libc::c_char) -> i32 {
-        return ::libc::strtol(
+        return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
             10 as i32,
@@ -141,9 +141,9 @@ static mut loadingPlayerIconCount: i32 = 0;
 
 static mut loadingItemIconCount: i32 = 0;
 
-static mut loadingPlayerIcons: [crate::src::qcommon::q_shared::qhandle_t; 16] = [0; 16];
+static mut loadingPlayerIcons: [qhandle_t; 16] = [0; 16];
 
-static mut loadingItemIcons: [crate::src::qcommon::q_shared::qhandle_t; 26] = [0; 26];
+static mut loadingItemIcons: [qhandle_t; 26] = [0; 26];
 /*
 ===================
 CG_DrawLoadingIcons
@@ -158,7 +158,7 @@ unsafe extern "C" fn CG_DrawLoadingIcons() {
     while n < loadingPlayerIconCount {
         x = 16 as i32 + n * 78 as i32;
         y = 324 as i32 - 40 as i32;
-        crate::src::cgame::cg_drawtools::CG_DrawPic(
+        CG_DrawPic(
             x as f32,
             y as f32,
             64 as i32 as f32,
@@ -174,7 +174,7 @@ unsafe extern "C" fn CG_DrawLoadingIcons() {
             y += 40 as i32
         }
         x = 16 as i32 + n % 13 as i32 * 48 as i32;
-        crate::src::cgame::cg_drawtools::CG_DrawPic(
+        CG_DrawPic(
             x as f32,
             y as f32,
             32 as i32 as f32,
@@ -193,12 +193,12 @@ CG_LoadingString
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_LoadingString(mut s: *const libc::c_char) {
-    crate::src::qcommon::q_shared::Q_strncpyz(
-        crate::src::cgame::cg_main::cg.infoScreenText.as_mut_ptr(),
+    Q_strncpyz(
+        cg.infoScreenText.as_mut_ptr(),
         s,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    crate::src::cgame::cg_syscalls::trap_UpdateScreen();
+    trap_UpdateScreen();
 }
 /*
 ===================
@@ -208,15 +208,15 @@ CG_LoadingItem
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_LoadingItem(mut itemNum: i32) {
-    let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
-    item = &mut *crate::src::game::bg_misc::bg_itemlist
+    let mut item: *mut gitem_t = 0 as *mut gitem_t;
+    item = &mut *bg_itemlist
         .as_mut_ptr()
-        .offset(itemNum as isize) as *mut crate::bg_public_h::gitem_t;
+        .offset(itemNum as isize) as *mut gitem_t;
     if !(*item).icon.is_null() && loadingItemIconCount < 26 as i32 {
         let fresh0 = loadingItemIconCount;
         loadingItemIconCount = loadingItemIconCount + 1;
         loadingItemIcons[fresh0 as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip((*item).icon)
+            trap_R_RegisterShaderNoMip((*item).icon)
     }
     CG_LoadingString((*item).pickup_name);
 }
@@ -233,19 +233,19 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
     let mut personality: [libc::c_char; 64] = [0; 64];
     let mut model: [libc::c_char; 64] = [0; 64];
     let mut iconName: [libc::c_char; 64] = [0; 64];
-    info = crate::src::cgame::cg_main::CG_ConfigString(
+    info = CG_ConfigString(
         32 as i32 + 256 as i32 + 256 as i32 + clientNum,
     );
     if loadingPlayerIconCount < 16 as i32 {
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             model.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 info,
                 b"model\x00" as *const u8 as *const libc::c_char,
             ),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
-        skin = ::libc::strrchr(model.as_mut_ptr(), '/' as i32);
+        skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
         if !skin.is_null() {
             let fresh1 = skin;
             skin = skin.offset(1);
@@ -253,7 +253,7 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
         } else {
             skin = b"default\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         }
-        crate::src::qcommon::q_shared::Com_sprintf(
+        Com_sprintf(
             iconName.as_mut_ptr(),
             64 as i32,
             b"models/players/%s/icon_%s.tga\x00" as *const u8 as *const libc::c_char,
@@ -261,9 +261,9 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
             skin,
         );
         loadingPlayerIcons[loadingPlayerIconCount as usize] =
-            crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(iconName.as_mut_ptr());
+            trap_R_RegisterShaderNoMip(iconName.as_mut_ptr());
         if loadingPlayerIcons[loadingPlayerIconCount as usize] == 0 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 iconName.as_mut_ptr(),
                 64 as i32,
                 b"models/players/characters/%s/icon_%s.tga\x00" as *const u8 as *const libc::c_char,
@@ -271,10 +271,10 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
                 skin,
             );
             loadingPlayerIcons[loadingPlayerIconCount as usize] =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(iconName.as_mut_ptr())
+                trap_R_RegisterShaderNoMip(iconName.as_mut_ptr())
         }
         if loadingPlayerIcons[loadingPlayerIconCount as usize] == 0 {
-            crate::src::qcommon::q_shared::Com_sprintf(
+            Com_sprintf(
                 iconName.as_mut_ptr(),
                 64 as i32,
                 b"models/players/%s/icon_%s.tga\x00" as *const u8 as *const libc::c_char,
@@ -282,31 +282,31 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
                 b"default\x00" as *const u8 as *const libc::c_char,
             );
             loadingPlayerIcons[loadingPlayerIconCount as usize] =
-                crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(iconName.as_mut_ptr())
+                trap_R_RegisterShaderNoMip(iconName.as_mut_ptr())
         }
         if loadingPlayerIcons[loadingPlayerIconCount as usize] != 0 {
             loadingPlayerIconCount += 1
         }
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
+    Q_strncpyz(
         personality.as_mut_ptr(),
-        crate::src::qcommon::q_shared::Info_ValueForKey(
+        Info_ValueForKey(
             info,
             b"n\x00" as *const u8 as *const libc::c_char,
         ),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    crate::src::qcommon::q_shared::Q_CleanStr(personality.as_mut_ptr());
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as u32
+    Q_CleanStr(personality.as_mut_ptr());
+    if cgs.gametype as u32
+        == GT_SINGLE_PLAYER as i32 as u32
     {
-        crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            crate::src::qcommon::q_shared::va(
+        trap_S_RegisterSound(
+            va(
                 b"sound/player/announce/%s.wav\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 personality.as_mut_ptr(),
             ),
-            crate::src::qcommon::q_shared::qtrue,
+            qtrue,
         );
     }
     CG_LoadingString(personality.as_mut_ptr());
@@ -568,28 +568,28 @@ pub unsafe extern "C" fn CG_DrawInformation() {
     let mut sysInfo: *const libc::c_char = 0 as *const libc::c_char;
     let mut y: i32 = 0;
     let mut value: i32 = 0;
-    let mut levelshot: crate::src::qcommon::q_shared::qhandle_t = 0;
-    let mut detail: crate::src::qcommon::q_shared::qhandle_t = 0;
+    let mut levelshot: qhandle_t = 0;
+    let mut detail: qhandle_t = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
-    info = crate::src::cgame::cg_main::CG_ConfigString(0 as i32);
-    sysInfo = crate::src::cgame::cg_main::CG_ConfigString(1 as i32);
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(
+    info = CG_ConfigString(0 as i32);
+    sysInfo = CG_ConfigString(1 as i32);
+    s = Info_ValueForKey(
         info,
         b"mapname\x00" as *const u8 as *const libc::c_char,
     );
-    levelshot = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
-        crate::src::qcommon::q_shared::va(
+    levelshot = trap_R_RegisterShaderNoMip(
+        va(
             b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             s,
         ),
     );
     if levelshot == 0 {
-        levelshot = crate::src::cgame::cg_syscalls::trap_R_RegisterShaderNoMip(
+        levelshot = trap_R_RegisterShaderNoMip(
             b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
         )
     }
-    crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
-    crate::src::cgame::cg_drawtools::CG_DrawPic(
+    trap_R_SetColor(0 as *const f32);
+    CG_DrawPic(
         0 as i32 as f32,
         0 as i32 as f32,
         640 as i32 as f32,
@@ -597,14 +597,14 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         levelshot,
     );
     // blend a detail texture over it
-    detail = crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
+    detail = trap_R_RegisterShader(
         b"levelShotDetail\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
+    trap_R_DrawStretchPic(
         0 as i32 as f32,
         0 as i32 as f32,
-        crate::src::cgame::cg_main::cgs.glconfig.vidWidth as f32,
-        crate::src::cgame::cg_main::cgs.glconfig.vidHeight as f32,
+        cgs.glconfig.vidWidth as f32,
+        cgs.glconfig.vidHeight as f32,
         0 as i32 as f32,
         0 as i32 as f32,
         2.5f64 as f32,
@@ -615,77 +615,77 @@ pub unsafe extern "C" fn CG_DrawInformation() {
     CG_DrawLoadingIcons();
     // the first 150 rows are reserved for the client connection
     // screen to write into
-    if crate::src::cgame::cg_main::cg.infoScreenText[0 as i32 as usize] != 0 {
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+    if cg.infoScreenText[0 as i32 as usize] != 0 {
+        UI_DrawProportionalString(
             320 as i32,
             128 as i32 - 32 as i32,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"Loading... %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                crate::src::cgame::cg_main::cg.infoScreenText.as_mut_ptr(),
+                cg.infoScreenText.as_mut_ptr(),
             ),
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
     } else {
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             128 as i32 - 32 as i32,
             b"Awaiting snapshot...\x00" as *const u8 as *const libc::c_char,
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
     }
     // draw info string information
     y = 180 as i32 - 32 as i32;
     // don't print server lines if playing a local game
-    crate::src::cgame::cg_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"sv_running\x00" as *const u8 as *const libc::c_char,
         buf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if atoi(buf.as_mut_ptr()) == 0 {
         // server hostname
-        crate::src::qcommon::q_shared::Q_strncpyz(
+        Q_strncpyz(
             buf.as_mut_ptr(),
-            crate::src::qcommon::q_shared::Info_ValueForKey(
+            Info_ValueForKey(
                 info,
                 b"sv_hostname\x00" as *const u8 as *const libc::c_char,
             ),
             1024 as i32,
         );
-        crate::src::qcommon::q_shared::Q_CleanStr(buf.as_mut_ptr());
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+        Q_CleanStr(buf.as_mut_ptr());
+        UI_DrawProportionalString(
             320 as i32,
             y,
             buf.as_mut_ptr(),
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
         y += 27 as i32;
         // pure server
-        s = crate::src::qcommon::q_shared::Info_ValueForKey(
+        s = Info_ValueForKey(
             sysInfo,
             b"sv_pure\x00" as *const u8 as *const libc::c_char,
         );
         if *s.offset(0 as i32 as isize) as i32 == '1' as i32 {
-            crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 320 as i32,
                 y,
                 b"Pure Server\x00" as *const u8 as *const libc::c_char,
                 0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-                crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+                colorWhite.as_mut_ptr(),
             );
             y += 27 as i32
         }
         // server-specific message of the day
-        s = crate::src::cgame::cg_main::CG_ConfigString(4 as i32);
+        s = CG_ConfigString(4 as i32);
         if *s.offset(0 as i32 as isize) != 0 {
-            crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 320 as i32,
                 y,
                 s,
                 0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-                crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+                colorWhite.as_mut_ptr(),
             );
             y += 27 as i32
         }
@@ -693,34 +693,34 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         y += 10 as i32
     }
     // map-specific message (long map name)
-    s = crate::src::cgame::cg_main::CG_ConfigString(3 as i32);
+    s = CG_ConfigString(3 as i32);
     if *s.offset(0 as i32 as isize) != 0 {
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             y,
             s,
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
         y += 27 as i32
     }
     // cheats warning
-    s = crate::src::qcommon::q_shared::Info_ValueForKey(
+    s = Info_ValueForKey(
         sysInfo,
         b"sv_cheats\x00" as *const u8 as *const libc::c_char,
     );
     if *s.offset(0 as i32 as isize) as i32 == '1' as i32 {
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             y,
             b"CHEATS ARE ENABLED\x00" as *const u8 as *const libc::c_char,
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
         y += 27 as i32
     }
     // game type
-    match crate::src::cgame::cg_main::cgs.gametype as u32 {
+    match cgs.gametype as u32 {
         0 => s = b"Free For All\x00" as *const u8 as *const libc::c_char,
         2 => s = b"Single Player\x00" as *const u8 as *const libc::c_char,
         1 => s = b"Tournament\x00" as *const u8 as *const libc::c_char,
@@ -728,66 +728,66 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         4 => s = b"Capture The Flag\x00" as *const u8 as *const libc::c_char,
         _ => s = b"Unknown Gametype\x00" as *const u8 as *const libc::c_char,
     }
-    crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         s,
         0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-        crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+        colorWhite.as_mut_ptr(),
     );
     y += 27 as i32;
-    value = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    value = atoi(Info_ValueForKey(
         info,
         b"timelimit\x00" as *const u8 as *const libc::c_char,
     ));
     if value != 0 {
-        crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             y,
-            crate::src::qcommon::q_shared::va(
+            va(
                 b"timelimit %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 value,
             ),
             0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-            crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+            colorWhite.as_mut_ptr(),
         );
         y += 27 as i32
     }
-    if (crate::src::cgame::cg_main::cgs.gametype as u32) < crate::bg_public_h::GT_CTF as i32 as u32
+    if (cgs.gametype as u32) < GT_CTF as i32 as u32
     {
-        value = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+        value = atoi(Info_ValueForKey(
             info,
             b"fraglimit\x00" as *const u8 as *const libc::c_char,
         ));
         if value != 0 {
-            crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 320 as i32,
                 y,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"fraglimit %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     value,
                 ),
                 0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-                crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+                colorWhite.as_mut_ptr(),
             );
             y += 27 as i32
         }
     }
-    if crate::src::cgame::cg_main::cgs.gametype as u32 >= crate::bg_public_h::GT_CTF as i32 as u32 {
-        value = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
+    if cgs.gametype as u32 >= GT_CTF as i32 as u32 {
+        value = atoi(Info_ValueForKey(
             info,
             b"capturelimit\x00" as *const u8 as *const libc::c_char,
         ));
         if value != 0 {
-            crate::src::cgame::cg_drawtools::UI_DrawProportionalString(
+            UI_DrawProportionalString(
                 320 as i32,
                 y,
-                crate::src::qcommon::q_shared::va(
+                va(
                     b"capturelimit %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     value,
                 ),
                 0x1 as i32 | 0x10 as i32 | 0x800 as i32,
-                crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
+                colorWhite.as_mut_ptr(),
             );
         }
     };

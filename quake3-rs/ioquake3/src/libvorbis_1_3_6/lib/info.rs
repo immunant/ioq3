@@ -76,7 +76,7 @@ pub use crate::stdlib::__ctype_toupper_loc;
 /* helpers */
 
 unsafe extern "C" fn _v_writestring(
-    mut o: *mut crate::ogg_h::oggpack_buffer,
+    mut o: *mut oggpack_buffer,
     mut s: *const libc::c_char,
     mut bytes: i32,
 ) {
@@ -88,8 +88,8 @@ unsafe extern "C" fn _v_writestring(
         }
         let fresh1 = s;
         s = s.offset(1);
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-            o as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_write(
+            o as *mut oggpack_buffer,
             *fresh1 as libc::c_ulong,
             8 as i32,
         );
@@ -97,7 +97,7 @@ unsafe extern "C" fn _v_writestring(
 }
 
 unsafe extern "C" fn _v_readstring(
-    mut o: *mut crate::ogg_h::oggpack_buffer,
+    mut o: *mut oggpack_buffer,
     mut buf: *mut libc::c_char,
     mut bytes: i32,
 ) {
@@ -109,25 +109,25 @@ unsafe extern "C" fn _v_readstring(
         }
         let fresh3 = buf;
         buf = buf.offset(1);
-        *fresh3 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            o as *mut crate::ogg_h::oggpack_buffer,
+        *fresh3 = oggpack_read(
+            o as *mut oggpack_buffer,
             8 as i32,
         ) as libc::c_char
     }
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_comment_init(mut vc: *mut crate::codec_h::vorbis_comment) {
+pub unsafe extern "C" fn vorbis_comment_init(mut vc: *mut vorbis_comment) {
     crate::stdlib::memset(
         vc as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_comment>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_comment>() as libc::c_ulong,
     );
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_comment_add(
-    mut vc: *mut crate::codec_h::vorbis_comment,
+    mut vc: *mut vorbis_comment,
     mut comment: *const libc::c_char,
 ) {
     (*vc).user_comments = crate::stdlib::realloc(
@@ -145,7 +145,7 @@ pub unsafe extern "C" fn vorbis_comment_add(
     *fresh4 = crate::stdlib::malloc(
         (*(*vc).comment_lengths.offset((*vc).comments as isize) + 1 as i32) as libc::c_ulong,
     ) as *mut libc::c_char;
-    ::libc::strcpy(
+    libc::strcpy(
         *(*vc).user_comments.offset((*vc).comments as isize),
         comment,
     );
@@ -156,7 +156,7 @@ pub unsafe extern "C" fn vorbis_comment_add(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_comment_add_tag(
-    mut vc: *mut crate::codec_h::vorbis_comment,
+    mut vc: *mut vorbis_comment,
     mut tag: *const libc::c_char,
     mut contents: *const libc::c_char,
 ) {
@@ -166,11 +166,11 @@ pub unsafe extern "C" fn vorbis_comment_add_tag(
             .wrapping_add(crate::stdlib::strlen(contents))
             .wrapping_add(2 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
-    ::libc::strcpy(comment, tag);
-    ::libc::strcat(comment, b"=\x00" as *const u8 as *const libc::c_char);
-    ::libc::strcat(comment, contents);
+    libc::strcpy(comment, tag);
+    libc::strcat(comment, b"=\x00" as *const u8 as *const libc::c_char);
+    libc::strcat(comment, contents);
     vorbis_comment_add(vc, comment);
-    ::libc::free(comment as *mut libc::c_void);
+    libc::free(comment as *mut libc::c_void);
 }
 /* This is more or less the same as strncasecmp - but that doesn't exist
  * everywhere, and this is a fairly trivial function, so we include it */
@@ -190,13 +190,13 @@ unsafe extern "C" fn tagcompare(
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
+                        *(*__ctype_toupper_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = toupper(*s1.offset(c as isize) as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_toupper_loc())
+                __res = *(*__ctype_toupper_loc())
                     .offset(*s1.offset(c as isize) as i32 as isize)
             }
             __res
@@ -208,13 +208,13 @@ unsafe extern "C" fn tagcompare(
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
-                        *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
+                        *(*__ctype_toupper_loc()).offset(__c as isize)
                     }
                 } else {
                     __res = toupper(*s2.offset(c as isize) as i32)
                 }
             } else {
-                __res = *(*crate::stdlib::__ctype_toupper_loc())
+                __res = *(*__ctype_toupper_loc())
                     .offset(*s2.offset(c as isize) as i32 as isize)
             }
             __res
@@ -228,7 +228,7 @@ unsafe extern "C" fn tagcompare(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_comment_query(
-    mut vc: *mut crate::codec_h::vorbis_comment,
+    mut vc: *mut vorbis_comment,
     mut tag: *const libc::c_char,
     mut count: i32,
 ) -> *mut libc::c_char {
@@ -237,14 +237,14 @@ pub unsafe extern "C" fn vorbis_comment_query(
     let mut taglen: i32 = crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     let mut fulltag: *mut libc::c_char =
         crate::stdlib::malloc((taglen + 1 as i32) as libc::c_ulong) as *mut libc::c_char;
-    ::libc::strcpy(fulltag, tag);
-    ::libc::strcat(fulltag, b"=\x00" as *const u8 as *const libc::c_char);
+    libc::strcpy(fulltag, tag);
+    libc::strcat(fulltag, b"=\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32 as isize;
     while i < (*vc).comments as isize {
         if tagcompare(*(*vc).user_comments.offset(i as isize), fulltag, taglen) == 0 {
             if count == found {
                 /* We return a pointer to the data, not a copy */
-                ::libc::free(fulltag as *mut libc::c_void);
+                libc::free(fulltag as *mut libc::c_void);
                 return (*(*vc).user_comments.offset(i as isize)).offset(taglen as isize);
             } else {
                 found += 1
@@ -252,14 +252,14 @@ pub unsafe extern "C" fn vorbis_comment_query(
         }
         i += 1
     }
-    ::libc::free(fulltag as *mut libc::c_void);
+    libc::free(fulltag as *mut libc::c_void);
     return 0 as *mut libc::c_char;
     /* didn't find anything */
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_comment_query_count(
-    mut vc: *mut crate::codec_h::vorbis_comment,
+    mut vc: *mut vorbis_comment,
     mut tag: *const libc::c_char,
 ) -> i32 {
     let mut i: i32 = 0; /* +1 for the = we append */
@@ -267,8 +267,8 @@ pub unsafe extern "C" fn vorbis_comment_query_count(
     let mut taglen: i32 = crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     let mut fulltag: *mut libc::c_char =
         crate::stdlib::malloc((taglen + 1 as i32) as libc::c_ulong) as *mut libc::c_char;
-    ::libc::strcpy(fulltag, tag);
-    ::libc::strcat(fulltag, b"=\x00" as *const u8 as *const libc::c_char);
+    libc::strcpy(fulltag, tag);
+    libc::strcat(fulltag, b"=\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;
     while i < (*vc).comments {
         if tagcompare(*(*vc).user_comments.offset(i as isize), fulltag, taglen) == 0 {
@@ -276,34 +276,34 @@ pub unsafe extern "C" fn vorbis_comment_query_count(
         }
         i += 1
     }
-    ::libc::free(fulltag as *mut libc::c_void);
+    libc::free(fulltag as *mut libc::c_void);
     return count;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_comment_clear(mut vc: *mut crate::codec_h::vorbis_comment) {
+pub unsafe extern "C" fn vorbis_comment_clear(mut vc: *mut vorbis_comment) {
     if !vc.is_null() {
         let mut i: isize = 0;
         if !(*vc).user_comments.is_null() {
             i = 0 as i32 as isize;
             while i < (*vc).comments as isize {
                 if !(*(*vc).user_comments.offset(i as isize)).is_null() {
-                    ::libc::free(*(*vc).user_comments.offset(i as isize) as *mut libc::c_void);
+                    libc::free(*(*vc).user_comments.offset(i as isize) as *mut libc::c_void);
                 }
                 i += 1
             }
-            ::libc::free((*vc).user_comments as *mut libc::c_void);
+            libc::free((*vc).user_comments as *mut libc::c_void);
         }
         if !(*vc).comment_lengths.is_null() {
-            ::libc::free((*vc).comment_lengths as *mut libc::c_void);
+            libc::free((*vc).comment_lengths as *mut libc::c_void);
         }
         if !(*vc).vendor.is_null() {
-            ::libc::free((*vc).vendor as *mut libc::c_void);
+            libc::free((*vc).vendor as *mut libc::c_void);
         }
         crate::stdlib::memset(
             vc as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<crate::codec_h::vorbis_comment>() as libc::c_ulong,
+            ::std::mem::size_of::<vorbis_comment>() as libc::c_ulong,
         );
     };
 }
@@ -312,11 +312,11 @@ They may be equal, but short will never ge greater than long */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_info_blocksize(
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut vi: *mut vorbis_info,
     mut zo: i32,
 ) -> i32 {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     return if !ci.is_null() {
         (*ci).blocksizes[zo as usize]
     } else {
@@ -338,28 +338,28 @@ and the streaming layer is not used */
 /* used by synthesis, which has a full, alloced vi */
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_info_init(mut vi: *mut crate::codec_h::vorbis_info) {
+pub unsafe extern "C" fn vorbis_info_init(mut vi: *mut vorbis_info) {
     crate::stdlib::memset(
         vi as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_info>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_info>() as libc::c_ulong,
     );
     (*vi).codec_setup = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
-        ::std::mem::size_of::<crate::codec_internal_h::codec_setup_info>() as libc::c_ulong,
+        ::std::mem::size_of::<codec_setup_info>() as libc::c_ulong,
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_info_clear(mut vi: *mut crate::codec_h::vorbis_info) {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+pub unsafe extern "C" fn vorbis_info_clear(mut vi: *mut vorbis_info) {
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut i: i32 = 0;
     if !ci.is_null() {
         i = 0 as i32;
         while i < (*ci).modes {
             if !(*ci).mode_param[i as usize].is_null() {
-                ::libc::free((*ci).mode_param[i as usize] as *mut libc::c_void);
+                libc::free((*ci).mode_param[i as usize] as *mut libc::c_void);
             }
             i += 1
         }
@@ -414,84 +414,84 @@ pub unsafe extern "C" fn vorbis_info_clear(mut vi: *mut crate::codec_h::vorbis_i
         while i < (*ci).books {
             if !(*ci).book_param[i as usize].is_null() {
                 /* knows if the book was not alloced */
-                crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy(
+                vorbis_staticbook_destroy(
                     (*ci).book_param[i as usize]
-                        as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                        as *mut static_codebook,
                 );
             }
             if !(*ci).fullbooks.is_null() {
-                crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_clear(
+                vorbis_book_clear(
                     (*ci).fullbooks.offset(i as isize)
-                        as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
+                        as *mut codebook,
                 );
             }
             i += 1
         }
         if !(*ci).fullbooks.is_null() {
-            ::libc::free((*ci).fullbooks as *mut libc::c_void);
+            libc::free((*ci).fullbooks as *mut libc::c_void);
         }
         i = 0 as i32;
         while i < (*ci).psys {
-            crate::src::libvorbis_1_3_6::lib::psy::_vi_psy_free(
+            _vi_psy_free(
                 (*ci).psy_param[i as usize]
-                    as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy,
+                    as *mut vorbis_info_psy,
             );
             i += 1
         }
-        ::libc::free(ci as *mut libc::c_void);
+        libc::free(ci as *mut libc::c_void);
     }
     crate::stdlib::memset(
         vi as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::codec_h::vorbis_info>() as libc::c_ulong,
+        ::std::mem::size_of::<vorbis_info>() as libc::c_ulong,
     );
 }
 /* Header packing/unpacking ********************************************/
 
 unsafe extern "C" fn _vorbis_unpack_info(
-    mut vi: *mut crate::codec_h::vorbis_info,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut vi: *mut vorbis_info,
+    mut opb: *mut oggpack_buffer,
 ) -> i32 {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info; /* EOP check */
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info; /* EOP check */
     if ci.is_null() {
         return -(129 as i32);
     } /* EOP check */
-    (*vi).version = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*vi).version = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
     ) as i32;
     if (*vi).version != 0 as i32 {
         return -(134 as i32);
     }
-    (*vi).channels = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*vi).channels = oggpack_read(
+        opb as *mut oggpack_buffer,
         8 as i32,
     ) as i32;
-    (*vi).rate = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*vi).rate = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
     );
-    (*vi).bitrate_upper = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*vi).bitrate_upper = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
-    ) as crate::config_types_h::ogg_int32_t as isize;
-    (*vi).bitrate_nominal = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    ) as ogg_int32_t as isize;
+    (*vi).bitrate_nominal = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
-    ) as crate::config_types_h::ogg_int32_t as isize;
-    (*vi).bitrate_lower = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    ) as ogg_int32_t as isize;
+    (*vi).bitrate_lower = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
-    ) as crate::config_types_h::ogg_int32_t as isize;
+    ) as ogg_int32_t as isize;
     (*ci).blocksizes[0 as i32 as usize] = ((1 as i32)
-        << crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        << oggpack_read(
+            opb as *mut oggpack_buffer,
             4 as i32,
         )) as isize;
     (*ci).blocksizes[1 as i32 as usize] = ((1 as i32)
-        << crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            opb as *mut crate::ogg_h::oggpack_buffer,
+        << oggpack_read(
+            opb as *mut oggpack_buffer,
             4 as i32,
         )) as isize;
     if !((*vi).rate < 1 as i32 as isize) {
@@ -499,8 +499,8 @@ unsafe extern "C" fn _vorbis_unpack_info(
             if !((*ci).blocksizes[0 as i32 as usize] < 64 as i32 as isize) {
                 if !((*ci).blocksizes[1 as i32 as usize] < (*ci).blocksizes[0 as i32 as usize]) {
                     if !((*ci).blocksizes[1 as i32 as usize] > 8192 as i32 as isize) {
-                        if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        if !(oggpack_read(
+                            opb as *mut oggpack_buffer,
                             1 as i32,
                         ) != 1 as i32 as isize)
                         {
@@ -516,13 +516,13 @@ unsafe extern "C" fn _vorbis_unpack_info(
 }
 
 unsafe extern "C" fn _vorbis_unpack_comment(
-    mut vc: *mut crate::codec_h::vorbis_comment,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut vc: *mut vorbis_comment,
+    mut opb: *mut oggpack_buffer,
 ) -> i32 {
     let mut current_block: u64;
     let mut i: i32 = 0;
-    let mut vendorlen: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    let mut vendorlen: i32 = oggpack_read(
+        opb as *mut oggpack_buffer,
         32 as i32,
     ) as i32;
     if !(vendorlen < 0 as i32) {
@@ -532,15 +532,15 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                 1 as i32 as libc::c_ulong,
             ) as *mut libc::c_char;
             _v_readstring(opb, (*vc).vendor, vendorlen);
-            i = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            i = oggpack_read(
+                opb as *mut oggpack_buffer,
                 32 as i32,
             ) as i32;
             if !(i < 0 as i32) {
                 if !(i as isize
                     > (*opb).storage
-                        - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        - oggpack_bytes(
+                            opb as *mut oggpack_buffer,
                         )
                         >> 2 as i32)
                 {
@@ -559,8 +559,8 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                             current_block = 6057473163062296781;
                             break;
                         }
-                        let mut len: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        let mut len: i32 = oggpack_read(
+                            opb as *mut oggpack_buffer,
                             32 as i32,
                         ) as i32;
                         if len < 0 as i32 {
@@ -569,8 +569,8 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                         }
                         if len as isize
                             > (*opb).storage
-                                - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                                    opb as *mut crate::ogg_h::oggpack_buffer,
+                                - oggpack_bytes(
+                                    opb as *mut oggpack_buffer,
                                 )
                         {
                             current_block = 16389255375241467587;
@@ -588,8 +588,8 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                     match current_block {
                         16389255375241467587 => {}
                         _ => {
-                            if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                opb as *mut crate::ogg_h::oggpack_buffer,
+                            if !(oggpack_read(
+                                opb as *mut oggpack_buffer,
                                 1 as i32,
                             ) != 1 as i32 as isize)
                             {
@@ -608,16 +608,16 @@ unsafe extern "C" fn _vorbis_unpack_comment(
 everything */
 
 unsafe extern "C" fn _vorbis_unpack_books(
-    mut vi: *mut crate::codec_h::vorbis_info,
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
+    mut vi: *mut vorbis_info,
+    mut opb: *mut oggpack_buffer,
 ) -> i32 {
     let mut current_block: u64;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut i: i32 = 0;
     /* codebooks */
-    (*ci).books = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    (*ci).books = (oggpack_read(
+        opb as *mut oggpack_buffer,
         8 as i32,
     ) + 1 as i32 as isize) as i32;
     if !((*ci).books <= 0 as i32) {
@@ -628,10 +628,10 @@ unsafe extern "C" fn _vorbis_unpack_books(
                 break;
             }
             (*ci).book_param[i as usize] =
-                crate::src::libvorbis_1_3_6::lib::codebook::vorbis_staticbook_unpack(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                vorbis_staticbook_unpack(
+                    opb as *mut oggpack_buffer,
                 )
-                    as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
+                    as *mut static_codebook;
             if (*ci).book_param[i as usize].is_null() {
                 current_block = 9493312797378346061;
                 break;
@@ -643,8 +643,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
             _ =>
             /* time backend settings; hooks are unused */
             {
-                let mut times: i32 = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                let mut times: i32 = (oggpack_read(
+                    opb as *mut oggpack_buffer,
                     6 as i32,
                 ) + 1 as i32 as isize) as i32;
                 if !(times <= 0 as i32) {
@@ -654,8 +654,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
                             current_block = 17860125682698302841;
                             break;
                         }
-                        let mut test: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        let mut test: i32 = oggpack_read(
+                            opb as *mut oggpack_buffer,
                             16 as i32,
                         ) as i32;
                         if test < 0 as i32 || test >= 1 as i32 {
@@ -668,8 +668,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
                         9493312797378346061 => {}
                         _ => {
                             /* floor backend settings */
-                            (*ci).floors = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                opb as *mut crate::ogg_h::oggpack_buffer,
+                            (*ci).floors = (oggpack_read(
+                                opb as *mut oggpack_buffer,
                                 6 as i32,
                             ) + 1 as i32 as isize)
                                 as i32;
@@ -681,8 +681,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                         break;
                                     }
                                     (*ci).floor_type[i as usize] =
-                                        crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                            opb as *mut crate::ogg_h::oggpack_buffer,
+                                        oggpack_read(
+                                            opb as *mut oggpack_buffer,
                                             16 as i32,
                                         ) as i32;
                                     if (*ci).floor_type[i as usize] < 0 as i32
@@ -710,8 +710,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                     _ => {
                                         /* residue backend settings */
                                         (*ci).residues =
-                                            (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                                opb as *mut crate::ogg_h::oggpack_buffer,
+                                            (oggpack_read(
+                                                opb as *mut oggpack_buffer,
                                                 6 as i32,
                                             ) + 1 as i32 as isize)
                                                 as i32;
@@ -724,7 +724,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                 }
                                                 (*ci).residue_type[i as usize]
                                                     =
-                                                    crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                    oggpack_read(opb as *mut oggpack_buffer,
                                                                  16 as
                                                                      i32)
                                                         as i32;
@@ -754,7 +754,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                 _ => {
                                                     /* map backend settings */
                                                     (*ci).maps =
-                                                        (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                        (oggpack_read(opb as *mut oggpack_buffer,
                                                                       6 as
                                                                           i32)
                                                              +
@@ -774,7 +774,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                as
                                                                                usize]
                                                                 =
-                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                oggpack_read(opb as *mut oggpack_buffer,
                                                                              16
                                                                                  as
                                                                                  i32)
@@ -809,7 +809,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                             _ => {
                                                                 /* mode settings */
                                                                 (*ci).modes =
-                                                                    (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                    (oggpack_read(opb as *mut oggpack_buffer,
                                                                                   6
                                                                                       as
                                                                                       i32)
@@ -837,16 +837,16 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                        i32
                                                                                        as
                                                                                        libc::c_ulong,
-                                                                                   ::std::mem::size_of::<crate::codec_internal_h::vorbis_info_mode>()
+                                                                                   ::std::mem::size_of::<vorbis_info_mode>()
                                                                                        as
                                                                                        libc::c_ulong)
                                                                                 as
-                                                                                *mut crate::codec_internal_h::vorbis_info_mode;
+                                                                                *mut vorbis_info_mode;
                                                                         (*(*ci).mode_param[i
                                                                                                as
                                                                                                usize]).blockflag
                                                                             =
-                                                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                            oggpack_read(opb as *mut oggpack_buffer,
                                                                                          1
                                                                                              as
                                                                                              i32)
@@ -856,7 +856,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                                as
                                                                                                usize]).windowtype
                                                                             =
-                                                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                            oggpack_read(opb as *mut oggpack_buffer,
                                                                                          16
                                                                                              as
                                                                                              i32)
@@ -866,7 +866,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                                as
                                                                                                usize]).transformtype
                                                                             =
-                                                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                            oggpack_read(opb as *mut oggpack_buffer,
                                                                                          16
                                                                                              as
                                                                                              i32)
@@ -876,7 +876,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                                as
                                                                                                usize]).mapping
                                                                             =
-                                                                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                            oggpack_read(opb as *mut oggpack_buffer,
                                                                                          8
                                                                                              as
                                                                                              i32)
@@ -926,7 +926,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                         => {
                                                                         }
                                                                         _ => {
-                                                                            if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
+                                                                            if !(oggpack_read(opb as *mut oggpack_buffer,
                                                                                               1
                                                                                                   as
                                                                                                   i32)
@@ -966,8 +966,8 @@ unsafe extern "C" fn _vorbis_unpack_books(
 /* Is this packet a vorbis ID header? */
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_synthesis_idheader(mut op: *mut crate::ogg_h::ogg_packet) -> i32 {
-    let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
+pub unsafe extern "C" fn vorbis_synthesis_idheader(mut op: *mut ogg_packet) -> i32 {
+    let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
         buffer: 0 as *mut u8,
@@ -976,16 +976,16 @@ pub unsafe extern "C" fn vorbis_synthesis_idheader(mut op: *mut crate::ogg_h::og
     }; /* Not the initial packet */
     let mut buffer: [libc::c_char; 6] = [0; 6]; /* not an ID header */
     if !op.is_null() {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_readinit(
+            &mut opb as *mut _ as *mut oggpack_buffer,
             (*op).packet,
             (*op).bytes as i32,
         ); /* not vorbis */
         if (*op).b_o_s == 0 {
             return 0 as i32;
         }
-        if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        if oggpack_read(
+            &mut opb as *mut _ as *mut oggpack_buffer,
             8 as i32,
         ) != 1 as i32 as isize
         {
@@ -1016,11 +1016,11 @@ codebook. */
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_synthesis_headerin(
-    mut vi: *mut crate::codec_h::vorbis_info,
-    mut vc: *mut crate::codec_h::vorbis_comment,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vi: *mut vorbis_info,
+    mut vc: *mut vorbis_comment,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
+    let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
         buffer: 0 as *mut u8,
@@ -1028,16 +1028,16 @@ pub unsafe extern "C" fn vorbis_synthesis_headerin(
         storage: 0,
     };
     if !op.is_null() {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_readinit(
+            &mut opb as *mut _ as *mut oggpack_buffer,
             (*op).packet,
             (*op).bytes as i32,
         );
         /* Which of the three types of header is this? */
         /* Also verify header-ness, vorbis */
         let mut buffer: [libc::c_char; 6] = [0; 6];
-        let mut packtype: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        let mut packtype: i32 = oggpack_read(
+            &mut opb as *mut _ as *mut oggpack_buffer,
             8 as i32,
         ) as i32;
         crate::stdlib::memset(
@@ -1090,7 +1090,7 @@ pub unsafe extern "C" fn vorbis_synthesis_headerin(
                     /* improperly initialized vorbis_info */
                     return -(129 as i32);
                 }
-                if (*((*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info)).books
+                if (*((*vi).codec_setup as *mut codec_setup_info)).books
                     > 0 as i32
                 {
                     /* previously initialized setup header */
@@ -1109,11 +1109,11 @@ pub unsafe extern "C" fn vorbis_synthesis_headerin(
 /* pack side **********************************************************/
 
 unsafe extern "C" fn _vorbis_pack_info(
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut opb: *mut oggpack_buffer,
+    mut vi: *mut vorbis_info,
 ) -> i32 {
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     if ci.is_null()
         || (*ci).blocksizes[0 as i32 as usize] < 64 as i32 as isize
         || (*ci).blocksizes[1 as i32 as usize] < (*ci).blocksizes[0 as i32 as usize]
@@ -1121,8 +1121,8 @@ unsafe extern "C" fn _vorbis_pack_info(
         return -(129 as i32);
     }
     /* preamble */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         0x1 as i32 as libc::c_ulong,
         8 as i32,
     );
@@ -1132,54 +1132,54 @@ unsafe extern "C" fn _vorbis_pack_info(
         6 as i32,
     );
     /* basic information about the stream */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         0 as i32 as libc::c_ulong,
         32 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vi).channels as libc::c_ulong,
         8 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vi).rate as libc::c_ulong,
         32 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vi).bitrate_upper as libc::c_ulong,
         32 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vi).bitrate_nominal as libc::c_ulong,
         32 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vi).bitrate_lower as libc::c_ulong,
         32 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
             ((*ci).blocksizes[0 as i32 as usize] - 1 as i32 as isize)
-                as crate::config_types_h::ogg_uint32_t,
+                as ogg_uint32_t,
         ) as libc::c_ulong,
         4 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
             ((*ci).blocksizes[1 as i32 as usize] - 1 as i32 as isize)
-                as crate::config_types_h::ogg_uint32_t,
+                as ogg_uint32_t,
         ) as libc::c_ulong,
         4 as i32,
     );
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         1 as i32 as libc::c_ulong,
         1 as i32,
     );
@@ -1187,16 +1187,16 @@ unsafe extern "C" fn _vorbis_pack_info(
 }
 
 unsafe extern "C" fn _vorbis_pack_comment(
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
-    mut vc: *mut crate::codec_h::vorbis_comment,
+    mut opb: *mut oggpack_buffer,
+    mut vc: *mut vorbis_comment,
 ) -> i32 {
     let mut bytes: i32 = crate::stdlib::strlen(
         b"Xiph.Org libVorbis I 20180316 (Now 100% fewer shells)\x00" as *const u8
             as *const libc::c_char,
     ) as i32;
     /* preamble */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         0x3 as i32 as libc::c_ulong,
         8 as i32,
     );
@@ -1206,8 +1206,8 @@ unsafe extern "C" fn _vorbis_pack_comment(
         6 as i32,
     );
     /* vendor */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         bytes as libc::c_ulong,
         32 as i32,
     );
@@ -1218,8 +1218,8 @@ unsafe extern "C" fn _vorbis_pack_comment(
         bytes,
     );
     /* comments */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         (*vc).comments as libc::c_ulong,
         32 as i32,
     );
@@ -1228,8 +1228,8 @@ unsafe extern "C" fn _vorbis_pack_comment(
         i = 0 as i32;
         while i < (*vc).comments {
             if !(*(*vc).user_comments.offset(i as isize)).is_null() {
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_write(
+                    opb as *mut oggpack_buffer,
                     *(*vc).comment_lengths.offset(i as isize) as libc::c_ulong,
                     32 as i32,
                 );
@@ -1239,8 +1239,8 @@ unsafe extern "C" fn _vorbis_pack_comment(
                     *(*vc).comment_lengths.offset(i as isize),
                 );
             } else {
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_write(
+                    opb as *mut oggpack_buffer,
                     0 as i32 as libc::c_ulong,
                     32 as i32,
                 );
@@ -1248,8 +1248,8 @@ unsafe extern "C" fn _vorbis_pack_comment(
             i += 1
         }
     }
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         1 as i32 as libc::c_ulong,
         1 as i32,
     );
@@ -1257,18 +1257,18 @@ unsafe extern "C" fn _vorbis_pack_comment(
 }
 
 unsafe extern "C" fn _vorbis_pack_books(
-    mut opb: *mut crate::ogg_h::oggpack_buffer,
-    mut vi: *mut crate::codec_h::vorbis_info,
+    mut opb: *mut oggpack_buffer,
+    mut vi: *mut vorbis_info,
 ) -> i32 {
     let mut current_block: u64;
-    let mut ci: *mut crate::codec_internal_h::codec_setup_info =
-        (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
+    let mut ci: *mut codec_setup_info =
+        (*vi).codec_setup as *mut codec_setup_info;
     let mut i: i32 = 0;
     if ci.is_null() {
         return -(129 as i32);
     }
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         0x5 as i32 as libc::c_ulong,
         8 as i32,
     );
@@ -1278,8 +1278,8 @@ unsafe extern "C" fn _vorbis_pack_books(
         6 as i32,
     );
     /* books */
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-        opb as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_write(
+        opb as *mut oggpack_buffer,
         ((*ci).books - 1 as i32) as libc::c_ulong,
         8 as i32,
     );
@@ -1289,10 +1289,10 @@ unsafe extern "C" fn _vorbis_pack_books(
             current_block = 14523784380283086299;
             break;
         }
-        if crate::src::libvorbis_1_3_6::lib::codebook::vorbis_staticbook_pack(
+        if vorbis_staticbook_pack(
             (*ci).book_param[i as usize]
-                as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
-            opb as *mut crate::ogg_h::oggpack_buffer,
+                as *const static_codebook,
+            opb as *mut oggpack_buffer,
         ) != 0
         {
             current_block = 9715915742856433172;
@@ -1303,19 +1303,19 @@ unsafe extern "C" fn _vorbis_pack_books(
     match current_block {
         14523784380283086299 => {
             /* times; hook placeholders */
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 0 as i32 as libc::c_ulong,
                 6 as i32,
             );
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 0 as i32 as libc::c_ulong,
                 16 as i32,
             );
             /* floors */
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                opb as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_write(
+                opb as *mut oggpack_buffer,
                 ((*ci).floors - 1 as i32) as libc::c_ulong,
                 6 as i32,
             );
@@ -1325,8 +1325,8 @@ unsafe extern "C" fn _vorbis_pack_books(
                     current_block = 8831408221741692167;
                     break;
                 }
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                    opb as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_write(
+                    opb as *mut oggpack_buffer,
                     (*ci).floor_type[i as usize] as libc::c_ulong,
                     16 as i32,
                 );
@@ -1352,15 +1352,15 @@ unsafe extern "C" fn _vorbis_pack_books(
                 9715915742856433172 => {}
                 _ => {
                     /* residues */
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         ((*ci).residues - 1 as i32) as libc::c_ulong,
                         6 as i32,
                     );
                     i = 0 as i32;
                     while i < (*ci).residues {
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*ci).residue_type[i as usize] as libc::c_ulong,
                             16 as i32,
                         );
@@ -1374,15 +1374,15 @@ unsafe extern "C" fn _vorbis_pack_books(
                         i += 1
                     }
                     /* maps */
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         ((*ci).maps - 1 as i32) as libc::c_ulong,
                         6 as i32,
                     );
                     i = 0 as i32;
                     while i < (*ci).maps {
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*ci).map_type[i as usize] as libc::c_ulong,
                             16 as i32,
                         );
@@ -1396,37 +1396,37 @@ unsafe extern "C" fn _vorbis_pack_books(
                         i += 1
                     }
                     /* modes */
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         ((*ci).modes - 1 as i32) as libc::c_ulong,
                         6 as i32,
                     );
                     i = 0 as i32;
                     while i < (*ci).modes {
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*(*ci).mode_param[i as usize]).blockflag as libc::c_ulong,
                             1 as i32,
                         );
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*(*ci).mode_param[i as usize]).windowtype as libc::c_ulong,
                             16 as i32,
                         );
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*(*ci).mode_param[i as usize]).transformtype as libc::c_ulong,
                             16 as i32,
                         );
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                            opb as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_write(
+                            opb as *mut oggpack_buffer,
                             (*(*ci).mode_param[i as usize]).mapping as libc::c_ulong,
                             8 as i32,
                         );
                         i += 1
                     }
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
-                        opb as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_write(
+                        opb as *mut oggpack_buffer,
                         1 as i32 as libc::c_ulong,
                         1 as i32,
                     );
@@ -1441,156 +1441,156 @@ unsafe extern "C" fn _vorbis_pack_books(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_commentheader_out(
-    mut vc: *mut crate::codec_h::vorbis_comment,
-    mut op: *mut crate::ogg_h::ogg_packet,
+    mut vc: *mut vorbis_comment,
+    mut op: *mut ogg_packet,
 ) -> i32 {
-    let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
+    let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
         buffer: 0 as *mut u8,
         ptr: 0 as *mut u8,
         storage: 0,
     };
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_writeinit(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    oggpack_writeinit(
+        &mut opb as *mut _ as *mut oggpack_buffer,
     );
     if _vorbis_pack_comment(&mut opb, vc) != 0 {
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_writeclear(
+            &mut opb as *mut _ as *mut oggpack_buffer,
         );
         return -(130 as i32);
     }
-    (*op).packet = crate::stdlib::malloc(crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    (*op).packet = crate::stdlib::malloc(oggpack_bytes(
+        &mut opb as *mut _ as *mut oggpack_buffer,
     ) as libc::c_ulong) as *mut u8;
     crate::stdlib::memcpy(
         (*op).packet as *mut libc::c_void,
         opb.buffer as *const libc::c_void,
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_bytes(
+            &mut opb as *mut _ as *mut oggpack_buffer,
         ) as libc::c_ulong,
     );
-    (*op).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    (*op).bytes = oggpack_bytes(
+        &mut opb as *mut _ as *mut oggpack_buffer,
     );
     (*op).b_o_s = 0 as i32 as isize;
     (*op).e_o_s = 0 as i32 as isize;
-    (*op).granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t;
-    (*op).packetno = 1 as i32 as crate::config_types_h::ogg_int64_t;
-    crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
-        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+    (*op).granulepos = 0 as i32 as ogg_int64_t;
+    (*op).packetno = 1 as i32 as ogg_int64_t;
+    oggpack_writeclear(
+        &mut opb as *mut _ as *mut oggpack_buffer,
     );
     return 0 as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_analysis_headerout(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut vc: *mut crate::codec_h::vorbis_comment,
-    mut op: *mut crate::ogg_h::ogg_packet,
-    mut op_comm: *mut crate::ogg_h::ogg_packet,
-    mut op_code: *mut crate::ogg_h::ogg_packet,
+    mut v: *mut vorbis_dsp_state,
+    mut vc: *mut vorbis_comment,
+    mut op: *mut ogg_packet,
+    mut op_comm: *mut ogg_packet,
+    mut op_code: *mut ogg_packet,
 ) -> i32 {
     let mut ret: i32 = -(130 as i32);
-    let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
-    let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
+    let mut vi: *mut vorbis_info = (*v).vi;
+    let mut opb: oggpack_buffer = oggpack_buffer {
         endbyte: 0,
         endbit: 0,
         buffer: 0 as *mut u8,
         ptr: 0 as *mut u8,
         storage: 0,
     };
-    let mut b: *mut crate::codec_internal_h::private_state =
-        (*v).backend_state as *mut crate::codec_internal_h::private_state;
+    let mut b: *mut private_state =
+        (*v).backend_state as *mut private_state;
     if b.is_null() || (*vi).channels <= 0 as i32 || (*vi).channels > 256 as i32 {
-        b = 0 as *mut crate::codec_internal_h::private_state;
+        b = 0 as *mut private_state;
         ret = -(129 as i32)
     } else {
         /* first header packet **********************************************/
-        crate::src::libogg_1_3_3::src::bitwise::oggpack_writeinit(
-            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+        oggpack_writeinit(
+            &mut opb as *mut _ as *mut oggpack_buffer,
         );
         if !(_vorbis_pack_info(&mut opb, vi) != 0) {
             /* build the packet */
             if !(*b).header.is_null() {
-                ::libc::free((*b).header as *mut libc::c_void);
+                libc::free((*b).header as *mut libc::c_void);
             }
             (*b).header =
-                crate::stdlib::malloc(crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                crate::stdlib::malloc(oggpack_bytes(
+                    &mut opb as *mut _ as *mut oggpack_buffer,
                 ) as libc::c_ulong) as *mut u8;
             crate::stdlib::memcpy(
                 (*b).header as *mut libc::c_void,
                 opb.buffer as *const libc::c_void,
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_bytes(
+                    &mut opb as *mut _ as *mut oggpack_buffer,
                 ) as libc::c_ulong,
             );
             (*op).packet = (*b).header;
-            (*op).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+            (*op).bytes = oggpack_bytes(
+                &mut opb as *mut _ as *mut oggpack_buffer,
             );
             (*op).b_o_s = 1 as i32 as isize;
             (*op).e_o_s = 0 as i32 as isize;
-            (*op).granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t;
-            (*op).packetno = 0 as i32 as crate::config_types_h::ogg_int64_t;
+            (*op).granulepos = 0 as i32 as ogg_int64_t;
+            (*op).packetno = 0 as i32 as ogg_int64_t;
             /* second header packet (comments) **********************************/
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_reset(
-                &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_reset(
+                &mut opb as *mut _ as *mut oggpack_buffer,
             );
             if !(_vorbis_pack_comment(&mut opb, vc) != 0) {
                 if !(*b).header1.is_null() {
-                    ::libc::free((*b).header1 as *mut libc::c_void);
+                    libc::free((*b).header1 as *mut libc::c_void);
                 }
                 (*b).header1 =
-                    crate::stdlib::malloc(crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                    crate::stdlib::malloc(oggpack_bytes(
+                        &mut opb as *mut _ as *mut oggpack_buffer,
                     ) as libc::c_ulong) as *mut u8;
                 crate::stdlib::memcpy(
                     (*b).header1 as *mut libc::c_void,
                     opb.buffer as *const libc::c_void,
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                    oggpack_bytes(
+                        &mut opb as *mut _ as *mut oggpack_buffer,
                     ) as libc::c_ulong,
                 );
                 (*op_comm).packet = (*b).header1;
-                (*op_comm).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                    &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                (*op_comm).bytes = oggpack_bytes(
+                    &mut opb as *mut _ as *mut oggpack_buffer,
                 );
                 (*op_comm).b_o_s = 0 as i32 as isize;
                 (*op_comm).e_o_s = 0 as i32 as isize;
-                (*op_comm).granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t;
-                (*op_comm).packetno = 1 as i32 as crate::config_types_h::ogg_int64_t;
+                (*op_comm).granulepos = 0 as i32 as ogg_int64_t;
+                (*op_comm).packetno = 1 as i32 as ogg_int64_t;
                 /* third header packet (modes/codebooks) ****************************/
-                crate::src::libogg_1_3_3::src::bitwise::oggpack_reset(
-                    &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                oggpack_reset(
+                    &mut opb as *mut _ as *mut oggpack_buffer,
                 );
                 if !(_vorbis_pack_books(&mut opb, vi) != 0) {
                     if !(*b).header2.is_null() {
-                        ::libc::free((*b).header2 as *mut libc::c_void);
+                        libc::free((*b).header2 as *mut libc::c_void);
                     }
                     (*b).header2 = crate::stdlib::malloc(
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_bytes(
+                            &mut opb as *mut _ as *mut oggpack_buffer,
                         ) as libc::c_ulong,
                     ) as *mut u8;
                     crate::stdlib::memcpy(
                         (*b).header2 as *mut libc::c_void,
                         opb.buffer as *const libc::c_void,
-                        crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                            &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                        oggpack_bytes(
+                            &mut opb as *mut _ as *mut oggpack_buffer,
                         ) as libc::c_ulong,
                     );
                     (*op_code).packet = (*b).header2;
-                    (*op_code).bytes = crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
-                        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                    (*op_code).bytes = oggpack_bytes(
+                        &mut opb as *mut _ as *mut oggpack_buffer,
                     );
                     (*op_code).b_o_s = 0 as i32 as isize;
                     (*op_code).e_o_s = 0 as i32 as isize;
-                    (*op_code).granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t;
-                    (*op_code).packetno = 2 as i32 as crate::config_types_h::ogg_int64_t;
-                    crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
-                        &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+                    (*op_code).granulepos = 0 as i32 as ogg_int64_t;
+                    (*op_code).packetno = 2 as i32 as ogg_int64_t;
+                    oggpack_writeclear(
+                        &mut opb as *mut _ as *mut oggpack_buffer,
                     );
                     return 0 as i32;
                 }
@@ -1600,32 +1600,32 @@ pub unsafe extern "C" fn vorbis_analysis_headerout(
     crate::stdlib::memset(
         op as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::ogg_packet>() as libc::c_ulong,
+        ::std::mem::size_of::<ogg_packet>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         op_comm as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::ogg_packet>() as libc::c_ulong,
+        ::std::mem::size_of::<ogg_packet>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         op_code as *mut libc::c_void,
         0 as i32,
-        ::std::mem::size_of::<crate::ogg_h::ogg_packet>() as libc::c_ulong,
+        ::std::mem::size_of::<ogg_packet>() as libc::c_ulong,
     );
     if !b.is_null() {
         if (*vi).channels > 0 as i32 {
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_writeclear(
-                &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+            oggpack_writeclear(
+                &mut opb as *mut _ as *mut oggpack_buffer,
             );
         }
         if !(*b).header.is_null() {
-            ::libc::free((*b).header as *mut libc::c_void);
+            libc::free((*b).header as *mut libc::c_void);
         }
         if !(*b).header1.is_null() {
-            ::libc::free((*b).header1 as *mut libc::c_void);
+            libc::free((*b).header1 as *mut libc::c_void);
         }
         if !(*b).header2.is_null() {
-            ::libc::free((*b).header2 as *mut libc::c_void);
+            libc::free((*b).header2 as *mut libc::c_void);
         }
         (*b).header = 0 as *mut u8;
         (*b).header1 = 0 as *mut u8;
@@ -1636,8 +1636,8 @@ pub unsafe extern "C" fn vorbis_analysis_headerout(
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_granule_time(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-    mut granulepos: crate::config_types_h::ogg_int64_t,
+    mut v: *mut vorbis_dsp_state,
+    mut granulepos: ogg_int64_t,
 ) -> f64 {
     if granulepos == -(1 as i32) as isize {
         return -(1 as i32) as f64;
@@ -1647,8 +1647,8 @@ pub unsafe extern "C" fn vorbis_granule_time(
     if granulepos >= 0 as i32 as isize {
         return granulepos as f64 / (*(*v).vi).rate as f64;
     } else {
-        let mut granuleoff: crate::config_types_h::ogg_int64_t =
-            0xffffffff as u32 as crate::config_types_h::ogg_int64_t;
+        let mut granuleoff: ogg_int64_t =
+            0xffffffff as u32 as ogg_int64_t;
         granuleoff <<= 31 as i32;
         granuleoff |= 0x7ffffffff as isize;
         return (granulepos as f64 + 2 as i32 as f64 + granuleoff as f64 + granuleoff as f64)

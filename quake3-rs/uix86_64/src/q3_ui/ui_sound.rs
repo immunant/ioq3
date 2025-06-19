@@ -38,20 +38,20 @@ pub use crate::ui_local_h::menutext_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct soundOptionsInfo_t {
-    pub menu: crate::ui_local_h::menuframework_s,
-    pub banner: crate::ui_local_h::menutext_s,
-    pub framel: crate::ui_local_h::menubitmap_s,
-    pub framer: crate::ui_local_h::menubitmap_s,
-    pub graphics: crate::ui_local_h::menutext_s,
-    pub display: crate::ui_local_h::menutext_s,
-    pub sound: crate::ui_local_h::menutext_s,
-    pub network: crate::ui_local_h::menutext_s,
-    pub sfxvolume: crate::ui_local_h::menuslider_s,
-    pub musicvolume: crate::ui_local_h::menuslider_s,
-    pub soundSystem: crate::ui_local_h::menulist_s,
-    pub quality: crate::ui_local_h::menulist_s,
-    pub back: crate::ui_local_h::menubitmap_s,
-    pub apply: crate::ui_local_h::menubitmap_s,
+    pub menu: menuframework_s,
+    pub banner: menutext_s,
+    pub framel: menubitmap_s,
+    pub framer: menubitmap_s,
+    pub graphics: menutext_s,
+    pub display: menutext_s,
+    pub sound: menutext_s,
+    pub network: menutext_s,
+    pub sfxvolume: menuslider_s,
+    pub musicvolume: menuslider_s,
+    pub soundSystem: menulist_s,
+    pub quality: menulist_s,
+    pub back: menubitmap_s,
+    pub apply: menubitmap_s,
     pub sfxvolume_original: f32,
     pub musicvolume_original: f32,
     pub soundSystem_original: i32,
@@ -72,19 +72,19 @@ static mut soundSystem_items: [*const libc::c_char; 3] = [
 ];
 
 static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
-    banner: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    banner: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -94,8 +94,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -106,8 +106,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    framel: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framel: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -117,8 +117,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -133,8 +133,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    framer: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    framer: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -144,8 +144,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -160,8 +160,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    graphics: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    graphics: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -171,8 +171,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -183,8 +183,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    display: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    display: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -194,8 +194,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -206,8 +206,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    sound: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    sound: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -217,8 +217,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -229,8 +229,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    network: crate::ui_local_h::menutext_s {
-        generic: crate::ui_local_h::menucommon_s {
+    network: menutext_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -240,8 +240,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -252,8 +252,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         style: 0,
         color: 0 as *const f32 as *mut f32,
     },
-    sfxvolume: crate::ui_local_h::menuslider_s {
-        generic: crate::ui_local_h::menucommon_s {
+    sfxvolume: menuslider_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -263,8 +263,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -276,8 +276,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         curvalue: 0.,
         range: 0.,
     },
-    musicvolume: crate::ui_local_h::menuslider_s {
-        generic: crate::ui_local_h::menucommon_s {
+    musicvolume: menuslider_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -287,8 +287,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -300,8 +300,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         curvalue: 0.,
         range: 0.,
     },
-    soundSystem: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    soundSystem: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -311,8 +311,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -329,8 +329,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         columns: 0,
         separation: 0,
     },
-    quality: crate::ui_local_h::menulist_s {
-        generic: crate::ui_local_h::menucommon_s {
+    quality: menulist_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -340,8 +340,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -358,8 +358,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         columns: 0,
         separation: 0,
     },
-    back: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    back: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -369,8 +369,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -385,8 +385,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
         height: 0,
         focuscolor: 0 as *const f32 as *mut f32,
     },
-    apply: crate::ui_local_h::menubitmap_s {
-        generic: crate::ui_local_h::menucommon_s {
+    apply: menubitmap_s {
+        generic: menucommon_s {
             type_0: 0,
             name: 0 as *const libc::c_char,
             id: 0,
@@ -396,8 +396,8 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const crate::ui_local_h::menuframework_s
-                as *mut crate::ui_local_h::menuframework_s,
+            parent: 0 as *const menuframework_s
+                as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -427,18 +427,18 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut e
     if event != 3 as i32 {
         return;
     }
-    match (*(ptr as *mut crate::ui_local_h::menucommon_s)).id {
+    match (*(ptr as *mut menucommon_s)).id {
         10 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_video::UI_GraphicsOptionsMenu();
+            UI_PopMenu();
+            UI_GraphicsOptionsMenu();
         }
         11 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_display::UI_DisplayOptionsMenu();
+            UI_PopMenu();
+            UI_DisplayOptionsMenu();
         }
         13 => {
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
-            crate::src::q3_ui::ui_network::UI_NetworkOptionsMenu();
+            UI_PopMenu();
+            UI_NetworkOptionsMenu();
         }
         19 => {
             /*
@@ -452,15 +452,15 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut e
                     soundOptionsInfo.a3d.curvalue = (int)trap_Cvar_VariableValue( "s_usingA3D" );
                     break;
             */
-            crate::src::q3_ui::ui_atoms::UI_PopMenu();
+            UI_PopMenu();
         }
         20 => {
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"s_volume\x00" as *const u8 as *const libc::c_char,
                 soundOptionsInfo.sfxvolume.curvalue / 10 as i32 as f32,
             );
             soundOptionsInfo.sfxvolume_original = soundOptionsInfo.sfxvolume.curvalue;
-            crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+            trap_Cvar_SetValue(
                 b"s_musicvolume\x00" as *const u8 as *const libc::c_char,
                 soundOptionsInfo.musicvolume.curvalue / 10 as i32 as f32,
             );
@@ -478,19 +478,19 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Event(mut ptr: *mut libc::c_void, mut e
                 if speed == 22050 as i32 {
                     speed = 0 as i32
                 }
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char,
                     speed as f32,
                 );
                 soundOptionsInfo.quality_original = soundOptionsInfo.quality.curvalue;
-                crate::src::ui::ui_syscalls::trap_Cvar_SetValue(
+                trap_Cvar_SetValue(
                     b"s_useOpenAL\x00" as *const u8 as *const libc::c_char,
                     (soundOptionsInfo.soundSystem.curvalue == 1 as i32) as i32 as f32,
                 );
                 soundOptionsInfo.soundSystem_original = soundOptionsInfo.soundSystem.curvalue;
-                crate::src::q3_ui::ui_atoms::UI_ForceMenuOff();
-                crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-                    crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+                UI_ForceMenuOff();
+                trap_Cmd_ExecuteText(
+                    EXEC_APPEND as i32,
                     b"snd_restart\n\x00" as *const u8 as *const libc::c_char,
                 );
             }
@@ -534,8 +534,8 @@ SoundOptions_MenuDraw
 pub unsafe extern "C" fn SoundOptions_MenuDraw() {
     //APSFIX - rework this
     SoundOptions_UpdateMenuItems();
-    crate::src::q3_ui::ui_qmenu::Menu_Draw(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    Menu_Draw(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
     );
 }
 /*
@@ -553,8 +553,8 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
         ::std::mem::size_of::<soundOptionsInfo_t>() as libc::c_ulong,
     );
     UI_SoundOptionsMenu_Cache();
-    soundOptionsInfo.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
-    soundOptionsInfo.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    soundOptionsInfo.menu.wrapAround = qtrue;
+    soundOptionsInfo.menu.fullscreen = qtrue;
     soundOptionsInfo.menu.draw = Some(SoundOptions_MenuDraw as unsafe extern "C" fn() -> ());
     soundOptionsInfo.banner.generic.type_0 = 10 as i32;
     soundOptionsInfo.banner.generic.flags = 0x8 as i32 as u32;
@@ -562,7 +562,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.banner.generic.y = 16 as i32;
     soundOptionsInfo.banner.string =
         b"SYSTEM SETUP\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    soundOptionsInfo.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
+    soundOptionsInfo.banner.color = color_white.as_mut_ptr();
     soundOptionsInfo.banner.style = 0x1 as i32;
     soundOptionsInfo.framel.generic.type_0 = 6 as i32;
     soundOptionsInfo.framel.generic.name =
@@ -590,7 +590,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     soundOptionsInfo.graphics.style = 0x2 as i32;
-    soundOptionsInfo.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    soundOptionsInfo.graphics.color = color_red.as_mut_ptr();
     soundOptionsInfo.display.generic.type_0 = 9 as i32;
     soundOptionsInfo.display.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     soundOptionsInfo.display.generic.id = 11 as i32;
@@ -601,7 +601,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.display.string =
         b"DISPLAY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     soundOptionsInfo.display.style = 0x2 as i32;
-    soundOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    soundOptionsInfo.display.color = color_red.as_mut_ptr();
     soundOptionsInfo.sound.generic.type_0 = 9 as i32;
     soundOptionsInfo.sound.generic.flags = 0x10 as i32 as u32;
     soundOptionsInfo.sound.generic.id = 12 as i32;
@@ -612,7 +612,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.sound.string =
         b"SOUND\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     soundOptionsInfo.sound.style = 0x2 as i32;
-    soundOptionsInfo.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    soundOptionsInfo.sound.color = color_red.as_mut_ptr();
     soundOptionsInfo.network.generic.type_0 = 9 as i32;
     soundOptionsInfo.network.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     soundOptionsInfo.network.generic.id = 13 as i32;
@@ -623,7 +623,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.network.string =
         b"NETWORK\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     soundOptionsInfo.network.style = 0x2 as i32;
-    soundOptionsInfo.network.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
+    soundOptionsInfo.network.color = color_red.as_mut_ptr();
     y = 240 as i32 - 2 as i32 * (16 as i32 + 2 as i32);
     soundOptionsInfo.sfxvolume.generic.type_0 = 1 as i32;
     soundOptionsInfo.sfxvolume.generic.name =
@@ -706,71 +706,71 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     soundOptionsInfo.apply.height = 64 as i32;
     soundOptionsInfo.apply.focuspic =
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.banner as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.banner as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.framel as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.framel as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.framer as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.framer as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.graphics as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.graphics as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.display as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.display as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.sound as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.sound as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.network as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.network as *mut menutext_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.sfxvolume as *mut crate::ui_local_h::menuslider_s
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.sfxvolume as *mut menuslider_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.musicvolume as *mut crate::ui_local_h::menuslider_s
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.musicvolume as *mut menuslider_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.soundSystem as *mut crate::ui_local_h::menulist_s
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.soundSystem as *mut menulist_s
             as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.quality as *mut crate::ui_local_h::menulist_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.quality as *mut menulist_s as *mut libc::c_void,
     );
     //	Menu_AddItem( &soundOptionsInfo.menu, ( void * ) &soundOptionsInfo.a3d );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.back as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_AddItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.apply as *mut crate::ui_local_h::menubitmap_s as *mut libc::c_void,
+    Menu_AddItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.apply as *mut menubitmap_s as *mut libc::c_void,
     );
-    soundOptionsInfo.sfxvolume_original = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    soundOptionsInfo.sfxvolume_original = trap_Cvar_VariableValue(
         b"s_volume\x00" as *const u8 as *const libc::c_char,
     ) * 10 as i32 as f32;
     soundOptionsInfo.sfxvolume.curvalue = soundOptionsInfo.sfxvolume_original;
-    soundOptionsInfo.musicvolume_original = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    soundOptionsInfo.musicvolume_original = trap_Cvar_VariableValue(
         b"s_musicvolume\x00" as *const u8 as *const libc::c_char,
     ) * 10 as i32 as f32;
     soundOptionsInfo.musicvolume.curvalue = soundOptionsInfo.musicvolume_original;
-    if crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    if trap_Cvar_VariableValue(
         b"s_useOpenAL\x00" as *const u8 as *const libc::c_char,
     ) != 0.
     {
@@ -779,7 +779,7 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
         soundOptionsInfo.soundSystem_original = 0 as i32
     }
     soundOptionsInfo.soundSystem.curvalue = soundOptionsInfo.soundSystem_original;
-    speed = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
+    speed = trap_Cvar_VariableValue(
         b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char,
     ) as i32;
     if speed == 0 {
@@ -805,22 +805,22 @@ UI_SoundOptionsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SoundOptionsMenu_Cache() {
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip(
+    trap_R_RegisterShaderNoMip(
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -991,11 +991,11 @@ UI_SoundOptionsMenu
 
 pub unsafe extern "C" fn UI_SoundOptionsMenu() {
     UI_SoundOptionsMenu_Init();
-    crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+    UI_PushMenu(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
     );
-    crate::src::q3_ui::ui_qmenu::Menu_SetCursorToItem(
-        &mut soundOptionsInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
-        &mut soundOptionsInfo.sound as *mut crate::ui_local_h::menutext_s as *mut libc::c_void,
+    Menu_SetCursorToItem(
+        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
+        &mut soundOptionsInfo.sound as *mut menutext_s as *mut libc::c_void,
     );
 }

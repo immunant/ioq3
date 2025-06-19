@@ -135,15 +135,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_control_SNR(
-    mut psEncC: *mut crate::structs_h::silk_encoder_state,
-    mut TargetRate_bps: crate::opus_types_h::opus_int32,
+    mut psEncC: *mut silk_encoder_state,
+    mut TargetRate_bps: opus_int32,
 ) -> i32
 /* I    Target max bitrate (bps)                    */ {
     let mut k: i32 = 0;
     let mut ret: i32 = 0 as i32;
-    let mut frac_Q6: crate::opus_types_h::opus_int32 = 0;
-    let mut rateTable: *const crate::opus_types_h::opus_int32 =
-        0 as *const crate::opus_types_h::opus_int32;
+    let mut frac_Q6: opus_int32 = 0;
+    let mut rateTable: *const opus_int32 =
+        0 as *const opus_int32;
     /* Set bitrate/coding quality */
     TargetRate_bps = if 5000 as i32 > 80000 as i32 {
         if TargetRate_bps > 5000 as i32 {
@@ -182,14 +182,14 @@ pub unsafe extern "C" fn silk_control_SNR(
         while k < 8 as i32 {
             if TargetRate_bps <= *rateTable.offset(k as isize) {
                 frac_Q6 = (((TargetRate_bps - *rateTable.offset((k - 1 as i32) as isize))
-                    as crate::opus_types_h::opus_uint32)
-                    << 6 as i32) as crate::opus_types_h::opus_int32
+                    as opus_uint32)
+                    << 6 as i32) as opus_int32
                     / (*rateTable.offset(k as isize) - *rateTable.offset((k - 1 as i32) as isize));
                 (*psEncC).SNR_dB_Q7 =
                     ((crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
                         [(k - 1 as i32) as usize]
-                        as crate::opus_types_h::opus_uint32)
-                        << 6 as i32) as crate::opus_types_h::opus_int32
+                        as opus_uint32)
+                        << 6 as i32) as opus_int32
                         + frac_Q6
                             * (crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
                                 [k as usize] as i32
