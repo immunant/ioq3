@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 
-USE_PATTERN = re.compile(r'^\s*(?:pub\s+)?use\s+([a-zA-Z0-9_:]+)::.*;', re.MULTILINE)
+USE_PATTERN = re.compile(r'^\s*(?:pub\s+)?use\s+([a-zA-Z0-9_:]+);', re.MULTILINE)
 
 
 def process_file(path: str) -> None:
@@ -18,9 +18,9 @@ def process_file(path: str) -> None:
             continue  # do not modify import lines
 
         for imp in sorted(imports, key=len, reverse=True):
-            qualified = f"{imp}::"
-            if qualified in line:
-                line = line.replace(qualified, "")
+            if imp in line:
+                name = imp.split("::")[-1]
+                line = line.replace(imp, name)
         lines[idx] = line
 
     new_text = "".join(lines)
