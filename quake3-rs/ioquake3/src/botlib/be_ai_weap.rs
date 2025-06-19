@@ -165,29 +165,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //weapon definition
 // Initialized in run_static_initializers
 
-static mut weaponinfo_fields: [fielddef_t; 23] =
-    [fielddef_t {
-        name: 0 as *mut libc::c_char,
-        offset: 0,
-        type_0: 0,
-        maxarray: 0,
-        floatmin: 0.,
-        floatmax: 0.,
-        substruct: 0 as *mut structdef_s,
-    }; 23];
+static mut weaponinfo_fields: [fielddef_t; 23] = [fielddef_t {
+    name: 0 as *mut libc::c_char,
+    offset: 0,
+    type_0: 0,
+    maxarray: 0,
+    floatmin: 0.,
+    floatmax: 0.,
+    substruct: 0 as *mut structdef_s,
+}; 23];
 //projectile definition
 // Initialized in run_static_initializers
 
-static mut projectileinfo_fields: [fielddef_t; 15] =
-    [fielddef_t {
-        name: 0 as *mut libc::c_char,
-        offset: 0,
-        type_0: 0,
-        maxarray: 0,
-        floatmin: 0.,
-        floatmax: 0.,
-        substruct: 0 as *mut structdef_s,
-    }; 15];
+static mut projectileinfo_fields: [fielddef_t; 15] = [fielddef_t {
+    name: 0 as *mut libc::c_char,
+    offset: 0,
+    type_0: 0,
+    maxarray: 0,
+    floatmin: 0.,
+    floatmax: 0.,
+    substruct: 0 as *mut structdef_s,
+}; 15];
 
 static mut weaponinfo_struct: structdef_t = unsafe {
     {
@@ -304,8 +302,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
     let mut path: [libc::c_char; 64] = [0; 64];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut source: *mut source_t =
-        0 as *mut source_t;
+    let mut source: *mut source_t = 0 as *mut source_t;
     let mut wc: *mut weaponconfig_t = 0 as *mut weaponconfig_t;
     let mut weaponinfo: crate::src::botlib::be_ai_weap::weaponinfo_t =
         crate::src::botlib::be_ai_weap::weaponinfo_t {
@@ -391,11 +388,8 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
         filename,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    PC_SetBaseFolder(
-        b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    );
-    source = LoadSourceFile(path.as_mut_ptr())
-        as *mut source_s;
+    PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
+    source = LoadSourceFile(path.as_mut_ptr()) as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -457,9 +451,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(wc as *mut libc::c_void); //end if
-                FreeSource(
-                    source as *mut source_s,
-                ); //end if
+                FreeSource(source as *mut source_s); //end if
                 return 0 as *mut weaponconfig_t;
             } //end if
             if weaponinfo.number < 0 as i32 || weaponinfo.number >= max_weaponinfo {
@@ -473,9 +465,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                     path.as_mut_ptr(),
                 ); //end if
                 crate::src::botlib::l_memory::FreeMemory(wc as *mut libc::c_void); //end if
-                FreeSource(
-                    source as *mut source_s,
-                );
+                FreeSource(source as *mut source_s);
                 return 0 as *mut weaponconfig_t;
             }
             crate::stdlib::memcpy(
@@ -487,8 +477,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                 ::std::mem::size_of::<crate::src::botlib::be_ai_weap::weaponinfo_t>()
                     as libc::c_ulong,
             );
-            (*(*wc).weaponinfo.offset(weaponinfo.number as isize)).valid =
-                qtrue as i32
+            (*(*wc).weaponinfo.offset(weaponinfo.number as isize)).valid = qtrue as i32
         } else if libc::strcmp(
             token.string.as_mut_ptr(),
             b"projectileinfo\x00" as *const u8 as *const libc::c_char,
@@ -505,9 +494,7 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                     path.as_mut_ptr(),
                 );
                 crate::src::botlib::l_memory::FreeMemory(wc as *mut libc::c_void);
-                FreeSource(
-                    source as *mut source_s,
-                );
+                FreeSource(source as *mut source_s);
                 return 0 as *mut weaponconfig_t;
             }
             crate::stdlib::memset(
@@ -520,17 +507,14 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
             );
             if ReadStructure(
                 source as *mut source_s,
-                &mut projectileinfo_struct as *mut _
-                    as *mut structdef_s,
+                &mut projectileinfo_struct as *mut _ as *mut structdef_s,
                 &mut *(*wc).projectileinfo.offset((*wc).numprojectiles as isize)
                     as *mut crate::src::botlib::be_ai_weap::projectileinfo_t
                     as *mut libc::c_char,
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(wc as *mut libc::c_void);
-                FreeSource(
-                    source as *mut source_s,
-                );
+                FreeSource(source as *mut source_s);
                 return 0 as *mut weaponconfig_t;
             }
             (*wc).numprojectiles += 1
@@ -545,16 +529,12 @@ pub unsafe extern "C" fn LoadWeaponConfig(mut filename: *mut libc::c_char) -> *m
                 path.as_mut_ptr(),
             );
             crate::src::botlib::l_memory::FreeMemory(wc as *mut libc::c_void);
-            FreeSource(
-                source as *mut source_s,
-            );
+            FreeSource(source as *mut source_s);
             return 0 as *mut weaponconfig_t;
         }
         //end else
     }
-    FreeSource(
-        source as *mut source_s,
-    );
+    FreeSource(source as *mut source_s);
     //fix up weapons
     i = 0 as i32; //end for
     while i < (*wc).numweapons {
@@ -691,9 +671,7 @@ pub unsafe extern "C" fn BotFreeWeaponWeights(mut weaponstate: i32) {
         return;
     }
     if !(*ws).weaponweightconfig.is_null() {
-        FreeWeightConfig(
-            (*ws).weaponweightconfig as *mut weightconfig_s,
-        );
+        FreeWeightConfig((*ws).weaponweightconfig as *mut weightconfig_s);
     }
     if !(*ws).weaponweightindex.is_null() {
         crate::src::botlib::l_memory::FreeMemory((*ws).weaponweightindex as *mut libc::c_void);
@@ -720,8 +698,7 @@ pub unsafe extern "C" fn BotLoadWeaponWeights(
     }
     BotFreeWeaponWeights(weaponstate);
     //
-    (*ws).weaponweightconfig = ReadWeightConfig(filename)
-        as *mut weightconfig_s; //end if
+    (*ws).weaponweightconfig = ReadWeightConfig(filename) as *mut weightconfig_s; //end if
     if (*ws).weaponweightconfig.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -814,8 +791,7 @@ pub unsafe extern "C" fn BotChooseBestFightWeapon(
             if !(index < 0 as i32) {
                 weight = FuzzyWeight(
                     inventory,
-                    (*ws).weaponweightconfig
-                        as *mut weightconfig_s,
+                    (*ws).weaponweightconfig as *mut weightconfig_s,
                     index,
                 );
                 if weight > bestweight {
@@ -979,8 +955,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).name
-                    as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1006,8 +981,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).model
-                    as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1046,8 +1020,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"projectile\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).projectile
-                    as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1061,8 +1034,7 @@ unsafe extern "C" fn run_static_initializers() {
                 name: b"numprojectiles\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t))
-                    .numprojectiles as *mut i32 as size_t
-                    as i32,
+                    .numprojectiles as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1114,8 +1086,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"acceleration\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t))
-                    .acceleration as *mut f32 as size_t
-                    as i32,
+                    .acceleration as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1128,8 +1099,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"recoil\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).recoil
-                    as *mut vec3_t
-                    as size_t as i32,
+                    as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1142,8 +1112,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"offset\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).offset
-                    as *mut vec3_t
-                    as size_t as i32,
+                    as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1156,8 +1125,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"angleoffset\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t)).angleoffset
-                    as *mut vec3_t
-                    as size_t as i32,
+                    as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -1171,8 +1139,7 @@ unsafe extern "C" fn run_static_initializers() {
                 name: b"extrazvelocity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::weaponinfo_t))
-                    .extrazvelocity as *mut f32 as size_t
-                    as i32,
+                    .extrazvelocity as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1277,8 +1244,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t)).name
-                    as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1291,8 +1257,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t)).model
-                    as *mut [libc::c_char; 80] as size_t
-                    as i32,
+                    as *mut [libc::c_char; 80] as size_t as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1357,8 +1322,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"visdamage\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .visdamage as *mut i32 as size_t
-                    as i32,
+                    .visdamage as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1371,8 +1335,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"damagetype\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .damagetype as *mut i32 as size_t
-                    as i32,
+                    .damagetype as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1385,8 +1348,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"healthinc\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .healthinc as *mut i32 as size_t
-                    as i32,
+                    .healthinc as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1412,8 +1374,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"detonation\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .detonation as *mut f32 as size_t
-                    as i32,
+                    .detonation as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1439,8 +1400,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"bouncefric\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .bouncefric as *mut f32 as size_t
-                    as i32,
+                    .bouncefric as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -1453,8 +1413,7 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = fielddef_s {
                 name: b"bouncestop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 offset: &mut (*(0 as *mut crate::src::botlib::be_ai_weap::projectileinfo_t))
-                    .bouncestop as *mut f32 as size_t
-                    as i32,
+                    .bouncestop as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,

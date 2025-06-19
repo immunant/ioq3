@@ -657,11 +657,7 @@ unsafe extern "C" fn median_cut(
     return numboxes;
 }
 
-unsafe extern "C" fn compute_color(
-    mut cinfo: j_decompress_ptr,
-    mut boxp: boxptr,
-    mut icolor: i32,
-)
+unsafe extern "C" fn compute_color(mut cinfo: j_decompress_ptr, mut boxp: boxptr, mut icolor: i32)
 /* Compute representative color for a box, put it in colormap[icolor] */
 {
     /* Current algorithm: mean weighted by pixels (not colors) */
@@ -730,10 +726,7 @@ unsafe extern "C" fn compute_color(
         ((c2total + (total >> 1 as i32)) / total) as JSAMPLE;
 }
 
-unsafe extern "C" fn select_colors(
-    mut cinfo: j_decompress_ptr,
-    mut desired_colors: i32,
-)
+unsafe extern "C" fn select_colors(mut cinfo: j_decompress_ptr, mut desired_colors: i32)
 /* Master routine for color selection */
 {
     let mut boxlist: boxptr = 0 as *mut box_0;
@@ -1453,10 +1446,7 @@ unsafe extern "C" fn finish_pass2(mut _cinfo: j_decompress_ptr) {
  * Initialize for each processing pass.
  */
 
-unsafe extern "C" fn start_pass_2_quant(
-    mut cinfo: j_decompress_ptr,
-    mut is_pre_scan: boolean,
-) {
+unsafe extern "C" fn start_pass_2_quant(mut cinfo: j_decompress_ptr, mut is_pre_scan: boolean) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut histogram: hist3d = (*cquantize).histogram;
     let mut i: i32 = 0;
@@ -1515,9 +1505,7 @@ unsafe extern "C" fn start_pass_2_quant(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         if i > 255 as i32 + 1 as i32 {
             (*(*cinfo).err).msg_code = JERR_QUANT_MANY_COLORS as i32;
@@ -1527,17 +1515,15 @@ unsafe extern "C" fn start_pass_2_quant(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         if (*cinfo).dither_mode as u32 == JDITHER_FS as i32 as u32 {
-            let mut arraysize: size_t =
-                ((*cinfo).output_width.wrapping_add(2 as i32 as u32) as libc::c_ulong)
-                    .wrapping_mul(
-                        (3 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong),
-                    );
+            let mut arraysize: size_t = ((*cinfo).output_width.wrapping_add(2 as i32 as u32)
+                as libc::c_ulong)
+                .wrapping_mul(
+                    (3 as i32 as libc::c_ulong)
+                        .wrapping_mul(::std::mem::size_of::<FSERROR>() as libc::c_ulong),
+                );
             /* Allocate Floyd-Steinberg workspace if we didn't already. */
             if (*cquantize).fserrors.is_null() {
                 (*cquantize).fserrors = Some(
@@ -1546,16 +1532,11 @@ unsafe extern "C" fn start_pass_2_quant(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as j_common_ptr,
-                    1 as i32,
-                    arraysize,
+                    cinfo as j_common_ptr, 1 as i32, arraysize
                 ) as FSERRPTR
             }
             /* Initialize the propagated errors to zero. */
-            jzero_far(
-                (*cquantize).fserrors as *mut libc::c_void,
-                arraysize,
-            );
+            jzero_far((*cquantize).fserrors as *mut libc::c_void, arraysize);
             /* Make the error-limit table if we didn't already. */
             if (*cquantize).error_limiter.is_null() {
                 init_error_limit(cinfo);
@@ -1605,16 +1586,10 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<my_cquantizer>() as libc::c_ulong,
     ) as my_cquantize_ptr;
     (*cinfo).cquantize = cquantize as *mut jpeg_color_quantizer;
-    (*cquantize).pub_0.start_pass = Some(
-        start_pass_2_quant
-            as unsafe extern "C" fn(
-                _: j_decompress_ptr,
-                _: boolean,
-            ) -> (),
-    );
-    (*cquantize).pub_0.new_color_map = Some(
-        new_color_map_2_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*cquantize).pub_0.start_pass =
+        Some(start_pass_2_quant as unsafe extern "C" fn(_: j_decompress_ptr, _: boolean) -> ());
+    (*cquantize).pub_0.new_color_map =
+        Some(new_color_map_2_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*cquantize).fserrors = 0 as FSERRPTR;
     (*cquantize).error_limiter = 0 as *mut i32;
     /* Make sure jdmaster didn't give me a case I can't handle */
@@ -1672,9 +1647,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         /* Make sure colormap indexes can be represented by JSAMPLEs */
         if desired > 255 as i32 + 1 as i32 {
@@ -1685,9 +1658,7 @@ pub unsafe extern "C" fn jinit_2pass_quantizer(mut cinfo: j_decompress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         (*cquantize).sv_colormap = Some(
             (*(*cinfo).mem)

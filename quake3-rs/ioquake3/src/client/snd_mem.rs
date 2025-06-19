@@ -31,11 +31,9 @@ memory management
 ===============================================================================
 */
 
-static mut buffer: *mut sndBuffer =
-    0 as *const sndBuffer as *mut sndBuffer;
+static mut buffer: *mut sndBuffer = 0 as *const sndBuffer as *mut sndBuffer;
 
-static mut freelist: *mut sndBuffer =
-    0 as *const sndBuffer as *mut sndBuffer;
+static mut freelist: *mut sndBuffer = 0 as *const sndBuffer as *mut sndBuffer;
 
 static mut inUse: i32 = 0 as i32;
 
@@ -45,8 +43,7 @@ static mut totalInUse: i32 = 0 as i32;
 pub static mut sfxScratchBuffer: *mut i16 = 0 as *const i16 as *mut i16;
 #[no_mangle]
 
-pub static mut sfxScratchPointer: *mut sfx_t =
-    0 as *const sfx_t as *mut sfx_t;
+pub static mut sfxScratchPointer: *mut sfx_t = 0 as *const sfx_t as *mut sfx_t;
 #[no_mangle]
 
 pub static mut sfxScratchIndex: i32 = 0 as i32;
@@ -57,8 +54,7 @@ pub unsafe extern "C" fn SND_free(mut v: *mut sndBuffer) {
     *fresh0 = freelist;
     freelist = v;
     inUse = (inUse as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
-        as i32;
+        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
 }
 #[no_mangle]
 
@@ -68,11 +64,9 @@ pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
         S_FreeOldestSound();
     }
     inUse = (inUse as libc::c_ulong)
-        .wrapping_sub(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
-        as i32;
+        .wrapping_sub(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
     totalInUse = (totalInUse as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
-        as i32;
+        .wrapping_add(::std::mem::size_of::<sndBuffer>() as libc::c_ulong) as i32;
     v = freelist;
     freelist = *(freelist as *mut *mut sndBuffer);
     (*v).next = 0 as *mut sndBuffer_s;
@@ -83,8 +77,7 @@ pub unsafe extern "C" fn SND_malloc() -> *mut sndBuffer {
 pub unsafe extern "C" fn SND_setup() {
     let mut p: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut q: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     let mut scs: i32 = 0;
     cv = crate::src::qcommon::cvar::Cvar_Get(
         b"com_soundMegs\x00" as *const u8 as *const libc::c_char,
@@ -93,8 +86,7 @@ pub unsafe extern "C" fn SND_setup() {
     ) as *mut cvar_s;
     scs = (*cv).integer * 1536 as i32;
     buffer = crate::stdlib::malloc(
-        (scs as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong),
+        (scs as libc::c_ulong).wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong),
     ) as *mut sndBuffer;
     // allocate the stack based hunk allocator
     sfxScratchBuffer = crate::stdlib::malloc(
@@ -103,8 +95,7 @@ pub unsafe extern "C" fn SND_setup() {
             .wrapping_mul(4 as i32 as libc::c_ulong),
     ) as *mut i16; //Hunk_Alloc(SND_CHUNK_SIZE * sizeof(short) * 4);
     sfxScratchPointer = 0 as *mut sfx_t;
-    inUse = (scs as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
+    inUse = (scs as libc::c_ulong).wrapping_mul(::std::mem::size_of::<sndBuffer>() as libc::c_ulong)
         as i32;
     p = buffer;
     q = p.offset(scs as isize);
@@ -119,9 +110,7 @@ pub unsafe extern "C" fn SND_setup() {
     let ref mut fresh2 = *(q as *mut *mut sndBuffer);
     *fresh2 = 0 as *mut sndBuffer;
     freelist = p.offset(scs as isize).offset(-(1 as i32 as isize));
-    Com_Printf(
-        b"Sound memory manager started\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"Sound memory manager started\n\x00" as *const u8 as *const libc::c_char);
 }
 #[no_mangle]
 
@@ -177,8 +166,7 @@ unsafe extern "C" fn ResampleSfx(
             }
             part = i * channels + j & 1024 as i32 - 1 as i32;
             if part == 0 as i32 {
-                let mut newchunk: *mut sndBuffer =
-                    0 as *mut sndBuffer;
+                let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
                 newchunk = SND_malloc();
                 if chunk.is_null() {
                     (*sfx).soundData = newchunk
@@ -311,21 +299,17 @@ of a forced fallback of a player specific sound
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_LoadSound(
-    mut sfx: *mut sfx_t,
-) -> qboolean {
-    let mut data: *mut byte =
-        0 as *mut byte;
+pub unsafe extern "C" fn S_LoadSound(mut sfx: *mut sfx_t) -> qboolean {
+    let mut data: *mut byte = 0 as *mut byte;
     let mut samples: *mut i16 = 0 as *mut i16;
-    let mut info: snd_info_t =
-        snd_info_t {
-            rate: 0,
-            width: 0,
-            channels: 0,
-            samples: 0,
-            size: 0,
-            dataofs: 0,
-        };
+    let mut info: snd_info_t = snd_info_t {
+        rate: 0,
+        width: 0,
+        channels: 0,
+        samples: 0,
+        size: 0,
+        dataofs: 0,
+    };
     //	int		size;
     // load it in
     data = S_CodecLoad(
@@ -358,9 +342,7 @@ pub unsafe extern "C" fn S_LoadSound(
     // install assured we can rely upon the sound memory
     // manager to do the right thing for us and page
     // sound in as needed
-    if info.channels == 1 as i32
-        && (*sfx).soundCompressed as u32 == qtrue as i32 as u32
-    {
+    if info.channels == 1 as i32 && (*sfx).soundCompressed as u32 == qtrue as i32 as u32 {
         (*sfx).soundCompressionMethod = 1 as i32;
         (*sfx).soundData = 0 as *mut sndBuffer;
         (*sfx).soundLength = ResampleSfxRaw(
@@ -371,10 +353,7 @@ pub unsafe extern "C" fn S_LoadSound(
             info.samples,
             data.offset(info.dataofs as isize),
         );
-        S_AdpcmEncodeSound(
-            sfx as *mut sfx_s,
-            samples,
-        );
+        S_AdpcmEncodeSound(sfx as *mut sfx_s, samples);
     } else {
         (*sfx).soundCompressionMethod = 0 as i32;
         (*sfx).soundData = 0 as *mut sndBuffer;

@@ -126,17 +126,12 @@ pub unsafe extern "C" fn R_LoadBMP(
     let mut columns: i32 = 0;
     let mut rows: i32 = 0;
     let mut numPixels: u32 = 0;
-    let mut pixbuf: *mut byte =
-        0 as *mut byte;
+    let mut pixbuf: *mut byte = 0 as *mut byte;
     let mut row: i32 = 0;
     let mut column: i32 = 0;
-    let mut buf_p: *mut byte =
-        0 as *mut byte;
-    let mut end: *mut byte =
-        0 as *mut byte;
-    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 {
-        b: 0 as *mut byte,
-    };
+    let mut buf_p: *mut byte = 0 as *mut byte;
+    let mut end: *mut byte = 0 as *mut byte;
+    let mut buffer: C2RustUnnamed_82 = C2RustUnnamed_82 { b: 0 as *mut byte };
     let mut length: i32 = 0;
     let mut bmpHeader: BMPHeader_t = BMPHeader_t {
         id: [0; 2],
@@ -156,8 +151,7 @@ pub unsafe extern "C" fn R_LoadBMP(
         importantColors: 0,
         palette: [[0; 4]; 256],
     };
-    let mut bmpRGBA: *mut byte =
-        0 as *mut byte;
+    let mut bmpRGBA: *mut byte = 0 as *mut byte;
     *pic = 0 as *mut byte;
     if !width.is_null() {
         *width = 0 as i32
@@ -387,16 +381,13 @@ pub unsafe extern "C" fn R_LoadBMP(
                     pixbuf = pixbuf.offset(2 as i32 as isize);
                     let fresh7 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh7 = ((shortPixel as i32 & (31 as i32) << 10 as i32) >> 7 as i32)
-                        as byte;
+                    *fresh7 = ((shortPixel as i32 & (31 as i32) << 10 as i32) >> 7 as i32) as byte;
                     let fresh8 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh8 = ((shortPixel as i32 & (31 as i32) << 5 as i32) >> 2 as i32)
-                        as byte;
+                    *fresh8 = ((shortPixel as i32 & (31 as i32) << 5 as i32) >> 2 as i32) as byte;
                     let fresh9 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh9 = ((shortPixel as i32 & 31 as i32) << 3 as i32)
-                        as byte;
+                    *fresh9 = ((shortPixel as i32 & 31 as i32) << 3 as i32) as byte;
                     let fresh10 = pixbuf;
                     pixbuf = pixbuf.offset(1);
                     *fresh10 = 0xff as i32 as byte

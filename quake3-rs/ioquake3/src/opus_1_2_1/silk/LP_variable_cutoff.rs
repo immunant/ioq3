@@ -151,17 +151,15 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 B_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (3 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    opus_int32,
-                >() as libc::c_ulong),
+                (3 as i32 as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
             );
             crate::stdlib::memcpy(
                 A_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    opus_int32,
-                >() as libc::c_ulong),
+                (2 as i32 as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
             );
         }
     } else {
@@ -170,18 +168,16 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
             crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
-            (3 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int32,
-            >() as libc::c_ulong),
+            (3 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
         );
         crate::stdlib::memcpy(
             A_Q28 as *mut libc::c_void,
             crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28
                 [(5 as i32 - 1 as i32) as usize]
                 .as_ptr() as *const libc::c_void,
-            (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int32,
-            >() as libc::c_ulong),
+            (2 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
         );
     };
 }
@@ -407,8 +403,7 @@ pub unsafe extern "C" fn silk_LP_variable_cutoff(
             as opus_uint32)
             << 16 as i32 - 6 as i32) as opus_int32;
         ind = fac_Q16 >> 16 as i32;
-        fac_Q16 -= ((ind as opus_uint32) << 16 as i32)
-            as opus_int32;
+        fac_Q16 -= ((ind as opus_uint32) << 16 as i32) as opus_int32;
         /* Interpolate filter coefficients */
         silk_LP_interpolate_filter_taps(B_Q28.as_mut_ptr(), A_Q28.as_mut_ptr(), ind, fac_Q16);
         /* Update transition frame number for next frame */

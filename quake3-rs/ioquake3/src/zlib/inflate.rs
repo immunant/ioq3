@@ -152,11 +152,7 @@ pub unsafe extern "C" fn inflateReset(mut strm: z_streamp) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflatePrime(
-    mut strm: z_streamp,
-    mut bits: i32,
-    mut value: i32,
-) -> i32 {
+pub unsafe extern "C" fn inflatePrime(mut strm: z_streamp, mut bits: i32, mut value: i32) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     if strm.is_null() || (*strm).state.is_null() {
@@ -198,26 +194,20 @@ pub unsafe extern "C" fn inflateInit2_(
     if (*strm).zalloc.is_none() {
         (*strm).zalloc = Some(
             crate::src::zlib::zutil::zcalloc
-                as unsafe extern "C" fn(
-                    _: voidpf,
-                    _: u32,
-                    _: u32,
-                ) -> voidpf,
+                as unsafe extern "C" fn(_: voidpf, _: u32, _: u32) -> voidpf,
         );
         (*strm).opaque = 0 as voidpf
     }
     if (*strm).zfree.is_none() {
         (*strm).zfree = Some(
-            crate::src::zlib::zutil::zcfree
-                as unsafe extern "C" fn(_: voidpf, _: voidpf) -> (),
+            crate::src::zlib::zutil::zcfree as unsafe extern "C" fn(_: voidpf, _: voidpf) -> (),
         )
     }
     state = Some((*strm).zalloc.expect("non-null function pointer"))
         .expect("non-null function pointer")(
         (*strm).opaque,
         1 as i32 as uInt,
-        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
-            as uInt,
+        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if state.is_null() {
         return -(4 as i32);
@@ -5008,11 +4998,8 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                             continue;
                         } else {
                             (*state).dmax = (1 as u32) << len;
-                            (*state).check = adler32(
-                                0 as isize as uLong,
-                                0 as *const Bytef,
-                                0 as i32 as uInt,
-                            );
+                            (*state).check =
+                                adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
                             (*strm).adler = (*state).check;
                             (*state).mode = if hold & 0x200 as i32 as libc::c_ulong != 0 {
                                 crate::src::zlib::inflate::DICTID as i32
@@ -5177,11 +5164,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                         as uLong;
                     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
                     if out != 0 {
-                        (*state).check = adler32(
-                            (*state).check,
-                            put.offset(-(out as isize)),
-                            out,
-                        );
+                        (*state).check = adler32((*state).check, put.offset(-(out as isize)), out);
                         (*strm).adler = (*state).check
                     }
                     out = left;
@@ -5301,11 +5284,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     (*state).bits = bits;
                     return 2 as i32;
                 }
-                (*state).check = adler32(
-                    0 as isize as uLong,
-                    0 as *const Bytef,
-                    0 as i32 as uInt,
-                );
+                (*state).check = adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
                 (*strm).adler = (*state).check;
                 (*state).mode = crate::src::zlib::inflate::TYPE;
                 current_block = 10674880093440332853;
@@ -5509,10 +5488,7 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
                     (*strm).avail_in = have;
                     (*state).hold = hold;
                     (*state).bits = bits;
-                    crate::src::zlib::inffast::inflate_fast(
-                        strm as *mut z_stream_s,
-                        out,
-                    );
+                    crate::src::zlib::inffast::inflate_fast(strm as *mut z_stream_s, out);
                     put = (*strm).next_out;
                     left = (*strm).avail_out;
                     next = (*strm).next_in;
@@ -5826,10 +5802,10 @@ pub unsafe extern "C" fn inflate(mut strm: z_streamp, mut flush: i32) -> i32 {
     }
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
-    (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong)
-        as uLong;
-    (*strm).total_out = ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong)
-        as uLong;
+    (*strm).total_in =
+        ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong) as uLong;
+    (*strm).total_out =
+        ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong) as uLong;
     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
     if (*state).wrap != 0 && out != 0 {
         (*state).check = adler32(
@@ -5904,11 +5880,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
     }
     /* check for correct dictionary id */
     if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
-        id = adler32(
-            0 as isize as uLong,
-            0 as *const Bytef,
-            0 as i32 as uInt,
-        );
+        id = adler32(0 as isize as uLong, 0 as *const Bytef, 0 as i32 as uInt);
         id = adler32(id, dictionary, dictLength);
         if id != (*state).check {
             return -(3 as i32);
@@ -5944,10 +5916,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateGetHeader(
-    mut strm: z_streamp,
-    mut head: gz_headerp,
-) -> i32 {
+pub unsafe extern "C" fn inflateGetHeader(mut strm: z_streamp, mut head: gz_headerp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     /* check state */
@@ -6036,8 +6005,8 @@ pub unsafe extern "C" fn inflateSync(mut strm: z_streamp) -> i32 {
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
     (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
-    (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
-        as uLong;
+    (*strm).total_in =
+        ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong) as uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);
@@ -6717,10 +6686,7 @@ ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflateCopy(
-    mut dest: z_streamp,
-    mut source: z_streamp,
-) -> i32 {
+pub unsafe extern "C" fn inflateCopy(mut dest: z_streamp, mut source: z_streamp) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     let mut copy: *mut crate::src::zlib::inflate::inflate_state =
@@ -6742,8 +6708,7 @@ pub unsafe extern "C" fn inflateCopy(
         .expect("non-null function pointer")(
         (*source).opaque,
         1 as i32 as uInt,
-        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong
-            as uInt,
+        ::std::mem::size_of::<crate::src::zlib::inflate::inflate_state>() as libc::c_ulong as uInt,
     ) as *mut crate::src::zlib::inflate::inflate_state;
     if copy.is_null() {
         return -(4 as i32);
@@ -6758,10 +6723,7 @@ pub unsafe extern "C" fn inflateCopy(
         ) as *mut u8;
         if window.is_null() {
             Some((*source).zfree.expect("non-null function pointer"))
-                .expect("non-null function pointer")(
-                (*source).opaque,
-                copy as voidpf,
-            );
+                .expect("non-null function pointer")((*source).opaque, copy as voidpf);
             return -(4 as i32);
         }
     }
@@ -6782,8 +6744,7 @@ pub unsafe extern "C" fn inflateCopy(
                 .codes
                 .as_mut_ptr()
                 .offset(2048 as i32 as isize)
-                .offset(-(1 as i32 as isize))
-                as *const code
+                .offset(-(1 as i32 as isize)) as *const code
     {
         (*copy).lencode = (*copy)
             .codes

@@ -197,10 +197,7 @@ pub unsafe extern "C" fn mumble_set_identity(mut identity: *const libc::c_char) 
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn mumble_set_context(
-    mut context: *const u8,
-    mut len: size_t,
-) {
+pub unsafe extern "C" fn mumble_set_context(mut context: *const u8, mut len: size_t) {
     if lm.is_null() {
         return;
     }

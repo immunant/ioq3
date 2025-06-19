@@ -11,11 +11,7 @@ pub use crate::zconf_h::Bytef;
 /* ========================================================================= */
 #[no_mangle]
 
-pub unsafe extern "C" fn adler32(
-    mut adler: uLong,
-    mut buf: *const Bytef,
-    mut len: uInt,
-) -> uLong {
+pub unsafe extern "C" fn adler32(mut adler: uLong, mut buf: *const Bytef, mut len: uInt) -> uLong {
     let mut sum2: libc::c_ulong = 0;
     let mut n: u32 = 0;
     /* split Adler-32 into component sums */
@@ -24,11 +20,9 @@ pub unsafe extern "C" fn adler32(
     /* in case user likes doing a byte at a time, keep it fast */
     if len == 1 as i32 as u32 {
         adler = (adler as libc::c_ulong)
-            .wrapping_add(*buf.offset(0 as i32 as isize) as libc::c_ulong)
-            as uLong;
+            .wrapping_add(*buf.offset(0 as i32 as isize) as libc::c_ulong) as uLong;
         if adler >= 65521 as libc::c_ulong {
-            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong)
-                as uLong
+            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong) as uLong
         }
         sum2 = sum2.wrapping_add(adler);
         if sum2 >= 65521 as libc::c_ulong {
@@ -50,13 +44,11 @@ pub unsafe extern "C" fn adler32(
             }
             let fresh1 = buf;
             buf = buf.offset(1);
-            adler = (adler as libc::c_ulong).wrapping_add(*fresh1 as libc::c_ulong)
-                as uLong;
+            adler = (adler as libc::c_ulong).wrapping_add(*fresh1 as libc::c_ulong) as uLong;
             sum2 = sum2.wrapping_add(adler)
         }
         if adler >= 65521 as libc::c_ulong {
-            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong)
-                as uLong
+            adler = (adler as libc::c_ulong).wrapping_sub(65521 as libc::c_ulong) as uLong
         }
         sum2 = sum2.wrapping_rem(65521 as libc::c_ulong);
         return adler | sum2 << 16 as i32;
@@ -137,8 +129,7 @@ pub unsafe extern "C" fn adler32(
                 break;
             }
         }
-        adler =
-            (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
+        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
         sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
     }
     /* do remaining bytes (less than NMAX, still just one modulo) */
@@ -220,12 +211,10 @@ pub unsafe extern "C" fn adler32(
             }
             let fresh3 = buf;
             buf = buf.offset(1);
-            adler = (adler as libc::c_ulong).wrapping_add(*fresh3 as libc::c_ulong)
-                as uLong;
+            adler = (adler as libc::c_ulong).wrapping_add(*fresh3 as libc::c_ulong) as uLong;
             sum2 = sum2.wrapping_add(adler)
         }
-        adler =
-            (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
+        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as uLong;
         sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
     }
     /* return recombined sums */

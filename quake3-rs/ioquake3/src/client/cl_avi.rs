@@ -162,10 +162,8 @@ static mut afd: aviFileData_t = aviFileData_t {
     numAudioFrames: 0,
     chunkStack: [0; 16],
     chunkStackTop: 0,
-    cBuffer: 0 as *const byte
-        as *mut byte,
-    eBuffer: 0 as *const byte
-        as *mut byte,
+    cBuffer: 0 as *const byte as *mut byte,
+    eBuffer: 0 as *const byte as *mut byte,
 };
 
 static mut buffer: [byte; 2048] = [0; 2048];
@@ -199,8 +197,7 @@ WRITE_STRING
 
 unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
     crate::stdlib::memcpy(
-        &mut *buffer.as_mut_ptr().offset(bufIndex as isize)
-            as *mut byte as *mut libc::c_void,
+        &mut *buffer.as_mut_ptr().offset(bufIndex as isize) as *mut byte as *mut libc::c_void,
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
@@ -214,14 +211,10 @@ WRITE_4BYTES
 #[inline]
 
 unsafe extern "C" fn WRITE_4BYTES(mut x: i32) {
-    buffer[(bufIndex + 0 as i32) as usize] =
-        (x >> 0 as i32 & 0xff as i32) as byte;
-    buffer[(bufIndex + 1 as i32) as usize] =
-        (x >> 8 as i32 & 0xff as i32) as byte;
-    buffer[(bufIndex + 2 as i32) as usize] =
-        (x >> 16 as i32 & 0xff as i32) as byte;
-    buffer[(bufIndex + 3 as i32) as usize] =
-        (x >> 24 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 0 as i32) as usize] = (x >> 0 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 1 as i32) as usize] = (x >> 8 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 2 as i32) as usize] = (x >> 16 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 3 as i32) as usize] = (x >> 24 as i32 & 0xff as i32) as byte;
     bufIndex += 4 as i32;
 }
 /*
@@ -232,10 +225,8 @@ WRITE_2BYTES
 #[inline]
 
 unsafe extern "C" fn WRITE_2BYTES(mut x: i32) {
-    buffer[(bufIndex + 0 as i32) as usize] =
-        (x >> 0 as i32 & 0xff as i32) as byte;
-    buffer[(bufIndex + 1 as i32) as usize] =
-        (x >> 8 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 0 as i32) as usize] = (x >> 0 as i32 & 0xff as i32) as byte;
+    buffer[(bufIndex + 1 as i32) as usize] = (x >> 8 as i32 & 0xff as i32) as byte;
     bufIndex += 2 as i32;
 }
 /*
@@ -409,9 +400,7 @@ writing the actual data can begin
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_OpenAVIForWriting(
-    mut fileName: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn CL_OpenAVIForWriting(mut fileName: *const libc::c_char) -> qboolean {
     if afd.fileOpen as u64 != 0 {
         return qfalse;
     }
@@ -422,9 +411,7 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     );
     // Don't start if a framerate has not been chosen
     if (*cl_aviFrameRate).integer <= 0 as i32 {
-        Com_Printf(
-            b"^1cl_aviFrameRate must be >= 1\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"^1cl_aviFrameRate must be >= 1\n\x00" as *const u8 as *const libc::c_char);
         return qfalse;
     }
     afd.f = FS_FOpenFileWrite(fileName);
@@ -452,9 +439,9 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     // Buffers only need to store RGB pixels.
     // Allocate a bit more space for the capture buffer to account for possible
     // padding at the end of pixel lines, and padding for alignment
-    afd.cBuffer = Z_Malloc(
-        (afd.width * 3 as i32 + 16 as i32 - 1 as i32) * afd.height + 16 as i32 - 1 as i32,
-    ) as *mut byte;
+    afd.cBuffer =
+        Z_Malloc((afd.width * 3 as i32 + 16 as i32 - 1 as i32) * afd.height + 16 as i32 - 1 as i32)
+            as *mut byte;
     // raw avi files have pixel lines start on 4-byte boundaries
     afd.eBuffer = Z_Malloc(
         (afd.width * 3 as i32 + 4 as i32 - 1 as i32 & !(4 as i32 - 1 as i32)) * afd.height,
@@ -478,15 +465,10 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
             suggestRate,
         );
     }
-    if Cvar_VariableIntegerValue(
-        b"s_initsound\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Cvar_VariableIntegerValue(b"s_initsound\x00" as *const u8 as *const libc::c_char) == 0 {
         afd.audio = qfalse
     } else if Q_stricmp(
-        Cvar_VariableString(
-            b"s_backend\x00" as *const u8 as *const libc::c_char,
-        ),
+        Cvar_VariableString(b"s_backend\x00" as *const u8 as *const libc::c_char),
         b"OpenAL\x00" as *const u8 as *const libc::c_char,
     ) != 0
     {
@@ -528,9 +510,7 @@ CL_CheckFileSize
 ===============
 */
 
-unsafe extern "C" fn CL_CheckFileSize(
-    mut bytesToAdd: i32,
-) -> qboolean {
+unsafe extern "C" fn CL_CheckFileSize(mut bytesToAdd: i32) -> qboolean {
     let mut newFileSize: u32 = 0; // The index size
     newFileSize = (afd.fileSize + bytesToAdd + afd.numIndices * 16 as i32 + 4 as i32) as u32;
     // I assume all the operating systems
@@ -554,15 +534,11 @@ CL_WriteAVIVideoFrame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
-    mut imageBuffer: *const byte,
-    mut size: i32,
-) {
+pub unsafe extern "C" fn CL_WriteAVIVideoFrame(mut imageBuffer: *const byte, mut size: i32) {
     let mut chunkOffset: i32 = afd.fileSize - afd.moviOffset - 8 as i32;
     let mut chunkSize: i32 = 8 as i32 + size;
     let mut paddingSize: i32 = (size + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32)) - size;
-    let mut padding: [byte; 4] =
-        [0 as i32 as byte, 0, 0, 0];
+    let mut padding: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
     if afd.fileOpen as u64 == 0 {
         return;
     }
@@ -606,10 +582,7 @@ CL_WriteAVIAudioFrame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
-    mut pcmBuffer: *const byte,
-    mut size: i32,
-) {
+pub unsafe extern "C" fn CL_WriteAVIAudioFrame(mut pcmBuffer: *const byte, mut size: i32) {
     static mut pcmCaptureBuffer: [byte; 44100] = [
         0 as i32 as byte,
         0,
@@ -44731,8 +44704,8 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
         size = 44100 as i32 - bytesInBuffer
     }
     crate::stdlib::memcpy(
-        &mut *pcmCaptureBuffer.as_mut_ptr().offset(bytesInBuffer as isize)
-            as *mut byte as *mut libc::c_void,
+        &mut *pcmCaptureBuffer.as_mut_ptr().offset(bytesInBuffer as isize) as *mut byte
+            as *mut libc::c_void,
         pcmBuffer as *const libc::c_void,
         size as libc::c_ulong,
     );
@@ -44746,8 +44719,7 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
         let mut chunkSize: i32 = 8 as i32 + bytesInBuffer;
         let mut paddingSize: i32 =
             (bytesInBuffer + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32)) - bytesInBuffer;
-        let mut padding: [byte; 4] =
-            [0 as i32 as byte, 0, 0, 0];
+        let mut padding: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
         bufIndex = 0 as i32;
         WRITE_STRING(b"01wb\x00" as *const u8 as *const libc::c_char);
         WRITE_4BYTES(bytesInBuffer);
@@ -44793,9 +44765,7 @@ pub unsafe extern "C" fn CL_TakeVideoFrame() {
     if afd.fileOpen as u64 == 0 {
         return;
     }
-    re
-        .TakeVideoFrame
-        .expect("non-null function pointer")(
+    re.TakeVideoFrame.expect("non-null function pointer")(
         afd.width,
         afd.height,
         afd.cBuffer,
@@ -44824,11 +44794,7 @@ pub unsafe extern "C" fn CL_CloseAVI() -> qboolean {
         return qfalse;
     }
     afd.fileOpen = qfalse;
-    FS_Seek(
-        afd.idxF,
-        4 as i32 as isize,
-        FS_SEEK_SET as i32,
-    );
+    FS_Seek(afd.idxF, 4 as i32 as isize, FS_SEEK_SET as i32);
     bufIndex = 0 as i32;
     WRITE_4BYTES(indexSize);
     SafeFS_Write(
@@ -44839,11 +44805,7 @@ pub unsafe extern "C" fn CL_CloseAVI() -> qboolean {
     FS_FCloseFile(afd.idxF);
     // Write index
     // Open the temp index file
-    indexSize = FS_FOpenFileRead(
-        idxFileName,
-        &mut afd.idxF,
-        qtrue,
-    ) as i32;
+    indexSize = FS_FOpenFileRead(idxFileName, &mut afd.idxF, qtrue) as i32;
     if indexSize <= 0 as i32 {
         FS_FCloseFile(afd.f);
         return qfalse;
@@ -44879,11 +44841,7 @@ pub unsafe extern "C" fn CL_CloseAVI() -> qboolean {
     // Remove temp index file
     FS_HomeRemove(idxFileName);
     // Write the real header
-    FS_Seek(
-        afd.f,
-        0 as i32 as isize,
-        FS_SEEK_SET as i32,
-    ); // "RIFF" size
+    FS_Seek(afd.f, 0 as i32 as isize, FS_SEEK_SET as i32); // "RIFF" size
     CL_WriteAVIHeader(); // Skip "LIST"
     bufIndex = 4 as i32;
     WRITE_4BYTES(afd.fileSize - 8 as i32);

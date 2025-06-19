@@ -186,11 +186,7 @@ Transpose
 ============
 */
 
-unsafe extern "C" fn Transpose(
-    mut width: i32,
-    mut height: i32,
-    mut ctrl: *mut [drawVert_t; 65],
-) {
+unsafe extern "C" fn Transpose(mut width: i32, mut height: i32, mut ctrl: *mut [drawVert_t; 65]) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut temp: drawVert_t = drawVert_t {
@@ -264,12 +260,9 @@ unsafe extern "C" fn MakeMeshNormals(
     let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut around: [vec3_t; 8] = [[0.; 3]; 8];
     let mut temp: vec3_t = [0.; 3];
-    let mut good: [qboolean; 8] =
-        [qfalse; 8];
-    let mut wrapWidth: qboolean =
-        qfalse;
-    let mut wrapHeight: qboolean =
-        qfalse;
+    let mut good: [qboolean; 8] = [qfalse; 8];
+    let mut wrapWidth: qboolean = qfalse;
+    let mut wrapHeight: qboolean = qfalse;
     let mut len: f32 = 0.;
     static mut neighbors: [[i32; 2]; 8] = [
         [0 as i32, 1 as i32],
@@ -293,8 +286,7 @@ unsafe extern "C" fn MakeMeshNormals(
         delta[2 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize].xyz
             [2 as i32 as usize]
             - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz[2 as i32 as usize];
-        len =
-            VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
+        len = VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
         if len as f64 > 1.0f64 {
             break;
         }
@@ -315,8 +307,7 @@ unsafe extern "C" fn MakeMeshNormals(
         delta[2 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize].xyz
             [2 as i32 as usize]
             - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz[2 as i32 as usize];
-        len =
-            VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
+        len = VectorLengthSquared(delta.as_mut_ptr() as *const vec_t);
         if len as f64 > 1.0f64 {
             break;
         }
@@ -329,15 +320,14 @@ unsafe extern "C" fn MakeMeshNormals(
     while i < width {
         j = 0 as i32;
         while j < height {
-            dv = &mut *(*ctrl.offset(j as isize)).as_mut_ptr().offset(i as isize)
-                as *mut drawVert_t;
+            dv =
+                &mut *(*ctrl.offset(j as isize)).as_mut_ptr().offset(i as isize) as *mut drawVert_t;
             base[0 as i32 as usize] = (*dv).xyz[0 as i32 as usize];
             base[1 as i32 as usize] = (*dv).xyz[1 as i32 as usize];
             base[2 as i32 as usize] = (*dv).xyz[2 as i32 as usize];
             k = 0 as i32;
             while k < 8 as i32 {
-                around[k as usize][2 as i32 as usize] =
-                    0 as i32 as vec_t;
+                around[k as usize][2 as i32 as usize] = 0 as i32 as vec_t;
                 around[k as usize][1 as i32 as usize] = around[k as usize][2 as i32 as usize];
                 around[k as usize][0 as i32 as usize] = around[k as usize][1 as i32 as usize];
                 good[k as usize] = qfalse;
@@ -371,10 +361,8 @@ unsafe extern "C" fn MakeMeshNormals(
                     temp[2 as i32 as usize] = (*ctrl.offset(y as isize))[x as usize].xyz
                         [2 as i32 as usize]
                         - base[2 as i32 as usize];
-                    if VectorNormalize2(
-                        temp.as_mut_ptr() as *const vec_t,
-                        temp.as_mut_ptr(),
-                    ) == 0 as i32 as f32
+                    if VectorNormalize2(temp.as_mut_ptr() as *const vec_t, temp.as_mut_ptr())
+                        == 0 as i32 as f32
                     {
                         dist += 1
                     // degenerate edge, get more dist
@@ -398,16 +386,12 @@ unsafe extern "C" fn MakeMeshNormals(
                     || good[(k + 1 as i32 & 7 as i32) as usize] as u64 == 0)
                 {
                     CrossProduct(
-                        around[(k + 1 as i32 & 7 as i32) as usize].as_mut_ptr()
-                            as *const vec_t,
-                        around[k as usize].as_mut_ptr()
-                            as *const vec_t,
+                        around[(k + 1 as i32 & 7 as i32) as usize].as_mut_ptr() as *const vec_t,
+                        around[k as usize].as_mut_ptr() as *const vec_t,
                         normal.as_mut_ptr(),
                     );
-                    if !(VectorNormalize2(
-                        normal.as_mut_ptr() as *const vec_t,
-                        normal.as_mut_ptr(),
-                    ) == 0 as i32 as f32)
+                    if !(VectorNormalize2(normal.as_mut_ptr() as *const vec_t, normal.as_mut_ptr())
+                        == 0 as i32 as f32)
                     {
                         sum[0 as i32 as usize] = normal[0 as i32 as usize] + sum[0 as i32 as usize];
                         sum[1 as i32 as usize] = normal[1 as i32 as usize] + sum[1 as i32 as usize];
@@ -420,10 +404,7 @@ unsafe extern "C" fn MakeMeshNormals(
             //if ( count == 0 ) {
             //	printf("bad normal\n");
             //}
-            VectorNormalize2(
-                sum.as_mut_ptr() as *const vec_t,
-                (*dv).normal.as_mut_ptr(),
-            );
+            VectorNormalize2(sum.as_mut_ptr() as *const vec_t, (*dv).normal.as_mut_ptr());
             j += 1
         }
         i += 1
@@ -435,11 +416,7 @@ InvertCtrl
 ============
 */
 
-unsafe extern "C" fn InvertCtrl(
-    mut width: i32,
-    mut height: i32,
-    mut ctrl: *mut [drawVert_t; 65],
-) {
+unsafe extern "C" fn InvertCtrl(mut width: i32, mut height: i32, mut ctrl: *mut [drawVert_t; 65]) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut temp: drawVert_t = drawVert_t {
@@ -593,17 +570,14 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     let mut size: i32 = 0;
     let mut vert: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut tmpVec: vec3_t = [0.; 3];
-    let mut grid: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     // copy the results out to a grid
     size = ((width * height - 1 as i32) as libc::c_ulong)
         .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
-        .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong) as i32;
     grid = crate::src::renderergl1::tr_main::ri
         .Malloc
-        .expect("non-null function pointer")(size)
-        as *mut srfGridMesh_t;
+        .expect("non-null function pointer")(size) as *mut srfGridMesh_t;
     crate::stdlib::memset(grid as *mut libc::c_void, 0 as i32, size as libc::c_ulong);
     (*grid).widthLodError = crate::src::renderergl1::tr_main::ri
         .Malloc
@@ -665,8 +639,7 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
         - (*grid).localOrigin[1 as i32 as usize];
     tmpVec[2 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize][2 as i32 as usize]
         - (*grid).localOrigin[2 as i32 as usize];
-    (*grid).meshRadius =
-        VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
+    (*grid).meshRadius = VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
     (*grid).lodOrigin[0 as i32 as usize] = (*grid).localOrigin[0 as i32 as usize];
     (*grid).lodOrigin[1 as i32 as usize] = (*grid).localOrigin[1 as i32 as usize];
     (*grid).lodOrigin[2 as i32 as usize] = (*grid).localOrigin[2 as i32 as usize];
@@ -710,18 +683,10 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     let mut l: i32 = 0;
     let mut prev: drawVert_t = {
         let mut init = drawVert_t {
-            xyz: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            xyz: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
-            normal: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            normal: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             color: [
                 0 as i32 as byte,
                 0 as i32 as byte,
@@ -733,18 +698,10 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     };
     let mut next: drawVert_t = {
         let mut init = drawVert_t {
-            xyz: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            xyz: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
-            normal: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            normal: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             color: [
                 0 as i32 as byte,
                 0 as i32 as byte,
@@ -756,18 +713,10 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     };
     let mut mid: drawVert_t = {
         let mut init = drawVert_t {
-            xyz: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            xyz: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             st: [0 as i32 as f32, 0 as i32 as f32],
             lightmap: [0 as i32 as f32, 0 as i32 as f32],
-            normal: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            normal: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
             color: [
                 0 as i32 as byte,
                 0 as i32 as byte,
@@ -861,9 +810,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                     midxyz[1 as i32 as usize] - projected[1 as i32 as usize];
                 midxyz2[2 as i32 as usize] =
                     midxyz[2 as i32 as usize] - projected[2 as i32 as usize];
-                len = VectorLengthSquared(
-                    midxyz2.as_mut_ptr() as *const vec_t
-                );
+                len = VectorLengthSquared(midxyz2.as_mut_ptr() as *const vec_t);
                 if len > maxLen {
                     maxLen = len
                 }

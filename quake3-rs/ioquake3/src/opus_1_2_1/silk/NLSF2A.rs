@@ -22,24 +22,21 @@ unsafe extern "C" fn silk_NLSF2A_find_poly(
     let mut k: i32 = 0; /* QA*/
     let mut n: i32 = 0;
     let mut ftmp: opus_int32 = 0;
-    *out.offset(0 as i32 as isize) = ((1 as i32 as opus_uint32) << 16 as i32)
-        as opus_int32;
+    *out.offset(0 as i32 as isize) = ((1 as i32 as opus_uint32) << 16 as i32) as opus_int32;
     *out.offset(1 as i32 as isize) = -*cLSF.offset(0 as i32 as isize);
     k = 1 as i32;
     while k < dd {
         ftmp = *cLSF.offset((2 as i32 * k) as isize);
-        *out.offset((k + 1 as i32) as isize) = ((*out.offset((k - 1 as i32) as isize)
-            as opus_uint32)
-            << 1 as i32)
-            as opus_int32
-            - (if 16 as i32 == 1 as i32 {
-                (ftmp as i64 * *out.offset(k as isize) as i64 >> 1 as i32)
-                    + (ftmp as i64 * *out.offset(k as isize) as i64 & 1 as i32 as i64)
-            } else {
-                ((ftmp as i64 * *out.offset(k as isize) as i64 >> 16 as i32 - 1 as i32)
-                    + 1 as i32 as i64)
-                    >> 1 as i32
-            }) as opus_int32;
+        *out.offset((k + 1 as i32) as isize) =
+            ((*out.offset((k - 1 as i32) as isize) as opus_uint32) << 1 as i32) as opus_int32
+                - (if 16 as i32 == 1 as i32 {
+                    (ftmp as i64 * *out.offset(k as isize) as i64 >> 1 as i32)
+                        + (ftmp as i64 * *out.offset(k as isize) as i64 & 1 as i32 as i64)
+                } else {
+                    ((ftmp as i64 * *out.offset(k as isize) as i64 >> 16 as i32 - 1 as i32)
+                        + 1 as i32 as i64)
+                        >> 1 as i32
+                }) as opus_int32;
         n = k;
         while n > 1 as i32 {
             let ref mut fresh0 = *out.offset(n as isize);
@@ -313,26 +310,17 @@ pub unsafe extern "C" fn silk_NLSF2A(
         f_int = *NLSF.offset(k as isize) as i32 >> 15 as i32 - 7 as i32;
         /* QA */
         f_frac = *NLSF.offset(k as isize) as i32
-            - ((f_int as opus_uint32) << 15 as i32 - 7 as i32)
-                as opus_int32;
+            - ((f_int as opus_uint32) << 15 as i32 - 7 as i32) as opus_int32;
         cos_val = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
             [f_int as usize] as opus_int32;
         delta = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
             [(f_int + 1 as i32) as usize] as i32
             - cos_val;
         cos_LSF_QA[*ordering.offset(k as isize) as usize] = if 20 as i32 - 16 as i32 == 1 as i32 {
-            (((cos_val as opus_uint32) << 8 as i32)
-                as opus_int32
-                + delta * f_frac
-                >> 1 as i32)
-                + (((cos_val as opus_uint32) << 8 as i32)
-                    as opus_int32
-                    + delta * f_frac
-                    & 1 as i32)
+            (((cos_val as opus_uint32) << 8 as i32) as opus_int32 + delta * f_frac >> 1 as i32)
+                + (((cos_val as opus_uint32) << 8 as i32) as opus_int32 + delta * f_frac & 1 as i32)
         } else {
-            ((((cos_val as opus_uint32) << 8 as i32)
-                as opus_int32
-                + delta * f_frac
+            ((((cos_val as opus_uint32) << 8 as i32) as opus_int32 + delta * f_frac
                 >> 20 as i32 - 16 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -386,9 +374,7 @@ pub unsafe extern "C" fn silk_NLSF2A(
         crate::src::opus_1_2_1::silk::bwexpander_32::silk_bwexpander_32(
             a32_QA1.as_mut_ptr(),
             d,
-            65536 as i32
-                - ((2 as i32 as opus_uint32) << i)
-                    as opus_int32,
+            65536 as i32 - ((2 as i32 as opus_uint32) << i) as opus_int32,
         );
         k = 0 as i32;
         while k < d {

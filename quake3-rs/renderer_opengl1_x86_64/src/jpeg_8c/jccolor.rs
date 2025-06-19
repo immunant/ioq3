@@ -236,30 +236,22 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: j_compress_ptr) {
     i = 0 as i32 as INT32;
     while i <= 255 as i32 as isize {
         *rgb_ycc_tab.offset((i + 0 as i32 as isize) as isize) =
-            (0.29900f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
-                * i;
+            (0.29900f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32 * i;
         *rgb_ycc_tab.offset((i + (1 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.58700f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
-                * i;
+            (0.58700f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32 * i;
         *rgb_ycc_tab.offset((i + (2 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.11400f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
-                * i
+            (0.11400f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32 * i
                 + ((1 as i32 as INT32) << 16 as i32 - 1 as i32);
         *rgb_ycc_tab.offset((i + (3 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            -((0.16874f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as INT32)
-                * i;
+            -((0.16874f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32) * i;
         *rgb_ycc_tab.offset((i + (4 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            -((0.33126f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as INT32)
-                * i;
+            -((0.33126f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32) * i;
         /* We use a rounding fudge-factor of 0.5-epsilon for Cb and Cr.
          * This ensures that the maximum output will round to MAXJSAMPLE
          * not MAXJSAMPLE+1, and thus that we don't have to range-limit.
          */
         *rgb_ycc_tab.offset((i + (5 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            (0.50000f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32
-                * i
+            (0.50000f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32 * i
                 + ((128 as i32 as INT32) << 16 as i32)
                 + ((1 as i32 as INT32) << 16 as i32 - 1 as i32)
                 - 1 as i32 as isize;
@@ -267,13 +259,9 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: j_compress_ptr) {
             rgb_ycc_tab[i+R_CR_OFF] = FIX(0.50000) * i    + CBCR_OFFSET + ONE_HALF-1;
         */
         *rgb_ycc_tab.offset((i + (6 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            -((0.41869f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as INT32)
-                * i;
+            -((0.41869f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32) * i;
         *rgb_ycc_tab.offset((i + (7 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
-            -((0.08131f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
-                as INT32)
-                * i;
+            -((0.08131f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64) as INT32) * i;
         i += 1
     }
 }
@@ -334,20 +322,19 @@ unsafe extern "C" fn rgb_ycc_convert(
             *outptr0.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
-                >> 16 as i32)
-                as JSAMPLE;
+                >> 16 as i32) as JSAMPLE;
             /* Cb */
-            *outptr1.offset(col as isize) =
-                (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as JSAMPLE;
+            *outptr1.offset(col as isize) = (*ctab
+                .offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                >> 16 as i32) as JSAMPLE;
             /* Cr */
-            *outptr2.offset(col as isize) =
-                (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as JSAMPLE;
+            *outptr2.offset(col as isize) = (*ctab
+                .offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
+                >> 16 as i32) as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -396,8 +383,7 @@ unsafe extern "C" fn rgb_gray_convert(
             *outptr.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
-                >> 16 as i32)
-                as JSAMPLE;
+                >> 16 as i32) as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -459,20 +445,19 @@ unsafe extern "C" fn cmyk_ycck_convert(
             *outptr0.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
                 + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
                 + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
-                >> 16 as i32)
-                as JSAMPLE;
+                >> 16 as i32) as JSAMPLE;
             /* Cb */
-            *outptr1.offset(col as isize) =
-                (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as JSAMPLE;
+            *outptr1.offset(col as isize) = (*ctab
+                .offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                >> 16 as i32) as JSAMPLE;
             /* Cr */
-            *outptr2.offset(col as isize) =
-                (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
-                    >> 16 as i32) as JSAMPLE;
+            *outptr2.offset(col as isize) = (*ctab
+                .offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
+                >> 16 as i32) as JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -586,60 +571,48 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
     match (*cinfo).in_color_space as u32 {
         1 => {
             if (*cinfo).input_components != 1 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_IN_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         2 | 3 => {
             /* else share code with YCbCr */
             if (*cinfo).input_components != 3 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_IN_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         4 | 5 => {
             if (*cinfo).input_components != 4 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_IN_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         _ => {
             /* JCS_UNKNOWN can be anything */
             if (*cinfo).input_components < 1 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_IN_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_IN_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
     }
@@ -647,16 +620,13 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
     match (*cinfo).jpeg_color_space as u32 {
         1 => {
             if (*cinfo).num_components != 1 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_J_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*cinfo).in_color_space as u32 == JCS_GRAYSCALE as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
@@ -670,10 +640,8 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32 {
-                (*cconvert).pub_0.start_pass = Some(
-                    rgb_ycc_start
-                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-                );
+                (*cconvert).pub_0.start_pass =
+                    Some(rgb_ycc_start as unsafe extern "C" fn(_: j_compress_ptr) -> ());
                 (*cconvert).pub_0.color_convert = Some(
                     rgb_gray_convert
                         as unsafe extern "C" fn(
@@ -696,34 +664,26 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         2 => {
             if (*cinfo).num_components != 3 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_J_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
-            if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32
-                && 3 as i32 == 3 as i32
-            {
+            if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32 && 3 as i32 == 3 as i32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
@@ -735,36 +695,28 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         3 => {
             if (*cinfo).num_components != 3 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_J_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*cinfo).in_color_space as u32 == JCS_RGB as i32 as u32 {
-                (*cconvert).pub_0.start_pass = Some(
-                    rgb_ycc_start
-                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-                );
+                (*cconvert).pub_0.start_pass =
+                    Some(rgb_ycc_start as unsafe extern "C" fn(_: j_compress_ptr) -> ());
                 (*cconvert).pub_0.color_convert = Some(
                     rgb_ycc_convert
                         as unsafe extern "C" fn(
@@ -787,30 +739,24 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         4 => {
             if (*cinfo).num_components != 4 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_J_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*cinfo).in_color_space as u32 == JCS_CMYK as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
@@ -824,36 +770,28 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         5 => {
             if (*cinfo).num_components != 4 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_BAD_J_COLORSPACE as i32;
+                (*(*cinfo).err).msg_code = JERR_BAD_J_COLORSPACE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*cinfo).in_color_space as u32 == JCS_CMYK as i32 as u32 {
-                (*cconvert).pub_0.start_pass = Some(
-                    rgb_ycc_start
-                        as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-                );
+                (*cconvert).pub_0.start_pass =
+                    Some(rgb_ycc_start as unsafe extern "C" fn(_: j_compress_ptr) -> ());
                 (*cconvert).pub_0.color_convert = Some(
                     cmyk_ycck_convert
                         as unsafe extern "C" fn(
@@ -876,16 +814,13 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
                         ) -> (),
                 )
             } else {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         _ => {
@@ -893,16 +828,13 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: j_compress_ptr) {
             if (*cinfo).jpeg_color_space as u32 != (*cinfo).in_color_space as u32
                 || (*cinfo).num_components != (*cinfo).input_components
             {
-                (*(*cinfo).err).msg_code =
-                    JERR_CONVERSION_NOTIMPL as i32;
+                (*(*cinfo).err).msg_code = JERR_CONVERSION_NOTIMPL as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*cconvert).pub_0.color_convert = Some(
                 null_convert

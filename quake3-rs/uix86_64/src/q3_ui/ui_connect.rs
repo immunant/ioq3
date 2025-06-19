@@ -339,8 +339,7 @@ CONNECTION SCREEN
 */
 #[no_mangle]
 
-pub static mut passwordNeeded: qboolean =
-    qtrue;
+pub static mut passwordNeeded: qboolean = qtrue;
 #[no_mangle]
 
 pub static mut passwordField: menufield_s = menufield_s {
@@ -354,8 +353,7 @@ pub static mut passwordField: menufield_s = menufield_s {
         top: 0,
         right: 0,
         bottom: 0,
-        parent: 0 as *const menuframework_s
-            as *mut menuframework_s,
+        parent: 0 as *const menuframework_s as *mut menuframework_s,
         menuPosition: 0,
         flags: 0,
         callback: None,
@@ -371,8 +369,7 @@ pub static mut passwordField: menufield_s = menufield_s {
     },
 };
 
-static mut lastConnState: connstate_t =
-    CA_UNINITIALIZED;
+static mut lastConnState: connstate_t = CA_UNINITIALIZED;
 
 static mut lastLoadingText: [libc::c_char; 1024] = [0; 1024];
 
@@ -477,17 +474,13 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     let mut leftWidth: i32 = 0;
     let mut style: i32 = 0 as i32 | 0x10 as i32 | 0x800 as i32;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    downloadSize = trap_Cvar_VariableValue(
-        b"cl_downloadSize\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
-    downloadCount = trap_Cvar_VariableValue(
-        b"cl_downloadCount\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
-    downloadTime = trap_Cvar_VariableValue(
-        b"cl_downloadTime\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
-    leftWidth = (UI_ProportionalStringWidth(dlText.as_mut_ptr())
-        as f32
+    downloadSize =
+        trap_Cvar_VariableValue(b"cl_downloadSize\x00" as *const u8 as *const libc::c_char) as i32;
+    downloadCount =
+        trap_Cvar_VariableValue(b"cl_downloadCount\x00" as *const u8 as *const libc::c_char) as i32;
+    downloadTime =
+        trap_Cvar_VariableValue(b"cl_downloadTime\x00" as *const u8 as *const libc::c_char) as i32;
+    leftWidth = (UI_ProportionalStringWidth(dlText.as_mut_ptr()) as f32
         * UI_ProportionalSizeScale(style)) as i32;
     width = (UI_ProportionalStringWidth(etaText.as_mut_ptr()) as f32
         * UI_ProportionalSizeScale(style)) as i32;
@@ -530,13 +523,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     } else {
         s = downloadName
     }
-    UI_DrawProportionalString(
-        leftWidth,
-        128 as i32,
-        s,
-        style,
-        color_white.as_mut_ptr(),
-    );
+    UI_DrawProportionalString(leftWidth, 128 as i32, s, style, color_white.as_mut_ptr());
     UI_ReadableSize(
         dlSizeBuf.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -568,8 +555,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         );
     } else {
         if (uis.realtime - downloadTime) / 1000 as i32 != 0 {
-            xferRate = downloadCount
-                / ((uis.realtime - downloadTime) / 1000 as i32)
+            xferRate = downloadCount / ((uis.realtime - downloadTime) / 1000 as i32)
         //xferRate = (int)( ((float)downloadCount) / elapsedTime);
         } else {
             xferRate = 0 as i32
@@ -729,9 +715,7 @@ to prevent it from blinking away too rapidly on local or lan games.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_DrawConnectScreen(
-    mut overlay: qboolean,
-) {
+pub unsafe extern "C" fn UI_DrawConnectScreen(mut overlay: qboolean) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cstate: uiClientState_t = uiClientState_t {
         connState: CA_UNINITIALIZED,
@@ -745,9 +729,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
     Menu_Cache();
     if overlay as u64 == 0 {
         // draw the dialog background
-        UI_SetColor(
-            color_white.as_mut_ptr(),
-        );
+        UI_SetColor(color_white.as_mut_ptr());
         UI_DrawHandlePic(
             0 as i32 as f32,
             0 as i32 as f32,
@@ -757,9 +739,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         );
     }
     // see what information we should display
-    trap_GetClientState(
-        &mut cstate as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cstate as *mut _ as *mut uiClientState_t);
     info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
     if trap_GetConfigString(
         0 as i32,

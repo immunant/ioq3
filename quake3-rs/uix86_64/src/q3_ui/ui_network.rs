@@ -74,8 +74,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -97,8 +96,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -124,8 +122,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -151,8 +148,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -174,8 +170,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -197,8 +192,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -220,8 +214,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -243,8 +236,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -272,8 +264,7 @@ static mut networkOptionsInfo: networkOptionsInfo_t = networkOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -496,9 +487,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
         &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut networkOptionsInfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    rate = trap_Cvar_VariableValue(
-        b"rate\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    rate = trap_Cvar_VariableValue(b"rate\x00" as *const u8 as *const libc::c_char) as i32;
     if rate <= 2500 as i32 {
         networkOptionsInfo.rate.curvalue = 0 as i32
     } else if rate <= 3000 as i32 {
@@ -519,18 +508,10 @@ UI_NetworkOptionsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_NetworkOptionsMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -702,9 +683,7 @@ UI_NetworkOptionsMenu
 
 pub unsafe extern "C" fn UI_NetworkOptionsMenu() {
     UI_NetworkOptionsMenu_Init();
-    UI_PushMenu(
-        &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut networkOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut networkOptionsInfo.network as *mut menutext_s as *mut libc::c_void,

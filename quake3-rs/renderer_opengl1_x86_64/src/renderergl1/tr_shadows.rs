@@ -328,9 +328,7 @@ pub unsafe extern "C" fn R_RenderShadowEdges() {
                 // if it doesn't share the edge with another front facing
                 // triangle, it is a sil edge
                 if hit[1 as i32 as usize] == 0 as i32 {
-                    qglBegin.expect("non-null function pointer")(
-                        0x5 as i32 as GLenum,
-                    );
+                    qglBegin.expect("non-null function pointer")(0x5 as i32 as GLenum);
                     qglVertex3fv.expect("non-null function pointer")(
                         tess.xyz[i as usize].as_mut_ptr(),
                     );
@@ -376,23 +374,17 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     if glConfig.stencilBits < 4 as i32 {
         return;
     }
-    lightDir[0 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[0 as i32 as usize];
-    lightDir[1 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[1 as i32 as usize];
-    lightDir[2 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[2 as i32 as usize];
+    lightDir[0 as i32 as usize] = (*backEnd.currentEntity).lightDir[0 as i32 as usize];
+    lightDir[1 as i32 as usize] = (*backEnd.currentEntity).lightDir[1 as i32 as usize];
+    lightDir[2 as i32 as usize] = (*backEnd.currentEntity).lightDir[2 as i32 as usize];
     // project vertexes away from light direction
     i = 0 as i32;
     while i < tess.numVertexes {
-        shadowXyz[i as usize][0 as i32 as usize] = tess.xyz
-            [i as usize][0 as i32 as usize]
+        shadowXyz[i as usize][0 as i32 as usize] = tess.xyz[i as usize][0 as i32 as usize]
             + lightDir[0 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][1 as i32 as usize] = tess.xyz
-            [i as usize][1 as i32 as usize]
+        shadowXyz[i as usize][1 as i32 as usize] = tess.xyz[i as usize][1 as i32 as usize]
             + lightDir[1 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][2 as i32 as usize] = tess.xyz
-            [i as usize][2 as i32 as usize]
+        shadowXyz[i as usize][2 as i32 as usize] = tess.xyz[i as usize][2 as i32 as usize]
             + lightDir[2 as i32 as usize] * -(512 as i32) as f32;
         i += 1
     }
@@ -415,12 +407,9 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         let mut v2: *mut f32 = 0 as *mut f32;
         let mut v3: *mut f32 = 0 as *mut f32;
         let mut d: f32 = 0.;
-        i1 = tess.indexes[(i * 3 as i32 + 0 as i32) as usize]
-            as i32;
-        i2 = tess.indexes[(i * 3 as i32 + 1 as i32) as usize]
-            as i32;
-        i3 = tess.indexes[(i * 3 as i32 + 2 as i32) as usize]
-            as i32;
+        i1 = tess.indexes[(i * 3 as i32 + 0 as i32) as usize] as i32;
+        i2 = tess.indexes[(i * 3 as i32 + 1 as i32) as usize] as i32;
+        i3 = tess.indexes[(i * 3 as i32 + 2 as i32) as usize] as i32;
         v1 = tess.xyz[i1 as usize].as_mut_ptr();
         v2 = tess.xyz[i2 as usize].as_mut_ptr();
         v3 = tess.xyz[i3 as usize].as_mut_ptr();
@@ -450,27 +439,18 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         i += 1
     }
     // draw the silhouette edges
-    GL_Bind(
-        tr.whiteImage as *mut image_s,
-    );
+    GL_Bind(tr.whiteImage as *mut image_s);
     GL_State((0x2 as i32 | 0x10 as i32) as libc::c_ulong);
-    qglColor3f.expect("non-null function pointer")(
-        0.2f32, 0.2f32, 0.2f32,
-    );
+    qglColor3f.expect("non-null function pointer")(0.2f32, 0.2f32, 0.2f32);
     // don't write to the color buffer
-    qglGetBooleanv.expect("non-null function pointer")(
-        0xc23 as i32 as GLenum,
-        rgba.as_mut_ptr(),
-    );
+    qglGetBooleanv.expect("non-null function pointer")(0xc23 as i32 as GLenum, rgba.as_mut_ptr());
     qglColorMask.expect("non-null function pointer")(
         0 as i32 as GLboolean,
         0 as i32 as GLboolean,
         0 as i32 as GLboolean,
         0 as i32 as GLboolean,
     );
-    qglEnable.expect("non-null function pointer")(
-        0xb90 as i32 as GLenum,
-    );
+    qglEnable.expect("non-null function pointer")(0xb90 as i32 as GLenum);
     qglStencilFunc.expect("non-null function pointer")(
         0x207 as i32 as GLenum,
         1 as i32,
@@ -517,33 +497,21 @@ pub unsafe extern "C" fn RB_ShadowFinish() {
     if glConfig.stencilBits < 4 as i32 {
         return;
     }
-    qglEnable.expect("non-null function pointer")(
-        0xb90 as i32 as GLenum,
-    );
+    qglEnable.expect("non-null function pointer")(0xb90 as i32 as GLenum);
     qglStencilFunc.expect("non-null function pointer")(
         0x205 as i32 as GLenum,
         0 as i32,
         255 as i32 as GLuint,
     );
-    qglDisable.expect("non-null function pointer")(
-        0x3000 as i32 as GLenum,
-    );
+    qglDisable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     GL_Cull(CT_TWO_SIDED as i32);
-    GL_Bind(
-        tr.whiteImage as *mut image_s,
-    );
+    GL_Bind(tr.whiteImage as *mut image_s);
     qglLoadIdentity.expect("non-null function pointer")();
-    qglColor3f.expect("non-null function pointer")(
-        0.6f32, 0.6f32, 0.6f32,
-    );
-    GL_State(
-        (0x100 as i32 | 0x3 as i32 | 0x10 as i32) as libc::c_ulong,
-    );
+    qglColor3f.expect("non-null function pointer")(0.6f32, 0.6f32, 0.6f32);
+    GL_State((0x100 as i32 | 0x3 as i32 | 0x10 as i32) as libc::c_ulong);
     //	qglColor3f( 1, 0, 0 );
     //	GL_State( GLS_DEPTHMASK_TRUE | GLS_SRCBLEND_ONE | GLS_DSTBLEND_ZERO );
-    qglBegin.expect("non-null function pointer")(
-        0x7 as i32 as GLenum,
-    );
+    qglBegin.expect("non-null function pointer")(0x7 as i32 as GLenum);
     qglVertex3f.expect("non-null function pointer")(
         -(100 as i32) as GLfloat,
         100 as i32 as GLfloat,
@@ -571,9 +539,7 @@ pub unsafe extern "C" fn RB_ShadowFinish() {
         1 as i32 as GLfloat,
         1 as i32 as GLfloat,
     );
-    qglDisable.expect("non-null function pointer")(
-        0xb90 as i32 as GLenum,
-    );
+    qglDisable.expect("non-null function pointer")(0xb90 as i32 as GLenum);
 }
 /*
 ===========================================================================
@@ -952,22 +918,13 @@ pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
     let mut d: f32 = 0.;
     let mut lightDir: vec3_t = [0.; 3];
     xyz = tess.xyz.as_mut_ptr() as *mut f32;
-    ground[0 as i32 as usize] =
-        backEnd.or.axis[0 as i32 as usize][2 as i32 as usize];
-    ground[1 as i32 as usize] =
-        backEnd.or.axis[1 as i32 as usize][2 as i32 as usize];
-    ground[2 as i32 as usize] =
-        backEnd.or.axis[2 as i32 as usize][2 as i32 as usize];
-    groundDist = backEnd.or.origin[2 as i32 as usize]
-        - (*backEnd.currentEntity)
-            .e
-            .shadowPlane;
-    lightDir[0 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[0 as i32 as usize];
-    lightDir[1 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[1 as i32 as usize];
-    lightDir[2 as i32 as usize] =
-        (*backEnd.currentEntity).lightDir[2 as i32 as usize];
+    ground[0 as i32 as usize] = backEnd.or.axis[0 as i32 as usize][2 as i32 as usize];
+    ground[1 as i32 as usize] = backEnd.or.axis[1 as i32 as usize][2 as i32 as usize];
+    ground[2 as i32 as usize] = backEnd.or.axis[2 as i32 as usize][2 as i32 as usize];
+    groundDist = backEnd.or.origin[2 as i32 as usize] - (*backEnd.currentEntity).e.shadowPlane;
+    lightDir[0 as i32 as usize] = (*backEnd.currentEntity).lightDir[0 as i32 as usize];
+    lightDir[1 as i32 as usize] = (*backEnd.currentEntity).lightDir[1 as i32 as usize];
+    lightDir[2 as i32 as usize] = (*backEnd.currentEntity).lightDir[2 as i32 as usize];
     d = lightDir[0 as i32 as usize] * ground[0 as i32 as usize]
         + lightDir[1 as i32 as usize] * ground[1 as i32 as usize]
         + lightDir[2 as i32 as usize] * ground[2 as i32 as usize];

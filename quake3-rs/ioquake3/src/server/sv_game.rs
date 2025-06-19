@@ -447,39 +447,29 @@ pub static mut botlib_export: *mut botlib_export_t =
 
 pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut sharedEntity_t) -> i32 {
     let mut num: i32 = 0;
-    num = ((ent as *mut byte).offset_from(
-        sv.gentities as *mut byte,
-    ) as isize
+    num = ((ent as *mut byte).offset_from(sv.gentities as *mut byte) as isize
         / sv.gentitySize as isize) as i32;
     return num;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut sharedEntity_t {
-    let mut ent: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
-    ent = (sv.gentities as *mut byte)
-        .offset((sv.gentitySize * num) as isize)
-        as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    ent =
+        (sv.gentities as *mut byte).offset((sv.gentitySize * num) as isize) as *mut sharedEntity_t;
     return ent;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GameClientNum(
-    mut num: i32,
-) -> *mut playerState_t {
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
-    ps = (sv.gameClients as *mut byte)
-        .offset((sv.gameClientSize * num) as isize)
+pub unsafe extern "C" fn SV_GameClientNum(mut num: i32) -> *mut playerState_t {
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
+    ps = (sv.gameClients as *mut byte).offset((sv.gameClientSize * num) as isize)
         as *mut playerState_t;
     return ps;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_SvEntityForGentity(
-    mut gEnt: *mut sharedEntity_t,
-) -> *mut svEntity_t {
+pub unsafe extern "C" fn SV_SvEntityForGentity(mut gEnt: *mut sharedEntity_t) -> *mut svEntity_t {
     if gEnt.is_null() || (*gEnt).s.number < 0 as i32 || (*gEnt).s.number >= (1 as i32) << 10 as i32
     {
         Com_Error(
@@ -487,19 +477,13 @@ pub unsafe extern "C" fn SV_SvEntityForGentity(
             b"SV_SvEntityForGentity: bad gEnt\x00" as *const u8 as *const libc::c_char,
         );
     }
-    return &mut *sv
-        .svEntities
-        .as_mut_ptr()
-        .offset((*gEnt).s.number as isize) as *mut svEntity_t;
+    return &mut *sv.svEntities.as_mut_ptr().offset((*gEnt).s.number as isize) as *mut svEntity_t;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GEntityForSvEntity(
-    mut svEnt: *mut svEntity_t,
-) -> *mut sharedEntity_t {
+pub unsafe extern "C" fn SV_GEntityForSvEntity(mut svEnt: *mut svEntity_t) -> *mut sharedEntity_t {
     let mut num: i32 = 0;
-    num =
-        svEnt.offset_from(sv.svEntities.as_mut_ptr()) as isize as i32;
+    num = svEnt.offset_from(sv.svEntities.as_mut_ptr()) as isize as i32;
     return SV_GentityNum(num);
 }
 /*
@@ -522,15 +506,11 @@ pub unsafe extern "C" fn SV_GameSendServerCommand(
             text,
         );
     } else {
-        if clientNum < 0 as i32
-            || clientNum >= (*sv_maxclients).integer
-        {
+        if clientNum < 0 as i32 || clientNum >= (*sv_maxclients).integer {
             return;
         }
         SV_SendServerCommand(
-            svs
-                .clients
-                .offset(clientNum as isize) as *mut client_s,
+            svs.clients.offset(clientNum as isize) as *mut client_s,
             b"%s\x00" as *const u8 as *const libc::c_char,
             text,
         );
@@ -550,9 +530,7 @@ pub unsafe extern "C" fn SV_GameDropClient(mut clientNum: i32, mut reason: *cons
         return;
     }
     SV_DropClient(
-        svs
-            .clients
-            .offset(clientNum as isize) as *mut client_s,
+        svs.clients.offset(clientNum as isize) as *mut client_s,
         reason,
     );
 }
@@ -608,16 +586,12 @@ Also checks portalareas so that doors block sight
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_inPVS(
-    mut p1: *const vec_t,
-    mut p2: *const vec_t,
-) -> qboolean {
+pub unsafe extern "C" fn SV_inPVS(mut p1: *const vec_t, mut p2: *const vec_t) -> qboolean {
     let mut leafnum: i32 = 0; // a door blocks sight
     let mut cluster: i32 = 0;
     let mut area1: i32 = 0;
     let mut area2: i32 = 0;
-    let mut mask: *mut byte =
-        0 as *mut byte;
+    let mut mask: *mut byte = 0 as *mut byte;
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     area1 = crate::src::qcommon::cm_load::CM_LeafArea(leafnum);
@@ -651,8 +625,7 @@ pub unsafe extern "C" fn SV_inPVSIgnorePortals(
 ) -> qboolean {
     let mut leafnum: i32 = 0;
     let mut cluster: i32 = 0;
-    let mut mask: *mut byte =
-        0 as *mut byte;
+    let mut mask: *mut byte = 0 as *mut byte;
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p1);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     mask = crate::src::qcommon::cm_test::CM_ClusterPVS(cluster);
@@ -704,35 +677,30 @@ pub unsafe extern "C" fn SV_EntityContact(
     let mut origin: *const f32 = 0 as *const f32;
     let mut angles: *const f32 = 0 as *const f32;
     let mut ch: clipHandle_t = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     // check for exact collision
     origin = (*gEnt).r.currentOrigin.as_ptr();
     angles = (*gEnt).r.currentAngles.as_ptr();
-    ch = SV_ClipHandleForEntity(
-        gEnt as *const sharedEntity_t,
-    );
+    ch = SV_ClipHandleForEntity(gEnt as *const sharedEntity_t);
     crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
         &mut trace as *mut _ as *mut trace_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         mins,
         maxs,
         ch,
@@ -759,11 +727,7 @@ pub unsafe extern "C" fn SV_GetServerinfo(mut buffer: *mut libc::c_char, mut buf
             bufferSize,
         );
     }
-    Q_strncpyz(
-        buffer,
-        Cvar_InfoString(0x4 as i32),
-        bufferSize,
-    );
+    Q_strncpyz(buffer, Cvar_InfoString(0x4 as i32), bufferSize);
 }
 /*
 ===============
@@ -794,10 +758,7 @@ SV_GetUsercmd
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GetUsercmd(
-    mut clientNum: i32,
-    mut cmd: *mut usercmd_t,
-) {
+pub unsafe extern "C" fn SV_GetUsercmd(mut clientNum: i32, mut cmd: *mut usercmd_t) {
     if clientNum < 0 as i32 || clientNum >= (*sv_maxclients).integer {
         Com_Error(
             ERR_DROP as i32,
@@ -805,16 +766,12 @@ pub unsafe extern "C" fn SV_GetUsercmd(
             clientNum,
         );
     }
-    *cmd = (*svs
-        .clients
-        .offset(clientNum as isize))
-    .lastUsercmd;
+    *cmd = (*svs.clients.offset(clientNum as isize)).lastUsercmd;
 }
 //==============================================
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = f;
     return fi.i;
 }
@@ -827,15 +784,12 @@ The module is making a system call
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GameSystemCalls(
-    mut args: *mut intptr_t,
-) -> intptr_t {
+pub unsafe extern "C" fn SV_GameSystemCalls(mut args: *mut intptr_t) -> intptr_t {
     match *args.offset(0 as i32 as isize) {
         0 => {
             Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -843,53 +797,41 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             Com_Error(
                 ERR_DROP as i32,
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
         }
         2 => return Sys_Milliseconds() as intptr_t,
         3 => {
             Cvar_Register(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vmCvar_t
-                    as *mut vmCvar_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         4 => {
-            Cvar_Update(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut vmCvar_t
-                as *mut vmCvar_t);
+            Cvar_Update(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t
+            );
             return 0 as i32 as intptr_t;
         }
         5 => {
             Cvar_SetSafe(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         6 => {
             return Cvar_VariableIntegerValue(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char
             ) as intptr_t
         }
         7 => {
             Cvar_VariableStringBuffer(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -898,8 +840,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         9 => {
             Cmd_ArgvBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -907,17 +848,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         14 => {
             Cbuf_ExecuteText(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         10 => {
             return FS_FOpenFileByMode(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut fileHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut fileHandle_t,
                 *args.offset(3 as i32 as isize) as fsMode_t,
             ) as intptr_t
         }
@@ -938,19 +876,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         13 => {
-            FS_FCloseFile(
-                *args.offset(1 as i32 as isize) as fileHandle_t
-            );
+            FS_FCloseFile(*args.offset(1 as i32 as isize) as fileHandle_t);
             return 0 as i32 as intptr_t;
         }
         38 => {
             return FS_GetFileList(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -963,12 +896,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         15 => {
             SV_LocateGameData(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut sharedEntity_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut sharedEntity_t,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut playerState_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut playerState_t,
                 *args.offset(5 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -976,80 +907,62 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         16 => {
             SV_GameDropClient(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         17 => {
             SV_GameSendServerCommand(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         30 => {
-            SV_LinkEntity(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut sharedEntity_t
-                as *mut sharedEntity_t);
+            SV_LinkEntity(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut sharedEntity_t
+                    as *mut sharedEntity_t,
+            );
             return 0 as i32 as intptr_t;
         }
         31 => {
-            SV_UnlinkEntity(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut sharedEntity_t
-                as *mut sharedEntity_t);
+            SV_UnlinkEntity(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut sharedEntity_t
+                    as *mut sharedEntity_t,
+            );
             return 0 as i32 as intptr_t;
         }
         32 => {
             return SV_AreaEntities(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
         }
         33 => {
             return SV_EntityContact(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const sharedEntity_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const sharedEntity_t,
                 qfalse as i32,
             ) as intptr_t
         }
         44 => {
             return SV_EntityContact(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const sharedEntity_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const sharedEntity_t,
                 qtrue as i32,
             ) as intptr_t
         }
         24 => {
             SV_Trace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *const vec_t,
                 *args.offset(6 as i32 as isize) as i32,
                 *args.offset(7 as i32 as isize) as i32,
                 qfalse as i32,
@@ -1058,17 +971,11 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         43 => {
             SV_Trace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *const vec_t,
                 *args.offset(6 as i32 as isize) as i32,
                 *args.offset(7 as i32 as isize) as i32,
                 qtrue as i32,
@@ -1077,49 +984,40 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         25 => {
             return SV_PointContents(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 *args.offset(2 as i32 as isize) as i32,
             ) as intptr_t
         }
         23 => {
             SV_SetBrushModel(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut sharedEntity_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut sharedEntity_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         26 => {
             return SV_inPVS(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
             ) as intptr_t
         }
         27 => {
             return SV_inPVSIgnorePortals(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
             ) as intptr_t
         }
         18 => {
             SV_SetConfigstring(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         19 => {
             SV_GetConfigstring(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1127,32 +1025,28 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         21 => {
             SV_SetUserinfo(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         20 => {
             SV_GetUserinfo(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         22 => {
             SV_GetServerinfo(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         28 => {
             SV_AdjustAreaPortalState(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut sharedEntity_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut sharedEntity_t,
                 *args.offset(2 as i32 as isize) as qboolean,
             );
             return 0 as i32 as intptr_t;
@@ -1171,25 +1065,19 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         36 => {
             SV_GetUsercmd(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut usercmd_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut usercmd_t,
             );
             return 0 as i32 as intptr_t;
         }
         37 => {
             let mut s: *const libc::c_char = 0 as *const libc::c_char;
-            s = COM_Parse(
-                &mut sv.entityParsePoint,
-            );
+            s = COM_Parse(&mut sv.entityParsePoint);
             Q_strncpyz(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 s,
                 *args.offset(2 as i32 as isize) as i32,
             );
-            if sv.entityParsePoint.is_null()
-                && *s.offset(0 as i32 as isize) == 0
-            {
+            if sv.entityParsePoint.is_null() && *s.offset(0 as i32 as isize) == 0 {
                 return qfalse as i32 as intptr_t;
             } else {
                 return qtrue as i32 as intptr_t;
@@ -1199,29 +1087,20 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return BotImport_DebugPolygonCreate(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec3_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec3_t,
             ) as intptr_t
         }
         40 => {
-            BotImport_DebugPolygonDelete(
-                *args.offset(1 as i32 as isize) as i32,
-            );
+            BotImport_DebugPolygonDelete(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as intptr_t;
         }
         41 => {
-            return Com_RealTime(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut qtime_t
-                as *mut qtime_s)
-                as intptr_t
+            return Com_RealTime(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut qtime_t as *mut qtime_s
+            ) as intptr_t
         }
         42 => {
-            qsnapvectorsse(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut vec_t);
+            qsnapvectorsse(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t);
             return 0 as i32 as intptr_t;
         }
         200 => {
@@ -1233,38 +1112,34 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .BotLibVarSet
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             ) as intptr_t
         }
         203 => {
             return (*botlib_export)
                 .BotLibVarGet
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             ) as intptr_t
         }
         204 => {
             return (*botlib_export)
                 .PC_AddGlobalDefine
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *mut libc::c_char) as intptr_t
         }
         578 => {
             return (*botlib_export)
                 .PC_LoadSourceHandle
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         579 => {
             return (*botlib_export)
@@ -1278,8 +1153,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .PC_ReadTokenHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut pc_token_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut pc_token_t,
             ) as intptr_t
         }
         581 => {
@@ -1287,8 +1161,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .PC_SourceFileAndLine
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as intptr_t
         }
@@ -1302,29 +1175,25 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         206 => {
             return (*botlib_export)
                 .BotLibLoadMap
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         207 => {
             return (*botlib_export)
                 .BotLibUpdateEntity
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_entitystate_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_entitystate_t,
             ) as intptr_t
         }
         208 => {
             return (*botlib_export).Test.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
             ) as intptr_t
         }
         209 => {
@@ -1336,24 +1205,16 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         210 => {
             return SV_BotGetConsoleMessage(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             ) as intptr_t
         }
         211 => {
             let mut clientNum: i32 = *args.offset(1 as i32 as isize) as i32;
-            if clientNum >= 0 as i32
-                && clientNum < (*sv_maxclients).integer
-            {
+            if clientNum >= 0 as i32 && clientNum < (*sv_maxclients).integer {
                 SV_ClientThink(
-                    &mut *svs
-                        .clients
-                        .offset(clientNum as isize) as *mut _
-                        as *mut client_s,
-                    VM_ArgPtr(*args.offset(2 as i32 as isize))
-                        as *mut usercmd_t
-                        as *mut usercmd_s,
+                    &mut *svs.clients.offset(clientNum as isize) as *mut _ as *mut client_s,
+                    VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut usercmd_t as *mut usercmd_s,
                 );
             }
             return 0 as i32 as intptr_t;
@@ -1363,10 +1224,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .aas
                 .AAS_BBoxAreas
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
@@ -1377,8 +1236,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_AreaInfo
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut aas_areainfo_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut aas_areainfo_s,
             ) as intptr_t
         }
         575 => {
@@ -1386,15 +1244,12 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .aas
                 .AAS_AlternativeRouteGoals
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut aas_altroutegoal_s,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *mut aas_altroutegoal_s,
                 *args.offset(7 as i32 as isize) as i32,
                 *args.offset(8 as i32 as isize) as i32,
             ) as intptr_t
@@ -1405,8 +1260,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_EntityInfo
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut aas_entityinfo_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut aas_entityinfo_s,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1414,8 +1268,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .aas
                 .AAS_Initialized
-                .expect("non-null function pointer")()
-                as intptr_t
+                .expect("non-null function pointer")() as intptr_t
         }
         305 => {
             (*botlib_export)
@@ -1423,10 +1276,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_PresenceTypeBoundingBox
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1434,39 +1285,33 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return FloatAsInt((*botlib_export)
                 .aas
                 .AAS_Time
-                .expect("non-null function pointer")())
-                as intptr_t
+                .expect("non-null function pointer")()) as intptr_t
         }
         307 => {
             return (*botlib_export)
                 .aas
                 .AAS_PointAreaNum
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            ) as *mut vec_t) as intptr_t
         }
         577 => {
             return (*botlib_export)
                 .aas
                 .AAS_PointReachabilityAreaIndex
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            ) as *mut vec_t) as intptr_t
         }
         308 => {
             return (*botlib_export)
                 .aas
                 .AAS_TraceAreas
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec3_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec3_t,
                 *args.offset(5 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -1474,10 +1319,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .aas
                 .AAS_PointContents
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            ) as *mut vec_t) as intptr_t
         }
         310 => {
             return (*botlib_export)
@@ -1493,10 +1337,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_ValueForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -1506,10 +1348,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_VectorForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
             ) as intptr_t
         }
         313 => {
@@ -1518,8 +1358,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_FloatForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut f32,
             ) as intptr_t
         }
@@ -1529,8 +1368,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_IntForBSPEpairKey
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as intptr_t
         }
@@ -1548,8 +1386,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .AAS_AreaTravelTimeToGoalArea
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
@@ -1568,11 +1405,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .aas
                 .AAS_PredictRoute
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut aas_predictroute_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut aas_predictroute_s,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
                 *args.offset(6 as i32 as isize) as i32,
@@ -1587,27 +1422,22 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .aas
                 .AAS_Swimming
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            ) as *mut vec_t) as intptr_t
         }
         318 => {
             return (*botlib_export)
                 .aas
                 .AAS_PredictClientMovement
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut aas_clientmove_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut aas_clientmove_s,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
                 *args.offset(4 as i32 as isize) as i32,
                 *args.offset(5 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(7 as i32 as isize)) as *mut vec_t,
                 *args.offset(8 as i32 as isize) as i32,
                 *args.offset(9 as i32 as isize) as i32,
                 _vmf(*args.offset(10 as i32 as isize)),
@@ -1622,8 +1452,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Say
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1633,8 +1462,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_SayTeam
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1644,8 +1472,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Command
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1801,8 +1628,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_Move
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
             );
             return 0 as i32 as intptr_t;
@@ -1813,8 +1639,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .EA_View
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1835,8 +1660,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 _vmf(*args.offset(2 as i32 as isize)),
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut bot_input_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut bot_input_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1854,8 +1678,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotLoadCharacter
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 _vmf(*args.offset(2 as i32 as isize)),
             ) as intptr_t
         }
@@ -1915,8 +1738,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1925,8 +1747,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .ai
                 .BotAllocChatState
-                .expect("non-null function pointer")()
-                as intptr_t
+                .expect("non-null function pointer")() as intptr_t
         }
         508 => {
             (*botlib_export)
@@ -1944,8 +1765,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1965,8 +1785,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotNextConsoleMessage
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_consolemessage_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_consolemessage_s,
             ) as intptr_t
         }
         512 => {
@@ -1983,25 +1802,16 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotInitialChat
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(10 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(11 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(7 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(8 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(9 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(10 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(11 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2011,8 +1821,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotNumInitialChats
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             ) as intptr_t
         }
         514 => {
@@ -2021,26 +1830,17 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotReplyChat
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(10 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(11 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(12 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(7 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(8 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(9 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(10 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(11 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(12 as i32 as isize)) as *mut libc::c_char,
             ) as intptr_t
         }
         515 => {
@@ -2068,8 +1868,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetChatMessage
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -2079,10 +1878,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .StringContains
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -2091,10 +1888,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFindMatch
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_match_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_match_s,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             ) as intptr_t
         }
@@ -2103,11 +1898,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotMatchVariable
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut bot_match_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut bot_match_s,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -2116,12 +1909,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             (*botlib_export)
                 .ai
                 .UnifyWhiteSpaces
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+                .expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *mut libc::c_char
-            );
+                as *mut libc::c_char);
             return 0 as i32 as intptr_t;
         }
         521 => {
@@ -2129,8 +1920,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotReplaceSynonyms
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as libc::c_ulong,
             );
             return 0 as i32 as intptr_t;
@@ -2141,10 +1931,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadChatFile
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
             ) as intptr_t
         }
         523 => {
@@ -2163,8 +1951,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotSetChatName
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -2203,8 +1990,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotPushGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2250,8 +2036,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGoalName
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -2262,8 +2047,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetTopGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         534 => {
@@ -2272,8 +2056,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetSecondGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         535 => {
@@ -2282,8 +2065,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseLTGItem
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
@@ -2294,12 +2076,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseNBGItem
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut bot_goal_s,
                 _vmf(*args.offset(6 as i32 as isize)),
             ) as intptr_t
         }
@@ -2308,10 +2088,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotTouchingGoal
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         538 => {
@@ -2320,12 +2098,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotItemGoalInVisButNotVisible
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         539 => {
@@ -2334,10 +2109,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetLevelItemGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         567 => {
@@ -2346,8 +2119,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotGetNextCampSpotGoal
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         568 => {
@@ -2355,10 +2127,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotGetMapLocationGoal
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
             ) as intptr_t
         }
         540 => {
@@ -2401,8 +2171,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadItemWeights
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             ) as intptr_t
         }
         544 => {
@@ -2431,8 +2200,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotSaveGoalFuzzyLogic
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2478,8 +2246,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotAddAvoidSpot
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
                 *args.offset(4 as i32 as isize) as i32,
             );
@@ -2490,11 +2257,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotMoveToGoal
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut bot_moveresult_s,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut bot_moveresult_s,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut bot_goal_s,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -2505,8 +2270,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotMoveInDirection
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
                 _vmf(*args.offset(3 as i32 as isize)),
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
@@ -2534,8 +2298,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotReachabilityArea
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -2545,12 +2308,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotMovementViewTarget
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_goal_s,
                 *args.offset(3 as i32 as isize) as i32,
                 _vmf(*args.offset(4 as i32 as isize)),
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
             ) as intptr_t
         }
         572 => {
@@ -2558,22 +2319,18 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotPredictVisiblePosition
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut bot_goal_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut bot_goal_s,
                 *args.offset(4 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
             ) as intptr_t
         }
         555 => {
             return (*botlib_export)
                 .ai
                 .BotAllocMoveState
-                .expect("non-null function pointer")()
-                as intptr_t
+                .expect("non-null function pointer")() as intptr_t
         }
         556 => {
             (*botlib_export)
@@ -2590,8 +2347,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotInitMoveState
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut bot_initmove_s,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut bot_initmove_s,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2611,8 +2367,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut weaponinfo_s,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut weaponinfo_s,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2622,16 +2377,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotLoadWeaponWeights
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
             ) as intptr_t
         }
         561 => {
             return (*botlib_export)
                 .ai
                 .BotAllocWeaponState
-                .expect("non-null function pointer")()
-                as intptr_t
+                .expect("non-null function pointer")() as intptr_t
         }
         562 => {
             (*botlib_export)
@@ -2681,10 +2434,8 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         102 => {
             crate::stdlib::strncpy(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
             return *args.offset(1 as i32 as isize);
@@ -2712,34 +2463,25 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         107 => {
             MatrixMultiply(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut [f32; 3],
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut [f32; 3],
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut [f32; 3],
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut [f32; 3],
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut [f32; 3],
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut [f32; 3],
             );
             return 0 as i32 as intptr_t;
         }
         108 => {
             AngleVectors(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
             );
             return 0 as i32 as intptr_t;
         }
         109 => {
             PerpendicularVector(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2775,11 +2517,7 @@ pub unsafe extern "C" fn SV_ShutdownGameProgs() {
     if gvm.is_null() {
         return;
     }
-    VM_Call(
-        gvm,
-        GAME_SHUTDOWN as i32,
-        qfalse as i32,
-    );
+    VM_Call(gvm, GAME_SHUTDOWN as i32, qfalse as i32);
     VM_Free(gvm);
     gvm = 0 as *mut vm_t;
 }
@@ -2794,8 +2532,7 @@ Called for both a full init and a restart
 unsafe extern "C" fn SV_InitGameVM(mut restart: qboolean) {
     let mut i: i32 = 0;
     // start the entity parsing at the beginning
-    sv.entityParsePoint =
-        crate::src::qcommon::cm_load::CM_EntityString();
+    sv.entityParsePoint = crate::src::qcommon::cm_load::CM_EntityString();
     // clear all gentity pointers that might still be set from
     // a previous level
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=522
@@ -2829,16 +2566,9 @@ pub unsafe extern "C" fn SV_RestartGameProgs() {
     if gvm.is_null() {
         return;
     }
-    VM_Call(
-        gvm,
-        GAME_SHUTDOWN as i32,
-        qtrue as i32,
-    );
+    VM_Call(gvm, GAME_SHUTDOWN as i32, qtrue as i32);
     // do a restart instead of a free
-    gvm = VM_Restart(
-        gvm,
-        qtrue,
-    );
+    gvm = VM_Restart(gvm, qtrue);
     if gvm.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -2999,8 +2729,7 @@ Called on a normal map change, not on a map_restart
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_InitGameProgs() {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     //FIXME these are temp while I make bots run in vm
     extern "C" {
         #[no_mangle]
@@ -3019,13 +2748,8 @@ pub unsafe extern "C" fn SV_InitGameProgs() {
     // load the dll or bytecode
     gvm = VM_Create(
         b"qagame\x00" as *const u8 as *const libc::c_char,
-        Some(
-            SV_GameSystemCalls
-                as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
-        ),
-        Cvar_VariableValue(
-            b"vm_game\x00" as *const u8 as *const libc::c_char,
-        ) as vmInterpret_t,
+        Some(SV_GameSystemCalls as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t),
+        Cvar_VariableValue(b"vm_game\x00" as *const u8 as *const libc::c_char) as vmInterpret_t,
     );
     if gvm.is_null() {
         Com_Error(
@@ -3048,8 +2772,5 @@ pub unsafe extern "C" fn SV_GameCommand() -> qboolean {
     if sv.state as u32 != SS_GAME as i32 as u32 {
         return qfalse;
     }
-    return VM_Call(
-        gvm,
-        GAME_CONSOLE_COMMAND as i32,
-    ) as qboolean;
+    return VM_Call(gvm, GAME_CONSOLE_COMMAND as i32) as qboolean;
 }

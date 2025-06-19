@@ -366,9 +366,7 @@ pub unsafe extern "C" fn LibVarSet(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn LibVarChanged(
-    mut var_name: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn LibVarChanged(mut var_name: *const libc::c_char) -> qboolean {
     let mut v: *mut crate::src::botlib::l_libvar::libvar_t =
         0 as *mut crate::src::botlib::l_libvar::libvar_t; //end if
     v = LibVarGet(var_name);

@@ -291,57 +291,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // g_syscalls.asm is included instead when building a qvm
 // Initialized in run_static_initializers
 
-static mut syscall: Option<
-    unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-> = None;
+static mut syscall: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t> = None;
 #[no_mangle]
 
 pub unsafe extern "C" fn dllEntry(
-    mut syscallptr: Option<
-        unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-    >,
+    mut syscallptr: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
 ) {
     syscall = syscallptr;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn PASSFLOAT(mut x: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = x;
     return fi.i;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Print(mut text: *const libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        G_PRINT as i32 as intptr_t,
-        text,
-    );
+    syscall.expect("non-null function pointer")(G_PRINT as i32 as intptr_t, text);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Error(mut text: *const libc::c_char) -> ! {
-    syscall.expect("non-null function pointer")(
-        G_ERROR as i32 as intptr_t,
-        text,
-    );
+    syscall.expect("non-null function pointer")(G_ERROR as i32 as intptr_t, text);
     // shut up GCC warning about returning functions, because we know better
     libc::exit(1 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Milliseconds() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        G_MILLISECONDS as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(G_MILLISECONDS as i32 as intptr_t) as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Argc() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        G_ARGC as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(G_ARGC as i32 as intptr_t) as i32;
 }
 #[no_mangle]
 
@@ -350,12 +335,7 @@ pub unsafe extern "C" fn trap_Argv(
     mut buffer: *mut libc::c_char,
     mut bufferLength: i32,
 ) {
-    syscall.expect("non-null function pointer")(
-        G_ARGV as i32 as intptr_t,
-        n,
-        buffer,
-        bufferLength,
-    );
+    syscall.expect("non-null function pointer")(G_ARGV as i32 as intptr_t, n, buffer, bufferLength);
 }
 #[no_mangle]
 
@@ -378,12 +358,7 @@ pub unsafe extern "C" fn trap_FS_Read(
     mut len: i32,
     mut f: fileHandle_t,
 ) {
-    syscall.expect("non-null function pointer")(
-        G_FS_READ as i32 as intptr_t,
-        buffer,
-        len,
-        f,
-    );
+    syscall.expect("non-null function pointer")(G_FS_READ as i32 as intptr_t, buffer, len, f);
 }
 #[no_mangle]
 
@@ -392,20 +367,12 @@ pub unsafe extern "C" fn trap_FS_Write(
     mut len: i32,
     mut f: fileHandle_t,
 ) {
-    syscall.expect("non-null function pointer")(
-        G_FS_WRITE as i32 as intptr_t,
-        buffer,
-        len,
-        f,
-    );
+    syscall.expect("non-null function pointer")(G_FS_WRITE as i32 as intptr_t, buffer, len, f);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_FS_FCloseFile(mut f: fileHandle_t) {
-    syscall.expect("non-null function pointer")(
-        G_FS_FCLOSE_FILE as i32 as intptr_t,
-        f,
-    );
+    syscall.expect("non-null function pointer")(G_FS_FCLOSE_FILE as i32 as intptr_t, f);
 }
 #[no_mangle]
 
@@ -468,10 +435,7 @@ pub unsafe extern "C" fn trap_Cvar_Register(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Cvar_Update(mut cvar: *mut vmCvar_t) {
-    syscall.expect("non-null function pointer")(
-        G_CVAR_UPDATE as i32 as intptr_t,
-        cvar,
-    );
+    syscall.expect("non-null function pointer")(G_CVAR_UPDATE as i32 as intptr_t, cvar);
 }
 #[no_mangle]
 
@@ -479,11 +443,7 @@ pub unsafe extern "C" fn trap_Cvar_Set(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) {
-    syscall.expect("non-null function pointer")(
-        G_CVAR_SET as i32 as intptr_t,
-        var_name,
-        value,
-    );
+    syscall.expect("non-null function pointer")(G_CVAR_SET as i32 as intptr_t, var_name, value);
 }
 #[no_mangle]
 
@@ -546,11 +506,7 @@ pub unsafe extern "C" fn trap_SendServerCommand(mut clientNum: i32, mut text: *c
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_SetConfigstring(mut num: i32, mut string: *const libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        G_SET_CONFIGSTRING as i32 as intptr_t,
-        num,
-        string,
-    );
+    syscall.expect("non-null function pointer")(G_SET_CONFIGSTRING as i32 as intptr_t, num, string);
 }
 #[no_mangle]
 
@@ -583,11 +539,7 @@ pub unsafe extern "C" fn trap_GetUserinfo(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_SetUserinfo(mut num: i32, mut buffer: *const libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        G_SET_USERINFO as i32 as intptr_t,
-        num,
-        buffer,
-    );
+    syscall.expect("non-null function pointer")(G_SET_USERINFO as i32 as intptr_t, num, buffer);
 }
 #[no_mangle]
 
@@ -604,11 +556,7 @@ pub unsafe extern "C" fn trap_SetBrushModel(
     mut ent: *mut gentity_t,
     mut name: *const libc::c_char,
 ) {
-    syscall.expect("non-null function pointer")(
-        G_SET_BRUSH_MODEL as i32 as intptr_t,
-        ent,
-        name,
-    );
+    syscall.expect("non-null function pointer")(G_SET_BRUSH_MODEL as i32 as intptr_t, ent, name);
 }
 #[no_mangle]
 
@@ -668,15 +616,9 @@ pub unsafe extern "C" fn trap_PointContents(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_InPVS(
-    mut p1: *const vec_t,
-    mut p2: *const vec_t,
-) -> qboolean {
-    return syscall.expect("non-null function pointer")(
-        G_IN_PVS as i32 as intptr_t,
-        p1,
-        p2,
-    ) as qboolean;
+pub unsafe extern "C" fn trap_InPVS(mut p1: *const vec_t, mut p2: *const vec_t) -> qboolean {
+    return syscall.expect("non-null function pointer")(G_IN_PVS as i32 as intptr_t, p1, p2)
+        as qboolean;
 }
 #[no_mangle]
 
@@ -692,10 +634,7 @@ pub unsafe extern "C" fn trap_InPVSIgnorePortals(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AdjustAreaPortalState(
-    mut ent: *mut gentity_t,
-    mut open: qboolean,
-) {
+pub unsafe extern "C" fn trap_AdjustAreaPortalState(mut ent: *mut gentity_t, mut open: qboolean) {
     syscall.expect("non-null function pointer")(
         G_ADJUST_AREA_PORTAL_STATE as i32 as intptr_t,
         ent,
@@ -704,10 +643,7 @@ pub unsafe extern "C" fn trap_AdjustAreaPortalState(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AreasConnected(
-    mut area1: i32,
-    mut area2: i32,
-) -> qboolean {
+pub unsafe extern "C" fn trap_AreasConnected(mut area1: i32, mut area2: i32) -> qboolean {
     return syscall.expect("non-null function pointer")(
         G_AREAS_CONNECTED as i32 as intptr_t,
         area1,
@@ -717,18 +653,12 @@ pub unsafe extern "C" fn trap_AreasConnected(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LinkEntity(mut ent: *mut gentity_t) {
-    syscall.expect("non-null function pointer")(
-        G_LINKENTITY as i32 as intptr_t,
-        ent,
-    );
+    syscall.expect("non-null function pointer")(G_LINKENTITY as i32 as intptr_t, ent);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_UnlinkEntity(mut ent: *mut gentity_t) {
-    syscall.expect("non-null function pointer")(
-        G_UNLINKENTITY as i32 as intptr_t,
-        ent,
-    );
+    syscall.expect("non-null function pointer")(G_UNLINKENTITY as i32 as intptr_t, ent);
 }
 #[no_mangle]
 
@@ -777,29 +707,18 @@ pub unsafe extern "C" fn trap_EntityContactCapsule(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotAllocateClient() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        G_BOT_ALLOCATE_CLIENT as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(G_BOT_ALLOCATE_CLIENT as i32 as intptr_t)
+        as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotFreeClient(mut clientNum: i32) {
-    syscall.expect("non-null function pointer")(
-        G_BOT_FREE_CLIENT as i32 as intptr_t,
-        clientNum,
-    );
+    syscall.expect("non-null function pointer")(G_BOT_FREE_CLIENT as i32 as intptr_t, clientNum);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_GetUsercmd(
-    mut clientNum: i32,
-    mut cmd: *mut usercmd_t,
-) {
-    syscall.expect("non-null function pointer")(
-        G_GET_USERCMD as i32 as intptr_t,
-        clientNum,
-        cmd,
-    );
+pub unsafe extern "C" fn trap_GetUsercmd(mut clientNum: i32, mut cmd: *mut usercmd_t) {
+    syscall.expect("non-null function pointer")(G_GET_USERCMD as i32 as intptr_t, clientNum, cmd);
 }
 #[no_mangle]
 
@@ -830,43 +749,29 @@ pub unsafe extern "C" fn trap_DebugPolygonCreate(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_DebugPolygonDelete(mut id: i32) {
-    syscall.expect("non-null function pointer")(
-        G_DEBUG_POLYGON_DELETE as i32 as intptr_t,
-        id,
-    );
+    syscall.expect("non-null function pointer")(G_DEBUG_POLYGON_DELETE as i32 as intptr_t, id);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_RealTime(
-    mut qtime: *mut qtime_t,
-) -> i32 {
-    return syscall.expect("non-null function pointer")(
-        G_REAL_TIME as i32 as intptr_t,
-        qtime,
-    ) as i32;
+pub unsafe extern "C" fn trap_RealTime(mut qtime: *mut qtime_t) -> i32 {
+    return syscall.expect("non-null function pointer")(G_REAL_TIME as i32 as intptr_t, qtime)
+        as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_SnapVector(mut v: *mut f32) {
-    syscall.expect("non-null function pointer")(
-        G_SNAPVECTOR as i32 as intptr_t,
-        v,
-    );
+    syscall.expect("non-null function pointer")(G_SNAPVECTOR as i32 as intptr_t, v);
 }
 // BotLib traps start here
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotLibSetup() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        BOTLIB_SETUP as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(BOTLIB_SETUP as i32 as intptr_t) as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotLibShutdown() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        BOTLIB_SHUTDOWN as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(BOTLIB_SHUTDOWN as i32 as intptr_t) as i32;
 }
 #[no_mangle]
 
@@ -913,10 +818,8 @@ pub unsafe extern "C" fn trap_BotLibStartFrame(mut time: f32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotLibLoadMap(mut mapname: *const libc::c_char) -> i32 {
-    return syscall.expect("non-null function pointer")(
-        BOTLIB_LOAD_MAP as i32 as intptr_t,
-        mapname,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(BOTLIB_LOAD_MAP as i32 as intptr_t, mapname)
+        as i32;
 }
 #[no_mangle]
 
@@ -968,10 +871,7 @@ pub unsafe extern "C" fn trap_BotGetServerCommand(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotUserCommand(
-    mut clientNum: i32,
-    mut ucmd: *mut usercmd_t,
-) {
+pub unsafe extern "C" fn trap_BotUserCommand(mut clientNum: i32, mut ucmd: *mut usercmd_t) {
     syscall.expect("non-null function pointer")(
         BOTLIB_USER_COMMAND as i32 as intptr_t,
         clientNum,
@@ -990,9 +890,8 @@ pub unsafe extern "C" fn trap_AAS_EntityInfo(mut entnum: i32, mut info: *mut lib
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_AAS_Initialized() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        BOTLIB_AAS_INITIALIZED as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(BOTLIB_AAS_INITIALIZED as i32 as intptr_t)
+        as i32;
 }
 #[no_mangle]
 
@@ -1011,18 +910,13 @@ pub unsafe extern "C" fn trap_AAS_PresenceTypeBoundingBox(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_AAS_Time() -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
-    fi.i = syscall.expect("non-null function pointer")(
-        BOTLIB_AAS_TIME as i32 as intptr_t,
-    ) as i32;
+    let mut fi: floatint_t = floatint_t { f: 0. };
+    fi.i = syscall.expect("non-null function pointer")(BOTLIB_AAS_TIME as i32 as intptr_t) as i32;
     return fi.f;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_PointAreaNum(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_PointAreaNum(mut point: *mut vec_t) -> i32 {
     return syscall.expect("non-null function pointer")(
         BOTLIB_AAS_POINT_AREA_NUM as i32 as intptr_t,
         point,
@@ -1030,12 +924,9 @@ pub unsafe extern "C" fn trap_AAS_PointAreaNum(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_PointReachabilityAreaIndex(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_PointReachabilityAreaIndex(mut point: *mut vec_t) -> i32 {
     return syscall.expect("non-null function pointer")(
-        BOTLIB_AAS_POINT_REACHABILITY_AREA_INDEX as i32
-            as intptr_t,
+        BOTLIB_AAS_POINT_REACHABILITY_AREA_INDEX as i32 as intptr_t,
         point,
     ) as i32;
 }
@@ -1084,9 +975,7 @@ pub unsafe extern "C" fn trap_AAS_AreaInfo(mut areanum: i32, mut info: *mut libc
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_PointContents(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_PointContents(mut point: *mut vec_t) -> i32 {
     return syscall.expect("non-null function pointer")(
         BOTLIB_AAS_POINT_CONTENTS as i32 as intptr_t,
         point,
@@ -1175,8 +1064,7 @@ pub unsafe extern "C" fn trap_AAS_AreaTravelTimeToGoalArea(
     mut travelflags: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        BOTLIB_AAS_AREA_TRAVEL_TIME_TO_GOAL_AREA as i32
-            as intptr_t,
+        BOTLIB_AAS_AREA_TRAVEL_TIME_TO_GOAL_AREA as i32 as intptr_t,
         areanum,
         origin,
         goalareanum,
@@ -1248,9 +1136,7 @@ pub unsafe extern "C" fn trap_AAS_AlternativeRouteGoals(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_Swimming(
-    mut origin: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_Swimming(mut origin: *mut vec_t) -> i32 {
     return syscall.expect("non-null function pointer")(
         BOTLIB_AAS_SWIMMING as i32 as intptr_t,
         origin,
@@ -1293,20 +1179,12 @@ pub unsafe extern "C" fn trap_AAS_PredictClientMovement(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Say(mut client: i32, mut str: *mut libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_SAY as i32 as intptr_t,
-        client,
-        str,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_SAY as i32 as intptr_t, client, str);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_SayTeam(mut client: i32, mut str: *mut libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_SAY_TEAM as i32 as intptr_t,
-        client,
-        str,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_SAY_TEAM as i32 as intptr_t, client, str);
 }
 #[no_mangle]
 
@@ -1329,98 +1207,62 @@ pub unsafe extern "C" fn trap_EA_Action(mut client: i32, mut action: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Gesture(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_GESTURE as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_GESTURE as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Talk(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_TALK as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_TALK as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Attack(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_ATTACK as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_ATTACK as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Use(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_USE as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_USE as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Respawn(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_RESPAWN as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_RESPAWN as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Crouch(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_CROUCH as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_CROUCH as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveUp(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_UP as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_UP as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveDown(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_DOWN as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_DOWN as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveForward(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_FORWARD as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_FORWARD as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveBack(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_BACK as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_BACK as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveLeft(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_LEFT as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_LEFT as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_MoveRight(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_MOVE_RIGHT as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_MOVE_RIGHT as i32 as intptr_t, client);
 }
 #[no_mangle]
 
@@ -1434,26 +1276,16 @@ pub unsafe extern "C" fn trap_EA_SelectWeapon(mut client: i32, mut weapon: i32) 
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_Jump(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_JUMP as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_JUMP as i32 as intptr_t, client);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_DelayedJump(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_DELAYED_JUMP as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_DELAYED_JUMP as i32 as intptr_t, client);
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_EA_Move(
-    mut client: i32,
-    mut dir: *mut vec_t,
-    mut speed: f32,
-) {
+pub unsafe extern "C" fn trap_EA_Move(mut client: i32, mut dir: *mut vec_t, mut speed: f32) {
     syscall.expect("non-null function pointer")(
         BOTLIB_EA_MOVE as i32 as intptr_t,
         client,
@@ -1463,10 +1295,7 @@ pub unsafe extern "C" fn trap_EA_Move(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_EA_View(
-    mut client: i32,
-    mut viewangles: *mut vec_t,
-) {
+pub unsafe extern "C" fn trap_EA_View(mut client: i32, mut viewangles: *mut vec_t) {
     syscall.expect("non-null function pointer")(
         BOTLIB_EA_VIEW as i32 as intptr_t,
         client,
@@ -1499,10 +1328,7 @@ pub unsafe extern "C" fn trap_EA_GetInput(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_EA_ResetInput(mut client: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_EA_RESET_INPUT as i32 as intptr_t,
-        client,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_EA_RESET_INPUT as i32 as intptr_t, client);
 }
 #[no_mangle]
 
@@ -1527,8 +1353,7 @@ pub unsafe extern "C" fn trap_BotFreeCharacter(mut character: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Characteristic_Float(mut character: i32, mut index: i32) -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
         BOTLIB_AI_CHARACTERISTIC_FLOAT as i32 as intptr_t,
         character,
@@ -1544,8 +1369,7 @@ pub unsafe extern "C" fn trap_Characteristic_BFloat(
     mut min: f32,
     mut max: f32,
 ) -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
         BOTLIB_AI_CHARACTERISTIC_BFLOAT as i32 as intptr_t,
         character,
@@ -1898,10 +1722,7 @@ pub unsafe extern "C" fn trap_BotPushGoal(mut goalstate: i32, mut goal: *mut lib
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotPopGoal(mut goalstate: i32) {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_AI_POP_GOAL as i32 as intptr_t,
-        goalstate,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_AI_POP_GOAL as i32 as intptr_t, goalstate);
 }
 #[no_mangle]
 
@@ -2022,8 +1843,7 @@ pub unsafe extern "C" fn trap_BotItemGoalInVisButNotVisible(
     mut goal: *mut libc::c_void,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        BOTLIB_AI_ITEM_GOAL_IN_VIS_BUT_NOT_VISIBLE as i32
-            as intptr_t,
+        BOTLIB_AI_ITEM_GOAL_IN_VIS_BUT_NOT_VISIBLE as i32 as intptr_t,
         viewer,
         eye,
         viewangles,
@@ -2071,8 +1891,7 @@ pub unsafe extern "C" fn trap_BotGetMapLocationGoal(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotAvoidGoalTime(mut goalstate: i32, mut number: i32) -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
         BOTLIB_AI_AVOID_GOAL_TIME as i32 as intptr_t,
         goalstate,
@@ -2097,16 +1916,12 @@ pub unsafe extern "C" fn trap_BotSetAvoidGoalTime(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotInitLevelItems() {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_AI_INIT_LEVEL_ITEMS as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_AI_INIT_LEVEL_ITEMS as i32 as intptr_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_BotUpdateEntityItems() {
-    syscall.expect("non-null function pointer")(
-        BOTLIB_AI_UPDATE_ENTITY_ITEMS as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(BOTLIB_AI_UPDATE_ENTITY_ITEMS as i32 as intptr_t);
 }
 #[no_mangle]
 
@@ -2420,8 +2235,7 @@ pub unsafe extern "C" fn trap_GeneticParentsAndChildSelection(
     mut child: *mut i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION as i32
-            as intptr_t,
+        BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION as i32 as intptr_t,
         numranks,
         ranks,
         parent1,
@@ -2447,10 +2261,7 @@ pub unsafe extern "C" fn trap_PC_FreeSource(mut handle: i32) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_PC_ReadToken(
-    mut handle: i32,
-    mut pc_token: *mut pc_token_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_PC_ReadToken(mut handle: i32, mut pc_token: *mut pc_token_t) -> i32 {
     return syscall.expect("non-null function pointer")(
         BOTLIB_PC_READ_TOKEN as i32 as intptr_t,
         handle,

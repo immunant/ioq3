@@ -430,8 +430,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -457,8 +456,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -484,8 +482,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -511,8 +508,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -538,8 +534,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -565,8 +560,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -588,8 +582,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -615,8 +608,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -642,8 +634,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -669,8 +660,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -696,8 +686,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -723,8 +712,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -746,8 +734,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -769,8 +756,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -795,8 +781,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         torsoModel: 0,
@@ -812,8 +797,7 @@ static mut s_playermodel: playermodel_t = playermodel_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         headModel: 0,
@@ -928,8 +912,7 @@ unsafe extern "C" fn PlayerModel_UpdateModel() {
         0 as i32,
         ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
     );
-    viewangles[1 as i32 as usize] =
-        (180 as i32 - 30 as i32) as vec_t;
+    viewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
     viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
     viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
     moveangles[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1009,30 +992,25 @@ PlayerModel_MenuKey
 =================
 */
 
-unsafe extern "C" fn PlayerModel_MenuKey(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn PlayerModel_MenuKey(mut key: i32) -> sfxHandle_t {
     let mut m: *mut menucommon_s = 0 as *mut menucommon_s;
     let mut picnum: i32 = 0;
     match key {
         163 | 134 => {
-            m = Menu_ItemAtCursor(
-                &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
-            ) as *mut menucommon_s;
+            m = Menu_ItemAtCursor(&mut s_playermodel.menu as *mut _ as *mut _tag_menuframework)
+                as *mut menucommon_s;
             picnum = (*m).id - 0 as i32;
             if picnum >= 0 as i32 && picnum <= 15 as i32 {
                 if picnum > 0 as i32 {
                     Menu_SetCursor(
-                        &mut s_playermodel.menu as *mut _
-                            as *mut _tag_menuframework,
+                        &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
                         s_playermodel.menu.cursor - 1 as i32,
                     );
                     return menu_move_sound;
                 } else if s_playermodel.modelpage > 0 as i32 {
                     s_playermodel.modelpage -= 1;
                     Menu_SetCursor(
-                        &mut s_playermodel.menu as *mut _
-                            as *mut _tag_menuframework,
+                        &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
                         s_playermodel.menu.cursor + 15 as i32,
                     );
                     PlayerModel_UpdateGrid();
@@ -1043,9 +1021,8 @@ unsafe extern "C" fn PlayerModel_MenuKey(
             }
         }
         165 | 135 => {
-            m = Menu_ItemAtCursor(
-                &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
-            ) as *mut menucommon_s;
+            m = Menu_ItemAtCursor(&mut s_playermodel.menu as *mut _ as *mut _tag_menuframework)
+                as *mut menucommon_s;
             picnum = (*m).id - 0 as i32;
             if picnum >= 0 as i32 && picnum <= 15 as i32 {
                 if picnum < 15 as i32
@@ -1053,8 +1030,7 @@ unsafe extern "C" fn PlayerModel_MenuKey(
                         < s_playermodel.nummodels
                 {
                     Menu_SetCursor(
-                        &mut s_playermodel.menu as *mut _
-                            as *mut _tag_menuframework,
+                        &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
                         s_playermodel.menu.cursor + 1 as i32,
                     );
                     return menu_move_sound;
@@ -1063,8 +1039,7 @@ unsafe extern "C" fn PlayerModel_MenuKey(
                 {
                     s_playermodel.modelpage += 1;
                     Menu_SetCursor(
-                        &mut s_playermodel.menu as *mut _
-                            as *mut _tag_menuframework,
+                        &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
                         s_playermodel.menu.cursor - 15 as i32,
                     );
                     PlayerModel_UpdateGrid();
@@ -1150,9 +1125,7 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
         );
         Q_strupr(s_playermodel.skinname.string);
         s_playermodel.selectedmodel = modelnum;
-        if trap_MemoryRemaining()
-            > 5 as i32 * 1024 as i32 * 1024 as i32
-        {
+        if trap_MemoryRemaining() > 5 as i32 * 1024 as i32 * 1024 as i32 {
             PlayerModel_UpdateModel();
         }
     };
@@ -1203,11 +1176,9 @@ unsafe extern "C" fn PlayerModel_BuildList() {
     let mut j: i32 = 0;
     let mut dirlen: i32 = 0;
     let mut filelen: i32 = 0;
-    let mut precache: qboolean =
-        qfalse;
-    precache = trap_Cvar_VariableValue(
-        b"com_buildscript\x00" as *const u8 as *const libc::c_char,
-    ) as qboolean;
+    let mut precache: qboolean = qfalse;
+    precache = trap_Cvar_VariableValue(b"com_buildscript\x00" as *const u8 as *const libc::c_char)
+        as qboolean;
     s_playermodel.modelpage = 0 as i32;
     s_playermodel.nummodels = 0 as i32;
     // iterate directory of all player models
@@ -1340,11 +1311,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 (pdest.offset_from(buffptr) as isize + 1 as i32 as isize) as i32,
             );
             libc::strcat(modelskin.as_mut_ptr(), pdest.offset(5 as i32 as isize));
-            if Q_stricmp(
-                s_playermodel.modelskin.as_mut_ptr(),
-                modelskin.as_mut_ptr(),
-            ) == 0
-            {
+            if Q_stricmp(s_playermodel.modelskin.as_mut_ptr(), modelskin.as_mut_ptr()) == 0 {
                 // found pic, set selection here
                 s_playermodel.selectedmodel = i;
                 s_playermodel.modelpage = i / (4 as i32 * 4 as i32);
@@ -1353,11 +1320,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 if maxlen > 16 as i32 {
                     maxlen = 16 as i32
                 }
-                Q_strncpyz(
-                    s_playermodel.modelname.string,
-                    buffptr,
-                    maxlen,
-                );
+                Q_strncpyz(s_playermodel.modelname.string, buffptr, maxlen);
                 Q_strupr(s_playermodel.modelname.string);
                 // separate the skin name
                 maxlen = crate::stdlib::strlen(pdest.offset(5 as i32 as isize))
@@ -1399,10 +1362,8 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
         ::std::mem::size_of::<playermodel_t>() as libc::c_ulong,
     );
     PlayerModel_Cache();
-    s_playermodel.menu.key = Some(
-        PlayerModel_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_playermodel.menu.key =
+        Some(PlayerModel_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_playermodel.menu.wrapAround = qtrue;
     s_playermodel.menu.fullscreen = qtrue;
     s_playermodel.banner.generic.type_0 = 10 as i32;
@@ -1452,8 +1413,7 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
             s_playermodel.pics[k as usize].focuspic =
                 b"menu/art/opponents_selected\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
-            s_playermodel.pics[k as usize].focuscolor =
-                colorRed.as_mut_ptr();
+            s_playermodel.pics[k as usize].focuscolor = colorRed.as_mut_ptr();
             s_playermodel.picbuttons[k as usize].generic.type_0 = 6 as i32;
             s_playermodel.picbuttons[k as usize].generic.flags =
                 0x4 as i32 as u32 | 0x8000 as i32 as u32 | 0x100 as i32 as u32;
@@ -1472,8 +1432,7 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
             s_playermodel.picbuttons[k as usize].focuspic =
                 b"menu/art/opponents_select\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
-            s_playermodel.picbuttons[k as usize].focuscolor =
-                colorRed.as_mut_ptr();
+            s_playermodel.picbuttons[k as usize].focuscolor = colorRed.as_mut_ptr();
             x += 64 as i32 + 6 as i32;
             j += 1;
             k += 1
@@ -1584,13 +1543,13 @@ unsafe extern "C" fn PlayerModel_MenuInit() {
     while i < 4 as i32 * 4 as i32 {
         Menu_AddItem(
             &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
-            &mut *s_playermodel.pics.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *s_playermodel.pics.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         Menu_AddItem(
             &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
-            &mut *s_playermodel.picbuttons.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *s_playermodel.picbuttons.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         i += 1
     }
@@ -1639,9 +1598,7 @@ pub unsafe extern "C" fn PlayerModel_Cache() {
     PlayerModel_BuildList();
     i = 0 as i32;
     while i < s_playermodel.nummodels {
-        trap_R_RegisterShaderNoMip(
-            s_playermodel.modelnames[i as usize].as_mut_ptr(),
-        );
+        trap_R_RegisterShaderNoMip(s_playermodel.modelnames[i as usize].as_mut_ptr());
         i += 1
     }
 }
@@ -1729,9 +1686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 pub unsafe extern "C" fn UI_PlayerModelMenu() {
     PlayerModel_MenuInit();
-    UI_PushMenu(
-        &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_playermodel.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut s_playermodel.menu as *mut _ as *mut _tag_menuframework,
         &mut *s_playermodel

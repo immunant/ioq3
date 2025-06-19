@@ -489,38 +489,24 @@ unsafe extern "C" fn mdfour64(mut M: *mut uint32_t) {
     (*m).D = D;
 }
 
-unsafe extern "C" fn copy64(
-    mut M: *mut uint32_t,
-    mut in_0: *mut byte,
-) {
+unsafe extern "C" fn copy64(mut M: *mut uint32_t, mut in_0: *mut byte) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 16 as i32 {
-        *M.offset(i as isize) = (*in_0.offset((i * 4 as i32 + 3 as i32) as isize)
-            as uint32_t)
+        *M.offset(i as isize) = (*in_0.offset((i * 4 as i32 + 3 as i32) as isize) as uint32_t)
             << 24 as i32
-            | (*in_0.offset((i * 4 as i32 + 2 as i32) as isize) as uint32_t)
-                << 16 as i32
-            | (*in_0.offset((i * 4 as i32 + 1 as i32) as isize) as uint32_t)
-                << 8 as i32
-            | (*in_0.offset((i * 4 as i32 + 0 as i32) as isize) as uint32_t)
-                << 0 as i32;
+            | (*in_0.offset((i * 4 as i32 + 2 as i32) as isize) as uint32_t) << 16 as i32
+            | (*in_0.offset((i * 4 as i32 + 1 as i32) as isize) as uint32_t) << 8 as i32
+            | (*in_0.offset((i * 4 as i32 + 0 as i32) as isize) as uint32_t) << 0 as i32;
         i += 1
     }
 }
 
-unsafe extern "C" fn copy4(
-    mut out: *mut byte,
-    mut x: uint32_t,
-) {
-    *out.offset(0 as i32 as isize) =
-        (x & 0xff as i32 as u32) as byte;
-    *out.offset(1 as i32 as isize) =
-        (x >> 8 as i32 & 0xff as i32 as u32) as byte;
-    *out.offset(2 as i32 as isize) =
-        (x >> 16 as i32 & 0xff as i32 as u32) as byte;
-    *out.offset(3 as i32 as isize) =
-        (x >> 24 as i32 & 0xff as i32 as u32) as byte;
+unsafe extern "C" fn copy4(mut out: *mut byte, mut x: uint32_t) {
+    *out.offset(0 as i32 as isize) = (x & 0xff as i32 as u32) as byte;
+    *out.offset(1 as i32 as isize) = (x >> 8 as i32 & 0xff as i32 as u32) as byte;
+    *out.offset(2 as i32 as isize) = (x >> 16 as i32 & 0xff as i32 as u32) as byte;
+    *out.offset(3 as i32 as isize) = (x >> 24 as i32 & 0xff as i32 as u32) as byte;
 }
 #[no_mangle]
 
@@ -564,11 +550,7 @@ unsafe extern "C" fn mdfour_tail(mut in_0: *mut byte, mut n: i32) {
     };
 }
 
-unsafe extern "C" fn mdfour_update(
-    mut md: *mut mdfour,
-    mut in_0: *mut byte,
-    mut n: i32,
-) {
+unsafe extern "C" fn mdfour_update(mut md: *mut mdfour, mut in_0: *mut byte, mut n: i32) {
     let mut M: [uint32_t; 16] = [0; 16];
     m = md;
     if n == 0 as i32 {
@@ -584,21 +566,14 @@ unsafe extern "C" fn mdfour_update(
     mdfour_tail(in_0, n);
 }
 
-unsafe extern "C" fn mdfour_result(
-    mut md: *mut mdfour,
-    mut out: *mut byte,
-) {
+unsafe extern "C" fn mdfour_result(mut md: *mut mdfour, mut out: *mut byte) {
     copy4(out, (*md).A);
     copy4(out.offset(4 as i32 as isize), (*md).B);
     copy4(out.offset(8 as i32 as isize), (*md).C);
     copy4(out.offset(12 as i32 as isize), (*md).D);
 }
 
-unsafe extern "C" fn mdfour(
-    mut out: *mut byte,
-    mut in_0: *mut byte,
-    mut n: i32,
-) {
+unsafe extern "C" fn mdfour(mut out: *mut byte, mut in_0: *mut byte, mut n: i32) {
     let mut md: mdfour = mdfour {
         A: 0,
         B: 0,

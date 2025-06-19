@@ -83,8 +83,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -106,8 +105,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -133,8 +131,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -160,8 +157,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -183,8 +179,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -206,8 +201,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -229,8 +223,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -252,8 +245,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -276,8 +268,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -300,8 +291,7 @@ static mut displayOptionsInfo: displayOptionsInfo_t = displayOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -459,11 +449,7 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.brightness.generic.y = y;
     displayOptionsInfo.brightness.minvalue = 5 as i32 as f32;
     displayOptionsInfo.brightness.maxvalue = 20 as i32 as f32;
-    if uis
-        .glconfig
-        .deviceSupportsGamma as u64
-        == 0
-    {
+    if uis.glconfig.deviceSupportsGamma as u64 == 0 {
         displayOptionsInfo.brightness.generic.flags |= 0x2000 as i32 as u32
     }
     y += 16 as i32 + 2 as i32;
@@ -523,24 +509,22 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     );
     Menu_AddItem(
         &mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut displayOptionsInfo.brightness as *mut menuslider_s
-            as *mut libc::c_void,
+        &mut displayOptionsInfo.brightness as *mut menuslider_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut displayOptionsInfo.screensize as *mut menuslider_s
-            as *mut libc::c_void,
+        &mut displayOptionsInfo.screensize as *mut menuslider_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut displayOptionsInfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue(
-        b"r_gamma\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as i32 as f32;
-    displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue(
-        b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
-    ) / 10 as i32 as f32;
+    displayOptionsInfo.brightness.curvalue =
+        trap_Cvar_VariableValue(b"r_gamma\x00" as *const u8 as *const libc::c_char)
+            * 10 as i32 as f32;
+    displayOptionsInfo.screensize.curvalue =
+        trap_Cvar_VariableValue(b"cg_viewsize\x00" as *const u8 as *const libc::c_char)
+            / 10 as i32 as f32;
 }
 /*
 ===============
@@ -550,18 +534,10 @@ UI_DisplayOptionsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_DisplayOptionsMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -727,9 +703,7 @@ UI_DisplayOptionsMenu
 
 pub unsafe extern "C" fn UI_DisplayOptionsMenu() {
     UI_DisplayOptionsMenu_Init();
-    UI_PushMenu(
-        &mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut displayOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut displayOptionsInfo.display as *mut menutext_s as *mut libc::c_void,

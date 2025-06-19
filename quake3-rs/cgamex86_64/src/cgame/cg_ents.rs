@@ -251,11 +251,10 @@ pub unsafe extern "C" fn CG_PositionEntityOnTag(
     mut tagName: *mut libc::c_char,
 ) {
     let mut i: i32 = 0;
-    let mut lerped: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut lerped: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     // lerp the tag
     trap_R_LerpTag(
         &mut lerped as *mut _ as *mut orientation_t,
@@ -282,9 +281,7 @@ pub unsafe extern "C" fn CG_PositionEntityOnTag(
     // had to cast away the const to avoid compiler problems...
     MatrixMultiply(
         lerped.axis.as_mut_ptr(),
-        (*(parent as *mut refEntity_t))
-            .axis
-            .as_mut_ptr(),
+        (*(parent as *mut refEntity_t)).axis.as_mut_ptr(),
         (*entity).axis.as_mut_ptr(),
     );
     (*entity).backlerp = (*parent).backlerp;
@@ -306,11 +303,10 @@ pub unsafe extern "C" fn CG_PositionRotatedEntityOnTag(
     mut tagName: *mut libc::c_char,
 ) {
     let mut i: i32 = 0;
-    let mut lerped: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut lerped: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     let mut tempAxis: [vec3_t; 3] = [[0.; 3]; 3];
     //AxisClear( entity->axis );
     // lerp the tag
@@ -344,9 +340,7 @@ pub unsafe extern "C" fn CG_PositionRotatedEntityOnTag(
     );
     MatrixMultiply(
         tempAxis.as_mut_ptr(),
-        (*(parent as *mut refEntity_t))
-            .axis
-            .as_mut_ptr(),
+        (*(parent as *mut refEntity_t)).axis.as_mut_ptr(),
         (*entity).axis.as_mut_ptr(),
     );
 }
@@ -370,9 +364,7 @@ pub unsafe extern "C" fn CG_SetEntitySoundPosition(mut cent: *mut centity_t) {
     if (*cent).currentState.solid == 0xffffff as i32 {
         let mut origin: vec3_t = [0.; 3];
         let mut v: *mut f32 = 0 as *mut f32;
-        v = cgs.inlineModelMidpoints
-            [(*cent).currentState.modelindex as usize]
-            .as_mut_ptr();
+        v = cgs.inlineModelMidpoints[(*cent).currentState.modelindex as usize].as_mut_ptr();
         origin[0 as i32 as usize] =
             (*cent).lerpOrigin[0 as i32 as usize] + *v.offset(0 as i32 as isize);
         origin[1 as i32 as usize] =
@@ -407,16 +399,14 @@ unsafe extern "C" fn CG_EntityEffects(mut cent: *mut centity_t) {
             trap_S_AddLoopingSound(
                 (*cent).currentState.number,
                 (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-                vec3_origin.as_mut_ptr()
-                    as *const vec_t,
+                vec3_origin.as_mut_ptr() as *const vec_t,
                 cgs.gameSounds[(*cent).currentState.loopSound as usize],
             );
         } else {
             trap_S_AddRealLoopingSound(
                 (*cent).currentState.number,
                 (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-                vec3_origin.as_mut_ptr()
-                    as *const vec_t,
+                vec3_origin.as_mut_ptr() as *const vec_t,
                 cgs.gameSounds[(*cent).currentState.loopSound as usize],
             );
         }
@@ -433,13 +423,7 @@ unsafe extern "C" fn CG_EntityEffects(mut cent: *mut centity_t) {
         g = ((cl >> 8 as i32 & 0xff as i32) as f32 as f64 / 255.0f64) as f32;
         b = ((cl >> 16 as i32 & 0xff as i32) as f32 as f64 / 255.0f64) as f32;
         i = ((cl >> 24 as i32 & 0xff as i32) as f32 as f64 * 4.0f64) as f32;
-        trap_R_AddLightToScene(
-            (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-            i,
-            r,
-            g,
-            b,
-        );
+        trap_R_AddLightToScene((*cent).lerpOrigin.as_mut_ptr() as *const vec_t, i, r, g, b);
     };
 }
 /*
@@ -471,8 +455,7 @@ unsafe extern "C" fn CG_General(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
     s1 = &mut (*cent).currentState;
     // if set to invisible, skip
     if (*s1).modelindex == 0 {
@@ -505,9 +488,7 @@ unsafe extern "C" fn CG_General(mut cent: *mut centity_t) {
         ent.axis.as_mut_ptr(),
     );
     // add to refresh list
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ==================
@@ -534,12 +515,11 @@ unsafe extern "C" fn CG_Speaker(mut cent: *mut centity_t) {
     );
     //	ent->s.frame = ent->wait * 10;
     //	ent->s.clientNum = ent->random * 10;
-    (*cent).miscTime = ((cg.time
-        + (*cent).currentState.frame * 100 as i32) as f64
+    (*cent).miscTime = ((cg.time + (*cent).currentState.frame * 100 as i32) as f64
         + ((*cent).currentState.clientNum * 100 as i32) as f64
             * (2.0f64
-                * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64))) as i32;
+                * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
+        as i32;
 }
 /*
 ==================
@@ -570,8 +550,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
     let mut msec: i32 = 0;
     let mut frac: f32 = 0.;
@@ -588,12 +567,8 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
     if (*es).modelindex == 0 || (*es).eFlags & 0x80 as i32 != 0 {
         return;
     }
-    item = &mut *bg_itemlist
-        .as_mut_ptr()
-        .offset((*es).modelindex as isize) as *mut gitem_t;
-    if cg_simpleItems.integer != 0
-        && (*item).giType as u32 != IT_TEAM as i32 as u32
-    {
+    item = &mut *bg_itemlist.as_mut_ptr().offset((*es).modelindex as isize) as *mut gitem_t;
+    if cg_simpleItems.integer != 0 && (*item).giType as u32 != IT_TEAM as i32 as u32 {
         crate::stdlib::memset(
             &mut ent as *mut refEntity_t as *mut libc::c_void,
             0 as i32,
@@ -609,19 +584,15 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         ent.shaderRGBA[1 as i32 as usize] = 255 as i32 as byte;
         ent.shaderRGBA[2 as i32 as usize] = 255 as i32 as byte;
         ent.shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
-        trap_R_AddRefEntityToScene(
-            &mut ent as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
         return;
     }
     // items bob up and down continuously
     scale = (0.005f64 + (*cent).currentState.number as f64 * 0.00001f64) as f32;
     (*cent).lerpOrigin[2 as i32 as usize] = ((*cent).lerpOrigin[2 as i32 as usize] as f64
         + (4 as i32 as f64
-            + crate::stdlib::cos(
-                ((cg.time + 1000 as i32) as f32 * scale) as f64,
-            ) * 4 as i32 as f64))
-        as vec_t;
+            + crate::stdlib::cos(((cg.time + 1000 as i32) as f32 * scale) as f64)
+                * 4 as i32 as f64)) as vec_t;
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
@@ -629,36 +600,22 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
     );
     // autorotate at one of two speeds
     if (*item).giType as u32 == IT_HEALTH as i32 as u32 {
-        (*cent).lerpAngles[0 as i32 as usize] =
-            cg.autoAnglesFast[0 as i32 as usize];
-        (*cent).lerpAngles[1 as i32 as usize] =
-            cg.autoAnglesFast[1 as i32 as usize];
-        (*cent).lerpAngles[2 as i32 as usize] =
-            cg.autoAnglesFast[2 as i32 as usize];
-        AxisCopy(
-            cg.autoAxisFast.as_mut_ptr(),
-            ent.axis.as_mut_ptr(),
-        );
+        (*cent).lerpAngles[0 as i32 as usize] = cg.autoAnglesFast[0 as i32 as usize];
+        (*cent).lerpAngles[1 as i32 as usize] = cg.autoAnglesFast[1 as i32 as usize];
+        (*cent).lerpAngles[2 as i32 as usize] = cg.autoAnglesFast[2 as i32 as usize];
+        AxisCopy(cg.autoAxisFast.as_mut_ptr(), ent.axis.as_mut_ptr());
     } else {
-        (*cent).lerpAngles[0 as i32 as usize] =
-            cg.autoAngles[0 as i32 as usize];
-        (*cent).lerpAngles[1 as i32 as usize] =
-            cg.autoAngles[1 as i32 as usize];
-        (*cent).lerpAngles[2 as i32 as usize] =
-            cg.autoAngles[2 as i32 as usize];
-        AxisCopy(
-            cg.autoAxis.as_mut_ptr(),
-            ent.axis.as_mut_ptr(),
-        );
+        (*cent).lerpAngles[0 as i32 as usize] = cg.autoAngles[0 as i32 as usize];
+        (*cent).lerpAngles[1 as i32 as usize] = cg.autoAngles[1 as i32 as usize];
+        (*cent).lerpAngles[2 as i32 as usize] = cg.autoAngles[2 as i32 as usize];
+        AxisCopy(cg.autoAxis.as_mut_ptr(), ent.axis.as_mut_ptr());
     }
     wi = 0 as *mut weaponInfo_t;
     // the weapons have their origin where they attatch to player
     // models, so we need to offset them or they will rotate
     // eccentricly
     if (*item).giType as u32 == IT_WEAPON as i32 as u32 {
-        wi = &mut *cg_weapons
-            .as_mut_ptr()
-            .offset((*item).giTag as isize) as *mut weaponInfo_t;
+        wi = &mut *cg_weapons.as_mut_ptr().offset((*item).giTag as isize) as *mut weaponInfo_t;
         (*cent).lerpOrigin[0 as i32 as usize] -= (*wi).weaponMidpoint[0 as i32 as usize]
             * ent.axis[0 as i32 as usize][0 as i32 as usize]
             + (*wi).weaponMidpoint[1 as i32 as usize]
@@ -680,9 +637,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         (*cent).lerpOrigin[2 as i32 as usize] += 8 as i32 as f32
         // an extra height boost
     }
-    if (*item).giType as u32 == IT_WEAPON as i32 as u32
-        && (*item).giTag == WP_RAILGUN as i32
-    {
+    if (*item).giType as u32 == IT_WEAPON as i32 as u32 && (*item).giTag == WP_RAILGUN as i32 {
         let mut ci: *mut clientInfo_t = &mut *cgs
             .clientinfo
             .as_mut_ptr()
@@ -693,8 +648,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         ent.shaderRGBA[2 as i32 as usize] = (*ci).c1RGBA[2 as i32 as usize];
         ent.shaderRGBA[3 as i32 as usize] = (*ci).c1RGBA[3 as i32 as usize]
     }
-    ent.hModel =
-        cg_items[(*es).modelindex as usize].models[0 as i32 as usize];
+    ent.hModel = cg_items[(*es).modelindex as usize].models[0 as i32 as usize];
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
     ent.origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
@@ -738,42 +692,28 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
     // increase the size of the weapons when they are presented as items
     if (*item).giType as u32 == IT_WEAPON as i32 as u32 {
         ent.axis[0 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[0 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[0 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[0 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[0 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[0 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[1 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[1 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[1 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[1 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[1 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[1 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[2 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[2 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[2 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[2 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.axis[2 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
-                as vec_t;
+            (ent.axis[2 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64) as vec_t;
         ent.nonNormalizedAxes = qtrue
     }
     // add to refresh list
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
-    if (*item).giType as u32 == IT_WEAPON as i32 as u32
-        && !wi.is_null()
-        && (*wi).barrelModel != 0
-    {
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
+    if (*item).giType as u32 == IT_WEAPON as i32 as u32 && !wi.is_null() && (*wi).barrelModel != 0 {
         let mut barrel: refEntity_t = refEntity_t {
             reType: RT_MODEL,
             renderfx: 0,
@@ -822,9 +762,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
             b"tag_barrel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         barrel.nonNormalizedAxes = ent.nonNormalizedAxes;
-        trap_R_AddRefEntityToScene(
-            &mut barrel as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut barrel as *mut _ as *const refEntity_t);
     }
     // accompanying rings / spheres for powerups
     if cg_simpleItems.integer == 0 {
@@ -835,14 +773,12 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
         if (*item).giType as u32 == IT_HEALTH as i32 as u32
             || (*item).giType as u32 == IT_POWERUP as i32 as u32
         {
-            ent.hModel = cg_items[(*es).modelindex as usize].models
-                [1 as i32 as usize];
+            ent.hModel = cg_items[(*es).modelindex as usize].models[1 as i32 as usize];
             if ent.hModel != 0 as i32 {
                 if (*item).giType as u32 == IT_POWERUP as i32 as u32 {
                     ent.origin[2 as i32 as usize] += 12 as i32 as f32;
                     spinAngles[1 as i32 as usize] =
-                        ((cg.time & 1023 as i32) * 360 as i32) as f32
-                            / -1024.0f32
+                        ((cg.time & 1023 as i32) * 360 as i32) as f32 / -1024.0f32
                 }
                 AnglesToAxis(
                     spinAngles.as_mut_ptr() as *const vec_t,
@@ -870,9 +806,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut centity_t) {
                         ent.axis[2 as i32 as usize][2 as i32 as usize] * frac;
                     ent.nonNormalizedAxes = qtrue
                 }
-                trap_R_AddRefEntityToScene(
-                    &mut ent as *mut _ as *const refEntity_t,
-                );
+                trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
             }
         }
     };
@@ -907,18 +841,14 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
-    let mut weapon: *const weaponInfo_t =
-        0 as *const weaponInfo_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut weapon: *const weaponInfo_t = 0 as *const weaponInfo_t;
     //	int	col;
     s1 = &mut (*cent).currentState;
     if (*s1).weapon >= WP_NUM_WEAPONS as i32 {
         (*s1).weapon = 0 as i32
     }
-    weapon = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset((*s1).weapon as isize) as *mut weaponInfo_t;
+    weapon = &mut *cg_weapons.as_mut_ptr().offset((*s1).weapon as isize) as *mut weaponInfo_t;
     // calculate the axis
     (*cent).lerpAngles[0 as i32 as usize] = (*s1).angles[0 as i32 as usize];
     (*cent).lerpAngles[1 as i32 as usize] = (*s1).angles[1 as i32 as usize];
@@ -960,8 +890,7 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
     if (*weapon).missileSound != 0 {
         let mut velocity: vec3_t = [0.; 3];
         BG_EvaluateTrajectoryDelta(
-            &mut (*cent).currentState.pos as *mut _
-                as *const trajectory_t,
+            &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
             cg.time,
             velocity.as_mut_ptr(),
         );
@@ -989,9 +918,7 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
         ent.radius = 16 as i32 as f32;
         ent.rotation = 0 as i32 as f32;
         ent.customShader = cgs.media.plasmaBallShader;
-        trap_R_AddRefEntityToScene(
-            &mut ent as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
         return;
     }
     // flicker between two skins
@@ -1004,20 +931,13 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut centity_t) {
         ent.axis[0 as i32 as usize].as_mut_ptr(),
     ) == 0 as i32 as f32
     {
-        ent.axis[0 as i32 as usize][2 as i32 as usize] =
-            1 as i32 as vec_t
+        ent.axis[0 as i32 as usize][2 as i32 as usize] = 1 as i32 as vec_t
     }
     // spin as it moves
     if (*s1).pos.trType as u32 != TR_STATIONARY as i32 as u32 {
-        RotateAroundDirection(
-            ent.axis.as_mut_ptr(),
-            (cg.time / 4 as i32) as f32,
-        );
+        RotateAroundDirection(ent.axis.as_mut_ptr(), (cg.time / 4 as i32) as f32);
     } else {
-        RotateAroundDirection(
-            ent.axis.as_mut_ptr(),
-            (*s1).time as f32,
-        );
+        RotateAroundDirection(ent.axis.as_mut_ptr(), (*s1).time as f32);
     }
     // add to refresh list, possibly with quad glow
     CG_AddRefEntityWithPowerups(
@@ -1057,27 +977,20 @@ unsafe extern "C" fn CG_Grapple(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
-    let mut weapon: *const weaponInfo_t =
-        0 as *const weaponInfo_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
+    let mut weapon: *const weaponInfo_t = 0 as *const weaponInfo_t;
     s1 = &mut (*cent).currentState;
     if (*s1).weapon >= WP_NUM_WEAPONS as i32 {
         (*s1).weapon = 0 as i32
     }
-    weapon = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset((*s1).weapon as isize) as *mut weaponInfo_t;
+    weapon = &mut *cg_weapons.as_mut_ptr().offset((*s1).weapon as isize) as *mut weaponInfo_t;
     // calculate the axis
     (*cent).lerpAngles[0 as i32 as usize] = (*s1).angles[0 as i32 as usize];
     (*cent).lerpAngles[1 as i32 as usize] = (*s1).angles[1 as i32 as usize];
     (*cent).lerpAngles[2 as i32 as usize] = (*s1).angles[2 as i32 as usize];
     // FIXME add grapple pull sound here..?
     // Will draw cable if needed
-    CG_GrappleTrail(
-        cent as *mut centity_s,
-        weapon as *const weaponInfo_s,
-    );
+    CG_GrappleTrail(cent as *mut centity_s, weapon as *const weaponInfo_s);
     // create the render entity
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
@@ -1100,12 +1013,9 @@ unsafe extern "C" fn CG_Grapple(mut cent: *mut centity_t) {
         ent.axis[0 as i32 as usize].as_mut_ptr(),
     ) == 0 as i32 as f32
     {
-        ent.axis[0 as i32 as usize][2 as i32 as usize] =
-            1 as i32 as vec_t
+        ent.axis[0 as i32 as usize][2 as i32 as usize] = 1 as i32 as vec_t
     }
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -1136,8 +1046,7 @@ unsafe extern "C" fn CG_Mover(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1165,16 +1074,12 @@ unsafe extern "C" fn CG_Mover(mut cent: *mut centity_t) {
         ent.hModel = cgs.gameModels[(*s1).modelindex as usize]
     }
     // add to refresh list
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
     // add the secondary model
     if (*s1).modelindex2 != 0 {
         ent.skinNum = 0 as i32;
         ent.hModel = cgs.gameModels[(*s1).modelindex2 as usize];
-        trap_R_AddRefEntityToScene(
-            &mut ent as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
     };
 }
 /*
@@ -1209,8 +1114,7 @@ pub unsafe extern "C" fn CG_Beam(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1228,9 +1132,7 @@ pub unsafe extern "C" fn CG_Beam(mut cent: *mut centity_t) {
     ent.reType = RT_BEAM;
     ent.renderfx = 0x40 as i32;
     // add to refresh list
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -1261,8 +1163,7 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    let mut s1: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut s1: *mut entityState_t = 0 as *mut entityState_t;
     s1 = &mut (*cent).currentState;
     // create the render entity
     crate::stdlib::memset(
@@ -1276,25 +1177,19 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut centity_t) {
     ent.oldorigin[0 as i32 as usize] = (*s1).origin2[0 as i32 as usize];
     ent.oldorigin[1 as i32 as usize] = (*s1).origin2[1 as i32 as usize];
     ent.oldorigin[2 as i32 as usize] = (*s1).origin2[2 as i32 as usize];
-    ByteToDir(
-        (*s1).eventParm,
-        ent.axis[0 as i32 as usize].as_mut_ptr(),
-    );
+    ByteToDir((*s1).eventParm, ent.axis[0 as i32 as usize].as_mut_ptr());
     PerpendicularVector(
         ent.axis[1 as i32 as usize].as_mut_ptr(),
         ent.axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
     );
     // negating this tends to get the directions like they want
     // we really should have a camera roll value
-    ent.axis[1 as i32 as usize][0 as i32 as usize] = vec3_origin
-        [0 as i32 as usize]
-        - ent.axis[1 as i32 as usize][0 as i32 as usize]; // rotation speed
-    ent.axis[1 as i32 as usize][1 as i32 as usize] = vec3_origin
-        [1 as i32 as usize]
-        - ent.axis[1 as i32 as usize][1 as i32 as usize]; // roll offset
-    ent.axis[1 as i32 as usize][2 as i32 as usize] = vec3_origin
-        [2 as i32 as usize]
-        - ent.axis[1 as i32 as usize][2 as i32 as usize];
+    ent.axis[1 as i32 as usize][0 as i32 as usize] =
+        vec3_origin[0 as i32 as usize] - ent.axis[1 as i32 as usize][0 as i32 as usize]; // rotation speed
+    ent.axis[1 as i32 as usize][1 as i32 as usize] =
+        vec3_origin[1 as i32 as usize] - ent.axis[1 as i32 as usize][1 as i32 as usize]; // roll offset
+    ent.axis[1 as i32 as usize][2 as i32 as usize] =
+        vec3_origin[2 as i32 as usize] - ent.axis[1 as i32 as usize][2 as i32 as usize];
     CrossProduct(
         ent.axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
         ent.axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
@@ -1305,9 +1200,7 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut centity_t) {
     ent.frame = (*s1).frame;
     ent.skinNum = ((*s1).clientNum as f64 / 256.0f64 * 360 as i32 as f64) as i32;
     // add to refresh list
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ================
@@ -1316,10 +1209,7 @@ CG_CreateRotationMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_CreateRotationMatrix(
-    mut angles: *mut vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn CG_CreateRotationMatrix(mut angles: *mut vec_t, mut matrix: *mut vec3_t) {
     AngleVectors(
         angles as *const vec_t,
         (*matrix.offset(0 as i32 as isize)).as_mut_ptr(),
@@ -1335,10 +1225,7 @@ CG_TransposeMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_TransposeMatrix(
-    mut matrix: *mut vec3_t,
-    mut transpose: *mut vec3_t,
-) {
+pub unsafe extern "C" fn CG_TransposeMatrix(mut matrix: *mut vec3_t, mut transpose: *mut vec3_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     i = 0 as i32;
@@ -1358,10 +1245,7 @@ CG_RotatePoint
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_RotatePoint(
-    mut point: *mut vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn CG_RotatePoint(mut point: *mut vec_t, mut matrix: *mut vec3_t) {
     let mut tvec: vec3_t = [0.; 3];
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
@@ -1418,9 +1302,7 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
         *angles_out.offset(2 as i32 as isize) = *angles_in.offset(2 as i32 as isize);
         return;
     }
-    cent = &mut *cg_entities
-        .as_mut_ptr()
-        .offset(moverNum as isize) as *mut centity_t;
+    cent = &mut *cg_entities.as_mut_ptr().offset(moverNum as isize) as *mut centity_t;
     if (*cent).currentState.eType != ET_MOVER as i32 {
         *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize);
         *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize);
@@ -1431,26 +1313,22 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
         return;
     }
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         fromTime,
         oldOrigin.as_mut_ptr(),
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.apos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.apos as *mut _ as *const trajectory_t,
         fromTime,
         oldAngles.as_mut_ptr(),
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         toTime,
         origin.as_mut_ptr(),
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.apos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.apos as *mut _ as *const trajectory_t,
         toTime,
         angles.as_mut_ptr(),
     );
@@ -1511,8 +1389,7 @@ unsafe extern "C" fn CG_InterpolateEntityPosition(mut cent: *mut centity_t) {
     // this will linearize a sine or parabolic curve, but it is important
     // to not extrapolate player positions if more recent data is available
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         (*cg.snap).serverTime,
         current.as_mut_ptr(),
     );
@@ -1528,8 +1405,7 @@ unsafe extern "C" fn CG_InterpolateEntityPosition(mut cent: *mut centity_t) {
     (*cent).lerpOrigin[2 as i32 as usize] =
         current[2 as i32 as usize] + f * (next[2 as i32 as usize] - current[2 as i32 as usize]);
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.apos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.apos as *mut _ as *const trajectory_t,
         (*cg.snap).serverTime,
         current.as_mut_ptr(),
     );
@@ -1538,21 +1414,12 @@ unsafe extern "C" fn CG_InterpolateEntityPosition(mut cent: *mut centity_t) {
         (*cg.nextSnap).serverTime,
         next.as_mut_ptr(),
     );
-    (*cent).lerpAngles[0 as i32 as usize] = LerpAngle(
-        current[0 as i32 as usize],
-        next[0 as i32 as usize],
-        f,
-    );
-    (*cent).lerpAngles[1 as i32 as usize] = LerpAngle(
-        current[1 as i32 as usize],
-        next[1 as i32 as usize],
-        f,
-    );
-    (*cent).lerpAngles[2 as i32 as usize] = LerpAngle(
-        current[2 as i32 as usize],
-        next[2 as i32 as usize],
-        f,
-    );
+    (*cent).lerpAngles[0 as i32 as usize] =
+        LerpAngle(current[0 as i32 as usize], next[0 as i32 as usize], f);
+    (*cent).lerpAngles[1 as i32 as usize] =
+        LerpAngle(current[1 as i32 as usize], next[1 as i32 as usize], f);
+    (*cent).lerpAngles[2 as i32 as usize] =
+        LerpAngle(current[2 as i32 as usize], next[2 as i32 as usize], f);
 }
 /*
 ===============
@@ -1571,8 +1438,7 @@ unsafe extern "C" fn CG_CalcEntityLerpPositions(mut cent: *mut centity_t) {
         }
     }
     if (*cent).interpolate as u32 != 0
-        && (*cent).currentState.pos.trType as u32
-            == TR_INTERPOLATE as i32 as u32
+        && (*cent).currentState.pos.trType as u32 == TR_INTERPOLATE as i32 as u32
     {
         CG_InterpolateEntityPosition(cent);
         return;
@@ -1580,8 +1446,7 @@ unsafe extern "C" fn CG_CalcEntityLerpPositions(mut cent: *mut centity_t) {
     // first see if we can interpolate between two snaps for
     // linear extrapolated clients
     if (*cent).interpolate as u32 != 0
-        && (*cent).currentState.pos.trType as u32
-            == TR_LINEAR_STOP as i32 as u32
+        && (*cent).currentState.pos.trType as u32 == TR_LINEAR_STOP as i32 as u32
         && (*cent).currentState.number < 64 as i32
     {
         CG_InterpolateEntityPosition(cent);
@@ -1589,23 +1454,18 @@ unsafe extern "C" fn CG_CalcEntityLerpPositions(mut cent: *mut centity_t) {
     }
     // just use the current frame and evaluate as best we can
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         cg.time,
         (*cent).lerpOrigin.as_mut_ptr(),
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.apos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.apos as *mut _ as *const trajectory_t,
         cg.time,
         (*cent).lerpAngles.as_mut_ptr(),
     );
     // adjust for riding a mover if it wasn't rolled into the predicted
     // player state
-    if cent
-        != &mut cg.predictedPlayerEntity
-            as *mut centity_t
-    {
+    if cent != &mut cg.predictedPlayerEntity as *mut centity_t {
         CG_AdjustPositionForMover(
             (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
             (*cent).currentState.groundEntityNum,
@@ -1671,9 +1531,7 @@ unsafe extern "C" fn CG_TeamBase(mut cent: *mut centity_t) {
         } else {
             model.hModel = cgs.media.neutralFlagBaseModel
         }
-        trap_R_AddRefEntityToScene(
-            &mut model as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut model as *mut _ as *const refEntity_t);
     };
 }
 /*
@@ -1966,20 +1824,15 @@ CG_AddPacketEntities
 pub unsafe extern "C" fn CG_AddPacketEntities() {
     let mut num: i32 = 0;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     // set cg.frameInterpolation
     if !cg.nextSnap.is_null() {
         let mut delta: i32 = 0;
-        delta = (*cg.nextSnap).serverTime
-            - (*cg.snap).serverTime;
+        delta = (*cg.nextSnap).serverTime - (*cg.snap).serverTime;
         if delta == 0 as i32 {
             cg.frameInterpolation = 0 as i32 as f32
         } else {
-            cg.frameInterpolation =
-                (cg.time
-                    - (*cg.snap).serverTime) as f32
-                    / delta as f32
+            cg.frameInterpolation = (cg.time - (*cg.snap).serverTime) as f32 / delta as f32
         }
     } else {
         cg.frameInterpolation = 0 as i32 as f32
@@ -1987,36 +1840,27 @@ pub unsafe extern "C" fn CG_AddPacketEntities() {
         // no entities should be marked as interpolating
     }
     // the auto-rotating items will all have the same axis
-    cg.autoAngles[0 as i32 as usize] =
-        0 as i32 as vec_t;
+    cg.autoAngles[0 as i32 as usize] = 0 as i32 as vec_t;
     cg.autoAngles[1 as i32 as usize] =
-        (((cg.time & 2047 as i32) * 360 as i32) as f64 / 2048.0f64)
-            as vec_t;
-    cg.autoAngles[2 as i32 as usize] =
-        0 as i32 as vec_t;
-    cg.autoAnglesFast[0 as i32 as usize] =
-        0 as i32 as vec_t;
+        (((cg.time & 2047 as i32) * 360 as i32) as f64 / 2048.0f64) as vec_t;
+    cg.autoAngles[2 as i32 as usize] = 0 as i32 as vec_t;
+    cg.autoAnglesFast[0 as i32 as usize] = 0 as i32 as vec_t;
     cg.autoAnglesFast[1 as i32 as usize] =
         ((cg.time & 1023 as i32) * 360 as i32) as f32 / 1024.0f32;
-    cg.autoAnglesFast[2 as i32 as usize] =
-        0 as i32 as vec_t;
+    cg.autoAnglesFast[2 as i32 as usize] = 0 as i32 as vec_t;
     AnglesToAxis(
-        cg.autoAngles.as_mut_ptr()
-            as *const vec_t,
+        cg.autoAngles.as_mut_ptr() as *const vec_t,
         cg.autoAxis.as_mut_ptr(),
     );
     AnglesToAxis(
-        cg.autoAnglesFast.as_mut_ptr()
-            as *const vec_t,
+        cg.autoAnglesFast.as_mut_ptr() as *const vec_t,
         cg.autoAxisFast.as_mut_ptr(),
     );
     // generate and add the entity from the playerstate
     ps = &mut cg.predictedPlayerState;
     BG_PlayerStateToEntityState(
         ps as *mut playerState_s,
-        &mut cg
-            .predictedPlayerEntity
-            .currentState as *mut _ as *mut entityState_s,
+        &mut cg.predictedPlayerEntity.currentState as *mut _ as *mut entityState_s,
         qfalse,
     );
     CG_AddCEntity(&mut cg.predictedPlayerEntity);
@@ -2029,13 +1873,10 @@ pub unsafe extern "C" fn CG_AddPacketEntities() {
     // add each entity sent over by the server
     num = 0 as i32;
     while num < (*cg.snap).numEntities {
-        cent = &mut *cg_entities.as_mut_ptr().offset(
-            (*(*cg.snap)
-                .entities
-                .as_mut_ptr()
-                .offset(num as isize))
-            .number as isize,
-        ) as *mut centity_t;
+        cent = &mut *cg_entities
+            .as_mut_ptr()
+            .offset((*(*cg.snap).entities.as_mut_ptr().offset(num as isize)).number as isize)
+            as *mut centity_t;
         CG_AddCEntity(cent);
         num += 1
     }

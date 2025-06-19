@@ -1598,11 +1598,9 @@ pub static mut silk_NLSF_CB_WB: silk_NLSF_CB_struct = unsafe {
             nVectors: 32 as i32 as opus_int16,
             order: 16 as i32 as opus_int16,
             quantStepSize_Q16: (0.15f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                as opus_int32
-                as opus_int16,
+                as opus_int32 as opus_int16,
             invQuantStepSize_Q6: (1.0f64 / 0.15f64 * ((1 as i32 as i64) << 6 as i32) as f64
-                + 0.5f64) as opus_int32
-                as opus_int16,
+                + 0.5f64) as opus_int32 as opus_int16,
             CB1_NLSF_Q8: silk_NLSF_CB1_WB_Q8.as_ptr(),
             CB1_Wght_Q9: silk_NLSF_CB1_WB_Wght_Q9.as_ptr(),
             CB1_iCDF: silk_NLSF_CB1_iCDF_WB.as_ptr(),

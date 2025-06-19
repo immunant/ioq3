@@ -82,10 +82,7 @@ S_ReadChunkInfo
 =================
 */
 
-unsafe extern "C" fn S_ReadChunkInfo(
-    mut f: fileHandle_t,
-    mut name: *mut libc::c_char,
-) -> i32 {
+unsafe extern "C" fn S_ReadChunkInfo(mut f: fileHandle_t, mut name: *mut libc::c_char) -> i32 {
     let mut len: i32 = 0;
     let mut r: i32 = 0;
     *name.offset(4 as i32 as isize) = 0 as i32 as libc::c_char;
@@ -95,9 +92,7 @@ unsafe extern "C" fn S_ReadChunkInfo(
     }
     len = FGetLittleLong(f);
     if len < 0 as i32 {
-        Com_Printf(
-            b"^3WARNING: Negative chunk length\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"^3WARNING: Negative chunk length\n\x00" as *const u8 as *const libc::c_char);
         return -(1 as i32);
     }
     return len;
@@ -110,10 +105,7 @@ Returns the length of the data in the chunk, or -1 if not found
 =================
 */
 
-unsafe extern "C" fn S_FindRIFFChunk(
-    mut f: fileHandle_t,
-    mut chunk: *mut libc::c_char,
-) -> i32 {
+unsafe extern "C" fn S_FindRIFFChunk(mut f: fileHandle_t, mut chunk: *mut libc::c_char) -> i32 {
     let mut name: [libc::c_char; 5] = [0; 5];
     let mut len: i32 = 0;
     loop {
@@ -127,11 +119,7 @@ unsafe extern "C" fn S_FindRIFFChunk(
         }
         len = len + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
         // Not the right chunk - skip it
-        crate::src::qcommon::files::FS_Seek(
-            f,
-            len as isize,
-            FS_SEEK_CUR as i32,
-        );
+        crate::src::qcommon::files::FS_Seek(f, len as isize, FS_SEEK_CUR as i32);
     }
     return -(1 as i32);
 }
@@ -208,11 +196,7 @@ unsafe extern "C" fn S_ReadRIFFHeader(
     // Skip the rest of the format chunk if required
     if fmtlen > 16 as i32 {
         fmtlen -= 16 as i32;
-        crate::src::qcommon::files::FS_Seek(
-            file,
-            fmtlen as isize,
-            FS_SEEK_CUR as i32,
-        );
+        crate::src::qcommon::files::FS_Seek(file, fmtlen as isize, FS_SEEK_CUR as i32);
     }
     // Scan for the data chunk
     (*info).size = S_FindRIFFChunk(
@@ -244,10 +228,7 @@ pub static mut wav_codec: snd_codec_t = {
             ),
             open: Some(
                 S_WAV_CodecOpenStream
-                    as unsafe extern "C" fn(
-                        _: *const libc::c_char,
-                    )
-                        -> *mut snd_stream_t,
+                    as unsafe extern "C" fn(_: *const libc::c_char) -> *mut snd_stream_t,
             ),
             read: Some(
                 S_WAV_CodecReadStream
@@ -257,14 +238,8 @@ pub static mut wav_codec: snd_codec_t = {
                         _: *mut libc::c_void,
                     ) -> i32,
             ),
-            close: Some(
-                S_WAV_CodecCloseStream
-                    as unsafe extern "C" fn(
-                        _: *mut snd_stream_t,
-                    ) -> (),
-            ),
-            next: 0 as *const snd_codec_t
-                as *mut snd_codec_t,
+            close: Some(S_WAV_CodecCloseStream as unsafe extern "C" fn(_: *mut snd_stream_t) -> ()),
+            next: 0 as *const snd_codec_t as *mut snd_codec_t,
         };
         init
     }
@@ -284,11 +259,7 @@ pub unsafe extern "C" fn S_WAV_CodecLoad(
     let mut file: fileHandle_t = 0;
     let mut buffer: *mut libc::c_void = 0 as *mut libc::c_void;
     // Try to open the file
-    crate::src::qcommon::files::FS_FOpenFileRead(
-        filename,
-        &mut file,
-        qtrue,
-    );
+    crate::src::qcommon::files::FS_FOpenFileRead(filename, &mut file, qtrue);
     if file == 0 {
         return 0 as *mut libc::c_void;
     }
@@ -334,21 +305,16 @@ S_WAV_CodecOpenStream
 pub unsafe extern "C" fn S_WAV_CodecOpenStream(
     mut filename: *const libc::c_char,
 ) -> *mut snd_stream_t {
-    let mut rv: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut rv: *mut snd_stream_t = 0 as *mut snd_stream_t;
     // Open
-    rv = S_CodecUtilOpen(
-        filename,
-        &mut wav_codec as *mut _ as *mut snd_codec_s,
-    ) as *mut snd_stream_s;
+    rv = S_CodecUtilOpen(filename, &mut wav_codec as *mut _ as *mut snd_codec_s)
+        as *mut snd_stream_s;
     if rv.is_null() {
         return 0 as *mut snd_stream_t;
     }
     // Read the RIFF header
     if S_ReadRIFFHeader((*rv).file, &mut (*rv).info) as u64 == 0 {
-        S_CodecUtilClose(
-            &mut rv as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut rv as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     return rv;
@@ -360,12 +326,8 @@ S_WAV_CodecCloseStream
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_WAV_CodecCloseStream(
-    mut stream: *mut snd_stream_t,
-) {
-    S_CodecUtilClose(
-        &mut stream as *mut _ as *mut *mut snd_stream_s,
-    );
+pub unsafe extern "C" fn S_WAV_CodecCloseStream(mut stream: *mut snd_stream_t) {
+    S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
 }
 /*
 =================

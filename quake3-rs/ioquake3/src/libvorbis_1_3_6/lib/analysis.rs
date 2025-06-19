@@ -39,8 +39,7 @@ pub unsafe extern "C" fn vorbis_analysis(
 ) -> i32 {
     let mut ret: i32 = 0;
     let mut i: i32 = 0;
-    let mut vbi: *mut vorbis_block_internal =
-        (*vb).internal as *mut vorbis_block_internal;
+    let mut vbi: *mut vorbis_block_internal = (*vb).internal as *mut vorbis_block_internal;
     (*vb).glue_bits = 0 as i32 as isize;
     (*vb).time_bits = 0 as i32 as isize;
     (*vb).floor_bits = 0 as i32 as isize;
@@ -48,9 +47,7 @@ pub unsafe extern "C" fn vorbis_analysis(
     /* first things first.  Make sure encode is ready */
     i = 0 as i32;
     while i < 15 as i32 {
-        oggpack_reset(
-            (*vbi).packetblob[i as usize] as *mut oggpack_buffer,
-        );
+        oggpack_reset((*vbi).packetblob[i as usize] as *mut oggpack_buffer);
         i += 1
     }
     /* we only have one mapping type (0), and we let the mapping code
@@ -73,12 +70,8 @@ pub unsafe extern "C" fn vorbis_analysis(
             bitrate management interface. */
             return -(131 as i32);
         }
-        (*op).packet = oggpack_get_buffer(
-            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-        );
-        (*op).bytes = oggpack_bytes(
-            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-        );
+        (*op).packet = oggpack_get_buffer(&mut (*vb).opb as *mut _ as *mut oggpack_buffer);
+        (*op).bytes = oggpack_bytes(&mut (*vb).opb as *mut _ as *mut oggpack_buffer);
         (*op).b_o_s = 0 as i32 as isize;
         (*op).e_o_s = (*vb).eofflag as isize;
         (*op).granulepos = (*vb).granulepos;

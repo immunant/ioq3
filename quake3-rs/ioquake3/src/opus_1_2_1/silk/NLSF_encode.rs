@@ -376,10 +376,8 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     let mut bits_q7: i32 = 0;
     let mut W_tmp_Q9: opus_int32 = 0;
     let mut ret: opus_int32 = 0;
-    let mut err_Q24: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut RD_Q25: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut err_Q24: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut RD_Q25: *mut opus_int32 = 0 as *mut opus_int32;
     let mut tempIndices1: *mut i32 = 0 as *mut i32;
     let mut tempIndices2: *mut i8 = 0 as *mut i8;
     let mut res_Q10: [opus_int16; 16] = [0; 16];
@@ -389,8 +387,7 @@ pub unsafe extern "C" fn silk_NLSF_encode(
     let mut ec_ix: [opus_int16; 16] = [0; 16];
     let mut pCB_element: *const u8 = 0 as *const u8;
     let mut iCDF_ptr: *const u8 = 0 as *const u8;
-    let mut pCB_Wght_Q9: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut pCB_Wght_Q9: *const opus_int16 = 0 as *const opus_int16;
     /* NLSF stabilization */
     crate::src::opus_1_2_1::silk::NLSF_stabilize::silk_NLSF_stabilize(
         pNLSF_Q15,
@@ -451,22 +448,18 @@ pub unsafe extern "C" fn silk_NLSF_encode(
             as *const opus_int16;
         i = 0 as i32;
         while i < (*psNLSF_CB).order as i32 {
-            NLSF_tmp_Q15[i as usize] =
-                ((*pCB_element.offset(i as isize) as opus_int16
-                    as opus_uint16 as i32)
-                    << 7 as i32) as opus_int16;
+            NLSF_tmp_Q15[i as usize] = ((*pCB_element.offset(i as isize) as opus_int16
+                as opus_uint16 as i32)
+                << 7 as i32) as opus_int16;
             W_tmp_Q9 = *pCB_Wght_Q9.offset(i as isize) as opus_int32;
             res_Q10[i as usize] = ((*pNLSF_Q15.offset(i as isize) as i32
-                - NLSF_tmp_Q15[i as usize] as i32)
-                as opus_int16
+                - NLSF_tmp_Q15[i as usize] as i32) as opus_int16
                 as opus_int32
                 * W_tmp_Q9 as opus_int16 as opus_int32
                 >> 14 as i32) as opus_int16;
             W_adj_Q5[i as usize] = silk_DIV32_varQ(
                 *pW_Q2.offset(i as isize) as opus_int32,
-                W_tmp_Q9 as opus_int16 as opus_int32
-                    * W_tmp_Q9 as opus_int16
-                        as opus_int32,
+                W_tmp_Q9 as opus_int16 as opus_int32 * W_tmp_Q9 as opus_int16 as opus_int32,
                 21 as i32,
             ) as opus_int16;
             i += 1
@@ -507,8 +500,7 @@ pub unsafe extern "C" fn silk_NLSF_encode(
             ((8 as i32) << 7 as i32) - crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(prob_Q8);
         *RD_Q25.offset(s as isize) = *RD_Q25.offset(s as isize)
             + bits_q7 as opus_int16 as opus_int32
-                * (NLSF_mu_Q20 >> 2 as i32) as opus_int16
-                    as opus_int32;
+                * (NLSF_mu_Q20 >> 2 as i32) as opus_int16 as opus_int32;
         s += 1
     }
     /* Find the lowest rate-distortion error */

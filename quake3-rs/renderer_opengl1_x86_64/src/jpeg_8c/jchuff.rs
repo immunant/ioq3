@@ -320,9 +320,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         loop {
             let fresh0 = i;
@@ -360,9 +358,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         code <<= 1 as i32;
         si += 1
@@ -394,9 +390,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         (*dtbl).ehufco[i as usize] = huffcode[p as usize];
         (*dtbl).ehufsi[i as usize] = huffsize[p as usize];
@@ -447,9 +441,7 @@ unsafe extern "C" fn dump_buffer_e(mut entropy: huff_entropy_ptr)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            (*entropy).cinfo as j_common_ptr
-        );
+        .expect("non-null function pointer")((*entropy).cinfo as j_common_ptr);
     }
     /* After a successful buffer dump, must reset buffer pointers */
     (*entropy).next_output_byte = (*dest).next_output_byte;
@@ -474,16 +466,13 @@ unsafe extern "C" fn emit_bits_s(
     let mut put_bits: i32 = (*state).cur.put_bits;
     /* if size is 0, caller used an invalid Huffman table entry */
     if size == 0 as i32 {
-        (*(*(*state).cinfo).err).msg_code =
-            JERR_HUFF_MISSING_CODE as i32; /* mask off any extra bits in code */
+        (*(*(*state).cinfo).err).msg_code = JERR_HUFF_MISSING_CODE as i32; /* mask off any extra bits in code */
         Some(
             (*(*(*state).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            (*state).cinfo as j_common_ptr
-        ); /* new number of bits in buffer */
+        .expect("non-null function pointer")((*state).cinfo as j_common_ptr); /* new number of bits in buffer */
     } /* align incoming bits */
     put_buffer &= ((1 as i32 as INT32) << size) - 1 as i32 as isize; /* and merge with old buffer contents */
     put_bits += size;
@@ -529,16 +518,13 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
     let mut put_bits: i32 = (*entropy).saved.put_bits;
     /* if size is 0, caller used an invalid Huffman table entry */
     if size == 0 as i32 {
-        (*(*(*entropy).cinfo).err).msg_code =
-            JERR_HUFF_MISSING_CODE as i32; /* do nothing if we're only getting stats */
+        (*(*(*entropy).cinfo).err).msg_code = JERR_HUFF_MISSING_CODE as i32; /* do nothing if we're only getting stats */
         Some(
             (*(*(*entropy).cinfo).err)
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            (*entropy).cinfo as j_common_ptr
-        ); /* mask off any extra bits in code */
+        .expect("non-null function pointer")((*entropy).cinfo as j_common_ptr); /* mask off any extra bits in code */
     } /* new number of bits in buffer */
     if (*entropy).gather_statistics != 0 {
         return;
@@ -668,16 +654,13 @@ unsafe extern "C" fn emit_eobrun(mut entropy: huff_entropy_ptr) {
         }
         /* safety check: shouldn't happen given limited correction-bit buffer */
         if nbits > 14 as i32 {
-            (*(*(*entropy).cinfo).err).msg_code =
-                JERR_HUFF_MISSING_CODE as i32;
+            (*(*(*entropy).cinfo).err).msg_code = JERR_HUFF_MISSING_CODE as i32;
             Some(
                 (*(*(*entropy).cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                (*entropy).cinfo as j_common_ptr,
-            );
+            .expect("non-null function pointer")((*entropy).cinfo as j_common_ptr);
         }
         emit_ac_symbol(entropy, (*entropy).ac_tbl_no, nbits << 4 as i32);
         if nbits != 0 {
@@ -779,8 +762,7 @@ unsafe extern "C" fn encode_mcu_DC_first(
     let mut ci: i32 = 0;
     let mut Al: i32 = (*cinfo).Al;
     let mut block: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     (*entropy).next_output_byte = (*(*cinfo).dest).next_output_byte;
     (*entropy).free_in_buffer = (*(*cinfo).dest).free_in_buffer;
     /* Emit restart marker if needed */
@@ -826,9 +808,7 @@ unsafe extern "C" fn encode_mcu_DC_first(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         /* Count/emit the Huffman-coded symbol for the number of bits */
         emit_dc_symbol(entropy, (*compptr).dc_tbl_no, nbits);
@@ -932,16 +912,13 @@ unsafe extern "C" fn encode_mcu_AC_first(
                 }
                 /* Check for out-of-range coefficient values */
                 if nbits > 10 as i32 {
-                    (*(*cinfo).err).msg_code =
-                        JERR_BAD_DCT_COEF as i32;
+                    (*(*cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
-                    .expect("non-null function pointer")(
-                        cinfo as j_common_ptr
-                    );
+                    .expect("non-null function pointer")(cinfo as j_common_ptr);
                 }
                 /* Count/emit Huffman symbol for run length / number of bits */
                 emit_ac_symbol(entropy, (*entropy).ac_tbl_no, (r << 4 as i32) + nbits);
@@ -1200,9 +1177,7 @@ unsafe extern "C" fn encode_one_block(
                 .error_exit
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            (*state).cinfo as j_common_ptr
-        );
+        .expect("non-null function pointer")((*state).cinfo as j_common_ptr);
     }
     /* Emit the Huffman-coded symbol for the number of bits */
     if emit_bits_s(
@@ -1258,16 +1233,13 @@ unsafe extern "C" fn encode_one_block(
             }
             /* Check for out-of-range coefficient values */
             if nbits > 10 as i32 {
-                (*(*(*state).cinfo).err).msg_code =
-                    JERR_BAD_DCT_COEF as i32;
+                (*(*(*state).cinfo).err).msg_code = JERR_BAD_DCT_COEF as i32;
                 Some(
                     (*(*(*state).cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    (*state).cinfo as j_common_ptr,
-                );
+                .expect("non-null function pointer")((*state).cinfo as j_common_ptr);
             }
             /* Emit Huffman symbol for run length / number of bits */
             i = (r << 4 as i32) + nbits;
@@ -1322,8 +1294,7 @@ unsafe extern "C" fn encode_mcu_huff(
     };
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Load up working state */
     state.next_output_byte = (*(*cinfo).dest).next_output_byte;
     state.free_in_buffer = (*(*cinfo).dest).free_in_buffer;
@@ -1411,9 +1382,7 @@ unsafe extern "C" fn finish_pass_huff(mut cinfo: j_compress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         /* Update state */
         (*(*cinfo).dest).next_output_byte = state.next_output_byte;
@@ -1507,9 +1476,7 @@ unsafe extern "C" fn htest_one_block(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             /* Count Huffman symbol for run length / number of bits */
             let ref mut fresh16 = *ac_counts.offset(((r << 4 as i32) + nbits) as isize);
@@ -1536,8 +1503,7 @@ unsafe extern "C" fn encode_mcu_gather(
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Take care of restart intervals if needed */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -1688,16 +1654,13 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
             /* The JPEG standard seems to think that this can't happen, */
             /* but I'm paranoid... */
             if codesize[i as usize] > 32 as i32 {
-                (*(*cinfo).err).msg_code =
-                    JERR_HUFF_CLEN_OVERFLOW as i32;
+                (*(*cinfo).err).msg_code = JERR_HUFF_CLEN_OVERFLOW as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             bits[codesize[i as usize] as usize] =
                 bits[codesize[i as usize] as usize].wrapping_add(1)
@@ -1770,10 +1733,8 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
-    let mut htblptr: *mut *mut JHUFF_TBL =
-        0 as *mut *mut JHUFF_TBL;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut htblptr: *mut *mut JHUFF_TBL = 0 as *mut *mut JHUFF_TBL;
     let mut did_dc: [boolean; 4] = [0; 4];
     let mut did_ac: [boolean; 4] = [0; 4];
     /* It's important not to apply jpeg_gen_optimal_table more than once
@@ -1803,10 +1764,9 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
                 htblptr = &mut *(*cinfo).dc_huff_tbl_ptrs.as_mut_ptr().offset(tbl as isize)
                     as *mut *mut JHUFF_TBL;
                 if (*htblptr).is_null() {
-                    *htblptr = jpeg_alloc_huff_table(
-                        cinfo as j_common_ptr
-                            as *mut jpeg_common_struct,
-                    ) as *mut JHUFF_TBL
+                    *htblptr =
+                        jpeg_alloc_huff_table(cinfo as j_common_ptr as *mut jpeg_common_struct)
+                            as *mut JHUFF_TBL
                 }
                 jpeg_gen_optimal_table(cinfo, *htblptr, (*entropy).dc_count_ptrs[tbl as usize]);
                 did_dc[tbl as usize] = 1 as i32
@@ -1819,10 +1779,9 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
                 htblptr = &mut *(*cinfo).ac_huff_tbl_ptrs.as_mut_ptr().offset(tbl as isize)
                     as *mut *mut JHUFF_TBL;
                 if (*htblptr).is_null() {
-                    *htblptr = jpeg_alloc_huff_table(
-                        cinfo as j_common_ptr
-                            as *mut jpeg_common_struct,
-                    ) as *mut JHUFF_TBL
+                    *htblptr =
+                        jpeg_alloc_huff_table(cinfo as j_common_ptr as *mut jpeg_common_struct)
+                            as *mut JHUFF_TBL
                 }
                 jpeg_gen_optimal_table(cinfo, *htblptr, (*entropy).ac_count_ptrs[tbl as usize]);
                 did_ac[tbl as usize] = 1 as i32
@@ -1837,23 +1796,17 @@ unsafe extern "C" fn finish_pass_gather(mut cinfo: j_compress_ptr) {
  * just count the Huffman symbols used and generate Huffman code tables.
  */
 
-unsafe extern "C" fn start_pass_huff(
-    mut cinfo: j_compress_ptr,
-    mut gather_statistics: boolean,
-) {
+unsafe extern "C" fn start_pass_huff(mut cinfo: j_compress_ptr, mut gather_statistics: boolean) {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if gather_statistics != 0 {
-        (*entropy).pub_0.finish_pass = Some(
-            finish_pass_gather as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-        )
+        (*entropy).pub_0.finish_pass =
+            Some(finish_pass_gather as unsafe extern "C" fn(_: j_compress_ptr) -> ())
     } else {
-        (*entropy).pub_0.finish_pass = Some(
-            finish_pass_huff as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-        )
+        (*entropy).pub_0.finish_pass =
+            Some(finish_pass_huff as unsafe extern "C" fn(_: j_compress_ptr) -> ())
     }
     if (*cinfo).progressive_mode != 0 {
         (*entropy).cinfo = cinfo;
@@ -1864,37 +1817,23 @@ unsafe extern "C" fn start_pass_huff(
             if (*cinfo).Ss == 0 as i32 {
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_DC_first
-                        as unsafe extern "C" fn(
-                            _: j_compress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             } else {
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_AC_first
-                        as unsafe extern "C" fn(
-                            _: j_compress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             }
         } else if (*cinfo).Ss == 0 as i32 {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_DC_refine
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         } else {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_AC_refine
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
             );
             /* AC refinement needs a correction bit buffer */
             if (*entropy).bit_buffer.is_null() {
@@ -1918,18 +1857,12 @@ unsafe extern "C" fn start_pass_huff(
     } else if gather_statistics != 0 {
         (*entropy).pub_0.encode_mcu = Some(
             encode_mcu_gather
-                as unsafe extern "C" fn(
-                    _: j_compress_ptr,
-                    _: *mut JBLOCKROW,
-                ) -> boolean,
+                as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
         )
     } else {
         (*entropy).pub_0.encode_mcu = Some(
             encode_mcu_huff
-                as unsafe extern "C" fn(
-                    _: j_compress_ptr,
-                    _: *mut JBLOCKROW,
-                ) -> boolean,
+                as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
         )
     }
     ci = 0 as i32;
@@ -1942,17 +1875,14 @@ unsafe extern "C" fn start_pass_huff(
                 /* Check for invalid table index */
                 /* (make_c_derived_tbl does this in the other path) */
                 if tbl < 0 as i32 || tbl >= 4 as i32 {
-                    (*(*cinfo).err).msg_code =
-                        JERR_NO_HUFF_TABLE as i32;
+                    (*(*cinfo).err).msg_code = JERR_NO_HUFF_TABLE as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
-                    .expect("non-null function pointer")(
-                        cinfo as j_common_ptr
-                    );
+                    .expect("non-null function pointer")(cinfo as j_common_ptr);
                 }
                 /* Allocate and zero the statistics tables */
                 /* Note that jpeg_gen_optimal_table expects 257 entries in each table! */
@@ -1993,17 +1923,14 @@ unsafe extern "C" fn start_pass_huff(
             tbl = (*compptr).ac_tbl_no;
             if gather_statistics != 0 {
                 if tbl < 0 as i32 || tbl >= 4 as i32 {
-                    (*(*cinfo).err).msg_code =
-                        JERR_NO_HUFF_TABLE as i32;
+                    (*(*cinfo).err).msg_code = JERR_NO_HUFF_TABLE as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
-                    .expect("non-null function pointer")(
-                        cinfo as j_common_ptr
-                    );
+                    .expect("non-null function pointer")(cinfo as j_common_ptr);
                 }
                 if (*entropy).ac_count_ptrs[tbl as usize].is_null() {
                     (*entropy).ac_count_ptrs[tbl as usize] = Some(
@@ -2061,13 +1988,8 @@ pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: j_compress_ptr) {
         ::std::mem::size_of::<huff_entropy_encoder>() as libc::c_ulong,
     ) as huff_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_encoder;
-    (*entropy).pub_0.start_pass = Some(
-        start_pass_huff
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: boolean,
-            ) -> (),
-    );
+    (*entropy).pub_0.start_pass =
+        Some(start_pass_huff as unsafe extern "C" fn(_: j_compress_ptr, _: boolean) -> ());
     /* Mark tables unallocated */
     i = 0 as i32;
     while i < 4 as i32 {

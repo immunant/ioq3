@@ -27,9 +27,7 @@ Written by Jean-Marc Valin */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn validate_layout(
-    mut layout: *const ChannelLayout,
-) -> i32 {
+pub unsafe extern "C" fn validate_layout(mut layout: *const ChannelLayout) -> i32 {
     let mut i: i32 = 0;
     let mut max_channel: i32 = 0;
     max_channel = (*layout).nb_streams + (*layout).nb_coupled_streams;

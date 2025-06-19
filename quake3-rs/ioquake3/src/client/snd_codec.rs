@@ -121,8 +121,7 @@ unsafe extern "C" fn S_CodecGetSound(
         0 as *mut crate::src::client::snd_codec::snd_codec_t;
     let mut orgCodec: *mut crate::src::client::snd_codec::snd_codec_t =
         0 as *mut crate::src::client::snd_codec::snd_codec_t;
-    let mut orgNameFailed: qboolean =
-        qfalse;
+    let mut orgNameFailed: qboolean = qfalse;
     let mut localName: [libc::c_char; 64] = [0; 64];
     let mut ext: *const libc::c_char = 0 as *const libc::c_char;
     let mut altName: [libc::c_char; 64] = [0; 64];
@@ -156,11 +155,7 @@ unsafe extern "C" fn S_CodecGetSound(
                 // try again without the extension
                 orgNameFailed = qtrue;
                 orgCodec = codec;
-                COM_StripExtension(
-                    filename,
-                    localName.as_mut_ptr(),
-                    64 as i32,
-                );
+                COM_StripExtension(filename, localName.as_mut_ptr(), 64 as i32);
             } else {
                 // Something loaded
                 return rtn;
@@ -312,11 +307,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
     let mut hnd: fileHandle_t = 0;
     let mut length: i32 = 0;
     // Try to open the file
-    length = crate::src::qcommon::files::FS_FOpenFileRead(
-        filename,
-        &mut hnd,
-        qtrue,
-    ) as i32;
+    length = crate::src::qcommon::files::FS_FOpenFileRead(filename, &mut hnd, qtrue) as i32;
     if hnd == 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"Can\'t read sound file %s\n\x00" as *const u8 as *const libc::c_char,

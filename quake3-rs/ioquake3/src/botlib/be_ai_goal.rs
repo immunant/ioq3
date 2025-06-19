@@ -238,16 +238,15 @@ pub const GT_FFA: C2RustUnnamed_3 = 0;
 // Initialized in run_static_initializers
 #[no_mangle]
 
-pub static mut iteminfo_fields: [fielddef_t; 9] =
-    [fielddef_t {
-        name: 0 as *mut libc::c_char,
-        offset: 0,
-        type_0: 0,
-        maxarray: 0,
-        floatmin: 0.,
-        floatmax: 0.,
-        substruct: 0 as *mut structdef_s,
-    }; 9];
+pub static mut iteminfo_fields: [fielddef_t; 9] = [fielddef_t {
+    name: 0 as *mut libc::c_char,
+    offset: 0,
+    type_0: 0,
+    maxarray: 0,
+    floatmin: 0.,
+    floatmax: 0.,
+    substruct: 0 as *mut structdef_s,
+}; 9];
 #[no_mangle]
 
 pub static mut iteminfo_struct: structdef_t = unsafe {
@@ -296,9 +295,7 @@ pub static mut g_gametype: i32 = 0 as i32;
 //additional dropped item weight
 #[no_mangle]
 
-pub static mut droppedweight: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut droppedweight: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 //========================================================================
 //
 // Parameter:				-
@@ -396,9 +393,7 @@ pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(mut goalstate: i32, mut _range:
     if gs.is_null() {
         return;
     }
-    EvolveWeightConfig(
-        (*gs).itemweightconfig as *mut weightconfig_s,
-    );
+    EvolveWeightConfig((*gs).itemweightconfig as *mut weightconfig_s);
 }
 //end of the function BotMutateGoalFuzzyLogic
 //===========================================================================
@@ -424,8 +419,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
         next: 0 as *mut token_s,
     };
     let mut path: [libc::c_char; 64] = [0; 64];
-    let mut source: *mut source_t =
-        0 as *mut source_t;
+    let mut source: *mut source_t = 0 as *mut source_t;
     let mut ic: *mut itemconfig_t = 0 as *mut itemconfig_t;
     let mut ii: *mut iteminfo_t = 0 as *mut iteminfo_t;
     max_iteminfo = LibVarValue(
@@ -451,11 +445,8 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
         filename,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    PC_SetBaseFolder(
-        b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    );
-    source = LoadSourceFile(path.as_mut_ptr())
-        as *mut source_s;
+    PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
+    source = LoadSourceFile(path.as_mut_ptr()) as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -497,9 +488,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
                     max_iteminfo,
                 ); //end if
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void); //end if
-                FreeSource(
-                    source as *mut source_s,
-                ); //end if
+                FreeSource(source as *mut source_s); //end if
                 return 0 as *mut itemconfig_t;
             } //end if
             ii = &mut *(*ic).iteminfo.offset((*ic).numiteminfo as isize) as *mut iteminfo_t;
@@ -516,9 +505,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-                FreeSource(
-                    source as *mut source_s,
-                );
+                FreeSource(source as *mut source_s);
                 return 0 as *mut itemconfig_t;
             }
             StripDoubleQuotes(token.string.as_mut_ptr());
@@ -534,9 +521,7 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
             ) == 0
             {
                 crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-                FreeSource(
-                    source as *mut source_s,
-                );
+                FreeSource(source as *mut source_s);
                 return 0 as *mut itemconfig_t;
             }
             (*ii).number = (*ic).numiteminfo;
@@ -549,16 +534,12 @@ pub unsafe extern "C" fn LoadItemConfig(mut filename: *mut libc::c_char) -> *mut
                 token.string.as_mut_ptr(),
             );
             crate::src::botlib::l_memory::FreeMemory(ic as *mut libc::c_void);
-            FreeSource(
-                source as *mut source_s,
-            );
+            FreeSource(source as *mut source_s);
             return 0 as *mut itemconfig_t;
         }
         //end else
     }
-    FreeSource(
-        source as *mut source_s,
-    );
+    FreeSource(source as *mut source_s);
     //
     if (*ic).numiteminfo == 0 {
         crate::src::botlib::be_interface::botimport
@@ -1586,11 +1567,7 @@ pub unsafe extern "C" fn BotGetMapLocationGoal(
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        8 as i32 as vec_t,
-        8 as i32 as vec_t,
-        8 as i32 as vec_t,
-    ];
+    let mut maxs: vec3_t = [8 as i32 as vec_t, 8 as i32 as vec_t, 8 as i32 as vec_t];
     ml = maplocations;
     while !ml.is_null() {
         if Q_stricmp((*ml).name.as_mut_ptr(), name) == 0 {
@@ -1636,11 +1613,7 @@ pub unsafe extern "C" fn BotGetNextCampSpotGoal(
         -(8 as i32) as vec_t,
         -(8 as i32) as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        8 as i32 as vec_t,
-        8 as i32 as vec_t,
-        8 as i32 as vec_t,
-    ];
+    let mut maxs: vec3_t = [8 as i32 as vec_t, 8 as i32 as vec_t, 8 as i32 as vec_t];
     if num < 0 as i32 {
         num = 0 as i32
     }
@@ -1739,9 +1712,7 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
                         (*li).origin[1 as i32 as usize] - entinfo.origin[1 as i32 as usize];
                     dir[2 as i32 as usize] =
                         (*li).origin[2 as i32 as usize] - entinfo.origin[2 as i32 as usize];
-                    if VectorLength(dir.as_mut_ptr() as *const vec_t)
-                        < 30 as i32 as f32
-                    {
+                    if VectorLength(dir.as_mut_ptr() as *const vec_t) < 30 as i32 as f32 {
                         //end if
                         //found an entity for this level item
                         (*li).entitynum = ent
@@ -1926,8 +1897,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
                                             dir[2 as i32 as usize] = (*li).origin
                                                 [2 as i32 as usize]
                                                 - entinfo.origin[2 as i32 as usize];
-                                            if VectorLength(dir.as_mut_ptr()
-                                                as *const vec_t)
+                                            if VectorLength(dir.as_mut_ptr() as *const vec_t)
                                                 < 30 as i32 as f32
                                             {
                                                 //end if
@@ -2327,8 +2297,7 @@ pub unsafe extern "C" fn BotChooseLTGItem(
                             if !(weightnum < 0 as i32) {
                                 weight = FuzzyWeightUndecided(
                                     inventory,
-                                    (*gs).itemweightconfig
-                                        as *mut weightconfig_s,
+                                    (*gs).itemweightconfig as *mut weightconfig_s,
                                     weightnum,
                                 );
                                 //UNDECIDEDFUZZY
@@ -2573,8 +2542,7 @@ pub unsafe extern "C" fn BotChooseNBGItem(
                                 //
                                 weight = FuzzyWeightUndecided(
                                     inventory,
-                                    (*gs).itemweightconfig
-                                        as *mut weightconfig_s,
+                                    (*gs).itemweightconfig as *mut weightconfig_s,
                                     weightnum,
                                 );
                                 //UNDECIDEDFUZZY
@@ -2703,16 +2671,8 @@ pub unsafe extern "C" fn BotTouchingGoal(
     let mut boxmaxs: vec3_t = [0.; 3];
     let mut absmins: vec3_t = [0.; 3];
     let mut absmaxs: vec3_t = [0.; 3];
-    let mut safety_maxs: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
-    let mut safety_mins: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut safety_maxs: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
+    let mut safety_mins: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox(
         2 as i32,
         boxmins.as_mut_ptr(),
@@ -2819,12 +2779,9 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
     middle[0 as i32 as usize] = (*goal).mins[0 as i32 as usize] + (*goal).mins[0 as i32 as usize];
     middle[1 as i32 as usize] = (*goal).mins[1 as i32 as usize] + (*goal).mins[1 as i32 as usize];
     middle[2 as i32 as usize] = (*goal).mins[2 as i32 as usize] + (*goal).mins[2 as i32 as usize];
-    middle[0 as i32 as usize] =
-        (middle[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    middle[1 as i32 as usize] =
-        (middle[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    middle[2 as i32 as usize] =
-        (middle[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    middle[0 as i32 as usize] = (middle[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    middle[1 as i32 as usize] = (middle[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    middle[2 as i32 as usize] = (middle[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     middle[0 as i32 as usize] = (*goal).origin[0 as i32 as usize] + middle[0 as i32 as usize];
     middle[1 as i32 as usize] = (*goal).origin[1 as i32 as usize] + middle[1 as i32 as usize];
     middle[2 as i32 as usize] = (*goal).origin[2 as i32 as usize] + middle[2 as i32 as usize];
@@ -2906,8 +2863,7 @@ pub unsafe extern "C" fn BotLoadItemWeights(
         return 9 as i32;
     }
     //load the weight configuration
-    (*gs).itemweightconfig = ReadWeightConfig(filename)
-        as *mut weightconfig_s; //end if
+    (*gs).itemweightconfig = ReadWeightConfig(filename) as *mut weightconfig_s; //end if
     if (*gs).itemweightconfig.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -2944,9 +2900,7 @@ pub unsafe extern "C" fn BotFreeItemWeights(mut goalstate: i32) {
         return;
     }
     if !(*gs).itemweightconfig.is_null() {
-        FreeWeightConfig(
-            (*gs).itemweightconfig as *mut weightconfig_s,
-        );
+        FreeWeightConfig((*gs).itemweightconfig as *mut weightconfig_s);
     }
     if !(*gs).itemweightindex.is_null() {
         crate::src::botlib::l_memory::FreeMemory((*gs).itemweightindex as *mut libc::c_void);
@@ -3096,8 +3050,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"name\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).name as *mut [libc::c_char; 80]
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).name as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3109,8 +3063,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).model as *mut [libc::c_char; 80]
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).model as *mut [libc::c_char; 80] as size_t
+                    as i32,
                 type_0: 4 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3122,8 +3076,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"modelindex\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).modelindex as *mut i32
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).modelindex as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3135,8 +3088,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as size_t
-                    as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3148,8 +3100,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"index\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as size_t
-                    as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as size_t as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3161,8 +3112,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"respawntime\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).respawntime as *mut f32
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).respawntime as *mut f32 as size_t as i32,
                 type_0: 3 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3174,9 +3124,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"mins\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).mins
-                    as *mut vec3_t
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).mins as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,
@@ -3188,9 +3136,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = fielddef_s {
                 name: b"maxs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).maxs
-                    as *mut vec3_t
-                    as size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).maxs as *mut vec3_t as size_t as i32,
                 type_0: 3 as i32 | 0x100 as i32,
                 maxarray: 3 as i32,
                 floatmin: 0.,

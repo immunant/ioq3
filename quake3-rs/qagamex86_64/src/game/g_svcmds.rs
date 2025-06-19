@@ -206,10 +206,7 @@ StringToFilter
 =================
 */
 
-unsafe extern "C" fn StringToFilter(
-    mut s: *mut libc::c_char,
-    mut f: *mut ipFilter_t,
-) -> qboolean {
+unsafe extern "C" fn StringToFilter(mut s: *mut libc::c_char, mut f: *mut ipFilter_t) -> qboolean {
     let mut num: [libc::c_char; 128] = [0; 128];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -269,10 +266,8 @@ UpdateIPBans
 */
 
 unsafe extern "C" fn UpdateIPBans() {
-    let mut b: [byte; 4] =
-        [0 as i32 as byte, 0, 0, 0];
-    let mut m: [byte; 4] =
-        [0 as i32 as byte, 0, 0, 0];
+    let mut b: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
+    let mut m: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut iplist_final: [libc::c_char; 256] = [
@@ -666,21 +661,17 @@ G_FilterPacket
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_FilterPacket(
-    mut from: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn G_FilterPacket(mut from: *mut libc::c_char) -> qboolean {
     let mut i: i32 = 0;
     let mut in_0: u32 = 0;
-    let mut m: [byte; 4] =
-        [0 as i32 as byte, 0, 0, 0];
+    let mut m: [byte; 4] = [0 as i32 as byte, 0, 0, 0];
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     i = 0 as i32;
     p = from;
     while *p as i32 != 0 && i < 4 as i32 {
         m[i as usize] = 0 as i32 as byte;
         while *p as i32 >= '0' as i32 && *p as i32 <= '9' as i32 {
-            m[i as usize] = (m[i as usize] as i32 * 10 as i32 + (*p as i32 - '0' as i32))
-                as byte;
+            m[i as usize] = (m[i as usize] as i32 * 10 as i32 + (*p as i32 - '0' as i32)) as byte;
             p = p.offset(1)
         }
         if *p == 0 || *p as i32 == ':' as i32 {
@@ -693,13 +684,11 @@ pub unsafe extern "C" fn G_FilterPacket(
     i = 0 as i32;
     while i < numIPFilters {
         if in_0 & ipFilters[i as usize].mask == ipFilters[i as usize].compare {
-            return (g_filterBan.integer != 0 as i32) as i32
-                as qboolean;
+            return (g_filterBan.integer != 0 as i32) as i32 as qboolean;
         }
         i += 1
     }
-    return (g_filterBan.integer == 0 as i32) as i32
-        as qboolean;
+    return (g_filterBan.integer == 0 as i32) as i32 as qboolean;
 }
 /*
 =================
@@ -718,9 +707,7 @@ unsafe extern "C" fn AddIP(mut str: *mut libc::c_char) {
     }
     if i == numIPFilters {
         if numIPFilters == 1024 as i32 {
-            G_Printf(
-                b"IP filter list is full\n\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Printf(b"IP filter list is full\n\x00" as *const u8 as *const libc::c_char);
             return;
         }
         numIPFilters += 1
@@ -775,9 +762,7 @@ Svcmd_AddIP_f
 pub unsafe extern "C" fn Svcmd_AddIP_f() {
     let mut str: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() < 2 as i32 {
-        G_Printf(
-            b"Usage: addip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"Usage: addip <ip-mask>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     trap_Argv(
@@ -802,9 +787,7 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
     let mut i: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() < 2 as i32 {
-        G_Printf(
-            b"Usage: removeip <ip-mask>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"Usage: removeip <ip-mask>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     trap_Argv(
@@ -819,9 +802,7 @@ pub unsafe extern "C" fn Svcmd_RemoveIP_f() {
     while i < numIPFilters {
         if ipFilters[i as usize].mask == f.mask && ipFilters[i as usize].compare == f.compare {
             ipFilters[i as usize].compare = 0xffffffff as u32;
-            G_Printf(
-                b"Removed.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Printf(b"Removed.\n\x00" as *const u8 as *const libc::c_char);
             UpdateIPBans();
             return;
         }
@@ -849,64 +830,40 @@ pub unsafe extern "C" fn Svcmd_EntityList_f() {
             G_Printf(b"%3i:\x00" as *const u8 as *const libc::c_char, e);
             match (*check).s.eType {
                 0 => {
-                    G_Printf(
-                        b"ET_GENERAL          \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_GENERAL          \x00" as *const u8 as *const libc::c_char);
                 }
                 1 => {
-                    G_Printf(
-                        b"ET_PLAYER           \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_PLAYER           \x00" as *const u8 as *const libc::c_char);
                 }
                 2 => {
-                    G_Printf(
-                        b"ET_ITEM             \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_ITEM             \x00" as *const u8 as *const libc::c_char);
                 }
                 3 => {
-                    G_Printf(
-                        b"ET_MISSILE          \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_MISSILE          \x00" as *const u8 as *const libc::c_char);
                 }
                 4 => {
-                    G_Printf(
-                        b"ET_MOVER            \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_MOVER            \x00" as *const u8 as *const libc::c_char);
                 }
                 5 => {
-                    G_Printf(
-                        b"ET_BEAM             \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_BEAM             \x00" as *const u8 as *const libc::c_char);
                 }
                 6 => {
-                    G_Printf(
-                        b"ET_PORTAL           \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_PORTAL           \x00" as *const u8 as *const libc::c_char);
                 }
                 7 => {
-                    G_Printf(
-                        b"ET_SPEAKER          \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_SPEAKER          \x00" as *const u8 as *const libc::c_char);
                 }
                 8 => {
-                    G_Printf(
-                        b"ET_PUSH_TRIGGER     \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_PUSH_TRIGGER     \x00" as *const u8 as *const libc::c_char);
                 }
                 9 => {
-                    G_Printf(
-                        b"ET_TELEPORT_TRIGGER \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_TELEPORT_TRIGGER \x00" as *const u8 as *const libc::c_char);
                 }
                 10 => {
-                    G_Printf(
-                        b"ET_INVISIBLE        \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_INVISIBLE        \x00" as *const u8 as *const libc::c_char);
                 }
                 11 => {
-                    G_Printf(
-                        b"ET_GRAPPLE          \x00" as *const u8 as *const libc::c_char,
-                    );
+                    G_Printf(b"ET_GRAPPLE          \x00" as *const u8 as *const libc::c_char);
                 }
                 _ => {
                     G_Printf(
@@ -929,9 +886,7 @@ pub unsafe extern "C" fn Svcmd_EntityList_f() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ClientForString(
-    mut s: *const libc::c_char,
-) -> *mut gclient_t {
+pub unsafe extern "C" fn ClientForString(mut s: *const libc::c_char) -> *mut gclient_t {
     let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut i: i32 = 0;
     let mut idnum: i32 = 0;
@@ -947,9 +902,7 @@ pub unsafe extern "C" fn ClientForString(
             );
             return 0 as *mut gclient_t;
         }
-        cl = &mut *level
-            .clients
-            .offset(idnum as isize) as *mut gclient_s;
+        cl = &mut *level.clients.offset(idnum as isize) as *mut gclient_s;
         if (*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32 {
             G_Printf(
                 b"Client %i is not connected\n\x00" as *const u8 as *const libc::c_char,
@@ -962,8 +915,7 @@ pub unsafe extern "C" fn ClientForString(
     // check for a name match
     i = 0 as i32;
     while i < level.maxclients {
-        cl = &mut *level.clients.offset(i as isize)
-            as *mut gclient_s;
+        cl = &mut *level.clients.offset(i as isize) as *mut gclient_s;
         if !((*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32) {
             if Q_stricmp((*cl).pers.netname.as_mut_ptr(), s) == 0 {
                 return cl;
@@ -990,9 +942,7 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     let mut str: [libc::c_char; 1024] = [0; 1024];
     if trap_Argc() < 3 as i32 {
-        G_Printf(
-            b"Usage: forceteam <player> <team>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"Usage: forceteam <player> <team>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // find the player
@@ -1014,8 +964,7 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     SetTeam(
         &mut *g_entities
             .as_mut_ptr()
-            .offset(cl.offset_from(level.clients) as isize)
-            as *mut _ as *mut gentity_s,
+            .offset(cl.offset_from(level.clients) as isize) as *mut _ as *mut gentity_s,
         str.as_mut_ptr(),
     );
 }

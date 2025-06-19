@@ -354,9 +354,7 @@ pub unsafe extern "C" fn AAS_LinkCache(mut cache: *mut aas_routingcache_t) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FreeRoutingCache(
-    mut cache: *mut aas_routingcache_t,
-) {
+pub unsafe extern "C" fn AAS_FreeRoutingCache(mut cache: *mut aas_routingcache_t) {
     AAS_UnlinkCache(cache);
     routingcachesize -= (*cache).size;
     crate::src::botlib::l_memory::FreeMemory(cache as *mut libc::c_void);
@@ -372,12 +370,9 @@ pub unsafe extern "C" fn AAS_FreeRoutingCache(
 
 pub unsafe extern "C" fn AAS_RemoveRoutingCacheInCluster(mut clusternum: i32) {
     let mut i: i32 = 0; //end for
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut nextcache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut cluster: *mut aas_cluster_t =
-        0 as *mut aas_cluster_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut nextcache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut cluster: *mut aas_cluster_t = 0 as *mut aas_cluster_t;
     if crate::src::botlib::be_aas_main::aasworld
         .clusterareacache
         .is_null()
@@ -419,10 +414,8 @@ pub unsafe extern "C" fn AAS_RemoveRoutingCacheInCluster(mut clusternum: i32) {
 pub unsafe extern "C" fn AAS_RemoveRoutingCacheUsingArea(mut areanum: i32) {
     let mut i: i32 = 0; //end else
     let mut clusternum: i32 = 0; //end if
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut nextcache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut nextcache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     clusternum = (*crate::src::botlib::be_aas_main::aasworld
         .areasettings
         .offset(areanum as isize))
@@ -653,12 +646,9 @@ pub unsafe extern "C" fn AAS_InitAreaContentsTravelFlags() {
 pub unsafe extern "C" fn AAS_CreateReversedReachability() {
     let mut i: i32 = 0;
     let mut n: i32 = 0;
-    let mut revlink: *mut aas_reversedlink_t =
-        0 as *mut aas_reversedlink_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t;
+    let mut revlink: *mut aas_reversedlink_t = 0 as *mut aas_reversedlink_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     //free reversed links that have already been created
     if !crate::src::botlib::be_aas_main::aasworld
@@ -672,16 +662,10 @@ pub unsafe extern "C" fn AAS_CreateReversedReachability() {
     //allocate memory for the reversed reachability links
     ptr = crate::src::botlib::l_memory::GetClearedMemory(
         (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(
-                ::std::mem::size_of::<aas_reversedreachability_t>()
-                    as libc::c_ulong,
-            )
+            .wrapping_mul(::std::mem::size_of::<aas_reversedreachability_t>() as libc::c_ulong)
             .wrapping_add(
                 (crate::src::botlib::be_aas_main::aasworld.reachabilitysize as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<aas_reversedlink_t>()
-                            as libc::c_ulong,
-                    ),
+                    .wrapping_mul(::std::mem::size_of::<aas_reversedlink_t>() as libc::c_ulong),
             ),
     ) as *mut libc::c_char;
     //
@@ -689,10 +673,9 @@ pub unsafe extern "C" fn AAS_CreateReversedReachability() {
         ptr as *mut aas_reversedreachability_t;
     //pointer to the memory for the reversed links
     ptr = ptr.offset(
-        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_reversedreachability_t>()
-                as libc::c_ulong,
-        ) as isize,
+        (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_reversedreachability_t>() as libc::c_ulong)
+            as isize,
     );
     //check all reachabilities of all areas
     i = 1 as i32;
@@ -723,10 +706,7 @@ pub unsafe extern "C" fn AAS_CreateReversedReachability() {
                 as *mut aas_reachability_t;
             //
             revlink = ptr as *mut aas_reversedlink_t;
-            ptr = ptr.offset(
-                ::std::mem::size_of::<aas_reversedlink_t>() as libc::c_ulong
-                    as isize,
-            );
+            ptr = ptr.offset(::std::mem::size_of::<aas_reversedlink_t>() as libc::c_ulong as isize);
             //
             (*revlink).areanum = i;
             (*revlink).linknum = (*settings).firstreachablearea + n;
@@ -805,14 +785,10 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
     let mut size: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut end: vec3_t = [0.; 3];
-    let mut revreach: *mut aas_reversedreachability_t =
-        0 as *mut aas_reversedreachability_t;
-    let mut revlink: *mut aas_reversedlink_t =
-        0 as *mut aas_reversedlink_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t;
+    let mut revreach: *mut aas_reversedreachability_t = 0 as *mut aas_reversedreachability_t;
+    let mut revlink: *mut aas_reversedlink_t = 0 as *mut aas_reversedlink_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
     //if there are still area travel times, free the memory
     if !crate::src::botlib::be_aas_main::aasworld
         .areatraveltimes
@@ -829,8 +805,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
     while i < crate::src::botlib::be_aas_main::aasworld.numareas {
         revreach = &mut *crate::src::botlib::be_aas_main::aasworld
             .reversedreachability
-            .offset(i as isize)
-            as *mut aas_reversedreachability_t;
+            .offset(i as isize) as *mut aas_reversedreachability_t;
         //settings of the area
         settings = &mut *crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -868,8 +843,7 @@ pub unsafe extern "C" fn AAS_CalculateAreaTravelTimes() {
         //reversed reachabilities of this area
         revreach = &mut *crate::src::botlib::be_aas_main::aasworld
             .reversedreachability
-            .offset(i as isize)
-            as *mut aas_reversedreachability_t;
+            .offset(i as isize) as *mut aas_reversedreachability_t;
         //end for
         settings = &mut *crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -955,25 +929,20 @@ pub unsafe extern "C" fn AAS_PortalMaxTravelTime(mut portalnum: i32) -> i32 {
     let mut t: i32 = 0;
     let mut maxt: i32 = 0;
     let mut portal: *mut aas_portal_t = 0 as *mut aas_portal_t;
-    let mut revreach: *mut aas_reversedreachability_t =
-        0 as *mut aas_reversedreachability_t;
-    let mut revlink: *mut aas_reversedlink_t =
-        0 as *mut aas_reversedlink_t;
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t;
+    let mut revreach: *mut aas_reversedreachability_t = 0 as *mut aas_reversedreachability_t;
+    let mut revlink: *mut aas_reversedlink_t = 0 as *mut aas_reversedlink_t;
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
     portal = &mut *crate::src::botlib::be_aas_main::aasworld
         .portals
         .offset(portalnum as isize) as *mut aas_portal_t;
     //reversed reachabilities of this portal area
     revreach = &mut *crate::src::botlib::be_aas_main::aasworld
         .reversedreachability
-        .offset((*portal).areanum as isize)
-        as *mut aas_reversedreachability_t;
+        .offset((*portal).areanum as isize) as *mut aas_reversedreachability_t;
     //settings of the portal area
     settings = &mut *crate::src::botlib::be_aas_main::aasworld
         .areasettings
-        .offset((*portal).areanum as isize)
-        as *mut aas_areasettings_t;
+        .offset((*portal).areanum as isize) as *mut aas_areasettings_t;
     //
     maxt = 0 as i32; //end for
     l = 0 as i32;
@@ -1118,8 +1087,7 @@ int AAS_FreeOldestCache(void)
 
 pub unsafe extern "C" fn AAS_FreeOldestCache() -> i32 {
     let mut clusterareanum: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     cache = crate::src::botlib::be_aas_main::aasworld.oldestcache;
     while !cache.is_null() {
         // never free area cache leading towards a portal
@@ -1180,11 +1148,8 @@ pub unsafe extern "C" fn AAS_FreeOldestCache() -> i32 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_AllocRoutingCache(
-    mut numtraveltimes: i32,
-) -> *mut aas_routingcache_t {
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+pub unsafe extern "C" fn AAS_AllocRoutingCache(mut numtraveltimes: i32) -> *mut aas_routingcache_t {
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     let mut size: i32 = 0;
     //
     size = (::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong)
@@ -1202,10 +1167,7 @@ pub unsafe extern "C" fn AAS_AllocRoutingCache(
     cache = crate::src::botlib::l_memory::GetClearedMemory(size as libc::c_ulong)
         as *mut aas_routingcache_t;
     (*cache).reachabilities = (cache as *mut u8)
-        .offset(
-            ::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong
-                as isize,
-        )
+        .offset(::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong as isize)
         .offset(
             (numtraveltimes as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<u16>() as libc::c_ulong) as isize,
@@ -1225,12 +1187,9 @@ pub unsafe extern "C" fn AAS_AllocRoutingCache(
 pub unsafe extern "C" fn AAS_FreeAllClusterAreaCache() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut nextcache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut cluster: *mut aas_cluster_t =
-        0 as *mut aas_cluster_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut nextcache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut cluster: *mut aas_cluster_t = 0 as *mut aas_cluster_t;
     //free all cluster cache if existing
     if crate::src::botlib::be_aas_main::aasworld
         .clusterareacache
@@ -1310,10 +1269,9 @@ pub unsafe extern "C" fn AAS_InitClusterAreaCache() {
     crate::src::botlib::be_aas_main::aasworld.clusterareacache =
         ptr as *mut *mut *mut aas_routingcache_t;
     ptr = ptr.offset(
-        (crate::src::botlib::be_aas_main::aasworld.numclusters as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut *mut aas_routingcache_t>()
-                as libc::c_ulong,
-        ) as isize,
+        (crate::src::botlib::be_aas_main::aasworld.numclusters as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut *mut aas_routingcache_t>() as libc::c_ulong)
+            as isize,
     );
     i = 0 as i32;
     while i < crate::src::botlib::be_aas_main::aasworld.numclusters {
@@ -1326,10 +1284,8 @@ pub unsafe extern "C" fn AAS_InitClusterAreaCache() {
                 .clusters
                 .offset(i as isize))
             .numareas as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<*mut aas_routingcache_t>()
-                        as libc::c_ulong,
-                ) as isize,
+                .wrapping_mul(::std::mem::size_of::<*mut aas_routingcache_t>() as libc::c_ulong)
+                as isize,
         );
         i += 1
     }
@@ -1346,10 +1302,8 @@ pub unsafe extern "C" fn AAS_InitClusterAreaCache() {
 
 pub unsafe extern "C" fn AAS_FreeAllPortalCache() {
     let mut i: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut nextcache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut nextcache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     //free all portal cache if existing
     if crate::src::botlib::be_aas_main::aasworld
         .portalcache
@@ -1377,8 +1331,7 @@ pub unsafe extern "C" fn AAS_FreeAllPortalCache() {
     crate::src::botlib::l_memory::FreeMemory(
         crate::src::botlib::be_aas_main::aasworld.portalcache as *mut libc::c_void,
     );
-    crate::src::botlib::be_aas_main::aasworld.portalcache =
-        0 as *mut *mut aas_routingcache_t;
+    crate::src::botlib::be_aas_main::aasworld.portalcache = 0 as *mut *mut aas_routingcache_t;
 }
 //end of the function AAS_FreeAllPortalCache
 //===========================================================================
@@ -1393,10 +1346,8 @@ pub unsafe extern "C" fn AAS_InitPortalCache() {
     //
     crate::src::botlib::be_aas_main::aasworld.portalcache =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<*mut aas_routingcache_t>()
-                    as libc::c_ulong,
-            ),
+            (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<*mut aas_routingcache_t>() as libc::c_ulong),
         ) as *mut *mut aas_routingcache_t;
 }
 //end of the function AAS_InitPortalCache
@@ -1441,9 +1392,8 @@ pub unsafe extern "C" fn AAS_InitRoutingUpdate() {
     //allocate memory for the routing update fields
     crate::src::botlib::be_aas_main::aasworld.areaupdate =
         crate::src::botlib::l_memory::GetClearedMemory(
-            (maxreachabilityareas as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                aas_routingupdate_t,
-            >() as libc::c_ulong),
+            (maxreachabilityareas as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<aas_routingupdate_t>() as libc::c_ulong),
         ) as *mut aas_routingupdate_t;
     //
     if !crate::src::botlib::be_aas_main::aasworld
@@ -1458,10 +1408,7 @@ pub unsafe extern "C" fn AAS_InitRoutingUpdate() {
     crate::src::botlib::be_aas_main::aasworld.portalupdate =
         crate::src::botlib::l_memory::GetClearedMemory(
             ((crate::src::botlib::be_aas_main::aasworld.numportals + 1 as i32) as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<aas_routingupdate_t>()
-                        as libc::c_ulong,
-                ),
+                .wrapping_mul(::std::mem::size_of::<aas_routingupdate_t>() as libc::c_ulong),
         ) as *mut aas_routingupdate_t;
 }
 //end of the function AAS_InitRoutingUpdate
@@ -1477,8 +1424,7 @@ pub unsafe extern "C" fn AAS_CreateAllRoutingCache() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     //int t;
-    crate::src::botlib::be_aas_main::aasworld.initialized =
-        qtrue as i32; //end for
+    crate::src::botlib::be_aas_main::aasworld.initialized = qtrue as i32; //end for
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
@@ -1525,8 +1471,7 @@ pub unsafe extern "C" fn AAS_CreateAllRoutingCache() {
         i += 1
         //end for
     }
-    crate::src::botlib::be_aas_main::aasworld.initialized =
-        qfalse as i32;
+    crate::src::botlib::be_aas_main::aasworld.initialized = qfalse as i32;
 }
 //void AAS_DecompressVis(byte *in, int numareas, byte *decompressed);
 //int AAS_CompressVis(byte *vis, int numareas, byte *dest);
@@ -1538,10 +1483,8 @@ pub unsafe extern "C" fn AAS_WriteRouteCache() {
     let mut numportalcache: i32 = 0;
     let mut numareacache: i32 = 0;
     let mut totalsize: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut cluster: *mut aas_cluster_t =
-        0 as *mut aas_cluster_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut cluster: *mut aas_cluster_t = 0 as *mut aas_cluster_t;
     let mut fp: fileHandle_t = 0;
     let mut filename: [libc::c_char; 64] = [0; 64];
     let mut routecacheheader: routecacheheader_t = routecacheheader_t {
@@ -1600,11 +1543,7 @@ pub unsafe extern "C" fn AAS_WriteRouteCache() {
     ); //end if
     crate::src::botlib::be_interface::botimport
         .FS_FOpenFile
-        .expect("non-null function pointer")(
-        filename.as_mut_ptr(),
-        &mut fp,
-        FS_WRITE,
-    );
+        .expect("non-null function pointer")(filename.as_mut_ptr(), &mut fp, FS_WRITE);
     if fp == 0 {
         crate::src::botlib::be_aas_main::AAS_Error(
             b"Unable to open file: %s\n\x00" as *const u8 as *const libc::c_char
@@ -1738,12 +1677,9 @@ pub unsafe extern "C" fn AAS_WriteRouteCache() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ReadCache(
-    mut fp: fileHandle_t,
-) -> *mut aas_routingcache_t {
+pub unsafe extern "C" fn AAS_ReadCache(mut fp: fileHandle_t) -> *mut aas_routingcache_t {
     let mut size: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     crate::src::botlib::be_interface::botimport
         .FS_Read
         .expect("non-null function pointer")(
@@ -1751,8 +1687,8 @@ pub unsafe extern "C" fn AAS_ReadCache(
         ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
         fp,
     );
-    cache = crate::src::botlib::l_memory::GetMemory(size as libc::c_ulong)
-        as *mut aas_routingcache_t;
+    cache =
+        crate::src::botlib::l_memory::GetMemory(size as libc::c_ulong) as *mut aas_routingcache_t;
     (*cache).size = size;
     crate::src::botlib::be_interface::botimport
         .FS_Read
@@ -1763,17 +1699,11 @@ pub unsafe extern "C" fn AAS_ReadCache(
         fp,
     );
     (*cache).reachabilities = (cache as *mut u8)
-        .offset(
-            ::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong
-                as isize,
-        )
+        .offset(::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong as isize)
         .offset(-(::std::mem::size_of::<u16>() as libc::c_ulong as isize))
         .offset(
             (size as libc::c_ulong)
-                .wrapping_sub(
-                    ::std::mem::size_of::<aas_routingcache_t>()
-                        as libc::c_ulong,
-                )
+                .wrapping_sub(::std::mem::size_of::<aas_routingcache_t>() as libc::c_ulong)
                 .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
                 .wrapping_div(3 as i32 as libc::c_ulong)
                 .wrapping_mul(2 as i32 as libc::c_ulong) as isize,
@@ -1804,8 +1734,7 @@ pub unsafe extern "C" fn AAS_ReadRouteCache() -> i32 {
         numportalcache: 0,
         numareacache: 0,
     }; //end if
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     Com_sprintf(
         filename.as_mut_ptr(),
         64 as i32,
@@ -1816,11 +1745,7 @@ pub unsafe extern "C" fn AAS_ReadRouteCache() -> i32 {
     );
     crate::src::botlib::be_interface::botimport
         .FS_FOpenFile
-        .expect("non-null function pointer")(
-        filename.as_mut_ptr(),
-        &mut fp,
-        FS_READ,
-    );
+        .expect("non-null function pointer")(filename.as_mut_ptr(), &mut fp, FS_READ);
     if fp == 0 {
         return qfalse as i32;
     }
@@ -1875,10 +1800,9 @@ pub unsafe extern "C" fn AAS_ReadRouteCache() -> i32 {
     if routecacheheader.clustercrc
         != crate::src::botlib::l_crc::CRC_ProcessString(
             crate::src::botlib::be_aas_main::aasworld.clusters as *mut u8,
-            (::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong)
-                .wrapping_mul(
-                    crate::src::botlib::be_aas_main::aasworld.numclusters as libc::c_ulong,
-                ) as i32,
+            (::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong).wrapping_mul(
+                crate::src::botlib::be_aas_main::aasworld.numclusters as libc::c_ulong,
+            ) as i32,
         ) as i32
     {
         //AAS_Error("route cache dump cluster CRC incorrect\n");
@@ -1966,8 +1890,7 @@ pub unsafe extern "C" fn AAS_InitReachabilityAreas() {
     let mut numareas: i32 = 0;
     let mut areas: [i32; 32] = [0; 32];
     let mut numreachareas: i32 = 0;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
     if !crate::src::botlib::be_aas_main::aasworld
@@ -1989,10 +1912,7 @@ pub unsafe extern "C" fn AAS_InitReachabilityAreas() {
     crate::src::botlib::be_aas_main::aasworld.reachabilityareas =
         crate::src::botlib::l_memory::GetClearedMemory(
             (crate::src::botlib::be_aas_main::aasworld.reachabilitysize as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<aas_reachabilityareas_t>()
-                        as libc::c_ulong,
-                ),
+                .wrapping_mul(::std::mem::size_of::<aas_reachabilityareas_t>() as libc::c_ulong),
         ) as *mut aas_reachabilityareas_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilityareaindex =
         crate::src::botlib::l_memory::GetClearedMemory(
@@ -2164,8 +2084,7 @@ pub unsafe extern "C" fn AAS_FreeRoutingCaches() {
             crate::src::botlib::be_aas_main::aasworld.areaupdate as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.areaupdate =
-        0 as *mut aas_routingupdate_t;
+    crate::src::botlib::be_aas_main::aasworld.areaupdate = 0 as *mut aas_routingupdate_t;
     if !crate::src::botlib::be_aas_main::aasworld
         .portalupdate
         .is_null()
@@ -2174,8 +2093,7 @@ pub unsafe extern "C" fn AAS_FreeRoutingCaches() {
             crate::src::botlib::be_aas_main::aasworld.portalupdate as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.portalupdate =
-        0 as *mut aas_routingupdate_t;
+    crate::src::botlib::be_aas_main::aasworld.portalupdate = 0 as *mut aas_routingupdate_t;
     // free lists with areas the reachabilities go through
     if !crate::src::botlib::be_aas_main::aasworld
         .reachabilityareas
@@ -2185,8 +2103,7 @@ pub unsafe extern "C" fn AAS_FreeRoutingCaches() {
             crate::src::botlib::be_aas_main::aasworld.reachabilityareas as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.reachabilityareas =
-        0 as *mut aas_reachabilityareas_t;
+    crate::src::botlib::be_aas_main::aasworld.reachabilityareas = 0 as *mut aas_reachabilityareas_t;
     // free the reachability area index
     if !crate::src::botlib::be_aas_main::aasworld
         .reachabilityareaindex
@@ -2218,9 +2135,7 @@ pub unsafe extern "C" fn AAS_FreeRoutingCaches() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(
-    mut areacache: *mut aas_routingcache_t,
-) {
+pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(mut areacache: *mut aas_routingcache_t) {
     let mut i: i32 = 0; //NOTE: not more than 128 reachabilities per area allowed
     let mut nextareanum: i32 = 0;
     let mut cluster: i32 = 0;
@@ -2230,20 +2145,13 @@ pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(
     let mut numreachabilityareas: i32 = 0;
     let mut t: u16 = 0;
     let mut startareatraveltimes: [u16; 128] = [0; 128];
-    let mut updateliststart: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut updatelistend: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut curupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut nextupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
-    let mut revreach: *mut aas_reversedreachability_t =
-        0 as *mut aas_reversedreachability_t;
-    let mut revlink: *mut aas_reversedlink_t =
-        0 as *mut aas_reversedlink_t;
+    let mut updateliststart: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut updatelistend: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut curupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut nextupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut revreach: *mut aas_reversedreachability_t = 0 as *mut aas_reversedreachability_t;
+    let mut revlink: *mut aas_reversedlink_t = 0 as *mut aas_reversedlink_t;
     numareacacheupdates += 1;
     //ROUTING_DEBUG
     //number of reachability areas within this cluster
@@ -2271,8 +2179,7 @@ pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(
     //
     curupdate = &mut *crate::src::botlib::be_aas_main::aasworld
         .areaupdate
-        .offset(clusterareanum as isize)
-        as *mut aas_routingupdate_t;
+        .offset(clusterareanum as isize) as *mut aas_routingupdate_t;
     (*curupdate).areanum = (*areacache).areanum;
     //VectorCopy(areacache->origin, curupdate->start);
     (*curupdate).areatraveltimes = startareatraveltimes.as_mut_ptr();
@@ -2308,8 +2215,7 @@ pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(
             linknum = (*revlink).linknum;
             reach = &mut *crate::src::botlib::be_aas_main::aasworld
                 .reachability
-                .offset(linknum as isize)
-                as *mut aas_reachability_t;
+                .offset(linknum as isize) as *mut aas_reachability_t;
             //
             //
             //check all reversed reachability links
@@ -2394,8 +2300,7 @@ pub unsafe extern "C" fn AAS_UpdateAreaRoutingCache(
                                         // we add the update to the end of the list
                                         // we could also use a B+ tree to have a real sorted list
                                         // on travel time which makes for faster routing updates
-                                        (*nextupdate).next =
-                                            0 as *mut aas_routingupdate_s;
+                                        (*nextupdate).next = 0 as *mut aas_routingupdate_s;
                                         (*nextupdate).prev = updatelistend;
                                         if !updatelistend.is_null() {
                                             (*updatelistend).next = nextupdate
@@ -2432,10 +2337,8 @@ pub unsafe extern "C" fn AAS_GetAreaRoutingCache(
     mut travelflags: i32,
 ) -> *mut aas_routingcache_t {
     let mut clusterareanum: i32 = 0;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut clustercache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut clustercache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     //number of the area in the cluster
     clusterareanum = AAS_ClusterAreaNum(clusternum, areanum);
     //pointer to the cache for the area in the cluster
@@ -2506,27 +2409,19 @@ pub unsafe extern "C" fn AAS_GetAreaRoutingCache(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_UpdatePortalRoutingCache(
-    mut portalcache: *mut aas_routingcache_t,
-) {
+pub unsafe extern "C" fn AAS_UpdatePortalRoutingCache(mut portalcache: *mut aas_routingcache_t) {
     let mut i: i32 = 0;
     let mut portalnum: i32 = 0;
     let mut clusterareanum: i32 = 0;
     let mut clusternum: i32 = 0;
     let mut t: u16 = 0;
     let mut portal: *mut aas_portal_t = 0 as *mut aas_portal_t;
-    let mut cluster: *mut aas_cluster_t =
-        0 as *mut aas_cluster_t;
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut updateliststart: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut updatelistend: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut curupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut nextupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
+    let mut cluster: *mut aas_cluster_t = 0 as *mut aas_cluster_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut updateliststart: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut updatelistend: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut curupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut nextupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
     numportalcacheupdates += 1;
     //ROUTING_DEBUG
     //clear the routing update fields
@@ -2568,8 +2463,7 @@ pub unsafe extern "C" fn AAS_UpdatePortalRoutingCache(
         (*curupdate).inlist = qfalse;
         cluster = &mut *crate::src::botlib::be_aas_main::aasworld
             .clusters
-            .offset((*curupdate).cluster as isize)
-            as *mut aas_cluster_t;
+            .offset((*curupdate).cluster as isize) as *mut aas_cluster_t;
         cache = AAS_GetAreaRoutingCache(
             (*curupdate).cluster,
             (*curupdate).areanum,
@@ -2582,8 +2476,7 @@ pub unsafe extern "C" fn AAS_UpdatePortalRoutingCache(
                 .offset(((*cluster).firstportal + i) as isize);
             portal = &mut *crate::src::botlib::be_aas_main::aasworld
                 .portals
-                .offset(portalnum as isize)
-                as *mut aas_portal_t;
+                .offset(portalnum as isize) as *mut aas_portal_t;
             //remove the current update from the list
             //current update is removed from the list
             //
@@ -2640,8 +2533,7 @@ pub unsafe extern "C" fn AAS_UpdatePortalRoutingCache(
                                 // we add the update to the end of the list
                                 // we could also use a B+ tree to have a real sorted list
                                 // on travel time which makes for faster routing updates
-                                (*nextupdate).next =
-                                    0 as *mut aas_routingupdate_s;
+                                (*nextupdate).next = 0 as *mut aas_routingupdate_s;
                                 (*nextupdate).prev = updatelistend;
                                 if !updatelistend.is_null() {
                                     (*updatelistend).next = nextupdate
@@ -2674,8 +2566,7 @@ pub unsafe extern "C" fn AAS_GetPortalRoutingCache(
     mut areanum: i32,
     mut travelflags: i32,
 ) -> *mut aas_routingcache_t {
-    let mut cache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
+    let mut cache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
     //find the cached portal routing if existing
     cache = *crate::src::botlib::be_aas_main::aasworld
         .portalcache
@@ -2763,14 +2654,10 @@ pub unsafe extern "C" fn AAS_AreaRouteToGoalArea(
     let mut t: u16 = 0;
     let mut besttime: u16 = 0;
     let mut portal: *mut aas_portal_t = 0 as *mut aas_portal_t;
-    let mut cluster: *mut aas_cluster_t =
-        0 as *mut aas_cluster_t;
-    let mut areacache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut portalcache: *mut aas_routingcache_t =
-        0 as *mut aas_routingcache_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
+    let mut cluster: *mut aas_cluster_t = 0 as *mut aas_cluster_t;
+    let mut areacache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut portalcache: *mut aas_routingcache_t = 0 as *mut aas_routingcache_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return qfalse as i32;
     }
@@ -2864,8 +2751,7 @@ pub unsafe extern "C" fn AAS_AreaRouteToGoalArea(
     } else if clusternum > 0 as i32 && goalclusternum < 0 as i32 {
         portal = &mut *crate::src::botlib::be_aas_main::aasworld
             .portals
-            .offset(-goalclusternum as isize)
-            as *mut aas_portal_t;
+            .offset(-goalclusternum as isize) as *mut aas_portal_t;
         if (*portal).frontcluster == clusternum || (*portal).backcluster == clusternum {
             goalclusternum = clusternum
         }
@@ -2906,8 +2792,7 @@ pub unsafe extern "C" fn AAS_AreaRouteToGoalArea(
             }
             reach = &mut *crate::src::botlib::be_aas_main::aasworld
                 .reachability
-                .offset(*reachnum as isize)
-                as *mut aas_reachability_t;
+                .offset(*reachnum as isize) as *mut aas_reachability_t;
             *traveltime = *(*areacache)
                 .traveltimes
                 .as_mut_ptr()
@@ -2936,8 +2821,7 @@ pub unsafe extern "C" fn AAS_AreaRouteToGoalArea(
         //just assume the goal area is part of the front cluster
         portal = &mut *crate::src::botlib::be_aas_main::aasworld
             .portals
-            .offset(-goalclusternum as isize)
-            as *mut aas_portal_t;
+            .offset(-goalclusternum as isize) as *mut aas_portal_t;
         goalclusternum = (*portal).frontcluster
     }
     //get the portal routing cache
@@ -2979,8 +2863,7 @@ pub unsafe extern "C" fn AAS_AreaRouteToGoalArea(
             //
             portal = &mut *crate::src::botlib::be_aas_main::aasworld
                 .portals
-                .offset(portalnum as isize)
-                as *mut aas_portal_t;
+                .offset(portalnum as isize) as *mut aas_portal_t;
             //get the cache of the portal area
             areacache = AAS_GetAreaRoutingCache(clusternum, (*portal).areanum, travelflags);
             //current area inside the current cluster
@@ -3216,10 +3099,8 @@ pub unsafe extern "C" fn AAS_PredictRoute(
     let mut j: i32 = 0;
     let mut testareanum: i32 = 0;
     let mut curorigin: vec3_t = [0.; 3];
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
-    let mut reachareas: *mut aas_reachabilityareas_t =
-        0 as *mut aas_reachabilityareas_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    let mut reachareas: *mut aas_reachabilityareas_t = 0 as *mut aas_reachabilityareas_t;
     //init output
     (*route).stopevent = 0 as i32; //end while
     (*route).endarea = goalareanum; //end if
@@ -3287,8 +3168,7 @@ pub unsafe extern "C" fn AAS_PredictRoute(
         } //end for
         reachareas = &mut *crate::src::botlib::be_aas_main::aasworld
             .reachabilityareas
-            .offset(reachnum as isize)
-            as *mut aas_reachabilityareas_t;
+            .offset(reachnum as isize) as *mut aas_reachabilityareas_t;
         j = 0 as i32;
         while j < (*reachareas).numareas + 1 as i32 {
             if j >= (*reachareas).numareas {
@@ -3388,10 +3268,7 @@ pub unsafe extern "C" fn AAS_BridgeWalkable(mut _areanum: i32) -> i32 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ReachabilityFromNum(
-    mut num: i32,
-    mut reach: *mut aas_reachability_s,
-) {
+pub unsafe extern "C" fn AAS_ReachabilityFromNum(mut num: i32, mut reach: *mut aas_reachability_s) {
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         crate::stdlib::memset(
             reach as *mut libc::c_void,
@@ -3412,8 +3289,7 @@ pub unsafe extern "C" fn AAS_ReachabilityFromNum(
         reach as *mut libc::c_void,
         &mut *crate::src::botlib::be_aas_main::aasworld
             .reachability
-            .offset(num as isize) as *mut aas_reachability_t
-            as *const libc::c_void,
+            .offset(num as isize) as *mut aas_reachability_t as *const libc::c_void,
         ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
     );
 }
@@ -3427,8 +3303,7 @@ pub unsafe extern "C" fn AAS_ReachabilityFromNum(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_NextAreaReachability(mut areanum: i32, mut reachnum: i32) -> i32 {
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t; //end if
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t; //end if
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return 0 as i32;
     } //end if
@@ -3791,23 +3666,17 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
     let mut t: u16 = 0;
     let mut besttraveltime: u16 = 0;
     static mut hidetraveltimes: *mut u16 = 0 as *const u16 as *mut u16;
-    let mut updateliststart: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut updatelistend: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut curupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut nextupdate: *mut aas_routingupdate_t =
-        0 as *mut aas_routingupdate_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
+    let mut updateliststart: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut updatelistend: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut curupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut nextupdate: *mut aas_routingupdate_t = 0 as *mut aas_routingupdate_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
     let mut dist1: f32 = 0.;
     let mut dist2: f32 = 0.;
     let mut v1: vec3_t = [0.; 3];
     let mut v2: vec3_t = [0.; 3];
     let mut p: vec3_t = [0.; 3];
-    let mut startVisible: qboolean =
-        qfalse;
+    let mut startVisible: qboolean = qfalse;
     //
     if hidetraveltimes.is_null() {
         //end else
@@ -3926,9 +3795,7 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
                             v2[2 as i32 as usize] =
                                 *enemyorigin.offset(2 as i32 as isize) - p[2 as i32 as usize]
                         }
-                        dist2 = VectorLength(
-                            v2.as_mut_ptr() as *const vec_t
-                        );
+                        dist2 = VectorLength(v2.as_mut_ptr() as *const vec_t);
                         //never go through the enemy
                         if !(dist2 < 40 as i32 as f32) {
                             //
@@ -3938,9 +3805,7 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
                                 - (*curupdate).start[1 as i32 as usize];
                             v1[2 as i32 as usize] = *enemyorigin.offset(2 as i32 as isize)
                                 - (*curupdate).start[2 as i32 as usize];
-                            dist1 = VectorLength(
-                                v1.as_mut_ptr() as *const vec_t
-                            );
+                            dist1 = VectorLength(v1.as_mut_ptr() as *const vec_t);
                             //
                             if dist2 < dist1 {
                                 t = (t as f32 + (dist1 - dist2) * 10 as i32 as f32) as u16
@@ -3981,8 +3846,7 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
                                             //remember where we entered this area
                                             //if this update is not in the list yet
                                             //add the new update to the end of the list
-                                            (*nextupdate).next =
-                                                0 as *mut aas_routingupdate_s;
+                                            (*nextupdate).next = 0 as *mut aas_routingupdate_s;
                                             (*nextupdate).prev = updatelistend;
                                             if !updatelistend.is_null() {
                                                 (*updatelistend).next = nextupdate
@@ -3990,8 +3854,7 @@ pub unsafe extern "C" fn AAS_NearestHideArea(
                                                 updateliststart = nextupdate
                                             }
                                             updatelistend = nextupdate;
-                                            (*nextupdate).inlist =
-                                                qtrue
+                                            (*nextupdate).inlist = qtrue
                                         }
                                     }
                                 }

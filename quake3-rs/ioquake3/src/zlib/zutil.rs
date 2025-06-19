@@ -45,18 +45,9 @@ pub unsafe extern "C" fn zlibCompileFlags() -> uLong {
     flags = 0 as i32 as uLong;
     match ::std::mem::size_of::<uInt>() as libc::c_ulong {
         2 => {}
-        4 => {
-            flags = (flags as libc::c_ulong).wrapping_add(1 as i32 as libc::c_ulong)
-                as uLong
-        }
-        8 => {
-            flags = (flags as libc::c_ulong).wrapping_add(2 as i32 as libc::c_ulong)
-                as uLong
-        }
-        _ => {
-            flags = (flags as libc::c_ulong).wrapping_add(3 as i32 as libc::c_ulong)
-                as uLong
-        }
+        4 => flags = (flags as libc::c_ulong).wrapping_add(1 as i32 as libc::c_ulong) as uLong,
+        8 => flags = (flags as libc::c_ulong).wrapping_add(2 as i32 as libc::c_ulong) as uLong,
+        _ => flags = (flags as libc::c_ulong).wrapping_add(3 as i32 as libc::c_ulong) as uLong,
     }
     match ::std::mem::size_of::<uLong>() as libc::c_ulong {
         2 => {}
@@ -677,17 +668,11 @@ pub unsafe extern "C" fn zError(mut err: i32) -> *const libc::c_char {
 /* Any system without a special alloc function */
 #[no_mangle]
 
-pub unsafe extern "C" fn zcalloc(
-    mut opaque: voidpf,
-    mut items: u32,
-    mut size: u32,
-) -> voidpf {
+pub unsafe extern "C" fn zcalloc(mut opaque: voidpf, mut items: u32, mut size: u32) -> voidpf {
     if !opaque.is_null() {
         items = items.wrapping_add(size.wrapping_sub(size))
     } /* make compiler happy */
-    return if ::std::mem::size_of::<uInt>() as libc::c_ulong
-        > 2 as i32 as libc::c_ulong
-    {
+    return if ::std::mem::size_of::<uInt>() as libc::c_ulong > 2 as i32 as libc::c_ulong {
         crate::stdlib::malloc(items.wrapping_mul(size) as libc::c_ulong)
     } else {
         crate::stdlib::calloc(items as libc::c_ulong, size as libc::c_ulong)
@@ -721,10 +706,7 @@ pub unsafe extern "C" fn zcalloc(
 /* Diagnostic functions */
 #[no_mangle]
 
-pub unsafe extern "C" fn zcfree(
-    mut opaque: voidpf,
-    mut ptr: voidpf,
-) {
+pub unsafe extern "C" fn zcfree(mut opaque: voidpf, mut ptr: voidpf) {
     libc::free(ptr);
     if !opaque.is_null() {
         return;

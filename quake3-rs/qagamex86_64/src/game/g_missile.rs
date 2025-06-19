@@ -478,18 +478,13 @@ G_BounceMissile
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_BounceMissile(
-    mut ent: *mut gentity_t,
-    mut trace: *mut trace_t,
-) {
+pub unsafe extern "C" fn G_BounceMissile(mut ent: *mut gentity_t, mut trace: *mut trace_t) {
     let mut velocity: vec3_t = [0.; 3];
     let mut dot: f32 = 0.;
     let mut hitTime: i32 = 0;
     // reflect the velocity on the trace plane
     hitTime = (level.previousTime as f32
-        + (level.time - level.previousTime)
-            as f32
-            * (*trace).fraction) as i32;
+        + (level.time - level.previousTime) as f32 * (*trace).fraction) as i32;
     BG_EvaluateTrajectoryDelta(
         &mut (*ent).s.pos as *mut _ as *const trajectory_t,
         hitTime,
@@ -505,25 +500,17 @@ pub unsafe extern "C" fn G_BounceMissile(
     (*ent).s.pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
         + (*trace).plane.normal[2 as i32 as usize] * (-(2 as i32) as f32 * dot);
     if (*ent).s.eFlags & 0x20 as i32 != 0 {
-        (*ent).s.pos.trDelta[0 as i32 as usize] = ((*ent).s.pos.trDelta[0 as i32 as usize] as f64
-            * 0.65f64)
-            as vec_t;
-        (*ent).s.pos.trDelta[1 as i32 as usize] = ((*ent).s.pos.trDelta[1 as i32 as usize] as f64
-            * 0.65f64)
-            as vec_t;
-        (*ent).s.pos.trDelta[2 as i32 as usize] = ((*ent).s.pos.trDelta[2 as i32 as usize] as f64
-            * 0.65f64)
-            as vec_t;
+        (*ent).s.pos.trDelta[0 as i32 as usize] =
+            ((*ent).s.pos.trDelta[0 as i32 as usize] as f64 * 0.65f64) as vec_t;
+        (*ent).s.pos.trDelta[1 as i32 as usize] =
+            ((*ent).s.pos.trDelta[1 as i32 as usize] as f64 * 0.65f64) as vec_t;
+        (*ent).s.pos.trDelta[2 as i32 as usize] =
+            ((*ent).s.pos.trDelta[2 as i32 as usize] as f64 * 0.65f64) as vec_t;
         // check for stop
         if (*trace).plane.normal[2 as i32 as usize] as f64 > 0.2f64
-            && VectorLength(
-                (*ent).s.pos.trDelta.as_mut_ptr() as *const vec_t
-            ) < 40 as i32 as f32
+            && VectorLength((*ent).s.pos.trDelta.as_mut_ptr() as *const vec_t) < 40 as i32 as f32
         {
-            G_SetOrigin(
-                ent as *mut gentity_s,
-                (*trace).endpos.as_mut_ptr(),
-            );
+            G_SetOrigin(ent as *mut gentity_s, (*trace).endpos.as_mut_ptr());
             (*ent).s.time = level.time / 4 as i32;
             return;
         }
@@ -556,16 +543,10 @@ pub unsafe extern "C" fn G_ExplodeMissile(mut ent: *mut gentity_t) {
         level.time,
         origin.as_mut_ptr(),
     );
-    origin[0 as i32 as usize] =
-        origin[0 as i32 as usize] as i32 as vec_t;
-    origin[1 as i32 as usize] =
-        origin[1 as i32 as usize] as i32 as vec_t;
-    origin[2 as i32 as usize] =
-        origin[2 as i32 as usize] as i32 as vec_t;
-    G_SetOrigin(
-        ent as *mut gentity_s,
-        origin.as_mut_ptr(),
-    );
+    origin[0 as i32 as usize] = origin[0 as i32 as usize] as i32 as vec_t;
+    origin[1 as i32 as usize] = origin[1 as i32 as usize] as i32 as vec_t;
+    origin[2 as i32 as usize] = origin[2 as i32 as usize] as i32 as vec_t;
+    G_SetOrigin(ent as *mut gentity_s, origin.as_mut_ptr());
     // we don't have a valid direction, so just point straight up
     dir[1 as i32 as usize] = 0 as i32 as vec_t;
     dir[0 as i32 as usize] = dir[1 as i32 as usize];
@@ -589,8 +570,7 @@ pub unsafe extern "C" fn G_ExplodeMissile(mut ent: *mut gentity_t) {
         ) as u64
             != 0
         {
-            (*g_entities[(*ent).r.ownerNum as usize].client)
-                .accuracy_hits += 1
+            (*g_entities[(*ent).r.ownerNum as usize].client).accuracy_hits += 1
         }
     }
     trap_LinkEntity(ent as *mut gentity_s);
@@ -602,24 +582,14 @@ G_MissileImpact
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_MissileImpact(
-    mut ent: *mut gentity_t,
-    mut trace: *mut trace_t,
-) {
+pub unsafe extern "C" fn G_MissileImpact(mut ent: *mut gentity_t, mut trace: *mut trace_t) {
     let mut other: *mut gentity_t = 0 as *mut gentity_t;
-    let mut hitClient: qboolean =
-        qfalse;
-    other = &mut *g_entities
-        .as_mut_ptr()
-        .offset((*trace).entityNum as isize) as *mut gentity_t;
+    let mut hitClient: qboolean = qfalse;
+    other = &mut *g_entities.as_mut_ptr().offset((*trace).entityNum as isize) as *mut gentity_t;
     // check for bounce
     if (*other).takedamage as u64 == 0 && (*ent).s.eFlags & (0x10 as i32 | 0x20 as i32) != 0 {
         G_BounceMissile(ent, trace);
-        G_AddEvent(
-            ent as *mut gentity_s,
-            EV_GRENADE_BOUNCE as i32,
-            0 as i32,
-        );
+        G_AddEvent(ent as *mut gentity_s, EV_GRENADE_BOUNCE as i32, 0 as i32);
         return;
     }
     // impact damage
@@ -629,15 +599,12 @@ pub unsafe extern "C" fn G_MissileImpact(
             let mut velocity: vec3_t = [0.; 3];
             if LogAccuracyHit(
                 other as *mut gentity_s,
-                &mut *g_entities
-                    .as_mut_ptr()
-                    .offset((*ent).r.ownerNum as isize) as *mut _
+                &mut *g_entities.as_mut_ptr().offset((*ent).r.ownerNum as isize) as *mut _
                     as *mut gentity_s,
             ) as u64
                 != 0
             {
-                (*g_entities[(*ent).r.ownerNum as usize].client)
-                    .accuracy_hits += 1;
+                (*g_entities[(*ent).r.ownerNum as usize].client).accuracy_hits += 1;
                 hitClient = qtrue
             }
             BG_EvaluateTrajectoryDelta(
@@ -645,18 +612,14 @@ pub unsafe extern "C" fn G_MissileImpact(
                 level.time,
                 velocity.as_mut_ptr(),
             );
-            if VectorLength(velocity.as_mut_ptr() as *const vec_t)
-                == 0 as i32 as f32
-            {
+            if VectorLength(velocity.as_mut_ptr() as *const vec_t) == 0 as i32 as f32 {
                 velocity[2 as i32 as usize] = 1 as i32 as vec_t
                 // stepped on a grenade
             }
             G_Damage(
                 other as *mut gentity_s,
                 ent as *mut gentity_s,
-                &mut *g_entities
-                    .as_mut_ptr()
-                    .offset((*ent).r.ownerNum as isize) as *mut _
+                &mut *g_entities.as_mut_ptr().offset((*ent).r.ownerNum as isize) as *mut _
                     as *mut gentity_s,
                 velocity.as_mut_ptr(),
                 (*ent).s.origin.as_mut_ptr(),
@@ -684,20 +647,14 @@ pub unsafe extern "C" fn G_MissileImpact(
             (*ent).enemy = other;
             v[0 as i32 as usize] = ((*other).r.currentOrigin[0 as i32 as usize] as f64
                 + ((*other).r.mins[0 as i32 as usize] + (*other).r.maxs[0 as i32 as usize]) as f64
-                    * 0.5f64)
-                as vec_t;
+                    * 0.5f64) as vec_t;
             v[1 as i32 as usize] = ((*other).r.currentOrigin[1 as i32 as usize] as f64
                 + ((*other).r.mins[1 as i32 as usize] + (*other).r.maxs[1 as i32 as usize]) as f64
-                    * 0.5f64)
-                as vec_t;
+                    * 0.5f64) as vec_t;
             v[2 as i32 as usize] = ((*other).r.currentOrigin[2 as i32 as usize] as f64
                 + ((*other).r.mins[2 as i32 as usize] + (*other).r.maxs[2 as i32 as usize]) as f64
-                    * 0.5f64)
-                as vec_t;
-            SnapVectorTowards(
-                v.as_mut_ptr(),
-                (*ent).s.pos.trBase.as_mut_ptr(),
-            );
+                    * 0.5f64) as vec_t;
+            SnapVectorTowards(v.as_mut_ptr(), (*ent).s.pos.trBase.as_mut_ptr());
         // save net bandwidth
         } else {
             v[0 as i32 as usize] = (*trace).endpos[0 as i32 as usize]; // save net bandwidth
@@ -710,26 +667,14 @@ pub unsafe extern "C" fn G_MissileImpact(
             );
             (*ent).enemy = 0 as *mut gentity_t
         }
-        SnapVectorTowards(
-            v.as_mut_ptr(),
-            (*ent).s.pos.trBase.as_mut_ptr(),
-        );
+        SnapVectorTowards(v.as_mut_ptr(), (*ent).s.pos.trBase.as_mut_ptr());
         (*nent).freeAfterEvent = qtrue;
         // change over to a normal entity right at the point of impact
         (*nent).s.eType = ET_GENERAL as i32;
         (*ent).s.eType = ET_GRAPPLE as i32;
-        G_SetOrigin(
-            ent as *mut gentity_s,
-            v.as_mut_ptr(),
-        );
-        G_SetOrigin(
-            nent as *mut gentity_s,
-            v.as_mut_ptr(),
-        );
-        (*ent).think = Some(
-            Weapon_HookThink
-                as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-        );
+        G_SetOrigin(ent as *mut gentity_s, v.as_mut_ptr());
+        G_SetOrigin(nent as *mut gentity_s, v.as_mut_ptr());
+        (*ent).think = Some(Weapon_HookThink as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).nextthink = level.time + 100 as i32;
         (*(*(*ent).parent).client).ps.pm_flags |= 2048 as i32;
         (*(*(*ent).parent).client).ps.grapplePoint[0 as i32 as usize] =
@@ -771,10 +716,7 @@ pub unsafe extern "C" fn G_MissileImpact(
         (*trace).endpos.as_mut_ptr(),
         (*ent).s.pos.trBase.as_mut_ptr(),
     );
-    G_SetOrigin(
-        ent as *mut gentity_s,
-        (*trace).endpos.as_mut_ptr(),
-    );
+    G_SetOrigin(ent as *mut gentity_s, (*trace).endpos.as_mut_ptr());
     // splash damage (doesn't apply to person directly hit)
     if (*ent).splashDamage != 0 {
         if G_RadiusDamage(
@@ -788,8 +730,7 @@ pub unsafe extern "C" fn G_MissileImpact(
             != 0
         {
             if hitClient as u64 == 0 {
-                (*g_entities[(*ent).r.ownerNum as usize].client)
-                    .accuracy_hits += 1
+                (*g_entities[(*ent).r.ownerNum as usize].client).accuracy_hits += 1
             }
         }
     }
@@ -903,8 +844,7 @@ pub unsafe extern "C" fn fire_plasma(
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"plasma\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*bolt).nextthink = level.time + 10000 as i32;
-    (*bolt).think =
-        Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*bolt).think = Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*bolt).s.eType = ET_MISSILE as i32;
     (*bolt).r.svFlags = 0x80 as i32;
     (*bolt).s.weapon = WP_PLASMAGUN as i32;
@@ -955,8 +895,7 @@ pub unsafe extern "C" fn fire_grenade(
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"grenade\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*bolt).nextthink = level.time + 2500 as i32;
-    (*bolt).think =
-        Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*bolt).think = Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*bolt).s.eType = ET_MISSILE as i32;
     (*bolt).r.svFlags = 0x80 as i32;
     (*bolt).s.weapon = WP_GRENADE_LAUNCHER as i32;
@@ -1008,8 +947,7 @@ pub unsafe extern "C" fn fire_bfg(
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"bfg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*bolt).nextthink = level.time + 10000 as i32;
-    (*bolt).think =
-        Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*bolt).think = Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*bolt).s.eType = ET_MISSILE as i32;
     (*bolt).r.svFlags = 0x80 as i32;
     (*bolt).s.weapon = WP_BFG as i32;
@@ -1060,8 +998,7 @@ pub unsafe extern "C" fn fire_rocket(
     bolt = G_Spawn() as *mut gentity_s;
     (*bolt).classname = b"rocket\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*bolt).nextthink = level.time + 15000 as i32;
-    (*bolt).think =
-        Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*bolt).think = Some(G_ExplodeMissile as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*bolt).s.eType = ET_MISSILE as i32;
     (*bolt).r.svFlags = 0x80 as i32;
     (*bolt).s.weapon = WP_ROCKET_LAUNCHER as i32;
@@ -1296,10 +1233,7 @@ pub unsafe extern "C" fn fire_grapple(
     hook = G_Spawn() as *mut gentity_s;
     (*hook).classname = b"hook\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*hook).nextthink = level.time + 10000 as i32;
-    (*hook).think = Some(
-        Weapon_HookFree
-            as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    );
+    (*hook).think = Some(Weapon_HookFree as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*hook).s.eType = ET_MISSILE as i32;
     (*hook).r.svFlags = 0x80 as i32;
     (*hook).s.weapon = WP_GRAPPLING_HOOK as i32;

@@ -95,8 +95,7 @@ pub use crate::zlib_h::z_streamp;
 pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
 /* inflate()'s starting value for strm->avail_out */
 {
-    let mut state: *mut inflate_state =
-        0 as *mut inflate_state; /* local strm->next_in */
+    let mut state: *mut inflate_state = 0 as *mut inflate_state; /* local strm->next_in */
     let mut in_0: *mut u8 = 0 as *mut u8; /* while in < last, enough input available */
     let mut last: *mut u8 = 0 as *mut u8; /* local strm->next_out */
     let mut out: *mut u8 = 0 as *mut u8; /* inflate()'s initial strm->next_out */
@@ -108,10 +107,8 @@ pub unsafe extern "C" fn inflate_fast(mut strm: z_streamp, mut start: u32)
     let mut window: *mut u8 = 0 as *mut u8; /* local strm->hold */
     let mut hold: libc::c_ulong = 0; /* local strm->bits */
     let mut bits: u32 = 0; /* local strm->lencode */
-    let mut lcode: *const code =
-        0 as *const code; /* local strm->distcode */
-    let mut dcode: *const code =
-        0 as *const code; /* mask for first level of length codes */
+    let mut lcode: *const code = 0 as *const code; /* local strm->distcode */
+    let mut dcode: *const code = 0 as *const code; /* mask for first level of length codes */
     let mut lmask: u32 = 0; /* mask for first level of distance codes */
     let mut dmask: u32 = 0; /* retrieved table entry */
     let mut this: code = code {

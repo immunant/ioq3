@@ -98,28 +98,30 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
     let mut pred0_Q13: opus_int32 = 0;
     let mut pred1_Q13: opus_int32 = 0;
     /* Buffering */
-    crate::stdlib::memcpy(x1 as *mut libc::c_void,
-           (*state).sMid.as_mut_ptr() as *const libc::c_void,
-           (2 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
-    crate::stdlib::memcpy(x2 as *mut libc::c_void,
-           (*state).sSide.as_mut_ptr() as *const libc::c_void,
-           (2 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
-    crate::stdlib::memcpy((*state).sMid.as_mut_ptr() as *mut libc::c_void,
-           &mut *x1.offset(frame_length as isize) as *mut opus_int16 as
-               *const libc::c_void,
-           (2 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
-    crate::stdlib::memcpy((*state).sSide.as_mut_ptr() as *mut libc::c_void,
-           &mut *x2.offset(frame_length as isize) as *mut opus_int16 as
-               *const libc::c_void,
-           (2 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        x1 as *mut libc::c_void,
+        (*state).sMid.as_mut_ptr() as *const libc::c_void,
+        (2 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
+    crate::stdlib::memcpy(
+        x2 as *mut libc::c_void,
+        (*state).sSide.as_mut_ptr() as *const libc::c_void,
+        (2 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
+    crate::stdlib::memcpy(
+        (*state).sMid.as_mut_ptr() as *mut libc::c_void,
+        &mut *x1.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
+        (2 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
+    crate::stdlib::memcpy(
+        (*state).sSide.as_mut_ptr() as *mut libc::c_void,
+        &mut *x2.offset(frame_length as isize) as *mut opus_int16 as *const libc::c_void,
+        (2 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
     /* Interpolate predictors and add prediction to side channel */
     pred0_Q13 = (*state).pred_prev_Q13[0 as i32 as usize] as opus_int32; /* Q11 */
     pred1_Q13 = (*state).pred_prev_Q13[1 as i32 as usize] as opus_int32; /* Q8  */
@@ -130,8 +132,7 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
             * denom_Q16 as opus_int16 as opus_int32
             >> 1 as i32)
             + ((*pred_Q13.offset(0 as i32 as isize)
-                - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
-                as opus_int16
+                - (*state).pred_prev_Q13[0 as i32 as usize] as i32) as opus_int16
                 as opus_int32
                 * denom_Q16 as opus_int16 as opus_int32
                 & 1 as i32)
@@ -149,8 +150,7 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
             * denom_Q16 as opus_int16 as opus_int32
             >> 1 as i32)
             + ((*pred_Q13.offset(1 as i32 as isize)
-                - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
-                as opus_int16
+                - (*state).pred_prev_Q13[1 as i32 as usize] as i32) as opus_int16
                 as opus_int32
                 * denom_Q16 as opus_int16 as opus_int32
                 & 1 as i32)
@@ -168,19 +168,16 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
         pred1_Q13 += delta1_Q13;
         sum = (((*x1.offset(n as isize) as i32
             + *x1.offset((n + 2 as i32) as isize) as i32
-            + ((*x1.offset((n + 1 as i32) as isize) as opus_uint32)
-                << 1 as i32) as opus_int32)
+            + ((*x1.offset((n + 1 as i32) as isize) as opus_uint32) << 1 as i32) as opus_int32)
             as opus_uint32)
             << 9 as i32) as opus_int32;
-        sum = (((*x2.offset((n + 1 as i32) as isize) as opus_int32
-            as opus_uint32)
-            << 8 as i32) as opus_int32 as i64
+        sum = (((*x2.offset((n + 1 as i32) as isize) as opus_int32 as opus_uint32) << 8 as i32)
+            as opus_int32 as i64
             + (sum as i64 * pred0_Q13 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         sum = (sum as i64
-            + (((*x1.offset((n + 1 as i32) as isize) as opus_int32
-                as opus_uint32)
-                << 11 as i32) as opus_int32 as i64
+            + (((*x1.offset((n + 1 as i32) as isize) as opus_int32 as opus_uint32) << 11 as i32)
+                as opus_int32 as i64
                 * pred1_Q13 as opus_int16 as i64
                 >> 16 as i32)) as opus_int32;
         *x2.offset((n + 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {
@@ -210,19 +207,16 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
     while n < frame_length {
         sum = (((*x1.offset(n as isize) as i32
             + *x1.offset((n + 2 as i32) as isize) as i32
-            + ((*x1.offset((n + 1 as i32) as isize) as opus_uint32)
-                << 1 as i32) as opus_int32)
+            + ((*x1.offset((n + 1 as i32) as isize) as opus_uint32) << 1 as i32) as opus_int32)
             as opus_uint32)
             << 9 as i32) as opus_int32;
-        sum = (((*x2.offset((n + 1 as i32) as isize) as opus_int32
-            as opus_uint32)
-            << 8 as i32) as opus_int32 as i64
+        sum = (((*x2.offset((n + 1 as i32) as isize) as opus_int32 as opus_uint32) << 8 as i32)
+            as opus_int32 as i64
             + (sum as i64 * pred0_Q13 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         sum = (sum as i64
-            + (((*x1.offset((n + 1 as i32) as isize) as opus_int32
-                as opus_uint32)
-                << 11 as i32) as opus_int32 as i64
+            + (((*x1.offset((n + 1 as i32) as isize) as opus_int32 as opus_uint32) << 11 as i32)
+                as opus_int32 as i64
                 * pred1_Q13 as opus_int16 as i64
                 >> 16 as i32)) as opus_int32;
         *x2.offset((n + 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {
@@ -246,10 +240,8 @@ pub unsafe extern "C" fn silk_stereo_MS_to_LR(
         } as opus_int16;
         n += 1
     }
-    (*state).pred_prev_Q13[0 as i32 as usize] =
-        *pred_Q13.offset(0 as i32 as isize) as opus_int16;
-    (*state).pred_prev_Q13[1 as i32 as usize] =
-        *pred_Q13.offset(1 as i32 as isize) as opus_int16;
+    (*state).pred_prev_Q13[0 as i32 as usize] = *pred_Q13.offset(0 as i32 as isize) as opus_int16;
+    (*state).pred_prev_Q13[1 as i32 as usize] = *pred_Q13.offset(1 as i32 as isize) as opus_int16;
     /* Convert to left/right signals */
     n = 0 as i32;
     while n < frame_length {

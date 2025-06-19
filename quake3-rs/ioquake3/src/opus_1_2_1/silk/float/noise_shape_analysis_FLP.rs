@@ -156,9 +156,7 @@ unsafe extern "C" fn warped_true2monic_coefs(
         chirp = 0.99f32
             - (0.8f32 + 0.1f32 * iter as f32) * (maxabs - limit)
                 / (maxabs * (ind + 1 as i32) as f32);
-        silk_bwexpander_FLP(
-            coefs, order, chirp,
-        );
+        silk_bwexpander_FLP(coefs, order, chirp);
         /* Convert to monic warped coefficients */
         i = order - 1 as i32;
         while i > 0 as i32 {
@@ -204,9 +202,7 @@ unsafe extern "C" fn limit_coefs(mut coefs: *mut f32, mut limit: f32, mut order:
         chirp = 0.99f32
             - (0.8f32 + 0.1f32 * iter as f32) * (maxabs - limit)
                 / (maxabs * (ind + 1 as i32) as f32);
-        silk_bwexpander_FLP(
-            coefs, order, chirp,
-        );
+        silk_bwexpander_FLP(coefs, order, chirp);
         iter += 1
     }
 }
@@ -340,16 +336,11 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         log_energy_prev = 0.0f32;
         pitch_res_ptr = pitch_res;
         nSegs = 5 as i32 as opus_int16 as opus_int32
-            * (*psEnc).sCmn.nb_subfr as opus_int16
-                as opus_int32
+            * (*psEnc).sCmn.nb_subfr as opus_int16 as opus_int32
             / 2 as i32;
         k = 0 as i32;
         while k < nSegs {
-            nrg = nSamples as f32
-                + silk_energy_FLP(
-                    pitch_res_ptr,
-                    nSamples,
-                ) as f32;
+            nrg = nSamples as f32 + silk_energy_FLP(pitch_res_ptr, nSamples) as f32;
             log_energy = silk_log2(nrg as f64);
             if k > 0 as i32 {
                 energy_variation +=

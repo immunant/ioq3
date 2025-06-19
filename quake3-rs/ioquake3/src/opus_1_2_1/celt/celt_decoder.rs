@@ -387,8 +387,8 @@ unsafe extern "C" fn deemphasis(
     }
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as libc::c_ulong)
-            .wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_sig>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+            as usize,
     );
     scratch = fresh0.as_mut_ptr() as *mut celt_sig;
     coef0 = *coef.offset(0 as i32 as isize);
@@ -469,8 +469,8 @@ unsafe extern "C" fn celt_synthesis(
     N = (*mode).shortMdctSize << LM;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_sig>() as libc::c_ulong)
-            .wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_sig>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+            as usize,
     );
     freq = fresh1.as_mut_ptr() as *mut celt_sig;
     M = (1 as i32) << LM;
@@ -601,8 +601,7 @@ unsafe extern "C" fn celt_synthesis(
             b = 0 as i32;
             while b < B {
                 clt_mdct_backward_c(
-                    &(*mode).mdct as *const _
-                        as *const mdct_lookup,
+                    &(*mode).mdct as *const _ as *const mdct_lookup,
                     &mut *freq.offset(b as isize),
                     (*out_syn.offset(c as isize)).offset((NB * b) as isize),
                     (*mode).window,
@@ -658,8 +657,7 @@ unsafe extern "C" fn tf_decode(
     tf_select_rsv = (LM > 0 as i32
         && tell.wrapping_add(logp as u32).wrapping_add(1 as i32 as u32) <= budget)
         as i32;
-    budget = (budget as u32).wrapping_sub(tf_select_rsv as u32) as opus_uint32
-        as opus_uint32;
+    budget = (budget as u32).wrapping_sub(tf_select_rsv as u32) as opus_uint32 as opus_uint32;
     curr = 0 as i32;
     tf_changed = curr;
     i = start;
@@ -678,8 +676,8 @@ unsafe extern "C" fn tf_decode(
     }
     tf_select = 0 as i32;
     if tf_select_rsv != 0
-        && tf_select_table[LM as usize]
-            [(4 as i32 * isTransient + 0 as i32 + tf_changed) as usize] as i32
+        && tf_select_table[LM as usize][(4 as i32 * isTransient + 0 as i32 + tf_changed) as usize]
+            as i32
             != tf_select_table[LM as usize]
                 [(4 as i32 * isTransient + 2 as i32 + tf_changed) as usize] as i32
     {
@@ -690,8 +688,7 @@ unsafe extern "C" fn tf_decode(
     }
     i = start;
     while i < end {
-        *tf_res.offset(i as isize) = tf_select_table
-            [LM as usize]
+        *tf_res.offset(i as isize) = tf_select_table[LM as usize]
             [(4 as i32 * isTransient + 2 as i32 * tf_select + *tf_res.offset(i as isize)) as usize]
             as i32;
         i += 1
@@ -741,15 +738,13 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
     let mut oldLogE: *mut opus_val16 = 0 as *mut opus_val16;
     let mut oldLogE2: *mut opus_val16 = 0 as *mut opus_val16;
     let mut backgroundLogE: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut mode: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
     let mut start: i32 = 0;
     let mut loss_count: i32 = 0;
     let mut noise_based: i32 = 0;
-    let mut eBands: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
     mode = (*st).mode;
     nbEBands = (*mode).nbEBands;
     overlap = (*mode).overlap;
@@ -845,9 +840,8 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
                 j = 0 as i32;
                 while j < blen {
                     seed = crate::src::opus_1_2_1::celt::bands::celt_lcg_rand(seed);
-                    *X.offset((boffs + j) as isize) = (seed as opus_int32
-                        >> 20 as i32)
-                        as celt_norm;
+                    *X.offset((boffs + j) as isize) =
+                        (seed as opus_int32 >> 20 as i32) as celt_norm;
                     j += 1
                 }
                 crate::src::opus_1_2_1::celt::vq::renormalise_vector(
@@ -1077,8 +1071,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
             let mut S2: opus_val32 = 0 as i32 as opus_val32;
             i = 0 as i32;
             while i < extrapolation_len {
-                let mut tmp_0: opus_val16 =
-                    *buf.offset((2048 as i32 - N + i) as isize);
+                let mut tmp_0: opus_val16 = *buf.offset((2048 as i32 - N + i) as isize);
                 S2 += tmp_0 * tmp_0;
                 i += 1
             }
@@ -1088,8 +1081,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
             if !(S1 > 0.2f32 * S2) {
                 i = 0 as i32;
                 while i < extrapolation_len {
-                    *buf.offset((2048 as i32 - N + i) as isize) =
-                        0 as i32 as celt_sig;
+                    *buf.offset((2048 as i32 - N + i) as isize) = 0 as i32 as celt_sig;
                     i += 1
                 }
             } else if S1 < S2 {
@@ -1204,21 +1196,20 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     let mut N: i32 = 0;
     let mut spread_decision: i32 = 0;
     let mut bits: opus_int32 = 0;
-    let mut _dec: ec_dec =
-        ec_dec {
-            buf: 0 as *mut u8,
-            storage: 0,
-            end_offs: 0,
-            end_window: 0,
-            nend_bits: 0,
-            nbits_total: 0,
-            offs: 0,
-            rng: 0,
-            val: 0,
-            ext: 0,
-            rem: 0,
-            error: 0,
-        };
+    let mut _dec: ec_dec = ec_dec {
+        buf: 0 as *mut u8,
+        storage: 0,
+        end_offs: 0,
+        end_window: 0,
+        nend_bits: 0,
+        nbits_total: 0,
+        offs: 0,
+        rng: 0,
+        val: 0,
+        ext: 0,
+        rem: 0,
+        error: 0,
+    };
     let mut X: *mut celt_norm = 0 as *mut celt_norm;
     let mut fine_quant: *mut i32 = 0 as *mut i32;
     let mut pulses: *mut i32 = 0 as *mut i32;
@@ -1258,12 +1249,10 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     let mut anti_collapse_on: i32 = 0 as i32;
     let mut silence: i32 = 0;
     let mut C: i32 = (*st).stream_channels;
-    let mut mode: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
     let mut nbEBands: i32 = 0;
     let mut overlap: i32 = 0;
-    let mut eBands: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut eBands: *const opus_int16 = 0 as *const opus_int16;
     mode = (*st).mode;
     nbEBands = (*mode).nbEBands;
     overlap = (*mode).overlap;
@@ -1274,8 +1263,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     lpc = (*st)
         ._decode_mem
         .as_mut_ptr()
-        .offset(((2048 as i32 + overlap) * CC) as isize)
-        as *mut opus_val16;
+        .offset(((2048 as i32 + overlap) * CC) as isize) as *mut opus_val16;
     oldBandE = lpc.offset((CC * 24 as i32) as isize);
     oldLogE = oldBandE.offset((2 as i32 * nbEBands) as isize);
     oldLogE2 = oldLogE.offset((2 as i32 * nbEBands) as isize);
@@ -1419,10 +1407,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     }
     /* Decode the global flags (first symbols in the stream) */
     intra_ener = if tell + 3 as i32 <= total_bits {
-        crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp(
-            dec as *mut ec_ctx,
-            3 as i32 as u32,
-        )
+        crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp(dec as *mut ec_ctx, 3 as i32 as u32)
     } else {
         0 as i32
     };
@@ -1459,12 +1444,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
             as usize,
     );
     cap = fresh7.as_mut_ptr() as *mut i32;
-    init_caps(
-        mode as *const OpusCustomMode,
-        cap,
-        LM,
-        C,
-    );
+    init_caps(mode as *const OpusCustomMode, cap, LM, C);
     let mut fresh8 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(nbEBands as libc::c_ulong)
@@ -1473,9 +1453,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     offsets = fresh8.as_mut_ptr() as *mut i32;
     dynalloc_logp = 6 as i32;
     total_bits <<= 3 as i32;
-    tell = ec_tell_frac(
-        dec as *mut ec_ctx,
-    ) as opus_int32;
+    tell = ec_tell_frac(dec as *mut ec_ctx) as opus_int32;
     i = start;
     while i < end {
         let mut width: i32 = 0;
@@ -1509,9 +1487,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
                 dec as *mut ec_ctx,
                 dynalloc_loop_logp as u32,
             );
-            tell = ec_tell_frac(
-                dec as *mut ec_ctx,
-            ) as opus_int32;
+            tell = ec_tell_frac(dec as *mut ec_ctx) as opus_int32;
             if flag == 0 {
                 break;
             }
@@ -1546,9 +1522,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
         5 as i32
     };
     bits = (((len * 8 as i32) << 3 as i32) as u32)
-        .wrapping_sub(ec_tell_frac(
-            dec as *mut ec_ctx,
-        ))
+        .wrapping_sub(ec_tell_frac(dec as *mut ec_ctx))
         .wrapping_sub(1 as i32 as u32) as opus_int32;
     anti_collapse_rsv = if isTransient != 0 && LM >= 2 as i32 && bits >= (LM + 2 as i32) << 3 as i32
     {
@@ -1627,8 +1601,8 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     collapse_masks = fresh12.as_mut_ptr() as *mut u8;
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul((C * N) as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul((C * N) as libc::c_ulong)
+            as usize,
     );
     X = fresh13.as_mut_ptr() as *mut celt_norm;
     crate::src::opus_1_2_1::celt::bands::quant_all_bands(
@@ -1661,10 +1635,9 @@ pub unsafe extern "C" fn celt_decode_with_ec(
         (*st).disable_inv,
     );
     if anti_collapse_rsv > 0 as i32 {
-        anti_collapse_on = crate::src::opus_1_2_1::celt::entdec::ec_dec_bits(
-            dec as *mut ec_ctx,
-            1 as i32 as u32,
-        ) as i32
+        anti_collapse_on =
+            crate::src::opus_1_2_1::celt::entdec::ec_dec_bits(dec as *mut ec_ctx, 1 as i32 as u32)
+                as i32
     }
     crate::src::opus_1_2_1::celt::quant_bands::unquant_energy_finalise(
         mode as *const OpusCustomMode,
@@ -1777,15 +1750,13 @@ pub unsafe extern "C" fn celt_decode_with_ec(
     }
     if C == 1 as i32 {
         crate::stdlib::memcpy(
-            &mut *oldBandE.offset(nbEBands as isize) as *mut opus_val16
-                as *mut libc::c_void,
+            &mut *oldBandE.offset(nbEBands as isize) as *mut opus_val16 as *mut libc::c_void,
             oldBandE as *const libc::c_void,
             (nbEBands as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as i32 as isize
-                        * (&mut *oldBandE.offset(nbEBands as isize)
-                            as *mut opus_val16)
+                        * (&mut *oldBandE.offset(nbEBands as isize) as *mut opus_val16)
                             .offset_from(oldBandE) as isize) as libc::c_ulong,
                 ),
         );
@@ -1905,8 +1876,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
     ap = args.clone();
     match request {
         10010 => {
-            let mut value: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value < 0 as i32 || value >= (*(*st).mode).nbEBands {
                 current_block = 5597585068398118923;
             } else {
@@ -1915,8 +1885,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         10012 => {
-            let mut value_0: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_0: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value_0 < 1 as i32 || value_0 > (*(*st).mode).nbEBands {
                 current_block = 5597585068398118923;
             } else {
@@ -1925,8 +1894,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         10008 => {
-            let mut value_1: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_1: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value_1 < 1 as i32 || value_1 > 2 as i32 {
                 current_block = 5597585068398118923;
             } else {
@@ -1935,9 +1903,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         10007 => {
-            let mut value_2: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_2: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_2.is_null() {
                 current_block = 5597585068398118923;
             } else {
@@ -1947,9 +1913,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         4027 => {
-            let mut value_3: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_3: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_3.is_null() {
                 current_block = 5597585068398118923;
             } else {
@@ -1972,8 +1936,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             oldLogE = oldBandE.offset((2 as i32 * (*(*st).mode).nbEBands) as isize);
             oldLogE2 = oldLogE.offset((2 as i32 * (*(*st).mode).nbEBands) as isize);
             crate::stdlib::memset(
-                &mut (*st).rng as *mut opus_uint32 as *mut libc::c_char
-                    as *mut libc::c_void,
+                &mut (*st).rng as *mut opus_uint32 as *mut libc::c_char as *mut libc::c_void,
                 0 as i32,
                 ((opus_custom_decoder_get_size((*st).mode, (*st).channels) as isize
                     - (&mut (*st).rng as *mut opus_uint32 as *mut libc::c_char)
@@ -1992,9 +1955,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             current_block = 1623252117315916725;
         }
         4033 => {
-            let mut value_4: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_4: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_4.is_null() {
                 current_block = 5597585068398118923;
             } else {
@@ -2003,9 +1964,8 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         10015 => {
-            let mut value_5: *mut *const OpusCustomMode = ap
-                .as_va_list()
-                .arg::<*mut *const OpusCustomMode>();
+            let mut value_5: *mut *const OpusCustomMode =
+                ap.as_va_list().arg::<*mut *const OpusCustomMode>();
             if value_5.is_null() {
                 current_block = 5597585068398118923;
             } else {
@@ -2014,15 +1974,12 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         10016 => {
-            let mut value_6: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_6: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             (*st).signalling = value_6;
             current_block = 1623252117315916725;
         }
         4031 => {
-            let mut value_7: *mut opus_uint32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_uint32>();
+            let mut value_7: *mut opus_uint32 = ap.as_va_list().arg::<*mut opus_uint32>();
             if value_7.is_null() {
                 current_block = 5597585068398118923;
             } else {
@@ -2031,8 +1988,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         4046 => {
-            let mut value_8: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_8: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value_8 < 0 as i32 || value_8 > 1 as i32 {
                 current_block = 5597585068398118923;
             } else {
@@ -2041,9 +1997,7 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
             }
         }
         4047 => {
-            let mut value_9: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_9: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_9.is_null() {
                 current_block = 5597585068398118923;
             } else {

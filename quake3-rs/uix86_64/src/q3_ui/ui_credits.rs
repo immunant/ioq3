@@ -359,7 +359,5 @@ pub unsafe extern "C" fn UI_CreditMenu() {
     s_credits.menu.draw = Some(UI_CreditMenu_Draw as unsafe extern "C" fn() -> ());
     s_credits.menu.key = Some(UI_CreditMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_credits.menu.fullscreen = qtrue;
-    UI_PushMenu(
-        &mut s_credits.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_credits.menu as *mut _ as *mut _tag_menuframework);
 }

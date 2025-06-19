@@ -294,17 +294,14 @@ unsafe extern "C" fn R_MDRCullModel(
     frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut mdrBone_t
-        as size_t as i32;
+        .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
     // compute frame pointers
     newFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
-        .offset((frameSize * (*ent).e.frame) as isize)
-        as *mut mdrFrame_t;
+        .offset((frameSize * (*ent).e.frame) as isize) as *mut mdrFrame_t;
     oldFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
-        .offset((frameSize * (*ent).e.oldframe) as isize)
-        as *mut mdrFrame_t;
+        .offset((frameSize * (*ent).e.oldframe) as isize) as *mut mdrFrame_t;
     // cull bounding sphere ONLY if this is not an upscaled entity
     if (*ent).e.nonNormalizedAxes as u64 == 0 {
         if (*ent).e.frame == (*ent).e.oldframe {
@@ -315,29 +312,21 @@ unsafe extern "C" fn R_MDRCullModel(
                 2 => {
                     // Ummm... yeah yeah I know we don't really have an md3 here.. but we pretend
                     // we do. After all, the purpose of mdrs are not that different, are they?
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_out += 1;
+                    tr.pc.c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 }
                 0 => {
                     tr.pc.c_sphere_cull_md3_in += 1;
                     return 0 as i32;
                 }
-                1 => {
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_clip += 1
-                }
+                1 => tr.pc.c_sphere_cull_md3_clip += 1,
                 _ => {}
             }
         } else {
             let mut sphereCull: i32 = 0;
             let mut sphereCullB: i32 = 0;
-            sphereCull = R_CullLocalPointAndRadius(
-                (*newFrame).localOrigin.as_mut_ptr(),
-                (*newFrame).radius,
-            );
+            sphereCull =
+                R_CullLocalPointAndRadius((*newFrame).localOrigin.as_mut_ptr(), (*newFrame).radius);
             if newFrame == oldFrame {
                 sphereCullB = sphereCull
             } else {
@@ -348,18 +337,14 @@ unsafe extern "C" fn R_MDRCullModel(
             }
             if sphereCull == sphereCullB {
                 if sphereCull == 2 as i32 {
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_out += 1;
+                    tr.pc.c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 } else {
                     if sphereCull == 0 as i32 {
                         tr.pc.c_sphere_cull_md3_in += 1;
                         return 0 as i32;
                     } else {
-                        tr
-                            .pc
-                            .c_sphere_cull_md3_clip += 1
+                        tr.pc.c_sphere_cull_md3_clip += 1
                     }
                 }
             }
@@ -423,13 +408,11 @@ pub unsafe extern "C" fn R_MDRComputeFogNum(
     frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut mdrBone_t
-        as size_t as i32;
+        .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
     // FIXME: non-normalized axis issues
     mdrFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
-        .offset((frameSize * (*ent).e.frame) as isize)
-        as *mut mdrFrame_t;
+        .offset((frameSize * (*ent).e.frame) as isize) as *mut mdrFrame_t;
     localOrigin[0 as i32 as usize] =
         (*ent).e.origin[0 as i32 as usize] + (*mdrFrame).localOrigin[0 as i32 as usize];
     localOrigin[1 as i32 as usize] =
@@ -438,9 +421,7 @@ pub unsafe extern "C" fn R_MDRComputeFogNum(
         (*ent).e.origin[2 as i32 as usize] + (*mdrFrame).localOrigin[2 as i32 as usize];
     i = 1 as i32;
     while i < (*tr.world).numfogs {
-        fog = &mut *(*tr.world)
-            .fogs
-            .offset(i as isize) as *mut fog_t;
+        fog = &mut *(*tr.world).fogs.offset(i as isize) as *mut fog_t;
         j = 0 as i32;
         while j < 3 as i32 {
             if localOrigin[j as usize] - (*mdrFrame).radius
@@ -481,12 +462,9 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
     let mut lodnum: i32 = 0 as i32;
     let mut fogNum: i32 = 0 as i32;
     let mut cull: i32 = 0;
-    let mut personalModel: qboolean =
-        qfalse;
-    header = (*tr.currentModel).modelData
-        as *mut mdrHeader_t;
-    personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0
-        && tr.viewParms.isPortal as u64 == 0)
+    let mut personalModel: qboolean = qfalse;
+    header = (*tr.currentModel).modelData as *mut mdrHeader_t;
+    personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0 && tr.viewParms.isPortal as u64 == 0)
         as i32 as qboolean;
     if (*ent).e.renderfx & 0x200 as i32 != 0 {
         (*ent).e.frame %= (*header).numFrames;
@@ -503,17 +481,13 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
         || (*ent).e.oldframe >= (*header).numFrames
         || (*ent).e.oldframe < 0 as i32
     {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"R_MDRAddAnimSurfaces: no such frame %d to %d for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             (*ent).e.oldframe,
             (*ent).e.frame,
-            (*tr.currentModel)
-                .name
-                .as_mut_ptr(),
+            (*tr.currentModel).name.as_mut_ptr(),
         );
         (*ent).e.frame = 0 as i32;
         (*ent).e.oldframe = 0 as i32
@@ -527,9 +501,7 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
         return;
     }
     // figure out the current LOD of the model we're rendering, and set the lod pointer respectively.
-    lodnum = R_ComputeLOD(
-        ent as *mut trRefEntity_t,
-    );
+    lodnum = R_ComputeLOD(ent as *mut trRefEntity_t);
     // check whether this model has as that many LODs at all. If not, try the closest thing we got.
     if (*header).numLODs <= 0 as i32 {
         return;
@@ -537,38 +509,28 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
     if (*header).numLODs <= lodnum {
         lodnum = (*header).numLODs - 1 as i32
     }
-    lod = (header as *mut byte).offset((*header).ofsLODs as isize)
-        as *mut mdrLOD_t;
+    lod = (header as *mut byte).offset((*header).ofsLODs as isize) as *mut mdrLOD_t;
     i = 0 as i32;
     while i < lodnum {
-        lod = (lod as *mut byte).offset((*lod).ofsEnd as isize)
-            as *mut mdrLOD_t;
+        lod = (lod as *mut byte).offset((*lod).ofsEnd as isize) as *mut mdrLOD_t;
         i += 1
     }
     // set up lighting
-    if personalModel as u64 == 0
-        || (*r_shadows).integer > 1 as i32
-    {
+    if personalModel as u64 == 0 || (*r_shadows).integer > 1 as i32 {
         R_SetupEntityLighting(
-            &mut tr.refdef as *mut _
-                as *const trRefdef_t,
+            &mut tr.refdef as *mut _ as *const trRefdef_t,
             ent as *mut trRefEntity_t,
         );
     }
     // fogNum?
     fogNum = R_MDRComputeFogNum(header, ent);
-    surface = (lod as *mut byte).offset((*lod).ofsSurfaces as isize)
-        as *mut mdrSurface_t;
+    surface = (lod as *mut byte).offset((*lod).ofsSurfaces as isize) as *mut mdrSurface_t;
     i = 0 as i32;
     while i < (*lod).numSurfaces {
         if (*ent).e.customShader != 0 {
-            shader = R_GetShaderByHandle((*ent).e.customShader)
-                as *mut shader_s
-        } else if (*ent).e.customSkin > 0 as i32
-            && (*ent).e.customSkin < tr.numSkins
-        {
-            skin = R_GetSkinByHandle((*ent).e.customSkin)
-                as *mut skin_s;
+            shader = R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s
+        } else if (*ent).e.customSkin > 0 as i32 && (*ent).e.customSkin < tr.numSkins {
+            skin = R_GetSkinByHandle((*ent).e.customSkin) as *mut skin_s;
             shader = tr.defaultShader;
             j = 0 as i32;
             while j < (*skin).numSurfaces {
@@ -584,8 +546,7 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
                 }
             }
         } else if (*surface).shaderIndex > 0 as i32 {
-            shader = R_GetShaderByHandle((*surface).shaderIndex)
-                as *mut shader_s
+            shader = R_GetShaderByHandle((*surface).shaderIndex) as *mut shader_s
         } else {
             shader = tr.defaultShader
         }
@@ -599,8 +560,7 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
         {
             R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut surfaceType_t,
-                tr.shadowShader
-                    as *mut shader_s,
+                tr.shadowShader as *mut shader_s,
                 0 as i32,
                 qfalse as i32,
             );
@@ -613,8 +573,7 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
         {
             R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut surfaceType_t,
-                tr.projectionShadowShader
-                    as *mut shader_s,
+                tr.projectionShadowShader as *mut shader_s,
                 0 as i32,
                 qfalse as i32,
             );
@@ -627,9 +586,7 @@ pub unsafe extern "C" fn R_MDRAddAnimSurfaces(mut ent: *mut trRefEntity_t) {
                 qfalse as i32,
             );
         }
-        surface = (surface as *mut byte)
-            .offset((*surface).ofsEnd as isize)
-            as *mut mdrSurface_t;
+        surface = (surface as *mut byte).offset((*surface).ofsEnd as isize) as *mut mdrSurface_t;
         i += 1
     }
 }
@@ -670,55 +627,32 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
     let mut frameSize: i32 = 0;
     // don't lerp if lerping off, or this is the only frame, or the last frame...
     //
-    if (*backEnd.currentEntity)
-        .e
-        .oldframe
-        == (*backEnd.currentEntity)
-            .e
-            .frame
-    {
+    if (*backEnd.currentEntity).e.oldframe == (*backEnd.currentEntity).e.frame {
         backlerp = 0 as i32 as f32; // if backlerp is 0, lerping is off and frontlerp is never used
         frontlerp = 1 as i32 as f32
     } else {
-        backlerp = (*backEnd.currentEntity)
-            .e
-            .backlerp;
+        backlerp = (*backEnd.currentEntity).e.backlerp;
         frontlerp = 1.0f32 - backlerp
     }
-    header = (surface as *mut byte)
-        .offset((*surface).ofsHeader as isize) as *mut mdrHeader_t;
+    header = (surface as *mut byte).offset((*surface).ofsHeader as isize) as *mut mdrHeader_t;
     frameSize = &mut *(*(0 as *mut mdrFrame_t))
         .bones
         .as_mut_ptr()
-        .offset((*header).numBones as isize) as *mut mdrBone_t
-        as size_t as i32;
+        .offset((*header).numBones as isize) as *mut mdrBone_t as size_t as i32;
     frame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
-        .offset(
-            ((*backEnd.currentEntity)
-                .e
-                .frame
-                * frameSize) as isize,
-        ) as *mut mdrFrame_t;
+        .offset(((*backEnd.currentEntity).e.frame * frameSize) as isize)
+        as *mut mdrFrame_t;
     oldFrame = (header as *mut byte)
         .offset((*header).ofsFrames as isize)
-        .offset(
-            ((*backEnd.currentEntity)
-                .e
-                .oldframe
-                * frameSize) as isize,
-        ) as *mut mdrFrame_t;
+        .offset(((*backEnd.currentEntity).e.oldframe * frameSize) as isize)
+        as *mut mdrFrame_t;
     if tess.numVertexes + (*surface).numVerts >= 1000 as i32
-        || tess.numIndexes + (*surface).numTriangles * 3 as i32
-            >= 6 as i32 * 1000 as i32
+        || tess.numIndexes + (*surface).numTriangles * 3 as i32 >= 6 as i32 * 1000 as i32
     {
-        RB_CheckOverflow(
-            (*surface).numVerts,
-            (*surface).numTriangles * 3 as i32,
-        );
+        RB_CheckOverflow((*surface).numVerts, (*surface).numTriangles * 3 as i32);
     }
-    triangles = (surface as *mut byte)
-        .offset((*surface).ofsTriangles as isize) as *mut i32;
+    triangles = (surface as *mut byte).offset((*surface).ofsTriangles as isize) as *mut i32;
     indexes = (*surface).numTriangles * 3 as i32;
     baseIndex = tess.numIndexes;
     baseVertex = tess.numVertexes;
@@ -750,8 +684,7 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
     // deform the vertexes by the lerped bones
     //
     numVerts = (*surface).numVerts;
-    v = (surface as *mut byte).offset((*surface).ofsVerts as isize)
-        as *mut mdrVertex_t;
+    v = (surface as *mut byte).offset((*surface).ofsVerts as isize) as *mut mdrVertex_t;
     j = 0 as i32;
     while j < numVerts {
         let mut tempVert: vec3_t = [0.; 3];
@@ -815,24 +748,18 @@ pub unsafe extern "C" fn RB_MDRSurfaceAnim(mut surface: *mut mdrSurface_t) {
             k += 1;
             w = w.offset(1)
         }
-        tess.xyz[(baseVertex + j) as usize][0 as i32 as usize] =
-            tempVert[0 as i32 as usize];
-        tess.xyz[(baseVertex + j) as usize][1 as i32 as usize] =
-            tempVert[1 as i32 as usize];
-        tess.xyz[(baseVertex + j) as usize][2 as i32 as usize] =
-            tempVert[2 as i32 as usize];
-        tess.normal[(baseVertex + j) as usize]
-            [0 as i32 as usize] = tempNormal[0 as i32 as usize];
-        tess.normal[(baseVertex + j) as usize]
-            [1 as i32 as usize] = tempNormal[1 as i32 as usize];
-        tess.normal[(baseVertex + j) as usize]
-            [2 as i32 as usize] = tempNormal[2 as i32 as usize];
-        tess.texCoords[(baseVertex + j) as usize]
-            [0 as i32 as usize][0 as i32 as usize] = (*v).texCoords[0 as i32 as usize];
-        tess.texCoords[(baseVertex + j) as usize]
-            [0 as i32 as usize][1 as i32 as usize] = (*v).texCoords[1 as i32 as usize];
-        v = &mut *(*v).weights.as_mut_ptr().offset((*v).numWeights as isize)
-            as *mut mdrWeight_t as *mut mdrVertex_t;
+        tess.xyz[(baseVertex + j) as usize][0 as i32 as usize] = tempVert[0 as i32 as usize];
+        tess.xyz[(baseVertex + j) as usize][1 as i32 as usize] = tempVert[1 as i32 as usize];
+        tess.xyz[(baseVertex + j) as usize][2 as i32 as usize] = tempVert[2 as i32 as usize];
+        tess.normal[(baseVertex + j) as usize][0 as i32 as usize] = tempNormal[0 as i32 as usize];
+        tess.normal[(baseVertex + j) as usize][1 as i32 as usize] = tempNormal[1 as i32 as usize];
+        tess.normal[(baseVertex + j) as usize][2 as i32 as usize] = tempNormal[2 as i32 as usize];
+        tess.texCoords[(baseVertex + j) as usize][0 as i32 as usize][0 as i32 as usize] =
+            (*v).texCoords[0 as i32 as usize];
+        tess.texCoords[(baseVertex + j) as usize][0 as i32 as usize][1 as i32 as usize] =
+            (*v).texCoords[1 as i32 as usize];
+        v = &mut *(*v).weights.as_mut_ptr().offset((*v).numWeights as isize) as *mut mdrWeight_t
+            as *mut mdrVertex_t;
         j += 1
     }
     tess.numVertexes += (*surface).numVerts;

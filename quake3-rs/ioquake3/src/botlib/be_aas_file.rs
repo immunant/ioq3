@@ -651,8 +651,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.edgeindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.edgeindex =
-        0 as *mut aas_edgeindex_t;
+    crate::src::botlib::be_aas_main::aasworld.edgeindex = 0 as *mut aas_edgeindex_t;
     crate::src::botlib::be_aas_main::aasworld.numfaces = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.faces.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
@@ -669,8 +668,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.faceindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.faceindex =
-        0 as *mut aas_faceindex_t;
+    crate::src::botlib::be_aas_main::aasworld.faceindex = 0 as *mut aas_faceindex_t;
     crate::src::botlib::be_aas_main::aasworld.numareas = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.areas.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
@@ -687,8 +685,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.areasettings as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.areasettings =
-        0 as *mut aas_areasettings_t;
+    crate::src::botlib::be_aas_main::aasworld.areasettings = 0 as *mut aas_areasettings_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld
         .reachability
@@ -698,8 +695,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.reachability as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.reachability =
-        0 as *mut aas_reachability_t;
+    crate::src::botlib::be_aas_main::aasworld.reachability = 0 as *mut aas_reachability_t;
     crate::src::botlib::be_aas_main::aasworld.numnodes = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.nodes.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
@@ -723,8 +719,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
             crate::src::botlib::be_aas_main::aasworld.portalindex as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.portalindex =
-        0 as *mut aas_portalindex_t;
+    crate::src::botlib::be_aas_main::aasworld.portalindex = 0 as *mut aas_portalindex_t;
     crate::src::botlib::be_aas_main::aasworld.portalindexsize = 0 as i32;
     if !crate::src::botlib::be_aas_main::aasworld.clusters.is_null() {
         crate::src::botlib::l_memory::FreeMemory(
@@ -735,10 +730,8 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
     crate::src::botlib::be_aas_main::aasworld.numclusters = 0 as i32;
     //
     crate::src::botlib::be_aas_main::aasworld.loaded = qfalse as i32;
-    crate::src::botlib::be_aas_main::aasworld.initialized =
-        qfalse as i32;
-    crate::src::botlib::be_aas_main::aasworld.savefile =
-        qfalse as i32;
+    crate::src::botlib::be_aas_main::aasworld.initialized = qfalse as i32;
+    crate::src::botlib::be_aas_main::aasworld.savefile = qfalse as i32;
 }
 //end of the function AAS_DumpAASData
 //===========================================================================
@@ -784,11 +777,8 @@ pub unsafe extern "C" fn AAS_LoadAASLump(
         );
         if crate::src::botlib::be_interface::botimport
             .FS_Seek
-            .expect("non-null function pointer")(
-            fp,
-            offset as isize,
-            FS_SEEK_SET as i32,
-        ) != 0
+            .expect("non-null function pointer")(fp, offset as isize, FS_SEEK_SET as i32)
+            != 0
         {
             crate::src::botlib::be_aas_main::AAS_Error(
                 b"can\'t seek to aas lump\n\x00" as *const u8 as *const libc::c_char
@@ -869,11 +859,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
     //open the file
     crate::src::botlib::be_interface::botimport
         .FS_FOpenFile
-        .expect("non-null function pointer")(
-        filename,
-        &mut fp,
-        FS_READ,
-    ); //end if
+        .expect("non-null function pointer")(filename, &mut fp, FS_READ); //end if
     if fp == 0 {
         crate::src::botlib::be_aas_main::AAS_Error(
             b"can\'t open %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -926,8 +912,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
     //
     if header.version == 5 as i32 {
         AAS_DData(
-            (&mut header as *mut aas_header_t as *mut u8)
-                .offset(8 as i32 as isize),
+            (&mut header as *mut aas_header_t as *mut u8).offset(8 as i32 as isize),
             (::std::mem::size_of::<aas_header_t>() as libc::c_ulong)
                 .wrapping_sub(8 as i32 as libc::c_ulong) as i32,
         ); //end if
@@ -976,8 +961,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_vertex_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_vertex_t;
+    ) as *mut aas_vertex_t;
     crate::src::botlib::be_aas_main::aasworld.numvertexes = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_vertex_t>() as libc::c_ulong)
         as i32;
@@ -1031,8 +1015,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_edgeindex_t;
+    ) as *mut aas_edgeindex_t;
     crate::src::botlib::be_aas_main::aasworld.edgeindexsize = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong)
         as i32;
@@ -1070,8 +1053,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_faceindex_t;
+    ) as *mut aas_faceindex_t;
     crate::src::botlib::be_aas_main::aasworld.faceindexsize = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong)
         as i32;
@@ -1109,12 +1091,10 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_areasettings_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_areasettings_t;
+    ) as *mut aas_areasettings_t;
     crate::src::botlib::be_aas_main::aasworld.numareasettings = (length as libc::c_ulong)
-        .wrapping_div(
-            ::std::mem::size_of::<aas_areasettings_t>() as libc::c_ulong,
-        ) as i32;
+        .wrapping_div(::std::mem::size_of::<aas_areasettings_t>() as libc::c_ulong)
+        as i32;
     if crate::src::botlib::be_aas_main::aasworld.numareasettings != 0
         && crate::src::botlib::be_aas_main::aasworld
             .areasettings
@@ -1131,12 +1111,10 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_reachability_t;
+    ) as *mut aas_reachability_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = (length as libc::c_ulong)
-        .wrapping_div(
-            ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
-        ) as i32;
+        .wrapping_div(::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong)
+        as i32;
     if crate::src::botlib::be_aas_main::aasworld.reachabilitysize != 0
         && crate::src::botlib::be_aas_main::aasworld
             .reachability
@@ -1171,8 +1149,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_portal_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_portal_t;
+    ) as *mut aas_portal_t;
     crate::src::botlib::be_aas_main::aasworld.numportals = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_portal_t>() as libc::c_ulong)
         as i32;
@@ -1190,8 +1167,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_portalindex_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_portalindex_t;
+    ) as *mut aas_portalindex_t;
     crate::src::botlib::be_aas_main::aasworld.portalindexsize = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_portalindex_t>() as libc::c_ulong)
         as i32;
@@ -1211,8 +1187,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         length,
         &mut lastoffset,
         ::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong as i32,
-    )
-        as *mut aas_cluster_t;
+    ) as *mut aas_cluster_t;
     crate::src::botlib::be_aas_main::aasworld.numclusters = (length as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong)
         as i32;
@@ -1253,8 +1228,7 @@ pub unsafe extern "C" fn AAS_WriteAASLump(
     mut length: i32,
 ) -> i32 {
     let mut lump: *mut aas_lump_t = 0 as *mut aas_lump_t; //LittleLong(ftell(fp));
-    lump =
-        &mut *(*h).lumps.as_mut_ptr().offset(lumpnum as isize) as *mut aas_lump_t; //end if
+    lump = &mut *(*h).lumps.as_mut_ptr().offset(lumpnum as isize) as *mut aas_lump_t; //end if
     (*lump).fileofs = AAS_WriteAASLump_offset;
     (*lump).filelen = length;
     if length > 0 as i32 {
@@ -1275,9 +1249,7 @@ pub unsafe extern "C" fn AAS_WriteAASLump(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_WriteAASFile(
-    mut filename: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn AAS_WriteAASFile(mut filename: *mut libc::c_char) -> qboolean {
     let mut header: aas_header_t = aas_header_t {
         ident: 0,
         version: 0,
@@ -1312,11 +1284,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
     //open a new file
     crate::src::botlib::be_interface::botimport
         .FS_FOpenFile
-        .expect("non-null function pointer")(
-        filename,
-        &mut fp,
-        FS_WRITE,
-    ); //end if
+        .expect("non-null function pointer")(filename, &mut fp, FS_WRITE); //end if
     if fp == 0 {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -1335,8 +1303,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         ::std::mem::size_of::<aas_header_t>() as libc::c_ulong as i32,
         fp,
     );
-    AAS_WriteAASLump_offset =
-        ::std::mem::size_of::<aas_header_t>() as libc::c_ulong as i32;
+    AAS_WriteAASLump_offset = ::std::mem::size_of::<aas_header_t>() as libc::c_ulong as i32;
     //add the data lumps to the file
     if AAS_WriteAASLump(
         fp,
@@ -1344,8 +1311,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         0 as i32,
         crate::src::botlib::be_aas_main::aasworld.bboxes as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numbboxes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_bbox_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_bbox_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1356,8 +1322,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         1 as i32,
         crate::src::botlib::be_aas_main::aasworld.vertexes as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numvertexes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_vertex_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_vertex_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1368,8 +1333,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         2 as i32,
         crate::src::botlib::be_aas_main::aasworld.planes as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numplanes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_plane_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_plane_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1380,8 +1344,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         3 as i32,
         crate::src::botlib::be_aas_main::aasworld.edges as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numedges as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_edge_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_edge_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1391,9 +1354,8 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         &mut header,
         4 as i32,
         crate::src::botlib::be_aas_main::aasworld.edgeindex as *mut libc::c_void,
-        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong,
-        ) as i32,
+        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1404,8 +1366,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         5 as i32,
         crate::src::botlib::be_aas_main::aasworld.faces as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numfaces as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_face_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_face_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1415,9 +1376,8 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         &mut header,
         6 as i32,
         crate::src::botlib::be_aas_main::aasworld.faceindex as *mut libc::c_void,
-        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong,
-        ) as i32,
+        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1428,8 +1388,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         7 as i32,
         crate::src::botlib::be_aas_main::aasworld.areas as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_area_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_area_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1439,9 +1398,9 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         &mut header,
         8 as i32,
         crate::src::botlib::be_aas_main::aasworld.areasettings as *mut libc::c_void,
-        (crate::src::botlib::be_aas_main::aasworld.numareasettings as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_areasettings_t>() as libc::c_ulong,
-        ) as i32,
+        (crate::src::botlib::be_aas_main::aasworld.numareasettings as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_areasettings_t>() as libc::c_ulong)
+            as i32,
     ) == 0
     {
         return qfalse;
@@ -1451,9 +1410,9 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         &mut header,
         9 as i32,
         crate::src::botlib::be_aas_main::aasworld.reachability as *mut libc::c_void,
-        (crate::src::botlib::be_aas_main::aasworld.reachabilitysize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong,
-        ) as i32,
+        (crate::src::botlib::be_aas_main::aasworld.reachabilitysize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_reachability_t>() as libc::c_ulong)
+            as i32,
     ) == 0
     {
         return qfalse;
@@ -1464,8 +1423,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         10 as i32,
         crate::src::botlib::be_aas_main::aasworld.nodes as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numnodes as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_node_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_node_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1476,8 +1434,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         11 as i32,
         crate::src::botlib::be_aas_main::aasworld.portals as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numportals as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_portal_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_portal_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1487,9 +1444,9 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         &mut header,
         12 as i32,
         crate::src::botlib::be_aas_main::aasworld.portalindex as *mut libc::c_void,
-        (crate::src::botlib::be_aas_main::aasworld.portalindexsize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_portalindex_t>() as libc::c_ulong,
-        ) as i32,
+        (crate::src::botlib::be_aas_main::aasworld.portalindexsize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_portalindex_t>() as libc::c_ulong)
+            as i32,
     ) == 0
     {
         return qfalse;
@@ -1500,8 +1457,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         13 as i32,
         crate::src::botlib::be_aas_main::aasworld.clusters as *mut libc::c_void,
         (crate::src::botlib::be_aas_main::aasworld.numclusters as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<aas_cluster_t>() as libc::c_ulong) as i32,
     ) == 0
     {
         return qfalse;
@@ -1509,11 +1465,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
     //rewrite the header with the added lumps
     crate::src::botlib::be_interface::botimport
         .FS_Seek
-        .expect("non-null function pointer")(
-        fp,
-        0 as i32 as isize,
-        FS_SEEK_SET as i32,
-    );
+        .expect("non-null function pointer")(fp, 0 as i32 as isize, FS_SEEK_SET as i32);
     AAS_DData(
         (&mut header as *mut aas_header_t as *mut u8).offset(8 as i32 as isize),
         (::std::mem::size_of::<aas_header_t>() as libc::c_ulong)

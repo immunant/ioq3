@@ -247,10 +247,7 @@ extern "C" {
     =================
     */
     #[no_mangle]
-    pub fn CL_CDKeyValidate(
-        key: *const libc::c_char,
-        checksum: *const libc::c_char,
-    ) -> qboolean;
+    pub fn CL_CDKeyValidate(key: *const libc::c_char, checksum: *const libc::c_char) -> qboolean;
 }
 
 #[repr(C)]
@@ -358,8 +355,7 @@ pub static mut abortframe: jmp_buf = [__jmp_buf_tag {
 // an ERR_DROP occurred, exit the entire frame
 #[no_mangle]
 
-pub static mut debuglogfile: *mut FILE =
-    0 as *const FILE as *mut FILE;
+pub static mut debuglogfile: *mut FILE = 0 as *const FILE as *mut FILE;
 
 static mut pipefile: fileHandle_t = 0;
 
@@ -374,154 +370,117 @@ pub static mut com_journalDataFile: fileHandle_t = 0;
 // config files are written here
 #[no_mangle]
 
-pub static mut com_speeds: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_speeds: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_developer: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_developer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_dedicated: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_dedicated: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_timescale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_timescale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_fixedtime: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_fixedtime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_journal: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_journal: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_maxfps: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_altivec: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_altivec: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_timedemo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_timedemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_sv_running: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_sv_running: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_cl_running: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_cl_running: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_logfile: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_logfile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // 1 = buffer log, 2 = flush after each print
 #[no_mangle]
 
-pub static mut com_pipefile: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_pipefile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_showtrace: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_showtrace: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_version: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_version: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_blood: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_blood: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_buildScript: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_buildScript: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // for automated data building scripts
 #[no_mangle]
 
-pub static mut com_introPlayed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_introPlayed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_paused: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_paused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_paused: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_paused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_packetdelay: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_packetdelay: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_packetdelay: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_packetdelay: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_cameraMode: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_cameraMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_ansiColor: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_ansiColor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_unfocused: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_unfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_maxfpsUnfocused: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfpsUnfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_minimized: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_minimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_maxfpsMinimized: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_maxfpsMinimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_abnormalExit: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_abnormalExit: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_standalone: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_standalone: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_gamename: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_gamename: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_protocol: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_protocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_legacyprotocol: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_legacyprotocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_basegame: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_basegame: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_homepath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_homepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut com_busyWait: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_busyWait: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut con_autochat: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut con_autochat: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut Q_VMftol: Option<unsafe extern "C" fn() -> i32> = None;
@@ -545,20 +504,16 @@ pub static mut com_frameTime: i32 = 0;
 pub static mut com_frameNumber: i32 = 0;
 #[no_mangle]
 
-pub static mut com_errorEntered: qboolean =
-    qfalse;
+pub static mut com_errorEntered: qboolean = qfalse;
 #[no_mangle]
 
-pub static mut com_fullyInitialized: qboolean =
-    qfalse;
+pub static mut com_fullyInitialized: qboolean = qfalse;
 #[no_mangle]
 
-pub static mut com_gameRestarting: qboolean =
-    qfalse;
+pub static mut com_gameRestarting: qboolean = qfalse;
 #[no_mangle]
 
-pub static mut com_gameClientRestarting: qboolean =
-    qfalse;
+pub static mut com_gameClientRestarting: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut com_errorMessage: [libc::c_char; 4096] = [0; 4096];
@@ -609,8 +564,7 @@ A raw string should NEVER be passed as fmt, because of "%f" type crashers.
 pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...) {
     let mut argptr: ::std::ffi::VaListImpl;
     let mut msg: [libc::c_char; 4096] = [0; 4096];
-    static mut opening_qconsole: qboolean =
-        qfalse;
+    static mut opening_qconsole: qboolean = qfalse;
     argptr = args.clone();
     crate::stdlib::vsnprintf(
         msg.as_mut_ptr(),
@@ -638,20 +592,13 @@ pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...)
     if !com_logfile.is_null() && (*com_logfile).integer != 0 {
         // TTimo: only open the qconsole.log if the filesystem is in an initialized state
         //   also, avoid recursing in the qconsole.log opening (i.e. if fs_debug is on)
-        if logfile == 0
-            && FS_Initialized() as u32 != 0
-            && opening_qconsole as u64 == 0
-        {
+        if logfile == 0 && FS_Initialized() as u32 != 0 && opening_qconsole as u64 == 0 {
             let mut newtime: *mut tm = 0 as *mut tm;
             let mut aclock: time_t = 0;
             opening_qconsole = qtrue;
             libc::time(&mut aclock as *mut time_t as *mut libc::c_long);
-            newtime =
-                libc::localtime(&mut aclock as *mut time_t as *mut libc::c_long)
-                    as *mut tm;
-            logfile = FS_FOpenFileWrite(
-                b"qconsole.log\x00" as *const u8 as *const libc::c_char,
-            );
+            newtime = libc::localtime(&mut aclock as *mut time_t as *mut libc::c_long) as *mut tm;
+            logfile = FS_FOpenFileWrite(b"qconsole.log\x00" as *const u8 as *const libc::c_char);
             if logfile != 0 {
                 Com_Printf(
                     b"logfile opened on %s\n\x00" as *const u8 as *const libc::c_char,
@@ -729,8 +676,7 @@ pub unsafe extern "C" fn Com_Error(
     static mut lastErrorTime: i32 = 0;
     static mut errorCount: i32 = 0;
     let mut currentTime: i32 = 0;
-    let mut restartClient: qboolean =
-        qfalse;
+    let mut restartClient: qboolean = qfalse;
     if com_errorEntered as u64 != 0 {
         Sys_Error(
             b"recursive error after: %s\x00" as *const u8 as *const libc::c_char,
@@ -768,9 +714,7 @@ pub unsafe extern "C" fn Com_Error(
         fmt,
         argptr.as_va_list(),
     );
-    if code != ERR_DISCONNECT as i32
-        && code != ERR_NEED_CD as i32
-    {
+    if code != ERR_DISCONNECT as i32 && code != ERR_NEED_CD as i32 {
         Cvar_Set(
             b"com_errorMessage\x00" as *const u8 as *const libc::c_char,
             com_errorMessage.as_mut_ptr(),
@@ -781,9 +725,7 @@ pub unsafe extern "C" fn Com_Error(
         as i32 as qboolean;
     com_gameRestarting = qfalse;
     com_gameClientRestarting = qfalse;
-    if code == ERR_DISCONNECT as i32
-        || code == ERR_SERVERDISCONNECT as i32
-    {
+    if code == ERR_DISCONNECT as i32 || code == ERR_SERVERDISCONNECT as i32 {
         VM_Forced_Unload_Start();
         SV_Shutdown(
             b"Server disconnected\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -836,9 +778,7 @@ pub unsafe extern "C" fn Com_Error(
                     CL_Init();
                 }
                 if !com_cl_running.is_null() && (*com_cl_running).integer != 0 {
-                    CL_Disconnect(
-                        qtrue,
-                    );
+                    CL_Disconnect(qtrue);
                     CL_FlushMemory();
                     VM_Forced_Unload_Done();
                     CL_CDDialog();
@@ -1015,17 +955,9 @@ pub unsafe extern "C" fn Com_StartupVariable(mut match_0: *const libc::c_char) {
             s = Cmd_Argv(1 as i32);
             if match_0.is_null() || libc::strcmp(s, match_0) == 0 {
                 if Cvar_Flags(s) as u32 == 0x80000000 as u32 {
-                    Cvar_Get(
-                        s,
-                        Cmd_ArgsFrom(2 as i32),
-                        0x80 as i32,
-                    ) as *mut cvar_s;
+                    Cvar_Get(s, Cmd_ArgsFrom(2 as i32), 0x80 as i32) as *mut cvar_s;
                 } else {
-                    Cvar_Set2(
-                        s,
-                        Cmd_ArgsFrom(2 as i32),
-                        qfalse,
-                    ) as *mut cvar_s;
+                    Cvar_Set2(s, Cmd_ArgsFrom(2 as i32), qfalse) as *mut cvar_s;
                 }
             }
         }
@@ -1064,9 +996,7 @@ pub unsafe extern "C" fn Com_AddStartupCommands() -> qboolean {
             {
                 added = qtrue;
                 Cbuf_AddText(com_consoleLines[i as usize]);
-                Cbuf_AddText(
-                    b"\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
             }
         }
         i += 1
@@ -1171,8 +1101,8 @@ pub unsafe extern "C" fn Com_StringContains(
                         __res = toupper(*str1.offset(j as isize) as i32)
                     }
                 } else {
-                    __res = *(*__ctype_toupper_loc())
-                        .offset(*str1.offset(j as isize) as i32 as isize)
+                    __res =
+                        *(*__ctype_toupper_loc()).offset(*str1.offset(j as isize) as i32 as isize)
                 }
                 __res
             }) != ({
@@ -1191,8 +1121,8 @@ pub unsafe extern "C" fn Com_StringContains(
                         __res = toupper(*str2.offset(j as isize) as i32)
                     }
                 } else {
-                    __res = *(*__ctype_toupper_loc())
-                        .offset(*str2.offset(j as isize) as i32 as isize)
+                    __res =
+                        *(*__ctype_toupper_loc()).offset(*str2.offset(j as isize) as i32 as isize)
                 }
                 __res
             }) {
@@ -1287,8 +1217,7 @@ pub unsafe extern "C" fn Com_Filter(
                                 __res = toupper(*name as i32)
                             }
                         } else {
-                            __res = *(*__ctype_toupper_loc())
-                                .offset(*name as i32 as isize)
+                            __res = *(*__ctype_toupper_loc()).offset(*name as i32 as isize)
                         }
                         __res
                     }) >= ({
@@ -1307,8 +1236,7 @@ pub unsafe extern "C" fn Com_Filter(
                                 __res = toupper(*filter as i32)
                             }
                         } else {
-                            __res = *(*__ctype_toupper_loc())
-                                .offset(*filter as i32 as isize)
+                            __res = *(*__ctype_toupper_loc()).offset(*filter as i32 as isize)
                         }
                         __res
                     }) && ({
@@ -1327,8 +1255,7 @@ pub unsafe extern "C" fn Com_Filter(
                                 __res = toupper(*name as i32)
                             }
                         } else {
-                            __res = *(*__ctype_toupper_loc())
-                                .offset(*name as i32 as isize)
+                            __res = *(*__ctype_toupper_loc()).offset(*name as i32 as isize)
                         }
                         __res
                     }) <= ({
@@ -1376,8 +1303,7 @@ pub unsafe extern "C" fn Com_Filter(
                                 __res = toupper(*filter as i32)
                             }
                         } else {
-                            __res = *(*__ctype_toupper_loc())
-                                .offset(*filter as i32 as isize)
+                            __res = *(*__ctype_toupper_loc()).offset(*filter as i32 as isize)
                         }
                         __res
                     }) == ({
@@ -1396,8 +1322,7 @@ pub unsafe extern "C" fn Com_Filter(
                                 __res = toupper(*name as i32)
                             }
                         } else {
-                            __res = *(*__ctype_toupper_loc())
-                                .offset(*name as i32 as isize)
+                            __res = *(*__ctype_toupper_loc()).offset(*name as i32 as isize)
                         }
                         __res
                     }) {
@@ -1523,17 +1448,14 @@ Com_RealTime
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Com_RealTime(
-    mut qtime: *mut qtime_t,
-) -> i32 {
+pub unsafe extern "C" fn Com_RealTime(mut qtime: *mut qtime_t) -> i32 {
     let mut t: time_t = 0;
     let mut tms: *mut tm = 0 as *mut tm;
     t = libc::time(0 as *mut libc::c_long) as time_t;
     if qtime.is_null() {
         return t as i32;
     }
-    tms = libc::localtime(&mut t as *mut time_t as *mut libc::c_long)
-        as *mut tm;
+    tms = libc::localtime(&mut t as *mut time_t as *mut libc::c_long) as *mut tm;
     if !tms.is_null() {
         (*qtime).tm_sec = (*tms).tm_sec;
         (*qtime).tm_min = (*tms).tm_min;
@@ -1563,8 +1485,7 @@ Z_ClearZone
 unsafe extern "C" fn Z_ClearZone(mut zone: *mut memzone_t, mut size: i32) {
     let mut block: *mut memblock_t = 0 as *mut memblock_t;
     // set the entire zone to one free block
-    block = (zone as *mut byte)
-        .offset(::std::mem::size_of::<memzone_t>() as libc::c_ulong as isize)
+    block = (zone as *mut byte).offset(::std::mem::size_of::<memzone_t>() as libc::c_ulong as isize)
         as *mut memblock_t; // in use block
     (*zone).blocklist.prev = block; // free block
     (*zone).blocklist.next = (*zone).blocklist.prev;
@@ -1802,8 +1723,7 @@ pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::
     extra = (*base).size - size;
     if extra > 64 as i32 {
         // there will be a free fragment after the allocated block
-        new = (base as *mut byte).offset(size as isize)
-            as *mut memblock_t; // free block
+        new = (base as *mut byte).offset(size as isize) as *mut memblock_t; // free block
         (*new).size = extra; // no longer a free block
         (*new).tag = 0 as i32; // next allocation will start looking here
         (*new).prev = base; //
@@ -1821,8 +1741,7 @@ pub unsafe extern "C" fn Z_TagMalloc(mut size: i32, mut tag: i32) -> *mut libc::
     *((base as *mut byte)
         .offset((*base).size as isize)
         .offset(-(4 as i32 as isize)) as *mut i32) = 0x1d4a11 as i32;
-    return (base as *mut byte)
-        .offset(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize)
+    return (base as *mut byte).offset(::std::mem::size_of::<memblock_t>() as libc::c_ulong as isize)
         as *mut libc::c_void;
 }
 // NOT 0 filled memory
@@ -1856,9 +1775,7 @@ unsafe extern "C" fn Z_CheckHeap() {
     let mut block: *mut memblock_t = 0 as *mut memblock_t;
     block = (*mainzone).blocklist.next;
     while !((*block).next == &mut (*mainzone).blocklist as *mut memblock_t) {
-        if (block as *mut byte).offset((*block).size as isize)
-            != (*block).next as *mut byte
-        {
+        if (block as *mut byte).offset((*block).size as isize) != (*block).next as *mut byte {
             Com_Error(
                 ERR_FATAL as i32,
                 b"Z_CheckHeap: block size does not touch the next block\x00" as *const u8
@@ -2044,8 +1961,7 @@ static mut hunk_permanent: *mut hunkUsed_t = 0 as *const hunkUsed_t as *mut hunk
 
 static mut hunk_temp: *mut hunkUsed_t = 0 as *const hunkUsed_t as *mut hunkUsed_t;
 
-static mut s_hunkData: *mut byte =
-    0 as *const byte as *mut byte;
+static mut s_hunkData: *mut byte = 0 as *const byte as *mut byte;
 
 static mut s_hunkTotal: i32 = 0;
 
@@ -2093,9 +2009,7 @@ pub unsafe extern "C" fn Com_Meminfo_f() {
         if (*block).next == &mut (*mainzone).blocklist as *mut memblock_t {
             break;
         }
-        if (block as *mut byte).offset((*block).size as isize)
-            != (*block).next as *mut byte
-        {
+        if (block as *mut byte).offset((*block).size as isize) != (*block).next as *mut byte {
             Com_Printf(
                 b"ERROR: block size does not touch the next block\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2289,8 +2203,7 @@ pub unsafe extern "C" fn Com_InitSmallZoneMemory() {
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_InitZoneMemory() {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     // Please note: com_zoneMegs can only be set on the command line, and
     // not in q3config.cfg or Com_StartupVariable, as they haven't been
     // executed by this point. It's a chicken and egg problem. We need the
@@ -2393,8 +2306,7 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     }
     block = hunkblocks;
     while !block.is_null() {
-        (*block).printed =
-            qfalse as i32 as byte;
+        (*block).printed = qfalse as i32 as byte;
         block = (*block).next
     }
     size = 0 as i32;
@@ -2416,12 +2328,9 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
             block2 = (*block).next;
             while !block2.is_null() {
                 if !((*block).line != (*block2).line) {
-                    if !(Q_stricmp((*block).file, (*block2).file)
-                        != 0)
-                    {
+                    if !(Q_stricmp((*block).file, (*block2).file) != 0) {
                         size += (*block2).size;
-                        (*block2).printed = qtrue as i32
-                            as byte
+                        (*block2).printed = qtrue as i32 as byte
                     }
                 }
                 block2 = (*block2).next
@@ -2462,8 +2371,7 @@ Com_InitHunkZoneMemory
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_InitHunkMemory() {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     let mut nMinAlloc: i32 = 0;
     let mut pMsg: *mut libc::c_char = 0 as *mut libc::c_char;
     // make sure the file system has allocated and "not" freed any temp blocks
@@ -2515,8 +2423,7 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
         );
     }
     // cacheline align
-    s_hunkData = (s_hunkData as intptr_t + 31 as i32 as isize
-        & !(31 as i32) as isize) as *mut byte;
+    s_hunkData = (s_hunkData as intptr_t + 31 as i32 as isize & !(31 as i32) as isize) as *mut byte;
     Hunk_Clear();
     Cmd_AddCommand(
         b"meminfo\x00" as *const u8 as *const libc::c_char,
@@ -2639,10 +2546,7 @@ Allocate permanent (until the hunk is cleared) memory
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Hunk_Alloc(
-    mut size: i32,
-    mut preference: ha_pref,
-) -> *mut libc::c_void {
+pub unsafe extern "C" fn Hunk_Alloc(mut size: i32, mut preference: ha_pref) -> *mut libc::c_void {
     let mut buf: *mut libc::c_void = 0 as *mut libc::c_void;
     if s_hunkData.is_null() {
         Com_Error(
@@ -2652,8 +2556,7 @@ pub unsafe extern "C" fn Hunk_Alloc(
         );
     }
     // can't do preference if there is any temp allocated
-    if preference as u32 == h_dontcare as i32 as u32
-        || (*hunk_temp).temp != (*hunk_temp).permanent
+    if preference as u32 == h_dontcare as i32 as u32 || (*hunk_temp).temp != (*hunk_temp).permanent
     {
         Hunk_SwapBanks();
     } else if preference as u32 == h_low as i32 as u32
@@ -2843,12 +2746,9 @@ pub unsafe extern "C" fn Com_InitJournaling() {
     }
     if (*com_journal).integer == 1 as i32 {
         Com_Printf(b"Journaling events\n\x00" as *const u8 as *const libc::c_char);
-        com_journalFile = FS_FOpenFileWrite(
-            b"journal.dat\x00" as *const u8 as *const libc::c_char,
-        );
-        com_journalDataFile = FS_FOpenFileWrite(
-            b"journaldata.dat\x00" as *const u8 as *const libc::c_char,
-        )
+        com_journalFile = FS_FOpenFileWrite(b"journal.dat\x00" as *const u8 as *const libc::c_char);
+        com_journalDataFile =
+            FS_FOpenFileWrite(b"journaldata.dat\x00" as *const u8 as *const libc::c_char)
     } else if (*com_journal).integer == 2 as i32 {
         Com_Printf(b"Replaying journaled events\n\x00" as *const u8 as *const libc::c_char);
         FS_FOpenFileRead(
@@ -2919,8 +2819,7 @@ pub unsafe extern "C" fn Com_QueueEvent(
     }
     ev = &mut *eventQueue
         .as_mut_ptr()
-        .offset((eventHead & 256 as i32 - 1 as i32) as isize)
-        as *mut sysEvent_t;
+        .offset((eventHead & 256 as i32 - 1 as i32) as isize) as *mut sysEvent_t;
     if eventHead - eventTail >= 256 as i32 {
         Com_Printf(b"Com_QueueEvent: overflow\n\x00" as *const u8 as *const libc::c_char);
         // we are discarding an event, but don't leak memory
@@ -3018,9 +2917,7 @@ pub unsafe extern "C" fn Com_GetRealEvent() -> sysEvent_t {
             ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong as i32,
             com_journalFile,
         );
-        if r as libc::c_ulong
-            != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong
-        {
+        if r as libc::c_ulong != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong {
             Com_Error(
                 ERR_FATAL as i32,
                 b"Error reading from journal file\x00" as *const u8 as *const libc::c_char,
@@ -3045,9 +2942,7 @@ pub unsafe extern "C" fn Com_GetRealEvent() -> sysEvent_t {
                 ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong as i32,
                 com_journalFile,
             );
-            if r as libc::c_ulong
-                != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong
-            {
+            if r as libc::c_ulong != ::std::mem::size_of::<sysEvent_t>() as libc::c_ulong {
                 Com_Error(
                     ERR_FATAL as i32,
                     b"Error writing to journal file\x00" as *const u8 as *const libc::c_char,
@@ -3151,10 +3046,7 @@ pub unsafe extern "C" fn Com_RunAndTimeServerPacket(
     if (*com_speeds).integer != 0 {
         t1 = Sys_Milliseconds()
     }
-    SV_PacketEvent(
-        *evFrom as netadr_t,
-        buf as *mut msg_t,
-    );
+    SV_PacketEvent(*evFrom as netadr_t, buf as *mut msg_t);
     if (*com_speeds).integer != 0 {
         t2 = Sys_Milliseconds();
         msec = t2 - t1;
@@ -3205,8 +3097,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
     );
     loop {
         ev = Com_GetEvent();
@@ -3220,10 +3111,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
             ) as u64
                 != 0
             {
-                CL_PacketEvent(
-                    evFrom as netadr_t,
-                    &mut buf as *mut _ as *mut msg_t,
-                );
+                CL_PacketEvent(evFrom as netadr_t, &mut buf as *mut _ as *mut msg_t);
             }
             while NET_GetLoopPacket(
                 NS_SERVER,
@@ -3241,11 +3129,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
         }
         match ev.evType as u32 {
             1 => {
-                CL_KeyEvent(
-                    ev.evValue,
-                    ev.evValue2 as qboolean,
-                    ev.evTime as u32,
-                );
+                CL_KeyEvent(ev.evValue, ev.evValue2 as qboolean, ev.evTime as u32);
             }
             2 => {
                 CL_CharEvent(ev.evValue);
@@ -3258,9 +3142,7 @@ pub unsafe extern "C" fn Com_EventLoop() -> i32 {
             }
             5 => {
                 Cbuf_AddText(ev.evPtr as *mut libc::c_char);
-                Cbuf_AddText(
-                    b"\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
             }
             _ => {
                 Com_Error(
@@ -3437,15 +3319,11 @@ Change to a new mod properly with cleaning up cvars before switching.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Com_GameRestart(
-    mut checksumFeed: i32,
-    mut disconnect: qboolean,
-) {
+pub unsafe extern "C" fn Com_GameRestart(mut checksumFeed: i32, mut disconnect: qboolean) {
     // make sure no recursion can be triggered
     if com_gameRestarting as u64 == 0 && com_fullyInitialized as u32 != 0 {
         com_gameRestarting = qtrue;
-        com_gameClientRestarting =
-            (*com_cl_running).integer as qboolean;
+        com_gameClientRestarting = (*com_cl_running).integer as qboolean;
         // Kill server if we have one
         if (*com_sv_running).integer != 0 {
             SV_Shutdown(
@@ -3536,11 +3414,7 @@ pub unsafe extern "C" fn Com_ReadCDKey(mut filename: *const libc::c_char) {
     FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 16 as i32, f);
     FS_FCloseFile(f);
     if CL_CDKeyValidate(buffer.as_mut_ptr(), 0 as *const libc::c_char) as u64 != 0 {
-        Q_strncpyz(
-            cl_cdkey.as_mut_ptr(),
-            buffer.as_mut_ptr(),
-            17 as i32,
-        );
+        Q_strncpyz(cl_cdkey.as_mut_ptr(), buffer.as_mut_ptr(), 17 as i32);
     } else {
         Q_strncpyz(
             cl_cdkey.as_mut_ptr(),
@@ -3650,14 +3524,10 @@ unsafe extern "C" fn Com_WriteCDKey(
 unsafe extern "C" fn Com_DetectAltivec() {
     // Only detect if user hasn't forcibly disabled it.
     if (*com_altivec).integer != 0 {
-        static mut altivec: qboolean =
-            qfalse;
-        static mut detected: qboolean =
-            qfalse;
+        static mut altivec: qboolean = qfalse;
+        static mut detected: qboolean = qfalse;
         if detected as u64 == 0 {
-            altivec = (Sys_GetProcessorFeatures() as u32
-                & CF_ALTIVEC as i32 as u32)
-                as qboolean;
+            altivec = (Sys_GetProcessorFeatures() as u32 & CF_ALTIVEC as i32 as u32) as qboolean;
             detected = qtrue
         }
         if altivec as u64 == 0 {
@@ -3718,9 +3588,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
         b"Jan 10 2020\x00" as *const u8 as *const libc::c_char,
     );
     if _setjmp(abortframe.as_mut_ptr()) != 0 {
-        Sys_Error(
-            b"Error during initialization\x00" as *const u8 as *const libc::c_char,
-        );
+        Sys_Error(b"Error during initialization\x00" as *const u8 as *const libc::c_char);
     }
     // Clear queues
     crate::stdlib::memset(
@@ -3779,10 +3647,9 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     if !com_developer.is_null() && (*com_developer).integer != 0 {
         Cmd_AddCommand(
             b"error\x00" as *const u8 as *const libc::c_char,
-            ::std::mem::transmute::<
-                Option<unsafe extern "C" fn() -> !>,
-                xcommand_t,
-            >(Some(Com_Error_f as unsafe extern "C" fn() -> !)),
+            ::std::mem::transmute::<Option<unsafe extern "C" fn() -> !>, xcommand_t>(Some(
+                Com_Error_f as unsafe extern "C" fn() -> !,
+            )),
         );
         Cmd_AddCommand(
             b"crash\x00" as *const u8 as *const libc::c_char,
@@ -3795,9 +3662,9 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     }
     Cmd_AddCommand(
         b"quit\x00" as *const u8 as *const libc::c_char,
-        ::std::mem::transmute::<Option<unsafe extern "C" fn() -> !>, xcommand_t>(
-            Some(Com_Quit_f as unsafe extern "C" fn() -> !),
-        ),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn() -> !>, xcommand_t>(Some(
+            Com_Quit_f as unsafe extern "C" fn() -> !,
+        )),
     );
     Cmd_AddCommand(
         b"changeVectors\x00" as *const u8 as *const libc::c_char,
@@ -3809,10 +3676,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     );
     Cmd_SetCommandCompletionFunc(
         b"writeconfig\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cmd_CompleteCfgName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cmd_CompleteCfgName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     Cmd_AddCommand(
         b"game_restart\x00" as *const u8 as *const libc::c_char,
@@ -4043,9 +3907,7 @@ pub unsafe extern "C" fn Com_Init(mut commandLine: *mut libc::c_char) {
     if Com_AddStartupCommands() as u64 == 0 {
         // if the user didn't give any commands, run default action
         if (*com_dedicated).integer == 0 {
-            Cbuf_AddText(
-                b"cinematic idlogo.RoQ\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Cbuf_AddText(b"cinematic idlogo.RoQ\n\x00" as *const u8 as *const libc::c_char);
             if (*com_introPlayed).integer == 0 {
                 Cvar_Set(
                     (*com_introPlayed).name,
@@ -4126,10 +3988,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
         if !brk.is_null() {
             let mut tmp: libc::c_char = *brk;
             *brk = '\u{0}' as i32 as libc::c_char;
-            Cbuf_ExecuteText(
-                EXEC_APPEND as i32,
-                buf.as_mut_ptr(),
-            );
+            Cbuf_ExecuteText(EXEC_APPEND as i32, buf.as_mut_ptr());
             *brk = tmp;
             accu = (accu as isize - brk.offset_from(buf.as_mut_ptr()) as isize) as i32;
             crate::stdlib::memmove(
@@ -4142,10 +4001,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
                 .wrapping_sub(1 as i32 as libc::c_ulong)
         {
             // full
-            Cbuf_ExecuteText(
-                EXEC_APPEND as i32,
-                buf.as_mut_ptr(),
-            );
+            Cbuf_ExecuteText(EXEC_APPEND as i32, buf.as_mut_ptr());
             accu = 0 as i32
         }
     }
@@ -4194,11 +4050,8 @@ pub unsafe extern "C" fn Com_WriteConfiguration() {
     // not needed for dedicated or standalone
     if (*com_standalone).integer == 0 {
         let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
-        gamedir = Cvar_VariableString(
-            b"fs_game\x00" as *const u8 as *const libc::c_char,
-        );
-        if UI_usesUniqueCDKey() as u32 != 0
-            && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32
+        gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
+        if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32
         {
             Com_WriteCDKey(
                 gamedir,
@@ -4575,8 +4428,7 @@ static mut shortestMatch: [libc::c_char; 1024] = [0; 1024];
 static mut matchCount: i32 = 0;
 // field we are working on, passed to Field_AutoComplete(&g_consoleCommand for instance)
 
-static mut completionField: *mut field_t =
-    0 as *const field_t as *mut field_t;
+static mut completionField: *mut field_t = 0 as *const field_t as *mut field_t;
 /*
 ===============
 FindMatches
@@ -4626,8 +4478,8 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                         __res = tolower(shortestMatch[i as usize] as i32)
                     }
                 } else {
-                    __res = *(*__ctype_tolower_loc())
-                        .offset(shortestMatch[i as usize] as i32 as isize)
+                    __res =
+                        *(*__ctype_tolower_loc()).offset(shortestMatch[i as usize] as i32 as isize)
                 }
                 __res
             }) != ({
@@ -4646,8 +4498,7 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                         __res = tolower(*s.offset(i as isize) as i32)
                     }
                 } else {
-                    __res = *(*__ctype_tolower_loc())
-                        .offset(*s.offset(i as isize) as i32 as isize)
+                    __res = *(*__ctype_tolower_loc()).offset(*s.offset(i as isize) as i32 as isize)
                 }
                 __res
             }) {
@@ -4689,10 +4540,7 @@ unsafe extern "C" fn PrintCvarMatches(mut s: *const libc::c_char) {
         crate::stdlib::strlen(shortestMatch.as_mut_ptr()) as i32,
     ) == 0
     {
-        Com_TruncateLongString(
-            value.as_mut_ptr(),
-            Cvar_VariableString(s),
-        );
+        Com_TruncateLongString(value.as_mut_ptr(), Cvar_VariableString(s));
         Com_Printf(
             b"    %s = \"%s\"\n\x00" as *const u8 as *const libc::c_char,
             s,
@@ -4880,11 +4728,7 @@ pub unsafe extern "C" fn Field_CompleteCommand(
         } // Compound command
         p = Field_FindFirstSeparator(cmd);
         if !p.is_null() {
-            Field_CompleteCommand(
-                p.offset(1 as i32 as isize),
-                qtrue,
-                qtrue,
-            );
+            Field_CompleteCommand(p.offset(1 as i32 as isize), qtrue, qtrue);
         } else {
             Cmd_CompleteArgument(baseCmd, cmd, completionArgument);
         }
@@ -4935,11 +4779,7 @@ Perform Tab expansion
 
 pub unsafe extern "C" fn Field_AutoComplete(mut field: *mut field_t) {
     completionField = field;
-    Field_CompleteCommand(
-        (*completionField).buffer.as_mut_ptr(),
-        qtrue,
-        qtrue,
-    );
+    Field_CompleteCommand((*completionField).buffer.as_mut_ptr(), qtrue, qtrue);
 }
 /*
 ==================
@@ -4950,10 +4790,7 @@ fills string array with len random bytes, preferably from the OS randomizer
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Com_RandomBytes(
-    mut string: *mut byte,
-    mut len: i32,
-) {
+pub unsafe extern "C" fn Com_RandomBytes(mut string: *mut byte, mut len: i32) {
     let mut i: i32 = 0;
     if Sys_RandomBytes(string, len) as u64 != 0 {
         return;
@@ -5006,9 +4843,7 @@ Field_CompletePlayerName
 ===============
 */
 
-unsafe extern "C" fn Field_CompletePlayerNameFinal(
-    mut whitespace: qboolean,
-) -> qboolean {
+unsafe extern "C" fn Field_CompletePlayerNameFinal(mut whitespace: qboolean) -> qboolean {
     let mut completionOffset: i32 = 0;
     if matchCount == 0 as i32 {
         return qtrue;
@@ -5153,8 +4988,7 @@ pub unsafe extern "C" fn Field_CompletePlayerName(
     mut names: *mut *const libc::c_char,
     mut nameCount: i32,
 ) {
-    let mut whitespace: qboolean =
-        qfalse;
+    let mut whitespace: qboolean = qfalse;
     matchCount = 0 as i32;
     shortestMatch[0 as i32 as usize] = 0 as i32 as libc::c_char;
     if nameCount <= 0 as i32 {
@@ -5175,16 +5009,13 @@ pub unsafe extern "C" fn Field_CompletePlayerName(
     //allow to tab player names
     //if full player name switch to next player name
     if *completionString.offset(0 as i32 as isize) as i32 != '\u{0}' as i32
-        && Q_stricmp(shortestMatch.as_mut_ptr(), completionString)
-            == 0 as i32
+        && Q_stricmp(shortestMatch.as_mut_ptr(), completionString) == 0 as i32
         && nameCount > 1 as i32
     {
         let mut i: i32 = 0;
         i = 0 as i32;
         while i < nameCount {
-            if Q_stricmp(*names.offset(i as isize), completionString)
-                == 0 as i32
-            {
+            if Q_stricmp(*names.offset(i as isize), completionString) == 0 as i32 {
                 i += 1;
                 if i >= nameCount {
                     i = 0 as i32
@@ -5244,10 +5075,7 @@ unsafe extern "C" fn run_static_initializers() {
                 };
                 init
             },
-            mem: [
-                '\u{0}' as i32 as byte,
-                '\u{0}' as i32 as byte,
-            ],
+            mem: ['\u{0}' as i32 as byte, '\u{0}' as i32 as byte],
         };
         init
     };
@@ -5266,10 +5094,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '0' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['0' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5287,10 +5112,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '1' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['1' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5308,10 +5130,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '2' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['2' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5329,10 +5148,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '3' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['3' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5350,10 +5166,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '4' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['4' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5371,10 +5184,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '5' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['5' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5392,10 +5202,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '6' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['6' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5413,10 +5220,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '7' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['7' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5434,10 +5238,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '8' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['8' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },
@@ -5455,10 +5256,7 @@ unsafe extern "C" fn run_static_initializers() {
                     };
                     init
                 },
-                mem: [
-                    '9' as i32 as byte,
-                    '\u{0}' as i32 as byte,
-                ],
+                mem: ['9' as i32 as byte, '\u{0}' as i32 as byte],
             };
             init
         },

@@ -124,12 +124,10 @@ and one exported function: Perform
 */
 #[no_mangle]
 
-pub static mut currentVM: *mut vm_t =
-    0 as *const vm_t as *mut vm_t;
+pub static mut currentVM: *mut vm_t = 0 as *const vm_t as *mut vm_t;
 #[no_mangle]
 
-pub static mut lastVM: *mut vm_t =
-    0 as *const vm_t as *mut vm_t;
+pub static mut lastVM: *mut vm_t = 0 as *const vm_t as *mut vm_t;
 #[no_mangle]
 
 pub static mut vm_debugLevel: i32 = 0;
@@ -148,14 +146,12 @@ pub static mut vmTable: [vm_t; 3] = [vm_t {
     destroy: None,
     currentlyInterpreting: qfalse,
     compiled: qfalse,
-    codeBase: 0 as *const byte
-        as *mut byte,
+    codeBase: 0 as *const byte as *mut byte,
     entryOfs: 0,
     codeLength: 0,
     instructionPointers: 0 as *const intptr_t as *mut intptr_t,
     instructionCount: 0,
-    dataBase: 0 as *const byte
-        as *mut byte,
+    dataBase: 0 as *const byte as *mut byte,
     dataMask: 0,
     dataAlloc: 0,
     stackBottom: 0,
@@ -164,8 +160,7 @@ pub static mut vmTable: [vm_t; 3] = [vm_t {
     callLevel: 0,
     breakFunction: 0,
     breakCount: 0,
-    jumpTableTargets: 0 as *const byte
-        as *mut byte,
+    jumpTableTargets: 0 as *const byte as *mut byte,
     numJumpTableTargets: 0,
 }; 3];
 // 64bit!
@@ -350,8 +345,7 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut name: [libc::c_char; 64] = [0; 64];
     let mut symbols: [libc::c_char; 64] = [0; 64];
-    let mut prev: *mut *mut vmSymbol_t =
-        0 as *mut *mut vmSymbol_t;
+    let mut prev: *mut *mut vmSymbol_t = 0 as *mut *mut vmSymbol_t;
     let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     let mut count: i32 = 0;
     let mut value: i32 = 0;
@@ -428,11 +422,7 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut vm_t) {
                         value = *(*vm).instructionPointers.offset(value as isize) as i32
                     }
                     (*sym).symValue = value;
-                    Q_strncpyz(
-                        (*sym).symName.as_mut_ptr(),
-                        token,
-                        chars + 1 as i32,
-                    );
+                    Q_strncpyz((*sym).symName.as_mut_ptr(), token, chars + 1 as i32);
                     count += 1
                 }
             }
@@ -486,10 +476,7 @@ Dlls will call this directly
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_DllSyscall(
-    mut arg: intptr_t,
-    mut args: ...
-) -> intptr_t {
+pub unsafe extern "C" fn VM_DllSyscall(mut arg: intptr_t, mut args: ...) -> intptr_t {
     // rcg010206 - see commentary above
     let mut args_0: [intptr_t; 16] = [0; 16];
     let mut i: i32 = 0;
@@ -545,9 +532,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
         &mut header.v,
     );
     if header.h.is_null() {
-        Com_Printf(
-            b"Failed.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Failed.\n\x00" as *const u8 as *const libc::c_char);
         VM_Free(vm);
         Com_Printf(
             b"^3Warning: Couldn\'t open VM file %s\n\x00" as *const u8 as *const libc::c_char,
@@ -558,9 +543,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
     // show where the qvm was loaded from
     FS_Which(filename.as_mut_ptr(), (*vm).searchPath);
     if (*header.h).vmMagic == 0x12721445 as i32 {
-        Com_Printf(
-            b"...which has vmMagic VM_MAGIC_VER2\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"...which has vmMagic VM_MAGIC_VER2\n\x00" as *const u8 as *const libc::c_char);
         // byte swap the header
         i = 0 as i32;
         while (i as libc::c_ulong)
@@ -633,10 +616,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
         // allocate zero filled space for initialized and uninitialized data
         // leave some space beyond data mask so we can secure all mask operations
         (*vm).dataAlloc = dataLength + 4 as i32;
-        (*vm).dataBase = Hunk_Alloc(
-            (*vm).dataAlloc,
-            h_high,
-        ) as *mut byte;
+        (*vm).dataBase = Hunk_Alloc((*vm).dataAlloc, h_high) as *mut byte;
         (*vm).dataMask = dataLength - 1 as i32
     } else {
         // clear the data, but make sure we're not clearing more than allocated
@@ -659,8 +639,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
     // copy the intialized data
     crate::stdlib::memcpy(
         (*vm).dataBase as *mut libc::c_void,
-        (header.h as *mut byte)
-            .offset((*header.h).dataOffset as isize) as *const libc::c_void,
+        (header.h as *mut byte).offset((*header.h).dataOffset as isize) as *const libc::c_void,
         ((*header.h).dataLength + (*header.h).litLength) as libc::c_ulong,
     );
     // byte swap the longs
@@ -679,10 +658,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
             (*vm).numJumpTableTargets,
         );
         if alloc as u64 != 0 {
-            (*vm).jumpTableTargets = Hunk_Alloc(
-                (*header.h).jtrgLength,
-                h_high,
-            ) as *mut byte
+            (*vm).jumpTableTargets = Hunk_Alloc((*header.h).jtrgLength, h_high) as *mut byte
         } else {
             if (*vm).numJumpTableTargets != previousNumJumpTableTargets {
                 VM_Free(vm);
@@ -731,17 +707,12 @@ even if the client is pure, so take "unpure" as argument.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_Restart(
-    mut vm: *mut vm_t,
-    mut unpure: qboolean,
-) -> *mut vm_t {
+pub unsafe extern "C" fn VM_Restart(mut vm: *mut vm_t, mut unpure: qboolean) -> *mut vm_t {
     let mut header: *mut vmHeader_t = 0 as *mut vmHeader_t;
     // DLL's can't be restarted in place
     if !(*vm).dllHandle.is_null() {
         let mut name: [libc::c_char; 64] = [0; 64];
-        let mut systemCall: Option<
-            unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
-        > = None;
+        let mut systemCall: Option<unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t> = None;
         systemCall = (*vm).systemCall;
         Q_strncpyz(
             name.as_mut_ptr(),
@@ -753,9 +724,7 @@ pub unsafe extern "C" fn VM_Restart(
         return vm;
     }
     // load the image
-    Com_Printf(
-        b"VM_Restart()\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"VM_Restart()\n\x00" as *const u8 as *const libc::c_char);
     header = VM_LoadQVM(vm, qfalse, unpure);
     if header.is_null() {
         Com_Error(
@@ -779,9 +748,7 @@ it will attempt to load as a system dll
 
 pub unsafe extern "C" fn VM_Create(
     mut module: *const libc::c_char,
-    mut systemCalls: Option<
-        unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
-    >,
+    mut systemCalls: Option<unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t>,
     mut interpret: vmInterpret_t,
 ) -> *mut vm_t {
     let mut vm: *mut vm_t = 0 as *mut vm_t;
@@ -801,9 +768,7 @@ pub unsafe extern "C" fn VM_Create(
     // see if we already have the VM
     i = 0 as i32;
     while i < 3 as i32 {
-        if Q_stricmp(vmTable[i as usize].name.as_mut_ptr(), module)
-            == 0
-        {
+        if Q_stricmp(vmTable[i as usize].name.as_mut_ptr(), module) == 0 {
             vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut vm_t;
             return vm;
         }
@@ -845,13 +810,7 @@ pub unsafe extern "C" fn VM_Create(
             (*vm).dllHandle = Sys_LoadGameDll(
                 filename.as_mut_ptr(),
                 &mut (*vm).entryPoint,
-                Some(
-                    VM_DllSyscall
-                        as unsafe extern "C" fn(
-                            _: intptr_t,
-                            _: ...
-                        ) -> intptr_t,
-                ),
+                Some(VM_DllSyscall as unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t),
             );
             if !(*vm).dllHandle.is_null() {
                 (*vm).systemCall = systemCalls;
@@ -862,11 +821,7 @@ pub unsafe extern "C" fn VM_Create(
             );
         } else if retval == VMI_COMPILED as i32 {
             (*vm).searchPath = startSearch;
-            header = VM_LoadQVM(
-                vm,
-                qtrue,
-                qfalse,
-            );
+            header = VM_LoadQVM(vm, qtrue, qfalse);
             if !header.is_null() {
                 break;
             }
@@ -889,8 +844,7 @@ pub unsafe extern "C" fn VM_Create(
     (*vm).instructionCount = (*header).instructionCount;
     (*vm).instructionPointers = Hunk_Alloc(
         ((*vm).instructionCount as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<intptr_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<intptr_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut intptr_t;
     // copy or compile the instructions
@@ -898,17 +852,11 @@ pub unsafe extern "C" fn VM_Create(
     (*vm).compiled = qfalse;
     if interpret as u32 != VMI_BYTECODE as i32 as u32 {
         (*vm).compiled = qtrue;
-        VM_Compile(
-            vm as *mut vm_s,
-            header as *mut vmHeader_t,
-        );
+        VM_Compile(vm as *mut vm_s, header as *mut vmHeader_t);
     }
     // VM_Compile may have reset vm->compiled if compilation failed
     if (*vm).compiled as u64 == 0 {
-        VM_PrepareInterpreter(
-            vm as *mut vm_s,
-            header as *mut vmHeader_t,
-        );
+        VM_PrepareInterpreter(vm as *mut vm_s, header as *mut vmHeader_t);
     }
     // free the original file
     FS_FreeFile(header as *mut libc::c_void);
@@ -1165,11 +1113,7 @@ locals from sp
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_Call(
-    mut vm: *mut vm_t,
-    mut callnum: i32,
-    mut args: ...
-) -> intptr_t {
+pub unsafe extern "C" fn VM_Call(mut vm: *mut vm_t, mut callnum: i32, mut args: ...) -> intptr_t {
     let mut oldVM: *mut vm_t = 0 as *mut vm_t;
     let mut r: intptr_t = 0;
     let mut i: i32 = 0;
@@ -1236,15 +1180,9 @@ pub unsafe extern "C" fn VM_Call(
             i += 1
         }
         if (*vm).compiled as u64 != 0 {
-            r = VM_CallCompiled(
-                vm as *mut vm_s,
-                &mut a.callnum,
-            ) as intptr_t
+            r = VM_CallCompiled(vm as *mut vm_s, &mut a.callnum) as intptr_t
         } else {
-            r = VM_CallInterpreted(
-                vm as *mut vm_s,
-                &mut a.callnum,
-            ) as intptr_t
+            r = VM_CallInterpreted(vm as *mut vm_s, &mut a.callnum) as intptr_t
         }
     }
     (*vm).callLevel -= 1;
@@ -1278,8 +1216,7 @@ VM_VmProfile_f
 
 pub unsafe extern "C" fn VM_VmProfile_f() {
     let mut vm: *mut vm_t = 0 as *mut vm_t;
-    let mut sorted: *mut *mut vmSymbol_t =
-        0 as *mut *mut vmSymbol_t;
+    let mut sorted: *mut *mut vmSymbol_t = 0 as *mut *mut vmSymbol_t;
     let mut sym: *mut vmSymbol_t = 0 as *mut vmSymbol_t;
     let mut i: i32 = 0;
     let mut total: f64 = 0.;
@@ -1290,10 +1227,10 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
     if (*vm).numSymbols == 0 {
         return;
     }
-    sorted =
-        Z_Malloc(((*vm).numSymbols as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong,
-        ) as i32) as *mut *mut vmSymbol_t;
+    sorted = Z_Malloc(
+        ((*vm).numSymbols as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut vmSymbol_t>() as libc::c_ulong) as i32,
+    ) as *mut *mut vmSymbol_t;
     let ref mut fresh1 = *sorted.offset(0 as i32 as isize);
     *fresh1 = (*vm).symbols;
     total = (**sorted.offset(0 as i32 as isize)).profileCount as f64;
@@ -1344,9 +1281,7 @@ VM_VmInfo_f
 pub unsafe extern "C" fn VM_VmInfo_f() {
     let mut vm: *mut vm_t = 0 as *mut vm_t;
     let mut i: i32 = 0;
-    Com_Printf(
-        b"Registered virtual machines:\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"Registered virtual machines:\n\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;
     while i < 3 as i32 {
         vm = &mut *vmTable.as_mut_ptr().offset(i as isize) as *mut vm_t;
@@ -1358,18 +1293,12 @@ pub unsafe extern "C" fn VM_VmInfo_f() {
             (*vm).name.as_mut_ptr(),
         );
         if !(*vm).dllHandle.is_null() {
-            Com_Printf(
-                b"native\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"native\n\x00" as *const u8 as *const libc::c_char);
         } else {
             if (*vm).compiled as u64 != 0 {
-                Com_Printf(
-                    b"compiled on load\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"compiled on load\n\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b"interpreted\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"interpreted\n\x00" as *const u8 as *const libc::c_char);
             }
             Com_Printf(
                 b"    code length : %7i\n\x00" as *const u8 as *const libc::c_char,
@@ -1398,8 +1327,7 @@ Insert calls to this while debugging the vm compiler
 
 pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut i32) {
     static mut callnum: i32 = 0;
-    static mut f: *mut FILE =
-        0 as *const FILE as *mut FILE;
+    static mut f: *mut FILE = 0 as *const FILE as *mut FILE;
     if f.is_null() {
         f = crate::stdlib::fopen(
             b"syscalls.log\x00" as *const u8 as *const libc::c_char,

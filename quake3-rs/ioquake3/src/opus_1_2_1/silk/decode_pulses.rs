@@ -345,8 +345,7 @@ pub unsafe extern "C" fn silk_decode_pulses(
     let mut RateLevelIndex: i32 = 0;
     let mut sum_pulses: [i32; 20] = [0; 20];
     let mut nLshifts: [i32; 20] = [0; 20];
-    let mut pulses_ptr: *mut opus_int16 =
-        0 as *mut opus_int16;
+    let mut pulses_ptr: *mut opus_int16 = 0 as *mut opus_int16;
     let mut cdf_ptr: *const u8 = 0 as *const u8;
     /* ********************/
     /* Decode rate level */
@@ -401,9 +400,8 @@ pub unsafe extern "C" fn silk_decode_pulses(
         if sum_pulses[i as usize] > 0 as i32 {
             crate::src::opus_1_2_1::silk::shell_coder::silk_shell_decoder(
                 &mut *pulses.offset(
-                    (i as opus_int16 as opus_int32
-                        * 16 as i32 as opus_int16
-                            as opus_int32) as isize,
+                    (i as opus_int16 as opus_int32 * 16 as i32 as opus_int16 as opus_int32)
+                        as isize,
                 ),
                 psRangeDec as *mut ec_ctx,
                 sum_pulses[i as usize],
@@ -411,14 +409,12 @@ pub unsafe extern "C" fn silk_decode_pulses(
         } else {
             crate::stdlib::memset(
                 &mut *pulses.offset(
-                    (i as opus_int16 as opus_int32
-                        * 16 as i32 as opus_int16
-                            as opus_int32) as isize,
+                    (i as opus_int16 as opus_int32 * 16 as i32 as opus_int16 as opus_int32)
+                        as isize,
                 ) as *mut opus_int16 as *mut libc::c_void,
                 0 as i32,
-                (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    opus_int16,
-                >() as libc::c_ulong),
+                (16 as i32 as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
             );
         }
         i += 1
@@ -431,17 +427,14 @@ pub unsafe extern "C" fn silk_decode_pulses(
         if nLshifts[i as usize] > 0 as i32 {
             nLS = nLshifts[i as usize];
             pulses_ptr = &mut *pulses.offset(
-                (i as opus_int16 as opus_int32
-                    * 16 as i32 as opus_int16
-                        as opus_int32) as isize,
+                (i as opus_int16 as opus_int32 * 16 as i32 as opus_int16 as opus_int32) as isize,
             ) as *mut opus_int16;
             k = 0 as i32;
             while k < 16 as i32 {
                 abs_q = *pulses_ptr.offset(k as isize) as i32;
                 j = 0 as i32;
                 while j < nLS {
-                    abs_q = ((abs_q as opus_uint32) << 1 as i32)
-                        as opus_int32;
+                    abs_q = ((abs_q as opus_uint32) << 1 as i32) as opus_int32;
                     abs_q += crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                         psRangeDec as *mut ec_ctx,
                         crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF.as_ptr(),

@@ -614,451 +614,406 @@ pub static mut g_clients: [gclient_t; 64] = [gclient_t {
 }; 64];
 #[no_mangle]
 
-pub static mut g_gametype: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_gametype: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_dmflags: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_dmflags: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_fraglimit: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_fraglimit: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_timelimit: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_timelimit: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_capturelimit: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_capturelimit: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_friendlyFire: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_friendlyFire: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_password: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_password: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_needpass: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_needpass: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_maxclients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_maxclients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_maxGameClients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_maxGameClients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_dedicated: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_dedicated: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_speed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_speed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_gravity: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_gravity: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_cheats: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_cheats: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_knockback: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_knockback: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_quadfactor: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_quadfactor: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_forcerespawn: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_forcerespawn: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_inactivity: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_inactivity: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_debugMove: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_debugMove: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_debugDamage: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_debugDamage: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_debugAlloc: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_debugAlloc: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_weaponRespawn: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_weaponRespawn: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_weaponTeamRespawn: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_weaponTeamRespawn: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_motd: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_motd: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_synchronousClients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_synchronousClients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_warmup: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_warmup: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_doWarmup: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_doWarmup: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_restarted: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_restarted: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_logfile: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_logfile: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_logfileSync: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_logfileSync: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_blood: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_blood: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_podiumDist: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_podiumDist: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_podiumDrop: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_podiumDrop: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_allowVote: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_allowVote: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_teamAutoJoin: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_teamAutoJoin: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_teamForceBalance: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_teamForceBalance: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_banIPs: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_banIPs: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_filterBan: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_filterBan: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_smoothClients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_smoothClients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut pmove_fixed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut pmove_fixed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut pmove_msec: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut pmove_msec: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_rankings: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_rankings: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_listEntity: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_listEntity: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut g_localTeamPref: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut g_localTeamPref: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 
 static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
     [
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_cheats as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_cheats as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"sv_cheats\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1070,8 +1025,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: 0 as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: 0 as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"gamename\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"baseq3\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -1084,8 +1038,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: 0 as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: 0 as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"gamedate\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"Jan 10 2020\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -1098,8 +1051,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_restarted as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_restarted as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_restarted\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1112,8 +1064,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_gametype as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_gametype as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_gametype\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1126,8 +1077,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_maxclients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_maxclients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"sv_maxclients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1140,8 +1090,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_maxGameClients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_maxGameClients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_maxGameClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1154,8 +1103,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_dmflags as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_dmflags as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"dmflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32,
@@ -1167,8 +1115,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_fraglimit as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_fraglimit as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"fraglimit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32 | 0x400 as i32,
@@ -1180,8 +1127,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_timelimit as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_timelimit as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"timelimit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x4 as i32 | 0x1 as i32 | 0x400 as i32,
@@ -1193,8 +1139,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_capturelimit as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_capturelimit as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"capturelimit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1207,8 +1152,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_synchronousClients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_synchronousClients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_synchronousClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1221,8 +1165,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_friendlyFire as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_friendlyFire as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_friendlyFire\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1235,8 +1178,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_teamAutoJoin as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_teamAutoJoin as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_teamAutoJoin\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1249,8 +1191,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_teamForceBalance as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_teamForceBalance as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_teamForceBalance\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1263,8 +1204,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_warmup as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_warmup as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_warmup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -1276,8 +1216,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_doWarmup as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_doWarmup as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_doWarmup\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1290,8 +1229,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_logfile as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_logfile as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_log\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"games.log\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -1304,8 +1242,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_logfileSync as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_logfileSync as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_logsync\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -1317,8 +1254,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_password as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_password as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_password\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1331,8 +1267,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_banIPs as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_banIPs as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_banIPs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -1344,8 +1279,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_filterBan as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_filterBan as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_filterBan\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1358,8 +1292,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_needpass as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_needpass as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_needpass\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1372,8 +1305,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_dedicated as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_dedicated as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"dedicated\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1385,8 +1317,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_speed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_speed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"320\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1398,8 +1329,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_gravity as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_gravity as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_gravity\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"800\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1411,8 +1341,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_knockback as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_knockback as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_knockback\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1000\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1425,8 +1354,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_quadfactor as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_quadfactor as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_quadfactor\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1439,8 +1367,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_weaponRespawn as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_weaponRespawn as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_weaponrespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1453,8 +1380,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_weaponTeamRespawn as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_weaponTeamRespawn as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_weaponTeamRespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"30\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1467,8 +1393,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_forcerespawn as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_forcerespawn as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_forcerespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"20\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1481,8 +1406,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_inactivity as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_inactivity as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_inactivity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1495,8 +1419,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugMove as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_debugMove as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_debugMove\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1509,8 +1432,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugDamage as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_debugDamage as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_debugDamage\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1523,8 +1445,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_debugAlloc as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_debugAlloc as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_debugAlloc\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1537,8 +1458,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_motd as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_motd as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_motd\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1550,8 +1470,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_blood as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_blood as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"com_blood\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -1563,8 +1482,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_podiumDist as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_podiumDist as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_podiumDist\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"80\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1577,8 +1495,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_podiumDrop as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_podiumDrop as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_podiumDrop\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"70\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1591,8 +1508,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_allowVote as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_allowVote as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_allowVote\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1605,8 +1521,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_listEntity as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_listEntity as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_listEntity\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1619,8 +1534,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_smoothClients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_smoothClients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_smoothClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1633,8 +1547,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_fixed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &pmove_fixed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"pmove_fixed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1647,8 +1560,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_msec as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &pmove_msec as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"pmove_msec\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1661,8 +1573,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_rankings as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_rankings as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_rankings\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1675,8 +1586,7 @@ static mut gameCvarTable: [cvarTable_t; 46] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &g_localTeamPref as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &g_localTeamPref as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_localTeamPref\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1726,13 +1636,7 @@ pub unsafe extern "C" fn vmMain(
             G_ShutdownGame(arg0);
             return 0 as i32 as intptr_t;
         }
-        2 => {
-            return ClientConnect(
-                arg0,
-                arg1 as qboolean,
-                arg2 as qboolean,
-            ) as intptr_t
-        }
+        2 => return ClientConnect(arg0, arg1 as qboolean, arg2 as qboolean) as intptr_t,
         7 => {
             ClientThink(arg0);
             return 0 as i32 as intptr_t;
@@ -1871,8 +1775,7 @@ G_RegisterCvars
 pub unsafe extern "C" fn G_RegisterCvars() {
     let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    let mut remapped: qboolean =
-        qfalse;
+    let mut remapped: qboolean = qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
     while i < gameCvarTableSize {
@@ -1895,9 +1798,7 @@ pub unsafe extern "C" fn G_RegisterCvars() {
         G_RemapTeamShaders();
     }
     // check some things
-    if g_gametype.integer < 0 as i32
-        || g_gametype.integer >= GT_MAX_GAME_TYPE as i32
-    {
+    if g_gametype.integer < 0 as i32 || g_gametype.integer >= GT_MAX_GAME_TYPE as i32 {
         G_Printf(
             b"g_gametype %i is out of range, defaulting to 0\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1907,9 +1808,7 @@ pub unsafe extern "C" fn G_RegisterCvars() {
             b"g_gametype\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut g_gametype as *mut _ as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut g_gametype as *mut _ as *mut vmCvar_t);
     }
     level.warmupModificationCount = g_warmup.modificationCount;
 }
@@ -1923,15 +1822,12 @@ G_UpdateCvars
 pub unsafe extern "C" fn G_UpdateCvars() {
     let mut i: i32 = 0;
     let mut cv: *mut cvarTable_t = 0 as *mut cvarTable_t;
-    let mut remapped: qboolean =
-        qfalse;
+    let mut remapped: qboolean = qfalse;
     i = 0 as i32;
     cv = gameCvarTable.as_mut_ptr();
     while i < gameCvarTableSize {
         if !(*cv).vmCvar.is_null() {
-            trap_Cvar_Update(
-                (*cv).vmCvar as *mut vmCvar_t,
-            );
+            trap_Cvar_Update((*cv).vmCvar as *mut vmCvar_t);
             if (*cv).modificationCount != (*(*cv).vmCvar).modificationCount {
                 (*cv).modificationCount = (*(*cv).vmCvar).modificationCount;
                 if (*cv).trackChange as u64 != 0 {
@@ -2002,11 +1898,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
                 FS_APPEND_SYNC,
             );
         } else {
-            trap_FS_FOpenFile(
-                g_logfile.string.as_mut_ptr(),
-                &mut level.logFile,
-                FS_APPEND,
-            );
+            trap_FS_FOpenFile(g_logfile.string.as_mut_ptr(), &mut level.logFile, FS_APPEND);
         }
         if level.logFile == 0 {
             G_Printf(
@@ -2070,8 +1962,7 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
         level.gentities as *mut gentity_s,
         level.num_entities,
         ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
-        &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _
-            as *mut playerState_s,
+        &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _ as *mut playerState_s,
         ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
     );
     // reserve some spots for dead player bodies
@@ -2097,19 +1988,13 @@ pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut
                 as *mut libc::c_char,
         );
     }
-    if trap_Cvar_VariableIntegerValue(
-        b"bot_enable\x00" as *const u8 as *const libc::c_char,
-    ) != 0
-    {
+    if trap_Cvar_VariableIntegerValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) != 0 {
         BotAISetup(restart);
         BotAILoadMap(restart);
         G_InitBots(restart as qboolean);
     }
     G_RemapTeamShaders();
-    trap_SetConfigstring(
-        22 as i32,
-        b"\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_SetConfigstring(22 as i32, b"\x00" as *const u8 as *const libc::c_char);
 }
 /*
 =================
@@ -2131,10 +2016,7 @@ pub unsafe extern "C" fn G_ShutdownGame(mut restart: i32) {
     }
     // write all the client session data so we can get it back
     G_WriteSessionData();
-    if trap_Cvar_VariableIntegerValue(
-        b"bot_enable\x00" as *const u8 as *const libc::c_char,
-    ) != 0
-    {
+    if trap_Cvar_VariableIntegerValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) != 0 {
         BotAIShutdown(restart);
     };
 }
@@ -2355,12 +2237,9 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     while i < level.maxclients {
         client = &mut *level.clients.offset(i as isize) as *mut gclient_s;
         if !((*client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
-            if !((*client).sess.sessionTeam as u32
-                != TEAM_SPECTATOR as i32 as u32)
-            {
+            if !((*client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32) {
                 // never select the dedicated follow or scoreboard clients
-                if !((*client).sess.spectatorState as u32
-                    == SPECTATOR_SCOREBOARD as i32 as u32
+                if !((*client).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32
                     || (*client).sess.spectatorClient < 0 as i32)
                 {
                     if nextInLine.is_null()
@@ -2404,9 +2283,7 @@ pub unsafe extern "C" fn AddTournamentQueue(mut client: *mut gclient_t) {
         if (*curclient).pers.connected as u32 != CON_DISCONNECTED as i32 as u32 {
             if curclient == client {
                 (*curclient).sess.spectatorNum = 0 as i32
-            } else if (*curclient).sess.sessionTeam as u32
-                == TEAM_SPECTATOR as i32 as u32
-            {
+            } else if (*curclient).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
                 (*curclient).sess.spectatorNum += 1
             }
         }
@@ -2435,8 +2312,7 @@ pub unsafe extern "C" fn RemoveTournamentLoser() {
     }
     // make them a spectator
     SetTeam(
-        &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _
-            as *mut gentity_s,
+        &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _ as *mut gentity_s,
         b"s\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2460,8 +2336,7 @@ pub unsafe extern "C" fn RemoveTournamentWinner() {
     }
     // make them a spectator
     SetTeam(
-        &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _
-            as *mut gentity_s,
+        &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut _ as *mut gentity_s,
         b"s\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -2685,8 +2560,7 @@ pub unsafe extern "C" fn CalculateRanks() {
                 .persistant[PERS_RANK as i32 as usize] = rank | 0x4000 as i32
             }
             score = newScore;
-            if g_gametype.integer == GT_SINGLE_PLAYER as i32
-                && level.numPlayingClients == 1 as i32
+            if g_gametype.integer == GT_SINGLE_PLAYER as i32 && level.numPlayingClients == 1 as i32
             {
                 (*level
                     .clients
@@ -2799,11 +2673,10 @@ pub unsafe extern "C" fn SendScoreboardMessageToAllClients() {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < level.maxclients {
-        if (*level.clients.offset(i as isize)).pers.connected as u32
-            == CON_CONNECTED as i32 as u32
+        if (*level.clients.offset(i as isize)).pers.connected as u32 == CON_CONNECTED as i32 as u32
         {
             DeathmatchScoreboardMessage(
-                g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_s,
+                g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_s
             );
         }
         i += 1
@@ -2821,9 +2694,7 @@ If a new client connects, this will be called after the spawn function.
 
 pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut gentity_t) {
     // take out of follow mode if needed
-    if (*(*ent).client).sess.spectatorState as u32
-        == SPECTATOR_FOLLOW as i32 as u32
-    {
+    if (*(*ent).client).sess.spectatorState as u32 == SPECTATOR_FOLLOW as i32 as u32 {
         StopFollowing(ent as *mut gentity_s);
     }
     FindIntermissionPoint();
@@ -2868,8 +2739,7 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
     // find the intermission spot
     ent = G_Find(
         0 as *mut gentity_t as *mut gentity_s,
-        &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-            as size_t as i32,
+        &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
         b"info_player_intermission\x00" as *const u8 as *const libc::c_char,
     ) as *mut gentity_s;
     if ent.is_null() {
@@ -2890,8 +2760,7 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
         level.intermission_angle[2 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
         // if it has a target, look towards it
         if !(*ent).target.is_null() {
-            target = G_PickTarget((*ent).target)
-                as *mut gentity_s;
+            target = G_PickTarget((*ent).target) as *mut gentity_s;
             if !target.is_null() {
                 dir[0 as i32 as usize] = (*target).s.origin[0 as i32 as usize]
                     - level.intermission_origin[0 as i32 as usize];
@@ -2933,9 +2802,7 @@ pub unsafe extern "C" fn BeginIntermission() {
         if !((*client).inuse as u64 == 0) {
             // respawn if dead
             if (*client).health <= 0 as i32 {
-                ClientRespawn(
-                    client as *mut gentity_s,
-                );
+                ClientRespawn(client as *mut gentity_s);
             }
             MoveClientToIntermission(client);
         }
@@ -2996,10 +2863,7 @@ pub unsafe extern "C" fn ExitLevel() {
         nextmap.as_mut_ptr(),
         b"map_restart 0\x00" as *const u8 as *const libc::c_char,
     ) == 0
-        && Q_stricmp(
-            d1.as_mut_ptr(),
-            b"\x00" as *const u8 as *const libc::c_char,
-        ) != 0
+        && Q_stricmp(d1.as_mut_ptr(), b"\x00" as *const u8 as *const libc::c_char) != 0
     {
         trap_Cvar_Set(
             b"nextmap\x00" as *const u8 as *const libc::c_char,
@@ -3034,8 +2898,7 @@ pub unsafe extern "C" fn ExitLevel() {
     // next level will know the others aren't done reconnecting
     i = 0 as i32;
     while i < g_maxclients.integer {
-        if (*level.clients.offset(i as isize)).pers.connected as u32
-            == CON_CONNECTED as i32 as u32
+        if (*level.clients.offset(i as isize)).pers.connected as u32 == CON_CONNECTED as i32 as u32
         {
             (*level.clients.offset(i as isize)).pers.connected = CON_CONNECTING
         }
@@ -3113,10 +2976,7 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
     level.intermissionQueued = level.time;
     // this will keep the clients from playing any voice sounds
     // that will get cut off when the queued intermission starts
-    trap_SetConfigstring(
-        22 as i32,
-        b"1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_SetConfigstring(22 as i32, b"1\x00" as *const u8 as *const libc::c_char);
     // don't send more than 32 scores (FIXME?)
     numSorted = level.numConnectedClients;
     if numSorted > 32 as i32 {
@@ -3254,8 +3114,7 @@ pub unsafe extern "C" fn ScoreIsTied() -> qboolean {
     }
     if g_gametype.integer >= GT_TEAM as i32 {
         return (level.teamScores[TEAM_RED as i32 as usize]
-            == level.teamScores[TEAM_BLUE as i32 as usize])
-            as i32 as qboolean;
+            == level.teamScores[TEAM_BLUE as i32 as usize]) as i32 as qboolean;
     }
     a = (*level
         .clients
@@ -3311,9 +3170,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             b"timelimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut g_timelimit as *mut _ as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut g_timelimit as *mut _ as *mut vmCvar_t);
     }
     if g_timelimit.integer != 0 && level.warmupTime == 0 {
         if level.time - level.startTime >= g_timelimit.integer * 60000 as i32 {
@@ -3335,9 +3192,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             b"fraglimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut g_fraglimit as *mut _ as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut g_fraglimit as *mut _ as *mut vmCvar_t);
     }
     if g_gametype.integer < GT_CTF as i32 && g_fraglimit.integer != 0 {
         if level.teamScores[TEAM_RED as i32 as usize] >= g_fraglimit.integer {
@@ -3361,9 +3216,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             cl = level.clients.offset(i as isize);
             if !((*cl).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
                 if !((*cl).sess.sessionTeam as u32 != TEAM_FREE as i32 as u32) {
-                    if (*cl).ps.persistant[PERS_SCORE as i32 as usize]
-                        >= g_fraglimit.integer
-                    {
+                    if (*cl).ps.persistant[PERS_SCORE as i32 as usize] >= g_fraglimit.integer {
                         LogExit(b"Fraglimit hit.\x00" as *const u8 as *const libc::c_char);
                         trap_SendServerCommand(
                             -(1 as i32),
@@ -3391,13 +3244,10 @@ pub unsafe extern "C" fn CheckExitRules() {
             b"capturelimit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut g_capturelimit as *mut _ as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut g_capturelimit as *mut _ as *mut vmCvar_t);
     }
     if g_gametype.integer >= GT_CTF as i32 && g_capturelimit.integer != 0 {
-        if level.teamScores[TEAM_RED as i32 as usize] >= g_capturelimit.integer
-        {
+        if level.teamScores[TEAM_RED as i32 as usize] >= g_capturelimit.integer {
             trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Red hit the capturelimit.\n\"\x00" as *const u8 as *const libc::c_char,
@@ -3405,8 +3255,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             LogExit(b"Capturelimit hit.\x00" as *const u8 as *const libc::c_char);
             return;
         }
-        if level.teamScores[TEAM_BLUE as i32 as usize] >= g_capturelimit.integer
-        {
+        if level.teamScores[TEAM_BLUE as i32 as usize] >= g_capturelimit.integer {
             trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Blue hit the capturelimit.\n\"\x00" as *const u8 as *const libc::c_char,
@@ -3499,17 +3348,12 @@ pub unsafe extern "C" fn CheckTournament() {
             level.restarted = qtrue;
             return;
         }
-    } else if g_gametype.integer != GT_SINGLE_PLAYER as i32
-        && level.warmupTime != 0 as i32
-    {
+    } else if g_gametype.integer != GT_SINGLE_PLAYER as i32 && level.warmupTime != 0 as i32 {
         let mut counts: [i32; 4] = [0; 4];
-        let mut notEnough: qboolean =
-            qfalse;
+        let mut notEnough: qboolean = qfalse;
         if g_gametype.integer >= GT_TEAM as i32 {
-            counts[TEAM_BLUE as i32 as usize] =
-                TeamCount(-(1 as i32), TEAM_BLUE);
-            counts[TEAM_RED as i32 as usize] =
-                TeamCount(-(1 as i32), TEAM_RED);
+            counts[TEAM_BLUE as i32 as usize] = TeamCount(-(1 as i32), TEAM_BLUE);
+            counts[TEAM_RED as i32 as usize] = TeamCount(-(1 as i32), TEAM_RED);
             if counts[TEAM_RED as i32 as usize] < 1 as i32
                 || counts[TEAM_BLUE as i32 as usize] < 1 as i32
             {
@@ -3619,10 +3463,7 @@ pub unsafe extern "C" fn CheckVote() {
         return;
     }
     level.voteTime = 0 as i32;
-    trap_SetConfigstring(
-        8 as i32,
-        b"\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_SetConfigstring(8 as i32, b"\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ==================
@@ -3684,8 +3525,7 @@ pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
     while i < level.maxclients {
         if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
             if (*level.clients.offset(i as isize)).sess.teamLeader as u64 != 0 {
-                (*level.clients.offset(i as isize)).sess.teamLeader =
-                    qfalse;
+                (*level.clients.offset(i as isize)).sess.teamLeader = qfalse;
                 ClientUserinfoChanged(i);
             }
         }
@@ -3728,8 +3568,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
         while i < level.maxclients {
             if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
                 if g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
-                    (*level.clients.offset(i as isize)).sess.teamLeader =
-                        qtrue;
+                    (*level.clients.offset(i as isize)).sess.teamLeader = qtrue;
                     break;
                 }
             }
@@ -3741,8 +3580,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
                 if (*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32 {
                     i += 1
                 } else {
-                    (*level.clients.offset(i as isize)).sess.teamLeader =
-                        qtrue;
+                    (*level.clients.offset(i as isize)).sess.teamLeader = qtrue;
                     break;
                 }
             }
@@ -4113,8 +3951,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     //
     // go through all allocated objects
     //
-    ent =
-        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
+    ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
     let mut current_block_24: u64;
     i = 0 as i32;
     while i < level.num_entities {
@@ -4132,17 +3969,13 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
                 }
                 if (*ent).freeAfterEvent as u64 != 0 {
                     // tempEntities or dropped items completely go away after their event
-                    G_FreeEntity(
-                        ent as *mut gentity_s,
-                    );
+                    G_FreeEntity(ent as *mut gentity_s);
                     current_block_24 = 17216689946888361452;
                 } else {
                     if (*ent).unlinkAfterEvent as u64 != 0 {
                         // items that will respawn will hide themselves after their pickup event
                         (*ent).unlinkAfterEvent = qfalse;
-                        trap_UnlinkEntity(
-                            ent as *mut gentity_s,
-                        );
+                        trap_UnlinkEntity(ent as *mut gentity_s);
                     }
                     current_block_24 = 17478428563724192186;
                 }
@@ -4157,23 +3990,15 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
                     if !((*ent).freeAfterEvent as u64 != 0) {
                         if !((*ent).r.linked as u64 == 0 && (*ent).neverFree as u32 != 0) {
                             if (*ent).s.eType == ET_MISSILE as i32 {
-                                G_RunMissile(
-                                    ent as *mut gentity_s,
-                                );
+                                G_RunMissile(ent as *mut gentity_s);
                             } else if (*ent).s.eType == ET_ITEM as i32
                                 || (*ent).physicsObject as u32 != 0
                             {
-                                G_RunItem(
-                                    ent as *mut gentity_s,
-                                );
+                                G_RunItem(ent as *mut gentity_s);
                             } else if (*ent).s.eType == ET_MOVER as i32 {
-                                G_RunMover(
-                                    ent as *mut gentity_s,
-                                );
+                                G_RunMover(ent as *mut gentity_s);
                             } else if i < 64 as i32 {
-                                G_RunClient(
-                                    ent as *mut gentity_s,
-                                );
+                                G_RunClient(ent as *mut gentity_s);
                             } else {
                                 G_RunThink(ent);
                             }
@@ -4186,8 +4011,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
         ent = ent.offset(1)
     }
     // perform final fixups on the players
-    ent =
-        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
+    ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut gentity_t;
     i = 0 as i32;
     while i < level.maxclients {
         if (*ent).inuse as u64 != 0 {

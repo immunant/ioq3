@@ -356,9 +356,7 @@ Returns the amount of memory (in bytes) needed to store the samples in out inter
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_AdpcmMemoryNeeded(
-    mut info: *const wavinfo_t,
-) -> i32 {
+pub unsafe extern "C" fn S_AdpcmMemoryNeeded(mut info: *const wavinfo_t) -> i32 {
     let mut scale: f32 = 0.;
     let mut scaledSampleCount: i32 = 0;
     let mut sampleMemory: i32 = 0;
@@ -388,16 +386,12 @@ S_AdpcmGetSamples
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_AdpcmGetSamples(
-    mut chunk: *mut sndBuffer,
-    mut to: *mut i16,
-) {
+pub unsafe extern "C" fn S_AdpcmGetSamples(mut chunk: *mut sndBuffer, mut to: *mut i16) {
     let mut state: adpcm_state_t = adpcm_state_t {
         sample: 0,
         index: 0,
     };
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     // get the starting state from the block header
     state.index = (*chunk).adpcm.index;
     state.sample = (*chunk).adpcm.sample;
@@ -477,10 +471,7 @@ S_AdpcmEncodeSound
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_AdpcmEncodeSound(
-    mut sfx: *mut sfx_t,
-    mut samples: *mut i16,
-) {
+pub unsafe extern "C" fn S_AdpcmEncodeSound(mut sfx: *mut sfx_t, mut samples: *mut i16) {
     let mut state: adpcm_state_t = adpcm_state_t {
         sample: 0,
         index: 0,
@@ -490,8 +481,7 @@ pub unsafe extern "C" fn S_AdpcmEncodeSound(
     let mut n: i32 = 0;
     let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     inOffset = 0 as i32;
     count = (*sfx).soundLength;
     state.index = 0 as i32 as libc::c_char;
@@ -502,8 +492,7 @@ pub unsafe extern "C" fn S_AdpcmEncodeSound(
         if n > 1024 as i32 * 2 as i32 * 2 as i32 {
             n = 1024 as i32 * 2 as i32 * 2 as i32
         }
-        newchunk =
-            SND_malloc() as *mut sndBuffer_s;
+        newchunk = SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {

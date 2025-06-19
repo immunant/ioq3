@@ -163,8 +163,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -186,8 +185,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -213,8 +211,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -240,8 +237,7 @@ static mut s_driverinfo: driverinfo_t = driverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -286,9 +282,7 @@ DriverInfo_MenuDraw
 unsafe extern "C" fn DriverInfo_MenuDraw() {
     let mut i: i32 = 0;
     let mut y: i32 = 0;
-    Menu_Draw(
-        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework);
     UI_DrawString(
         320 as i32,
         80 as i32,
@@ -313,30 +307,21 @@ unsafe extern "C" fn DriverInfo_MenuDraw() {
     UI_DrawString(
         320 as i32,
         80 as i32 + 16 as i32,
-        uis
-            .glconfig
-            .vendor_string
-            .as_mut_ptr(),
+        uis.glconfig.vendor_string.as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
         text_color_normal.as_mut_ptr(),
     );
     UI_DrawString(
         320 as i32,
         96 as i32 + 16 as i32,
-        uis
-            .glconfig
-            .version_string
-            .as_mut_ptr(),
+        uis.glconfig.version_string.as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
         text_color_normal.as_mut_ptr(),
     );
     UI_DrawString(
         320 as i32,
         112 as i32 + 16 as i32,
-        uis
-            .glconfig
-            .renderer_string
-            .as_mut_ptr(),
+        uis.glconfig.renderer_string.as_mut_ptr(),
         0x1 as i32 | 0x10 as i32,
         text_color_normal.as_mut_ptr(),
     );
@@ -458,10 +443,7 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
     // (no matter what your resolution)
     Q_strncpyz(
         s_driverinfo.stringbuff.as_mut_ptr(),
-        uis
-            .glconfig
-            .extensions_string
-            .as_mut_ptr(),
+        uis.glconfig.extensions_string.as_mut_ptr(),
         1024 as i32,
     );
     // build null terminated extension strings
@@ -509,9 +491,7 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
         &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
         &mut s_driverinfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    UI_PushMenu(
-        &mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_driverinfo.menu as *mut _ as *mut _tag_menuframework);
 }
 
 static mut s_ivo: InitialVideoOptions_s = InitialVideoOptions_s {
@@ -550,8 +530,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -573,8 +552,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -600,8 +578,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -627,8 +604,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -650,8 +626,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -673,8 +648,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -696,8 +670,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -719,8 +692,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -748,8 +720,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -777,8 +748,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -806,8 +776,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -835,8 +804,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -859,8 +827,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -888,8 +855,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -917,8 +883,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -946,8 +911,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -975,8 +939,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1004,8 +967,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1033,8 +995,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1062,8 +1023,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1085,8 +1045,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1112,8 +1071,7 @@ static mut s_graphicsoptions: graphicsoptions_t = graphicsoptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1285,8 +1243,7 @@ static mut detectedResolutions: [*const libc::c_char; 32] = [0 as *const libc::c
 
 static mut resolutions: *mut *const libc::c_char = unsafe { builtinResolutions.as_ptr() as *mut _ };
 
-static mut resolutionsDetected: qboolean =
-    qfalse;
+static mut resolutionsDetected: qboolean = qfalse;
 /*
 =================
 GraphicsOptions_FindBuiltinResolution
@@ -1375,11 +1332,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         // rename common ratios ("1.33:1" -> "4:3")
         i = 0 as i32;
         while !knownRatios[i as usize][0 as i32 as usize].is_null() {
-            if Q_stricmp(
-                str.as_mut_ptr(),
-                knownRatios[i as usize][0 as i32 as usize],
-            ) == 0
-            {
+            if Q_stricmp(str.as_mut_ptr(), knownRatios[i as usize][0 as i32 as usize]) == 0 {
                 Q_strncpyz(
                     str.as_mut_ptr(),
                     knownRatios[i as usize][1 as i32 as usize],
@@ -1394,11 +1347,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         // establish res/ratio relationship
         i = 0 as i32;
         while ratioBuf[i as usize][0 as i32 as usize] != 0 {
-            if Q_stricmp(
-                str.as_mut_ptr(),
-                ratioBuf[i as usize].as_mut_ptr(),
-            ) == 0
-            {
+            if Q_stricmp(str.as_mut_ptr(), ratioBuf[i as usize].as_mut_ptr()) == 0 {
                 break;
             }
             i += 1
@@ -1428,8 +1377,7 @@ unsafe extern "C" fn GraphicsOptions_GetInitialVideo() {
     s_ivo.driver = s_graphicsoptions.driver.curvalue;
     s_ivo.mode = s_graphicsoptions.mode.curvalue;
     s_ivo.fullscreen = s_graphicsoptions.fs.curvalue as qboolean;
-    s_ivo.extensions =
-        s_graphicsoptions.allow_extensions.curvalue as qboolean;
+    s_ivo.extensions = s_graphicsoptions.allow_extensions.curvalue as qboolean;
     s_ivo.tq = s_graphicsoptions.tq.curvalue as i32;
     s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
     s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
@@ -1445,9 +1393,7 @@ GraphicsOptions_GetResolutions
 unsafe extern "C" fn GraphicsOptions_GetResolutions() {
     Q_strncpyz(
         resbuf.as_mut_ptr(),
-        UI_Cvar_VariableString(
-            b"r_availableModes\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"r_availableModes\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if *resbuf.as_mut_ptr() != 0 {
@@ -1691,9 +1637,7 @@ unsafe extern "C" fn GraphicsOptions_ApplyChanges(
                 b"r_depthbits\x00" as *const u8 as *const libc::c_char,
                 0 as i32 as f32,
             );
-            trap_Cvar_Reset(
-                b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_Cvar_Reset(b"r_stencilbits\x00" as *const u8 as *const libc::c_char);
         }
         1 => {
             trap_Cvar_SetValue(
@@ -1875,9 +1819,7 @@ GraphicsOptions_MenuDraw
 pub unsafe extern "C" fn GraphicsOptions_MenuDraw() {
     //APSFIX - rework this
     GraphicsOptions_UpdateMenuItems();
-    Menu_Draw(
-        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 =================
@@ -1887,9 +1829,7 @@ GraphicsOptions_SetMenuItems
 
 unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(
-        trap_Cvar_VariableValue(
-            b"r_mode\x00" as *const u8 as *const libc::c_char,
-        ) as i32,
+        trap_Cvar_VariableValue(b"r_mode\x00" as *const u8 as *const libc::c_char) as i32,
     );
     if s_graphicsoptions.mode.curvalue < 0 as i32 {
         if resolutionsDetected as u64 != 0 {
@@ -1913,11 +1853,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
             );
             i = 0 as i32;
             while !detectedResolutions[i as usize].is_null() {
-                if Q_stricmp(
-                    buf.as_mut_ptr(),
-                    detectedResolutions[i as usize],
-                ) == 0
-                {
+                if Q_stricmp(buf.as_mut_ptr(), detectedResolutions[i as usize]) == 0 {
                     s_graphicsoptions.mode.curvalue = i;
                     break;
                 } else {
@@ -1932,37 +1868,28 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
         }
     }
     s_graphicsoptions.ratio.curvalue = resToRatio[s_graphicsoptions.mode.curvalue as usize];
-    s_graphicsoptions.fs.curvalue = trap_Cvar_VariableValue(
-        b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    s_graphicsoptions.fs.curvalue =
+        trap_Cvar_VariableValue(b"r_fullscreen\x00" as *const u8 as *const libc::c_char) as i32;
     s_graphicsoptions.allow_extensions.curvalue =
-        trap_Cvar_VariableValue(
-            b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
-        ) as i32;
+        trap_Cvar_VariableValue(b"r_allowExtensions\x00" as *const u8 as *const libc::c_char)
+            as i32;
     s_graphicsoptions.tq.curvalue = 3 as i32 as f32
-        - trap_Cvar_VariableValue(
-            b"r_picmip\x00" as *const u8 as *const libc::c_char,
-        );
+        - trap_Cvar_VariableValue(b"r_picmip\x00" as *const u8 as *const libc::c_char);
     if s_graphicsoptions.tq.curvalue < 0 as i32 as f32 {
         s_graphicsoptions.tq.curvalue = 0 as i32 as f32
     } else if s_graphicsoptions.tq.curvalue > 3 as i32 as f32 {
         s_graphicsoptions.tq.curvalue = 3 as i32 as f32
     }
-    s_graphicsoptions.lighting.curvalue = (trap_Cvar_VariableValue(
-        b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    match trap_Cvar_VariableValue(
-        b"r_texturebits\x00" as *const u8 as *const libc::c_char,
-    ) as i32
-    {
+    s_graphicsoptions.lighting.curvalue =
+        (trap_Cvar_VariableValue(b"r_vertexLight\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    match trap_Cvar_VariableValue(b"r_texturebits\x00" as *const u8 as *const libc::c_char) as i32 {
         16 => s_graphicsoptions.texturebits.curvalue = 1 as i32,
         32 => s_graphicsoptions.texturebits.curvalue = 2 as i32,
         0 | _ => s_graphicsoptions.texturebits.curvalue = 0 as i32,
     }
     if Q_stricmp(
-        UI_Cvar_VariableString(
-            b"r_textureMode\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"r_textureMode\x00" as *const u8 as *const libc::c_char),
         b"GL_LINEAR_MIPMAP_NEAREST\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -1970,13 +1897,11 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     } else {
         s_graphicsoptions.filter.curvalue = 1 as i32
     }
-    if trap_Cvar_VariableValue(
-        b"r_lodBias\x00" as *const u8 as *const libc::c_char,
-    ) > 0 as i32 as f32
+    if trap_Cvar_VariableValue(b"r_lodBias\x00" as *const u8 as *const libc::c_char)
+        > 0 as i32 as f32
     {
-        if trap_Cvar_VariableValue(
-            b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
-        ) >= 20 as i32 as f32
+        if trap_Cvar_VariableValue(b"r_subdivisions\x00" as *const u8 as *const libc::c_char)
+            >= 20 as i32 as f32
         {
             s_graphicsoptions.geometry.curvalue = 0 as i32
         } else {
@@ -1985,10 +1910,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     } else {
         s_graphicsoptions.geometry.curvalue = 2 as i32
     }
-    match trap_Cvar_VariableValue(
-        b"r_colorbits\x00" as *const u8 as *const libc::c_char,
-    ) as i32
-    {
+    match trap_Cvar_VariableValue(b"r_colorbits\x00" as *const u8 as *const libc::c_char) as i32 {
         16 => s_graphicsoptions.colordepth.curvalue = 1 as i32,
         32 => s_graphicsoptions.colordepth.curvalue = 2 as i32,
         0 | _ => s_graphicsoptions.colordepth.curvalue = 0 as i32,
@@ -2176,8 +2098,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.driver.generic.y = y;
     s_graphicsoptions.driver.itemnames = s_driver_names.as_mut_ptr();
     s_graphicsoptions.driver.curvalue =
-        (uis.glconfig.driverType as u32
-            == GLDRV_VOODOO as i32 as u32) as i32;
+        (uis.glconfig.driverType as u32 == GLDRV_VOODOO as i32 as u32) as i32;
     y += 16 as i32 + 2 as i32;
     // references/modifies "r_allowExtensions"
     s_graphicsoptions.allow_extensions.generic.type_0 = 3 as i32;
@@ -2348,8 +2269,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_graphicsoptions.allow_extensions as *mut menulist_s
-            as *mut libc::c_void,
+        &mut s_graphicsoptions.allow_extensions as *mut menulist_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
@@ -2361,8 +2281,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_graphicsoptions.colordepth as *mut menulist_s
-            as *mut libc::c_void,
+        &mut s_graphicsoptions.colordepth as *mut menulist_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
@@ -2382,8 +2301,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_graphicsoptions.texturebits as *mut menulist_s
-            as *mut libc::c_void,
+        &mut s_graphicsoptions.texturebits as *mut menulist_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
@@ -2391,8 +2309,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_graphicsoptions.driverinfo as *mut menutext_s
-            as *mut libc::c_void,
+        &mut s_graphicsoptions.driverinfo as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
@@ -2404,10 +2321,8 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     );
     GraphicsOptions_SetMenuItems();
     GraphicsOptions_GetInitialVideo();
-    if uis.glconfig.driverType as u32
-        == GLDRV_ICD as i32 as u32
-        && uis.glconfig.hardwareType as u32
-            == GLHW_3DFX_2D3D as i32 as u32
+    if uis.glconfig.driverType as u32 == GLDRV_ICD as i32 as u32
+        && uis.glconfig.hardwareType as u32 == GLHW_3DFX_2D3D as i32 as u32
     {
         s_graphicsoptions.driver.generic.flags |= 0x1000 as i32 as u32 | 0x4000 as i32 as u32
     };
@@ -2420,24 +2335,12 @@ GraphicsOptions_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn GraphicsOptions_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char);
 }
 //
 // ui_video.c
@@ -2451,9 +2354,7 @@ UI_GraphicsOptionsMenu
 
 pub unsafe extern "C" fn UI_GraphicsOptionsMenu() {
     GraphicsOptions_MenuInit();
-    UI_PushMenu(
-        &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut s_graphicsoptions.menu as *mut _ as *mut _tag_menuframework,
         &mut s_graphicsoptions.graphics as *mut menutext_s as *mut libc::c_void,

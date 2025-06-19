@@ -380,8 +380,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -403,8 +402,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -430,8 +428,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -459,8 +456,7 @@ static mut teamOrdersMenuInfo: teamOrdersMenuInfo_t = teamOrdersMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -570,16 +566,13 @@ UI_TeamOrdersMenu_Key
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
-    mut key: i32,
-) -> sfxHandle_t {
+pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(mut key: i32) -> sfxHandle_t {
     let mut l: *mut menulist_s = 0 as *mut menulist_s;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut index: i32 = 0;
-    l = Menu_ItemAtCursor(
-        &mut teamOrdersMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    ) as *mut menulist_s;
+    l = Menu_ItemAtCursor(&mut teamOrdersMenuInfo.menu as *mut _ as *mut _tag_menuframework)
+        as *mut menulist_s;
     if l != &mut teamOrdersMenuInfo.list as *mut menulist_s {
         return Menu_DefaultKey(
             &mut teamOrdersMenuInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -590,14 +583,7 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_Key(
         178 => {
             x = (*l).generic.left;
             y = (*l).generic.top;
-            if UI_CursorInRect(
-                x,
-                y,
-                (*l).generic.right - x,
-                (*l).generic.bottom - y,
-            ) as u64
-                != 0
-            {
+            if UI_CursorInRect(x, y, (*l).generic.right - x, (*l).generic.bottom - y) as u64 != 0 {
                 index = (uis.cursory - y) / 27 as i32;
                 (*l).oldvalue = (*l).curvalue;
                 (*l).curvalue = index;
@@ -648,12 +634,10 @@ unsafe extern "C" fn UI_TeamOrdersMenu_ListDraw(mut self_0: *mut libc::c_void) {
     let mut y: i32 = 0;
     let mut i: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
-    let mut hasfocus: qboolean =
-        qfalse;
+    let mut hasfocus: qboolean = qfalse;
     let mut style: i32 = 0;
     l = self_0 as *mut menulist_s;
-    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32
-        as qboolean;
+    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32 as qboolean;
     x = 320 as i32;
     y = (*l).generic.y;
     i = 0 as i32;
@@ -667,13 +651,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_ListDraw(mut self_0: *mut libc::c_void) {
         } else {
             color = color_orange.as_mut_ptr()
         }
-        UI_DrawProportionalString(
-            x,
-            y,
-            *(*l).itemnames.offset(i as isize),
-            style,
-            color,
-        );
+        UI_DrawProportionalString(x, y, *(*l).itemnames.offset(i as isize), style, color);
         y += 27 as i32;
         i += 1
     }
@@ -752,9 +730,7 @@ unsafe extern "C" fn UI_TeamOrdersMenu_BuildBotList() {
         teamOrdersMenuInfo.bots[n as usize] = teamOrdersMenuInfo.botNames[n as usize].as_mut_ptr();
         n += 1
     }
-    trap_GetClientState(
-        &mut cs as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cs as *mut _ as *mut uiClientState_t);
     Q_strncpyz(
         teamOrdersMenuInfo.botNames[0 as i32 as usize].as_mut_ptr(),
         b"Everyone\x00" as *const u8 as *const libc::c_char,
@@ -831,10 +807,8 @@ unsafe extern "C" fn UI_TeamOrdersMenu_Init() {
         ::std::mem::size_of::<teamOrdersMenuInfo_t>() as libc::c_ulong,
     );
     teamOrdersMenuInfo.menu.fullscreen = qfalse;
-    teamOrdersMenuInfo.menu.key = Some(
-        UI_TeamOrdersMenu_Key
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    teamOrdersMenuInfo.menu.key =
+        Some(UI_TeamOrdersMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     UI_TeamOrdersMenu_BuildBotList();
     teamOrdersMenuInfo.banner.generic.type_0 = 10 as i32;
     teamOrdersMenuInfo.banner.generic.x = 320 as i32;
@@ -902,15 +876,9 @@ UI_TeamOrdersMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_TeamOrdersMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -921,9 +889,7 @@ UI_TeamOrdersMenu
 
 pub unsafe extern "C" fn UI_TeamOrdersMenu() {
     UI_TeamOrdersMenu_Init();
-    UI_PushMenu(
-        &mut teamOrdersMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut teamOrdersMenuInfo.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 ===========================================================================
@@ -1103,9 +1069,7 @@ pub unsafe extern "C" fn UI_TeamOrdersMenu_f() {
         return;
     }
     // not available to spectators
-    trap_GetClientState(
-        &mut cs as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cs as *mut _ as *mut uiClientState_t);
     trap_GetConfigString(
         32 as i32 + 256 as i32 + 256 as i32 + cs.clientNum,
         info.as_mut_ptr(),

@@ -226,9 +226,7 @@ pub struct my_decomp_master {
  * CRUCIAL: this must match the actual capabilities of jdmerge.c!
  */
 
-unsafe extern "C" fn use_merged_upsample(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+unsafe extern "C" fn use_merged_upsample(mut cinfo: j_decompress_ptr) -> boolean {
     /* Merging is the equivalent of plain box-filter upsampling */
     if (*cinfo).do_fancy_upsampling != 0 || (*cinfo).CCIR601_sampling != 0 {
         return 0 as i32;
@@ -279,16 +277,13 @@ unsafe extern "C" fn use_merged_upsample(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_calc_output_dimensions(
-    mut cinfo: j_decompress_ptr,
-)
+pub unsafe extern "C" fn jpeg_calc_output_dimensions(mut cinfo: j_decompress_ptr)
 /* Do computations that are needed before master selection phase.
  * This function is used for full decompression.
  */
 {
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Prevent application from calling me at wrong times */
     if (*cinfo).global_state != 202 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
@@ -301,9 +296,7 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Compute core output image dimensions and DCT scaling choices. */
-    jpeg_core_output_dimensions(
-        cinfo as *mut jpeg_decompress_struct,
-    );
+    jpeg_core_output_dimensions(cinfo as *mut jpeg_decompress_struct);
     /* In selecting the actual DCT scaling for each component, we try to
      * scale up the chroma components via IDCT scaling rather than upsampling.
      * This saves time if the upsampler gets to use 1:1 scaling.
@@ -541,9 +534,7 @@ unsafe extern "C" fn master_selection(mut cinfo: j_decompress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         /* If both quantizers are initialized, the 2-pass one is left active;
          * this is necessary for starting with quantization to an external map.
@@ -561,15 +552,11 @@ unsafe extern "C" fn master_selection(mut cinfo: j_decompress_ptr) {
             (*cinfo).enable_1pass_quant = 1 as i32
         }
         if (*cinfo).enable_1pass_quant != 0 {
-            jinit_1pass_quantizer(
-                cinfo as *mut jpeg_decompress_struct,
-            );
+            jinit_1pass_quantizer(cinfo as *mut jpeg_decompress_struct);
             (*master).quantizer_1pass = (*cinfo).cquantize
         }
         if (*cinfo).enable_2pass_quant != 0 || (*cinfo).enable_external_quant != 0 {
-            jinit_2pass_quantizer(
-                cinfo as *mut jpeg_decompress_struct,
-            );
+            jinit_2pass_quantizer(cinfo as *mut jpeg_decompress_struct);
             (*master).quantizer_2pass = (*cinfo).cquantize
         }
     }
@@ -578,17 +565,11 @@ unsafe extern "C" fn master_selection(mut cinfo: j_decompress_ptr) {
     /* Post-processing: in particular, color conversion first */
     if (*cinfo).raw_data_out == 0 {
         if (*master).using_merged_upsample != 0 {
-            jinit_merged_upsampler(
-                cinfo as *mut jpeg_decompress_struct,
-            );
+            jinit_merged_upsampler(cinfo as *mut jpeg_decompress_struct);
         /* does color conversion too */
         } else {
-            jinit_color_deconverter(
-                cinfo as *mut jpeg_decompress_struct,
-            );
-            jinit_upsampler(
-                cinfo as *mut jpeg_decompress_struct,
-            );
+            jinit_color_deconverter(cinfo as *mut jpeg_decompress_struct);
+            jinit_upsampler(cinfo as *mut jpeg_decompress_struct);
         }
         jinit_d_post_controller(
             cinfo as *mut jpeg_decompress_struct,
@@ -596,31 +577,19 @@ unsafe extern "C" fn master_selection(mut cinfo: j_decompress_ptr) {
         );
     }
     /* Inverse DCT */
-    jinit_inverse_dct(
-        cinfo as *mut jpeg_decompress_struct,
-    );
+    jinit_inverse_dct(cinfo as *mut jpeg_decompress_struct);
     /* Entropy decoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        jinit_arith_decoder(
-            cinfo as *mut jpeg_decompress_struct,
-        );
+        jinit_arith_decoder(cinfo as *mut jpeg_decompress_struct);
     } else {
-        jinit_huff_decoder(
-            cinfo as *mut jpeg_decompress_struct,
-        );
+        jinit_huff_decoder(cinfo as *mut jpeg_decompress_struct);
     }
     /* Initialize principal buffer controllers. */
     use_c_buffer =
         ((*(*cinfo).inputctl).has_multiple_scans != 0 || (*cinfo).buffered_image != 0) as i32;
-    jinit_d_coef_controller(
-        cinfo as *mut jpeg_decompress_struct,
-        use_c_buffer,
-    );
+    jinit_d_coef_controller(cinfo as *mut jpeg_decompress_struct, use_c_buffer);
     if (*cinfo).raw_data_out == 0 {
-        jinit_d_main_controller(
-            cinfo as *mut jpeg_decompress_struct,
-            0 as i32,
-        );
+        jinit_d_main_controller(cinfo as *mut jpeg_decompress_struct, 0 as i32);
     }
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
@@ -714,9 +683,7 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         Some(
@@ -774,9 +741,7 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: j_decompress_ptr) {
                     .start_pass
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo, JBUF_PASS_THRU
-            );
+            .expect("non-null function pointer")(cinfo, JBUF_PASS_THRU);
         }
     }
     /* Set up progress monitor's pass info if present */
@@ -880,13 +845,10 @@ pub unsafe extern "C" fn jinit_master_decompress(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<my_decomp_master>() as libc::c_ulong,
     ) as my_master_ptr;
     (*cinfo).master = master as *mut jpeg_decomp_master;
-    (*master).pub_0.prepare_for_output_pass = Some(
-        prepare_for_output_pass
-            as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
-    (*master).pub_0.finish_output_pass = Some(
-        finish_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*master).pub_0.prepare_for_output_pass =
+        Some(prepare_for_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
+    (*master).pub_0.finish_output_pass =
+        Some(finish_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*master).pub_0.is_dummy_pass = 0 as i32;
     master_selection(cinfo);
 }

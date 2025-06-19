@@ -147,9 +147,7 @@ pub use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
 
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_encode_do_VAD_FLP(
-    mut psEnc: *mut silk_encoder_state_FLP,
-)
+pub unsafe extern "C" fn silk_encode_do_VAD_FLP(mut psEnc: *mut silk_encoder_state_FLP)
 /* I/O  Encoder state FLP                           */
 {
     /* ***************************/
@@ -167,8 +165,7 @@ pub unsafe extern "C" fn silk_encode_do_VAD_FLP(
     /* Convert speech activity into VAD and DTX flags */
     /* *************************************************/
     if (*psEnc).sCmn.speech_activity_Q8
-        < ((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
-            as opus_int32
+        < ((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64) as opus_int32
     {
         (*psEnc).sCmn.indices.signalType = 0 as i32 as i8;
         (*psEnc).sCmn.noSpeechCounter += 1;
@@ -234,27 +231,26 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     mut useCBR: i32,
 ) -> i32
 /* I    Flag to force constant-bitrate operation    */ {
-    let mut sEncCtrl: silk_encoder_control_FLP =
-        silk_encoder_control_FLP {
-            Gains: [0.; 4],
-            PredCoef: [[0.; 16]; 2],
-            LTPCoef: [0.; 20],
-            LTP_scale: 0.,
-            pitchL: [0; 4],
-            AR: [0.; 96],
-            LF_MA_shp: [0.; 4],
-            LF_AR_shp: [0.; 4],
-            Tilt: [0.; 4],
-            HarmShapeGain: [0.; 4],
-            Lambda: 0.,
-            input_quality: 0.,
-            coding_quality: 0.,
-            predGain: 0.,
-            LTPredCodGain: 0.,
-            ResNrg: [0.; 4],
-            GainsUnq_Q16: [0; 4],
-            lastGainIndexPrev: 0,
-        };
+    let mut sEncCtrl: silk_encoder_control_FLP = silk_encoder_control_FLP {
+        Gains: [0.; 4],
+        PredCoef: [[0.; 16]; 2],
+        LTPCoef: [0.; 20],
+        LTP_scale: 0.,
+        pitchL: [0; 4],
+        AR: [0.; 96],
+        LF_MA_shp: [0.; 4],
+        LF_AR_shp: [0.; 4],
+        Tilt: [0.; 4],
+        HarmShapeGain: [0.; 4],
+        Lambda: 0.,
+        input_quality: 0.,
+        coding_quality: 0.,
+        predGain: 0.,
+        LTPredCodGain: 0.,
+        ResNrg: [0.; 4],
+        GainsUnq_Q16: [0; 4],
+        lastGainIndexPrev: 0,
+    };
     let mut i: i32 = 0;
     let mut iter: i32 = 0;
     let mut maxIter: i32 = 0;
@@ -264,36 +260,34 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     let mut x_frame: *mut f32 = 0 as *mut f32;
     let mut res_pitch_frame: *mut f32 = 0 as *mut f32;
     let mut res_pitch: [f32; 672] = [0.; 672];
-    let mut sRangeEnc_copy: ec_enc =
-        ec_enc {
-            buf: 0 as *mut u8,
-            storage: 0,
-            end_offs: 0,
-            end_window: 0,
-            nend_bits: 0,
-            nbits_total: 0,
-            offs: 0,
-            rng: 0,
-            val: 0,
-            ext: 0,
-            rem: 0,
-            error: 0,
-        };
-    let mut sRangeEnc_copy2: ec_enc =
-        ec_enc {
-            buf: 0 as *mut u8,
-            storage: 0,
-            end_offs: 0,
-            end_window: 0,
-            nend_bits: 0,
-            nbits_total: 0,
-            offs: 0,
-            rng: 0,
-            val: 0,
-            ext: 0,
-            rem: 0,
-            error: 0,
-        };
+    let mut sRangeEnc_copy: ec_enc = ec_enc {
+        buf: 0 as *mut u8,
+        storage: 0,
+        end_offs: 0,
+        end_window: 0,
+        nend_bits: 0,
+        nbits_total: 0,
+        offs: 0,
+        rng: 0,
+        val: 0,
+        ext: 0,
+        rem: 0,
+        error: 0,
+    };
+    let mut sRangeEnc_copy2: ec_enc = ec_enc {
+        buf: 0 as *mut u8,
+        storage: 0,
+        end_offs: 0,
+        end_window: 0,
+        nend_bits: 0,
+        nbits_total: 0,
+        offs: 0,
+        rng: 0,
+        val: 0,
+        ext: 0,
+        rem: 0,
+        error: 0,
+    };
     let mut sNSQ_copy: silk_nsq_state = silk_nsq_state {
         xq: [0; 640],
         sLTP_shp_Q14: [0; 640],
@@ -434,8 +428,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         /* Loop over quantizer and entroy coding to control bitrate */
         maxIter = 6 as i32;
         gainMult_Q8 = ((1 as i32 as i64 * ((1 as i32 as i64) << 8 as i32)) as f64 + 0.5f64)
-            as opus_int32
-            as opus_int16;
+            as opus_int32 as opus_int16;
         found_lower = 0 as i32;
         found_upper = 0 as i32;
         gainsID = crate::src::opus_1_2_1::silk::gain_quant::silk_gains_ID(
@@ -446,8 +439,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         gainsID_upper = -(1 as i32);
         /* Copy part of the input state */
         crate::stdlib::memcpy(
-            &mut sRangeEnc_copy as *mut ec_enc
-                as *mut libc::c_void,
+            &mut sRangeEnc_copy as *mut ec_enc as *mut libc::c_void,
             psRangeEnc as *const libc::c_void,
             ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
         );
@@ -470,16 +462,12 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 if iter > 0 as i32 {
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
-                        &mut sRangeEnc_copy as *mut ec_enc
-                            as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>()
-                            as libc::c_ulong,
+                        &mut sRangeEnc_copy as *mut ec_enc as *const libc::c_void,
+                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
                     );
                     crate::stdlib::memcpy(
-                        &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state
-                            as *mut libc::c_void,
-                        &mut sNSQ_copy as *mut silk_nsq_state
-                            as *const libc::c_void,
+                        &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
+                        &mut sNSQ_copy as *mut silk_nsq_state as *const libc::c_void,
                         ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
                     );
                     (*psEnc).sCmn.indices.Seed = seed_copy as i8;
@@ -499,11 +487,9 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 );
                 if iter == maxIter && found_lower == 0 {
                     crate::stdlib::memcpy(
-                        &mut sRangeEnc_copy2 as *mut ec_enc
-                            as *mut libc::c_void,
+                        &mut sRangeEnc_copy2 as *mut ec_enc as *mut libc::c_void,
                         psRangeEnc as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>()
-                            as libc::c_ulong,
+                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
                     );
                 }
                 /* ***************************************/
@@ -531,10 +517,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 if iter == maxIter && found_lower == 0 && nBits > maxBits {
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
-                        &mut sRangeEnc_copy2 as *mut ec_enc
-                            as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>()
-                            as libc::c_ulong,
+                        &mut sRangeEnc_copy2 as *mut ec_enc as *const libc::c_void,
+                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
                     );
                     /* Keep gains the same as the last frame. */
                     (*psEnc).sShape.LastGainIndex = sEncCtrl.lastGainIndexPrev;
@@ -580,10 +564,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     /* Restore output state from earlier iteration that did meet the bitrate budget */
                     crate::stdlib::memcpy(
                         psRangeEnc as *mut libc::c_void,
-                        &mut sRangeEnc_copy2 as *mut ec_enc
-                            as *const libc::c_void,
-                        ::std::mem::size_of::<ec_enc>()
-                            as libc::c_ulong,
+                        &mut sRangeEnc_copy2 as *mut ec_enc as *const libc::c_void,
+                        ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
                     );
                     crate::stdlib::memcpy(
                         (*psRangeEnc).buf as *mut libc::c_void,
@@ -591,10 +573,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                         sRangeEnc_copy2.offs as libc::c_ulong,
                     );
                     crate::stdlib::memcpy(
-                        &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state
-                            as *mut libc::c_void,
-                        &mut sNSQ_copy2 as *mut silk_nsq_state
-                            as *const libc::c_void,
+                        &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *mut libc::c_void,
+                        &mut sNSQ_copy2 as *mut silk_nsq_state as *const libc::c_void,
                         ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
                     );
                     (*psEnc).sShape.LastGainIndex = LastGainIndex_copy2
@@ -630,12 +610,9 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                         gainsID_lower = gainsID;
                         /* Copy part of the output state */
                         crate::stdlib::memcpy(
-                            &mut sRangeEnc_copy2
-                                as *mut ec_enc
-                                as *mut libc::c_void,
+                            &mut sRangeEnc_copy2 as *mut ec_enc as *mut libc::c_void,
                             psRangeEnc as *const libc::c_void,
-                            ::std::mem::size_of::<ec_enc>()
-                                as libc::c_ulong,
+                            ::std::mem::size_of::<ec_enc>() as libc::c_ulong,
                         );
                         crate::stdlib::memcpy(
                             ec_buf_copy.as_mut_ptr() as *mut libc::c_void,
@@ -643,12 +620,9 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             (*psRangeEnc).offs as libc::c_ulong,
                         );
                         crate::stdlib::memcpy(
-                            &mut sNSQ_copy2 as *mut silk_nsq_state
-                                as *mut libc::c_void,
-                            &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state
-                                as *const libc::c_void,
-                            ::std::mem::size_of::<silk_nsq_state>()
-                                as libc::c_ulong,
+                            &mut sNSQ_copy2 as *mut silk_nsq_state as *mut libc::c_void,
+                            &mut (*psEnc).sCmn.sNSQ as *mut silk_nsq_state as *const libc::c_void,
+                            ::std::mem::size_of::<silk_nsq_state>() as libc::c_ulong,
                         );
                         LastGainIndex_copy2 = (*psEnc).sShape.LastGainIndex
                     }
@@ -678,24 +652,20 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     /* Adjust gain according to high-rate rate/distortion curve */
                     if nBits > maxBits {
                         if (gainMult_Q8 as i32) < 16384 as i32 {
-                            gainMult_Q8 =
-                                (gainMult_Q8 as i32 * 2 as i32) as opus_int16
+                            gainMult_Q8 = (gainMult_Q8 as i32 * 2 as i32) as opus_int16
                         } else {
                             gainMult_Q8 = 32767 as i32 as opus_int16
                         }
                     } else {
                         let mut gain_factor_Q16: opus_int32 = 0;
                         gain_factor_Q16 = silk_log2lin(
-                            (((nBits - maxBits) as opus_uint32) << 7 as i32)
-                                as opus_int32
+                            (((nBits - maxBits) as opus_uint32) << 7 as i32) as opus_int32
                                 / (*psEnc).sCmn.frame_length
                                 + ((16 as i32 as i64 * ((1 as i32 as i64) << 7 as i32)) as f64
-                                    + 0.5f64)
-                                    as opus_int32,
+                                    + 0.5f64) as opus_int32,
                         );
                         gainMult_Q8 = (gain_factor_Q16 as i64 * gainMult_Q8 as i64 >> 16 as i32)
-                            as opus_int32
-                            as opus_int16
+                            as opus_int32 as opus_int16
                     }
                 } else {
                     /* Adjust gain by interpolating */
@@ -726,9 +696,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     } else {
                         tmp = gainMult_Q8
                     }
-                    pGains_Q16[i as usize] = (((if 0x80000000 as u32
-                        as opus_int32
-                        >> 8 as i32
+                    pGains_Q16[i as usize] = (((if 0x80000000 as u32 as opus_int32 >> 8 as i32
                         > 0x7fffffff as i32 >> 8 as i32
                     {
                         (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64 >> 16 as i32)
@@ -738,8 +706,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             (0x80000000 as u32 as opus_int32) >> 8 as i32
                         } else {
                             (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64
-                                >> 16 as i32)
-                                as opus_int32)
+                                >> 16 as i32) as opus_int32)
                                 < 0x7fffffff as i32 >> 8 as i32
                             {
                                 (0x7fffffff as i32) >> 8 as i32
@@ -756,8 +723,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                             (0x7fffffff as i32) >> 8 as i32
                         } else {
                             (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64
-                                >> 16 as i32)
-                                as opus_int32)
+                                >> 16 as i32) as opus_int32)
                                 < 0x80000000 as u32 as opus_int32 >> 8 as i32
                             {
                                 (0x80000000 as u32 as opus_int32) >> 8 as i32
@@ -766,10 +732,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                                     as opus_int32
                             })
                         })
-                    })
-                        as opus_uint32)
-                        << 8 as i32)
-                        as opus_int32;
+                    }) as opus_uint32)
+                        << 8 as i32) as opus_int32;
                     i += 1
                 }
                 /* Quantize gains */
@@ -889,8 +853,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
     /* ******************************************/
     if (*psEnc).sCmn.LBRR_enabled != 0
         && (*psEnc).sCmn.speech_activity_Q8
-            > ((0.3f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32
+            > ((0.3f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64) as opus_int32
     {
         (*psEnc).sCmn.LBRR_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 1 as i32;
         /* Copy noise shaping quantizer state and quantization indices from regular encoding */
@@ -901,8 +864,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         );
         crate::stdlib::memcpy(
             psIndices_LBRR as *mut libc::c_void,
-            &mut (*psEnc).sCmn.indices as *mut SideInfoIndices
-                as *const libc::c_void,
+            &mut (*psEnc).sCmn.indices as *mut SideInfoIndices as *const libc::c_void,
             ::std::mem::size_of::<SideInfoIndices>() as libc::c_ulong,
         );
         /* Save original gains */

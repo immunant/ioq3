@@ -219,8 +219,7 @@ pub unsafe extern "C" fn G_InitSessionData(
     mut client: *mut gclient_t,
     mut userinfo: *mut libc::c_char,
 ) {
-    let mut sess: *mut clientSession_t =
-        0 as *mut clientSession_t;
+    let mut sess: *mut clientSession_t = 0 as *mut clientSession_t;
     let mut value: *const libc::c_char = 0 as *const libc::c_char;
     sess = &mut (*client).sess;
     // check for team preference, mainly for bots
@@ -233,9 +232,7 @@ pub unsafe extern "C" fn G_InitSessionData(
         && g_localTeamPref.string[0 as i32 as usize] as i32 != 0
         && (*client).pers.localClient as u32 != 0
     {
-        value = g_localTeamPref
-            .string
-            .as_mut_ptr();
+        value = g_localTeamPref.string.as_mut_ptr();
         // clear team so it's only used once
         trap_Cvar_Set(
             b"g_localTeamPref\x00" as *const u8 as *const libc::c_char,
@@ -247,14 +244,12 @@ pub unsafe extern "C" fn G_InitSessionData(
         // always spawn as spectator in team games
         (*sess).sessionTeam = TEAM_SPECTATOR;
         (*sess).spectatorState = SPECTATOR_FREE;
-        if *value.offset(0 as i32 as isize) as i32 != 0
-            || g_teamAutoJoin.integer != 0
-        {
+        if *value.offset(0 as i32 as isize) as i32 != 0 || g_teamAutoJoin.integer != 0 {
             SetTeam(
                 &mut *g_entities
                     .as_mut_ptr()
-                    .offset(client.offset_from(level.clients) as isize)
-                    as *mut _ as *mut gentity_s,
+                    .offset(client.offset_from(level.clients) as isize) as *mut _
+                    as *mut gentity_s,
                 value,
             );
         }
@@ -274,8 +269,7 @@ pub unsafe extern "C" fn G_InitSessionData(
                 }
                 0 | 2 | _ => {
                     if g_maxGameClients.integer > 0 as i32
-                        && level.numNonSpectatorClients
-                            >= g_maxGameClients.integer
+                        && level.numNonSpectatorClients >= g_maxGameClients.integer
                     {
                         (*sess).sessionTeam = TEAM_SPECTATOR
                     } else {
@@ -561,14 +555,9 @@ pub unsafe extern "C" fn G_WriteSessionData() {
     );
     i = 0 as i32;
     while i < level.maxclients {
-        if (*level.clients.offset(i as isize))
-            .pers
-            .connected as u32
-            == CON_CONNECTED as i32 as u32
+        if (*level.clients.offset(i as isize)).pers.connected as u32 == CON_CONNECTED as i32 as u32
         {
-            G_WriteClientSessionData(
-                &mut *level.clients.offset(i as isize),
-            );
+            G_WriteClientSessionData(&mut *level.clients.offset(i as isize));
         }
         i += 1
     }

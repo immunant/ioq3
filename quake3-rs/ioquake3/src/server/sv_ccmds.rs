@@ -224,9 +224,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut client_t {
         return 0 as *mut client_t;
     }
     if Cmd_Argc() < 2 as i32 {
-        Com_Printf(
-            b"No player specified.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"No player specified.\n\x00" as *const u8 as *const libc::c_char);
         return 0 as *mut client_t;
     }
     s = Cmd_Argv(1 as i32);
@@ -239,9 +237,7 @@ unsafe extern "C" fn SV_GetPlayerByHandle() -> *mut client_t {
         let mut plid: i32 = atoi(s);
         // Check for numeric playerid match
         if plid >= 0 as i32 && plid < (*sv_maxclients).integer {
-            cl = &mut *svs
-                .clients
-                .offset(plid as isize) as *mut client_t;
+            cl = &mut *svs.clients.offset(plid as isize) as *mut client_t;
             if (*cl).state as u64 != 0 {
                 return cl;
             }
@@ -292,9 +288,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
         return 0 as *mut client_t;
     }
     if Cmd_Argc() < 2 as i32 {
-        Com_Printf(
-            b"No player specified.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"No player specified.\n\x00" as *const u8 as *const libc::c_char);
         return 0 as *mut client_t;
     }
     s = Cmd_Argv(1 as i32);
@@ -318,9 +312,7 @@ unsafe extern "C" fn SV_GetPlayerByNum() -> *mut client_t {
         );
         return 0 as *mut client_t;
     }
-    cl = &mut *svs
-        .clients
-        .offset(idnum as isize) as *mut client_t;
+    cl = &mut *svs.clients.offset(idnum as isize) as *mut client_t;
     if (*cl).state as u64 == 0 {
         Com_Printf(
             b"Client %i is not active\n\x00" as *const u8 as *const libc::c_char,
@@ -342,8 +334,7 @@ Restart the server on a different map
 unsafe extern "C" fn SV_Map_f() {
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut map: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut killBots: qboolean =
-        qfalse;
+    let mut killBots: qboolean = qfalse;
     let mut cheat: qboolean = qfalse;
     let mut expanded: [libc::c_char; 64] = [0; 64];
     let mut mapname: [libc::c_char; 64] = [0; 64];
@@ -359,9 +350,7 @@ unsafe extern "C" fn SV_Map_f() {
         b"maps/%s.bsp\x00" as *const u8 as *const libc::c_char,
         map,
     );
-    if FS_ReadFile(expanded.as_mut_ptr(), 0 as *mut *mut libc::c_void)
-        == -(1 as i32) as isize
-    {
+    if FS_ReadFile(expanded.as_mut_ptr(), 0 as *mut *mut libc::c_void) == -(1 as i32) as isize {
         Com_Printf(
             b"Can\'t find map %s\n\x00" as *const u8 as *const libc::c_char,
             expanded.as_mut_ptr(),
@@ -376,12 +365,7 @@ unsafe extern "C" fn SV_Map_f() {
         0x4 as i32 | 0x2 as i32 | 0x20 as i32,
     ) as *mut cvar_s;
     cmd = Cmd_Argv(0 as i32);
-    if Q_stricmpn(
-        cmd,
-        b"sp\x00" as *const u8 as *const libc::c_char,
-        2 as i32,
-    ) == 0 as i32
-    {
+    if Q_stricmpn(cmd, b"sp\x00" as *const u8 as *const libc::c_char, 2 as i32) == 0 as i32 {
         Cvar_SetValue(
             b"g_gametype\x00" as *const u8 as *const libc::c_char,
             GT_SINGLE_PLAYER as i32 as f32,
@@ -396,31 +380,21 @@ unsafe extern "C" fn SV_Map_f() {
             b"8\x00" as *const u8 as *const libc::c_char,
         );
         cmd = cmd.offset(2 as i32 as isize);
-        if Q_stricmp(
-            cmd,
-            b"devmap\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(cmd, b"devmap\x00" as *const u8 as *const libc::c_char) == 0 {
             cheat = qtrue
         } else {
             cheat = qfalse
         }
         killBots = qtrue
     } else {
-        if Q_stricmp(
-            cmd,
-            b"devmap\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(cmd, b"devmap\x00" as *const u8 as *const libc::c_char) == 0 {
             cheat = qtrue;
             killBots = qtrue
         } else {
             cheat = qfalse;
             killBots = qfalse
         }
-        if (*sv_gametype).integer
-            == GT_SINGLE_PLAYER as i32
-        {
+        if (*sv_gametype).integer == GT_SINGLE_PLAYER as i32 {
             Cvar_SetValue(
                 b"g_gametype\x00" as *const u8 as *const libc::c_char,
                 GT_FFA as i32 as f32,
@@ -473,9 +447,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
     }
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if sv.restartTime != 0 {
@@ -486,13 +458,9 @@ unsafe extern "C" fn SV_MapRestart_f() {
     } else {
         delay = 5 as i32
     }
-    if delay != 0
-        && Cvar_VariableValue(
-            b"g_doWarmup\x00" as *const u8 as *const libc::c_char,
-        ) == 0.
+    if delay != 0 && Cvar_VariableValue(b"g_doWarmup\x00" as *const u8 as *const libc::c_char) == 0.
     {
-        sv.restartTime =
-            sv.time + delay * 1000 as i32;
+        sv.restartTime = sv.time + delay * 1000 as i32;
         SV_SetConfigstring(
             5 as i32,
             va(
@@ -504,25 +472,16 @@ unsafe extern "C" fn SV_MapRestart_f() {
     }
     // check for changes in variables that can't just be restarted
     // check for maxclients change
-    if (*sv_maxclients).modified as u32 != 0
-        || (*sv_gametype).modified as u32 != 0
-    {
+    if (*sv_maxclients).modified as u32 != 0 || (*sv_gametype).modified as u32 != 0 {
         let mut mapname: [libc::c_char; 64] = [0; 64];
-        Com_Printf(
-            b"variable change -- restarting.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"variable change -- restarting.\n\x00" as *const u8 as *const libc::c_char);
         // restart the map the slow way
         Q_strncpyz(
             mapname.as_mut_ptr(),
-            Cvar_VariableString(
-                b"mapname\x00" as *const u8 as *const libc::c_char,
-            ),
+            Cvar_VariableString(b"mapname\x00" as *const u8 as *const libc::c_char),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
-        SV_SpawnServer(
-            mapname.as_mut_ptr(),
-            qfalse,
-        );
+        SV_SpawnServer(mapname.as_mut_ptr(), qfalse);
         return;
     }
     // toggle the server bit so clients can detect that a
@@ -543,11 +502,8 @@ unsafe extern "C" fn SV_MapRestart_f() {
     // they don't violate the backwards time check in cl_cgame.c
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
-        if (*svs.clients.offset(i as isize)).state as u32
-            == CS_PRIMED as i32 as u32
-        {
-            (*svs.clients.offset(i as isize)).oldServerTime =
-                sv.restartTime
+        if (*svs.clients.offset(i as isize)).state as u32 == CS_PRIMED as i32 as u32 {
+            (*svs.clients.offset(i as isize)).oldServerTime = sv.restartTime
         }
         i += 1
     }
@@ -560,11 +516,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
     // run a few frames to allow everything to settle
     i = 0 as i32;
     while i < 3 as i32 {
-        VM_Call(
-            gvm,
-            GAME_RUN_FRAME as i32,
-            sv.time,
-        );
+        VM_Call(gvm, GAME_RUN_FRAME as i32, sv.time);
         sv.time += 100 as i32;
         svs.time += 100 as i32;
         i += 1
@@ -574,13 +526,10 @@ unsafe extern "C" fn SV_MapRestart_f() {
     // connect and begin all the clients
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
-        client = &mut *svs.clients.offset(i as isize)
-            as *mut client_t;
+        client = &mut *svs.clients.offset(i as isize) as *mut client_t;
         // send the new gamestate to all connected clients
         if !(((*client).state as u32) < CS_CONNECTED as i32 as u32) {
-            if (*client).netchan.remoteAddress.type_0 as u32
-                == NA_BOT as i32 as u32
-            {
+            if (*client).netchan.remoteAddress.type_0 as u32 == NA_BOT as i32 as u32 {
                 isBot = qtrue
             } else {
                 isBot = qfalse
@@ -604,10 +553,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
             if !denied.is_null() {
                 // this generally shouldn't happen, because the client
                 // was connected before the level change
-                SV_DropClient(
-                    client as *mut client_s,
-                    denied,
-                );
+                SV_DropClient(client as *mut client_s, denied);
                 Com_Printf(
                     b"SV_MapRestart_f(%d): dropped client %i - denied!\n\x00" as *const u8
                         as *const libc::c_char,
@@ -617,8 +563,7 @@ unsafe extern "C" fn SV_MapRestart_f() {
             } else if (*client).state as u32 == CS_ACTIVE as i32 as u32 {
                 SV_ClientEnterWorld(
                     client as *mut client_s,
-                    &mut (*client).lastUsercmd as *mut _
-                        as *mut usercmd_s,
+                    &mut (*client).lastUsercmd as *mut _ as *mut usercmd_s,
                 );
             } else {
                 // If we don't reset client->lastUsercmd and are restarting during map load,
@@ -626,19 +571,14 @@ unsafe extern "C" fn SV_MapRestart_f() {
                 // which is wrong obviously.
                 SV_ClientEnterWorld(
                     client as *mut client_s,
-                    0 as *mut usercmd_t
-                        as *mut usercmd_s,
+                    0 as *mut usercmd_t as *mut usercmd_s,
                 );
             }
         }
         i += 1
     }
     // run another frame to allow things to look at all the players
-    VM_Call(
-        gvm,
-        GAME_RUN_FRAME as i32,
-        sv.time,
-    );
+    VM_Call(gvm, GAME_RUN_FRAME as i32, sv.time);
     sv.time += 100 as i32;
     svs.time += 100 as i32;
 }
@@ -656,9 +596,7 @@ unsafe extern "C" fn SV_Kick_f() {
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
@@ -677,9 +615,7 @@ unsafe extern "C" fn SV_Kick_f() {
             cl = svs.clients;
             while i < (*sv_maxclients).integer {
                 if !((*cl).state as u64 == 0) {
-                    if !((*cl).netchan.remoteAddress.type_0 as u32
-                        == NA_LOOPBACK as i32 as u32)
-                    {
+                    if !((*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32) {
                         SV_DropClient(
                             cl as *mut client_s,
                             b"was kicked\x00" as *const u8 as *const libc::c_char,
@@ -700,9 +636,7 @@ unsafe extern "C" fn SV_Kick_f() {
             cl = svs.clients;
             while i < (*sv_maxclients).integer {
                 if !((*cl).state as u64 == 0) {
-                    if !((*cl).netchan.remoteAddress.type_0 as u32
-                        != NA_BOT as i32 as u32)
-                    {
+                    if !((*cl).netchan.remoteAddress.type_0 as u32 != NA_BOT as i32 as u32) {
                         SV_DropClient(
                             cl as *mut client_s,
                             b"was kicked\x00" as *const u8 as *const libc::c_char,
@@ -718,9 +652,7 @@ unsafe extern "C" fn SV_Kick_f() {
         return;
     }
     if (*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
-        Com_Printf(
-            b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     SV_DropClient(
@@ -743,18 +675,14 @@ unsafe extern "C" fn SV_KickBots_f() {
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
-            if !((*cl).netchan.remoteAddress.type_0 as u32
-                != NA_BOT as i32 as u32)
-            {
+            if !((*cl).netchan.remoteAddress.type_0 as u32 != NA_BOT as i32 as u32) {
                 SV_DropClient(
                     cl as *mut client_s,
                     b"was kicked\x00" as *const u8 as *const libc::c_char,
@@ -780,18 +708,14 @@ unsafe extern "C" fn SV_KickAll_f() {
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
-            if !((*cl).netchan.remoteAddress.type_0 as u32
-                == NA_LOOPBACK as i32 as u32)
-            {
+            if !((*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32) {
                 SV_DropClient(
                     cl as *mut client_s,
                     b"was kicked\x00" as *const u8 as *const libc::c_char,
@@ -816,9 +740,7 @@ unsafe extern "C" fn SV_KickNum_f() {
     let mut cl: *mut client_t = 0 as *mut client_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
@@ -833,9 +755,7 @@ unsafe extern "C" fn SV_KickNum_f() {
         return;
     }
     if (*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
-        Com_Printf(
-            b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     SV_DropClient(
@@ -859,15 +779,11 @@ unsafe extern "C" fn SV_Ban_f() {
     let mut cl: *mut client_t = 0 as *mut client_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"Usage: banUser <player name>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: banUser <player name>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     cl = SV_GetPlayerByHandle();
@@ -875,15 +791,12 @@ unsafe extern "C" fn SV_Ban_f() {
         return;
     }
     if (*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
-        Com_Printf(
-            b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // look up the authorize server's IP
     if svs.authorizeAddress.ip[0 as i32 as usize] == 0
-        && svs.authorizeAddress.type_0 as u32
-            != NA_BAD as i32 as u32
+        && svs.authorizeAddress.type_0 as u32 != NA_BAD as i32 as u32
     {
         Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -891,14 +804,11 @@ unsafe extern "C" fn SV_Ban_f() {
         );
         if NET_StringToAdr(
             b"authorize.quake3arena.com\x00" as *const u8 as *const libc::c_char,
-            &mut svs.authorizeAddress as *mut _
-                as *mut netadr_t,
+            &mut svs.authorizeAddress as *mut _ as *mut netadr_t,
             NA_IP,
         ) == 0
         {
-            Com_Printf(
-                b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char);
             return;
         }
         svs.authorizeAddress.port =
@@ -910,15 +820,11 @@ unsafe extern "C" fn SV_Ban_f() {
             svs.authorizeAddress.ip[1 as i32 as usize] as i32,
             svs.authorizeAddress.ip[2 as i32 as usize] as i32,
             svs.authorizeAddress.ip[3 as i32 as usize] as i32,
-            crate::src::qcommon::q_shared::ShortSwap(
-                svs.authorizeAddress.port as i16,
-            ) as i32,
+            crate::src::qcommon::q_shared::ShortSwap(svs.authorizeAddress.port as i16) as i32,
         );
     }
     // otherwise send their ip to the authorize server
-    if svs.authorizeAddress.type_0 as u32
-        != NA_BAD as i32 as u32
-    {
+    if svs.authorizeAddress.type_0 as u32 != NA_BAD as i32 as u32 {
         NET_OutOfBandPrint(
             NS_SERVER,
             svs.authorizeAddress as netadr_t,
@@ -947,15 +853,11 @@ unsafe extern "C" fn SV_BanNum_f() {
     let mut cl: *mut client_t = 0 as *mut client_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"Usage: banClient <client number>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: banClient <client number>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     cl = SV_GetPlayerByNum();
@@ -963,15 +865,12 @@ unsafe extern "C" fn SV_BanNum_f() {
         return;
     }
     if (*cl).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
-        Com_Printf(
-            b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cannot kick host player\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // look up the authorize server's IP
     if svs.authorizeAddress.ip[0 as i32 as usize] == 0
-        && svs.authorizeAddress.type_0 as u32
-            != NA_BAD as i32 as u32
+        && svs.authorizeAddress.type_0 as u32 != NA_BAD as i32 as u32
     {
         Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -979,14 +878,11 @@ unsafe extern "C" fn SV_BanNum_f() {
         );
         if NET_StringToAdr(
             b"authorize.quake3arena.com\x00" as *const u8 as *const libc::c_char,
-            &mut svs.authorizeAddress as *mut _
-                as *mut netadr_t,
+            &mut svs.authorizeAddress as *mut _ as *mut netadr_t,
             NA_IP,
         ) == 0
         {
-            Com_Printf(
-                b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char);
             return;
         }
         svs.authorizeAddress.port =
@@ -998,15 +894,11 @@ unsafe extern "C" fn SV_BanNum_f() {
             svs.authorizeAddress.ip[1 as i32 as usize] as i32,
             svs.authorizeAddress.ip[2 as i32 as usize] as i32,
             svs.authorizeAddress.ip[3 as i32 as usize] as i32,
-            crate::src::qcommon::q_shared::ShortSwap(
-                svs.authorizeAddress.port as i16,
-            ) as i32,
+            crate::src::qcommon::q_shared::ShortSwap(svs.authorizeAddress.port as i16) as i32,
         );
     }
     // otherwise send their ip to the authorize server
-    if svs.authorizeAddress.type_0 as u32
-        != NA_BAD as i32 as u32
-    {
+    if svs.authorizeAddress.type_0 as u32 != NA_BAD as i32 as u32 {
         NET_OutOfBandPrint(
             NS_SERVER,
             svs.authorizeAddress as netadr_t,
@@ -1045,9 +937,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
         return;
     }
     serverBansCount = 0 as i32;
-    if (*sv_banFile).string.is_null()
-        || *(*sv_banFile).string == 0
-    {
+    if (*sv_banFile).string.is_null() || *(*sv_banFile).string == 0 {
         return;
     }
     Com_sprintf(
@@ -1057,8 +947,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
         FS_GetCurrentGameDir(),
         (*sv_banFile).string,
     );
-    filelen = FS_SV_FOpenFileRead(filepath.as_mut_ptr(), &mut readfrom)
-        as i32;
+    filelen = FS_SV_FOpenFileRead(filepath.as_mut_ptr(), &mut readfrom) as i32;
     if filelen >= 0 as i32 {
         if filelen < 2 as i32 {
             // Don't bother if file is too short.
@@ -1067,8 +956,7 @@ unsafe extern "C" fn SV_RehashBans_f() {
         }
         textbuf = Z_Malloc(filelen) as *mut libc::c_char;
         curpos = textbuf;
-        filelen =
-            FS_Read(textbuf as *mut libc::c_void, filelen, readfrom);
+        filelen = FS_Read(textbuf as *mut libc::c_void, filelen, readfrom);
         FS_FCloseFile(readfrom);
         endpos = textbuf.offset(filelen as isize);
         index = 0 as i32;
@@ -1094,33 +982,22 @@ unsafe extern "C" fn SV_RehashBans_f() {
             *newlinepos = '\u{0}' as i32 as libc::c_char;
             if NET_StringToAdr(
                 curpos.offset(2 as i32 as isize),
-                &mut (*serverBans
-                    .as_mut_ptr()
-                    .offset(index as isize))
-                .ip as *mut _ as *mut netadr_t,
+                &mut (*serverBans.as_mut_ptr().offset(index as isize)).ip as *mut _
+                    as *mut netadr_t,
                 NA_UNSPEC,
             ) != 0
             {
                 serverBans[index as usize].isexception =
-                    (*curpos.offset(0 as i32 as isize) as i32 != '0' as i32) as i32
-                        as qboolean;
+                    (*curpos.offset(0 as i32 as isize) as i32 != '0' as i32) as i32 as qboolean;
                 serverBans[index as usize].subnet = atoi(maskpos);
-                if serverBans[index as usize]
-                    .ip
-                    .type_0 as u32
-                    == NA_IP as i32 as u32
+                if serverBans[index as usize].ip.type_0 as u32 == NA_IP as i32 as u32
                     && (serverBans[index as usize].subnet < 1 as i32
-                        || serverBans[index as usize].subnet
-                            > 32 as i32)
+                        || serverBans[index as usize].subnet > 32 as i32)
                 {
                     serverBans[index as usize].subnet = 32 as i32
-                } else if serverBans[index as usize]
-                    .ip
-                    .type_0 as u32
-                    == NA_IP6 as i32 as u32
+                } else if serverBans[index as usize].ip.type_0 as u32 == NA_IP6 as i32 as u32
                     && (serverBans[index as usize].subnet < 1 as i32
-                        || serverBans[index as usize].subnet
-                            > 128 as i32)
+                        || serverBans[index as usize].subnet > 128 as i32)
                 {
                     serverBans[index as usize].subnet = 128 as i32
                 }
@@ -1144,9 +1021,7 @@ unsafe extern "C" fn SV_WriteBans() {
     let mut index: i32 = 0;
     let mut writeto: fileHandle_t = 0;
     let mut filepath: [libc::c_char; 64] = [0; 64];
-    if (*sv_banFile).string.is_null()
-        || *(*sv_banFile).string == 0
-    {
+    if (*sv_banFile).string.is_null() || *(*sv_banFile).string == 0 {
         return;
     }
     Com_sprintf(
@@ -1162,17 +1037,13 @@ unsafe extern "C" fn SV_WriteBans() {
         let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
         index = 0 as i32;
         while index < serverBansCount {
-            curban = &mut *serverBans
-                .as_mut_ptr()
-                .offset(index as isize) as *mut serverBan_t;
+            curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
             Com_sprintf(
                 writebuf.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
                 b"%d %s %d\n\x00" as *const u8 as *const libc::c_char,
                 (*curban).isexception as u32,
-                NET_AdrToString(
-                    (*curban).ip as netadr_t,
-                ),
+                NET_AdrToString((*curban).ip as netadr_t),
                 (*curban).subnet,
             );
             FS_Write(
@@ -1193,9 +1064,7 @@ Remove a ban or an exception from the list.
 ==================
 */
 
-unsafe extern "C" fn SV_DelBanEntryFromList(
-    mut index: i32,
-) -> qboolean {
+unsafe extern "C" fn SV_DelBanEntryFromList(mut index: i32) -> qboolean {
     if index == serverBansCount - 1 as i32 {
         serverBansCount -= 1
     } else if (index as libc::c_ulong)
@@ -1204,17 +1073,13 @@ unsafe extern "C" fn SV_DelBanEntryFromList(
             .wrapping_sub(1 as i32 as libc::c_ulong)
     {
         crate::stdlib::memmove(
-            serverBans
-                .as_mut_ptr()
-                .offset(index as isize) as *mut libc::c_void,
+            serverBans.as_mut_ptr().offset(index as isize) as *mut libc::c_void,
             serverBans
                 .as_mut_ptr()
                 .offset(index as isize)
                 .offset(1 as i32 as isize) as *const libc::c_void,
             ((serverBansCount - index - 1 as i32) as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<serverBan_t>() as libc::c_ulong
-                ),
+                .wrapping_mul(::std::mem::size_of::<serverBan_t>() as libc::c_ulong),
         );
         serverBansCount -= 1
     } else {
@@ -1241,12 +1106,7 @@ unsafe extern "C" fn SV_ParseCIDRNotation(
         *suffix = '\u{0}' as i32 as libc::c_char;
         suffix = suffix.offset(1)
     }
-    if NET_StringToAdr(
-        adrstr,
-        dest as *mut netadr_t,
-        NA_UNSPEC,
-    ) == 0
-    {
+    if NET_StringToAdr(adrstr, dest as *mut netadr_t, NA_UNSPEC) == 0 {
         return qtrue;
     }
     if !suffix.is_null() {
@@ -1289,9 +1149,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
     let mut curban: *mut serverBan_t = 0 as *mut serverBan_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     argc = Cmd_Argc();
@@ -1354,9 +1212,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
             }
         }
     }
-    if ip.type_0 as u32 != NA_IP as i32 as u32
-        && ip.type_0 as u32 != NA_IP6 as i32 as u32
-    {
+    if ip.type_0 as u32 != NA_IP as i32 as u32 && ip.type_0 as u32 != NA_IP6 as i32 as u32 {
         Com_Printf(
             b"Error: Can ban players connected via the internet only.\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1366,9 +1222,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
     // first check whether a conflicting ban exists that would supersede the new one.
     index = 0 as i32;
     while index < serverBansCount {
-        curban = &mut *serverBans
-            .as_mut_ptr()
-            .offset(index as isize) as *mut serverBan_t;
+        curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
         if (*curban).subnet <= mask {
             if ((*curban).isexception as u32 != 0 || isexception as u64 == 0)
                 && NET_CompareBaseAdrMask(
@@ -1391,9 +1245,7 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
                     } else {
                         b"Ban\x00" as *const u8 as *const libc::c_char
                     },
-                    NET_AdrToString(
-                        (*curban).ip as netadr_t,
-                    ),
+                    NET_AdrToString((*curban).ip as netadr_t),
                     (*curban).subnet,
                     if isexception as u32 != 0 {
                         b"exception\x00" as *const u8 as *const libc::c_char
@@ -1409,18 +1261,12 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
         if (*curban).subnet >= mask {
             if (*curban).isexception as u64 == 0
                 && isexception as u32 != 0
-                && NET_CompareBaseAdrMask(
-                    (*curban).ip as netadr_t,
-                    ip as netadr_t,
-                    mask,
-                ) as u32
+                && NET_CompareBaseAdrMask((*curban).ip as netadr_t, ip as netadr_t, mask) as u32
                     != 0
             {
                 Q_strncpyz(
                     addy2.as_mut_ptr(),
-                    NET_AdrToString(
-                        (*curban).ip as netadr_t,
-                    ),
+                    NET_AdrToString((*curban).ip as netadr_t),
                     ::std::mem::size_of::<[libc::c_char; 48]>() as libc::c_ulong as i32,
                 );
                 Com_Printf(
@@ -1449,32 +1295,19 @@ unsafe extern "C" fn SV_AddBanToList(mut isexception: qboolean) {
     // now delete bans that are superseded by the new one
     index = 0 as i32;
     while index < serverBansCount {
-        curban = &mut *serverBans
-            .as_mut_ptr()
-            .offset(index as isize) as *mut serverBan_t;
+        curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
         if (*curban).subnet > mask
             && ((*curban).isexception as u64 == 0 || isexception as u32 != 0)
-            && NET_CompareBaseAdrMask(
-                (*curban).ip as netadr_t,
-                ip as netadr_t,
-                mask,
-            ) as u32
-                != 0
+            && NET_CompareBaseAdrMask((*curban).ip as netadr_t, ip as netadr_t, mask) as u32 != 0
         {
             SV_DelBanEntryFromList(index);
         } else {
             index += 1
         }
     }
-    serverBans
-        [serverBansCount as usize]
-        .ip = ip;
-    serverBans
-        [serverBansCount as usize]
-        .subnet = mask;
-    serverBans
-        [serverBansCount as usize]
-        .isexception = isexception;
+    serverBans[serverBansCount as usize].ip = ip;
+    serverBans[serverBansCount as usize].subnet = mask;
+    serverBans[serverBansCount as usize].isexception = isexception;
     serverBansCount += 1;
     SV_WriteBans();
     Com_Printf(
@@ -1511,9 +1344,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
     let mut banstring: *mut libc::c_char = 0 as *mut libc::c_char;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
@@ -1537,16 +1368,10 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
         }
         index = 0 as i32;
         while index < serverBansCount {
-            curban = &mut *serverBans
-                .as_mut_ptr()
-                .offset(index as isize) as *mut serverBan_t;
+            curban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
             if (*curban).isexception as u32 == isexception as u32
                 && (*curban).subnet >= mask
-                && NET_CompareBaseAdrMask(
-                    (*curban).ip as netadr_t,
-                    ip as netadr_t,
-                    mask,
-                ) as u32
+                && NET_CompareBaseAdrMask((*curban).ip as netadr_t, ip as netadr_t, mask) as u32
                     != 0
             {
                 Com_Printf(
@@ -1556,9 +1381,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
                     } else {
                         b"ban\x00" as *const u8 as *const libc::c_char
                     },
-                    NET_AdrToString(
-                        (*curban).ip as netadr_t,
-                    ),
+                    NET_AdrToString((*curban).ip as netadr_t),
                     (*curban).subnet,
                 );
                 SV_DelBanEntryFromList(index);
@@ -1576,9 +1399,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
         }
         index = 0 as i32;
         while index < serverBansCount {
-            if serverBans[index as usize].isexception as u32
-                == isexception as u32
-            {
+            if serverBans[index as usize].isexception as u32 == isexception as u32 {
                 count += 1;
                 if count == todel {
                     Com_Printf(
@@ -1588,10 +1409,7 @@ unsafe extern "C" fn SV_DelBanFromList(mut isexception: qboolean) {
                         } else {
                             b"ban\x00" as *const u8 as *const libc::c_char
                         },
-                        NET_AdrToString(
-                            serverBans[index as usize].ip
-                                as netadr_t,
-                        ),
+                        NET_AdrToString(serverBans[index as usize].ip as netadr_t),
                         serverBans[index as usize].subnet,
                     );
                     SV_DelBanEntryFromList(index);
@@ -1617,26 +1435,20 @@ unsafe extern "C" fn SV_ListBans_f() {
     let mut ban: *mut serverBan_t = 0 as *mut serverBan_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // List all bans
     count = 0 as i32;
     index = count;
     while index < serverBansCount {
-        ban = &mut *serverBans
-            .as_mut_ptr()
-            .offset(index as isize) as *mut serverBan_t;
+        ban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
         if (*ban).isexception as u64 == 0 {
             count += 1;
             Com_Printf(
                 b"Ban #%d: %s/%d\n\x00" as *const u8 as *const libc::c_char,
                 count,
-                NET_AdrToString(
-                    (*ban).ip as netadr_t,
-                ),
+                NET_AdrToString((*ban).ip as netadr_t),
                 (*ban).subnet,
             );
         }
@@ -1646,17 +1458,13 @@ unsafe extern "C" fn SV_ListBans_f() {
     count = 0 as i32;
     index = count;
     while index < serverBansCount {
-        ban = &mut *serverBans
-            .as_mut_ptr()
-            .offset(index as isize) as *mut serverBan_t;
+        ban = &mut *serverBans.as_mut_ptr().offset(index as isize) as *mut serverBan_t;
         if (*ban).isexception as u64 != 0 {
             count += 1;
             Com_Printf(
                 b"Except #%d: %s/%d\n\x00" as *const u8 as *const libc::c_char,
                 count,
-                NET_AdrToString(
-                    (*ban).ip as netadr_t,
-                ),
+                NET_AdrToString((*ban).ip as netadr_t),
                 (*ban).subnet,
             );
         }
@@ -1674,9 +1482,7 @@ Delete all bans and exceptions.
 unsafe extern "C" fn SV_FlushBans_f() {
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     serverBansCount = 0 as i32;
@@ -1730,15 +1536,12 @@ unsafe extern "C" fn SV_Status_f() {
     let mut j: i32 = 0;
     let mut l: i32 = 0;
     let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut ping: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     Com_Printf(
@@ -1757,34 +1560,23 @@ unsafe extern "C" fn SV_Status_f() {
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
         if !((*cl).state as u64 == 0) {
-            Com_Printf(
-                b"%2i \x00" as *const u8 as *const libc::c_char,
-                i,
-            );
-            ps = SV_GameClientNum(i)
-                as *mut playerState_s;
+            Com_Printf(b"%2i \x00" as *const u8 as *const libc::c_char, i);
+            ps = SV_GameClientNum(i) as *mut playerState_s;
             Com_Printf(
                 b"%5i \x00" as *const u8 as *const libc::c_char,
                 (*ps).persistant[0 as i32 as usize],
             );
             if (*cl).state as u32 == CS_CONNECTED as i32 as u32 {
-                Com_Printf(
-                    b"CON \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"CON \x00" as *const u8 as *const libc::c_char);
             } else if (*cl).state as u32 == CS_ZOMBIE as i32 as u32 {
-                Com_Printf(
-                    b"ZMB \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"ZMB \x00" as *const u8 as *const libc::c_char);
             } else {
                 ping = if (*cl).ping < 9999 as i32 {
                     (*cl).ping
                 } else {
                     9999 as i32
                 };
-                Com_Printf(
-                    b"%4i \x00" as *const u8 as *const libc::c_char,
-                    ping,
-                );
+                Com_Printf(b"%4i \x00" as *const u8 as *const libc::c_char, ping);
             }
             Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
@@ -1793,37 +1585,25 @@ unsafe extern "C" fn SV_Status_f() {
             l = 16 as i32 - SV_Strlen((*cl).name.as_mut_ptr());
             j = 0 as i32;
             loop {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                 j += 1;
                 if !(j < l) {
                     break;
                 }
             }
             // TTimo adding a ^7 to reset the color
-            s = NET_AdrToString(
-                (*cl).netchan.remoteAddress as netadr_t,
-            );
-            Com_Printf(
-                b"^7%s\x00" as *const u8 as *const libc::c_char,
-                s,
-            );
+            s = NET_AdrToString((*cl).netchan.remoteAddress as netadr_t);
+            Com_Printf(b"^7%s\x00" as *const u8 as *const libc::c_char, s);
             l = (39 as i32 as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(s)) as i32;
             j = 0 as i32;
             loop {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                 j += 1;
                 if !(j < l) {
                     break;
                 }
             }
-            Com_Printf(
-                b" %5i\x00" as *const u8 as *const libc::c_char,
-                (*cl).rate,
-            );
+            Com_Printf(b" %5i\x00" as *const u8 as *const libc::c_char, (*cl).rate);
             Com_Printf(b"\n\x00" as *const u8 as *const libc::c_char);
         }
         i += 1;
@@ -1842,9 +1622,7 @@ unsafe extern "C" fn SV_ConSay_f() {
     let mut text: [libc::c_char; 1024] = [0; 1024];
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() < 2 as i32 {
@@ -1883,15 +1661,11 @@ unsafe extern "C" fn SV_ConTell_f() {
     let mut cl: *mut client_t = 0 as *mut client_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() < 3 as i32 {
-        Com_Printf(
-            b"Usage: tell <client number> <text>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: tell <client number> <text>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     cl = SV_GetPlayerByNum();
@@ -1936,15 +1710,11 @@ unsafe extern "C" fn SV_ConSayto_f() {
     let mut i: i32 = 0;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() < 3 as i32 {
-        Com_Printf(
-            b"Usage: sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     rawname = Cmd_Argv(1 as i32);
@@ -1962,9 +1732,7 @@ unsafe extern "C" fn SV_ConSayto_f() {
                 ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
             Q_CleanStr(cleanName.as_mut_ptr());
-            if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr())
-                == 0
-            {
+            if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr()) == 0 {
                 saytocl = cl;
                 break;
             }
@@ -2032,14 +1800,10 @@ Examine the serverinfo string
 unsafe extern "C" fn SV_Serverinfo_f() {
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
-    Com_Printf(
-        b"Server info settings:\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"Server info settings:\n\x00" as *const u8 as *const libc::c_char);
     Info_Print(Cvar_InfoString(0x4 as i32));
 }
 /*
@@ -2053,17 +1817,11 @@ Examine the systeminfo string
 unsafe extern "C" fn SV_Systeminfo_f() {
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
-    Com_Printf(
-        b"System info settings:\n\x00" as *const u8 as *const libc::c_char,
-    );
-    Info_Print(Cvar_InfoString_Big(
-        0x8 as i32,
-    ));
+    Com_Printf(b"System info settings:\n\x00" as *const u8 as *const libc::c_char);
+    Info_Print(Cvar_InfoString_Big(0x8 as i32));
 }
 /*
 ===========
@@ -2077,15 +1835,11 @@ unsafe extern "C" fn SV_DumpUser_f() {
     let mut cl: *mut client_t = 0 as *mut client_t;
     // make sure server is running
     if (*com_sv_running).integer == 0 {
-        Com_Printf(
-            b"Server is not running.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server is not running.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"Usage: dumpuser <userid>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: dumpuser <userid>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     cl = SV_GetPlayerByHandle();
@@ -2103,9 +1857,7 @@ SV_KillServer
 */
 
 unsafe extern "C" fn SV_KillServer_f() {
-    SV_Shutdown(
-        b"killserver\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    );
+    SV_Shutdown(b"killserver\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
 }
 //===========================================================
 /*
@@ -2179,8 +1931,7 @@ SV_AddOperatorCommands
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_AddOperatorCommands() {
-    static mut initialized: qboolean =
-        qfalse; // Legacy command
+    static mut initialized: qboolean = qfalse; // Legacy command
     if initialized as u64 != 0 {
         return;
     }

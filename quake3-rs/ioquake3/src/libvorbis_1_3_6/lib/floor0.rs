@@ -45,8 +45,7 @@ pub struct vorbis_look_floor0 {
 /* **********************************************/
 
 unsafe extern "C" fn floor0_free_info(mut i: *mut libc::c_void) {
-    let mut info: *mut vorbis_info_floor0 =
-        i as *mut vorbis_info_floor0;
+    let mut info: *mut vorbis_info_floor0 = i as *mut vorbis_info_floor0;
     if !info.is_null() {
         crate::stdlib::memset(
             info as *mut libc::c_void,
@@ -83,37 +82,18 @@ unsafe extern "C" fn floor0_unpack(
     mut opb: *mut oggpack_buffer,
 ) -> *mut libc::c_void {
     let mut current_block: u64;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     let mut j: i32 = 0;
-    let mut info: *mut vorbis_info_floor0 = crate::stdlib::malloc(
-        ::std::mem::size_of::<vorbis_info_floor0>() as libc::c_ulong,
-    )
-        as *mut vorbis_info_floor0;
-    (*info).order = oggpack_read(
-        opb as *mut oggpack_buffer,
-        8 as i32,
-    ) as i32;
-    (*info).rate = oggpack_read(
-        opb as *mut oggpack_buffer,
-        16 as i32,
-    );
-    (*info).barkmap = oggpack_read(
-        opb as *mut oggpack_buffer,
-        16 as i32,
-    );
-    (*info).ampbits = oggpack_read(
-        opb as *mut oggpack_buffer,
-        6 as i32,
-    ) as i32;
-    (*info).ampdB = oggpack_read(
-        opb as *mut oggpack_buffer,
-        8 as i32,
-    ) as i32;
-    (*info).numbooks = (oggpack_read(
-        opb as *mut oggpack_buffer,
-        4 as i32,
-    ) + 1 as i32 as isize) as i32;
+    let mut info: *mut vorbis_info_floor0 = crate::stdlib::malloc(::std::mem::size_of::<
+        vorbis_info_floor0,
+    >() as libc::c_ulong) as *mut vorbis_info_floor0;
+    (*info).order = oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
+    (*info).rate = oggpack_read(opb as *mut oggpack_buffer, 16 as i32);
+    (*info).barkmap = oggpack_read(opb as *mut oggpack_buffer, 16 as i32);
+    (*info).ampbits = oggpack_read(opb as *mut oggpack_buffer, 6 as i32) as i32;
+    (*info).ampdB = oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
+    (*info).numbooks =
+        (oggpack_read(opb as *mut oggpack_buffer, 4 as i32) + 1 as i32 as isize) as i32;
     if !((*info).order < 1 as i32) {
         if !((*info).rate < 1 as i32 as isize) {
             if !((*info).barkmap < 1 as i32 as isize) {
@@ -125,10 +105,7 @@ unsafe extern "C" fn floor0_unpack(
                             break;
                         }
                         (*info).books[j as usize] =
-                            oggpack_read(
-                                opb as *mut oggpack_buffer,
-                                8 as i32,
-                            ) as i32;
+                            oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
                         if (*info).books[j as usize] < 0 as i32
                             || (*info).books[j as usize] >= (*ci).books
                         {
@@ -176,10 +153,8 @@ unsafe extern "C" fn floor0_map_lazy_init(
     if (*(*look).linearmap.offset((*vb).W as isize)).is_null() {
         let mut vd: *mut vorbis_dsp_state = (*vb).vd;
         let mut vi: *mut vorbis_info = (*vd).vi;
-        let mut ci: *mut codec_setup_info =
-            (*vi).codec_setup as *mut codec_setup_info;
-        let mut info: *mut vorbis_info_floor0 =
-            infoX as *mut vorbis_info_floor0;
+        let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
+        let mut info: *mut vorbis_info_floor0 = infoX as *mut vorbis_info_floor0;
         let mut W: i32 = (*vb).W as i32;
         let mut n: i32 = ((*ci).blocksizes[W as usize] / 2 as i32 as isize) as i32;
         let mut j: i32 = 0;
@@ -239,8 +214,7 @@ unsafe extern "C" fn floor0_look(
     mut _vd: *mut vorbis_dsp_state,
     mut i: *mut libc::c_void,
 ) -> *mut libc::c_void {
-    let mut info: *mut vorbis_info_floor0 =
-        i as *mut vorbis_info_floor0;
+    let mut info: *mut vorbis_info_floor0 = i as *mut vorbis_info_floor0;
     let mut look: *mut vorbis_look_floor0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_look_floor0>() as libc::c_ulong,
@@ -273,9 +247,7 @@ unsafe extern "C" fn floor0_inverse1(
         let mut amp: f32 = ampraw as f32 / maxval as f32 * (*info).ampdB as f32;
         let mut booknum: i32 = oggpack_read(
             &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                (*info).numbooks as ogg_uint32_t,
-            ),
+            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog((*info).numbooks as ogg_uint32_t),
         ) as i32;
         if booknum != -(1 as i32) && booknum < (*info).numbooks {
             /* be paranoid */

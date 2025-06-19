@@ -521,9 +521,7 @@ G_TestEntityPosition
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_TestEntityPosition(
-    mut ent: *mut gentity_t,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn G_TestEntityPosition(mut ent: *mut gentity_t) -> *mut gentity_t {
     let mut tr: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -568,9 +566,7 @@ pub unsafe extern "C" fn G_TestEntityPosition(
         );
     }
     if tr.startsolid as u64 != 0 {
-        return &mut *g_entities
-            .as_mut_ptr()
-            .offset(tr.entityNum as isize) as *mut gentity_t;
+        return &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
     }
     return 0 as *mut gentity_t;
 }
@@ -581,10 +577,7 @@ G_CreateRotationMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_CreateRotationMatrix(
-    mut angles: *mut vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn G_CreateRotationMatrix(mut angles: *mut vec_t, mut matrix: *mut vec3_t) {
     AngleVectors(
         angles as *const vec_t,
         (*matrix.offset(0 as i32 as isize)).as_mut_ptr(),
@@ -600,10 +593,7 @@ G_TransposeMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_TransposeMatrix(
-    mut matrix: *mut vec3_t,
-    mut transpose: *mut vec3_t,
-) {
+pub unsafe extern "C" fn G_TransposeMatrix(mut matrix: *mut vec3_t, mut transpose: *mut vec3_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     i = 0 as i32;
@@ -623,10 +613,7 @@ G_RotatePoint
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_RotatePoint(
-    mut point: *mut vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn G_RotatePoint(mut point: *mut vec_t, mut matrix: *mut vec3_t) {
     let mut tvec: vec3_t = [0.; 3];
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
@@ -676,9 +663,7 @@ pub unsafe extern "C" fn G_TryPushingEntity(
             .as_mut_ptr()
             .offset(((1 as i32) << 10 as i32) as isize) as *mut pushed_t
     {
-        G_Error(
-            b"pushed_p > &pushed[MAX_GENTITIES]\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"pushed_p > &pushed[MAX_GENTITIES]\x00" as *const u8 as *const libc::c_char);
     }
     (*pushed_p).ent = check;
     (*pushed_p).origin[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize];
@@ -812,9 +797,7 @@ G_CheckProxMinePosition
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_CheckProxMinePosition(
-    mut check: *mut gentity_t,
-) -> qboolean {
+pub unsafe extern "C" fn G_CheckProxMinePosition(mut check: *mut gentity_t) -> qboolean {
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
     let mut tr: trace_t = trace_t {
@@ -883,12 +866,9 @@ pub unsafe extern "C" fn G_TryPushingProxMine(
     let mut move2: vec3_t = [0.; 3];
     let mut ret: i32 = 0;
     // we need this for pushing things later
-    org[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
-        - *amove.offset(0 as i32 as isize);
-    org[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
-        - *amove.offset(1 as i32 as isize);
-    org[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
-        - *amove.offset(2 as i32 as isize);
+    org[0 as i32 as usize] = vec3_origin[0 as i32 as usize] - *amove.offset(0 as i32 as isize);
+    org[1 as i32 as usize] = vec3_origin[1 as i32 as usize] - *amove.offset(1 as i32 as isize);
+    org[2 as i32 as usize] = vec3_origin[2 as i32 as usize] - *amove.offset(2 as i32 as isize);
     AngleVectors(
         org.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
@@ -1075,10 +1055,8 @@ pub unsafe extern "C" fn G_MoverPush(
                     if !(G_TryPushingEntity(check, pusher, move_0, amove) as u64 != 0) {
                         // the move was blocked an entity
                         // bobbing entities are instant-kill and never get blocked
-                        if (*pusher).s.pos.trType as u32
-                            == TR_SINE as i32 as u32
-                            || (*pusher).s.apos.trType as u32
-                                == TR_SINE as i32 as u32
+                        if (*pusher).s.pos.trType as u32 == TR_SINE as i32 as u32
+                            || (*pusher).s.apos.trType as u32 == TR_SINE as i32 as u32
                         {
                             G_Damage(
                                 check as *mut gentity_s,
@@ -1120,9 +1098,7 @@ pub unsafe extern "C" fn G_MoverPush(
                                     (*(*(*p).ent).client).ps.origin[2 as i32 as usize] =
                                         (*p).origin[2 as i32 as usize]
                                 }
-                                trap_LinkEntity(
-                                    (*p).ent as *mut gentity_s,
-                                );
+                                trap_LinkEntity((*p).ent as *mut gentity_s);
                                 p = p.offset(-1)
                             }
                             return qfalse;
@@ -1188,10 +1164,8 @@ pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut gentity_t) {
         // go back to the previous position
         part = ent;
         while !part.is_null() {
-            (*part).s.pos.trTime +=
-                level.time - level.previousTime;
-            (*part).s.apos.trTime +=
-                level.time - level.previousTime;
+            (*part).s.pos.trTime += level.time - level.previousTime;
+            (*part).s.apos.trTime += level.time - level.previousTime;
             BG_EvaluateTrajectory(
                 &mut (*part).s.pos as *mut _ as *const trajectory_t,
                 level.time,
@@ -1215,12 +1189,8 @@ pub unsafe extern "C" fn G_MoverTeam(mut ent: *mut gentity_t) {
     part = ent;
     while !part.is_null() {
         // call the reached function if time is at or past end point
-        if (*part).s.pos.trType as u32
-            == TR_LINEAR_STOP as i32 as u32
-        {
-            if level.time
-                >= (*part).s.pos.trTime + (*part).s.pos.trDuration
-            {
+        if (*part).s.pos.trType as u32 == TR_LINEAR_STOP as i32 as u32 {
+            if level.time >= (*part).s.pos.trTime + (*part).s.pos.trDuration {
                 if (*part).reached.is_some() {
                     (*part).reached.expect("non-null function pointer")(part);
                 }
@@ -1361,11 +1331,7 @@ ReturnToPos1
 #[no_mangle]
 
 pub unsafe extern "C" fn ReturnToPos1(mut ent: *mut gentity_t) {
-    MatchTeam(
-        ent,
-        MOVER_2TO1 as i32,
-        level.time,
-    );
+    MatchTeam(ent, MOVER_2TO1 as i32, level.time);
     // looping sound
     (*ent).s.loopSound = (*ent).soundLoop;
     // starting sound
@@ -1389,11 +1355,7 @@ pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut gentity_t) {
     (*ent).s.loopSound = (*ent).soundLoop;
     if (*ent).moverState as u32 == MOVER_1TO2 as i32 as u32 {
         // reached pos2
-        SetMoverState(
-            ent,
-            MOVER_POS2,
-            level.time,
-        );
+        SetMoverState(ent, MOVER_POS2, level.time);
         // play sound
         if (*ent).soundPos2 != 0 {
             G_AddEvent(
@@ -1403,24 +1365,16 @@ pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut gentity_t) {
             );
         }
         // return to pos1 after a delay
-        (*ent).think =
-            Some(ReturnToPos1 as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*ent).think = Some(ReturnToPos1 as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).nextthink = (level.time as f32 + (*ent).wait) as i32;
         // fire targets
         if (*ent).activator.is_null() {
             (*ent).activator = ent
         }
-        G_UseTargets(
-            ent as *mut gentity_s,
-            (*ent).activator as *mut gentity_s,
-        );
+        G_UseTargets(ent as *mut gentity_s, (*ent).activator as *mut gentity_s);
     } else if (*ent).moverState as u32 == MOVER_2TO1 as i32 as u32 {
         // reached pos1
-        SetMoverState(
-            ent,
-            MOVER_POS1,
-            level.time,
-        );
+        SetMoverState(ent, MOVER_POS1, level.time);
         // play sound
         if (*ent).soundPos1 != 0 {
             G_AddEvent(
@@ -1431,15 +1385,10 @@ pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut gentity_t) {
         }
         // close areaportals
         if (*ent).teammaster == ent || (*ent).teammaster.is_null() {
-            trap_AdjustAreaPortalState(
-                ent as *mut gentity_s,
-                qfalse,
-            );
+            trap_AdjustAreaPortalState(ent as *mut gentity_s, qfalse);
         }
     } else {
-        G_Error(
-            b"Reached_BinaryMover: bad moverState\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"Reached_BinaryMover: bad moverState\x00" as *const u8 as *const libc::c_char);
     };
 }
 /*
@@ -1465,11 +1414,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
     if (*ent).moverState as u32 == MOVER_POS1 as i32 as u32 {
         // start moving 50 msec later, becase if this was player
         // triggered, level.time hasn't been advanced yet
-        MatchTeam(
-            ent,
-            MOVER_1TO2 as i32,
-            level.time + 50 as i32,
-        );
+        MatchTeam(ent, MOVER_1TO2 as i32, level.time + 50 as i32);
         // starting sound
         if (*ent).sound1to2 != 0 {
             G_AddEvent(
@@ -1482,10 +1427,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
         (*ent).s.loopSound = (*ent).soundLoop;
         // open areaportal
         if (*ent).teammaster == ent || (*ent).teammaster.is_null() {
-            trap_AdjustAreaPortalState(
-                ent as *mut gentity_s,
-                qtrue,
-            );
+            trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
         }
         return;
     }
@@ -1501,11 +1443,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
         if partial > total {
             partial = total
         }
-        MatchTeam(
-            ent,
-            MOVER_1TO2 as i32,
-            level.time - (total - partial),
-        );
+        MatchTeam(ent, MOVER_1TO2 as i32, level.time - (total - partial));
         if (*ent).sound1to2 != 0 {
             G_AddEvent(
                 ent as *mut gentity_s,
@@ -1522,11 +1460,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
         if partial > total {
             partial = total
         }
-        MatchTeam(
-            ent,
-            MOVER_2TO1 as i32,
-            level.time - (total - partial),
-        );
+        MatchTeam(ent, MOVER_2TO1 as i32, level.time - (total - partial));
         if (*ent).sound2to1 != 0 {
             G_AddEvent(
                 ent as *mut gentity_s,
@@ -1552,10 +1486,8 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut gentity_t) {
     let mut distance: f32 = 0.;
     let mut light: f32 = 0.;
     let mut color: vec3_t = [0.; 3];
-    let mut lightSet: qboolean =
-        qfalse;
-    let mut colorSet: qboolean =
-        qfalse;
+    let mut lightSet: qboolean = qfalse;
+    let mut colorSet: qboolean = qfalse;
     let mut sound: *mut libc::c_char = 0 as *mut libc::c_char;
     // if the "model2" key is set, use a separate model
     // for drawing, but clip against the brushes
@@ -1608,15 +1540,9 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut gentity_t) {
     }
     (*ent).use_0 = Some(
         Use_BinaryMover
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
-    (*ent).reached = Some(
-        Reached_BinaryMover as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    );
+    (*ent).reached = Some(Reached_BinaryMover as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*ent).moverState = MOVER_POS1;
     (*ent).r.svFlags = 0x80 as i32;
     (*ent).s.eType = ET_MOVER as i32;
@@ -1661,26 +1587,18 @@ Blocked_Door
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Blocked_Door(
-    mut ent: *mut gentity_t,
-    mut other: *mut gentity_t,
-) {
+pub unsafe extern "C" fn Blocked_Door(mut ent: *mut gentity_t, mut other: *mut gentity_t) {
     // remove anything other than a client
     if (*other).client.is_null() {
         // except CTF flags!!!!
         if (*other).s.eType == ET_ITEM as i32
             && (*(*other).item).giType as u32 == IT_TEAM as i32 as u32
         {
-            crate::src::game::g_team::Team_DroppedFlagThink(
-                other as *mut gentity_s,
-            );
+            crate::src::game::g_team::Team_DroppedFlagThink(other as *mut gentity_s);
             return;
         }
 
-        G_TempEntity(
-            (*other).s.origin.as_mut_ptr(),
-            EV_ITEM_POP as i32,
-        ) as *mut gentity_s;
+        G_TempEntity((*other).s.origin.as_mut_ptr(), EV_ITEM_POP as i32) as *mut gentity_s;
         G_FreeEntity(other as *mut gentity_s);
         return;
     }
@@ -1754,8 +1672,7 @@ pub unsafe extern "C" fn Touch_DoorTrigger(
     mut trace: *mut trace_t,
 ) {
     if !(*other).client.is_null()
-        && (*(*other).client).sess.sessionTeam as u32
-            == TEAM_SPECTATOR as i32 as u32
+        && (*(*other).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32
     {
         // if the door is not open and not opening
         if (*(*ent).parent).moverState as u32 != MOVER_1TO2 as i32 as u32
@@ -1838,29 +1755,17 @@ pub unsafe extern "C" fn Think_SpawnNewDoorTrigger(mut ent: *mut gentity_t) {
     (*other).r.contents = 0x40000000 as i32;
     (*other).touch = Some(
         Touch_DoorTrigger
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
     // remember the thinnest axis
     (*other).count = best;
     trap_LinkEntity(other as *mut gentity_s);
-    MatchTeam(
-        ent,
-        (*ent).moverState as i32,
-        level.time,
-    );
+    MatchTeam(ent, (*ent).moverState as i32, level.time);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn Think_MatchTeam(mut ent: *mut gentity_t) {
-    MatchTeam(
-        ent,
-        (*ent).moverState as i32,
-        level.time,
-    );
+    MatchTeam(ent, (*ent).moverState as i32, level.time);
 }
 /*QUAKED func_door (0 .5 .8) ? START_OPEN x CRUSHER
 TOGGLE		wait in both the start and end states for a trigger event.
@@ -1895,13 +1800,8 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut gentity_t) {
             as *mut libc::c_char,
     );
     (*ent).soundPos1 = (*ent).soundPos2;
-    (*ent).blocked = Some(
-        Blocked_Door
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
-    );
+    (*ent).blocked =
+        Some(Blocked_Door as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t) -> ());
     // default speed of 400
     if (*ent).speed == 0. {
         (*ent).speed = 400 as i32 as f32
@@ -1928,20 +1828,14 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut gentity_t) {
     (*ent).pos1[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
     (*ent).pos1[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // calculate second position
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
-    G_SetMovedir(
-        (*ent).s.angles.as_mut_ptr(),
-        (*ent).movedir.as_mut_ptr(),
-    );
-    abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-        as vec_t;
-    abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-        as vec_t;
-    abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-        as vec_t;
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
+    G_SetMovedir((*ent).s.angles.as_mut_ptr(), (*ent).movedir.as_mut_ptr());
+    abs_movedir[0 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64) as vec_t;
+    abs_movedir[1 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64) as vec_t;
+    abs_movedir[2 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64) as vec_t;
     size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
     size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
     size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
@@ -1982,14 +1876,10 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut gentity_t) {
         }
         if !(*ent).targetname.is_null() || health != 0 {
             // non touch/shoot doors
-            (*ent).think = Some(
-                Think_MatchTeam as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-            )
+            (*ent).think = Some(Think_MatchTeam as unsafe extern "C" fn(_: *mut gentity_t) -> ())
         } else {
-            (*ent).think = Some(
-                Think_SpawnNewDoorTrigger
-                    as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-            )
+            (*ent).think =
+                Some(Think_SpawnNewDoorTrigger as unsafe extern "C" fn(_: *mut gentity_t) -> ())
         }
     };
 }
@@ -2067,11 +1957,7 @@ pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut gentity_t) {
         b"plat_trigger\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*trigger).touch = Some(
         Touch_PlatCenterTrigger
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
     (*trigger).r.contents = 0x40000000 as i32;
     (*trigger).parent = ent;
@@ -2157,10 +2043,7 @@ pub unsafe extern "C" fn SP_func_plat(mut ent: *mut gentity_t) {
     );
     (*ent).wait = 1000 as i32 as f32;
     // create second position
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     if G_SpawnFloat(
         b"height\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
@@ -2183,19 +2066,10 @@ pub unsafe extern "C" fn SP_func_plat(mut ent: *mut gentity_t) {
     // a live player is standing on it
     (*ent).touch = Some(
         Touch_Plat
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     ); // so it can be treated as a door
-    (*ent).blocked = Some(
-        Blocked_Door
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
-    );
+    (*ent).blocked =
+        Some(Blocked_Door as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t) -> ());
     (*ent).parent = ent;
     // spawn the trigger if one hasn't been custom made
     if (*ent).targetname.is_null() {
@@ -2265,25 +2139,19 @@ pub unsafe extern "C" fn SP_func_button(mut ent: *mut gentity_t) {
     (*ent).pos1[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
     (*ent).pos1[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
     // calculate second position
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     G_SpawnFloat(
         b"lip\x00" as *const u8 as *const libc::c_char,
         b"4\x00" as *const u8 as *const libc::c_char,
         &mut lip,
     );
-    G_SetMovedir(
-        (*ent).s.angles.as_mut_ptr(),
-        (*ent).movedir.as_mut_ptr(),
-    );
-    abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-        as vec_t;
-    abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-        as vec_t;
-    abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-        as vec_t;
+    G_SetMovedir((*ent).s.angles.as_mut_ptr(), (*ent).movedir.as_mut_ptr());
+    abs_movedir[0 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64) as vec_t;
+    abs_movedir[1 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64) as vec_t;
+    abs_movedir[2 as i32 as usize] =
+        crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64) as vec_t;
     size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
     size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
     size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
@@ -2392,18 +2260,11 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut gentity_t) {
     // looping sound
     (*ent).s.loopSound = (*next).soundLoop;
     // start it going
-    SetMoverState(
-        ent,
-        MOVER_1TO2,
-        level.time,
-    );
+    SetMoverState(ent, MOVER_1TO2, level.time);
     // if there is a "wait" value on the target, don't start moving yet
     if (*next).wait != 0. {
-        (*ent).nextthink = (level.time as f32
-            + (*next).wait * 1000 as i32 as f32) as i32;
-        (*ent).think = Some(
-            Think_BeginMoving as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-        );
+        (*ent).nextthink = (level.time as f32 + (*next).wait * 1000 as i32 as f32) as i32;
+        (*ent).think = Some(Think_BeginMoving as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).s.pos.trType = TR_STATIONARY
     };
 }
@@ -2422,16 +2283,13 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
     let mut start: *mut gentity_t = 0 as *mut gentity_t;
     (*ent).nextTrain = G_Find(
         0 as *mut gentity_t as *mut gentity_s,
-        &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-            as size_t as i32,
+        &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
         (*ent).target,
     ) as *mut gentity_s;
     if (*ent).nextTrain.is_null() {
         G_Printf(
             b"func_train at %s with an unfound target\n\x00" as *const u8 as *const libc::c_char,
-            vtos(
-                (*ent).r.absmin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*ent).r.absmin.as_mut_ptr() as *const vec_t),
         );
         return;
     }
@@ -2444,9 +2302,7 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
         if (*path).target.is_null() {
             G_Printf(
                 b"Train corner at %s without a target\n\x00" as *const u8 as *const libc::c_char,
-                vtos(
-                    (*path).s.origin.as_mut_ptr() as *const vec_t
-                ),
+                vtos((*path).s.origin.as_mut_ptr() as *const vec_t),
             );
             return;
         }
@@ -2457,16 +2313,14 @@ pub unsafe extern "C" fn Think_SetupTrainTargets(mut ent: *mut gentity_t) {
         loop {
             next = G_Find(
                 next as *mut gentity_s,
-                &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-                    as size_t as i32,
+                &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
                 (*path).target,
             ) as *mut gentity_s;
             if next.is_null() {
                 G_Printf(
                     b"Train corner at %s without a target path_corner\n\x00" as *const u8
                         as *const libc::c_char,
-                    vtos((*path).s.origin.as_mut_ptr()
-                        as *const vec_t),
+                    vtos((*path).s.origin.as_mut_ptr() as *const vec_t),
                 );
                 return;
             }
@@ -2496,9 +2350,7 @@ pub unsafe extern "C" fn SP_path_corner(mut self_0: *mut gentity_t) {
     if (*self_0).targetname.is_null() {
         G_Printf(
             b"path_corner with no targetname at %s\n\x00" as *const u8 as *const libc::c_char,
-            vtos(
-                (*self_0).s.origin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*self_0).s.origin.as_mut_ptr() as *const vec_t),
         );
         G_FreeEntity(self_0 as *mut gentity_s);
         return;
@@ -2534,26 +2386,19 @@ pub unsafe extern "C" fn SP_func_train(mut self_0: *mut gentity_t) {
     if (*self_0).target.is_null() {
         G_Printf(
             b"func_train without a target at %s\n\x00" as *const u8 as *const libc::c_char,
-            vtos(
-                (*self_0).r.absmin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*self_0).r.absmin.as_mut_ptr() as *const vec_t),
         );
         G_FreeEntity(self_0 as *mut gentity_s);
         return;
     }
-    trap_SetBrushModel(
-        self_0 as *mut gentity_s,
-        (*self_0).model,
-    );
+    trap_SetBrushModel(self_0 as *mut gentity_s, (*self_0).model);
     InitMover(self_0);
-    (*self_0).reached =
-        Some(Reached_Train as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).reached = Some(Reached_Train as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     // start trains on the second frame, to make sure their targets have had
     // a chance to spawn
     (*self_0).nextthink = level.time + 100 as i32;
-    (*self_0).think = Some(
-        Think_SetupTrainTargets as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    );
+    (*self_0).think =
+        Some(Think_SetupTrainTargets as unsafe extern "C" fn(_: *mut gentity_t) -> ());
 }
 /*
 ===============================================================================
@@ -2571,10 +2416,7 @@ A bmodel that just sits there, doing nothing.  Can be used for conditional walls
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_func_static(mut ent: *mut gentity_t) {
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     InitMover(ent);
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
@@ -2619,10 +2461,7 @@ pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut gentity_t) {
     if (*ent).damage == 0 {
         (*ent).damage = 2 as i32
     }
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     InitMover(ent);
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
@@ -2677,10 +2516,7 @@ pub unsafe extern "C" fn SP_func_bobbing(mut ent: *mut gentity_t) {
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut phase,
     );
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     InitMover(ent);
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
@@ -2740,19 +2576,15 @@ pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut gentity_t) {
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut phase,
     );
-    trap_SetBrushModel(
-        ent as *mut gentity_s,
-        (*ent).model,
-    );
+    trap_SetBrushModel(ent as *mut gentity_s, (*ent).model);
     // find pendulum length
     length = crate::stdlib::fabs((*ent).r.mins[2 as i32 as usize] as f64) as f32;
     if length < 8 as i32 as f32 {
         length = 8 as i32 as f32
     }
     freq = (1 as i32 as f64 / (3.14159265358979323846f64 * 2 as i32 as f64)
-        * crate::stdlib::sqrt(
-            (g_gravity.value / (3 as i32 as f32 * length)) as f64,
-        )) as f32;
+        * crate::stdlib::sqrt((g_gravity.value / (3 as i32 as f32 * length)) as f64))
+        as f32;
     (*ent).s.pos.trDuration = (1000 as i32 as f32 / freq) as i32;
     InitMover(ent);
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];

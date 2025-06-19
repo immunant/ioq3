@@ -262,9 +262,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
                         .progress_monitor
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             /* Absorb some more input */
             retcode = Some(
@@ -334,24 +332,15 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: j_decompress_ptr) {
     /* This is effectively a buffered-image operation. */
     (*cinfo).buffered_image = 1 as i32;
     /* Compute output image dimensions and related values. */
-    jpeg_core_output_dimensions(
-        cinfo as *mut jpeg_decompress_struct,
-    );
+    jpeg_core_output_dimensions(cinfo as *mut jpeg_decompress_struct);
     /* Entropy decoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        jinit_arith_decoder(
-            cinfo as *mut jpeg_decompress_struct,
-        );
+        jinit_arith_decoder(cinfo as *mut jpeg_decompress_struct);
     } else {
-        jinit_huff_decoder(
-            cinfo as *mut jpeg_decompress_struct,
-        );
+        jinit_huff_decoder(cinfo as *mut jpeg_decompress_struct);
     }
     /* Always get a full-image coefficient buffer. */
-    jinit_d_coef_controller(
-        cinfo as *mut jpeg_decompress_struct,
-        1 as i32,
-    );
+    jinit_d_coef_controller(cinfo as *mut jpeg_decompress_struct, 1 as i32);
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
         (*(*cinfo).mem)

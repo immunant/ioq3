@@ -94,9 +94,7 @@ pub union C2RustUnnamed_90 {
 
 unsafe extern "C" fn ReadBufferedFile(mut name: *const libc::c_char) -> *mut BufferedFile {
     let mut BF: *mut BufferedFile = 0 as *mut BufferedFile;
-    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 {
-        b: 0 as *mut byte,
-    };
+    let mut buffer: C2RustUnnamed_90 = C2RustUnnamed_90 { b: 0 as *mut byte };
     /*
      *  input verification
      */
@@ -198,10 +196,7 @@ unsafe extern "C" fn BufferedFileRead(
  *  Rewind the buffer.
  */
 
-unsafe extern "C" fn BufferedFileRewind(
-    mut BF: *mut BufferedFile,
-    mut Offset: u32,
-) -> qboolean {
+unsafe extern "C" fn BufferedFileRewind(mut BF: *mut BufferedFile, mut Offset: u32) -> qboolean {
     let mut BytesRead: u32 = 0;
     /*
      *  input verification
@@ -238,10 +233,7 @@ unsafe extern "C" fn BufferedFileRewind(
  *  Skip some bytes.
  */
 
-unsafe extern "C" fn BufferedFileSkip(
-    mut BF: *mut BufferedFile,
-    mut Offset: u32,
-) -> qboolean {
+unsafe extern "C" fn BufferedFileSkip(mut BF: *mut BufferedFile, mut Offset: u32) -> qboolean {
     /*
      *  input verification
      */
@@ -265,10 +257,7 @@ unsafe extern "C" fn BufferedFileSkip(
  *  Find a chunk
  */
 
-unsafe extern "C" fn FindChunk(
-    mut BF: *mut BufferedFile,
-    mut ChunkType: uint32_t,
-) -> qboolean {
+unsafe extern "C" fn FindChunk(mut BF: *mut BufferedFile, mut ChunkType: uint32_t) -> qboolean {
     let mut CH: *mut PNG_ChunkHeader = 0 as *mut PNG_ChunkHeader;
     let mut Length: uint32_t = 0;
     let mut Type: uint32_t = 0;
@@ -293,10 +282,8 @@ unsafe extern "C" fn FindChunk(
          *  Do not swap the original types
          *  they might be needed later.
          */
-        Length =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-        Type =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+        Length = crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
+        Type = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
         /*
          *  We found it!
          */
@@ -386,10 +373,8 @@ unsafe extern "C" fn DecompressIDATs(
         /*
          *  Length and Type of chunk
          */
-        Length =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-        Type =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+        Length = crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
+        Type = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
         /*
          *  We have reached the end of the IDAT chunks
          */
@@ -450,10 +435,8 @@ unsafe extern "C" fn DecompressIDATs(
         /*
          *  Length and Type of chunk
          */
-        Length =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-        Type =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+        Length = crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
+        Type = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
         /*
          *  We have reached the end of the IDAT chunks
          */
@@ -466,8 +449,7 @@ unsafe extern "C" fn DecompressIDATs(
             BufferedFileRewind(BF, 8 as i32 as u32);
             break;
         } else if Length != 0 {
-            let mut OrigCompressedData: *mut uint8_t =
-                0 as *mut uint8_t;
+            let mut OrigCompressedData: *mut uint8_t = 0 as *mut uint8_t;
             OrigCompressedData = BufferedFileRead(BF, Length) as *mut uint8_t;
             if OrigCompressedData.is_null() {
                 crate::src::renderergl1::tr_main::ri
@@ -571,11 +553,7 @@ unsafe extern "C" fn DecompressIDATs(
  *  the Paeth predictor
  */
 
-unsafe extern "C" fn PredictPaeth(
-    mut a: uint8_t,
-    mut b: uint8_t,
-    mut c: uint8_t,
-) -> uint8_t {
+unsafe extern "C" fn PredictPaeth(mut a: uint8_t, mut b: uint8_t, mut c: uint8_t) -> uint8_t {
     /*
      *  a == Left
      *  b == Up
@@ -691,21 +669,19 @@ unsafe extern "C" fn UnfilterImage(
                     0 => {}
                     1 => {
                         let ref mut fresh0 = *DecompPtr.offset(p as isize);
-                        *fresh0 = (*fresh0 as i32 + *PixelLeft.offset(p as isize) as i32)
-                            as uint8_t
+                        *fresh0 = (*fresh0 as i32 + *PixelLeft.offset(p as isize) as i32) as uint8_t
                     }
                     2 => {
                         let ref mut fresh1 = *DecompPtr.offset(p as isize);
-                        *fresh1 = (*fresh1 as i32 + *PixelUp.offset(p as isize) as i32)
-                            as uint8_t
+                        *fresh1 = (*fresh1 as i32 + *PixelUp.offset(p as isize) as i32) as uint8_t
                     }
                     3 => {
                         let ref mut fresh2 = *DecompPtr.offset(p as isize);
                         *fresh2 = (*fresh2 as i32
                             + ((*PixelLeft.offset(p as isize) as uint16_t as i32
                                 + *PixelUp.offset(p as isize) as uint16_t as i32)
-                                / 2 as i32) as uint8_t
-                                as i32) as uint8_t
+                                / 2 as i32) as uint8_t as i32)
+                            as uint8_t
                     }
                     4 => {
                         let ref mut fresh3 = *DecompPtr.offset(p as isize);
@@ -776,13 +752,12 @@ unsafe extern "C" fn ConvertPixel(
                     let mut GreyValue: uint8_t = 0;
                     Step = (0xff as i32 / (((1 as i32) << (*IHDR).BitDepth as i32) - 1 as i32))
                         as uint8_t;
-                    GreyValue = (*DecompPtr.offset(0 as i32 as isize) as i32 * Step as i32)
-                        as uint8_t;
+                    GreyValue =
+                        (*DecompPtr.offset(0 as i32 as isize) as i32 * Step as i32) as uint8_t;
                     *OutPtr.offset(0 as i32 as isize) = GreyValue;
                     *OutPtr.offset(1 as i32 as isize) = GreyValue;
                     *OutPtr.offset(2 as i32 as isize) = GreyValue;
-                    *OutPtr.offset(3 as i32 as isize) =
-                        0xff as i32 as byte;
+                    *OutPtr.offset(3 as i32 as isize) = 0xff as i32 as byte;
                     /*
                      *  Grey supports full transparency for one specified colour
                      */
@@ -790,8 +765,7 @@ unsafe extern "C" fn ConvertPixel(
                         if *TransparentColour.offset(1 as i32 as isize) as i32
                             == *DecompPtr.offset(0 as i32 as isize) as i32
                         {
-                            *OutPtr.offset(3 as i32 as isize) =
-                                0 as i32 as byte
+                            *OutPtr.offset(3 as i32 as isize) = 0 as i32 as byte
                         }
                     }
                 }
@@ -799,8 +773,7 @@ unsafe extern "C" fn ConvertPixel(
                     *OutPtr.offset(0 as i32 as isize) = *DecompPtr.offset(0 as i32 as isize);
                     *OutPtr.offset(1 as i32 as isize) = *DecompPtr.offset(0 as i32 as isize);
                     *OutPtr.offset(2 as i32 as isize) = *DecompPtr.offset(0 as i32 as isize);
-                    *OutPtr.offset(3 as i32 as isize) =
-                        0xff as i32 as byte;
+                    *OutPtr.offset(3 as i32 as isize) = 0xff as i32 as byte;
                     /*
                      *  Grey supports full transparency for one specified colour
                      */
@@ -809,16 +782,14 @@ unsafe extern "C" fn ConvertPixel(
                             if *TransparentColour.offset(1 as i32 as isize) as i32
                                 == *DecompPtr.offset(0 as i32 as isize) as i32
                             {
-                                *OutPtr.offset(3 as i32 as isize) =
-                                    0 as i32 as byte
+                                *OutPtr.offset(3 as i32 as isize) = 0 as i32 as byte
                             }
                         } else if *TransparentColour.offset(0 as i32 as isize) as i32
                             == *DecompPtr.offset(0 as i32 as isize) as i32
                             && *TransparentColour.offset(1 as i32 as isize) as i32
                                 == *DecompPtr.offset(1 as i32 as isize) as i32
                         {
-                            *OutPtr.offset(3 as i32 as isize) =
-                                0 as i32 as byte
+                            *OutPtr.offset(3 as i32 as isize) = 0 as i32 as byte
                         }
                     }
                 }
@@ -831,8 +802,7 @@ unsafe extern "C" fn ConvertPixel(
                     *OutPtr.offset(0 as i32 as isize) = *DecompPtr.offset(0 as i32 as isize);
                     *OutPtr.offset(1 as i32 as isize) = *DecompPtr.offset(1 as i32 as isize);
                     *OutPtr.offset(2 as i32 as isize) = *DecompPtr.offset(2 as i32 as isize);
-                    *OutPtr.offset(3 as i32 as isize) =
-                        0xff as i32 as byte;
+                    *OutPtr.offset(3 as i32 as isize) = 0xff as i32 as byte;
                     /*
                      *  True supports full transparency for one specified colour
                      */
@@ -844,8 +814,7 @@ unsafe extern "C" fn ConvertPixel(
                             && *TransparentColour.offset(5 as i32 as isize) as i32
                                 == *DecompPtr.offset(2 as i32 as isize) as i32
                         {
-                            *OutPtr.offset(3 as i32 as isize) =
-                                0 as i32 as byte
+                            *OutPtr.offset(3 as i32 as isize) = 0 as i32 as byte
                         }
                     }
                 }
@@ -856,8 +825,7 @@ unsafe extern "C" fn ConvertPixel(
                     *OutPtr.offset(0 as i32 as isize) = *DecompPtr.offset(0 as i32 as isize);
                     *OutPtr.offset(1 as i32 as isize) = *DecompPtr.offset(2 as i32 as isize);
                     *OutPtr.offset(2 as i32 as isize) = *DecompPtr.offset(4 as i32 as isize);
-                    *OutPtr.offset(3 as i32 as isize) =
-                        0xff as i32 as byte;
+                    *OutPtr.offset(3 as i32 as isize) = 0xff as i32 as byte;
                     /*
                      *  True supports full transparency for one specified colour
                      */
@@ -875,8 +843,7 @@ unsafe extern "C" fn ConvertPixel(
                             && *TransparentColour.offset(5 as i32 as isize) as i32
                                 == *DecompPtr.offset(5 as i32 as isize) as i32
                         {
-                            *OutPtr.offset(3 as i32 as isize) =
-                                0 as i32 as byte
+                            *OutPtr.offset(3 as i32 as isize) = 0 as i32 as byte
                         }
                     }
                 }
@@ -962,8 +929,7 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
     let mut w: uint32_t = 0;
     let mut h: uint32_t = 0;
     let mut p: uint32_t = 0;
-    let mut OutPtr: *mut byte =
-        0 as *mut byte;
+    let mut OutPtr: *mut byte = 0 as *mut byte;
     let mut DecompPtr: *mut uint8_t = 0 as *mut uint8_t;
     /*
      *  input verification
@@ -980,10 +946,8 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
     /*
      *  byte swapping
      */
-    IHDR_Width =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
-    IHDR_Height =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
+    IHDR_Width = crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
+    IHDR_Height = crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
     /*
      *  information for un-filtering
      */
@@ -994,16 +958,14 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
                 PixelsPerByte = (8 as i32 / (*IHDR).BitDepth as i32) as uint32_t
             }
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 1 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 1 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
         },
         2 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 3 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 3 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
@@ -1021,16 +983,14 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
         },
         4 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 2 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 2 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
         },
         6 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 4 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 4 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
@@ -1098,15 +1058,14 @@ unsafe extern "C" fn DecodeImageNonInterlaced(
                 p = 0 as i32 as uint32_t;
                 while p < PixelsPerByte {
                     if CurrPixel < IHDR_Width {
-                        Mask = (((1 as i32) << (*IHDR).BitDepth as i32) - 1 as i32)
-                            as uint8_t;
+                        Mask = (((1 as i32) << (*IHDR).BitDepth as i32) - 1 as i32) as uint8_t;
                         Shift = PixelsPerByte
                             .wrapping_sub(1 as i32 as u32)
                             .wrapping_sub(p)
                             .wrapping_mul((*IHDR).BitDepth as u32);
-                        SinglePixel =
-                            ((*DecompPtr.offset(0 as i32 as isize) as i32 & (Mask as i32) << Shift)
-                                >> Shift) as uint8_t;
+                        SinglePixel = ((*DecompPtr.offset(0 as i32 as isize) as i32
+                            & (Mask as i32) << Shift)
+                            >> Shift) as uint8_t;
                         if ConvertPixel(
                             IHDR,
                             OutPtr,
@@ -1174,8 +1133,7 @@ unsafe extern "C" fn DecodeImageInterlaced(
     let mut h: uint32_t = 0;
     let mut p: uint32_t = 0;
     let mut a: uint32_t = 0;
-    let mut OutPtr: *mut byte =
-        0 as *mut byte;
+    let mut OutPtr: *mut byte = 0 as *mut byte;
     let mut DecompPtr: *mut uint8_t = 0 as *mut uint8_t;
     let mut TargetLength: uint32_t = 0;
     /*
@@ -1193,10 +1151,8 @@ unsafe extern "C" fn DecodeImageInterlaced(
     /*
      *  byte swapping
      */
-    IHDR_Width =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
-    IHDR_Height =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
+    IHDR_Width = crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
+    IHDR_Height = crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
     /*
      *  Skip and Offset for the passes.
      */
@@ -1283,16 +1239,14 @@ unsafe extern "C" fn DecodeImageInterlaced(
                 PixelsPerByte = (8 as i32 / (*IHDR).BitDepth as i32) as uint32_t
             }
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 1 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 1 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
         },
         2 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 3 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 3 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
@@ -1310,16 +1264,14 @@ unsafe extern "C" fn DecodeImageInterlaced(
         },
         4 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 2 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 2 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
         },
         6 => match (*IHDR).BitDepth as i32 {
             8 | 16 => {
-                BytesPerPixel =
-                    ((*IHDR).BitDepth as i32 / 8 as i32 * 4 as i32) as uint32_t;
+                BytesPerPixel = ((*IHDR).BitDepth as i32 / 8 as i32 * 4 as i32) as uint32_t;
                 PixelsPerByte = 1 as i32 as uint32_t
             }
             _ => return qfalse,
@@ -1426,16 +1378,14 @@ unsafe extern "C" fn DecodeImageInterlaced(
                     p = 0 as i32 as uint32_t;
                     while p < PixelsPerByte {
                         if CurrPixel < PassWidth[a as usize] {
-                            Mask = (((1 as i32) << (*IHDR).BitDepth as i32) - 1 as i32)
-                                as uint8_t;
+                            Mask = (((1 as i32) << (*IHDR).BitDepth as i32) - 1 as i32) as uint8_t;
                             Shift = PixelsPerByte
                                 .wrapping_sub(1 as i32 as u32)
                                 .wrapping_sub(p)
                                 .wrapping_mul((*IHDR).BitDepth as u32);
                             SinglePixel = ((*DecompPtr.offset(0 as i32 as isize) as i32
                                 & (Mask as i32) << Shift)
-                                >> Shift)
-                                as uint8_t;
+                                >> Shift) as uint8_t;
                             OutPtr = OutBuffer.offset(
                                 h.wrapping_mul(HSkip[a as usize])
                                     .wrapping_add(HOffset[a as usize])
@@ -1570,8 +1520,7 @@ pub unsafe extern "C" fn R_LoadPNG(
     mut height: *mut i32,
 ) {
     let mut ThePNG: *mut BufferedFile = 0 as *mut BufferedFile;
-    let mut OutBuffer: *mut byte =
-        0 as *mut byte;
+    let mut OutBuffer: *mut byte = 0 as *mut byte;
     let mut Signature: *mut uint8_t = 0 as *mut uint8_t;
     let mut CH: *mut PNG_ChunkHeader = 0 as *mut PNG_ChunkHeader;
     let mut ChunkHeaderLength: uint32_t = 0;
@@ -1591,8 +1540,7 @@ pub unsafe extern "C" fn R_LoadPNG(
     /*
      *  transparent colour from the tRNS chunk
      */
-    let mut HasTransparentColour: qboolean =
-        qfalse;
+    let mut HasTransparentColour: qboolean = qfalse;
     let mut TransparentColour: [uint8_t; 6] = [
         0xff as i32 as uint8_t,
         0xff as i32 as uint8_t,
@@ -1655,10 +1603,8 @@ pub unsafe extern "C" fn R_LoadPNG(
     /*
      *  PNG multi-byte types are in Big Endian
      */
-    ChunkHeaderLength =
-        crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-    ChunkHeaderType =
-        crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+    ChunkHeaderLength = crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
+    ChunkHeaderType = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
     /*
      *  Check if the first chunk is an IHDR.
      */
@@ -1694,10 +1640,8 @@ pub unsafe extern "C" fn R_LoadPNG(
     /*
      *  multi-byte type swapping
      */
-    IHDR_Width =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
-    IHDR_Height =
-        crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
+    IHDR_Width = crate::src::qcommon::q_shared::LongSwap((*IHDR).Width as i32) as uint32_t;
+    IHDR_Height = crate::src::qcommon::q_shared::LongSwap((*IHDR).Height as i32) as uint32_t;
     /*
      *  Check if Width and Height are valid.
      */
@@ -1763,8 +1707,7 @@ pub unsafe extern "C" fn R_LoadPNG(
          */
         ChunkHeaderLength =
             crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-        ChunkHeaderType =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+        ChunkHeaderType = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
         /*
          *  Check if the chunk is a PLTE.
          */
@@ -1877,8 +1820,7 @@ pub unsafe extern "C" fn R_LoadPNG(
          */
         ChunkHeaderLength =
             crate::src::qcommon::q_shared::LongSwap((*CH).Length as i32) as uint32_t;
-        ChunkHeaderType =
-            crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
+        ChunkHeaderType = crate::src::qcommon::q_shared::LongSwap((*CH).Type as i32) as uint32_t;
         /*
          *  Check if the chunk is a tRNS.
          */

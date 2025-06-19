@@ -408,8 +408,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -431,8 +430,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -458,8 +456,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -485,8 +482,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -512,8 +508,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -539,8 +534,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -568,8 +562,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -597,8 +590,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -624,8 +616,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -651,8 +642,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -683,8 +673,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         torsoModel: 0,
@@ -700,8 +689,7 @@ static mut s_playersettings: playersettings_t = playersettings_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         headModel: 0,
@@ -800,8 +788,7 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
     f = self_0 as *mut menufield_s;
     basex = (*f).generic.x;
     y = (*f).generic.y;
-    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32 | 0x10 as i32;
     color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
@@ -819,9 +806,7 @@ unsafe extern "C" fn PlayerSettings_DrawName(mut self_0: *mut libc::c_void) {
     basex += 64 as i32;
     y += 27 as i32;
     txt = (*f).field.buffer.as_mut_ptr();
-    color = g_color_table
-        [('7' as i32 - '0' as i32 & 0x7 as i32) as usize]
-        .as_mut_ptr();
+    color = g_color_table[('7' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr();
     x = basex;
     loop {
         c = *txt;
@@ -885,8 +870,7 @@ unsafe extern "C" fn PlayerSettings_DrawHandicap(mut self_0: *mut libc::c_void) 
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
     item = self_0 as *mut menulist_s;
-    focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32 | 0x10 as i32;
     color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
@@ -920,8 +904,7 @@ unsafe extern "C" fn PlayerSettings_DrawEffects(mut self_0: *mut libc::c_void) {
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
     item = self_0 as *mut menulist_s;
-    focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*item).generic.parent).cursor == (*item).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32 | 0x10 as i32;
     color = text_color_normal.as_mut_ptr();
     if focus as u64 != 0 {
@@ -971,8 +954,7 @@ unsafe extern "C" fn PlayerSettings_DrawPlayer(mut self_0: *mut libc::c_void) {
             buf.as_mut_ptr(),
         );
         libc::strcpy(s_playersettings.playerModel.as_mut_ptr(), buf.as_mut_ptr());
-        viewangles[1 as i32 as usize] =
-            (180 as i32 - 30 as i32) as vec_t;
+        viewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
         viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
         viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
         UI_PlayerInfo_SetInfo(
@@ -1024,9 +1006,7 @@ PlayerSettings_MenuKey
 =================
 */
 
-unsafe extern "C" fn PlayerSettings_MenuKey(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn PlayerSettings_MenuKey(mut key: i32) -> sfxHandle_t {
     if key == K_MOUSE2 as i32 || key == K_ESCAPE as i32 {
         PlayerSettings_SaveChanges();
     }
@@ -1048,35 +1028,28 @@ unsafe extern "C" fn PlayerSettings_SetMenuItems() {
     // name
     Q_strncpyz(
         s_playersettings.name.field.buffer.as_mut_ptr(),
-        UI_Cvar_VariableString(
-            b"name\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"name\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
     // effects color
-    c = (trap_Cvar_VariableValue(
-        b"color1\x00" as *const u8 as *const libc::c_char,
-    ) - 1 as i32 as f32) as i32;
+    c = (trap_Cvar_VariableValue(b"color1\x00" as *const u8 as *const libc::c_char)
+        - 1 as i32 as f32) as i32;
     if c < 0 as i32 || c > 6 as i32 {
         c = 6 as i32
     }
     s_playersettings.effects.curvalue = gamecodetoui[c as usize];
     // model/skin
     crate::stdlib::memset(
-        &mut s_playersettings.playerinfo as *mut playerInfo_t
-            as *mut libc::c_void,
+        &mut s_playersettings.playerinfo as *mut playerInfo_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<playerInfo_t>() as libc::c_ulong,
     );
-    viewangles[1 as i32 as usize] =
-        (180 as i32 - 30 as i32) as vec_t;
+    viewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
     viewangles[0 as i32 as usize] = 0 as i32 as vec_t;
     viewangles[2 as i32 as usize] = 0 as i32 as vec_t;
     UI_PlayerInfo_SetModel(
         &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
-        UI_Cvar_VariableString(
-            b"model\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"model\x00" as *const u8 as *const libc::c_char),
     );
     UI_PlayerInfo_SetInfo(
         &mut s_playersettings.playerinfo as *mut _ as *mut playerInfo_t,
@@ -1091,9 +1064,7 @@ unsafe extern "C" fn PlayerSettings_SetMenuItems() {
     h = Com_Clamp(
         5 as i32 as f32,
         100 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"handicap\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"handicap\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     s_playersettings.handicap.curvalue = 20 as i32 - h / 5 as i32;
 }
@@ -1142,10 +1113,8 @@ unsafe extern "C" fn PlayerSettings_MenuInit() {
         ::std::mem::size_of::<playersettings_t>() as libc::c_ulong,
     );
     PlayerSettings_Cache();
-    s_playersettings.menu.key = Some(
-        PlayerSettings_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_playersettings.menu.key =
+        Some(PlayerSettings_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_playersettings.menu.wrapAround = qtrue;
     s_playersettings.menu.fullscreen = qtrue;
     s_playersettings.banner.generic.type_0 = 10 as i32;
@@ -1288,8 +1257,7 @@ unsafe extern "C" fn PlayerSettings_MenuInit() {
     );
     Menu_AddItem(
         &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_playersettings.item_null as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut s_playersettings.item_null as *mut menubitmap_s as *mut libc::c_void,
     );
     PlayerSettings_SetMenuItems();
 }
@@ -1301,55 +1269,28 @@ PlayerSettings_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn PlayerSettings_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/model_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/model_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    s_playersettings.fxBasePic = trap_R_RegisterShaderNoMip(
-        b"menu/art/fx_base\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/model_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/model_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    s_playersettings.fxBasePic =
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_base\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[0 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_red\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_red\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[1 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_yel\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_yel\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[2 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_grn\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_grn\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[3 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_teal\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_teal\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[4 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_blue\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_blue\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[5 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_cyan\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_cyan\x00" as *const u8 as *const libc::c_char);
     s_playersettings.fxPic[6 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/fx_white\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/fx_white\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -1443,7 +1384,5 @@ UI_PlayerSettingsMenu
 
 pub unsafe extern "C" fn UI_PlayerSettingsMenu() {
     PlayerSettings_MenuInit();
-    UI_PushMenu(
-        &mut s_playersettings.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_playersettings.menu as *mut _ as *mut _tag_menuframework);
 }

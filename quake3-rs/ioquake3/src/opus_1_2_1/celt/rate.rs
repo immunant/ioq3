@@ -233,8 +233,7 @@ unsafe extern "C" fn interp_bits2pulses(
             percoeff = celt_udiv(
                 left as opus_uint32,
                 (*(*m).eBands.offset(codedBands as isize) as i32
-                    - *(*m).eBands.offset(start as isize) as i32)
-                    as opus_uint32,
+                    - *(*m).eBands.offset(start as isize) as i32) as opus_uint32,
             ) as opus_int32;
             left -= (*(*m).eBands.offset(codedBands as isize) as i32
                 - *(*m).eBands.offset(start as isize) as i32)
@@ -368,8 +367,7 @@ unsafe extern "C" fn interp_bits2pulses(
     percoeff = celt_udiv(
         left as opus_uint32,
         (*(*m).eBands.offset(codedBands as isize) as i32
-            - *(*m).eBands.offset(start as isize) as i32)
-            as opus_uint32,
+            - *(*m).eBands.offset(start as isize) as i32) as opus_uint32,
     ) as opus_int32;
     left -= (*(*m).eBands.offset(codedBands as isize) as i32
         - *(*m).eBands.offset(start as isize) as i32)
@@ -447,10 +445,9 @@ unsafe extern "C" fn interp_bits2pulses(
                 } else {
                     (*bits.offset(j as isize) + offset) + (den << 3 as i32 - 1 as i32)
                 };
-            *ebits.offset(j as isize) = (celt_udiv(
-                *ebits.offset(j as isize) as opus_uint32,
-                den as opus_uint32,
-            ) >> 3 as i32) as i32;
+            *ebits.offset(j as isize) =
+                (celt_udiv(*ebits.offset(j as isize) as opus_uint32, den as opus_uint32)
+                    >> 3 as i32) as i32;
             /* Make sure not to bust */
             if C * *ebits.offset(j as isize) > *bits.offset(j as isize) >> 3 as i32 {
                 *ebits.offset(j as isize) = *bits.offset(j as isize) >> stereo >> 3 as i32

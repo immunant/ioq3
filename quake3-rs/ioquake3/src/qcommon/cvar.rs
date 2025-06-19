@@ -104,50 +104,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cvar.c -- dynamic variable tracking
 #[no_mangle]
 
-pub static mut cvar_vars: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cvar_vars: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cvar_cheats: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cvar_cheats: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut cvar_modifiedFlags: i32 = 0;
 #[no_mangle]
 
-pub static mut cvar_indexes: [cvar_t; 2048] =
-    [cvar_t {
-        name: 0 as *const libc::c_char as *mut libc::c_char,
-        string: 0 as *const libc::c_char as *mut libc::c_char,
-        resetString: 0 as *const libc::c_char as *mut libc::c_char,
-        latchedString: 0 as *const libc::c_char as *mut libc::c_char,
-        flags: 0,
-        modified: qfalse,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        validate: qfalse,
-        integral: qfalse,
-        min: 0.,
-        max: 0.,
-        description: 0 as *const libc::c_char as *mut libc::c_char,
-        next: 0 as *const cvar_t
-            as *mut cvar_t,
-        prev: 0 as *const cvar_t
-            as *mut cvar_t,
-        hashNext: 0 as *const cvar_t
-            as *mut cvar_t,
-        hashPrev: 0 as *const cvar_t
-            as *mut cvar_t,
-        hashIndex: 0,
-    }; 2048];
+pub static mut cvar_indexes: [cvar_t; 2048] = [cvar_t {
+    name: 0 as *const libc::c_char as *mut libc::c_char,
+    string: 0 as *const libc::c_char as *mut libc::c_char,
+    resetString: 0 as *const libc::c_char as *mut libc::c_char,
+    latchedString: 0 as *const libc::c_char as *mut libc::c_char,
+    flags: 0,
+    modified: qfalse,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    validate: qfalse,
+    integral: qfalse,
+    min: 0.,
+    max: 0.,
+    description: 0 as *const libc::c_char as *mut libc::c_char,
+    next: 0 as *const cvar_t as *mut cvar_t,
+    prev: 0 as *const cvar_t as *mut cvar_t,
+    hashNext: 0 as *const cvar_t as *mut cvar_t,
+    hashPrev: 0 as *const cvar_t as *mut cvar_t,
+    hashIndex: 0,
+}; 2048];
 #[no_mangle]
 
 pub static mut cvar_numIndexes: i32 = 0;
 
-static mut hashTable: [*mut cvar_t; 256] =
-    [0 as *const cvar_t
-        as *mut cvar_t; 256];
+static mut hashTable: [*mut cvar_t; 256] = [0 as *const cvar_t as *mut cvar_t; 256];
 /*
 ================
 return a hash value for the filename
@@ -175,8 +166,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize 
                     __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*__ctype_tolower_loc())
-                    .offset(*fname.offset(i as isize) as i32 as isize)
+                __res = *(*__ctype_tolower_loc()).offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -192,9 +182,7 @@ Cvar_ValidateString
 ============
 */
 
-unsafe extern "C" fn Cvar_ValidateString(
-    mut s: *const libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn Cvar_ValidateString(mut s: *const libc::c_char) -> qboolean {
     if s.is_null() {
         return qfalse;
     }
@@ -215,11 +203,8 @@ Cvar_FindVar
 ============
 */
 
-unsafe extern "C" fn Cvar_FindVar(
-    mut var_name: *const libc::c_char,
-) -> *mut cvar_t {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+unsafe extern "C" fn Cvar_FindVar(mut var_name: *const libc::c_char) -> *mut cvar_t {
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     let mut hash: isize = 0;
     hash = generateHashValue(var_name);
     var = hashTable[hash as usize];
@@ -240,8 +225,7 @@ Cvar_VariableValue
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0 as i32 as f32;
@@ -256,8 +240,7 @@ Cvar_VariableIntegerValue
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_VariableIntegerValue(mut var_name: *const libc::c_char) -> i32 {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0 as i32;
@@ -275,8 +258,7 @@ Cvar_VariableString
 pub unsafe extern "C" fn Cvar_VariableString(
     mut var_name: *const libc::c_char,
 ) -> *mut libc::c_char {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -295,8 +277,7 @@ pub unsafe extern "C" fn Cvar_VariableStringBuffer(
     mut buffer: *mut libc::c_char,
     mut bufsize: i32,
 ) {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         *buffer = 0 as i32 as libc::c_char
@@ -313,8 +294,7 @@ Cvar_Flags
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Flags(mut var_name: *const libc::c_char) -> i32 {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     var = Cvar_FindVar(var_name);
     if var.is_null() {
         return 0x80000000 as u32 as i32;
@@ -335,8 +315,7 @@ Cvar_CommandCompletion
 pub unsafe extern "C" fn Cvar_CommandCompletion(
     mut callback: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
 ) {
-    let mut cvar: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cvar: *mut cvar_t = 0 as *mut cvar_t;
     cvar = cvar_vars;
     while !cvar.is_null() {
         if !(*cvar).name.is_null() {
@@ -358,8 +337,7 @@ unsafe extern "C" fn Cvar_Validate(
 ) -> *const libc::c_char {
     static mut s: [libc::c_char; 256] = [0; 256];
     let mut valuef: f32 = 0.;
-    let mut changed: qboolean =
-        qfalse;
+    let mut changed: qboolean = qfalse;
     if (*var).validate as u64 == 0 {
         return value;
     }
@@ -394,9 +372,7 @@ unsafe extern "C" fn Cvar_Validate(
     if valuef < (*var).min {
         if warn as u64 != 0 {
             if changed as u64 != 0 {
-                Com_Printf(
-                    b" and is\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" and is\x00" as *const u8 as *const libc::c_char);
             } else {
                 Com_Printf(
                     b"WARNING: cvar \'%s\'\x00" as *const u8 as *const libc::c_char,
@@ -420,9 +396,7 @@ unsafe extern "C" fn Cvar_Validate(
     } else if valuef > (*var).max {
         if warn as u64 != 0 {
             if changed as u64 != 0 {
-                Com_Printf(
-                    b" and is\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" and is\x00" as *const u8 as *const libc::c_char);
             } else {
                 Com_Printf(
                     b"WARNING: cvar \'%s\'\x00" as *const u8 as *const libc::c_char,
@@ -519,8 +493,7 @@ pub unsafe extern "C" fn Cvar_Get(
     mut var_value: *const libc::c_char,
     mut flags: i32,
 ) -> *mut cvar_t {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     let mut hash: isize = 0;
     let mut index: i32 = 0;
     if var_name.is_null() || var_value.is_null() {
@@ -624,8 +597,7 @@ pub unsafe extern "C" fn Cvar_Get(
         }
         return 0 as *mut cvar_t;
     }
-    var = &mut *cvar_indexes.as_mut_ptr().offset(index as isize)
-        as *mut cvar_t;
+    var = &mut *cvar_indexes.as_mut_ptr().offset(index as isize) as *mut cvar_t;
     if index >= cvar_numIndexes {
         cvar_numIndexes = index + 1 as i32
     }
@@ -675,9 +647,7 @@ pub unsafe extern "C" fn Cvar_Print(mut v: *mut cvar_t) {
     );
     if (*v).flags & 0x40 as i32 == 0 {
         if Q_stricmp((*v).string, (*v).resetString) == 0 {
-            Com_Printf(
-                b", the default\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b", the default\x00" as *const u8 as *const libc::c_char);
         } else {
             Com_Printf(
                 b" default:\"%s^7\"\x00" as *const u8 as *const libc::c_char,
@@ -712,8 +682,7 @@ pub unsafe extern "C" fn Cvar_Set2(
     mut value: *const libc::c_char,
     mut force: qboolean,
 ) -> *mut cvar_t {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     //	Com_DPrintf( "Cvar_Set2: %s %s\n", var_name, value );
     if Cvar_ValidateString(var_name) as u64 == 0 {
         Com_Printf(
@@ -930,11 +899,7 @@ Cvar_Reset
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Reset(mut var_name: *const libc::c_char) {
-    Cvar_Set2(
-        var_name,
-        0 as *const libc::c_char,
-        qfalse,
-    );
+    Cvar_Set2(var_name, 0 as *const libc::c_char, qfalse);
 }
 /*
 ============
@@ -944,11 +909,7 @@ Cvar_ForceReset
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_ForceReset(mut var_name: *const libc::c_char) {
-    Cvar_Set2(
-        var_name,
-        0 as *const libc::c_char,
-        qtrue,
-    );
+    Cvar_Set2(var_name, 0 as *const libc::c_char, qtrue);
 }
 /*
 ============
@@ -960,8 +921,7 @@ Any testing variables will be reset to the safe values
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_SetCheatState() {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     // set all default vars to the safe value
     var = cvar_vars;
     while !var.is_null() {
@@ -990,8 +950,7 @@ Handles variable inspection and changing from the console
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Command() -> qboolean {
-    let mut v: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut v: *mut cvar_t = 0 as *mut cvar_t;
     // check variables
     v = Cvar_FindVar(Cmd_Argv(0 as i32));
     if v.is_null() {
@@ -1003,11 +962,7 @@ pub unsafe extern "C" fn Cvar_Command() -> qboolean {
         return qtrue;
     }
     // set the value if forcing isn't required
-    Cvar_Set2(
-        (*v).name,
-        Cmd_Args(),
-        qfalse,
-    );
+    Cvar_Set2((*v).name, Cmd_Args(), qfalse);
     return qtrue;
 }
 /*
@@ -1022,12 +977,9 @@ Prints the contents of a cvar
 
 pub unsafe extern "C" fn Cvar_Print_f() {
     let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"usage: print <variable>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: print <variable>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     name = Cmd_Argv(1 as i32);
@@ -1074,9 +1026,7 @@ pub unsafe extern "C" fn Cvar_Toggle_f() {
         return;
     }
     if c == 3 as i32 {
-        Com_Printf(
-            b"toggle: nothing to toggle to\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"toggle: nothing to toggle to\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     curval = Cvar_VariableString(Cmd_Argv(1 as i32));
@@ -1085,21 +1035,13 @@ pub unsafe extern "C" fn Cvar_Toggle_f() {
     i = 2 as i32;
     while (i + 1 as i32) < c {
         if libc::strcmp(curval, Cmd_Argv(i)) == 0 as i32 {
-            Cvar_Set2(
-                Cmd_Argv(1 as i32),
-                Cmd_Argv(i + 1 as i32),
-                qfalse,
-            );
+            Cvar_Set2(Cmd_Argv(1 as i32), Cmd_Argv(i + 1 as i32), qfalse);
             return;
         }
         i += 1
     }
     // fallback
-    Cvar_Set2(
-        Cmd_Argv(1 as i32),
-        Cmd_Argv(2 as i32),
-        qfalse,
-    );
+    Cvar_Set2(Cmd_Argv(1 as i32), Cmd_Argv(2 as i32), qfalse);
 }
 /*
 ============
@@ -1114,8 +1056,7 @@ weren't declared in C code.
 pub unsafe extern "C" fn Cvar_Set_f() {
     let mut c: i32 = 0;
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut v: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut v: *mut cvar_t = 0 as *mut cvar_t;
     c = Cmd_Argc();
     cmd = Cmd_Argv(0 as i32);
     if c < 2 as i32 {
@@ -1129,11 +1070,7 @@ pub unsafe extern "C" fn Cvar_Set_f() {
         Cvar_Print_f();
         return;
     }
-    v = Cvar_Set2(
-        Cmd_Argv(1 as i32),
-        Cmd_ArgsFrom(2 as i32),
-        qfalse,
-    );
+    v = Cvar_Set2(Cmd_Argv(1 as i32), Cmd_ArgsFrom(2 as i32), qfalse);
     if v.is_null() {
         return;
     }
@@ -1168,9 +1105,7 @@ Cvar_Reset_f
 
 pub unsafe extern "C" fn Cvar_Reset_f() {
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"usage: reset <variable>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: reset <variable>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     Cvar_Reset(Cmd_Argv(1 as i32));
@@ -1189,8 +1124,7 @@ with the archive flag set to qtrue.
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_WriteVariables(mut f: fileHandle_t) {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
     let mut current_block_5: u64;
     var = cvar_vars;
@@ -1269,8 +1203,7 @@ Cvar_List_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_List_f() {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     let mut i: i32 = 0;
     let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
     if Cmd_Argc() > 1 as i32 {
@@ -1282,93 +1215,52 @@ pub unsafe extern "C" fn Cvar_List_f() {
     var = cvar_vars;
     while !var.is_null() {
         if !((*var).name.is_null()
-            || !match_0.is_null()
-                && Com_Filter(
-                    match_0,
-                    (*var).name,
-                    qfalse as i32,
-                ) == 0)
+            || !match_0.is_null() && Com_Filter(match_0, (*var).name, qfalse as i32) == 0)
         {
             if (*var).flags & 0x4 as i32 != 0 {
-                Com_Printf(
-                    b"S\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"S\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x8 as i32 != 0 {
-                Com_Printf(
-                    b"s\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"s\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x2 as i32 != 0 {
-                Com_Printf(
-                    b"U\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"U\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x40 as i32 != 0 {
-                Com_Printf(
-                    b"R\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"R\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x10 as i32 != 0 {
-                Com_Printf(
-                    b"I\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"I\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x1 as i32 != 0 {
-                Com_Printf(
-                    b"A\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"A\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x20 as i32 != 0 {
-                Com_Printf(
-                    b"L\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"L\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x200 as i32 != 0 {
-                Com_Printf(
-                    b"C\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"C\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             if (*var).flags & 0x80 as i32 != 0 {
-                Com_Printf(
-                    b"?\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"?\x00" as *const u8 as *const libc::c_char);
             } else {
-                Com_Printf(
-                    b" \x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
             }
             Com_Printf(
                 b" %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
@@ -1396,8 +1288,7 @@ Cvar_ListModified_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_ListModified_f() {
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     let mut totalModified: i32 = 0;
     let mut value: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut match_0: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -1417,93 +1308,51 @@ pub unsafe extern "C" fn Cvar_ListModified_f() {
             };
             if !(libc::strcmp(value, (*var).resetString) == 0) {
                 totalModified += 1;
-                if !(!match_0.is_null()
-                    && Com_Filter(
-                        match_0,
-                        (*var).name,
-                        qfalse as i32,
-                    ) == 0)
-                {
+                if !(!match_0.is_null() && Com_Filter(match_0, (*var).name, qfalse as i32) == 0) {
                     if (*var).flags & 0x4 as i32 != 0 {
-                        Com_Printf(
-                            b"S\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"S\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x8 as i32 != 0 {
-                        Com_Printf(
-                            b"s\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"s\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x2 as i32 != 0 {
-                        Com_Printf(
-                            b"U\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"U\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x40 as i32 != 0 {
-                        Com_Printf(
-                            b"R\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"R\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x10 as i32 != 0 {
-                        Com_Printf(
-                            b"I\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"I\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x1 as i32 != 0 {
-                        Com_Printf(
-                            b"A\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"A\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x20 as i32 != 0 {
-                        Com_Printf(
-                            b"L\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"L\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x200 as i32 != 0 {
-                        Com_Printf(
-                            b"C\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"C\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     if (*var).flags & 0x80 as i32 != 0 {
-                        Com_Printf(
-                            b"?\x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b"?\x00" as *const u8 as *const libc::c_char);
                     } else {
-                        Com_Printf(
-                            b" \x00" as *const u8 as *const libc::c_char,
-                        );
+                        Com_Printf(b" \x00" as *const u8 as *const libc::c_char);
                     }
                     Com_Printf(
                         b" %s \"%s\", default \"%s\"\n\x00" as *const u8 as *const libc::c_char,
@@ -1530,9 +1379,7 @@ Unsets a cvar
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_Unset(
-    mut cv: *mut cvar_t,
-) -> *mut cvar_t {
+pub unsafe extern "C" fn Cvar_Unset(mut cv: *mut cvar_t) -> *mut cvar_t {
     let mut next: *mut cvar_t = (*cv).next;
     // note what types of cvars have been modified (userinfo, archive, serverinfo, systeminfo)
     cvar_modifiedFlags |= (*cv).flags;
@@ -1584,8 +1431,7 @@ Unsets a userdefined cvar
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Unset_f() {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     if Cmd_Argc() != 2 as i32 {
         Com_Printf(
             b"Usage: %s <varname>\n\x00" as *const u8 as *const libc::c_char,
@@ -1619,8 +1465,7 @@ and variables added via the VMs if requested.
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Restart(mut unsetVM: qboolean) {
-    let mut curvar: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut curvar: *mut cvar_t = 0 as *mut cvar_t;
     curvar = cvar_vars;
     while !curvar.is_null() {
         if (*curvar).flags & 0x80 as i32 != 0
@@ -1631,11 +1476,7 @@ pub unsafe extern "C" fn Cvar_Restart(mut unsetVM: qboolean) {
         } else {
             if (*curvar).flags & (0x40 as i32 | 0x10 as i32 | 0x400 as i32) == 0 {
                 // Just reset the rest to their default values.
-                Cvar_Set2(
-                    (*curvar).name,
-                    (*curvar).resetString,
-                    qfalse,
-                );
+                Cvar_Set2((*curvar).name, (*curvar).resetString, qfalse);
             }
             curvar = (*curvar).next
         }
@@ -1662,17 +1503,12 @@ Cvar_InfoString
 
 pub unsafe extern "C" fn Cvar_InfoString(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 1024] = [0; 1024];
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
         if !(*var).name.is_null() && (*var).flags & bit != 0 {
-            Info_SetValueForKey(
-                info.as_mut_ptr(),
-                (*var).name,
-                (*var).string,
-            );
+            Info_SetValueForKey(info.as_mut_ptr(), (*var).name, (*var).string);
         }
         var = (*var).next
     }
@@ -1689,17 +1525,12 @@ Cvar_InfoString_Big
 
 pub unsafe extern "C" fn Cvar_InfoString_Big(mut bit: i32) -> *mut libc::c_char {
     static mut info: [libc::c_char; 8192] = [0; 8192];
-    let mut var: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut var: *mut cvar_t = 0 as *mut cvar_t;
     info[0 as i32 as usize] = 0 as i32 as libc::c_char;
     var = cvar_vars;
     while !var.is_null() {
         if !(*var).name.is_null() && (*var).flags & bit != 0 {
-            Info_SetValueForKey_Big(
-                info.as_mut_ptr(),
-                (*var).name,
-                (*var).string,
-            );
+            Info_SetValueForKey_Big(info.as_mut_ptr(), (*var).name, (*var).string);
         }
         var = (*var).next
     }
@@ -1780,8 +1611,7 @@ pub unsafe extern "C" fn Cvar_Register(
     mut defaultValue: *const libc::c_char,
     mut flags: i32,
 ) {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     // There is code in Cvar_Get to prevent CVAR_ROM cvars being changed by the
     // user. In other words CVAR_ARCHIVE and CVAR_ROM are mutually exclusive
     // flags. Unfortunately some historical game code (including single player
@@ -1855,8 +1685,7 @@ pub unsafe extern "C" fn Cvar_Register(
     if vmCvar.is_null() {
         return;
     }
-    (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as isize
-        as cvarHandle_t;
+    (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as isize as cvarHandle_t;
     (*vmCvar).modificationCount = -(1 as i32);
     Cvar_Update(vmCvar);
 }
@@ -1871,8 +1700,7 @@ updates an interpreted modules' version of a cvar
 #[no_mangle]
 
 pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut vmCvar_t) {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
     if (*vmCvar).handle as u32 >= cvar_numIndexes as u32 {
         Com_Error(
             ERR_DROP as i32,
@@ -1899,11 +1727,7 @@ pub unsafe extern "C" fn Cvar_Update(mut vmCvar: *mut vmCvar_t) {
             crate::stdlib::strlen((*cv).string) as u32,
         );
     }
-    Q_strncpyz(
-        (*vmCvar).string.as_mut_ptr(),
-        (*cv).string,
-        256 as i32,
-    );
+    Q_strncpyz((*vmCvar).string.as_mut_ptr(), (*cv).string, 256 as i32);
     (*vmCvar).value = (*cv).value;
     (*vmCvar).integer = (*cv).integer;
 }
@@ -1923,11 +1747,7 @@ pub unsafe extern "C" fn Cvar_CompleteCvarName(mut args: *mut libc::c_char, mut 
             b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         if p > args {
-            Field_CompleteCommand(
-                p,
-                qfalse,
-                qtrue,
-            );
+            Field_CompleteCommand(p, qfalse, qtrue);
         }
     };
 }

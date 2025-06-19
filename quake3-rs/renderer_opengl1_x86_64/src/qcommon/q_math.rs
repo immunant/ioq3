@@ -75,29 +75,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // one file. That's what this is about.
 #[no_mangle]
 
-pub static mut vec3_origin: vec3_t = [
-    0 as i32 as vec_t,
-    0 as i32 as vec_t,
-    0 as i32 as vec_t,
-];
+pub static mut vec3_origin: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
 #[no_mangle]
 
 pub static mut axisDefault: [vec3_t; 3] = [
-    [
-        1 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ],
-    [
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ],
-    [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ],
+    [1 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+    [0 as i32 as vec_t, 1 as i32 as vec_t, 0 as i32 as vec_t],
+    [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t],
 ];
 #[no_mangle]
 
@@ -490,34 +474,24 @@ pub unsafe extern "C" fn ByteToDir(mut b: i32, mut dir: *mut vec_t) {
 
 pub unsafe extern "C" fn ColorBytes3(mut r: f32, mut g: f32, mut b: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) =
-        (r * 255 as i32 as f32) as byte;
-    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) =
-        (g * 255 as i32 as f32) as byte;
-    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) =
-        (b * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) = (r * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) = (g * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) = (b * 255 as i32 as f32) as byte;
     return i;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn ColorBytes4(mut r: f32, mut g: f32, mut b: f32, mut a: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) =
-        (r * 255 as i32 as f32) as byte;
-    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) =
-        (g * 255 as i32 as f32) as byte;
-    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) =
-        (b * 255 as i32 as f32) as byte;
-    *(&mut i as *mut u32 as *mut byte).offset(3 as i32 as isize) =
-        (a * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(0 as i32 as isize) = (r * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(1 as i32 as isize) = (g * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(2 as i32 as isize) = (b * 255 as i32 as f32) as byte;
+    *(&mut i as *mut u32 as *mut byte).offset(3 as i32 as isize) = (a * 255 as i32 as f32) as byte;
     return i;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn NormalizeColor(
-    mut in_0: *const vec_t,
-    mut out: *mut vec_t,
-) -> f32 {
+pub unsafe extern "C" fn NormalizeColor(mut in_0: *const vec_t, mut out: *mut vec_t) -> f32 {
     let mut max: f32 = 0.;
     max = *in_0.offset(0 as i32 as isize);
     if *in_0.offset(1 as i32 as isize) > max {
@@ -662,15 +636,11 @@ RotateAroundDirection
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RotateAroundDirection(
-    mut axis: *mut vec3_t,
-    mut yaw: f32,
-) {
+pub unsafe extern "C" fn RotateAroundDirection(mut axis: *mut vec3_t, mut yaw: f32) {
     // create an arbitrary axis[1]
     PerpendicularVector(
         (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
-        (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-            as *const vec_t,
+        (*axis.offset(0 as i32 as isize)).as_mut_ptr() as *const vec_t,
     );
     // rotate it around axis[0] by yaw
     if yaw != 0. {
@@ -680,27 +650,21 @@ pub unsafe extern "C" fn RotateAroundDirection(
         temp[2 as i32 as usize] = (*axis.offset(1 as i32 as isize))[2 as i32 as usize];
         RotatePointAroundVector(
             (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
-            (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-                as *const vec_t,
+            (*axis.offset(0 as i32 as isize)).as_mut_ptr() as *const vec_t,
             temp.as_mut_ptr() as *const vec_t,
             yaw,
         );
     }
     // cross to get axis[2]
     CrossProduct(
-        (*axis.offset(0 as i32 as isize)).as_mut_ptr()
-            as *const vec_t,
-        (*axis.offset(1 as i32 as isize)).as_mut_ptr()
-            as *const vec_t,
+        (*axis.offset(0 as i32 as isize)).as_mut_ptr() as *const vec_t,
+        (*axis.offset(1 as i32 as isize)).as_mut_ptr() as *const vec_t,
         (*axis.offset(2 as i32 as isize)).as_mut_ptr(),
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vectoangles(
-    mut value1: *const vec_t,
-    mut angles: *mut vec_t,
-) {
+pub unsafe extern "C" fn vectoangles(mut value1: *const vec_t, mut angles: *mut vec_t) {
     let mut forward: f32 = 0.;
     let mut yaw: f32 = 0.;
     let mut pitch: f32 = 0.;
@@ -751,10 +715,7 @@ AnglesToAxis
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AnglesToAxis(
-    mut angles: *const vec_t,
-    mut axis: *mut vec3_t,
-) {
+pub unsafe extern "C" fn AnglesToAxis(mut angles: *const vec_t, mut axis: *mut vec3_t) {
     let mut right: vec3_t = [0.; 3];
     // angle vectors returns "right" instead of "y axis"
     AngleVectors(
@@ -773,31 +734,19 @@ pub unsafe extern "C" fn AnglesToAxis(
 #[no_mangle]
 
 pub unsafe extern "C" fn AxisClear(mut axis: *mut vec3_t) {
-    (*axis.offset(0 as i32 as isize))[0 as i32 as usize] =
-        1 as i32 as vec_t;
-    (*axis.offset(0 as i32 as isize))[1 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(0 as i32 as isize))[2 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(1 as i32 as isize))[0 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(1 as i32 as isize))[1 as i32 as usize] =
-        1 as i32 as vec_t;
-    (*axis.offset(1 as i32 as isize))[2 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(2 as i32 as isize))[0 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(2 as i32 as isize))[1 as i32 as usize] =
-        0 as i32 as vec_t;
-    (*axis.offset(2 as i32 as isize))[2 as i32 as usize] =
-        1 as i32 as vec_t;
+    (*axis.offset(0 as i32 as isize))[0 as i32 as usize] = 1 as i32 as vec_t;
+    (*axis.offset(0 as i32 as isize))[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(0 as i32 as isize))[2 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(1 as i32 as isize))[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(1 as i32 as isize))[1 as i32 as usize] = 1 as i32 as vec_t;
+    (*axis.offset(1 as i32 as isize))[2 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(2 as i32 as isize))[0 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(2 as i32 as isize))[1 as i32 as usize] = 0 as i32 as vec_t;
+    (*axis.offset(2 as i32 as isize))[2 as i32 as usize] = 1 as i32 as vec_t;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn AxisCopy(
-    mut in_0: *mut vec3_t,
-    mut out: *mut vec3_t,
-) {
+pub unsafe extern "C" fn AxisCopy(mut in_0: *mut vec3_t, mut out: *mut vec3_t) {
     (*out.offset(0 as i32 as isize))[0 as i32 as usize] =
         (*in_0.offset(0 as i32 as isize))[0 as i32 as usize];
     (*out.offset(0 as i32 as isize))[1 as i32 as usize] =
@@ -874,11 +823,7 @@ pub unsafe extern "C" fn MakeNormalVectors(
     *right.offset(2 as i32 as isize) =
         *right.offset(2 as i32 as isize) + *forward.offset(2 as i32 as isize) * -d;
     VectorNormalize(right);
-    CrossProduct(
-        right as *const vec_t,
-        forward,
-        up,
-    );
+    CrossProduct(right as *const vec_t, forward, up);
 }
 #[no_mangle]
 
@@ -907,8 +852,7 @@ pub unsafe extern "C" fn VectorRotate(
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_rsqrt(mut number: f32) -> f32 {
-    let mut t: floatint_t =
-        floatint_t { f: 0. }; // what the fuck?
+    let mut t: floatint_t = floatint_t { f: 0. }; // what the fuck?
     let mut x2: f32 = 0.; // 1st iteration
     let mut y: f32 = 0.;
     let threehalfs: f32 = 1.5f32;
@@ -923,8 +867,7 @@ pub unsafe extern "C" fn Q_rsqrt(mut number: f32) -> f32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_fabs(mut f: f32) -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = f;
     fi.i &= 0x7fffffff as i32;
     return fi.f;
@@ -1112,10 +1055,7 @@ RadiusFromBounds
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RadiusFromBounds(
-    mut mins: *const vec_t,
-    mut maxs: *const vec_t,
-) -> f32 {
+pub unsafe extern "C" fn RadiusFromBounds(mut mins: *const vec_t, mut maxs: *const vec_t) -> f32 {
     let mut i: i32 = 0;
     let mut corner: vec3_t = [0.; 3];
     let mut a: f32 = 0.;
@@ -1131,10 +1071,7 @@ pub unsafe extern "C" fn RadiusFromBounds(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ClearBounds(
-    mut mins: *mut vec_t,
-    mut maxs: *mut vec_t,
-) {
+pub unsafe extern "C" fn ClearBounds(mut mins: *mut vec_t, mut maxs: *mut vec_t) {
     let ref mut fresh2 = *mins.offset(2 as i32 as isize);
     *fresh2 = 99999 as i32 as vec_t;
     let ref mut fresh3 = *mins.offset(1 as i32 as isize);
@@ -1230,9 +1167,7 @@ pub unsafe extern "C" fn BoundsIntersectPoint(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn VectorNormalize(
-    mut v: *mut vec_t,
-) -> vec_t {
+pub unsafe extern "C" fn VectorNormalize(mut v: *mut vec_t) -> vec_t {
     // NOTE: TTimo - Apple G4 altivec source uses double?
     let mut length: f32 = 0.;
     let mut ilength: f32 = 0.;
@@ -1255,10 +1190,7 @@ pub unsafe extern "C" fn VectorNormalize(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn VectorNormalize2(
-    mut v: *const vec_t,
-    mut out: *mut vec_t,
-) -> vec_t {
+pub unsafe extern "C" fn VectorNormalize2(mut v: *const vec_t, mut out: *mut vec_t) -> vec_t {
     let mut length: f32 = 0.;
     let mut ilength: f32 = 0.;
     length = *v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
@@ -1298,10 +1230,7 @@ pub unsafe extern "C" fn _VectorMA(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _DotProduct(
-    mut v1: *const vec_t,
-    mut v2: *const vec_t,
-) -> vec_t {
+pub unsafe extern "C" fn _DotProduct(mut v1: *const vec_t, mut v2: *const vec_t) -> vec_t {
     return *v1.offset(0 as i32 as isize) * *v2.offset(0 as i32 as isize)
         + *v1.offset(1 as i32 as isize) * *v2.offset(1 as i32 as isize)
         + *v1.offset(2 as i32 as isize) * *v2.offset(2 as i32 as isize);
@@ -1336,10 +1265,7 @@ pub unsafe extern "C" fn _VectorAdd(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _VectorCopy(
-    mut in_0: *const vec_t,
-    mut out: *mut vec_t,
-) {
+pub unsafe extern "C" fn _VectorCopy(mut in_0: *const vec_t, mut out: *mut vec_t) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize);
     *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize);
     *out.offset(2 as i32 as isize) = *in_0.offset(2 as i32 as isize);
@@ -1527,10 +1453,7 @@ pub unsafe extern "C" fn AngleVectors(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn PerpendicularVector(
-    mut dst: *mut vec_t,
-    mut src: *const vec_t,
-) {
+pub unsafe extern "C" fn PerpendicularVector(mut dst: *mut vec_t, mut src: *const vec_t) {
     let mut pos: i32 = 0;
     let mut i: i32 = 0;
     let mut minelem: f32 = 1.0f32;
@@ -1554,11 +1477,7 @@ pub unsafe extern "C" fn PerpendicularVector(
     /*
     	** project the point onto the plane defined by src
     	*/
-    ProjectPointOnPlane(
-        dst,
-        tempvec.as_mut_ptr() as *const vec_t,
-        src,
-    );
+    ProjectPointOnPlane(dst, tempvec.as_mut_ptr() as *const vec_t, src);
     /*
     	** normalize the result
     	*/
@@ -1574,8 +1493,7 @@ Don't pass doubles to this
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_isnan(mut x: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = x;
     fi.ui &= 0x7fffffff as i32 as u32;
     fi.ui = (0x7f800000 as i32 as u32).wrapping_sub(fi.ui);

@@ -552,35 +552,30 @@ static mut s_worldData: world_t = world_t {
     shaders: 0 as *const dshader_t as *mut dshader_t,
     bmodels: 0 as *const bmodel_t as *mut bmodel_t,
     numplanes: 0,
-    planes: 0 as *const cplane_t
-        as *mut cplane_t,
+    planes: 0 as *const cplane_t as *mut cplane_t,
     numnodes: 0,
     numDecisionNodes: 0,
     nodes: 0 as *const mnode_t as *mut mnode_t,
     numsurfaces: 0,
     surfaces: 0 as *const msurface_t as *mut msurface_t,
     nummarksurfaces: 0,
-    marksurfaces: 0 as *const *mut msurface_t
-        as *mut *mut msurface_t,
+    marksurfaces: 0 as *const *mut msurface_t as *mut *mut msurface_t,
     numfogs: 0,
     fogs: 0 as *const fog_t as *mut fog_t,
     lightGridOrigin: [0.; 3],
     lightGridSize: [0.; 3],
     lightGridInverseSize: [0.; 3],
     lightGridBounds: [0; 3],
-    lightGridData: 0 as *const byte
-        as *mut byte,
+    lightGridData: 0 as *const byte as *mut byte,
     numClusters: 0,
     clusterBytes: 0,
     vis: 0 as *const byte,
-    novis: 0 as *const byte
-        as *mut byte,
+    novis: 0 as *const byte as *mut byte,
     entityString: 0 as *const libc::c_char as *mut libc::c_char,
     entityParsePoint: 0 as *const libc::c_char as *mut libc::c_char,
 };
 
-static mut fileBase: *mut byte =
-    0 as *const byte as *mut byte;
+static mut fileBase: *mut byte = 0 as *const byte as *mut byte;
 #[no_mangle]
 
 pub static mut c_subdivisions: i32 = 0;
@@ -642,17 +637,13 @@ R_ColorShiftLightingBytes
 ===============
 */
 
-unsafe extern "C" fn R_ColorShiftLightingBytes(
-    mut in_0: *mut byte,
-    mut out: *mut byte,
-) {
+unsafe extern "C" fn R_ColorShiftLightingBytes(mut in_0: *mut byte, mut out: *mut byte) {
     let mut shift: i32 = 0;
     let mut r: i32 = 0;
     let mut g: i32 = 0;
     let mut b: i32 = 0;
     // shift the color data based on overbright range
-    shift = (*r_mapOverBrightBits).integer
-        - tr.overbrightBits;
+    shift = (*r_mapOverBrightBits).integer - tr.overbrightBits;
     // shift the data based on overbright range
     r = (*in_0.offset(0 as i32 as isize) as i32) << shift;
     g = (*in_0.offset(1 as i32 as isize) as i32) << shift;
@@ -673,10 +664,8 @@ unsafe extern "C" fn R_ColorShiftLightingBytes(
 }
 
 unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
-    let mut buf: *mut byte =
-        0 as *mut byte;
-    let mut buf_p: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
+    let mut buf_p: *mut byte = 0 as *mut byte;
     let mut len: i32 = 0;
     let mut image: [byte; 65536] = [0; 65536];
     let mut i: i32 = 0;
@@ -697,21 +686,15 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
         tr.numLightmaps += 1
     }
     // if we are in r_vertexLight mode, we don't need the lightmaps at all
-    if (*r_vertexLight).integer != 0
-        || glConfig.hardwareType as u32
-            == GLHW_PERMEDIA2 as i32 as u32
+    if (*r_vertexLight).integer != 0 || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
     {
         return;
     }
-    tr.lightmaps =
-        ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
-            (tr.numLightmaps as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<*mut image_t>() as libc::c_ulong,
-            ) as i32,
-            h_low,
-        ) as *mut *mut image_t;
+    tr.lightmaps = ri.Hunk_Alloc.expect("non-null function pointer")(
+        (tr.numLightmaps as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut image_t>() as libc::c_ulong) as i32,
+        h_low,
+    ) as *mut *mut image_t;
     i = 0 as i32;
     while i < tr.numLightmaps {
         // expand the 24 bit on-disk to 32 bit
@@ -735,17 +718,13 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
                     maxIntensity = intensity
                 }
                 HSVtoRGB(intensity, 1.00f64 as f32, 0.50f64 as f32, out.as_mut_ptr());
-                image[(j * 4 as i32 + 0 as i32) as usize] = (out[0 as i32 as usize]
-                    * 255 as i32 as f32)
-                    as byte;
-                image[(j * 4 as i32 + 1 as i32) as usize] = (out[1 as i32 as usize]
-                    * 255 as i32 as f32)
-                    as byte;
-                image[(j * 4 as i32 + 2 as i32) as usize] = (out[2 as i32 as usize]
-                    * 255 as i32 as f32)
-                    as byte;
-                image[(j * 4 as i32 + 3 as i32) as usize] =
-                    255 as i32 as byte;
+                image[(j * 4 as i32 + 0 as i32) as usize] =
+                    (out[0 as i32 as usize] * 255 as i32 as f32) as byte;
+                image[(j * 4 as i32 + 1 as i32) as usize] =
+                    (out[1 as i32 as usize] * 255 as i32 as f32) as byte;
+                image[(j * 4 as i32 + 2 as i32) as usize] =
+                    (out[2 as i32 as usize] * 255 as i32 as f32) as byte;
+                image[(j * 4 as i32 + 3 as i32) as usize] = 255 as i32 as byte;
                 j += 1
             }
         } else {
@@ -755,14 +734,11 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
                     &mut *buf_p.offset((j * 3 as i32) as isize),
                     &mut *image.as_mut_ptr().offset((j * 4 as i32) as isize),
                 );
-                image[(j * 4 as i32 + 3 as i32) as usize] =
-                    255 as i32 as byte;
+                image[(j * 4 as i32 + 3 as i32) as usize] = 255 as i32 as byte;
                 j += 1
             }
         }
-        let ref mut fresh0 = *tr
-            .lightmaps
-            .offset(i as isize);
+        let ref mut fresh0 = *tr.lightmaps.offset(i as isize);
         *fresh0 = R_CreateImage(
             va(
                 b"*lightmap%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -774,16 +750,13 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut lump_t) {
             IMGTYPE_COLORALPHA,
             (IMGFLAG_NOLIGHTSCALE as i32
                 | IMGFLAG_NO_COMPRESSION as i32
-                | IMGFLAG_CLAMPTOEDGE as i32)
-                as imgFlags_t,
+                | IMGFLAG_CLAMPTOEDGE as i32) as imgFlags_t,
             0 as i32,
         ) as *mut image_s;
         i += 1
     }
     if (*r_lightmap).integer == 2 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Brightest lightmap value: %d\n\x00" as *const u8 as *const libc::c_char,
             (maxIntensity * 255 as i32 as f32) as i32,
@@ -811,14 +784,9 @@ R_LoadVisibility
 
 unsafe extern "C" fn R_LoadVisibility(mut l: *mut lump_t) {
     let mut len: i32 = 0;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     len = s_worldData.numClusters + 63 as i32 & !(63 as i32);
-    s_worldData.novis = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        len, h_low
-    ) as *mut byte;
+    s_worldData.novis = ri.Hunk_Alloc.expect("non-null function pointer")(len, h_low) as *mut byte;
     crate::stdlib::memset(
         s_worldData.novis as *mut libc::c_void,
         0xff as i32,
@@ -833,20 +801,12 @@ unsafe extern "C" fn R_LoadVisibility(mut l: *mut lump_t) {
     s_worldData.clusterBytes = *(buf as *mut i32).offset(1 as i32 as isize);
     // CM_Load should have given us the vis data to share, so
     // we don't need to allocate another copy
-    if !tr
-        .externalVisData
-        .is_null()
-    {
+    if !tr.externalVisData.is_null() {
         s_worldData.vis = tr.externalVisData
     } else {
-        let mut dest: *mut byte =
-            0 as *mut byte;
-        dest = ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
-            len - 8 as i32,
-            h_low,
-        ) as *mut byte;
+        let mut dest: *mut byte = 0 as *mut byte;
+        dest =
+            ri.Hunk_Alloc.expect("non-null function pointer")(len - 8 as i32, h_low) as *mut byte;
         crate::stdlib::memcpy(
             dest as *mut libc::c_void,
             buf.offset(8 as i32 as isize) as *const libc::c_void,
@@ -862,37 +822,26 @@ ShaderForShaderNum
 ===============
 */
 
-unsafe extern "C" fn ShaderForShaderNum(
-    mut shaderNum: i32,
-    mut lightmapNum: i32,
-) -> *mut shader_t {
+unsafe extern "C" fn ShaderForShaderNum(mut shaderNum: i32, mut lightmapNum: i32) -> *mut shader_t {
     let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut dsh: *mut dshader_t = 0 as *mut dshader_t;
     let mut _shaderNum: i32 = shaderNum;
     if _shaderNum < 0 as i32 || _shaderNum >= s_worldData.numShaders {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"ShaderForShaderNum: bad num %i\x00" as *const u8 as *const libc::c_char,
             _shaderNum,
         );
     }
     dsh = &mut *s_worldData.shaders.offset(_shaderNum as isize) as *mut dshader_t;
-    if (*r_vertexLight).integer != 0
-        || glConfig.hardwareType as u32
-            == GLHW_PERMEDIA2 as i32 as u32
+    if (*r_vertexLight).integer != 0 || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
     {
         lightmapNum = -(3 as i32)
     }
     if (*r_fullbright).integer != 0 {
         lightmapNum = -(2 as i32)
     }
-    shader = R_FindShader(
-        (*dsh).shader.as_mut_ptr(),
-        lightmapNum,
-        qtrue,
-    ) as *mut shader_s;
+    shader = R_FindShader((*dsh).shader.as_mut_ptr(), lightmapNum, qtrue) as *mut shader_s;
     // if the shader had errors, just use default shader
     if (*shader).defaultShader as u64 != 0 {
         return tr.defaultShader;
@@ -913,8 +862,7 @@ unsafe extern "C" fn ParseFace(
 ) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cv: *mut srfSurfaceFace_t =
-        0 as *mut srfSurfaceFace_t;
+    let mut cv: *mut srfSurfaceFace_t = 0 as *mut srfSurfaceFace_t;
     let mut numPoints: i32 = 0;
     let mut numIndexes: i32 = 0;
     let mut lightmapNum: i32 = 0;
@@ -925,16 +873,12 @@ unsafe extern "C" fn ParseFace(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
-    if (*r_singleShader).integer != 0
-        && (*(*surf).shader).isSky as u64 == 0
-    {
+    if (*r_singleShader).integer != 0 && (*(*surf).shader).isSky as u64 == 0 {
         (*surf).shader = tr.defaultShader
     }
     numPoints = (*ds).numVerts;
     if numPoints > 64 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: MAX_FACE_POINTS exceeded: %i\n\x00" as *const u8 as *const libc::c_char,
             numPoints,
@@ -952,11 +896,8 @@ unsafe extern "C" fn ParseFace(
     sfaceSize = (sfaceSize as libc::c_ulong).wrapping_add(
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(numIndexes as libc::c_ulong),
     ) as i32;
-    cv = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        sfaceSize, h_low
-    ) as *mut srfSurfaceFace_t;
+    cv = ri.Hunk_Alloc.expect("non-null function pointer")(sfaceSize, h_low)
+        as *mut srfSurfaceFace_t;
     (*cv).surfaceType = SF_FACE;
     (*cv).numPoints = numPoints;
     (*cv).numIndices = numIndexes;
@@ -982,17 +923,15 @@ unsafe extern "C" fn ParseFace(
             (*verts.offset(i as isize)).color.as_mut_ptr(),
             &mut *(*(*cv).points.as_mut_ptr().offset(i as isize))
                 .as_mut_ptr()
-                .offset(7 as i32 as isize) as *mut f32
-                as *mut byte,
+                .offset(7 as i32 as isize) as *mut f32 as *mut byte,
         );
         i += 1
     }
     indexes = indexes.offset((*ds).firstIndex as isize);
     i = 0 as i32;
     while i < numIndexes {
-        *((cv as *mut byte).offset((*cv).ofsIndices as isize)
-            as *mut i32)
-            .offset(i as isize) = *indexes.offset(i as isize);
+        *((cv as *mut byte).offset((*cv).ofsIndices as isize) as *mut i32).offset(i as isize) =
+            *indexes.offset(i as isize);
         i += 1
     }
     // take the plane information from the lightmap vector
@@ -1007,9 +946,7 @@ unsafe extern "C" fn ParseFace(
             * (*cv).plane.normal[1 as i32 as usize]
         + (*(*cv).points.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize]
             * (*cv).plane.normal[2 as i32 as usize];
-    SetPlaneSignbits(
-        &mut (*cv).plane as *mut _ as *mut cplane_s,
-    );
+    SetPlaneSignbits(&mut (*cv).plane as *mut _ as *mut cplane_s);
     (*cv).plane.type_0 = if (*cv).plane.normal[0 as i32 as usize] as f64 == 1.0f64 {
         0 as i32
     } else if (*cv).plane.normal[1 as i32 as usize] as f64 == 1.0f64 {
@@ -1032,8 +969,7 @@ unsafe extern "C" fn ParseMesh(
     mut verts: *mut drawVert_t,
     mut surf: *mut msurface_t,
 ) {
-    let mut grid: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut width: i32 = 0;
@@ -1055,9 +991,7 @@ unsafe extern "C" fn ParseMesh(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader value
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, lightmapNum);
-    if (*r_singleShader).integer != 0
-        && (*(*surf).shader).isSky as u64 == 0
-    {
+    if (*r_singleShader).integer != 0 && (*(*surf).shader).isSky as u64 == 0 {
         (*surf).shader = tr.defaultShader
     }
     // we may have a nodraw surface, because they might still need to
@@ -1092,11 +1026,8 @@ unsafe extern "C" fn ParseMesh(
         i += 1
     }
     // pre-tesseleate
-    grid = R_SubdividePatchToGrid(
-        width,
-        height,
-        points.as_mut_ptr() as *mut drawVert_t,
-    ) as *mut srfGridMesh_s;
+    grid = R_SubdividePatchToGrid(width, height, points.as_mut_ptr() as *mut drawVert_t)
+        as *mut srfGridMesh_s;
     (*surf).data = grid as *mut surfaceType_t;
     // copy the level of detail origin, which is the center
     // of the group of all curves that must subdivide the same
@@ -1122,8 +1053,7 @@ unsafe extern "C" fn ParseMesh(
         bounds[0 as i32 as usize][1 as i32 as usize] - (*grid).lodOrigin[1 as i32 as usize];
     tmpVec[2 as i32 as usize] =
         bounds[0 as i32 as usize][2 as i32 as usize] - (*grid).lodOrigin[2 as i32 as usize];
-    (*grid).lodRadius =
-        VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
+    (*grid).lodRadius = VectorLength(tmpVec.as_mut_ptr() as *const vec_t);
 }
 /*
 ===============
@@ -1137,8 +1067,7 @@ unsafe extern "C" fn ParseTriSurf(
     mut surf: *mut msurface_t,
     mut indexes: *mut i32,
 ) {
-    let mut tri: *mut srfTriangles_t =
-        0 as *mut srfTriangles_t;
+    let mut tri: *mut srfTriangles_t = 0 as *mut srfTriangles_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut numVerts: i32 = 0;
@@ -1147,21 +1076,16 @@ unsafe extern "C" fn ParseTriSurf(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
-    if (*r_singleShader).integer != 0
-        && (*(*surf).shader).isSky as u64 == 0
-    {
+    if (*r_singleShader).integer != 0 && (*(*surf).shader).isSky as u64 == 0 {
         (*surf).shader = tr.defaultShader
     }
     numVerts = (*ds).numVerts;
     numIndexes = (*ds).numIndexes;
-    tri = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    tri = ri.Hunk_Alloc.expect("non-null function pointer")(
         (::std::mem::size_of::<srfTriangles_t>() as libc::c_ulong)
             .wrapping_add(
-                (numVerts as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    drawVert_t,
-                >() as libc::c_ulong),
+                (numVerts as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong),
             )
             .wrapping_add(
                 (numIndexes as libc::c_ulong)
@@ -1192,8 +1116,7 @@ unsafe extern "C" fn ParseTriSurf(
             j += 1
         }
         AddPointToBounds(
-            (*(*tri).verts.offset(i as isize)).xyz.as_mut_ptr()
-                as *const vec_t,
+            (*(*tri).verts.offset(i as isize)).xyz.as_mut_ptr() as *const vec_t,
             (*tri).bounds[0 as i32 as usize].as_mut_ptr(),
             (*tri).bounds[1 as i32 as usize].as_mut_ptr(),
         );
@@ -1219,9 +1142,7 @@ unsafe extern "C" fn ParseTriSurf(
         if *(*tri).indexes.offset(i as isize) < 0 as i32
             || *(*tri).indexes.offset(i as isize) >= numVerts
         {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"Bad index in triangle surface\x00" as *const u8 as *const libc::c_char,
             );
@@ -1247,14 +1168,10 @@ unsafe extern "C" fn ParseFlare(
     (*surf).fogIndex = (*ds).fogNum + 1 as i32;
     // get shader
     (*surf).shader = ShaderForShaderNum((*ds).shaderNum, -(3 as i32));
-    if (*r_singleShader).integer != 0
-        && (*(*surf).shader).isSky as u64 == 0
-    {
+    if (*r_singleShader).integer != 0 && (*(*surf).shader).isSky as u64 == 0 {
         (*surf).shader = tr.defaultShader
     }
-    flare = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    flare = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<srfFlare_t>() as libc::c_ulong as i32,
         h_low,
     ) as *mut srfFlare_t;
@@ -1277,10 +1194,7 @@ returns true if there are grid points merged on a width edge
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_MergedWidthPoints(
-    mut grid: *mut srfGridMesh_t,
-    mut offset: i32,
-) -> i32 {
+pub unsafe extern "C" fn R_MergedWidthPoints(mut grid: *mut srfGridMesh_t, mut offset: i32) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     i = 1 as i32;
@@ -1408,13 +1322,11 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
     let mut offset1: i32 = 0;
     let mut offset2: i32 = 0;
     let mut touch: i32 = 0;
-    let mut grid2: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     j = start;
     while j < s_worldData.numsurfaces {
         //
-        grid2 = (*s_worldData.surfaces.offset(j as isize)).data
-            as *mut srfGridMesh_t;
+        grid2 = (*s_worldData.surfaces.offset(j as isize)).data as *mut srfGridMesh_t;
         // if this surface is not a grid
         if !((*grid2).surfaceType as u32 != SF_GRID as i32 as u32) {
             // if the LOD errors are already fixed for this patch
@@ -1522,10 +1434,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         *(*grid1)
                                                                             .widthLodError
                                                                             .offset(k as isize);
-                                                                    touch =
-                                                                        qtrue
-                                                                            as
-                                                                            i32
+                                                                    touch = qtrue as i32
                                                                 }
                                                             }
                                                         }
@@ -1616,10 +1525,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         *(*grid1)
                                                                             .widthLodError
                                                                             .offset(k as isize);
-                                                                    touch =
-                                                                        qtrue
-                                                                            as
-                                                                            i32
+                                                                    touch = qtrue as i32
                                                                 }
                                                             }
                                                         }
@@ -1726,10 +1632,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         *(*grid1)
                                                                             .heightLodError
                                                                             .offset(k as isize);
-                                                                    touch =
-                                                                        qtrue
-                                                                            as
-                                                                            i32
+                                                                    touch = qtrue as i32
                                                                 }
                                                             }
                                                         }
@@ -1824,10 +1727,7 @@ pub unsafe extern "C" fn R_FixSharedVertexLodError_r(
                                                                         *(*grid1)
                                                                             .heightLodError
                                                                             .offset(k as isize);
-                                                                    touch =
-                                                                        qtrue
-                                                                            as
-                                                                            i32
+                                                                    touch = qtrue as i32
                                                                 }
                                                             }
                                                         }
@@ -1868,13 +1768,11 @@ If this is not the case this function will still do its job but won't fix the hi
 
 pub unsafe extern "C" fn R_FixSharedVertexLodError() {
     let mut i: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
-        grid1 = (*s_worldData.surfaces.offset(i as isize)).data
-            as *mut srfGridMesh_t;
+        grid1 = (*s_worldData.surfaces.offset(i as isize)).data as *mut srfGridMesh_t;
         // if this surface is not a grid
         if !((*grid1).surfaceType as u32 != SF_GRID as i32 as u32) {
             //
@@ -1898,10 +1796,8 @@ R_StitchPatches
 pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -> i32 {
     let mut v1: *mut f32 = 0 as *mut f32;
     let mut v2: *mut f32 = 0 as *mut f32;
-    let mut grid1: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
-    let mut grid2: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     let mut k: i32 = 0;
     let mut l: i32 = 0;
     let mut m: i32 = 0;
@@ -1910,10 +1806,8 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
     let mut offset2: i32 = 0;
     let mut row: i32 = 0;
     let mut column: i32 = 0;
-    grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
-        as *mut srfGridMesh_t;
-    grid2 = (*s_worldData.surfaces.offset(grid2num as isize)).data
-        as *mut srfGridMesh_t;
+    grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data as *mut srfGridMesh_t;
+    grid2 = (*s_worldData.surfaces.offset(grid2num as isize)).data as *mut srfGridMesh_t;
     n = 0 as i32;
     while n < 2 as i32 {
         //
@@ -2025,42 +1919,28 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         row = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
-                                                                           l +
-                                                                               1
-                                                                                   as
-                                                                                   i32,
-                                                                           row,
-                                                                           (*(*grid1).verts.as_mut_ptr().offset((k
-                                                                                                                     +
-                                                                                                                     1
-                                                                                                                         as
-                                                                                                                         i32
-                                                                                                                     +
-                                                                                                                     offset1)
-                                                                                                                    as
-                                                                                                                    isize)).xyz.as_mut_ptr(),
-                                                                           *(*grid1).widthLodError.offset((k
-                                                                                                               +
-                                                                                                               1
-                                                                                                                   as
-                                                                                                                   i32)
-                                                                                                              as
-                                                                                                              isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertColumn(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        row,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            (k + 1 as i32 + offset1) as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .widthLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh1 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh1 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2173,42 +2053,28 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         column = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
-                                                                        l +
-                                                                            1
-                                                                                as
-                                                                                i32,
-                                                                        column,
-                                                                        (*(*grid1).verts.as_mut_ptr().offset((k
-                                                                                                                  +
-                                                                                                                  1
-                                                                                                                      as
-                                                                                                                      i32
-                                                                                                                  +
-                                                                                                                  offset1)
-                                                                                                                 as
-                                                                                                                 isize)).xyz.as_mut_ptr(),
-                                                                        *(*grid1).widthLodError.offset((k
-                                                                                                            +
-                                                                                                            1
-                                                                                                                as
-                                                                                                                i32)
-                                                                                                           as
-                                                                                                           isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertRow(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        column,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            (k + 1 as i32 + offset1) as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .widthLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh2 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh2 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2338,44 +2204,30 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         row = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
-                                                                           l +
-                                                                               1
-                                                                                   as
-                                                                                   i32,
-                                                                           row,
-                                                                           (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
-                                                                                                                     *
-                                                                                                                     (k
-                                                                                                                          +
-                                                                                                                          1
-                                                                                                                              as
-                                                                                                                              i32)
-                                                                                                                     +
-                                                                                                                     offset1)
-                                                                                                                    as
-                                                                                                                    isize)).xyz.as_mut_ptr(),
-                                                                           *(*grid1).heightLodError.offset((k
-                                                                                                                +
-                                                                                                                1
-                                                                                                                    as
-                                                                                                                    i32)
-                                                                                                               as
-                                                                                                               isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertColumn(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        row,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            ((*grid1).width * (k + 1 as i32)
+                                                                + offset1)
+                                                                as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .heightLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh3 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh3 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2490,44 +2342,30 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         column = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
-                                                                        l +
-                                                                            1
-                                                                                as
-                                                                                i32,
-                                                                        column,
-                                                                        (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
-                                                                                                                  *
-                                                                                                                  (k
-                                                                                                                       +
-                                                                                                                       1
-                                                                                                                           as
-                                                                                                                           i32)
-                                                                                                                  +
-                                                                                                                  offset1)
-                                                                                                                 as
-                                                                                                                 isize)).xyz.as_mut_ptr(),
-                                                                        *(*grid1).heightLodError.offset((k
-                                                                                                             +
-                                                                                                             1
-                                                                                                                 as
-                                                                                                                 i32)
-                                                                                                            as
-                                                                                                            isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertRow(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        column,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            ((*grid1).width * (k + 1 as i32)
+                                                                + offset1)
+                                                                as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .heightLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh4 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh4 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2655,42 +2493,28 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         row = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
-                                                                           l +
-                                                                               1
-                                                                                   as
-                                                                                   i32,
-                                                                           row,
-                                                                           (*(*grid1).verts.as_mut_ptr().offset((k
-                                                                                                                     -
-                                                                                                                     1
-                                                                                                                         as
-                                                                                                                         i32
-                                                                                                                     +
-                                                                                                                     offset1)
-                                                                                                                    as
-                                                                                                                    isize)).xyz.as_mut_ptr(),
-                                                                           *(*grid1).widthLodError.offset((k
-                                                                                                               +
-                                                                                                               1
-                                                                                                                   as
-                                                                                                                   i32)
-                                                                                                              as
-                                                                                                              isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertColumn(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        row,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            (k - 1 as i32 + offset1) as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .widthLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh5 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh5 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2803,45 +2627,31 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         column = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
-                                                                        l +
-                                                                            1
-                                                                                as
-                                                                                i32,
-                                                                        column,
-                                                                        (*(*grid1).verts.as_mut_ptr().offset((k
-                                                                                                                  -
-                                                                                                                  1
-                                                                                                                      as
-                                                                                                                      i32
-                                                                                                                  +
-                                                                                                                  offset1)
-                                                                                                                 as
-                                                                                                                 isize)).xyz.as_mut_ptr(),
-                                                                        *(*grid1).widthLodError.offset((k
-                                                                                                            +
-                                                                                                            1
-                                                                                                                as
-                                                                                                                i32)
-                                                                                                           as
-                                                                                                           isize))
-    as *mut srfGridMesh_s;
+                                                    grid2 = R_GridInsertRow(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        column,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            (k - 1 as i32 + offset1) as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .widthLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
                                                     if grid2.is_null() {
                                                         break;
                                                     }
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh6 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh6 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -2971,44 +2781,30 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         row = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertColumn(grid2 as *mut srfGridMesh_s,
-                                                                           l +
-                                                                               1
-                                                                                   as
-                                                                                   i32,
-                                                                           row,
-                                                                           (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
-                                                                                                                     *
-                                                                                                                     (k
-                                                                                                                          -
-                                                                                                                          1
-                                                                                                                              as
-                                                                                                                              i32)
-                                                                                                                     +
-                                                                                                                     offset1)
-                                                                                                                    as
-                                                                                                                    isize)).xyz.as_mut_ptr(),
-                                                                           *(*grid1).heightLodError.offset((k
-                                                                                                                +
-                                                                                                                1
-                                                                                                                    as
-                                                                                                                    i32)
-                                                                                                               as
-                                                                                                               isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertColumn(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        row,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            ((*grid1).width * (k - 1 as i32)
+                                                                + offset1)
+                                                                as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .heightLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh7 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh7 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -3123,44 +2919,30 @@ pub unsafe extern "C" fn R_StitchPatches(mut grid1num: i32, mut grid2num: i32) -
                                                     } else {
                                                         column = 0 as i32
                                                     }
-                                                    grid2 =
-                                                        
-                                                        R_GridInsertRow(grid2 as *mut srfGridMesh_s,
-                                                                        l +
-                                                                            1
-                                                                                as
-                                                                                i32,
-                                                                        column,
-                                                                        (*(*grid1).verts.as_mut_ptr().offset(((*grid1).width
-                                                                                                                  *
-                                                                                                                  (k
-                                                                                                                       -
-                                                                                                                       1
-                                                                                                                           as
-                                                                                                                           i32)
-                                                                                                                  +
-                                                                                                                  offset1)
-                                                                                                                 as
-                                                                                                                 isize)).xyz.as_mut_ptr(),
-                                                                        *(*grid1).heightLodError.offset((k
-                                                                                                             +
-                                                                                                             1
-                                                                                                                 as
-                                                                                                                 i32)
-                                                                                                            as
-                                                                                                            isize))
-    as *mut srfGridMesh_s;
-                                                    (*grid2).lodStitched =
-                                                        qfalse
-                                                            as i32;
+                                                    grid2 = R_GridInsertRow(
+                                                        grid2 as *mut srfGridMesh_s,
+                                                        l + 1 as i32,
+                                                        column,
+                                                        (*(*grid1).verts.as_mut_ptr().offset(
+                                                            ((*grid1).width * (k - 1 as i32)
+                                                                + offset1)
+                                                                as isize,
+                                                        ))
+                                                        .xyz
+                                                        .as_mut_ptr(),
+                                                        *(*grid1)
+                                                            .heightLodError
+                                                            .offset((k + 1 as i32) as isize),
+                                                    )
+                                                        as *mut srfGridMesh_s;
+                                                    (*grid2).lodStitched = qfalse as i32;
                                                     let ref mut fresh8 = (*s_worldData
                                                         .surfaces
                                                         .offset(grid2num as isize))
                                                     .data;
                                                     *fresh8 = grid2 as *mut libc::c_void
                                                         as *mut surfaceType_t;
-                                                    return qtrue
-                                                        as i32;
+                                                    return qtrue as i32;
                                                 }
                                             }
                                         }
@@ -3197,18 +2979,14 @@ might still appear at that side.
 pub unsafe extern "C" fn R_TryStitchingPatch(mut grid1num: i32) -> i32 {
     let mut j: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
-    let mut grid2: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut grid2: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     numstitches = 0 as i32;
-    grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data
-        as *mut srfGridMesh_t;
+    grid1 = (*s_worldData.surfaces.offset(grid1num as isize)).data as *mut srfGridMesh_t;
     j = 0 as i32;
     while j < s_worldData.numsurfaces {
         //
-        grid2 = (*s_worldData.surfaces.offset(j as isize)).data
-            as *mut srfGridMesh_t;
+        grid2 = (*s_worldData.surfaces.offset(j as isize)).data as *mut srfGridMesh_t;
         // if this surface is not a grid
         if !((*grid2).surfaceType as u32 != SF_GRID as i32 as u32) {
             // grids in the same LOD group should have the exact same lod radius
@@ -3246,16 +3024,14 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
     let mut i: i32 = 0;
     let mut stitched: i32 = 0;
     let mut numstitches: i32 = 0;
-    let mut grid1: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid1: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     numstitches = 0 as i32;
     loop {
         stitched = qfalse as i32;
         i = 0 as i32;
         while i < s_worldData.numsurfaces {
             //
-            grid1 = (*s_worldData.surfaces.offset(i as isize)).data
-                as *mut srfGridMesh_t;
+            grid1 = (*s_worldData.surfaces.offset(i as isize)).data as *mut srfGridMesh_t;
             // if this surface is not a grid
             if !((*grid1).surfaceType as u32 != SF_GRID as i32 as u32) {
                 //
@@ -3273,9 +3049,7 @@ pub unsafe extern "C" fn R_StitchAllPatches() {
             break;
         }
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"stitched %d LoD cracks\n\x00" as *const u8 as *const libc::c_char,
         numstitches,
@@ -3291,58 +3065,43 @@ R_MovePatchSurfacesToHunk
 pub unsafe extern "C" fn R_MovePatchSurfacesToHunk() {
     let mut i: i32 = 0;
     let mut size: i32 = 0;
-    let mut grid: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
-    let mut hunkgrid: *mut srfGridMesh_t =
-        0 as *mut srfGridMesh_t;
+    let mut grid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
+    let mut hunkgrid: *mut srfGridMesh_t = 0 as *mut srfGridMesh_t;
     i = 0 as i32;
     while i < s_worldData.numsurfaces {
         //
-        grid = (*s_worldData.surfaces.offset(i as isize)).data
-            as *mut srfGridMesh_t;
+        grid = (*s_worldData.surfaces.offset(i as isize)).data as *mut srfGridMesh_t;
         // if this surface is not a grid
         if !((*grid).surfaceType as u32 != SF_GRID as i32 as u32) {
             //
             size = (((*grid).width * (*grid).height - 1 as i32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
-                .wrapping_add(
-                    ::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong
-                ) as i32;
-            hunkgrid = ri
-                .Hunk_Alloc
-                .expect("non-null function pointer")(
-                size, h_low
-            ) as *mut srfGridMesh_t;
+                .wrapping_add(::std::mem::size_of::<srfGridMesh_t>() as libc::c_ulong)
+                as i32;
+            hunkgrid = ri.Hunk_Alloc.expect("non-null function pointer")(size, h_low)
+                as *mut srfGridMesh_t;
             crate::stdlib::memcpy(
                 hunkgrid as *mut libc::c_void,
                 grid as *const libc::c_void,
                 size as libc::c_ulong,
             );
-            (*hunkgrid).widthLodError = ri
-                .Hunk_Alloc
-                .expect("non-null function pointer")(
-                (*grid).width * 4 as i32,
-                h_low,
-            ) as *mut f32;
+            (*hunkgrid).widthLodError =
+                ri.Hunk_Alloc.expect("non-null function pointer")((*grid).width * 4 as i32, h_low)
+                    as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).widthLodError as *mut libc::c_void,
                 (*grid).widthLodError as *const libc::c_void,
                 ((*grid).width * 4 as i32) as libc::c_ulong,
             );
-            (*hunkgrid).heightLodError = ri
-                .Hunk_Alloc
-                .expect("non-null function pointer")(
-                (*grid).height * 4 as i32,
-                h_low,
-            ) as *mut f32;
+            (*hunkgrid).heightLodError =
+                ri.Hunk_Alloc.expect("non-null function pointer")((*grid).height * 4 as i32, h_low)
+                    as *mut f32;
             crate::stdlib::memcpy(
                 (*hunkgrid).heightLodError as *mut libc::c_void,
                 (*grid).heightLodError as *const libc::c_void,
                 ((*grid).height * 4 as i32) as libc::c_ulong,
             );
-            R_FreeSurfaceGridMesh(
-                grid as *mut srfGridMesh_s,
-            );
+            R_FreeSurfaceGridMesh(grid as *mut srfGridMesh_s);
             let ref mut fresh9 = (*s_worldData.surfaces.offset(i as isize)).data;
             *fresh9 = hunkgrid as *mut libc::c_void as *mut surfaceType_t
         }
@@ -3374,32 +3133,25 @@ unsafe extern "C" fn R_LoadSurfaces(
     numMeshes = 0 as i32;
     numTriSurfs = 0 as i32;
     numFlares = 0 as i32;
-    in_0 = fileBase.offset((*surfs).fileofs as isize) as *mut libc::c_void
-        as *mut dsurface_t;
+    in_0 = fileBase.offset((*surfs).fileofs as isize) as *mut libc::c_void as *mut dsurface_t;
     if ((*surfs).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*surfs).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
-        as i32;
-    dv = fileBase.offset((*verts).fileofs as isize) as *mut libc::c_void
-        as *mut drawVert_t;
+        .wrapping_div(::std::mem::size_of::<dsurface_t>() as libc::c_ulong) as i32;
+    dv = fileBase.offset((*verts).fileofs as isize) as *mut libc::c_void as *mut drawVert_t;
     if ((*verts).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
@@ -3410,19 +3162,14 @@ unsafe extern "C" fn R_LoadSurfaces(
         .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<msurface_t>() as libc::c_ulong)
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<msurface_t>() as libc::c_ulong)
             as i32,
         h_low,
     ) as *mut msurface_t;
@@ -3448,9 +3195,7 @@ unsafe extern "C" fn R_LoadSurfaces(
                 numFlares += 1
             }
             _ => {
-                ri
-                    .Error
-                    .expect("non-null function pointer")(
+                ri.Error.expect("non-null function pointer")(
                     ERR_DROP as i32,
                     b"Bad surfaceType\x00" as *const u8 as *const libc::c_char,
                 );
@@ -3463,9 +3208,7 @@ unsafe extern "C" fn R_LoadSurfaces(
     R_StitchAllPatches();
     R_FixSharedVertexLodError();
     R_MovePatchSurfacesToHunk();
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"...loaded %d faces, %i meshes, %i trisurfs, %i flares\n\x00" as *const u8
             as *const libc::c_char,
@@ -3487,28 +3230,21 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
-    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dmodel_t;
+    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dmodel_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
-        as i32;
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<bmodel_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dmodel_t>() as libc::c_ulong) as i32;
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<bmodel_t>() as libc::c_ulong)
             as i32,
         h_low,
     ) as *mut bmodel_t;
@@ -3516,13 +3252,10 @@ unsafe extern "C" fn R_LoadSubmodels(mut l: *mut lump_t) {
     i = 0 as i32;
     while i < count {
         let mut model: *mut model_t = 0 as *mut model_t;
-        model =
-            R_AllocModel() as *mut model_s;
+        model = R_AllocModel() as *mut model_s;
         // this should never happen
         if model.is_null() {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"R_LoadSubmodels: R_AllocModel() failed\x00" as *const u8 as *const libc::c_char,
             );
@@ -3555,10 +3288,7 @@ R_SetParent
 =================
 */
 
-unsafe extern "C" fn R_SetParent(
-    mut node: *mut mnode_t,
-    mut parent: *mut mnode_t,
-) {
+unsafe extern "C" fn R_SetParent(mut node: *mut mnode_t, mut parent: *mut mnode_t) {
     (*node).parent = parent;
     if (*node).contents != -(1 as i32) {
         return;
@@ -3572,10 +3302,7 @@ R_LoadNodesAndLeafs
 =================
 */
 
-unsafe extern "C" fn R_LoadNodesAndLeafs(
-    mut nodeLump: *mut lump_t,
-    mut leafLump: *mut lump_t,
-) {
+unsafe extern "C" fn R_LoadNodesAndLeafs(mut nodeLump: *mut lump_t, mut leafLump: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut p: i32 = 0;
@@ -3584,8 +3311,7 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
     let mut out: *mut mnode_t = 0 as *mut mnode_t;
     let mut numNodes: i32 = 0;
     let mut numLeafs: i32 = 0;
-    in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void
-        as *mut dnode_t;
+    in_0 = fileBase.offset((*nodeLump).fileofs as isize) as *mut libc::c_void as *mut dnode_t;
     if ((*nodeLump).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
         != 0
@@ -3593,26 +3319,19 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
             .wrapping_rem(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
             != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     numNodes = ((*nodeLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dnode_t>() as libc::c_ulong) as i32;
     numLeafs = ((*leafLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
-        as i32;
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+        .wrapping_div(::std::mem::size_of::<dleaf_t>() as libc::c_ulong) as i32;
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
         ((numNodes + numLeafs) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<mnode_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<mnode_t>() as libc::c_ulong) as i32,
         h_low,
     ) as *mut mnode_t;
     s_worldData.nodes = out;
@@ -3623,10 +3342,8 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
     while i < numNodes {
         j = 0 as i32;
         while j < 3 as i32 {
-            (*out).mins[j as usize] =
-                (*in_0).mins[j as usize] as vec_t;
-            (*out).maxs[j as usize] =
-                (*in_0).maxs[j as usize] as vec_t;
+            (*out).mins[j as usize] = (*in_0).mins[j as usize] as vec_t;
+            (*out).maxs[j as usize] = (*in_0).maxs[j as usize] as vec_t;
             j += 1
         }
         p = (*in_0).planeNum;
@@ -3650,16 +3367,13 @@ unsafe extern "C" fn R_LoadNodesAndLeafs(
         out = out.offset(1)
     }
     // load leafs
-    inLeaf = fileBase.offset((*leafLump).fileofs as isize) as *mut libc::c_void
-        as *mut dleaf_t;
+    inLeaf = fileBase.offset((*leafLump).fileofs as isize) as *mut libc::c_void as *mut dleaf_t;
     i = 0 as i32;
     while i < numLeafs {
         j = 0 as i32;
         while j < 3 as i32 {
-            (*out).mins[j as usize] =
-                (*inLeaf).mins[j as usize] as vec_t;
-            (*out).maxs[j as usize] =
-                (*inLeaf).maxs[j as usize] as vec_t;
+            (*out).mins[j as usize] = (*inLeaf).mins[j as usize] as vec_t;
+            (*out).maxs[j as usize] = (*inLeaf).maxs[j as usize] as vec_t;
             j += 1
         }
         (*out).cluster = (*inLeaf).cluster;
@@ -3690,28 +3404,21 @@ unsafe extern "C" fn R_LoadShaders(mut l: *mut lump_t) {
     let mut count: i32 = 0;
     let mut in_0: *mut dshader_t = 0 as *mut dshader_t;
     let mut out: *mut dshader_t = 0 as *mut dshader_t;
-    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dshader_t;
+    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dshader_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
-        as i32;
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<dshader_t>() as libc::c_ulong) as i32;
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
             as i32,
         h_low,
     ) as *mut dshader_t;
@@ -3720,8 +3427,7 @@ unsafe extern "C" fn R_LoadShaders(mut l: *mut lump_t) {
     crate::stdlib::memcpy(
         out as *mut libc::c_void,
         in_0 as *const libc::c_void,
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong),
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong),
     );
     i = 0 as i32;
     while i < count {
@@ -3741,15 +3447,12 @@ unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut lump_t) {
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     let mut in_0: *mut i32 = 0 as *mut i32;
-    let mut out: *mut *mut msurface_t =
-        0 as *mut *mut msurface_t;
+    let mut out: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
     in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
     if ((*l).filelen as libc::c_ulong).wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
@@ -3757,12 +3460,9 @@ unsafe extern "C" fn R_LoadMarksurfaces(mut l: *mut lump_t) {
     }
     count = ((*l).filelen as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong) as i32;
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            *mut msurface_t,
-        >() as libc::c_ulong) as i32,
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
+        (count as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut msurface_t>() as libc::c_ulong) as i32,
         h_low,
     ) as *mut *mut msurface_t;
     s_worldData.marksurfaces = out;
@@ -3784,34 +3484,26 @@ R_LoadPlanes
 unsafe extern "C" fn R_LoadPlanes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut out: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut out: *mut cplane_t = 0 as *mut cplane_t;
     let mut in_0: *mut dplane_t = 0 as *mut dplane_t;
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
-    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dplane_t;
+    in_0 = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dplane_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
-        as i32;
-    out = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        ((count * 2 as i32) as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            cplane_t,
-        >() as libc::c_ulong) as i32,
+        .wrapping_div(::std::mem::size_of::<dplane_t>() as libc::c_ulong) as i32;
+    out = ri.Hunk_Alloc.expect("non-null function pointer")(
+        ((count * 2 as i32) as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<cplane_t>() as libc::c_ulong) as i32,
         h_low,
     ) as *mut cplane_t;
     s_worldData.planes = out;
@@ -3869,63 +3561,51 @@ unsafe extern "C" fn R_LoadFogs(
     let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut d: f32 = 0.;
     let mut firstSide: i32 = 0;
-    fogs =
-        fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dfog_t;
+    fogs = fileBase.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dfog_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dfog_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dfog_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dfog_t>() as libc::c_ulong) as i32;
     // create fog structures for them
     s_worldData.numfogs = count + 1 as i32;
-    s_worldData.fogs = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    s_worldData.fogs = ri.Hunk_Alloc.expect("non-null function pointer")(
         (s_worldData.numfogs as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<fog_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<fog_t>() as libc::c_ulong) as i32,
         h_low,
     ) as *mut fog_t;
     out = s_worldData.fogs.offset(1 as i32 as isize);
     if count == 0 {
         return;
     }
-    brushes = fileBase.offset((*brushesLump).fileofs as isize) as *mut libc::c_void
-        as *mut dbrush_t;
+    brushes =
+        fileBase.offset((*brushesLump).fileofs as isize) as *mut libc::c_void as *mut dbrush_t;
     if ((*brushesLump).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
         );
     }
     brushesCount = ((*brushesLump).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
-        as i32;
-    sides = fileBase.offset((*sidesLump).fileofs as isize) as *mut libc::c_void
-        as *mut dbrushside_t;
+        .wrapping_div(::std::mem::size_of::<dbrush_t>() as libc::c_ulong) as i32;
+    sides =
+        fileBase.offset((*sidesLump).fileofs as isize) as *mut libc::c_void as *mut dbrushside_t;
     if ((*sidesLump).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong)
         != 0
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"LoadMap: funny lump size in %s\x00" as *const u8 as *const libc::c_char,
             s_worldData.name.as_mut_ptr(),
@@ -3938,9 +3618,7 @@ unsafe extern "C" fn R_LoadFogs(
     while i < count {
         (*out).originalBrushNumber = (*fogs).brushNum;
         if (*out).originalBrushNumber as u32 >= brushesCount as u32 {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"fog brushNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
@@ -3948,9 +3626,7 @@ unsafe extern "C" fn R_LoadFogs(
         brush = brushes.offset((*out).originalBrushNumber as isize);
         firstSide = (*brush).firstSide;
         if firstSide as u32 > (sidesCount - 6 as i32) as u32 {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"fog brush sideNumber out of range\x00" as *const u8 as *const libc::c_char,
             );
@@ -3981,19 +3657,12 @@ unsafe extern "C" fn R_LoadFogs(
         (*out).bounds[1 as i32 as usize][2 as i32 as usize] =
             (*s_worldData.planes.offset(planeNum as isize)).dist;
         // get information from the shader for fog parameters
-        shader = R_FindShader(
-            (*fogs).shader.as_mut_ptr(),
-            -(1 as i32),
-            qtrue,
-        ) as *mut shader_s;
+        shader = R_FindShader((*fogs).shader.as_mut_ptr(), -(1 as i32), qtrue) as *mut shader_s;
         (*out).parms = (*shader).fogParms;
         (*out).colorInt = ColorBytes4(
-            (*shader).fogParms.color[0 as i32 as usize]
-                * tr.identityLight,
-            (*shader).fogParms.color[1 as i32 as usize]
-                * tr.identityLight,
-            (*shader).fogParms.color[2 as i32 as usize]
-                * tr.identityLight,
+            (*shader).fogParms.color[0 as i32 as usize] * tr.identityLight,
+            (*shader).fogParms.color[1 as i32 as usize] * tr.identityLight,
+            (*shader).fogParms.color[2 as i32 as usize] * tr.identityLight,
             1.0f64 as f32,
         );
         d = if (*shader).fogParms.depthForOpaque < 1 as i32 as f32 {
@@ -4009,14 +3678,11 @@ unsafe extern "C" fn R_LoadFogs(
         } else {
             (*out).hasSurface = qtrue;
             planeNum = (*sides.offset((firstSide + sideNum) as isize)).planeNum;
-            (*out).surface[0 as i32 as usize] = vec3_origin
-                [0 as i32 as usize]
+            (*out).surface[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[0 as i32 as usize];
-            (*out).surface[1 as i32 as usize] = vec3_origin
-                [1 as i32 as usize]
+            (*out).surface[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[1 as i32 as usize];
-            (*out).surface[2 as i32 as usize] = vec3_origin
-                [2 as i32 as usize]
+            (*out).surface[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
                 - (*s_worldData.planes.offset(planeNum as isize)).normal[2 as i32 as usize];
             (*out).surface[3 as i32 as usize] =
                 -(*s_worldData.planes.offset(planeNum as isize)).dist
@@ -4066,20 +3732,15 @@ pub unsafe extern "C" fn R_LoadLightGrid(mut l: *mut lump_t) {
         * (*w).lightGridBounds[1 as i32 as usize]
         * (*w).lightGridBounds[2 as i32 as usize];
     if (*l).filelen != numGridPoints * 8 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: light grid mismatch\n\x00" as *const u8 as *const libc::c_char,
         );
         (*w).lightGridData = 0 as *mut byte;
         return;
     }
-    (*w).lightGridData = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (*l).filelen, h_low
-    ) as *mut byte;
+    (*w).lightGridData =
+        ri.Hunk_Alloc.expect("non-null function pointer")((*l).filelen, h_low) as *mut byte;
     crate::stdlib::memcpy(
         (*w).lightGridData as *mut libc::c_void,
         fileBase.offset((*l).fileofs as isize) as *mut libc::c_void,
@@ -4123,16 +3784,12 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
     (*w).lightGridSize[2 as i32 as usize] = 128 as i32 as vec_t;
     p = fileBase.offset((*l).fileofs as isize) as *mut libc::c_char;
     // store for reference by the cgame
-    (*w).entityString = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        (*l).filelen + 1 as i32,
-        h_low,
-    ) as *mut libc::c_char;
+    (*w).entityString =
+        ri.Hunk_Alloc.expect("non-null function pointer")((*l).filelen + 1 as i32, h_low)
+            as *mut libc::c_char;
     libc::strcpy((*w).entityString, p);
     (*w).entityParsePoint = (*w).entityString;
-    token =
-        COM_ParseExt(&mut p, qtrue);
+    token = COM_ParseExt(&mut p, qtrue);
     if *token == 0 || *token as i32 != '{' as i32 {
         return;
     }
@@ -4140,10 +3797,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
     // only parse the world spawn
     // parse key
     {
-        token = COM_ParseExt(
-            &mut p,
-            qtrue,
-        );
+        token = COM_ParseExt(&mut p, qtrue);
         if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
@@ -4153,10 +3807,7 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
         // parse value
-        token = COM_ParseExt(
-            &mut p,
-            qtrue,
-        );
+        token = COM_ParseExt(&mut p, qtrue);
         if *token == 0 || *token as i32 == '}' as i32 {
             break;
         }
@@ -4167,17 +3818,10 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
         );
         // check for remapping of shaders for vertex lighting
         s = b"vertexremapshader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-        if Q_strncmp(
-            keyname.as_mut_ptr(),
-            s,
-            crate::stdlib::strlen(s) as i32,
-        ) == 0
-        {
+        if Q_strncmp(keyname.as_mut_ptr(), s, crate::stdlib::strlen(s) as i32) == 0 {
             s = libc::strchr(value.as_mut_ptr(), ';' as i32);
             if s.is_null() {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: no semi colon in vertexshaderremap \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -4199,17 +3843,10 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
         } else {
             // check for remapping of shaders
             s = b"remapshader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-            if Q_strncmp(
-                keyname.as_mut_ptr(),
-                s,
-                crate::stdlib::strlen(s) as i32,
-            ) == 0
-            {
+            if Q_strncmp(keyname.as_mut_ptr(), s, crate::stdlib::strlen(s) as i32) == 0 {
                 s = libc::strchr(value.as_mut_ptr(), ';' as i32);
                 if s.is_null() {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_WARNING as i32,
                         b"WARNING: no semi colon in shaderremap \'%s\'\n\x00" as *const u8
                             as *const libc::c_char,
@@ -4238,12 +3875,9 @@ pub unsafe extern "C" fn R_LoadEntities(mut l: *mut lump_t) {
                 libc::sscanf(
                     value.as_mut_ptr(),
                     b"%f %f %f\x00" as *const u8 as *const libc::c_char,
-                    &mut *(*w).lightGridSize.as_mut_ptr().offset(0 as i32 as isize)
-                        as *mut vec_t,
-                    &mut *(*w).lightGridSize.as_mut_ptr().offset(1 as i32 as isize)
-                        as *mut vec_t,
-                    &mut *(*w).lightGridSize.as_mut_ptr().offset(2 as i32 as isize)
-                        as *mut vec_t,
+                    &mut *(*w).lightGridSize.as_mut_ptr().offset(0 as i32 as isize) as *mut vec_t,
+                    &mut *(*w).lightGridSize.as_mut_ptr().offset(1 as i32 as isize) as *mut vec_t,
+                    &mut *(*w).lightGridSize.as_mut_ptr().offset(2 as i32 as isize) as *mut vec_t,
                 );
             }
         }
@@ -4600,15 +4234,10 @@ Called directly from cgame
 pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut header: *mut dheader_t = 0 as *mut dheader_t;
-    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 {
-        b: 0 as *mut byte,
-    };
-    let mut startMarker: *mut byte =
-        0 as *mut byte;
+    let mut buffer: C2RustUnnamed_102 = C2RustUnnamed_102 { b: 0 as *mut byte };
+    let mut startMarker: *mut byte = 0 as *mut byte;
     if tr.worldMapLoaded as u64 != 0 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"ERROR: attempted to redundantly load world map\x00" as *const u8
                 as *const libc::c_char,
@@ -4619,20 +4248,12 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     tr.sunDirection[0 as i32 as usize] = 0.45f32;
     tr.sunDirection[1 as i32 as usize] = 0.3f32;
     tr.sunDirection[2 as i32 as usize] = 0.9f32;
-    VectorNormalize(
-        tr
-            .sunDirection
-            .as_mut_ptr(),
-    );
+    VectorNormalize(tr.sunDirection.as_mut_ptr());
     tr.worldMapLoaded = qtrue;
     // load it
-    ri
-        .FS_ReadFile
-        .expect("non-null function pointer")(name, &mut buffer.v);
+    ri.FS_ReadFile.expect("non-null function pointer")(name, &mut buffer.v);
     if buffer.b.is_null() {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"RE_LoadWorldMap: %s not found\x00" as *const u8 as *const libc::c_char,
             name,
@@ -4661,19 +4282,13 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         s_worldData.baseName.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    startMarker = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        0 as i32, h_low
-    ) as *mut byte;
+    startMarker = ri.Hunk_Alloc.expect("non-null function pointer")(0 as i32, h_low) as *mut byte;
     c_gridVerts = 0 as i32;
     header = buffer.b as *mut dheader_t;
     fileBase = header as *mut byte;
     i = (*header).version;
     if i != 46 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"RE_LoadWorldMap: %s has wrong version number (%i should be %i)\x00" as *const u8
                 as *const libc::c_char,
@@ -4714,15 +4329,10 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
     R_LoadVisibility(&mut *(*header).lumps.as_mut_ptr().offset(16 as i32 as isize));
     R_LoadEntities(&mut *(*header).lumps.as_mut_ptr().offset(0 as i32 as isize));
     R_LoadLightGrid(&mut *(*header).lumps.as_mut_ptr().offset(15 as i32 as isize));
-    s_worldData.dataSize = (ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        0 as i32, h_low
-    ) as *mut byte)
+    s_worldData.dataSize = (ri.Hunk_Alloc.expect("non-null function pointer")(0 as i32, h_low)
+        as *mut byte)
         .offset_from(startMarker) as isize as i32;
     // only set tr.world now that we know the entire level has loaded properly
     tr.world = &mut s_worldData;
-    ri
-        .FS_FreeFile
-        .expect("non-null function pointer")(buffer.v);
+    ri.FS_FreeFile.expect("non-null function pointer")(buffer.v);
 }

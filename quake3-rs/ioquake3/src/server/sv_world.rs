@@ -121,9 +121,7 @@ be returned, otherwise a custom box tree will be constructed.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_ClipHandleForEntity(
-    mut ent: *const sharedEntity_t,
-) -> clipHandle_t {
+pub unsafe extern "C" fn SV_ClipHandleForEntity(mut ent: *const sharedEntity_t) -> clipHandle_t {
     if (*ent).r.bmodel as u64 != 0 {
         // explicit hulls in the BSP model
         return crate::src::qcommon::cm_load::CM_InlineModel((*ent).s.modelindex);
@@ -278,9 +276,7 @@ pub unsafe extern "C" fn SV_UnlinkEntity(mut gEnt: *mut sharedEntity_t) {
     let mut ent: *mut svEntity_t = 0 as *mut svEntity_t;
     let mut scan: *mut svEntity_t = 0 as *mut svEntity_t;
     let mut ws: *mut worldSector_t = 0 as *mut worldSector_t;
-    ent = SV_SvEntityForGentity(
-        gEnt as *mut sharedEntity_t,
-    ) as *mut svEntity_s;
+    ent = SV_SvEntityForGentity(gEnt as *mut sharedEntity_t) as *mut svEntity_s;
     (*gEnt).r.linked = qfalse;
     ws = (*ent).worldSector;
     if ws.is_null() {
@@ -320,9 +316,7 @@ pub unsafe extern "C" fn SV_LinkEntity(mut gEnt: *mut sharedEntity_t) {
     let mut origin: *mut f32 = 0 as *mut f32;
     let mut angles: *mut f32 = 0 as *mut f32;
     let mut ent: *mut svEntity_t = 0 as *mut svEntity_t;
-    ent = SV_SvEntityForGentity(
-        gEnt as *mut sharedEntity_t,
-    ) as *mut svEntity_s;
+    ent = SV_SvEntityForGentity(gEnt as *mut sharedEntity_t) as *mut svEntity_s;
     if !(*ent).worldSector.is_null() {
         SV_UnlinkEntity(gEnt);
         // unlink from old position
@@ -432,8 +426,7 @@ pub unsafe extern "C" fn SV_LinkEntity(mut gEnt: *mut sharedEntity_t) {
             if (*ent).areanum != -(1 as i32) && (*ent).areanum != area {
                 if (*ent).areanum2 != -(1 as i32)
                     && (*ent).areanum2 != area
-                    && sv.state as u32
-                        == SS_LOADING as i32 as u32
+                    && sv.state as u32 == SS_LOADING as i32 as u32
                 {
                     crate::src::qcommon::common::Com_DPrintf(
                         b"Object %i touching 3 areas at %f %f %f\n\x00" as *const u8
@@ -500,14 +493,11 @@ SV_AreaEntities_r
 unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mut areaParms_t) {
     let mut check: *mut svEntity_t = 0 as *mut svEntity_t;
     let mut next: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut gcheck: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut gcheck: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     check = (*node).entities;
     while !check.is_null() {
         next = (*check).nextEntityInWorldSector;
-        gcheck = SV_GEntityForSvEntity(
-            check as *mut svEntity_s,
-        ) as *mut sharedEntity_t;
+        gcheck = SV_GEntityForSvEntity(check as *mut svEntity_s) as *mut sharedEntity_t;
         if !((*gcheck).r.absmin[0 as i32 as usize] > *(*ap).maxs.offset(0 as i32 as isize)
             || (*gcheck).r.absmin[1 as i32 as usize] > *(*ap).maxs.offset(1 as i32 as isize)
             || (*gcheck).r.absmin[2 as i32 as usize] > *(*ap).maxs.offset(2 as i32 as isize)
@@ -516,14 +506,11 @@ unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mu
             || (*gcheck).r.absmax[2 as i32 as usize] < *(*ap).mins.offset(2 as i32 as isize))
         {
             if (*ap).count == (*ap).maxcount {
-                Com_Printf(
-                    b"SV_AreaEntities: MAXCOUNT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"SV_AreaEntities: MAXCOUNT\n\x00" as *const u8 as *const libc::c_char);
                 return;
             }
-            *(*ap).list.offset((*ap).count as isize) = check
-                .offset_from(sv.svEntities.as_mut_ptr())
-                as isize as i32;
+            *(*ap).list.offset((*ap).count as isize) =
+                check.offset_from(sv.svEntities.as_mut_ptr()) as isize as i32;
             (*ap).count += 1
         }
         check = next
@@ -592,13 +579,11 @@ pub unsafe extern "C" fn SV_ClipToEntity(
     mut contentmask: i32,
     mut capsule: i32,
 ) {
-    let mut touch: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut touch: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     let mut clipHandle: clipHandle_t = 0;
     let mut origin: *mut f32 = 0 as *mut f32;
     let mut angles: *mut f32 = 0 as *mut f32;
-    touch = SV_GentityNum(entityNum)
-        as *mut sharedEntity_t;
+    touch = SV_GentityNum(entityNum) as *mut sharedEntity_t;
     crate::stdlib::memset(
         trace as *mut libc::c_void,
         0 as i32,
@@ -645,26 +630,24 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touchlist: [i32; 1024] = [0; 1024];
-    let mut touch: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut touch: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     let mut passOwnerNum: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut clipHandle: clipHandle_t = 0;
     let mut origin: *mut f32 = 0 as *mut f32;
     let mut angles: *mut f32 = 0 as *mut f32;
@@ -675,8 +658,7 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
         (1 as i32) << 10 as i32,
     );
     if (*clip).passEntityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
-        passOwnerNum = (*(SV_GentityNum((*clip).passEntityNum)
-            as *mut sharedEntity_t))
+        passOwnerNum = (*(SV_GentityNum((*clip).passEntityNum) as *mut sharedEntity_t))
             .r
             .ownerNum;
         if passOwnerNum == ((1 as i32) << 10 as i32) - 1 as i32 {
@@ -691,8 +673,7 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
         if (*clip).trace.allsolid as u64 != 0 {
             return;
         }
-        touch = SV_GentityNum(touchlist[i as usize])
-            as *mut sharedEntity_t;
+        touch = SV_GentityNum(touchlist[i as usize]) as *mut sharedEntity_t;
         // see if we should ignore this entity
         if (*clip).passEntityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
             if touchlist[i as usize] == (*clip).passEntityNum {
@@ -726,8 +707,7 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
                     crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
                         &mut trace as *mut _ as *mut trace_t,
                         (*clip).start as *mut f32 as *const vec_t,
-                        (*clip).end.as_mut_ptr() as *mut f32
-                            as *const vec_t,
+                        (*clip).end.as_mut_ptr() as *mut f32 as *const vec_t,
                         (*clip).mins as *mut f32,
                         (*clip).maxs as *mut f32,
                         clipHandle,
@@ -744,16 +724,14 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
                         trace.entityNum = (*touch).s.number
                     }
                     if trace.fraction < (*clip).trace.fraction {
-                        let mut oldStart: qboolean =
-                            qfalse;
+                        let mut oldStart: qboolean = qfalse;
                         // make sure we keep a startsolid from a previous trace
                         oldStart = (*clip).trace.startsolid;
                         trace.entityNum = (*touch).s.number;
                         (*clip).trace = trace;
-                        (*clip).trace.startsolid =
-                            ::std::mem::transmute::<u32, qboolean>(
-                                (*clip).trace.startsolid as u32 | oldStart as u32,
-                            )
+                        (*clip).trace.startsolid = ::std::mem::transmute::<u32, qboolean>(
+                            (*clip).trace.startsolid as u32 | oldStart as u32,
+                        )
                     }
                 }
             }
@@ -1047,13 +1025,9 @@ SV_PointContents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_PointContents(
-    mut p: *const vec_t,
-    mut passEntityNum: i32,
-) -> i32 {
+pub unsafe extern "C" fn SV_PointContents(mut p: *const vec_t, mut passEntityNum: i32) -> i32 {
     let mut touch: [i32; 1024] = [0; 1024];
-    let mut hit: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut hit: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut contents: i32 = 0;
@@ -1067,8 +1041,7 @@ pub unsafe extern "C" fn SV_PointContents(
     i = 0 as i32;
     while i < num {
         if !(touch[i as usize] == passEntityNum) {
-            hit = SV_GentityNum(touch[i as usize])
-                as *mut sharedEntity_t;
+            hit = SV_GentityNum(touch[i as usize]) as *mut sharedEntity_t;
             // might intersect, so do an exact clip
             clipHandle = SV_ClipHandleForEntity(hit);
             angles = (*hit).r.currentAngles.as_mut_ptr();

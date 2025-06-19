@@ -205,11 +205,7 @@ pub unsafe extern "C" fn AAS_ClearShownDebugLines() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_DebugLine(
-    mut start: *mut vec_t,
-    mut end: *mut vec_t,
-    mut color: i32,
-) {
+pub unsafe extern "C" fn AAS_DebugLine(mut start: *mut vec_t, mut end: *mut vec_t, mut color: i32) {
     let mut line: i32 = 0; //end if
     line = 0 as i32;
     while line < 1024 as i32 {
@@ -521,8 +517,7 @@ pub unsafe extern "C" fn AAS_ShowBoundingBox(
     crate::stdlib::memcpy(
         bboxcorners[4 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
         bboxcorners[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
-        (::std::mem::size_of::<vec3_t>() as libc::c_ulong)
-            .wrapping_mul(4 as i32 as libc::c_ulong),
+        (::std::mem::size_of::<vec3_t>() as libc::c_ulong).wrapping_mul(4 as i32 as libc::c_ulong),
     );
     i = 0 as i32;
     while i < 4 as i32 {
@@ -1063,11 +1058,7 @@ pub unsafe extern "C" fn AAS_ShowAreaPolygons(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_DrawCross(
-    mut origin: *mut vec_t,
-    mut size: f32,
-    mut color: i32,
-) {
+pub unsafe extern "C" fn AAS_DrawCross(mut origin: *mut vec_t, mut size: f32, mut color: i32) {
     let mut i: i32 = 0;
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
@@ -1119,11 +1110,7 @@ pub unsafe extern "C" fn AAS_DrawArrow(
     let mut cross: vec3_t = [0.; 3];
     let mut p1: vec3_t = [0.; 3];
     let mut p2: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut dot: f32 = 0.;
     dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
@@ -1173,9 +1160,7 @@ pub unsafe extern "C" fn AAS_DrawArrow(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ShowReachability(
-    mut reach: *mut aas_reachability_t,
-) {
+pub unsafe extern "C" fn AAS_ShowReachability(mut reach: *mut aas_reachability_t) {
     let mut dir: vec3_t = [0.; 3];
     let mut cmdmove: vec3_t = [0.; 3];
     let mut velocity: vec3_t = [0.; 3];
@@ -1200,11 +1185,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(
         time: 0.,
         frames: 0,
     };
-    AAS_ShowAreaPolygons(
-        (*reach).areanum,
-        5 as i32,
-        qtrue as i32,
-    );
+    AAS_ShowAreaPolygons((*reach).areanum, 5 as i32, qtrue as i32);
     //AAS_ShowArea(reach->areanum, qtrue);
     AAS_DrawArrow(
         (*reach).start.as_mut_ptr(),
@@ -1357,8 +1338,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ShowReachableAreas(mut areanum: i32) {
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t; //end if
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t; //end if
     static mut reach: aas_reachability_t = aas_reachability_t {
         areanum: 0,
         facenum: 0,
@@ -1417,15 +1397,9 @@ pub unsafe extern "C" fn AAS_FloodAreas_r(mut areanum: i32, mut cluster: i32, mu
     let mut facenum: i32 = 0;
     let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t;
-    let mut reach: *mut aas_reachability_t =
-        0 as *mut aas_reachability_t;
-    AAS_ShowAreaPolygons(
-        areanum,
-        1 as i32,
-        qtrue as i32,
-    );
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t;
+    let mut reach: *mut aas_reachability_t = 0 as *mut aas_reachability_t;
+    AAS_ShowAreaPolygons(areanum, 1 as i32, qtrue as i32);
     //pointer to the convex area
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas

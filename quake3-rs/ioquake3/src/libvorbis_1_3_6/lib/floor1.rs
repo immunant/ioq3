@@ -62,8 +62,7 @@ pub struct lsfit_acc {
 /* **********************************************/
 
 unsafe extern "C" fn floor1_free_info(mut i: *mut libc::c_void) {
-    let mut info: *mut vorbis_info_floor1 =
-        i as *mut vorbis_info_floor1;
+    let mut info: *mut vorbis_info_floor1 = i as *mut vorbis_info_floor1;
     if !info.is_null() {
         crate::stdlib::memset(
             info as *mut libc::c_void,
@@ -75,8 +74,7 @@ unsafe extern "C" fn floor1_free_info(mut i: *mut libc::c_void) {
 }
 
 unsafe extern "C" fn floor1_free_look(mut i: *mut libc::c_void) {
-    let mut look: *mut vorbis_look_floor1 =
-        i as *mut vorbis_look_floor1;
+    let mut look: *mut vorbis_look_floor1 = i as *mut vorbis_look_floor1;
     if !look.is_null() {
         /*fprintf(stderr,"floor 1 bit usage %f:%f (%f total)\n",
         (float)look->phrasebits/look->frames,
@@ -91,12 +89,8 @@ unsafe extern "C" fn floor1_free_look(mut i: *mut libc::c_void) {
     };
 }
 
-unsafe extern "C" fn floor1_pack(
-    mut i: *mut libc::c_void,
-    mut opb: *mut oggpack_buffer,
-) {
-    let mut info: *mut vorbis_info_floor1 =
-        i as *mut vorbis_info_floor1;
+unsafe extern "C" fn floor1_pack(mut i: *mut libc::c_void, mut opb: *mut oggpack_buffer) {
+    let mut info: *mut vorbis_info_floor1 = i as *mut vorbis_info_floor1;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut count: i32 = 0 as i32;
@@ -162,9 +156,8 @@ unsafe extern "C" fn floor1_pack(
     can assume our setup is OK */
     oggpack_write(
         opb as *mut oggpack_buffer,
-        crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-            (maxposit - 1 as i32) as ogg_uint32_t,
-        ) as libc::c_ulong,
+        crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog((maxposit - 1 as i32) as ogg_uint32_t)
+            as libc::c_ulong,
         4 as i32,
     );
     rangebits = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -195,8 +188,7 @@ unsafe extern "C" fn floor1_unpack(
     mut opb: *mut oggpack_buffer,
 ) -> *mut libc::c_void {
     let mut current_block: u64;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut count: i32 = 0 as i32;
@@ -205,23 +197,17 @@ unsafe extern "C" fn floor1_unpack(
     let mut info: *mut vorbis_info_floor1 = calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_info_floor1>() as libc::c_ulong,
-    )
-        as *mut vorbis_info_floor1;
+    ) as *mut vorbis_info_floor1;
     /* read partitions */
-    (*info).partitions = oggpack_read(
-        opb as *mut oggpack_buffer,
-        5 as i32,
-    ) as i32; /* only 0 to 31 legal */
+    (*info).partitions = oggpack_read(opb as *mut oggpack_buffer, 5 as i32) as i32; /* only 0 to 31 legal */
     j = 0 as i32; /* only 0 to 15 legal */
     loop {
         if !(j < (*info).partitions) {
             current_block = 13183875560443969876;
             break;
         }
-        (*info).partitionclass[j as usize] = oggpack_read(
-            opb as *mut oggpack_buffer,
-            4 as i32,
-        ) as i32;
+        (*info).partitionclass[j as usize] =
+            oggpack_read(opb as *mut oggpack_buffer, 4 as i32) as i32;
         if (*info).partitionclass[j as usize] < 0 as i32 {
             current_block = 4682380797242156875;
             break;
@@ -242,25 +228,16 @@ unsafe extern "C" fn floor1_unpack(
                     break;
                 }
                 (*info).class_dim[j as usize] =
-                    (oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        3 as i32,
-                    ) + 1 as i32 as isize) as i32;
+                    (oggpack_read(opb as *mut oggpack_buffer, 3 as i32) + 1 as i32 as isize) as i32;
                 (*info).class_subs[j as usize] =
-                    oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        2 as i32,
-                    ) as i32;
+                    oggpack_read(opb as *mut oggpack_buffer, 2 as i32) as i32;
                 if (*info).class_subs[j as usize] < 0 as i32 {
                     current_block = 4682380797242156875;
                     break;
                 }
                 if (*info).class_subs[j as usize] != 0 {
                     (*info).class_book[j as usize] =
-                        oggpack_read(
-                            opb as *mut oggpack_buffer,
-                            8 as i32,
-                        ) as i32
+                        oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32
                 }
                 if (*info).class_book[j as usize] < 0 as i32
                     || (*info).class_book[j as usize] >= (*ci).books
@@ -271,10 +248,8 @@ unsafe extern "C" fn floor1_unpack(
                 k = 0 as i32;
                 while k < (1 as i32) << (*info).class_subs[j as usize] {
                     (*info).class_subbook[j as usize][k as usize] =
-                        (oggpack_read(
-                            opb as *mut oggpack_buffer,
-                            8 as i32,
-                        ) - 1 as i32 as isize) as i32;
+                        (oggpack_read(opb as *mut oggpack_buffer, 8 as i32) - 1 as i32 as isize)
+                            as i32;
                     if (*info).class_subbook[j as usize][k as usize] < -(1 as i32)
                         || (*info).class_subbook[j as usize][k as usize] >= (*ci).books
                     {
@@ -289,14 +264,9 @@ unsafe extern "C" fn floor1_unpack(
                 4682380797242156875 => {}
                 _ => {
                     /* read the post list */
-                    (*info).mult = (oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        2 as i32,
-                    ) + 1 as i32 as isize) as i32; /* only 1,2,3,4 legal now */
-                    rangebits = oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        4 as i32,
-                    ) as i32;
+                    (*info).mult = (oggpack_read(opb as *mut oggpack_buffer, 2 as i32)
+                        + 1 as i32 as isize) as i32; /* only 1,2,3,4 legal now */
+                    rangebits = oggpack_read(opb as *mut oggpack_buffer, 4 as i32) as i32;
                     if !(rangebits < 0 as i32) {
                         j = 0 as i32;
                         k = 0 as i32;
@@ -312,10 +282,7 @@ unsafe extern "C" fn floor1_unpack(
                             }
                             while k < count {
                                 (*info).postlist[(k + 2 as i32) as usize] =
-                                    oggpack_read(
-                                        opb as *mut oggpack_buffer,
-                                        rangebits,
-                                    ) as i32;
+                                    oggpack_read(opb as *mut oggpack_buffer, rangebits) as i32;
                                 let mut t: i32 = (*info).postlist[(k + 2 as i32) as usize];
                                 if t < 0 as i32 || t >= (1 as i32) << rangebits {
                                     current_block = 4682380797242156875;
@@ -387,13 +354,11 @@ unsafe extern "C" fn floor1_look(
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
-    let mut info: *mut vorbis_info_floor1 =
-        in_0 as *mut vorbis_info_floor1;
+    let mut info: *mut vorbis_info_floor1 = in_0 as *mut vorbis_info_floor1;
     let mut look: *mut vorbis_look_floor1 = calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_look_floor1>() as libc::c_ulong,
-    )
-        as *mut vorbis_look_floor1;
+    ) as *mut vorbis_look_floor1;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut n: i32 = 0 as i32;
@@ -1397,11 +1362,9 @@ pub unsafe extern "C" fn floor1_encode(
     let mut j: isize = 0;
     let mut info: *mut vorbis_info_floor1 = (*look).vi;
     let mut posts: isize = (*look).posts as isize;
-    let mut ci: *mut codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut out: [i32; 65] = [0; 65];
-    let mut sbooks: *mut *mut static_codebook =
-        (*ci).book_param.as_mut_ptr();
+    let mut sbooks: *mut *mut static_codebook = (*ci).book_param.as_mut_ptr();
     let mut books: *mut codebook = (*ci).fullbooks;
     /* quantize values to multiplier spec */
     if !post.is_null() {
@@ -1555,8 +1518,7 @@ pub unsafe extern "C" fn floor1_encode(
                 }
                 /* write it */
                 (*look).phrasebits += vorbis_book_encode(
-                    books.offset((*info).class_book[class as usize] as isize)
-                        as *mut codebook,
+                    books.offset((*info).class_book[class as usize] as isize) as *mut codebook,
                     cval,
                     opb as *mut oggpack_buffer,
                 ) as isize
@@ -1571,13 +1533,11 @@ pub unsafe extern "C" fn floor1_encode(
                     if (out[(j + k as isize) as usize] as isize)
                         < (*books.offset(book as isize)).entries
                     {
-                        (*look).postbits +=
-                            vorbis_book_encode(
-                                books.offset(book as isize)
-                                    as *mut codebook,
-                                out[(j + k as isize) as usize],
-                                opb as *mut oggpack_buffer,
-                            ) as isize
+                        (*look).postbits += vorbis_book_encode(
+                            books.offset(book as isize) as *mut codebook,
+                            out[(j + k as isize) as usize],
+                            opb as *mut oggpack_buffer,
+                        ) as isize
                     }
                     /*else
                     fprintf(stderr,"+!");*/
@@ -1633,20 +1593,15 @@ unsafe extern "C" fn floor1_inverse1(
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut current_block: u64;
-    let mut look: *mut vorbis_look_floor1 =
-        in_0 as *mut vorbis_look_floor1;
+    let mut look: *mut vorbis_look_floor1 = in_0 as *mut vorbis_look_floor1;
     let mut info: *mut vorbis_info_floor1 = (*look).vi;
-    let mut ci: *mut codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut books: *mut codebook = (*ci).fullbooks;
     /* unpack wrapped/predicted values from stream */
-    if oggpack_read(
-        &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-        1 as i32,
-    ) == 1 as i32 as isize
+    if oggpack_read(&mut (*vb).opb as *mut _ as *mut oggpack_buffer, 1 as i32) == 1 as i32 as isize
     {
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut vorbis_block,
@@ -1681,8 +1636,7 @@ unsafe extern "C" fn floor1_inverse1(
             /* decode the partition's first stage cascade value */
             if csubbits != 0 {
                 cval = vorbis_book_decode(
-                    books.offset((*info).class_book[class as usize] as isize)
-                        as *mut codebook,
+                    books.offset((*info).class_book[class as usize] as isize) as *mut codebook,
                     &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
                 ) as i32;
                 if cval == -(1 as i32) {
@@ -1698,8 +1652,7 @@ unsafe extern "C" fn floor1_inverse1(
                 if book >= 0 as i32 {
                     let ref mut fresh0 = *fit_value.offset((j + k) as isize);
                     *fresh0 = vorbis_book_decode(
-                        books.offset(book as isize)
-                            as *mut codebook,
+                        books.offset(book as isize) as *mut codebook,
                         &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
                     ) as i32;
                     if *fresh0 == -(1 as i32) {
@@ -1766,11 +1719,9 @@ unsafe extern "C" fn floor1_inverse2(
     mut memo: *mut libc::c_void,
     mut out: *mut f32,
 ) -> i32 {
-    let mut look: *mut vorbis_look_floor1 =
-        in_0 as *mut vorbis_look_floor1;
+    let mut look: *mut vorbis_look_floor1 = in_0 as *mut vorbis_look_floor1;
     let mut info: *mut vorbis_info_floor1 = (*look).vi;
-    let mut ci: *mut codec_setup_info =
-        (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*(*(*vb).vd).vi).codec_setup as *mut codec_setup_info;
     let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as isize) as i32;
     let mut j: i32 = 0;
     if !memo.is_null() {
@@ -1828,11 +1779,7 @@ unsafe extern "C" fn floor1_inverse2(
 pub static mut floor1_exportbundle: vorbis_func_floor = {
     let mut init = vorbis_func_floor {
         pack: Some(
-            floor1_pack
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: *mut oggpack_buffer,
-                ) -> (),
+            floor1_pack as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut oggpack_buffer) -> (),
         ),
         unpack: Some(
             floor1_unpack

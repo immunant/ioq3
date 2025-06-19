@@ -73,28 +73,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut snd_inited: qboolean =
-    qfalse;
+pub static mut snd_inited: qboolean = qfalse;
 #[no_mangle]
 
-pub static mut s_sdlBits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_sdlSpeed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlSpeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_sdlChannels: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlChannels: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_sdlDevSamps: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlDevSamps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_sdlMixSamps: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_sdlMixSamps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 /* The audio callback. All the magic happens here. */
 
 static mut dmapos: i32 = 0 as i32;
@@ -105,8 +99,7 @@ static mut sdlPlaybackDevice: SDL_AudioDeviceID = 0;
 
 static mut sdlCaptureDevice: SDL_AudioDeviceID = 0;
 
-static mut s_sdlCapture: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut s_sdlCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut sdlMasterGain: f32 = 1.0f32;
 /*
@@ -163,9 +156,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
     }
     if sdlMasterGain != 1.0f32 {
         let mut i: i32 = 0;
-        if dma.isfloat != 0
-            && dma.samplebits == 32 as i32
-        {
+        if dma.isfloat != 0 && dma.samplebits == 32 as i32 {
             let mut ptr: *mut f32 = stream as *mut f32;
             len = (len as libc::c_ulong).wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
                 as i32;
@@ -294,9 +285,7 @@ unsafe extern "C" fn SNDDMA_PrintAudiospec(
             fmt,
         );
     } else {
-        Com_Printf(
-            b"  Format:   ^1UNKNOWN\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"  Format:   ^1UNKNOWN\n\x00" as *const u8 as *const libc::c_char);
     }
     Com_Printf(
         b"  Freq:     %d\n\x00" as *const u8 as *const libc::c_char,
@@ -372,9 +361,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
             0x1 as i32,
         ) as *mut cvar_s
     }
-    Com_Printf(
-        b"SDL_Init( SDL_INIT_AUDIO )... \x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"SDL_Init( SDL_INIT_AUDIO )... \x00" as *const u8 as *const libc::c_char);
     if crate::stdlib::SDL_Init(0x10 as u32) != 0 as i32 {
         Com_Printf(
             b"FAILED (%s)\n\x00" as *const u8 as *const libc::c_char,
@@ -426,11 +413,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
     desired.channels = (*s_sdlChannels).value as i32 as Uint8;
     desired.callback = Some(
         SNDDMA_AudioCallback
-            as unsafe extern "C" fn(
-                _: *mut libc::c_void,
-                _: *mut Uint8,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut Uint8, _: i32) -> (),
     );
     sdlPlaybackDevice = SDL_OpenAudioDevice(
         0 as *const libc::c_char,
@@ -471,15 +454,12 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
     dma.isfloat = obtained.format as i32 & (1 as i32) << 8 as i32;
     dma.channels = obtained.channels as i32;
     dma.samples = tmp;
-    dma.fullsamples =
-        dma.samples / dma.channels;
+    dma.fullsamples = dma.samples / dma.channels;
     dma.submission_chunk = 1 as i32;
     dma.speed = obtained.freq;
-    dmasize = dma.samples
-        * (dma.samplebits / 8 as i32);
+    dmasize = dma.samples * (dma.samplebits / 8 as i32);
     dma.buffer =
-        crate::stdlib::calloc(1 as i32 as libc::c_ulong, dmasize as libc::c_ulong)
-            as *mut byte;
+        crate::stdlib::calloc(1 as i32 as libc::c_ulong, dmasize as libc::c_ulong) as *mut byte;
     // !!! FIXME: some of these SDL_OpenAudioDevice() values should be cvars.
     s_sdlCapture = crate::src::qcommon::cvar::Cvar_Get(
         b"s_sdlCapture\x00" as *const u8 as *const libc::c_char,
@@ -543,14 +523,10 @@ pub unsafe extern "C" fn SNDDMA_Init() -> qboolean {
         );
     }
     sdlMasterGain = 1.0f32;
-    Com_Printf(
-        b"Starting SDL audio callback...\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"Starting SDL audio callback...\n\x00" as *const u8 as *const libc::c_char);
     SDL_PauseAudioDevice(sdlPlaybackDevice, 0 as i32);
     // don't unpause the capture device; we'll do that in StartCapture.
-    Com_Printf(
-        b"SDL audio initialized.\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"SDL audio initialized.\n\x00" as *const u8 as *const libc::c_char);
     snd_inited = qtrue;
     return qtrue;
 }
@@ -577,9 +553,7 @@ pub unsafe extern "C" fn SNDDMA_Shutdown() {
             b"Closing SDL audio playback device...\n\x00" as *const u8 as *const libc::c_char,
         );
         SDL_CloseAudioDevice(sdlPlaybackDevice);
-        Com_Printf(
-            b"SDL audio playback device closed.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"SDL audio playback device closed.\n\x00" as *const u8 as *const libc::c_char);
         sdlPlaybackDevice = 0 as i32 as SDL_AudioDeviceID
     }
     if sdlCaptureDevice != 0 {
@@ -587,9 +561,7 @@ pub unsafe extern "C" fn SNDDMA_Shutdown() {
             b"Closing SDL audio capture device...\n\x00" as *const u8 as *const libc::c_char,
         );
         SDL_CloseAudioDevice(sdlCaptureDevice);
-        Com_Printf(
-            b"SDL audio capture device closed.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"SDL audio capture device closed.\n\x00" as *const u8 as *const libc::c_char);
         sdlCaptureDevice = 0 as i32 as SDL_AudioDeviceID
     }
     crate::stdlib::SDL_QuitSubSystem(0x10 as u32);
@@ -598,9 +570,7 @@ pub unsafe extern "C" fn SNDDMA_Shutdown() {
     dmasize = 0 as i32;
     dmapos = dmasize;
     snd_inited = qfalse;
-    Com_Printf(
-        b"SDL audio shut down.\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"SDL audio shut down.\n\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -644,10 +614,7 @@ pub unsafe extern "C" fn SNDDMA_AvailableCaptureSamples() -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SNDDMA_Capture(
-    mut samples: i32,
-    mut data: *mut byte,
-) {
+pub unsafe extern "C" fn SNDDMA_Capture(mut samples: i32, mut data: *mut byte) {
     // multiplied by 2 to convert from (mono16) samples to bytes.
     if sdlCaptureDevice != 0 {
         SDL_DequeueAudio(

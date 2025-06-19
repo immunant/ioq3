@@ -2133,11 +2133,7 @@ pub unsafe extern "C" fn get_crc_table() -> *const uLongf {
 /* ========================================================================= */
 #[no_mangle]
 
-pub unsafe extern "C" fn crc32(
-    mut crc: libc::c_ulong,
-    mut buf: *const u8,
-    mut len: u32,
-) -> uLong {
+pub unsafe extern "C" fn crc32(mut crc: libc::c_ulong, mut buf: *const u8, mut len: u32) -> uLong {
     if buf.is_null() {
         return 0 as libc::c_ulong;
     }
@@ -3088,11 +3084,7 @@ end of file, -1 for error). */
 /* ========================================================================= */
 #[no_mangle]
 
-pub unsafe extern "C" fn crc32_combine(
-    mut crc1: uLong,
-    mut crc2: uLong,
-    mut len2: off_t,
-) -> uLong {
+pub unsafe extern "C" fn crc32_combine(mut crc1: uLong, mut crc2: uLong, mut len2: off_t) -> uLong {
     let mut n: i32 = 0; /* even-power-of-two zeros operator */
     let mut row: libc::c_ulong = 0; /* odd-power-of-two zeros operator */
     let mut even: [libc::c_ulong; 32] = [0; 32];

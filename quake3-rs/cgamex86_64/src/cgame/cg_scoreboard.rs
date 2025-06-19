@@ -173,8 +173,7 @@ pub use crate::tr_types_h::TC_S3TC_ARB;
 //
 //  wins/losses are drawn on bot icon now
 
-static mut localClient: qboolean =
-    qfalse;
+static mut localClient: qboolean = qfalse;
 // true if local client has been displayed
 /*
 =================
@@ -201,10 +200,7 @@ unsafe extern "C" fn CG_DrawClientScore(
         );
         return;
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset((*score).client as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset((*score).client as isize) as *mut clientInfo_t;
     iconx = 0 as i32 + 32 as i32 + 6 as i32 * 16 as i32 / 2 as i32;
     headx = 0 as i32 + 64 as i32 + 6 as i32 * 16 as i32 / 2 as i32;
     // draw the handicap or bot skill marker (unless player has flag)
@@ -277,8 +273,7 @@ unsafe extern "C" fn CG_DrawClientScore(
                         (y - (32 as i32 - 16 as i32) / 2 as i32) as f32,
                         32 as i32 as f32,
                         32 as i32 as f32,
-                        cgs.media.botSkillShaders
-                            [((*ci).botSkill - 1 as i32) as usize],
+                        cgs.media.botSkillShaders[((*ci).botSkill - 1 as i32) as usize],
                     );
                 } else {
                     CG_DrawPic(
@@ -286,8 +281,7 @@ unsafe extern "C" fn CG_DrawClientScore(
                         y as f32,
                         16 as i32 as f32,
                         16 as i32 as f32,
-                        cgs.media.botSkillShaders
-                            [((*ci).botSkill - 1 as i32) as usize],
+                        cgs.media.botSkillShaders[((*ci).botSkill - 1 as i32) as usize],
                     );
                 }
             }
@@ -298,9 +292,7 @@ unsafe extern "C" fn CG_DrawClientScore(
                 b"%i\x00" as *const u8 as *const libc::c_char,
                 (*ci).handicap,
             );
-            if cgs.gametype as u32
-                == GT_TOURNAMENT as i32 as u32
-            {
+            if cgs.gametype as u32 == GT_TOURNAMENT as i32 as u32 {
                 CG_DrawSmallStringColor(
                     iconx,
                     y - 16 as i32 / 2 as i32,
@@ -308,18 +300,11 @@ unsafe extern "C" fn CG_DrawClientScore(
                     color,
                 );
             } else {
-                CG_DrawSmallStringColor(
-                    iconx,
-                    y,
-                    string.as_mut_ptr(),
-                    color,
-                );
+                CG_DrawSmallStringColor(iconx, y, string.as_mut_ptr(), color);
             }
         }
         // draw the wins / losses
-        if cgs.gametype as u32
-            == GT_TOURNAMENT as i32 as u32
-        {
+        if cgs.gametype as u32 == GT_TOURNAMENT as i32 as u32 {
             Com_sprintf(
                 string.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -335,12 +320,7 @@ unsafe extern "C" fn CG_DrawClientScore(
                     color,
                 );
             } else {
-                CG_DrawSmallStringColor(
-                    iconx,
-                    y,
-                    string.as_mut_ptr(),
-                    color,
-                );
+                CG_DrawSmallStringColor(iconx, y, string.as_mut_ptr(), color);
             }
         }
     }
@@ -401,17 +381,12 @@ unsafe extern "C" fn CG_DrawClientScore(
         let mut hcolor: [f32; 4] = [0.; 4];
         let mut rank: i32 = 0;
         localClient = qtrue;
-        if (*cg.snap).ps.persistant
-            [PERS_TEAM as i32 as usize]
-            == TEAM_SPECTATOR as i32
-            || cgs.gametype as u32
-                >= GT_TEAM as i32 as u32
+        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32
+            || cgs.gametype as u32 >= GT_TEAM as i32 as u32
         {
             rank = -(1 as i32)
         } else {
-            rank = (*cg.snap).ps.persistant
-                [PERS_RANK as i32 as usize]
-                & !(0x4000 as i32)
+            rank = (*cg.snap).ps.persistant[PERS_RANK as i32 as usize] & !(0x4000 as i32)
         }
         if rank == 0 as i32 {
             hcolor[0 as i32 as usize] = 0 as i32 as f32;
@@ -446,10 +421,7 @@ unsafe extern "C" fn CG_DrawClientScore(
         fade,
     );
     // add the "ready" marker for intermission exiting
-    if (*cg.snap).ps.stats
-        [STAT_CLIENTS_READY as i32 as usize]
-        & (1 as i32) << (*score).client
-        != 0
+    if (*cg.snap).ps.stats[STAT_CLIENTS_READY as i32 as usize] & (1 as i32) << (*score).client != 0
     {
         CG_DrawBigStringColor(
             iconx,
@@ -484,14 +456,9 @@ unsafe extern "C" fn CG_TeamScoreboard(
     count = 0 as i32;
     i = 0 as i32;
     while i < cg.numScores && count < maxClients {
-        score = &mut *cg
-            .scores
-            .as_mut_ptr()
-            .offset(i as isize) as *mut score_t;
-        ci = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset((*score).client as isize) as *mut clientInfo_t;
+        score = &mut *cg.scores.as_mut_ptr().offset(i as isize) as *mut score_t;
+        ci =
+            &mut *cgs.clientinfo.as_mut_ptr().offset((*score).client as isize) as *mut clientInfo_t;
         if !(team as u32 != (*ci).team as u32) {
             CG_DrawClientScore(
                 y + lineHeight * count,
@@ -534,33 +501,24 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
         cg.deferredPlayerLoading = 0 as i32;
         return qfalse;
     }
-    if cgs.gametype as u32
-        == GT_SINGLE_PLAYER as i32 as u32
-        && cg.predictedPlayerState.pm_type
-            == PM_INTERMISSION as i32
+    if cgs.gametype as u32 == GT_SINGLE_PLAYER as i32 as u32
+        && cg.predictedPlayerState.pm_type == PM_INTERMISSION as i32
     {
         cg.deferredPlayerLoading = 0 as i32;
         return qfalse;
     }
     // don't draw scoreboard during death while warmup up
-    if cg.warmup != 0
-        && cg.showScores as u64 == 0
-    {
+    if cg.warmup != 0 && cg.showScores as u64 == 0 {
         return qfalse;
     }
     if cg.showScores as u32 != 0
-        || cg.predictedPlayerState.pm_type
-            == PM_DEAD as i32
-        || cg.predictedPlayerState.pm_type
-            == PM_INTERMISSION as i32
+        || cg.predictedPlayerState.pm_type == PM_DEAD as i32
+        || cg.predictedPlayerState.pm_type == PM_INTERMISSION as i32
     {
         fade = 1.0f64 as f32;
         fadeColor = colorWhite.as_mut_ptr()
     } else {
-        fadeColor = CG_FadeColor(
-            cg.scoreFadeTime,
-            200 as i32,
-        );
+        fadeColor = CG_FadeColor(cg.scoreFadeTime, 200 as i32);
         if fadeColor.is_null() {
             // next time scoreboard comes up, don't print killer
             cg.deferredPlayerLoading = 0 as i32;
@@ -581,21 +539,12 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
         CG_DrawBigString(x, y, s, fade);
     }
     // current rank
-    if (cgs.gametype as u32) < GT_TEAM as i32 as u32
-    {
-        if (*cg.snap).ps.persistant
-            [PERS_TEAM as i32 as usize]
-            != TEAM_SPECTATOR as i32
-        {
+    if (cgs.gametype as u32) < GT_TEAM as i32 as u32 {
+        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] != TEAM_SPECTATOR as i32 {
             s = va(
                 b"%s place with %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                CG_PlaceString(
-                    (*cg.snap).ps.persistant
-                        [PERS_RANK as i32 as usize]
-                        + 1 as i32,
-                ),
-                (*cg.snap).ps.persistant
-                    [PERS_SCORE as i32 as usize],
+                CG_PlaceString((*cg.snap).ps.persistant[PERS_RANK as i32 as usize] + 1 as i32),
+                (*cg.snap).ps.persistant[PERS_SCORE as i32 as usize],
             );
             w = CG_DrawStrlen(s) * 16 as i32;
             x = (640 as i32 - w) / 2 as i32;
@@ -603,17 +552,13 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
             CG_DrawBigString(x, y, s, fade);
         }
     } else {
-        if cg.teamScores[0 as i32 as usize]
-            == cg.teamScores[1 as i32 as usize]
-        {
+        if cg.teamScores[0 as i32 as usize] == cg.teamScores[1 as i32 as usize] {
             s = va(
                 b"Teams are tied at %i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 cg.teamScores[0 as i32 as usize],
             )
-        } else if cg.teamScores[0 as i32 as usize]
-            >= cg.teamScores[1 as i32 as usize]
-        {
+        } else if cg.teamScores[0 as i32 as usize] >= cg.teamScores[1 as i32 as usize] {
             s = va(
                 b"Red leads %i to %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cg.teamScores[0 as i32 as usize],
@@ -663,8 +608,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
     );
     y = 86 as i32 + 32 as i32;
     // If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores
-    if cg.numScores > (420 as i32 - (86 as i32 + 32 as i32)) / 40 as i32
-    {
+    if cg.numScores > (420 as i32 - (86 as i32 + 32 as i32)) / 40 as i32 {
         maxClients = (420 as i32 - (86 as i32 + 32 as i32)) / 16 as i32 - 1 as i32;
         lineHeight = 16 as i32;
         topBorderSize = 8 as i32;
@@ -676,22 +620,13 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
         bottomBorderSize = 16 as i32
     }
     localClient = qfalse;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         //
         // teamplay scoreboard
         //
         y += lineHeight / 2 as i32;
-        if cg.teamScores[0 as i32 as usize]
-            >= cg.teamScores[1 as i32 as usize]
-        {
-            n1 = CG_TeamScoreboard(
-                y,
-                TEAM_RED,
-                fade,
-                maxClients,
-                lineHeight,
-            );
+        if cg.teamScores[0 as i32 as usize] >= cg.teamScores[1 as i32 as usize] {
+            n1 = CG_TeamScoreboard(y, TEAM_RED, fade, maxClients, lineHeight);
             CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
@@ -702,13 +637,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
             );
             y += n1 * lineHeight + 16 as i32;
             maxClients -= n1;
-            n2 = CG_TeamScoreboard(
-                y,
-                TEAM_BLUE,
-                fade,
-                maxClients,
-                lineHeight,
-            );
+            n2 = CG_TeamScoreboard(y, TEAM_BLUE, fade, maxClients, lineHeight);
             CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
@@ -720,13 +649,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
             y += n2 * lineHeight + 16 as i32;
             maxClients -= n2
         } else {
-            n1 = CG_TeamScoreboard(
-                y,
-                TEAM_BLUE,
-                fade,
-                maxClients,
-                lineHeight,
-            );
+            n1 = CG_TeamScoreboard(y, TEAM_BLUE, fade, maxClients, lineHeight);
             CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
@@ -737,13 +660,7 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
             );
             y += n1 * lineHeight + 16 as i32;
             maxClients -= n1;
-            n2 = CG_TeamScoreboard(
-                y,
-                TEAM_RED,
-                fade,
-                maxClients,
-                lineHeight,
-            );
+            n2 = CG_TeamScoreboard(y, TEAM_RED, fade, maxClients, lineHeight);
             CG_DrawTeamBackground(
                 0 as i32,
                 y - topBorderSize,
@@ -755,48 +672,25 @@ pub unsafe extern "C" fn CG_DrawOldScoreboard() -> qboolean {
             y += n2 * lineHeight + 16 as i32;
             maxClients -= n2
         }
-        n1 = CG_TeamScoreboard(
-            y,
-            TEAM_SPECTATOR,
-            fade,
-            maxClients,
-            lineHeight,
-        );
+        n1 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxClients, lineHeight);
         y += n1 * lineHeight + 16 as i32
     } else {
         //
         // free for all scoreboard
         //
-        n1 = CG_TeamScoreboard(
-            y,
-            TEAM_FREE,
-            fade,
-            maxClients,
-            lineHeight,
-        );
+        n1 = CG_TeamScoreboard(y, TEAM_FREE, fade, maxClients, lineHeight);
         y += n1 * lineHeight + 16 as i32;
-        n2 = CG_TeamScoreboard(
-            y,
-            TEAM_SPECTATOR,
-            fade,
-            maxClients - n1,
-            lineHeight,
-        );
+        n2 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxClients - n1, lineHeight);
         y += n2 * lineHeight + 16 as i32
     }
     if localClient as u64 == 0 {
         // draw local client at the bottom
         i = 0 as i32;
         while i < cg.numScores {
-            if cg.scores[i as usize].client
-                == (*cg.snap).ps.clientNum
-            {
+            if cg.scores[i as usize].client == (*cg.snap).ps.clientNum {
                 CG_DrawClientScore(
                     y,
-                    &mut *cg
-                        .scores
-                        .as_mut_ptr()
-                        .offset(i as isize),
+                    &mut *cg.scores.as_mut_ptr().offset(i as isize),
                     fadeColor,
                     fade,
                     (lineHeight == 40 as i32) as i32 as qboolean,
@@ -828,9 +722,7 @@ unsafe extern "C" fn CG_CenterGiantLine(mut y: f32, mut string: *const libc::c_c
     color[1 as i32 as usize] = 1 as i32 as vec_t;
     color[2 as i32 as usize] = 1 as i32 as vec_t;
     color[3 as i32 as usize] = 1 as i32 as vec_t;
-    x = (0.5f64
-        * (640 as i32 - 32 as i32 * CG_DrawStrlen(string)) as f64)
-        as f32;
+    x = (0.5f64 * (640 as i32 - 32 as i32 * CG_DrawStrlen(string)) as f64) as f32;
     CG_DrawStringExt(
         x as i32,
         y as i32,
@@ -1107,13 +999,9 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
     let mut y: i32 = 0;
     let mut i: i32 = 0;
     // request more scores regularly
-    if (cg.scoresRequestTime + 2000 as i32)
-        < cg.time
-    {
+    if (cg.scoresRequestTime + 2000 as i32) < cg.time {
         cg.scoresRequestTime = cg.time;
-        trap_SendClientCommand(
-            b"score\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_SendClientCommand(b"score\x00" as *const u8 as *const libc::c_char);
     }
     // draw the dialog background
     color[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1153,8 +1041,7 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
     CG_CenterGiantLine(64 as i32 as f32, s);
     // print the two scores
     y = 160 as i32;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         //
         // teamplay scoreboard
         //
@@ -1221,10 +1108,7 @@ pub unsafe extern "C" fn CG_DrawTourneyScoreboard() {
         //
         i = 0 as i32;
         while i < 64 as i32 {
-            ci = &mut *cgs
-                .clientinfo
-                .as_mut_ptr()
-                .offset(i as isize) as *mut clientInfo_t;
+            ci = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
             if !((*ci).infoValid as u64 == 0) {
                 if !((*ci).team as u32 != TEAM_FREE as i32 as u32) {
                     CG_DrawStringExt(

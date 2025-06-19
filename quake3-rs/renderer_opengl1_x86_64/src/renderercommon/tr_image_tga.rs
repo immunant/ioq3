@@ -156,17 +156,12 @@ pub unsafe extern "C" fn R_LoadTGA(
     let mut columns: u32 = 0;
     let mut rows: u32 = 0;
     let mut numPixels: u32 = 0;
-    let mut pixbuf: *mut byte =
-        0 as *mut byte;
+    let mut pixbuf: *mut byte = 0 as *mut byte;
     let mut row: i32 = 0;
     let mut column: i32 = 0;
-    let mut buf_p: *mut byte =
-        0 as *mut byte;
-    let mut end: *mut byte =
-        0 as *mut byte;
-    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 {
-        b: 0 as *mut byte,
-    };
+    let mut buf_p: *mut byte = 0 as *mut byte;
+    let mut end: *mut byte = 0 as *mut byte;
+    let mut buffer: C2RustUnnamed_93 = C2RustUnnamed_93 { b: 0 as *mut byte };
     let mut targa_header: TargaHeader = TargaHeader {
         id_length: 0,
         colormap_type: 0,
@@ -181,8 +176,7 @@ pub unsafe extern "C" fn R_LoadTGA(
         pixel_size: 0,
         attributes: 0,
     };
-    let mut targa_rgba: *mut byte =
-        0 as *mut byte;
+    let mut targa_rgba: *mut byte = 0 as *mut byte;
     let mut length: i32 = 0;
     *pic = 0 as *mut byte;
     if !width.is_null() {
@@ -217,39 +211,33 @@ pub unsafe extern "C" fn R_LoadTGA(
     targa_header.image_type = *buf_p.offset(2 as i32 as isize);
     crate::stdlib::memcpy(
         &mut targa_header.colormap_index as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(3 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(3 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         &mut targa_header.colormap_length as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(5 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(5 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     targa_header.colormap_size = *buf_p.offset(7 as i32 as isize);
     crate::stdlib::memcpy(
         &mut targa_header.x_origin as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(8 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(8 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         &mut targa_header.y_origin as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(10 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(10 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         &mut targa_header.width as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(12 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(12 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     crate::stdlib::memcpy(
         &mut targa_header.height as *mut u16 as *mut libc::c_void,
-        &mut *buf_p.offset(14 as i32 as isize) as *mut byte
-            as *const libc::c_void,
+        &mut *buf_p.offset(14 as i32 as isize) as *mut byte as *const libc::c_void,
         2 as i32 as libc::c_ulong,
     );
     targa_header.pixel_size = *buf_p.offset(16 as i32 as isize);
@@ -314,8 +302,7 @@ pub unsafe extern "C" fn R_LoadTGA(
     }
     targa_rgba = crate::src::renderergl1::tr_main::ri
         .Malloc
-        .expect("non-null function pointer")(numPixels as i32)
-        as *mut byte;
+        .expect("non-null function pointer")(numPixels as i32) as *mut byte;
     if targa_header.id_length as i32 != 0 as i32 {
         if buf_p.offset(targa_header.id_length as i32 as isize) > end {
             crate::src::renderergl1::tr_main::ri

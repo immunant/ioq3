@@ -1594,11 +1594,7 @@ pub unsafe extern "C" fn PS_ReadPunctuation(
             //if the script contains at least as much characters as the punctuation
             //if the script contains the punctuation
             if crate::stdlib::strncmp((*script).script_p, p, len as libc::c_ulong) == 0 {
-                Q_strncpyz(
-                    (*token).string.as_mut_ptr(),
-                    p,
-                    1024 as i32,
-                );
+                Q_strncpyz((*token).string.as_mut_ptr(), p, 1024 as i32);
                 (*script).script_p = (*script).script_p.offset(len as isize);
                 (*token).type_0 = 5 as i32;
                 //sub type is the number of the punctuation
@@ -2478,11 +2474,7 @@ pub unsafe extern "C" fn LoadScriptFile(
     }
     length = crate::src::botlib::be_interface::botimport
         .FS_FOpenFile
-        .expect("non-null function pointer")(
-        pathname.as_mut_ptr(),
-        &mut fp,
-        FS_READ,
-    );
+        .expect("non-null function pointer")(pathname.as_mut_ptr(), &mut fp, FS_READ);
     if fp == 0 {
         return 0 as *mut crate::src::botlib::l_script::script_t;
     }

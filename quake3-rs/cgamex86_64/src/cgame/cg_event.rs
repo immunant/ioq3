@@ -517,33 +517,22 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     attacker = (*ent).otherEntityNum2;
     mod_0 = (*ent).eventParm;
     if target < 0 as i32 || target >= 64 as i32 {
-        CG_Error(
-            b"CG_Obituary: target out of range\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Error(b"CG_Obituary: target out of range\x00" as *const u8 as *const libc::c_char);
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(target as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(target as isize) as *mut clientInfo_t;
     if attacker < 0 as i32 || attacker >= 64 as i32 {
         attacker = ((1 as i32) << 10 as i32) - 2 as i32;
         attackerInfo = 0 as *const libc::c_char
     } else {
-        attackerInfo = CG_ConfigString(
-            32 as i32 + 256 as i32 + 256 as i32 + attacker,
-        )
+        attackerInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + attacker)
     }
-    targetInfo =
-        CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + target);
+    targetInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + target);
     if targetInfo.is_null() {
         return;
     }
     Q_strncpyz(
         targetName.as_mut_ptr(),
-        Info_ValueForKey(
-            targetInfo,
-            b"n\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(targetInfo, b"n\x00" as *const u8 as *const libc::c_char),
         (::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
             .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
     );
@@ -645,20 +634,13 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     // check for kill messages from the current clientNum
     if attacker == (*cg.snap).ps.clientNum {
         let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-        if (cgs.gametype as u32)
-            < GT_TEAM as i32 as u32
-        {
+        if (cgs.gametype as u32) < GT_TEAM as i32 as u32 {
             s = va(
                 b"You fragged %s\n%s place with %i\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 targetName.as_mut_ptr(),
-                CG_PlaceString(
-                    (*cg.snap).ps.persistant
-                        [PERS_RANK as i32 as usize]
-                        + 1 as i32,
-                ),
-                (*cg.snap).ps.persistant
-                    [PERS_SCORE as i32 as usize],
+                CG_PlaceString((*cg.snap).ps.persistant[PERS_RANK as i32 as usize] + 1 as i32),
+                (*cg.snap).ps.persistant[PERS_SCORE as i32 as usize],
             )
         } else {
             s = va(
@@ -666,11 +648,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
                 targetName.as_mut_ptr(),
             )
         }
-        CG_CenterPrint(
-            s,
-            (480 as i32 as f64 * 0.30f64) as i32,
-            16 as i32,
-        );
+        CG_CenterPrint(s, (480 as i32 as f64 * 0.30f64) as i32, 16 as i32);
         // print the text message as well
     }
     // check for double client messages
@@ -683,10 +661,7 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut entityState_t) {
     } else {
         Q_strncpyz(
             attackerName.as_mut_ptr(),
-            Info_ValueForKey(
-                attackerInfo,
-                b"n\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(attackerInfo, b"n\x00" as *const u8 as *const libc::c_char),
             (::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
                 .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
         );
@@ -808,11 +783,9 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
     let mut itemNum: i32 = 0;
     let mut clientNum: i32 = 0;
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     es = &mut (*cent).currentState;
-    itemNum =
-        ((*es).event & !(0x100 as i32 | 0x200 as i32)) - EV_USE_ITEM0 as i32;
+    itemNum = ((*es).event & !(0x100 as i32 | 0x200 as i32)) - EV_USE_ITEM0 as i32;
     if itemNum < 0 as i32 || itemNum > HI_NUM_HOLDABLE as i32 {
         itemNum = 0 as i32
     }
@@ -825,9 +798,7 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
                 16 as i32,
             );
         } else {
-            item = BG_FindItemForHoldable(
-                itemNum as holdable_t,
-            ) as *mut gitem_s;
+            item = BG_FindItemForHoldable(itemNum as holdable_t) as *mut gitem_s;
             CG_CenterPrint(
                 va(
                     b"Use %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -843,10 +814,7 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut centity_t) {
         2 => {
             clientNum = (*cent).currentState.clientNum;
             if clientNum >= 0 as i32 && clientNum < 64 as i32 {
-                ci = &mut *cgs
-                    .clientinfo
-                    .as_mut_ptr()
-                    .offset(clientNum as isize)
+                ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize)
                     as *mut clientInfo_t;
                 (*ci).medkitUsageTime = cg.time
             }
@@ -880,25 +848,14 @@ unsafe extern "C" fn CG_ItemPickup(mut itemNum: i32) {
     cg.itemPickupTime = cg.time;
     cg.itemPickupBlendTime = cg.time;
     // see if it should be the grabbed weapon
-    if (*bg_itemlist
-        .as_mut_ptr()
-        .offset(itemNum as isize))
-    .giType as u32
-        == IT_WEAPON as i32 as u32
+    if (*bg_itemlist.as_mut_ptr().offset(itemNum as isize)).giType as u32 == IT_WEAPON as i32 as u32
     {
         // select it immediately
         if cg_autoswitch.integer != 0
-            && (*bg_itemlist
-                .as_mut_ptr()
-                .offset(itemNum as isize))
-            .giTag
-                != WP_MACHINEGUN as i32
+            && (*bg_itemlist.as_mut_ptr().offset(itemNum as isize)).giTag != WP_MACHINEGUN as i32
         {
             cg.weaponSelectTime = cg.time;
-            cg.weaponSelect = (*bg_itemlist
-                .as_mut_ptr()
-                .offset(itemNum as isize))
-            .giTag
+            cg.weaponSelect = (*bg_itemlist.as_mut_ptr().offset(itemNum as isize)).giTag
         }
     };
 }
@@ -920,9 +877,7 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut centity_t) -> i32 {
     let mut waterlevel: i32 = 0;
     let mut viewheight: i32 = 0;
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == LEGS_WALKCR as i32
-        || anim == LEGS_IDLECR as i32
-    {
+    if anim == LEGS_WALKCR as i32 || anim == LEGS_IDLECR as i32 {
         viewheight = 12 as i32
     } else {
         viewheight = 26 as i32
@@ -935,28 +890,19 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut centity_t) -> i32 {
     point[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
     point[2 as i32 as usize] =
         (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + 1 as i32 as f32;
-    contents = CG_PointContents(
-        point.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    );
+    contents = CG_PointContents(point.as_mut_ptr() as *const vec_t, -(1 as i32));
     if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
         sample2 = viewheight - -(24 as i32);
         sample1 = sample2 / 2 as i32;
         waterlevel = 1 as i32;
         point[2 as i32 as usize] =
             (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample1 as f32;
-        contents = CG_PointContents(
-            point.as_mut_ptr() as *const vec_t,
-            -(1 as i32),
-        );
+        contents = CG_PointContents(point.as_mut_ptr() as *const vec_t, -(1 as i32));
         if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
             waterlevel = 2 as i32;
             point[2 as i32 as usize] =
                 (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample2 as f32;
-            contents = CG_PointContents(
-                point.as_mut_ptr() as *const vec_t,
-                -(1 as i32),
-            );
+            contents = CG_PointContents(point.as_mut_ptr() as *const vec_t, -(1 as i32));
             if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
                 waterlevel = 3 as i32
             }
@@ -973,10 +919,7 @@ Also called by playerstate transition
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_PainEvent(
-    mut cent: *mut centity_t,
-    mut health: i32,
-) {
+pub unsafe extern "C" fn CG_PainEvent(mut cent: *mut centity_t, mut health: i32) {
     let mut snd: *mut libc::c_char = 0 as *mut libc::c_char;
     // don't do more than two pain sounds a second
     if cg.time - (*cent).pe.painTime < 500 as i32 {
@@ -1036,12 +979,8 @@ also called by CG_CheckPlayerstateEvents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_EntityEvent(
-    mut cent: *mut centity_t,
-    mut position: *mut vec_t,
-) {
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+pub unsafe extern "C" fn CG_EntityEvent(mut cent: *mut centity_t, mut position: *mut vec_t) {
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut event: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
@@ -1058,9 +997,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
     }
     if event == 0 {
         if cg_debugEvents.integer != 0 {
-            CG_Printf(
-                b"ZEROEVENT\n\x00" as *const u8 as *const libc::c_char,
-            );
+            CG_Printf(b"ZEROEVENT\n\x00" as *const u8 as *const libc::c_char);
         }
         return;
     }
@@ -1068,19 +1005,14 @@ pub unsafe extern "C" fn CG_EntityEvent(
     if clientNum < 0 as i32 || clientNum >= 64 as i32 {
         clientNum = 0 as i32
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     match event {
         1 => {
             //
             // movement generated events
             //
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FOOTSTEP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FOOTSTEP\n\x00" as *const u8 as *const libc::c_char);
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
@@ -1094,77 +1026,63 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         2 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FOOTSTEP_METAL\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FOOTSTEP_METAL\n\x00" as *const u8 as *const libc::c_char);
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*es).number,
                     CHAN_BODY as i32,
-                    cgs.media.footsteps
-                        [FOOTSTEP_METAL as i32 as usize]
+                    cgs.media.footsteps[FOOTSTEP_METAL as i32 as usize]
                         [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         3 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FOOTSPLASH\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FOOTSPLASH\n\x00" as *const u8 as *const libc::c_char);
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*es).number,
                     CHAN_BODY as i32,
-                    cgs.media.footsteps
-                        [FOOTSTEP_SPLASH as i32 as usize]
+                    cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
                         [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         4 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FOOTWADE\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FOOTWADE\n\x00" as *const u8 as *const libc::c_char);
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*es).number,
                     CHAN_BODY as i32,
-                    cgs.media.footsteps
-                        [FOOTSTEP_SPLASH as i32 as usize]
+                    cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
                         [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         5 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_SWIM\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_SWIM\n\x00" as *const u8 as *const libc::c_char);
             }
             if cg_footsteps.integer != 0 {
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*es).number,
                     CHAN_BODY as i32,
-                    cgs.media.footsteps
-                        [FOOTSTEP_SPLASH as i32 as usize]
+                    cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize]
                         [(libc::rand() & 3 as i32) as usize],
                 );
             }
         }
         10 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FALL_SHORT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FALL_SHORT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1172,11 +1090,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 CHAN_AUTO as i32,
                 cgs.media.landSound,
             );
-            if clientNum
-                == cg
-                    .predictedPlayerState
-                    .clientNum
-            {
+            if clientNum == cg.predictedPlayerState.clientNum {
                 // smooth landing z changes
                 cg.landChange = -(8 as i32) as f32;
                 cg.landTime = cg.time
@@ -1184,9 +1098,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         11 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FALL_MEDIUM\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FALL_MEDIUM\n\x00" as *const u8 as *const libc::c_char);
             }
             // use normal pain sound
             trap_S_StartSound(
@@ -1198,11 +1110,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     b"*pain100_1.wav\x00" as *const u8 as *const libc::c_char,
                 ),
             );
-            if clientNum
-                == cg
-                    .predictedPlayerState
-                    .clientNum
-            {
+            if clientNum == cg.predictedPlayerState.clientNum {
                 // smooth landing z changes
                 cg.landChange = -(16 as i32) as f32; // don't play a pain sound right after this
                 cg.landTime = cg.time
@@ -1210,9 +1118,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         12 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FALL_FAR\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FALL_FAR\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1224,11 +1130,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 ),
             );
             (*cent).pe.painTime = cg.time;
-            if clientNum
-                == cg
-                    .predictedPlayerState
-                    .clientNum
-            {
+            if clientNum == cg.predictedPlayerState.clientNum {
                 // smooth landing z changes
                 cg.landChange = -(24 as i32) as f32;
                 cg.landTime = cg.time
@@ -1237,18 +1139,12 @@ pub unsafe extern "C" fn CG_EntityEvent(
         6 | 7 | 8 | 9 => {
             // smooth out step up transitions
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_STEP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_STEP\n\x00" as *const u8 as *const libc::c_char);
             }
             let mut oldStep: f32 = 0.;
             let mut delta: i32 = 0;
             let mut step: i32 = 0;
-            if !(clientNum
-                != cg
-                    .predictedPlayerState
-                    .clientNum)
-            {
+            if !(clientNum != cg.predictedPlayerState.clientNum) {
                 // if we are interpolating, we don't need to smooth steps
                 if !(cg.demoPlayback as u32 != 0
                     || (*cg.snap).ps.pm_flags & 4096 as i32 != 0
@@ -1256,12 +1152,9 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     || cg_synchronousClients.integer != 0)
                 {
                     // check for stepping up before a previous step is completed
-                    delta = cg.time
-                        - cg.stepTime;
+                    delta = cg.time - cg.stepTime;
                     if delta < 200 as i32 {
-                        oldStep = cg.stepChange
-                            * (200 as i32 - delta) as f32
-                            / 200 as i32 as f32
+                        oldStep = cg.stepChange * (200 as i32 - delta) as f32 / 200 as i32 as f32
                     } else {
                         oldStep = 0 as i32 as f32
                     }
@@ -1277,16 +1170,10 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         13 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_JUMP_PAD\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_JUMP_PAD\n\x00" as *const u8 as *const libc::c_char);
             }
             //		CG_Printf( "EV_JUMP_PAD w/effect #%i\n", es->eventParm );
-            let mut up: vec3_t = [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                1 as i32 as vec_t,
-            ];
+            let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
 
             CG_SmokePuff(
                 (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
@@ -1321,9 +1208,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         14 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_JUMP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_JUMP\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1337,9 +1222,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         76 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_TAUNT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_TAUNT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1353,9 +1236,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         15 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_WATER_TOUCH\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_WATER_TOUCH\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1366,9 +1247,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         16 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_WATER_LEAVE\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_WATER_LEAVE\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1379,9 +1258,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         17 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_WATER_UNDER\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_WATER_UNDER\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1392,9 +1269,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         18 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_WATER_CLEAR\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_WATER_CLEAR\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1408,18 +1283,13 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         19 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char);
             }
             let mut item: *mut gitem_t = 0 as *mut gitem_t;
             let mut index: i32 = 0;
             index = (*es).eventParm;
             if !(index < 1 as i32 || index >= bg_numItems) {
-                item = &mut *bg_itemlist
-                    .as_mut_ptr()
-                    .offset(index as isize)
-                    as *mut gitem_t;
+                item = &mut *bg_itemlist.as_mut_ptr().offset(index as isize) as *mut gitem_t;
                 // powerups and team items will have a separate global sound, this one
                 // will be played at prediction time
                 if (*item).giType as u32 == IT_POWERUP as i32 as u32
@@ -1431,17 +1301,12 @@ pub unsafe extern "C" fn CG_EntityEvent(
                         CHAN_AUTO as i32,
                         cgs.media.n_healthSound,
                     );
-                } else if !((*item).giType as u32
-                    == IT_PERSISTANT_POWERUP as i32 as u32)
-                {
+                } else if !((*item).giType as u32 == IT_PERSISTANT_POWERUP as i32 as u32) {
                     trap_S_StartSound(
                         0 as *mut vec_t,
                         (*es).number,
                         CHAN_AUTO as i32,
-                        trap_S_RegisterSound(
-                            (*item).pickup_sound,
-                            qfalse,
-                        ),
+                        trap_S_RegisterSound((*item).pickup_sound, qfalse),
                     );
                 }
                 // show icon and name on status bar
@@ -1452,29 +1317,20 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         20 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GLOBAL_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GLOBAL_ITEM_PICKUP\n\x00" as *const u8 as *const libc::c_char);
             }
-            let mut item_0: *mut gitem_t =
-                0 as *mut gitem_t;
+            let mut item_0: *mut gitem_t = 0 as *mut gitem_t;
             let mut index_0: i32 = 0;
             index_0 = (*es).eventParm;
             if !(index_0 < 1 as i32 || index_0 >= bg_numItems) {
-                item_0 = &mut *bg_itemlist
-                    .as_mut_ptr()
-                    .offset(index_0 as isize)
-                    as *mut gitem_t;
+                item_0 = &mut *bg_itemlist.as_mut_ptr().offset(index_0 as isize) as *mut gitem_t;
                 // powerup pickups are global
                 if !(*item_0).pickup_sound.is_null() {
                     trap_S_StartSound(
                         0 as *mut vec_t,
                         (*cg.snap).ps.clientNum,
                         CHAN_AUTO as i32,
-                        trap_S_RegisterSound(
-                            (*item_0).pickup_sound,
-                            qfalse,
-                        ),
+                        trap_S_RegisterSound((*item_0).pickup_sound, qfalse),
                     );
                 }
                 // show icon and name on status bar
@@ -1488,9 +1344,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // weapon events
             //
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_NOAMMO\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_NOAMMO\n\x00" as *const u8 as *const libc::c_char);
             }
             //		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.noAmmoSound );
             if (*es).number == (*cg.snap).ps.clientNum {
@@ -1499,9 +1353,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         22 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_CHANGE_WEAPON\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_CHANGE_WEAPON\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1512,137 +1364,103 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         23 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_FIRE_WEAPON\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_FIRE_WEAPON\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_FireWeapon(cent as *mut centity_s);
         }
         24 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM0\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM0\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         25 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM1\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM1\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         26 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM2\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM2\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         27 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM3\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM3\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         28 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM4\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM4\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         29 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM5\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM5\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         30 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM6\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM6\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         31 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM7\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM7\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         32 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM8\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM8\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         33 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM9\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM9\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         34 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM10\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM10\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         35 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM11\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM11\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         36 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM12\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM12\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         37 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM13\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM13\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         38 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM14\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM14\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
         39 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_USE_ITEM15\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_USE_ITEM15\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_UseItem(cent);
         }
@@ -1652,9 +1470,8 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // other events
             //
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_PLAYER_TELEPORT_IN\n\x00" as *const u8 as *const libc::c_char,
-                ); // scale up from this
+                CG_Printf(b"EV_PLAYER_TELEPORT_IN\n\x00" as *const u8 as *const libc::c_char);
+                // scale up from this
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1666,9 +1483,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         43 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_PLAYER_TELEPORT_OUT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_PLAYER_TELEPORT_OUT\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1680,9 +1495,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         41 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_ITEM_POP\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_ITEM_POP\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StartSound(
                 0 as *mut vec_t,
@@ -1693,9 +1506,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         40 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_ITEM_RESPAWN\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_ITEM_RESPAWN\n\x00" as *const u8 as *const libc::c_char);
             }
             (*cent).miscTime = cg.time;
             trap_S_StartSound(
@@ -1707,9 +1518,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         44 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GRENADE_BOUNCE\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GRENADE_BOUNCE\n\x00" as *const u8 as *const libc::c_char);
             }
             if libc::rand() & 1 as i32 != 0 {
                 trap_S_StartSound(
@@ -1729,9 +1538,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         65 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_SCOREPLUM\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_SCOREPLUM\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_ScorePlum(
                 (*cent).currentState.otherEntityNum,
@@ -1744,9 +1551,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // missile impacts
             //
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_MISSILE_HIT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_MISSILE_HIT\n\x00" as *const u8 as *const libc::c_char);
             }
             ByteToDir((*es).eventParm, dir.as_mut_ptr());
             CG_MissileHitPlayer(
@@ -1758,9 +1563,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         51 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_MISSILE_MISS\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_MISSILE_MISS\n\x00" as *const u8 as *const libc::c_char);
             }
             ByteToDir((*es).eventParm, dir.as_mut_ptr());
             CG_MissileHitWall(
@@ -1773,9 +1576,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         52 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_MISSILE_MISS_METAL\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_MISSILE_MISS_METAL\n\x00" as *const u8 as *const libc::c_char);
             }
             ByteToDir((*es).eventParm, dir.as_mut_ptr());
             CG_MissileHitWall(
@@ -1788,40 +1589,28 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         53 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_RAILTRAIL\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_RAILTRAIL\n\x00" as *const u8 as *const libc::c_char);
             }
             (*cent).currentState.weapon = WP_RAILGUN as i32;
-            if (*es).clientNum == (*cg.snap).ps.clientNum
-                && cg.renderingThirdPerson as u64 == 0
-            {
+            if (*es).clientNum == (*cg.snap).ps.clientNum && cg.renderingThirdPerson as u64 == 0 {
                 if cg_drawGun.integer == 2 as i32 {
                     (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [0 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
                             * 8 as i32 as f32;
                     (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
                             * 8 as i32 as f32;
                     (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [2 as i32 as usize]
-                            * 8 as i32 as f32
+                        + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize] * 8 as i32 as f32
                 } else if cg_drawGun.integer == 3 as i32 {
                     (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [0 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
                             * 4 as i32 as f32;
                     (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [1 as i32 as usize]
+                        + cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
                             * 4 as i32 as f32;
                     (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
-                        + cg.refdef.viewaxis[1 as i32 as usize]
-                            [2 as i32 as usize]
-                            * 4 as i32 as f32
+                        + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize] * 4 as i32 as f32
                 }
             }
             CG_RailTrail(
@@ -1843,9 +1632,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         49 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_BULLET_HIT_WALL\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_BULLET_HIT_WALL\n\x00" as *const u8 as *const libc::c_char);
             }
             ByteToDir((*es).eventParm, dir.as_mut_ptr());
             CG_Bullet(
@@ -1858,9 +1645,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         48 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_BULLET_HIT_FLESH\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_BULLET_HIT_FLESH\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_Bullet(
                 (*es).pos.trBase.as_mut_ptr(),
@@ -1872,19 +1657,13 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         54 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_SHOTGUN\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_SHOTGUN\n\x00" as *const u8 as *const libc::c_char);
             }
-            CG_ShotgunFire(
-                es as *mut entityState_s,
-            );
+            CG_ShotgunFire(es as *mut entityState_s);
         }
         45 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GENERAL_SOUND\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GENERAL_SOUND\n\x00" as *const u8 as *const libc::c_char);
             }
             if cgs.gameSounds[(*es).eventParm as usize] != 0 {
                 trap_S_StartSound(
@@ -1894,9 +1673,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     cgs.gameSounds[(*es).eventParm as usize],
                 );
             } else {
-                s = CG_ConfigString(
-                    32 as i32 + 256 as i32 + (*es).eventParm,
-                );
+                s = CG_ConfigString(32 as i32 + 256 as i32 + (*es).eventParm);
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*es).number,
@@ -1908,9 +1685,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         46 => {
             // play from the player's head so it never diminishes
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GLOBAL_SOUND\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GLOBAL_SOUND\n\x00" as *const u8 as *const libc::c_char);
             }
             if cgs.gameSounds[(*es).eventParm as usize] != 0 {
                 trap_S_StartSound(
@@ -1920,9 +1695,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     cgs.gameSounds[(*es).eventParm as usize],
                 );
             } else {
-                s = CG_ConfigString(
-                    32 as i32 + 256 as i32 + (*es).eventParm,
-                );
+                s = CG_ConfigString(32 as i32 + 256 as i32 + (*es).eventParm);
                 trap_S_StartSound(
                     0 as *mut vec_t,
                     (*cg.snap).ps.clientNum,
@@ -1934,161 +1707,89 @@ pub unsafe extern "C" fn CG_EntityEvent(
         47 => {
             // play from the player's head so it never diminishes
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GLOBAL_TEAM_SOUND\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GLOBAL_TEAM_SOUND\n\x00" as *const u8 as *const libc::c_char);
             }
             match (*es).eventParm {
                 0 => {
                     // CTF: red team captured the blue flag, 1FCTF: red team captured the neutral flag
-                    if (*cg.snap).ps.persistant
-                        [PERS_TEAM as i32 as usize]
-                        == TEAM_RED as i32
-                    {
-                        CG_AddBufferedSound(
-                            cgs.media.captureYourTeamSound,
-                        );
+                    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
+                        CG_AddBufferedSound(cgs.media.captureYourTeamSound);
                     } else {
-                        CG_AddBufferedSound(
-                            cgs.media.captureOpponentSound,
-                        );
+                        CG_AddBufferedSound(cgs.media.captureOpponentSound);
                     }
                 }
                 1 => {
                     // CTF: blue team captured the red flag, 1FCTF: blue team captured the neutral flag
-                    if (*cg.snap).ps.persistant
-                        [PERS_TEAM as i32 as usize]
-                        == TEAM_BLUE as i32
-                    {
-                        CG_AddBufferedSound(
-                            cgs.media.captureYourTeamSound,
-                        );
+                    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32 {
+                        CG_AddBufferedSound(cgs.media.captureYourTeamSound);
                     } else {
-                        CG_AddBufferedSound(
-                            cgs.media.captureOpponentSound,
-                        );
+                        CG_AddBufferedSound(cgs.media.captureOpponentSound);
                     }
                 }
                 2 => {
                     // CTF: blue flag returned, 1FCTF: never used
-                    if (*cg.snap).ps.persistant
-                        [PERS_TEAM as i32 as usize]
-                        == TEAM_RED as i32
-                    {
-                        CG_AddBufferedSound(
-                            cgs.media.returnYourTeamSound,
-                        );
+                    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
+                        CG_AddBufferedSound(cgs.media.returnYourTeamSound);
                     } else {
-                        CG_AddBufferedSound(
-                            cgs.media.returnOpponentSound,
-                        );
+                        CG_AddBufferedSound(cgs.media.returnOpponentSound);
                     }
                     //
-                    CG_AddBufferedSound(
-                        cgs.media.blueFlagReturnedSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.blueFlagReturnedSound);
                 }
                 3 => {
                     // CTF red flag returned, 1FCTF: neutral flag returned
-                    if (*cg.snap).ps.persistant
-                        [PERS_TEAM as i32 as usize]
-                        == TEAM_BLUE as i32
-                    {
-                        CG_AddBufferedSound(
-                            cgs.media.returnYourTeamSound,
-                        );
+                    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32 {
+                        CG_AddBufferedSound(cgs.media.returnYourTeamSound);
                     } else {
-                        CG_AddBufferedSound(
-                            cgs.media.returnOpponentSound,
-                        );
+                        CG_AddBufferedSound(cgs.media.returnOpponentSound);
                     }
                     //
-                    CG_AddBufferedSound(
-                        cgs.media.redFlagReturnedSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.redFlagReturnedSound);
                 }
                 4 => {
                     // CTF: red team took blue flag, 1FCTF: blue team took the neutral flag
                     // if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-                    if !((*cg.snap).ps.powerups
-                        [PW_BLUEFLAG as i32 as usize]
-                        != 0
-                        || (*cg.snap).ps.powerups
-                            [PW_NEUTRALFLAG as i32 as usize]
-                            != 0)
+                    if !((*cg.snap).ps.powerups[PW_BLUEFLAG as i32 as usize] != 0
+                        || (*cg.snap).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0)
                     {
-                        if (*cg.snap).ps.persistant
-                            [PERS_TEAM as i32 as usize]
-                            == TEAM_BLUE as i32
-                        {
-                            CG_AddBufferedSound(
-                                cgs.media.enemyTookYourFlagSound,
-                            );
-                        } else if (*cg.snap).ps.persistant
-                            [PERS_TEAM as i32 as usize]
+                        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32 {
+                            CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
+                        } else if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
                             == TEAM_RED as i32
                         {
-                            CG_AddBufferedSound(
-                                cgs
-                                    .media
-                                    .yourTeamTookEnemyFlagSound,
-                            );
+                            CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
                         }
                     }
                 }
                 5 => {
                     // CTF: blue team took the red flag, 1FCTF red team took the neutral flag
                     // if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-                    if !((*cg.snap).ps.powerups
-                        [PW_REDFLAG as i32 as usize]
-                        != 0
-                        || (*cg.snap).ps.powerups
-                            [PW_NEUTRALFLAG as i32 as usize]
-                            != 0)
+                    if !((*cg.snap).ps.powerups[PW_REDFLAG as i32 as usize] != 0
+                        || (*cg.snap).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0)
                     {
-                        if (*cg.snap).ps.persistant
-                            [PERS_TEAM as i32 as usize]
-                            == TEAM_RED as i32
-                        {
-                            CG_AddBufferedSound(
-                                cgs.media.enemyTookYourFlagSound,
-                            );
-                        } else if (*cg.snap).ps.persistant
-                            [PERS_TEAM as i32 as usize]
+                        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
+                            CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
+                        } else if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
                             == TEAM_BLUE as i32
                         {
-                            CG_AddBufferedSound(
-                                cgs
-                                    .media
-                                    .yourTeamTookEnemyFlagSound,
-                            );
+                            CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
                         }
                     }
                 }
                 8 => {
-                    CG_AddBufferedSound(
-                        cgs.media.redScoredSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.redScoredSound);
                 }
                 9 => {
-                    CG_AddBufferedSound(
-                        cgs.media.blueScoredSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.blueScoredSound);
                 }
                 10 => {
-                    CG_AddBufferedSound(
-                        cgs.media.redLeadsSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.redLeadsSound);
                 }
                 11 => {
-                    CG_AddBufferedSound(
-                        cgs.media.blueLeadsSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.blueLeadsSound);
                 }
                 12 => {
-                    CG_AddBufferedSound(
-                        cgs.media.teamsTiedSound,
-                    );
+                    CG_AddBufferedSound(cgs.media.teamsTiedSound);
                 }
                 _ => {}
             }
@@ -2097,9 +1798,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // local player sounds are triggered in CG_CheckLocalSounds,
             // so ignore events on the player
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_PAIN\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_PAIN\n\x00" as *const u8 as *const libc::c_char);
             }
             if (*cent).currentState.number != (*cg.snap).ps.clientNum {
                 CG_PainEvent(cent, (*es).eventParm);
@@ -2107,9 +1806,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         57 | 58 | 59 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_DEATHx\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_DEATHx\n\x00" as *const u8 as *const libc::c_char);
             }
             if CG_WaterLevel(cent) == 3 as i32 {
                 trap_S_StartSound(
@@ -2139,9 +1836,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         60 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_OBITUARY\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_OBITUARY\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_Obituary(es);
         }
@@ -2150,9 +1845,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
             // powerup events
             //
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_POWERUP_QUAD\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_POWERUP_QUAD\n\x00" as *const u8 as *const libc::c_char);
             }
             if (*es).number == (*cg.snap).ps.clientNum {
                 cg.powerupActive = PW_QUAD as i32;
@@ -2167,13 +1860,10 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         62 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_POWERUP_BATTLESUIT\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_POWERUP_BATTLESUIT\n\x00" as *const u8 as *const libc::c_char);
             }
             if (*es).number == (*cg.snap).ps.clientNum {
-                cg.powerupActive =
-                    PW_BATTLESUIT as i32;
+                cg.powerupActive = PW_BATTLESUIT as i32;
                 cg.powerupTime = cg.time
             }
             trap_S_StartSound(
@@ -2185,9 +1875,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         63 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_POWERUP_REGEN\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_POWERUP_REGEN\n\x00" as *const u8 as *const libc::c_char);
             }
             if (*es).number == (*cg.snap).ps.clientNum {
                 cg.powerupActive = PW_REGEN as i32;
@@ -2202,9 +1890,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         64 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_GIB_PLAYER\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_GIB_PLAYER\n\x00" as *const u8 as *const libc::c_char);
             }
             // don't play gib sound when using the kamikaze because it interferes
             // with the kamikaze sound, downside is that the gib sound will also
@@ -2221,26 +1907,20 @@ pub unsafe extern "C" fn CG_EntityEvent(
         }
         75 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_STOPLOOPINGSOUND\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_STOPLOOPINGSOUND\n\x00" as *const u8 as *const libc::c_char);
             }
             trap_S_StopLoopingSound((*es).number);
             (*es).loopSound = 0 as i32
         }
         74 => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"EV_DEBUG_LINE\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"EV_DEBUG_LINE\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_Beam(cent as *mut centity_s);
         }
         _ => {
             if cg_debugEvents.integer != 0 {
-                CG_Printf(
-                    b"UNKNOWN\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"UNKNOWN\n\x00" as *const u8 as *const libc::c_char);
             }
             CG_Error(
                 b"Unknown event: %i\x00" as *const u8 as *const libc::c_char,
@@ -2489,8 +2169,7 @@ pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut centity_t) {
             (*cent).currentState.number = (*cent).currentState.otherEntityNum
         }
         (*cent).previousEvent = 1 as i32;
-        (*cent).currentState.event =
-            (*cent).currentState.eType - ET_EVENTS as i32
+        (*cent).currentState.event = (*cent).currentState.eType - ET_EVENTS as i32
     } else {
         // check for events riding with another entity
         if (*cent).currentState.event == (*cent).previousEvent {
@@ -2503,13 +2182,10 @@ pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut centity_t) {
     }
     // calculate the position at exactly the frame time
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         (*cg.snap).serverTime,
         (*cent).lerpOrigin.as_mut_ptr(),
     );
-    CG_SetEntitySoundPosition(
-        cent as *mut centity_s,
-    );
+    CG_SetEntitySoundPosition(cent as *mut centity_s);
     CG_EntityEvent(cent, (*cent).lerpOrigin.as_mut_ptr());
 }

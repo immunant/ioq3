@@ -354,17 +354,12 @@ unsafe extern "C" fn emit_byte(mut cinfo: j_compress_ptr, mut val: i32)
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
 
-unsafe extern "C" fn emit_marker(
-    mut cinfo: j_compress_ptr,
-    mut mark: JPEG_MARKER,
-)
+unsafe extern "C" fn emit_marker(mut cinfo: j_compress_ptr, mut mark: JPEG_MARKER)
 /* Emit a marker code */
 {
     emit_byte(cinfo, 0xff as i32);
@@ -433,11 +428,7 @@ unsafe extern "C" fn emit_dqt(mut cinfo: j_compress_ptr, mut index: i32) -> i32
     return prec;
 }
 
-unsafe extern "C" fn emit_dht(
-    mut cinfo: j_compress_ptr,
-    mut index: i32,
-    mut is_ac: boolean,
-)
+unsafe extern "C" fn emit_dht(mut cinfo: j_compress_ptr, mut index: i32, mut is_ac: boolean)
 /* Emit a DHT marker */
 {
     let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
@@ -493,8 +484,7 @@ unsafe extern "C" fn emit_dac(mut cinfo: j_compress_ptr)
     let mut ac_in_use: [libc::c_char; 16] = [0; 16];
     let mut length: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     i = 0 as i32;
     while i < 16 as i32 {
         ac_in_use[i as usize] = 0 as i32 as libc::c_char;
@@ -555,8 +545,7 @@ unsafe extern "C" fn emit_sof(mut cinfo: j_compress_ptr, mut code: JPEG_MARKER)
 /* Emit a SOF marker */
 {
     let mut ci: i32 = 0; /* length */
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     emit_marker(cinfo, code);
     emit_2bytes(
         cinfo,
@@ -599,8 +588,7 @@ unsafe extern "C" fn emit_sos(mut cinfo: j_compress_ptr)
     let mut i: i32 = 0; /* length */
     let mut td: i32 = 0;
     let mut ta: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     emit_marker(cinfo, M_SOS);
     emit_2bytes(
         cinfo,
@@ -802,8 +790,7 @@ unsafe extern "C" fn write_frame_header(mut cinfo: j_compress_ptr) {
     let mut ci: i32 = 0;
     let mut prec: i32 = 0;
     let mut is_baseline: boolean = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Emit DQT for each quantization table.
      * Note that emit_dqt() suppresses any duplicate tables.
      */
@@ -845,9 +832,7 @@ unsafe extern "C" fn write_frame_header(mut cinfo: j_compress_ptr) {
                     .emit_message
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr, 0 as i32
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr, 0 as i32);
         }
     }
     /* Emit the proper SOF marker */
@@ -880,8 +865,7 @@ unsafe extern "C" fn write_frame_header(mut cinfo: j_compress_ptr) {
 unsafe extern "C" fn write_scan_header(mut cinfo: j_compress_ptr) {
     let mut marker: my_marker_ptr = (*cinfo).marker as my_marker_ptr;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if (*cinfo).arith_code != 0 {
         /* Emit arith conditioning info.  We may have some duplication
          * if the file has multiple scans, but it's so small it's hardly
@@ -983,14 +967,10 @@ pub unsafe extern "C" fn jinit_marker_writer(mut cinfo: j_compress_ptr) {
         Some(write_file_trailer as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     (*marker).pub_0.write_tables_only =
         Some(write_tables_only as unsafe extern "C" fn(_: j_compress_ptr) -> ());
-    (*marker).pub_0.write_marker_header = Some(
-        write_marker_header
-            as unsafe extern "C" fn(_: j_compress_ptr, _: i32, _: u32) -> (),
-    );
-    (*marker).pub_0.write_marker_byte = Some(
-        write_marker_byte
-            as unsafe extern "C" fn(_: j_compress_ptr, _: i32) -> (),
-    );
+    (*marker).pub_0.write_marker_header =
+        Some(write_marker_header as unsafe extern "C" fn(_: j_compress_ptr, _: i32, _: u32) -> ());
+    (*marker).pub_0.write_marker_byte =
+        Some(write_marker_byte as unsafe extern "C" fn(_: j_compress_ptr, _: i32) -> ());
     /* Initialize private state */
     (*marker).last_restart_interval = 0 as i32 as u32;
 }

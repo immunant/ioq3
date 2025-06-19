@@ -214,10 +214,7 @@ pub struct my_post_controller {
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_dpost(
-    mut cinfo: j_decompress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_dpost(mut cinfo: j_decompress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut post: my_post_ptr = (*cinfo).post as my_post_ptr;
     match pass_mode as u32 {
         0 => {
@@ -269,9 +266,7 @@ unsafe extern "C" fn start_pass_dpost(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*post).pub_0.post_process_data = Some(
                 post_process_prepass
@@ -295,9 +290,7 @@ unsafe extern "C" fn start_pass_dpost(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*post).pub_0.post_process_data = Some(
                 post_process_2pass
@@ -320,9 +313,7 @@ unsafe extern "C" fn start_pass_dpost(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     }
     (*post).next_row = 0 as i32 as JDIMENSION;
@@ -447,8 +438,8 @@ unsafe extern "C" fn post_process_prepass(
     }
     /* Advance if we filled the strip. */
     if (*post).next_row >= (*post).strip_height {
-        (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as JDIMENSION;
+        (*post).starting_row =
+            ((*post).starting_row as u32).wrapping_add((*post).strip_height) as JDIMENSION;
         (*post).next_row = 0 as i32 as JDIMENSION
     };
 }
@@ -508,11 +499,10 @@ unsafe extern "C" fn post_process_2pass(
     );
     *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION;
     /* Advance if we filled the strip. */
-    (*post).next_row =
-        ((*post).next_row as u32).wrapping_add(num_rows) as JDIMENSION;
+    (*post).next_row = ((*post).next_row as u32).wrapping_add(num_rows) as JDIMENSION;
     if (*post).next_row >= (*post).strip_height {
-        (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as JDIMENSION;
+        (*post).starting_row =
+            ((*post).starting_row as u32).wrapping_add((*post).strip_height) as JDIMENSION;
         (*post).next_row = 0 as i32 as JDIMENSION
     };
 }
@@ -557,13 +547,8 @@ pub unsafe extern "C" fn jinit_d_post_controller(
         ::std::mem::size_of::<my_post_controller>() as libc::c_ulong,
     ) as my_post_ptr; /* flag for no strip buffer */
     (*cinfo).post = post as *mut jpeg_d_post_controller;
-    (*post).pub_0.start_pass = Some(
-        start_pass_dpost
-            as unsafe extern "C" fn(
-                _: j_decompress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
+    (*post).pub_0.start_pass =
+        Some(start_pass_dpost as unsafe extern "C" fn(_: j_decompress_ptr, _: J_BUF_MODE) -> ());
     (*post).whole_image = 0 as jvirt_sarray_ptr;
     (*post).buffer = 0 as JSAMPARRAY;
     /* Create the quantization buffer, if needed */

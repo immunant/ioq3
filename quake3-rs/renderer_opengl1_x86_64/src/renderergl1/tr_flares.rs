@@ -615,21 +615,12 @@ pub unsafe extern "C" fn RB_AddFlare(
             || *normal.offset(1 as i32 as isize) != 0.
             || *normal.offset(2 as i32 as isize) != 0.)
     {
-        local[0 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize]
-            - *point.offset(0 as i32 as isize);
-        local[1 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize]
-            - *point.offset(1 as i32 as isize);
-        local[2 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize]
-            - *point.offset(2 as i32 as isize);
+        local[0 as i32 as usize] =
+            backEnd.viewParms.or.origin[0 as i32 as usize] - *point.offset(0 as i32 as isize);
+        local[1 as i32 as usize] =
+            backEnd.viewParms.or.origin[1 as i32 as usize] - *point.offset(1 as i32 as isize);
+        local[2 as i32 as usize] =
+            backEnd.viewParms.or.origin[2 as i32 as usize] - *point.offset(2 as i32 as isize);
         VectorNormalizeFast(local.as_mut_ptr());
         d = local[0 as i32 as usize] * *normal.offset(0 as i32 as isize)
             + local[1 as i32 as usize] * *normal.offset(1 as i32 as isize)
@@ -643,14 +634,8 @@ pub unsafe extern "C" fn RB_AddFlare(
     // calculate screen coordinates and depth
     R_TransformModelToClip(
         point as *const vec_t,
-        backEnd
-            .or
-            .modelMatrix
-            .as_mut_ptr(),
-        backEnd
-            .viewParms
-            .projectionMatrix
-            .as_mut_ptr(),
+        backEnd.or.modelMatrix.as_mut_ptr(),
+        backEnd.viewParms.projectionMatrix.as_mut_ptr(),
         eye.as_mut_ptr(),
         clip.as_mut_ptr(),
     );
@@ -666,21 +651,14 @@ pub unsafe extern "C" fn RB_AddFlare(
     }
     R_TransformClipToWindow(
         clip.as_mut_ptr() as *const vec_t,
-        &mut backEnd.viewParms as *mut _
-            as *const viewParms_t,
+        &mut backEnd.viewParms as *mut _ as *const viewParms_t,
         normalized.as_mut_ptr(),
         window.as_mut_ptr(),
     );
     if window[0 as i32 as usize] < 0 as i32 as f32
-        || window[0 as i32 as usize]
-            >= backEnd
-                .viewParms
-                .viewportWidth as f32
+        || window[0 as i32 as usize] >= backEnd.viewParms.viewportWidth as f32
         || window[1 as i32 as usize] < 0 as i32 as f32
-        || window[1 as i32 as usize]
-            >= backEnd
-                .viewParms
-                .viewportHeight as f32
+        || window[1 as i32 as usize] >= backEnd.viewParms.viewportHeight as f32
     {
         return;
         // shouldn't happen, since we check the clip[] above, except for FP rounding
@@ -689,14 +667,8 @@ pub unsafe extern "C" fn RB_AddFlare(
     f = r_activeFlares;
     while !f.is_null() {
         if (*f).surface == surface
-            && (*f).frameSceneNum
-                == backEnd
-                    .viewParms
-                    .frameSceneNum
-            && (*f).inPortal as u32
-                == backEnd
-                    .viewParms
-                    .isPortal as u32
+            && (*f).frameSceneNum == backEnd.viewParms.frameSceneNum
+            && (*f).inPortal as u32 == backEnd.viewParms.isPortal as u32
         {
             break;
         }
@@ -713,26 +685,15 @@ pub unsafe extern "C" fn RB_AddFlare(
         (*f).next = r_activeFlares;
         r_activeFlares = f;
         (*f).surface = surface;
-        (*f).frameSceneNum = backEnd
-            .viewParms
-            .frameSceneNum;
-        (*f).inPortal = backEnd
-            .viewParms
-            .isPortal;
+        (*f).frameSceneNum = backEnd.viewParms.frameSceneNum;
+        (*f).inPortal = backEnd.viewParms.isPortal;
         (*f).addedFrame = -(1 as i32)
     }
-    if (*f).addedFrame
-        != backEnd
-            .viewParms
-            .frameCount
-            - 1 as i32
-    {
+    if (*f).addedFrame != backEnd.viewParms.frameCount - 1 as i32 {
         (*f).visible = qfalse;
         (*f).fadeTime = backEnd.refdef.time - 2000 as i32
     }
-    (*f).addedFrame = backEnd
-        .viewParms
-        .frameCount;
+    (*f).addedFrame = backEnd.viewParms.frameCount;
     (*f).fogNum = fogNum;
     (*f).origin[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     (*f).origin[1 as i32 as usize] = *point.offset(1 as i32 as isize);
@@ -746,14 +707,8 @@ pub unsafe extern "C" fn RB_AddFlare(
     (*f).color[1 as i32 as usize] = (*f).color[1 as i32 as usize] * d;
     (*f).color[2 as i32 as usize] = (*f).color[2 as i32 as usize] * d;
     // save info needed to test
-    (*f).windowX = (backEnd
-        .viewParms
-        .viewportX as f32
-        + window[0 as i32 as usize]) as i32;
-    (*f).windowY = (backEnd
-        .viewParms
-        .viewportY as f32
-        + window[1 as i32 as usize]) as i32;
+    (*f).windowX = (backEnd.viewParms.viewportX as f32 + window[0 as i32 as usize]) as i32;
+    (*f).windowY = (backEnd.viewParms.viewportY as f32 + window[1 as i32 as usize]) as i32;
     (*f).eyeZ = eye[2 as i32 as usize];
 }
 /*
@@ -777,17 +732,12 @@ pub unsafe extern "C" fn RB_AddDlightFlares() {
         fog = (*tr.world).fogs
     }
     i = 0 as i32;
-    while i < backEnd
-        .refdef
-        .num_dlights
-    {
+    while i < backEnd.refdef.num_dlights {
         if !fog.is_null() {
             // find which fog volume the light is in
             j = 1 as i32;
             while j < (*tr.world).numfogs {
-                fog = &mut *(*tr.world)
-                    .fogs
-                    .offset(j as isize) as *mut fog_t;
+                fog = &mut *(*tr.world).fogs.offset(j as isize) as *mut fog_t;
                 k = 0 as i32;
                 while k < 3 as i32 {
                     if (*l).origin[k as usize] < (*fog).bounds[0 as i32 as usize][k as usize]
@@ -835,8 +785,7 @@ RB_TestFlare
 
 pub unsafe extern "C" fn RB_TestFlare(mut f: *mut flare_t) {
     let mut depth: f32 = 0.;
-    let mut visible: qboolean =
-        qfalse;
+    let mut visible: qboolean = qfalse;
     let mut fade: f32 = 0.;
     let mut screenZ: f32 = 0.;
     backEnd.pc.c_flareTests += 1;
@@ -853,35 +802,24 @@ pub unsafe extern "C" fn RB_TestFlare(mut f: *mut flare_t) {
         0x1406 as i32 as GLenum,
         &mut depth as *mut f32 as *mut libc::c_void,
     );
-    screenZ = backEnd
-        .viewParms
-        .projectionMatrix[14 as i32 as usize]
+    screenZ = backEnd.viewParms.projectionMatrix[14 as i32 as usize]
         / ((2 as i32 as f32 * depth - 1 as i32 as f32)
-            * backEnd
-                .viewParms
-                .projectionMatrix[11 as i32 as usize]
-            - backEnd
-                .viewParms
-                .projectionMatrix[10 as i32 as usize]);
-    visible = (-(*f).eyeZ - -screenZ < 24 as i32 as f32) as i32
-        as qboolean;
+            * backEnd.viewParms.projectionMatrix[11 as i32 as usize]
+            - backEnd.viewParms.projectionMatrix[10 as i32 as usize]);
+    visible = (-(*f).eyeZ - -screenZ < 24 as i32 as f32) as i32 as qboolean;
     if visible as u64 != 0 {
         if (*f).visible as u64 == 0 {
             (*f).visible = qtrue;
             (*f).fadeTime = backEnd.refdef.time - 1 as i32
         }
-        fade = (backEnd.refdef.time - (*f).fadeTime) as f32
-            / 1000.0f32
-            * (*r_flareFade).value
+        fade = (backEnd.refdef.time - (*f).fadeTime) as f32 / 1000.0f32 * (*r_flareFade).value
     } else {
         if (*f).visible as u64 != 0 {
             (*f).visible = qfalse;
             (*f).fadeTime = backEnd.refdef.time - 1 as i32
         }
-        fade = 1.0f32
-            - (backEnd.refdef.time - (*f).fadeTime) as f32
-                / 1000.0f32
-                * (*r_flareFade).value
+        fade =
+            1.0f32 - (backEnd.refdef.time - (*f).fadeTime) as f32 / 1000.0f32 * (*r_flareFade).value
     }
     if fade < 0 as i32 as f32 {
         fade = 0 as i32 as f32
@@ -905,14 +843,8 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
     let mut distance: f32 = 0.;
     let mut intensity: f32 = 0.;
     let mut factor: f32 = 0.;
-    let mut fogFactors: [byte; 3] = [
-        255 as i32 as byte,
-        255 as i32 as byte,
-        255 as i32 as byte,
-    ];
-    backEnd
-        .pc
-        .c_flareRenders += 1;
+    let mut fogFactors: [byte; 3] = [255 as i32 as byte, 255 as i32 as byte, 255 as i32 as byte];
+    backEnd.pc.c_flareRenders += 1;
     // We don't want too big values anyways when dividing by distance.
     if (*f).eyeZ > -1.0f32 {
         distance = 1.0f32
@@ -920,11 +852,8 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
         distance = -(*f).eyeZ
     }
     // calculate the flare size..
-    size = backEnd
-        .viewParms
-        .viewportWidth as f32
-        * ((*r_flareSize).value / 640.0f32
-            + 8 as i32 as f32 / distance);
+    size = backEnd.viewParms.viewportWidth as f32
+        * ((*r_flareSize).value / 640.0f32 + 8 as i32 as f32 / distance);
     /*
      * This is an alternative to intensity scaling. It changes the size of the flare on screen instead
      * with growing distance. See in the description at the top why this is not the way to go.
@@ -950,17 +879,11 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
     color[1 as i32 as usize] = (*f).color[1 as i32 as usize] * ((*f).drawIntensity * intensity);
     color[2 as i32 as usize] = (*f).color[2 as i32 as usize] * ((*f).drawIntensity * intensity);
     // Calculations for fogging
-    if !tr.world.is_null()
-        && (*f).fogNum > 0 as i32
-        && (*f).fogNum < (*tr.world).numfogs
-    {
+    if !tr.world.is_null() && (*f).fogNum > 0 as i32 && (*f).fogNum < (*tr.world).numfogs {
         tess.numVertexes = 1 as i32;
-        tess.xyz[0 as i32 as usize][0 as i32 as usize] =
-            (*f).origin[0 as i32 as usize];
-        tess.xyz[0 as i32 as usize][1 as i32 as usize] =
-            (*f).origin[1 as i32 as usize];
-        tess.xyz[0 as i32 as usize][2 as i32 as usize] =
-            (*f).origin[2 as i32 as usize];
+        tess.xyz[0 as i32 as usize][0 as i32 as usize] = (*f).origin[0 as i32 as usize];
+        tess.xyz[0 as i32 as usize][1 as i32 as usize] = (*f).origin[1 as i32 as usize];
+        tess.xyz[0 as i32 as usize][2 as i32 as usize] = (*f).origin[2 as i32 as usize];
         tess.fogNum = (*f).fogNum;
         RB_CalcModulateColorsByFog(fogFactors.as_mut_ptr());
         // We don't need to render the flare if colors are 0 anyways.
@@ -977,141 +900,82 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
         (color[1 as i32 as usize] * fogFactors[1 as i32 as usize] as i32 as f32) as i32;
     iColor[2 as i32 as usize] =
         (color[2 as i32 as usize] * fogFactors[2 as i32 as usize] as i32 as f32) as i32;
-    RB_BeginSurface(
-        tr.flareShader as *mut shader_s,
-        (*f).fogNum,
-    );
+    RB_BeginSurface(tr.flareShader as *mut shader_s, (*f).fogNum);
     // FIXME: use quadstamp?
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*f).windowX as f32 - size;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*f).windowY as f32 - size;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 0 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] = (*f).windowX as f32 - size;
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] = (*f).windowY as f32 - size;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
         iColor[0 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
         iColor[1 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
         iColor[2 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][3 as i32 as usize] =
-        255 as i32 as byte;
+    tess.vertexColors[tess.numVertexes as usize][3 as i32 as usize] = 255 as i32 as byte;
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*f).windowX as f32 - size;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*f).windowY as f32 + size;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 1 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] = (*f).windowX as f32 - size;
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] = (*f).windowY as f32 + size;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
         iColor[0 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
         iColor[1 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
         iColor[2 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][3 as i32 as usize] =
-        255 as i32 as byte;
+    tess.vertexColors[tess.numVertexes as usize][3 as i32 as usize] = 255 as i32 as byte;
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*f).windowX as f32 + size;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*f).windowY as f32 + size;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 1 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 1 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] = (*f).windowX as f32 + size;
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] = (*f).windowY as f32 + size;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
         iColor[0 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
         iColor[1 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
         iColor[2 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][3 as i32 as usize] =
-        255 as i32 as byte;
+    tess.vertexColors[tess.numVertexes as usize][3 as i32 as usize] = 255 as i32 as byte;
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*f).windowX as f32 + size;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*f).windowY as f32 - size;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 1 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 0 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] = (*f).windowX as f32 + size;
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] = (*f).windowY as f32 - size;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
         iColor[0 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
         iColor[1 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
         iColor[2 as i32 as usize] as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][3 as i32 as usize] =
-        255 as i32 as byte;
+    tess.vertexColors[tess.numVertexes as usize][3 as i32 as usize] = 255 as i32 as byte;
     tess.numVertexes += 1;
     let fresh3 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh3 as usize] =
-        0 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh3 as usize] = 0 as i32 as glIndex_t;
     let fresh4 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh4 as usize] =
-        1 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh4 as usize] = 1 as i32 as glIndex_t;
     let fresh5 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh5 as usize] =
-        2 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh5 as usize] = 2 as i32 as glIndex_t;
     let fresh6 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh6 as usize] =
-        0 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh6 as usize] = 0 as i32 as glIndex_t;
     let fresh7 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh7 as usize] =
-        2 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh7 as usize] = 2 as i32 as glIndex_t;
     let fresh8 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh8 as usize] =
-        3 as i32 as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh8 as usize] = 3 as i32 as glIndex_t;
     RB_EndSurface();
 }
 /*
@@ -1486,15 +1350,12 @@ pub unsafe extern "C" fn RB_RenderFlares() {
     }
     if (*r_flareCoeff).modified as u64 != 0 {
         R_SetFlareCoeff();
-        (*r_flareCoeff).modified =
-            qfalse
+        (*r_flareCoeff).modified = qfalse
     }
     // Reset currentEntity to world so that any previously referenced entities
     // don't have influence on the rendering of these flares (i.e. RF_ renderer flags).
-    backEnd.currentEntity =
-        &mut tr.worldEntity;
-    backEnd.or =
-        backEnd.viewParms.world;
+    backEnd.currentEntity = &mut tr.worldEntity;
+    backEnd.or = backEnd.viewParms.world;
     //	RB_AddDlightFlares();
     // perform z buffer readback on each flare in this view
     draw = qfalse;
@@ -1505,26 +1366,15 @@ pub unsafe extern "C" fn RB_RenderFlares() {
             break;
         }
         // throw out any flares that weren't added last frame
-        if (*f).addedFrame
-            < backEnd
-                .viewParms
-                .frameCount
-                - 1 as i32
-        {
+        if (*f).addedFrame < backEnd.viewParms.frameCount - 1 as i32 {
             *prev = (*f).next;
             (*f).next = r_inactiveFlares;
             r_inactiveFlares = f
         } else {
             // don't draw any here that aren't from this scene / portal
             (*f).drawIntensity = 0 as i32 as f32;
-            if (*f).frameSceneNum
-                == backEnd
-                    .viewParms
-                    .frameSceneNum
-                && (*f).inPortal as u32
-                    == backEnd
-                        .viewParms
-                        .isPortal as u32
+            if (*f).frameSceneNum == backEnd.viewParms.frameSceneNum
+                && (*f).inPortal as u32 == backEnd.viewParms.isPortal as u32
             {
                 RB_TestFlare(f);
                 if (*f).drawIntensity != 0. {
@@ -1544,54 +1394,26 @@ pub unsafe extern "C" fn RB_RenderFlares() {
         return;
         // none visible
     }
-    if backEnd
-        .viewParms
-        .isPortal as u64
-        != 0
-    {
-        qglDisable.expect("non-null function pointer")(
-            0x3000 as i32 as GLenum,
-        );
+    if backEnd.viewParms.isPortal as u64 != 0 {
+        qglDisable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     }
     qglPushMatrix.expect("non-null function pointer")();
     qglLoadIdentity.expect("non-null function pointer")();
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1701 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1701 as i32 as GLenum);
     qglPushMatrix.expect("non-null function pointer")();
     qglLoadIdentity.expect("non-null function pointer")();
     qglOrtho.expect("non-null function pointer")(
-        backEnd
-            .viewParms
-            .viewportX as GLdouble,
-        (backEnd
-            .viewParms
-            .viewportX
-            + backEnd
-                .viewParms
-                .viewportWidth) as GLdouble,
-        backEnd
-            .viewParms
-            .viewportY as GLdouble,
-        (backEnd
-            .viewParms
-            .viewportY
-            + backEnd
-                .viewParms
-                .viewportHeight) as GLdouble,
+        backEnd.viewParms.viewportX as GLdouble,
+        (backEnd.viewParms.viewportX + backEnd.viewParms.viewportWidth) as GLdouble,
+        backEnd.viewParms.viewportY as GLdouble,
+        (backEnd.viewParms.viewportY + backEnd.viewParms.viewportHeight) as GLdouble,
         -(99999 as i32) as GLdouble,
         99999 as i32 as GLdouble,
     );
     f = r_activeFlares;
     while !f.is_null() {
-        if (*f).frameSceneNum
-            == backEnd
-                .viewParms
-                .frameSceneNum
-            && (*f).inPortal as u32
-                == backEnd
-                    .viewParms
-                    .isPortal as u32
+        if (*f).frameSceneNum == backEnd.viewParms.frameSceneNum
+            && (*f).inPortal as u32 == backEnd.viewParms.isPortal as u32
             && (*f).drawIntensity != 0.
         {
             RB_RenderFlare(f);
@@ -1599,8 +1421,6 @@ pub unsafe extern "C" fn RB_RenderFlares() {
         f = (*f).next
     }
     qglPopMatrix.expect("non-null function pointer")();
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1700 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1700 as i32 as GLenum);
     qglPopMatrix.expect("non-null function pointer")();
 }

@@ -561,9 +561,8 @@ unsafe extern "C" fn R_ChopPolyBehindPlane(
         crate::stdlib::memcpy(
             outPoints as *mut libc::c_void,
             inPoints as *const libc::c_void,
-            (numInPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                vec3_t,
-            >() as libc::c_ulong),
+            (numInPoints as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
         );
         return;
     }
@@ -628,15 +627,10 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
     let mut s: i32 = 0;
     let mut c: i32 = 0;
     let mut surf: *mut msurface_t = 0 as *mut msurface_t;
-    let mut mark: *mut *mut msurface_t =
-        0 as *mut *mut msurface_t;
+    let mut mark: *mut *mut msurface_t = 0 as *mut *mut msurface_t;
     // do the tail recursion in a loop
     while (*node).contents == -(1 as i32) {
-        s = BoxOnPlaneSide(
-            mins,
-            maxs,
-            (*node).plane as *mut cplane_s,
-        );
+        s = BoxOnPlaneSide(mins, maxs, (*node).plane as *mut cplane_s);
         if s == 1 as i32 {
             node = (*node).children[0 as i32 as usize]
         } else if s == 2 as i32 {
@@ -680,22 +674,15 @@ pub unsafe extern "C" fn R_BoxSurfaces_r(
             s = BoxOnPlaneSide(
                 mins,
                 maxs,
-                &mut (*((*surf).data as *mut srfSurfaceFace_t)).plane as *mut _
-                    as *mut cplane_s,
+                &mut (*((*surf).data as *mut srfSurfaceFace_t)).plane as *mut _ as *mut cplane_s,
             );
             if s == 1 as i32 || s == 2 as i32 {
                 (*surf).viewCount = tr.viewCount
-            } else if ((*((*surf).data as *mut srfSurfaceFace_t))
-                .plane
-                .normal[0 as i32 as usize]
+            } else if ((*((*surf).data as *mut srfSurfaceFace_t)).plane.normal[0 as i32 as usize]
                 * *dir.offset(0 as i32 as isize)
-                + (*((*surf).data as *mut srfSurfaceFace_t))
-                    .plane
-                    .normal[1 as i32 as usize]
+                + (*((*surf).data as *mut srfSurfaceFace_t)).plane.normal[1 as i32 as usize]
                     * *dir.offset(1 as i32 as isize)
-                + (*((*surf).data as *mut srfSurfaceFace_t))
-                    .plane
-                    .normal[2 as i32 as usize]
+                + (*((*surf).data as *mut srfSurfaceFace_t)).plane.normal[2 as i32 as usize]
                     * *dir.offset(2 as i32 as isize)) as f64
                 > -0.5f64
             {
@@ -743,8 +730,7 @@ pub unsafe extern "C" fn R_AddMarkFragments(
 ) {
     let mut pingPong: i32 = 0;
     let mut i: i32 = 0;
-    let mut mf: *mut markFragment_t =
-        0 as *mut markFragment_t;
+    let mut mf: *mut markFragment_t = 0 as *mut markFragment_t;
     // chop the surface by all the bounding planes of the to be projected polygon
     pingPong = 0 as i32;
     i = 0 as i32;
@@ -791,9 +777,8 @@ pub unsafe extern "C" fn R_AddMarkFragments(
     crate::stdlib::memcpy(
         pointBuffer.offset((*returnedPoints * 3 as i32) as isize) as *mut libc::c_void,
         (*clipPoints.offset(pingPong as isize)).as_mut_ptr() as *const libc::c_void,
-        (numClipPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (numClipPoints as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
     *returnedPoints += numClipPoints;
     *returnedFragments += 1;
@@ -1202,8 +1187,7 @@ pub unsafe extern "C" fn R_MarkFragments(
     let mut k: i32 = 0;
     let mut m: i32 = 0;
     let mut n: i32 = 0;
-    let mut surfaces: [*mut surfaceType_t; 64] =
-        [0 as *mut surfaceType_t; 64];
+    let mut surfaces: [*mut surfaceType_t; 64] = [0 as *mut surfaceType_t; 64];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut returnedFragments: i32 = 0;
@@ -1592,8 +1576,7 @@ pub unsafe extern "C" fn R_MarkFragments(
                 m += 1
             }
         } else if *surfaces[i as usize] as u32 == SF_FACE as i32 as u32 {
-            let mut surf: *mut srfSurfaceFace_t =
-                surfaces[i as usize] as *mut srfSurfaceFace_t;
+            let mut surf: *mut srfSurfaceFace_t = surfaces[i as usize] as *mut srfSurfaceFace_t;
             // check the normal of this face
             if !(((*surf).plane.normal[0 as i32 as usize] * projectionDir[0 as i32 as usize]
                 + (*surf).plane.normal[1 as i32 as usize] * projectionDir[1 as i32 as usize]
@@ -1601,8 +1584,7 @@ pub unsafe extern "C" fn R_MarkFragments(
                 as f64
                 > -0.5f64)
             {
-                indexes = (surf as *mut byte)
-                    .offset((*surf).ofsIndices as isize) as *mut i32;
+                indexes = (surf as *mut byte).offset((*surf).ofsIndices as isize) as *mut i32;
                 k = 0 as i32;
                 while k < (*surf).numIndices {
                     j = 0 as i32;
@@ -1648,8 +1630,7 @@ pub unsafe extern "C" fn R_MarkFragments(
         } else if *surfaces[i as usize] as u32 == SF_TRIANGLES as i32 as u32
             && (*r_marksOnTriangleMeshes).integer != 0
         {
-            let mut surf_0: *mut srfTriangles_t =
-                surfaces[i as usize] as *mut srfTriangles_t;
+            let mut surf_0: *mut srfTriangles_t = surfaces[i as usize] as *mut srfTriangles_t;
             k = 0 as i32;
             while k < (*surf_0).numIndexes {
                 j = 0 as i32;

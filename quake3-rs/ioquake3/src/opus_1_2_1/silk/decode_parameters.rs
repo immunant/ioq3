@@ -370,8 +370,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
             pNLSF0_Q15[i as usize] = ((*psDec).prevNLSF_Q15[i as usize] as i32
                 + ((*psDec).indices.NLSFInterpCoef_Q2 as i32
                     * (pNLSF_Q15[i as usize] as i32 - (*psDec).prevNLSF_Q15[i as usize] as i32)
-                    >> 2 as i32))
-                as opus_int16;
+                    >> 2 as i32)) as opus_int16;
             i += 1
         }
         /* Convert NLSF parameters to AR prediction filter coefficients */
@@ -386,16 +385,16 @@ pub unsafe extern "C" fn silk_decode_parameters(
         crate::stdlib::memcpy(
             (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
             (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
-            ((*psDec).LPC_order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int16,
-            >() as libc::c_ulong),
+            ((*psDec).LPC_order as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
         );
     }
-    crate::stdlib::memcpy((*psDec).prevNLSF_Q15.as_mut_ptr() as *mut libc::c_void,
-           pNLSF_Q15.as_mut_ptr() as *const libc::c_void,
-           ((*psDec).LPC_order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        (*psDec).prevNLSF_Q15.as_mut_ptr() as *mut libc::c_void,
+        pNLSF_Q15.as_mut_ptr() as *const libc::c_void,
+        ((*psDec).LPC_order as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
     /* After a packet loss do BWE of LPC coefs */
     if (*psDec).lossCnt != 0 {
         crate::src::opus_1_2_1::silk::bwexpander::silk_bwexpander(
@@ -430,10 +429,8 @@ pub unsafe extern "C" fn silk_decode_parameters(
             i = 0 as i32;
             while i < 5 as i32 {
                 (*psDecCtrl).LTPCoef_Q14[(k * 5 as i32 + i) as usize] =
-                    ((*cbk_ptr_Q7.offset((Ix * 5 as i32 + i) as isize)
-                        as opus_uint32)
-                        << 7 as i32) as opus_int32
-                        as opus_int16;
+                    ((*cbk_ptr_Q7.offset((Ix * 5 as i32 + i) as isize) as opus_uint32) << 7 as i32)
+                        as opus_int32 as opus_int16;
                 i += 1
             }
             k += 1
@@ -455,9 +452,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
             (*psDecCtrl).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
             ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<opus_int16>() as libc::c_ulong
-                ),
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
         );
         (*psDec).indices.PERIndex = 0 as i32 as i8;
         (*psDecCtrl).LTP_scale_Q14 = 0 as i32

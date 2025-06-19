@@ -646,10 +646,8 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> byte {
     }
     exponent = (numBits[(adjusted >> 7 as i32 & 0xff as i32 as libc::c_ulong) as usize] as i32
         - 1 as i32) as byte;
-    mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as libc::c_ulong)
-        as byte;
-    return !(sign as i32 | (exponent as i32) << 4 as i32 | mantissa as i32)
-        as byte;
+    mantissa = (adjusted >> exponent as i32 + 3 as i32 & 0xf as i32 as libc::c_ulong) as byte;
+    return !(sign as i32 | (exponent as i32) << 4 as i32 | mantissa as i32) as byte;
 }
 #[no_mangle]
 
@@ -671,26 +669,19 @@ pub unsafe extern "C" fn MuLawDecode(mut uLaw: byte) -> i16 {
 
 pub static mut mulawToShort: [i16; 256] = [0; 256];
 
-static mut madeTable: qboolean =
-    qfalse;
+static mut madeTable: qboolean = qfalse;
 
 static mut NXStreamCount: i32 = 0;
 #[no_mangle]
 
-pub unsafe extern "C" fn NXPutc(
-    mut stream: *mut byte,
-    mut out: libc::c_char,
-) {
+pub unsafe extern "C" fn NXPutc(mut stream: *mut byte, mut out: libc::c_char) {
     let fresh2 = NXStreamCount;
     NXStreamCount = NXStreamCount + 1;
     *stream.offset(fresh2 as isize) = out as byte;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn encodeWavelet(
-    mut sfx: *mut sfx_t,
-    mut packets: *mut i16,
-) {
+pub unsafe extern "C" fn encodeWavelet(mut sfx: *mut sfx_t, mut packets: *mut i16) {
     let mut wksp: [f32; 4097] = [
         0 as i32 as f32,
         0.,
@@ -4796,13 +4787,11 @@ pub unsafe extern "C" fn encodeWavelet(
     let mut size: i32 = 0;
     let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
-            mulawToShort[i as usize] =
-                MuLawDecode(i as byte) as f32 as i16;
+            mulawToShort[i as usize] = MuLawDecode(i as byte) as f32 as i16;
             i += 1
         }
         madeTable = qtrue
@@ -4817,8 +4806,7 @@ pub unsafe extern "C" fn encodeWavelet(
         if size < 4 as i32 {
             size = 4 as i32
         }
-        newchunk =
-            SND_malloc() as *mut sndBuffer_s;
+        newchunk = SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {
@@ -4850,10 +4838,7 @@ pub unsafe extern "C" fn encodeWavelet(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn decodeWavelet(
-    mut chunk: *mut sndBuffer,
-    mut to: *mut i16,
-) {
+pub unsafe extern "C" fn decodeWavelet(mut chunk: *mut sndBuffer, mut to: *mut i16) {
     let mut wksp: [f32; 4097] = [
         0 as i32 as f32,
         0.,
@@ -8954,8 +8939,7 @@ pub unsafe extern "C" fn decodeWavelet(
         0.,
     ];
     let mut i: i32 = 0;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;
@@ -9036,10 +9020,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // wavelet function
 #[no_mangle]
 
-pub unsafe extern "C" fn encodeMuLaw(
-    mut sfx: *mut sfx_t,
-    mut packets: *mut i16,
-) {
+pub unsafe extern "C" fn encodeMuLaw(mut sfx: *mut sfx_t, mut packets: *mut i16) {
     let mut i: i32 = 0;
     let mut samples: i32 = 0;
     let mut size: i32 = 0;
@@ -9047,13 +9028,11 @@ pub unsafe extern "C" fn encodeMuLaw(
     let mut poop: i32 = 0;
     let mut newchunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     if madeTable as u64 == 0 {
         i = 0 as i32;
         while i < 256 as i32 {
-            mulawToShort[i as usize] =
-                MuLawDecode(i as byte) as f32 as i16;
+            mulawToShort[i as usize] = MuLawDecode(i as byte) as f32 as i16;
             i += 1
         }
         madeTable = qtrue
@@ -9066,8 +9045,7 @@ pub unsafe extern "C" fn encodeMuLaw(
         if size > 1024 as i32 * 2 as i32 {
             size = 1024 as i32 * 2 as i32
         }
-        newchunk =
-            SND_malloc() as *mut sndBuffer_s;
+        newchunk = SND_malloc() as *mut sndBuffer_s;
         if (*sfx).soundData.is_null() {
             (*sfx).soundData = newchunk
         } else if !chunk.is_null() {
@@ -9094,13 +9072,9 @@ pub unsafe extern "C" fn encodeMuLaw(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn decodeMuLaw(
-    mut chunk: *mut sndBuffer,
-    mut to: *mut i16,
-) {
+pub unsafe extern "C" fn decodeMuLaw(mut chunk: *mut sndBuffer, mut to: *mut i16) {
     let mut i: i32 = 0;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     let mut size: i32 = (*chunk).size;
     out = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
     i = 0 as i32;

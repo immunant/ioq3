@@ -612,9 +612,7 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
         return 0 as i32;
     }
     if i == max {
-        G_Error(
-            b"G_FindConfigstringIndex: overflow\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"G_FindConfigstringIndex: overflow\x00" as *const u8 as *const libc::c_char);
     }
     trap_SetConfigstring(start + i, name);
     return i;
@@ -622,22 +620,12 @@ pub unsafe extern "C" fn G_FindConfigstringIndex(
 #[no_mangle]
 
 pub unsafe extern "C" fn G_ModelIndex(mut name: *mut libc::c_char) -> i32 {
-    return G_FindConfigstringIndex(
-        name,
-        32 as i32,
-        256 as i32,
-        qtrue,
-    );
+    return G_FindConfigstringIndex(name, 32 as i32, 256 as i32, qtrue);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn G_SoundIndex(mut name: *mut libc::c_char) -> i32 {
-    return G_FindConfigstringIndex(
-        name,
-        32 as i32 + 256 as i32,
-        256 as i32,
-        qtrue,
-    );
+    return G_FindConfigstringIndex(name, 32 as i32 + 256 as i32, 256 as i32, qtrue);
 }
 //=====================================================================
 /*
@@ -649,23 +637,13 @@ Broadcasts a command to only a specific team
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_TeamCommand(
-    mut team: team_t,
-    mut cmd: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn G_TeamCommand(mut team: team_t, mut cmd: *mut libc::c_char) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < level.maxclients {
-        if (*level.clients.offset(i as isize))
-            .pers
-            .connected as u32
-            == CON_CONNECTED as i32 as u32
+        if (*level.clients.offset(i as isize)).pers.connected as u32 == CON_CONNECTED as i32 as u32
         {
-            if (*level.clients.offset(i as isize))
-                .sess
-                .sessionTeam as u32
-                == team as u32
-            {
+            if (*level.clients.offset(i as isize)).sess.sessionTeam as u32 == team as u32 {
                 trap_SendServerCommand(
                     i,
                     va(
@@ -703,15 +681,10 @@ pub unsafe extern "C" fn G_Find(
     } else {
         from = from.offset(1)
     }
-    while from
-        < &mut *g_entities
-            .as_mut_ptr()
-            .offset(level.num_entities as isize)
-            as *mut gentity_t
+    while from < &mut *g_entities.as_mut_ptr().offset(level.num_entities as isize) as *mut gentity_t
     {
         if !((*from).inuse as u64 == 0) {
-            s = *((from as *mut byte).offset(fieldofs as isize)
-                as *mut *mut libc::c_char);
+            s = *((from as *mut byte).offset(fieldofs as isize) as *mut *mut libc::c_char);
             if !s.is_null() {
                 if Q_stricmp(s, match_0) == 0 {
                     return from;
@@ -724,13 +697,10 @@ pub unsafe extern "C" fn G_Find(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn G_PickTarget(
-    mut targetname: *mut libc::c_char,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn G_PickTarget(mut targetname: *mut libc::c_char) -> *mut gentity_t {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     let mut num_choices: i32 = 0 as i32;
-    let mut choice: [*mut gentity_t; 32] =
-        [0 as *mut gentity_t; 32];
+    let mut choice: [*mut gentity_t; 32] = [0 as *mut gentity_t; 32];
     if targetname.is_null() {
         G_Printf(
             b"G_PickTarget called with NULL targetname\n\x00" as *const u8 as *const libc::c_char,
@@ -740,8 +710,7 @@ pub unsafe extern "C" fn G_PickTarget(
     loop {
         ent = G_Find(
             ent,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
             targetname,
         );
         if ent.is_null() {
@@ -776,10 +745,7 @@ match (string)self.target and call their .use function
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_UseTargets(
-    mut ent: *mut gentity_t,
-    mut activator: *mut gentity_t,
-) {
+pub unsafe extern "C" fn G_UseTargets(mut ent: *mut gentity_t, mut activator: *mut gentity_t) {
     let mut t: *mut gentity_t = 0 as *mut gentity_t;
     if ent.is_null() {
         return;
@@ -796,17 +762,14 @@ pub unsafe extern "C" fn G_UseTargets(
     loop {
         t = G_Find(
             t,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
             (*ent).target,
         );
         if t.is_null() {
             break;
         }
         if t == ent {
-            G_Printf(
-                b"WARNING: Entity used itself.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Printf(b"WARNING: Entity used itself.\n\x00" as *const u8 as *const libc::c_char);
         } else if (*t).use_0.is_some() {
             (*t).use_0.expect("non-null function pointer")(t, ent, activator);
         }
@@ -851,9 +814,7 @@ for printing vectors
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn vtos(
-    mut v: *const vec_t,
-) -> *mut libc::c_char {
+pub unsafe extern "C" fn vtos(mut v: *const vec_t) -> *mut libc::c_char {
     static mut index: i32 = 0;
     static mut str: [[libc::c_char; 32]; 8] = [[0; 32]; 8];
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -882,35 +843,12 @@ instead of an orientation.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_SetMovedir(
-    mut angles: *mut vec_t,
-    mut movedir: *mut vec_t,
-) {
-    static mut VEC_UP: vec3_t = [
-        0 as i32 as vec_t,
-        -(1 as i32) as vec_t,
-        0 as i32 as vec_t,
-    ];
-    static mut MOVEDIR_UP: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
-    static mut VEC_DOWN: vec3_t = [
-        0 as i32 as vec_t,
-        -(2 as i32) as vec_t,
-        0 as i32 as vec_t,
-    ];
-    static mut MOVEDIR_DOWN: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        -(1 as i32) as vec_t,
-    ];
-    if VectorCompare(
-        angles as *const vec_t,
-        VEC_UP.as_mut_ptr() as *const vec_t,
-    ) != 0
-    {
+pub unsafe extern "C" fn G_SetMovedir(mut angles: *mut vec_t, mut movedir: *mut vec_t) {
+    static mut VEC_UP: vec3_t = [0 as i32 as vec_t, -(1 as i32) as vec_t, 0 as i32 as vec_t];
+    static mut MOVEDIR_UP: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
+    static mut VEC_DOWN: vec3_t = [0 as i32 as vec_t, -(2 as i32) as vec_t, 0 as i32 as vec_t];
+    static mut MOVEDIR_DOWN: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, -(1 as i32) as vec_t];
+    if VectorCompare(angles as *const vec_t, VEC_UP.as_mut_ptr() as *const vec_t) != 0 {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_UP[0 as i32 as usize];
         *movedir.offset(1 as i32 as isize) = MOVEDIR_UP[1 as i32 as usize];
         *movedir.offset(2 as i32 as isize) = MOVEDIR_UP[2 as i32 as usize]
@@ -967,8 +905,7 @@ pub unsafe extern "C" fn vectoyaw(mut vec: *const vec_t) -> f32 {
 pub unsafe extern "C" fn G_InitGentity(mut e: *mut gentity_t) {
     (*e).inuse = qtrue;
     (*e).classname = b"noclass\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*e).s.number =
-        e.offset_from(g_entities.as_mut_ptr()) as isize as i32;
+    (*e).s.number = e.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*e).r.ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
 }
 /*
@@ -997,9 +934,7 @@ pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
     while force < 2 as i32 {
         // if we go through all entities and can't find one to free,
         // override the normal minimum times before use
-        e = &mut *g_entities
-            .as_mut_ptr()
-            .offset(64 as i32 as isize) as *mut gentity_t;
+        e = &mut *g_entities.as_mut_ptr().offset(64 as i32 as isize) as *mut gentity_t;
         i = 64 as i32;
         while i < level.num_entities {
             if !((*e).inuse as u64 != 0) {
@@ -1032,9 +967,7 @@ pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
             );
             i += 1
         }
-        G_Error(
-            b"G_Spawn: no free entities\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"G_Spawn: no free entities\x00" as *const u8 as *const libc::c_char);
     }
     // open up a new slot
     level.num_entities += 1;
@@ -1043,10 +976,7 @@ pub unsafe extern "C" fn G_Spawn() -> *mut gentity_t {
         level.gentities as *mut gentity_s,
         level.num_entities,
         ::std::mem::size_of::<gentity_t>() as libc::c_ulong as i32,
-        &mut (*level
-            .clients
-            .offset(0 as i32 as isize))
-        .ps as *mut _ as *mut playerState_s,
+        &mut (*level.clients.offset(0 as i32 as isize)).ps as *mut _ as *mut playerState_s,
         ::std::mem::size_of::<gclient_s>() as libc::c_ulong as i32,
     );
     G_InitGentity(e);
@@ -1066,9 +996,7 @@ pub unsafe extern "C" fn G_EntitiesFree() -> qboolean {
         // can open a new slot if needed
         return qtrue;
     }
-    e = &mut *g_entities
-        .as_mut_ptr()
-        .offset(64 as i32 as isize) as *mut gentity_t;
+    e = &mut *g_entities.as_mut_ptr().offset(64 as i32 as isize) as *mut gentity_t;
     i = 64 as i32;
     while i < level.num_entities {
         if (*e).inuse as u64 != 0 {
@@ -1115,10 +1043,7 @@ must be taken if the origin is right on a surface (snap towards start vector fir
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_TempEntity(
-    mut origin: *mut vec_t,
-    mut event: i32,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn G_TempEntity(mut origin: *mut vec_t, mut event: i32) -> *mut gentity_t {
     let mut e: *mut gentity_t = 0 as *mut gentity_t;
     let mut snapped: vec3_t = [0.; 3];
     e = G_Spawn();
@@ -1129,12 +1054,9 @@ pub unsafe extern "C" fn G_TempEntity(
     snapped[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     snapped[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     snapped[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    snapped[0 as i32 as usize] =
-        snapped[0 as i32 as usize] as i32 as vec_t;
-    snapped[1 as i32 as usize] =
-        snapped[1 as i32 as usize] as i32 as vec_t;
-    snapped[2 as i32 as usize] =
-        snapped[2 as i32 as usize] as i32 as vec_t;
+    snapped[0 as i32 as usize] = snapped[0 as i32 as usize] as i32 as vec_t;
+    snapped[1 as i32 as usize] = snapped[1 as i32 as usize] as i32 as vec_t;
+    snapped[2 as i32 as usize] = snapped[2 as i32 as usize] as i32 as vec_t;
     // save network bandwidth
     G_SetOrigin(e, snapped.as_mut_ptr());
     // find cluster for PVS
@@ -1240,11 +1162,7 @@ Adds an event+parm and twiddles the event counter
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_AddEvent(
-    mut ent: *mut gentity_t,
-    mut event: i32,
-    mut eventParm: i32,
-) {
+pub unsafe extern "C" fn G_AddEvent(mut ent: *mut gentity_t, mut event: i32, mut eventParm: i32) {
     let mut bits: i32 = 0;
     if event == 0 {
         G_Printf(
@@ -1275,16 +1193,9 @@ G_Sound
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_Sound(
-    mut ent: *mut gentity_t,
-    mut _channel: i32,
-    mut soundIndex: i32,
-) {
+pub unsafe extern "C" fn G_Sound(mut ent: *mut gentity_t, mut _channel: i32, mut soundIndex: i32) {
     let mut te: *mut gentity_t = 0 as *mut gentity_t;
-    te = G_TempEntity(
-        (*ent).r.currentOrigin.as_mut_ptr(),
-        EV_GENERAL_SOUND as i32,
-    );
+    te = G_TempEntity((*ent).r.currentOrigin.as_mut_ptr(), EV_GENERAL_SOUND as i32);
     (*te).s.eventParm = soundIndex;
 }
 //==============================================================================
@@ -1297,10 +1208,7 @@ Sets the pos trajectory for a fixed position
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_SetOrigin(
-    mut ent: *mut gentity_t,
-    mut origin: *mut vec_t,
-) {
+pub unsafe extern "C" fn G_SetOrigin(mut ent: *mut gentity_t, mut origin: *mut vec_t) {
     (*ent).s.pos.trBase[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*ent).s.pos.trBase[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*ent).s.pos.trBase[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -1332,11 +1240,7 @@ pub unsafe extern "C" fn DebugLine(
     let mut points: [vec3_t; 4] = [[0.; 3]; 4];
     let mut dir: vec3_t = [0.; 3];
     let mut cross: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut dot: f32 = 0.;
     points[0 as i32 as usize][0 as i32 as usize] = *start.offset(0 as i32 as isize);
     points[0 as i32 as usize][1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1395,9 +1299,5 @@ pub unsafe extern "C" fn DebugLine(
         points[3 as i32 as usize][1 as i32 as usize] + cross[1 as i32 as usize] * 2 as i32 as f32;
     points[3 as i32 as usize][2 as i32 as usize] =
         points[3 as i32 as usize][2 as i32 as usize] + cross[2 as i32 as usize] * 2 as i32 as f32;
-    return trap_DebugPolygonCreate(
-        color,
-        4 as i32,
-        points.as_mut_ptr(),
-    );
+    return trap_DebugPolygonCreate(color, 4 as i32, points.as_mut_ptr());
 }

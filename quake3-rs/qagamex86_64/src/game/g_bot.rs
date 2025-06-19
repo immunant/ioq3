@@ -212,14 +212,13 @@ static mut botSpawnQueue: [botSpawnQueue_t; 16] = [botSpawnQueue_t {
 }; 16];
 #[no_mangle]
 
-pub static mut bot_minplayers: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_minplayers: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
@@ -254,22 +253,15 @@ pub unsafe extern "C" fn G_ParseInfos(
             break;
         }
         if libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
-            Com_Printf(
-                b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char);
             break;
         } else if count == max {
-            Com_Printf(
-                b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char);
             break;
         } else {
             info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
             loop {
-                token = COM_ParseExt(
-                    &mut buf,
-                    qtrue,
-                );
+                token = COM_ParseExt(&mut buf, qtrue);
                 if *token.offset(0 as i32 as isize) == 0 {
                     Com_Printf(
                         b"Unexpected end of info file\n\x00" as *const u8 as *const libc::c_char,
@@ -284,18 +276,11 @@ pub unsafe extern "C" fn G_ParseInfos(
                         token,
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
-                    token = COM_ParseExt(
-                        &mut buf,
-                        qfalse,
-                    );
+                    token = COM_ParseExt(&mut buf, qfalse);
                     if *token.offset(0 as i32 as isize) == 0 {
                         libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
                     }
-                    Info_SetValueForKey(
-                        info.as_mut_ptr(),
-                        key.as_mut_ptr(),
-                        token,
-                    );
+                    Info_SetValueForKey(info.as_mut_ptr(), key.as_mut_ptr(), token);
                 }
             }
             //NOTE: extra space for arena number
@@ -329,11 +314,7 @@ unsafe extern "C" fn G_LoadArenasFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
     let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if f == 0 {
         trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -369,14 +350,13 @@ G_LoadArenas
 
 unsafe extern "C" fn G_LoadArenas() {
     let mut numdirs: i32 = 0;
-    let mut arenasFile: vmCvar_t =
-        vmCvar_t {
-            handle: 0,
-            modificationCount: 0,
-            value: 0.,
-            integer: 0,
-            string: [0; 256],
-        };
+    let mut arenasFile: vmCvar_t = vmCvar_t {
+        handle: 0,
+        modificationCount: 0,
+        value: 0.,
+        integer: 0,
+        string: [0; 256],
+    };
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -481,11 +461,7 @@ unsafe extern "C" fn PlayerIntroSound(mut modelAndSkin: *const libc::c_char) {
     } else {
         skin = model.as_mut_ptr()
     }
-    if Q_stricmp(
-        skin,
-        b"default\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(skin, b"default\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         skin = model.as_mut_ptr()
     }
     trap_SendConsoleCommand(
@@ -522,12 +498,7 @@ pub unsafe extern "C" fn G_CountBotPlayersByName(
         if !((*cl).pers.connected as u32 == CON_DISCONNECTED as i32 as u32) {
             if !(g_entities[i as usize].r.svFlags & 0x8 as i32 == 0) {
                 if !(team >= 0 as i32 && (*cl).sess.sessionTeam as u32 != team as u32) {
-                    if !(!name.is_null()
-                        && Q_stricmp(
-                            name,
-                            (*cl).pers.netname.as_mut_ptr(),
-                        ) != 0)
-                    {
+                    if !(!name.is_null() && Q_stricmp(name, (*cl).pers.netname.as_mut_ptr()) != 0) {
                         num += 1
                     }
                 }
@@ -590,8 +561,8 @@ pub unsafe extern "C" fn G_SelectRandomBotInfo(mut team: i32) -> i32 {
         n += 1
     }
     if num > 0 as i32 {
-        num = ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-            * (num - 1 as i32) as f32) as i32;
+        num = ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * (num - 1 as i32) as f32)
+            as i32;
         return selection[num as usize];
     }
     return -(1 as i32);
@@ -731,9 +702,7 @@ pub unsafe extern "C" fn G_CheckMinimumPlayers() {
         return;
     }
     checkminimumplayers_time = level.time;
-    trap_Cvar_Update(
-        &mut bot_minplayers as *mut _ as *mut vmCvar_t,
-    );
+    trap_Cvar_Update(&mut bot_minplayers as *mut _ as *mut vmCvar_t);
     minplayers = bot_minplayers.integer;
     if minplayers <= 0 as i32 {
         return;
@@ -759,9 +728,7 @@ pub unsafe extern "C" fn G_CheckMinimumPlayers() {
         } else if humanplayers + botplayers > minplayers && botplayers != 0 {
             G_RemoveRandomBot(TEAM_BLUE as i32);
         }
-    } else if g_gametype.integer
-        == GT_TOURNAMENT as i32
-    {
+    } else if g_gametype.integer == GT_TOURNAMENT as i32 {
         if minplayers >= g_maxclients.integer {
             minplayers = g_maxclients.integer - 1 as i32
         }
@@ -808,9 +775,7 @@ pub unsafe extern "C" fn G_CheckBotSpawn() {
             if !(botSpawnQueue[n as usize].spawnTime > level.time) {
                 ClientBegin(botSpawnQueue[n as usize].clientNum);
                 botSpawnQueue[n as usize].spawnTime = 0 as i32;
-                if g_gametype.integer
-                    == GT_SINGLE_PLAYER as i32
-                {
+                if g_gametype.integer == GT_SINGLE_PLAYER as i32 {
                     trap_GetUserinfo(
                         botSpawnQueue[n as usize].clientNum,
                         userinfo.as_mut_ptr(),
@@ -843,9 +808,7 @@ unsafe extern "C" fn AddBotToSpawnQueue(mut clientNum: i32, mut delay: i32) {
         }
         n += 1
     }
-    G_Printf(
-        b"^3Unable to delay spawn\n\x00" as *const u8 as *const libc::c_char,
-    );
+    G_Printf(b"^3Unable to delay spawn\n\x00" as *const u8 as *const libc::c_char);
     ClientBegin(clientNum);
 }
 /*
@@ -876,10 +839,7 @@ G_BotConnect
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_BotConnect(
-    mut clientNum: i32,
-    mut restart: qboolean,
-) -> qboolean {
+pub unsafe extern "C" fn G_BotConnect(mut clientNum: i32, mut restart: qboolean) -> qboolean {
     let mut settings: bot_settings_t = bot_settings_t {
         characterfile: [0; 144],
         skill: 0.,
@@ -953,9 +913,7 @@ unsafe extern "C" fn G_AddBot(
     // set default team
     if team.is_null() || *team == 0 {
         if g_gametype.integer >= GT_TEAM as i32 {
-            if PickTeam(clientNum) as u32
-                == TEAM_RED as i32 as u32
-            {
+            if PickTeam(clientNum) as u32 == TEAM_RED as i32 as u32 {
                 team = b"red\x00" as *const u8 as *const libc::c_char
             } else {
                 team = b"blue\x00" as *const u8 as *const libc::c_char
@@ -965,39 +923,17 @@ unsafe extern "C" fn G_AddBot(
         }
     }
     // get the botinfo from bots.txt
-    if Q_stricmp(
-        name,
-        b"random\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
-        if Q_stricmp(
-            team,
-            b"red\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-            || Q_stricmp(
-                team,
-                b"r\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as i32
+    if Q_stricmp(name, b"random\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
+        if Q_stricmp(team, b"red\x00" as *const u8 as *const libc::c_char) == 0 as i32
+            || Q_stricmp(team, b"r\x00" as *const u8 as *const libc::c_char) == 0 as i32
         {
             teamNum = TEAM_RED as i32
-        } else if Q_stricmp(
-            team,
-            b"blue\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-            || Q_stricmp(
-                team,
-                b"b\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as i32
+        } else if Q_stricmp(team, b"blue\x00" as *const u8 as *const libc::c_char) == 0 as i32
+            || Q_stricmp(team, b"b\x00" as *const u8 as *const libc::c_char) == 0 as i32
         {
             teamNum = TEAM_BLUE as i32
-        } else if Q_stricmp(
-            team,
-            b"spectator\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-            || Q_stricmp(
-                team,
-                b"s\x00" as *const u8 as *const libc::c_char,
-            ) == 0
+        } else if Q_stricmp(team, b"spectator\x00" as *const u8 as *const libc::c_char) == 0
+            || Q_stricmp(team, b"s\x00" as *const u8 as *const libc::c_char) == 0
         {
             teamNum = TEAM_SPECTATOR as i32
         } else {
@@ -1026,15 +962,9 @@ unsafe extern "C" fn G_AddBot(
     }
     // create the bot's userinfo
     userinfo[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
-    botname = Info_ValueForKey(
-        botinfo,
-        b"funname\x00" as *const u8 as *const libc::c_char,
-    );
+    botname = Info_ValueForKey(botinfo, b"funname\x00" as *const u8 as *const libc::c_char);
     if *botname.offset(0 as i32 as isize) == 0 {
-        botname = Info_ValueForKey(
-            botinfo,
-            b"name\x00" as *const u8 as *const libc::c_char,
-        )
+        botname = Info_ValueForKey(botinfo, b"name\x00" as *const u8 as *const libc::c_char)
     }
     // check for an alternative name
     if !altname.is_null() && *altname.offset(0 as i32 as isize) as i32 != 0 {
@@ -1125,10 +1055,7 @@ unsafe extern "C" fn G_AddBot(
         s = b"5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
     Info_SetValueForKey(userinfo.as_mut_ptr(), key, s);
-    s = Info_ValueForKey(
-        botinfo,
-        b"aifile\x00" as *const u8 as *const libc::c_char,
-    );
+    s = Info_ValueForKey(botinfo, b"aifile\x00" as *const u8 as *const libc::c_char);
     if *s == 0 {
         trap_Print(
             b"^1Error: bot has no aifile specified\n\x00" as *const u8 as *const libc::c_char,
@@ -1150,13 +1077,7 @@ unsafe extern "C" fn G_AddBot(
     // register the userinfo
     trap_SetUserinfo(clientNum, userinfo.as_mut_ptr());
     // have it connect to the game as a normal client
-    if !ClientConnect(
-        clientNum,
-        qtrue,
-        qtrue,
-    )
-    .is_null()
-    {
+    if !ClientConnect(clientNum, qtrue, qtrue).is_null() {
         return;
     }
     if delay == 0 as i32 {
@@ -1180,10 +1101,7 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     let mut string: [libc::c_char; 1024] = [0; 1024];
     let mut team: [libc::c_char; 1024] = [0; 1024];
     // are bots enabled?
-    if trap_Cvar_VariableIntegerValue(
-        b"bot_enable\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if trap_Cvar_VariableIntegerValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) == 0 {
         return;
     }
     // name
@@ -1246,11 +1164,9 @@ pub unsafe extern "C" fn Svcmd_AddBot_f() {
     );
     // if this was issued during gameplay and we are playing locally,
     // go ahead and load the bot's media immediately
-    if level.time - level.startTime
-        > 1000 as i32
-        && trap_Cvar_VariableIntegerValue(
-            b"cl_running\x00" as *const u8 as *const libc::c_char,
-        ) != 0
+    if level.time - level.startTime > 1000 as i32
+        && trap_Cvar_VariableIntegerValue(b"cl_running\x00" as *const u8 as *const libc::c_char)
+            != 0
     {
         trap_SendServerCommand(
             -(1 as i32),
@@ -1425,11 +1341,7 @@ unsafe extern "C" fn G_LoadBotsFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
     let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if f == 0 {
         trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1464,24 +1376,20 @@ G_LoadBots
 */
 
 unsafe extern "C" fn G_LoadBots() {
-    let mut botsFile: vmCvar_t =
-        vmCvar_t {
-            handle: 0,
-            modificationCount: 0,
-            value: 0.,
-            integer: 0,
-            string: [0; 256],
-        };
+    let mut botsFile: vmCvar_t = vmCvar_t {
+        handle: 0,
+        modificationCount: 0,
+        value: 0.,
+        integer: 0,
+        string: [0; 256],
+    };
     let mut numdirs: i32 = 0;
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     let mut dirlen: i32 = 0;
-    if trap_Cvar_VariableIntegerValue(
-        b"bot_enable\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if trap_Cvar_VariableIntegerValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) == 0 {
         return;
     }
     g_numBots = 0 as i32;
@@ -1660,10 +1568,7 @@ pub unsafe extern "C" fn G_InitBots(mut restart: qboolean) {
         }
         if restart as u64 == 0 {
             G_SpawnBots(
-                Info_ValueForKey(
-                    arenainfo,
-                    b"bots\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(arenainfo, b"bots\x00" as *const u8 as *const libc::c_char),
                 basedelay,
             );
         }

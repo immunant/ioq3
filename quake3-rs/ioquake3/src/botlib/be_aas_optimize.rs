@@ -171,8 +171,7 @@ pub unsafe extern "C" fn AAS_OptimizeEdge(
             return -optedgenum;
         }
     } //end for
-    optedge = &mut *(*optimized).edges.offset((*optimized).numedges as isize)
-        as *mut aas_edge_t; //end if
+    optedge = &mut *(*optimized).edges.offset((*optimized).numedges as isize) as *mut aas_edge_t; //end if
     i = 0 as i32;
     while i < 2 as i32 {
         if *(*optimized)
@@ -276,8 +275,7 @@ pub unsafe extern "C" fn AAS_OptimizeFace(
             return -optfacenum;
         }
     } //end for
-    optface = &mut *(*optimized).faces.offset((*optimized).numfaces as isize)
-        as *mut aas_face_t;
+    optface = &mut *(*optimized).faces.offset((*optimized).numfaces as isize) as *mut aas_face_t;
     crate::stdlib::memcpy(
         optface as *mut libc::c_void,
         face as *const libc::c_void,
@@ -331,8 +329,7 @@ pub unsafe extern "C" fn AAS_OptimizeArea(mut optimized: *mut optimized_t, mut a
     area = &mut *crate::src::botlib::be_aas_main::aasworld
         .areas
         .offset(areanum as isize) as *mut aas_area_t;
-    optarea =
-        &mut *(*optimized).areas.offset(areanum as isize) as *mut aas_area_t;
+    optarea = &mut *(*optimized).areas.offset(areanum as isize) as *mut aas_area_t;
     crate::stdlib::memcpy(
         optarea as *mut libc::c_void,
         area as *const libc::c_void,
@@ -379,9 +376,8 @@ pub unsafe extern "C" fn AAS_OptimizeAlloc(mut optimized: *mut optimized_t) {
     ) as *mut aas_edge_t;
     (*optimized).numedges = 1 as i32;
     (*optimized).edgeindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong,
-        ),
+        (crate::src::botlib::be_aas_main::aasworld.edgeindexsize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_edgeindex_t>() as libc::c_ulong),
     ) as *mut aas_edgeindex_t;
     (*optimized).edgeindexsize = 0 as i32;
     (*optimized).faces = crate::src::botlib::l_memory::GetClearedMemory(
@@ -390,9 +386,8 @@ pub unsafe extern "C" fn AAS_OptimizeAlloc(mut optimized: *mut optimized_t) {
     ) as *mut aas_face_t;
     (*optimized).numfaces = 1 as i32;
     (*optimized).faceindex = crate::src::botlib::l_memory::GetClearedMemory(
-        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong,
-        ),
+        (crate::src::botlib::be_aas_main::aasworld.faceindexsize as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_faceindex_t>() as libc::c_ulong),
     ) as *mut aas_faceindex_t;
     (*optimized).faceindexsize = 0 as i32;
     (*optimized).areas = crate::src::botlib::l_memory::GetClearedMemory(

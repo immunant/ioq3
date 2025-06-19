@@ -199,8 +199,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -222,8 +221,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -249,8 +247,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -276,8 +273,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -305,8 +301,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -332,8 +327,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -359,8 +353,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -386,8 +379,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -413,8 +405,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -440,8 +431,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -467,8 +457,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -494,8 +483,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -517,8 +505,7 @@ static mut s_startserver: startserver_t = startserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -570,43 +557,20 @@ unsafe extern "C" fn GametypeBits(mut string: *mut libc::c_char) -> i32 {
     bits = 0 as i32;
     p = string;
     loop {
-        token = COM_ParseExt(
-            &mut p,
-            qfalse,
-        );
+        token = COM_ParseExt(&mut p, qfalse);
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
-        if Q_stricmp(
-            token,
-            b"ffa\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        if Q_stricmp(token, b"ffa\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             bits |= (1 as i32) << GT_FFA as i32
-        } else if Q_stricmp(
-            token,
-            b"tourney\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        } else if Q_stricmp(token, b"tourney\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             bits |= (1 as i32) << GT_TOURNAMENT as i32
-        } else if Q_stricmp(
-            token,
-            b"single\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        } else if Q_stricmp(token, b"single\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             bits |= (1 as i32) << GT_SINGLE_PLAYER as i32
-        } else if Q_stricmp(
-            token,
-            b"team\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        } else if Q_stricmp(token, b"team\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             bits |= (1 as i32) << GT_TEAM as i32
         } else {
-            if !(Q_stricmp(
-                token,
-                b"ctf\x00" as *const u8 as *const libc::c_char,
-            ) == 0 as i32)
-            {
+            if !(Q_stricmp(token, b"ctf\x00" as *const u8 as *const libc::c_char) == 0 as i32) {
                 continue;
             }
             bits |= (1 as i32) << GT_CTF as i32
@@ -632,15 +596,10 @@ unsafe extern "C" fn StartServer_Update() {
         if top + i >= s_startserver.nummaps {
             break;
         }
-        info = UI_GetArenaInfoByNumber(
-            s_startserver.maplist[(top + i) as usize],
-        );
+        info = UI_GetArenaInfoByNumber(s_startserver.maplist[(top + i) as usize]);
         Q_strncpyz(
             mapname.as_mut_ptr(),
-            Info_ValueForKey(
-                info,
-                b"map\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
             16 as i32,
         );
         Q_strupr(mapname.as_mut_ptr());
@@ -684,15 +643,10 @@ unsafe extern "C" fn StartServer_Update() {
             s_startserver.mapbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32)
         }
         // set the map name
-        info = UI_GetArenaInfoByNumber(
-            s_startserver.maplist[s_startserver.currentmap as usize],
-        );
+        info = UI_GetArenaInfoByNumber(s_startserver.maplist[s_startserver.currentmap as usize]);
         Q_strncpyz(
             s_startserver.mapname.string,
-            Info_ValueForKey(
-                info,
-                b"map\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
             16 as i32,
         );
     }
@@ -708,8 +662,8 @@ unsafe extern "C" fn StartServer_MapEvent(mut ptr: *mut libc::c_void, mut event:
     if event != 3 as i32 {
         return;
     }
-    s_startserver.currentmap = s_startserver.page * 4 as i32
-        + ((*(ptr as *mut menucommon_s)).id - 11 as i32);
+    s_startserver.currentmap =
+        s_startserver.page * 4 as i32 + ((*(ptr as *mut menucommon_s)).id - 11 as i32);
     StartServer_Update();
 }
 /*
@@ -730,8 +684,7 @@ unsafe extern "C" fn StartServer_GametypeEvent(mut _ptr: *mut libc::c_void, mut 
     count = UI_GetNumArenas();
     s_startserver.nummaps = 0 as i32;
     matchbits = (1 as i32) << gametype_remap[s_startserver.gametype.curvalue as usize];
-    if gametype_remap[s_startserver.gametype.curvalue as usize] == GT_FFA as i32
-    {
+    if gametype_remap[s_startserver.gametype.curvalue as usize] == GT_FFA as i32 {
         matchbits |= (1 as i32) << GT_SINGLE_PLAYER as i32
     }
     i = 0 as i32;
@@ -821,13 +774,7 @@ unsafe extern "C" fn StartServer_LevelshotDraw(mut self_0: *mut libc::c_void) {
     w = (*b).width;
     h = (*b).height;
     if (*b).shader != 0 {
-        UI_DrawHandlePic(
-            x as f32,
-            y as f32,
-            w as f32,
-            h as f32,
-            (*b).shader,
-        );
+        UI_DrawHandlePic(x as f32, y as f32, w as f32, h as f32, (*b).shader);
     }
     x = (*b).generic.x;
     y = (*b).generic.y + (*b).height;
@@ -841,14 +788,10 @@ unsafe extern "C" fn StartServer_LevelshotDraw(mut self_0: *mut libc::c_void) {
     x += (*b).width / 2 as i32;
     y += 4 as i32;
     n = s_startserver.page * 4 as i32 + (*b).generic.id - 11 as i32;
-    info =
-        UI_GetArenaInfoByNumber(s_startserver.maplist[n as usize]);
+    info = UI_GetArenaInfoByNumber(s_startserver.maplist[n as usize]);
     Q_strncpyz(
         mapname.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"map\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
         16 as i32,
     );
     Q_strupr(mapname.as_mut_ptr());
@@ -864,13 +807,7 @@ unsafe extern "C" fn StartServer_LevelshotDraw(mut self_0: *mut libc::c_void) {
     w = (*b).width;
     h = (*b).height + 28 as i32;
     if (*b).generic.flags & 0x40 as i32 as u32 != 0 {
-        UI_DrawHandlePic(
-            x as f32,
-            y as f32,
-            w as f32,
-            h as f32,
-            (*b).focusshader,
-        );
+        UI_DrawHandlePic(x as f32, y as f32, w as f32, h as f32, (*b).focusshader);
     };
 }
 /*
@@ -1048,13 +985,13 @@ unsafe extern "C" fn StartServer_MenuInit() {
     while i < 4 as i32 {
         Menu_AddItem(
             &mut s_startserver.menu as *mut _ as *mut _tag_menuframework,
-            &mut *s_startserver.mappics.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *s_startserver.mappics.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         Menu_AddItem(
             &mut s_startserver.menu as *mut _ as *mut _tag_menuframework,
-            &mut *s_startserver.mapbuttons.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *s_startserver.mapbuttons.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         i += 1
     }
@@ -1098,59 +1035,30 @@ StartServer_Cache
 pub unsafe extern "C" fn StartServer_Cache() {
     let mut i: i32 = 0;
     let mut info: *const libc::c_char = 0 as *const libc::c_char;
-    let mut precache: qboolean =
-        qfalse;
+    let mut precache: qboolean = qfalse;
     let mut picname: [libc::c_char; 64] = [0; 64];
     let mut mapname: [libc::c_char; 16] = [0; 16];
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/next_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/next_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/maps_selected\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char,
-    );
-    precache = trap_Cvar_VariableValue(
-        b"com_buildscript\x00" as *const u8 as *const libc::c_char,
-    ) as qboolean;
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/next_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/next_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/maps_selected\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char);
+    precache = trap_Cvar_VariableValue(b"com_buildscript\x00" as *const u8 as *const libc::c_char)
+        as qboolean;
     if precache as u64 != 0 {
         i = 0 as i32;
         while i < UI_GetNumArenas() {
             info = UI_GetArenaInfoByNumber(i);
             Q_strncpyz(
                 mapname.as_mut_ptr(),
-                Info_ValueForKey(
-                    info,
-                    b"map\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
                 16 as i32,
             );
             Q_strupr(mapname.as_mut_ptr());
@@ -1172,14 +1080,10 @@ UI_StartServerMenu
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_StartServerMenu(
-    mut multiplayer: qboolean,
-) {
+pub unsafe extern "C" fn UI_StartServerMenu(mut multiplayer: qboolean) {
     StartServer_MenuInit();
     s_startserver.multiplayer = multiplayer;
-    UI_PushMenu(
-        &mut s_startserver.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_startserver.menu as *mut _ as *mut _tag_menuframework);
 }
 
 static mut s_serveroptions: serveroptions_t = serveroptions_t {
@@ -1205,8 +1109,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1228,8 +1131,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1255,8 +1157,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1282,8 +1183,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1311,8 +1211,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1338,8 +1237,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1365,8 +1263,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1392,8 +1289,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1413,8 +1309,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1440,8 +1335,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1461,8 +1355,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1490,8 +1383,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1513,8 +1405,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1542,8 +1433,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1565,8 +1455,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1594,8 +1483,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1621,8 +1509,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1648,8 +1535,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1682,8 +1568,7 @@ static mut s_serveroptions: serveroptions_t = serveroptions_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1736,9 +1621,7 @@ BotAlreadySelected
 =================
 */
 
-unsafe extern "C" fn BotAlreadySelected(
-    mut checkName: *const libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn BotAlreadySelected(mut checkName: *const libc::c_char) -> qboolean {
     let mut n: i32 = 0;
     n = 1 as i32;
     while n < 12 as i32 {
@@ -1851,43 +1734,23 @@ unsafe extern "C" fn ServerOptions_Start() {
     }
     trap_Cvar_SetValue(
         b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-        Com_Clamp(
-            0 as i32 as f32,
-            12 as i32 as f32,
-            maxclients as f32,
-        ),
+        Com_Clamp(0 as i32 as f32, 12 as i32 as f32, maxclients as f32),
     );
     trap_Cvar_SetValue(
         b"dedicated\x00" as *const u8 as *const libc::c_char,
-        Com_Clamp(
-            0 as i32 as f32,
-            2 as i32 as f32,
-            dedicated as f32,
-        ),
+        Com_Clamp(0 as i32 as f32, 2 as i32 as f32, dedicated as f32),
     );
     trap_Cvar_SetValue(
         b"timelimit\x00" as *const u8 as *const libc::c_char,
-        Com_Clamp(
-            0 as i32 as f32,
-            timelimit as f32,
-            timelimit as f32,
-        ),
+        Com_Clamp(0 as i32 as f32, timelimit as f32, timelimit as f32),
     );
     trap_Cvar_SetValue(
         b"fraglimit\x00" as *const u8 as *const libc::c_char,
-        Com_Clamp(
-            0 as i32 as f32,
-            fraglimit as f32,
-            fraglimit as f32,
-        ),
+        Com_Clamp(0 as i32 as f32, fraglimit as f32, fraglimit as f32),
     );
     trap_Cvar_SetValue(
         b"capturelimit\x00" as *const u8 as *const libc::c_char,
-        Com_Clamp(
-            0 as i32 as f32,
-            flaglimit as f32,
-            flaglimit as f32,
-        ),
+        Com_Clamp(0 as i32 as f32, flaglimit as f32, flaglimit as f32),
     );
     trap_Cvar_SetValue(
         b"g_friendlyfire\x00" as *const u8 as *const libc::c_char,
@@ -1906,17 +1769,12 @@ unsafe extern "C" fn ServerOptions_Start() {
         s_serveroptions.punkbuster.curvalue as f32,
     );
     // the wait commands will allow the dedicated to take effect
-    info = UI_GetArenaInfoByNumber(
-        s_startserver.maplist[s_startserver.currentmap as usize],
-    );
+    info = UI_GetArenaInfoByNumber(s_startserver.maplist[s_startserver.currentmap as usize]);
     trap_Cmd_ExecuteText(
         EXEC_APPEND as i32,
         va(
             b"wait ; wait ; map %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            Info_ValueForKey(
-                info,
-                b"map\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
         ),
     );
     // add bots
@@ -1952,10 +1810,7 @@ unsafe extern "C" fn ServerOptions_Start() {
                             skill,
                         );
                     }
-                    trap_Cmd_ExecuteText(
-                        EXEC_APPEND as i32,
-                        buf.as_mut_ptr(),
-                    );
+                    trap_Cmd_ExecuteText(EXEC_APPEND as i32, buf.as_mut_ptr());
                 }
             }
         }
@@ -2000,9 +1855,7 @@ unsafe extern "C" fn ServerOptions_InitPlayerItems() {
         s_serveroptions.playerType[n as usize].curvalue = v;
         n += 1
     }
-    if s_serveroptions.multiplayer as u32 != 0
-        && s_serveroptions.gametype < GT_TEAM as i32
-    {
+    if s_serveroptions.multiplayer as u32 != 0 && s_serveroptions.gametype < GT_TEAM as i32 {
         n = 8 as i32;
         while n < 12 as i32 {
             s_serveroptions.playerType[n as usize].curvalue = 2 as i32;
@@ -2019,9 +1872,7 @@ unsafe extern "C" fn ServerOptions_InitPlayerItems() {
             s_serveroptions.playerNameBuffers[0 as i32 as usize].as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 16]>() as libc::c_ulong as i32,
         );
-        Q_CleanStr(
-            s_serveroptions.playerNameBuffers[0 as i32 as usize].as_mut_ptr(),
-        );
+        Q_CleanStr(s_serveroptions.playerNameBuffers[0 as i32 as usize].as_mut_ptr());
     }
     // init teams
     if s_serveroptions.gametype >= GT_TEAM as i32 {
@@ -2268,16 +2119,11 @@ unsafe extern "C" fn ServerOptions_InitBotNames() {
     }
     count = 1 as i32;
     // get info for this map
-    arenaInfo = UI_GetArenaInfoByMap(
-        s_serveroptions.mapnamebuffer.as_mut_ptr(),
-    );
+    arenaInfo = UI_GetArenaInfoByMap(s_serveroptions.mapnamebuffer.as_mut_ptr());
     // get the bot info - we'll seed with them if any are listed
     Q_strncpyz(
         bots.as_mut_ptr(),
-        Info_ValueForKey(
-            arenaInfo,
-            b"bots\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(arenaInfo, b"bots\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     p = &mut *bots.as_mut_ptr().offset(0 as i32 as isize) as *mut libc::c_char;
@@ -2304,10 +2150,7 @@ unsafe extern "C" fn ServerOptions_InitBotNames() {
         if botInfo.is_null() {
             botInfo = UI_GetBotInfoByNumber(count)
         }
-        bot = Info_ValueForKey(
-            botInfo,
-            b"name\x00" as *const u8 as *const libc::c_char,
-        );
+        bot = Info_ValueForKey(botInfo, b"name\x00" as *const u8 as *const libc::c_char);
         Q_strncpyz(
             s_serveroptions.playerNameBuffers[count as usize].as_mut_ptr(),
             bot,
@@ -2435,9 +2278,7 @@ unsafe extern "C" fn ServerOptions_SetMenuItems() {
             s_serveroptions.friendlyfire.curvalue = Com_Clamp(
                 0 as i32 as f32,
                 1 as i32 as f32,
-                trap_Cvar_VariableValue(
-                    b"ui_ctf_friendly\x00" as *const u8 as *const libc::c_char,
-                ),
+                trap_Cvar_VariableValue(b"ui_ctf_friendly\x00" as *const u8 as *const libc::c_char),
             ) as i32
         }
         0 | _ => {
@@ -2469,28 +2310,19 @@ unsafe extern "C" fn ServerOptions_SetMenuItems() {
     }
     Q_strncpyz(
         s_serveroptions.hostname.field.buffer.as_mut_ptr(),
-        UI_Cvar_VariableString(
-            b"sv_hostname\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"sv_hostname\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
     s_serveroptions.pure_0.curvalue = Com_Clamp(
         0 as i32 as f32,
         1 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"sv_pure\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"sv_pure\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     // set the map pic
-    info = UI_GetArenaInfoByNumber(
-        s_startserver.maplist[s_startserver.currentmap as usize],
-    );
+    info = UI_GetArenaInfoByNumber(s_startserver.maplist[s_startserver.currentmap as usize]);
     Q_strncpyz(
         mapname.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"map\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"map\x00" as *const u8 as *const libc::c_char),
         16 as i32,
     );
     Q_strupr(mapname.as_mut_ptr());
@@ -2531,8 +2363,7 @@ unsafe extern "C" fn PlayerName_Draw(mut item: *mut libc::c_void) {
     x = (*s).generic.x;
     y = (*s).generic.y;
     style = 0x10 as i32;
-    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32 as qboolean;
     if (*s).generic.flags & 0x2000 as i32 as u32 != 0 {
         color = text_color_disabled.as_mut_ptr()
     } else if focus as u64 != 0 {
@@ -2568,18 +2399,10 @@ unsafe extern "C" fn PlayerName_Draw(mut item: *mut libc::c_void) {
         style | 0x2 as i32,
         color,
     );
-    UI_DrawString(
-        x + 8 as i32,
-        y,
-        (*s).string,
-        style | 0 as i32,
-        color,
-    );
+    UI_DrawString(x + 8 as i32, y, (*s).string, style | 0 as i32, color);
 }
 
-unsafe extern "C" fn ServerOptions_MenuInit(
-    mut multiplayer: qboolean,
-) {
+unsafe extern "C" fn ServerOptions_MenuInit(mut multiplayer: qboolean) {
     let mut y: i32 = 0;
     let mut n: i32 = 0;
     crate::stdlib::memset(
@@ -2593,16 +2416,12 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         (::std::mem::size_of::<[i32; 5]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
             .wrapping_sub(1 as i32 as libc::c_ulong) as f32,
-        trap_Cvar_VariableValue(
-            b"g_gametype\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     s_serveroptions.punkbuster.curvalue = Com_Clamp(
         0 as i32 as f32,
         1 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"sv_punkbuster\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"sv_punkbuster\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     ServerOptions_Cache();
     s_serveroptions.menu.wrapAround = qtrue;
@@ -2758,8 +2577,7 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         s_serveroptions.playerName[n as usize].generic.id = n;
         s_serveroptions.playerName[n as usize].generic.ownerdraw =
             Some(PlayerName_Draw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-        s_serveroptions.playerName[n as usize].color =
-            color_orange.as_mut_ptr();
+        s_serveroptions.playerName[n as usize].color = color_orange.as_mut_ptr();
         s_serveroptions.playerName[n as usize].style = 0x10 as i32;
         s_serveroptions.playerName[n as usize].string =
             s_serveroptions.playerNameBuffers[n as usize].as_mut_ptr();
@@ -2846,20 +2664,20 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         if n != 0 as i32 {
             Menu_AddItem(
                 &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-                &mut *s_serveroptions.playerType.as_mut_ptr().offset(n as isize)
-                    as *mut menulist_s as *mut libc::c_void,
+                &mut *s_serveroptions.playerType.as_mut_ptr().offset(n as isize) as *mut menulist_s
+                    as *mut libc::c_void,
             );
         }
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut *s_serveroptions.playerName.as_mut_ptr().offset(n as isize)
-                as *mut menutext_s as *mut libc::c_void,
+            &mut *s_serveroptions.playerName.as_mut_ptr().offset(n as isize) as *mut menutext_s
+                as *mut libc::c_void,
         );
         if s_serveroptions.gametype >= GT_TEAM as i32 {
             Menu_AddItem(
                 &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-                &mut *s_serveroptions.playerTeam.as_mut_ptr().offset(n as isize)
-                    as *mut menulist_s as *mut libc::c_void,
+                &mut *s_serveroptions.playerTeam.as_mut_ptr().offset(n as isize) as *mut menulist_s
+                    as *mut libc::c_void,
             );
         }
         n += 1
@@ -2867,14 +2685,12 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     if s_serveroptions.gametype != GT_CTF as i32 {
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut s_serveroptions.fraglimit as *mut menufield_s
-                as *mut libc::c_void,
+            &mut s_serveroptions.fraglimit as *mut menufield_s as *mut libc::c_void,
         );
     } else {
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut s_serveroptions.flaglimit as *mut menufield_s
-                as *mut libc::c_void,
+            &mut s_serveroptions.flaglimit as *mut menufield_s as *mut libc::c_void,
         );
     }
     Menu_AddItem(
@@ -2884,27 +2700,23 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     if s_serveroptions.gametype >= GT_TEAM as i32 {
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut s_serveroptions.friendlyfire as *mut menuradiobutton_s
-                as *mut libc::c_void,
+            &mut s_serveroptions.friendlyfire as *mut menuradiobutton_s as *mut libc::c_void,
         );
     }
     Menu_AddItem(
         &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_serveroptions.pure_0 as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_serveroptions.pure_0 as *mut menuradiobutton_s as *mut libc::c_void,
     );
     if s_serveroptions.multiplayer as u64 != 0 {
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut s_serveroptions.dedicated as *mut menulist_s
-                as *mut libc::c_void,
+            &mut s_serveroptions.dedicated as *mut menulist_s as *mut libc::c_void,
         );
     }
     if s_serveroptions.multiplayer as u64 != 0 {
         Menu_AddItem(
             &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-            &mut s_serveroptions.hostname as *mut menufield_s
-                as *mut libc::c_void,
+            &mut s_serveroptions.hostname as *mut menufield_s as *mut libc::c_void,
         );
     }
     Menu_AddItem(
@@ -2933,24 +2745,12 @@ ServerOptions_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn ServerOptions_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/maps_select\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char);
 }
 /*
 =================
@@ -2958,13 +2758,9 @@ UI_ServerOptionsMenu
 =================
 */
 
-unsafe extern "C" fn UI_ServerOptionsMenu(
-    mut multiplayer: qboolean,
-) {
+unsafe extern "C" fn UI_ServerOptionsMenu(mut multiplayer: qboolean) {
     ServerOptions_MenuInit(multiplayer);
-    UI_PushMenu(
-        &mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_serveroptions.menu as *mut _ as *mut _tag_menuframework);
 }
 
 static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
@@ -2990,8 +2786,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3013,8 +2808,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3040,8 +2834,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3067,8 +2860,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3090,8 +2882,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3117,8 +2908,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3144,8 +2934,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3171,8 +2960,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3198,8 +2986,7 @@ static mut botSelectInfo: botSelectInfo_t = botSelectInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -3242,14 +3029,8 @@ unsafe extern "C" fn UI_BotSelectMenu_SortCompare(
     num2 = *(arg2 as *mut i32);
     info1 = UI_GetBotInfoByNumber(num1);
     info2 = UI_GetBotInfoByNumber(num2);
-    name1 = Info_ValueForKey(
-        info1,
-        b"name\x00" as *const u8 as *const libc::c_char,
-    );
-    name2 = Info_ValueForKey(
-        info2,
-        b"name\x00" as *const u8 as *const libc::c_char,
-    );
+    name1 = Info_ValueForKey(info1, b"name\x00" as *const u8 as *const libc::c_char);
+    name2 = Info_ValueForKey(info2, b"name\x00" as *const u8 as *const libc::c_char);
     return Q_stricmp(name1, name2);
 }
 /*
@@ -3317,10 +3098,7 @@ unsafe extern "C" fn ServerPlayerIcon(
         skin,
     );
     if trap_R_RegisterShaderNoMip(iconName) == 0
-        && Q_stricmp(
-            skin,
-            b"default\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as i32
+        && Q_stricmp(skin, b"default\x00" as *const u8 as *const libc::c_char) != 0 as i32
     {
         Com_sprintf(
             iconName,
@@ -3344,36 +3122,24 @@ unsafe extern "C" fn UI_BotSelectMenu_UpdateGrid() {
     i = 0 as i32;
     while i < 4 as i32 * 4 as i32 {
         if j < botSelectInfo.numBots {
-            info = UI_GetBotInfoByNumber(
-                botSelectInfo.sortedBotNums[j as usize],
-            );
+            info = UI_GetBotInfoByNumber(botSelectInfo.sortedBotNums[j as usize]);
             ServerPlayerIcon(
-                Info_ValueForKey(
-                    info,
-                    b"model\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"model\x00" as *const u8 as *const libc::c_char),
                 botSelectInfo.boticons[i as usize].as_mut_ptr(),
                 64 as i32,
             );
             Q_strncpyz(
                 botSelectInfo.botnames[i as usize].as_mut_ptr(),
-                Info_ValueForKey(
-                    info,
-                    b"name\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"name\x00" as *const u8 as *const libc::c_char),
                 16 as i32,
             );
-            Q_CleanStr(
-                botSelectInfo.botnames[i as usize].as_mut_ptr(),
-            );
+            Q_CleanStr(botSelectInfo.botnames[i as usize].as_mut_ptr());
             botSelectInfo.pics[i as usize].generic.name =
                 botSelectInfo.boticons[i as usize].as_mut_ptr();
             if BotAlreadySelected(botSelectInfo.botnames[i as usize].as_mut_ptr()) as u64 != 0 {
-                botSelectInfo.picnames[i as usize].color =
-                    color_red.as_mut_ptr()
+                botSelectInfo.picnames[i as usize].color = color_red.as_mut_ptr()
             } else {
-                botSelectInfo.picnames[i as usize].color =
-                    color_orange.as_mut_ptr()
+                botSelectInfo.picnames[i as usize].color = color_orange.as_mut_ptr()
             }
             botSelectInfo.picbuttons[i as usize].generic.flags &= !(0x4000 as i32 as u32)
         } else {
@@ -3423,10 +3189,7 @@ unsafe extern "C" fn UI_BotSelectMenu_Default(mut bot: *mut libc::c_char) {
     n = 0 as i32;
     while n < botSelectInfo.numBots {
         botInfo = UI_GetBotInfoByNumber(n);
-        test = Info_ValueForKey(
-            botInfo,
-            b"name\x00" as *const u8 as *const libc::c_char,
-        );
+        test = Info_ValueForKey(botInfo, b"name\x00" as *const u8 as *const libc::c_char);
         if Q_stricmp(bot, test) == 0 as i32 {
             break;
         }
@@ -3543,33 +3306,19 @@ UI_BotSelectMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_BotSelectMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char);
     trap_R_RegisterShaderNoMip(
         b"menu/art/opponents_select\x00" as *const u8 as *const libc::c_char,
     );
     trap_R_RegisterShaderNoMip(
         b"menu/art/opponents_selected\x00" as *const u8 as *const libc::c_char,
     );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char);
 }
 
 unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
@@ -3611,8 +3360,7 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
             botSelectInfo.pics[k as usize].focuspic =
                 b"menu/art/opponents_selected\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
-            botSelectInfo.pics[k as usize].focuscolor =
-                colorRed.as_mut_ptr();
+            botSelectInfo.pics[k as usize].focuscolor = colorRed.as_mut_ptr();
             botSelectInfo.picbuttons[k as usize].generic.type_0 = 6 as i32;
             botSelectInfo.picbuttons[k as usize].generic.flags =
                 0x4 as i32 as u32 | 0x8000 as i32 as u32 | 0x100 as i32 as u32;
@@ -3632,16 +3380,14 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
             botSelectInfo.picbuttons[k as usize].focuspic =
                 b"menu/art/opponents_select\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char;
-            botSelectInfo.picbuttons[k as usize].focuscolor =
-                colorRed.as_mut_ptr();
+            botSelectInfo.picbuttons[k as usize].focuscolor = colorRed.as_mut_ptr();
             botSelectInfo.picnames[k as usize].generic.type_0 = 7 as i32;
             botSelectInfo.picnames[k as usize].generic.flags = 0x2 as i32 as u32;
             botSelectInfo.picnames[k as usize].generic.x = x + 32 as i32;
             botSelectInfo.picnames[k as usize].generic.y = y + 64 as i32;
             botSelectInfo.picnames[k as usize].string =
                 botSelectInfo.botnames[k as usize].as_mut_ptr();
-            botSelectInfo.picnames[k as usize].color =
-                color_orange.as_mut_ptr();
+            botSelectInfo.picnames[k as usize].color = color_orange.as_mut_ptr();
             botSelectInfo.picnames[k as usize].style = 0x1 as i32 | 0x10 as i32;
             x += 64 as i32 + 6 as i32;
             j += 1;
@@ -3712,18 +3458,18 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
     while i < 4 as i32 * 4 as i32 {
         Menu_AddItem(
             &mut botSelectInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut *botSelectInfo.pics.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *botSelectInfo.pics.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         Menu_AddItem(
             &mut botSelectInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut *botSelectInfo.picbuttons.as_mut_ptr().offset(i as isize)
-                as *mut menubitmap_s as *mut libc::c_void,
+            &mut *botSelectInfo.picbuttons.as_mut_ptr().offset(i as isize) as *mut menubitmap_s
+                as *mut libc::c_void,
         );
         Menu_AddItem(
             &mut botSelectInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut *botSelectInfo.picnames.as_mut_ptr().offset(i as isize)
-                as *mut menutext_s as *mut libc::c_void,
+            &mut *botSelectInfo.picnames.as_mut_ptr().offset(i as isize) as *mut menutext_s
+                as *mut libc::c_void,
         );
         i += 1
     }
@@ -3859,7 +3605,5 @@ UI_BotSelectMenu
 
 pub unsafe extern "C" fn UI_BotSelectMenu(mut bot: *mut libc::c_char) {
     UI_BotSelectMenu_Init(bot);
-    UI_PushMenu(
-        &mut botSelectInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut botSelectInfo.menu as *mut _ as *mut _tag_menuframework);
 }

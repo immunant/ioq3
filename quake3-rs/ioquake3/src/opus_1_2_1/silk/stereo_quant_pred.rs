@@ -116,16 +116,13 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
                 [(i + 1 as i32) as usize] as i32
                 - low_Q13) as i64
                 * (0.5f64 / 5 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-                    as opus_int32
-                    as opus_int16 as i64
+                    as opus_int32 as opus_int16 as i64
                 >> 16 as i32) as opus_int32;
             j = 0 as i32;
             while j < 5 as i32 {
                 lvl_Q13 = low_Q13
-                    + step_Q13 as opus_int16
-                        as opus_int32
-                        * (2 as i32 * j + 1 as i32) as opus_int16
-                            as opus_int32;
+                    + step_Q13 as opus_int16 as opus_int32
+                        * (2 as i32 * j + 1 as i32) as opus_int16 as opus_int32;
                 err_Q13 = if *pred_Q13.offset(n as isize) - lvl_Q13 > 0 as i32 {
                     (*pred_Q13.offset(n as isize)) - lvl_Q13
                 } else {

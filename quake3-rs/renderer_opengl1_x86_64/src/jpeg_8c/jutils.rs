@@ -156,8 +156,8 @@ pub unsafe extern "C" fn jcopy_sample_rows(
 {
     let mut inptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut outptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut count: size_t = (num_cols as libc::c_ulong)
-        .wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong);
+    let mut count: size_t =
+        (num_cols as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JSAMPLE>() as libc::c_ulong);
     let mut row: i32 = 0;
     input_array = input_array.offset(source_row as isize);
     output_array = output_array.offset(dest_row as isize);
@@ -197,10 +197,7 @@ pub unsafe extern "C" fn jcopy_block_row(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn jzero_far(
-    mut target: *mut libc::c_void,
-    mut bytestozero: size_t,
-)
+pub unsafe extern "C" fn jzero_far(mut target: *mut libc::c_void, mut bytestozero: size_t)
 /* Zero out a chunk of FAR memory. */
 /* This might be sample-array data, block-array data, or alloc_large data. */
 {

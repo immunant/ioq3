@@ -340,8 +340,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                                 //if the travel time from the area to the goal is greater than the shortest goal travel time
                                 if !(goaltime as f32 > 0.8f64 as f32 * goaltraveltime as f32) {
                                     //this is a mid range area
-                                    (*midrangeareas.offset(i as isize)).valid =
-                                        qtrue as i32;
+                                    (*midrangeareas.offset(i as isize)).valid = qtrue as i32;
                                     (*midrangeareas.offset(i as isize)).starttime =
                                         starttime as u16;
                                     (*midrangeareas.offset(i as isize)).goaltime = goaltime as u16;
@@ -394,15 +393,12 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                     .center[2 as i32 as usize];
                 j += 1
             }
-            mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64
-                * (1.0f64 / numclusterareas as f64))
-                as vec_t;
-            mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64
-                * (1.0f64 / numclusterareas as f64))
-                as vec_t;
-            mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64
-                * (1.0f64 / numclusterareas as f64))
-                as vec_t;
+            mid[0 as i32 as usize] =
+                (mid[0 as i32 as usize] as f64 * (1.0f64 / numclusterareas as f64)) as vec_t;
+            mid[1 as i32 as usize] =
+                (mid[1 as i32 as usize] as f64 * (1.0f64 / numclusterareas as f64)) as vec_t;
+            mid[2 as i32 as usize] =
+                (mid[2 as i32 as usize] as f64 * (1.0f64 / numclusterareas as f64)) as vec_t;
             //get the area closest to the center of the cluster
             bestdist = 999999 as i32 as f32; //end for
             bestareanum = 0 as i32;
@@ -423,8 +419,7 @@ pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
                         .areas
                         .offset(*clusterareas.offset(j as isize) as isize))
                     .center[2 as i32 as usize];
-                dist =
-                    VectorLength(dir.as_mut_ptr() as *const vec_t);
+                dist = VectorLength(dir.as_mut_ptr() as *const vec_t);
                 if dist < bestdist {
                     bestdist = dist;
                     bestareanum = *clusterareas.offset(j as isize)

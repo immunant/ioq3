@@ -85,8 +85,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -108,8 +107,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -135,8 +133,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -162,8 +159,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -189,8 +185,7 @@ static mut cdkeyMenuInfo: cdkeyMenuInfo_t = cdkeyMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -219,9 +214,7 @@ unsafe extern "C" fn UI_CDKeyMenu_Event(mut ptr: *mut libc::c_void, mut event: i
     match (*(ptr as *mut menucommon_s)).id {
         11 => {
             if cdkeyMenuInfo.cdkey.field.buffer[0 as i32 as usize] != 0 {
-                trap_SetCDKey(
-                    cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr(),
-                );
+                trap_SetCDKey(cdkeyMenuInfo.cdkey.field.buffer.as_mut_ptr());
             }
             UI_PopMenu();
         }
@@ -276,8 +269,7 @@ unsafe extern "C" fn UI_CDKeyMenu_DrawKey(mut self_0: *mut libc::c_void) {
     let mut y: i32 = 0;
     let mut val: i32 = 0;
     f = self_0 as *mut menufield_s;
-    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*f).generic.parent).cursor == (*f).generic.menuPosition) as i32 as qboolean;
     style = 0 as i32;
     if focus as u64 != 0 {
         color = color_yellow.as_mut_ptr()
@@ -449,21 +441,11 @@ UI_CDKeyMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_CDKeyMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -474,9 +456,7 @@ UI_CDKeyMenu
 
 pub unsafe extern "C" fn UI_CDKeyMenu() {
     UI_CDKeyMenu_Init();
-    UI_PushMenu(
-        &mut cdkeyMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut cdkeyMenuInfo.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 ===========================================================================

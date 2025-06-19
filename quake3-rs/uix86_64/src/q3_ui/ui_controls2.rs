@@ -503,8 +503,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -526,8 +525,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -553,8 +551,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -580,8 +577,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -607,8 +603,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -630,8 +625,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -653,8 +647,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -676,8 +669,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -699,8 +691,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -719,8 +710,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -739,8 +729,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -759,8 +748,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -779,8 +767,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -799,8 +786,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -819,8 +805,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -839,8 +824,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -859,8 +843,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -879,8 +862,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -899,8 +881,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -919,8 +900,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -939,8 +919,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -959,8 +938,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -979,8 +957,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -999,8 +976,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1019,8 +995,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1039,8 +1014,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1059,8 +1033,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1079,8 +1052,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1099,8 +1071,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1119,8 +1090,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1139,8 +1109,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1159,8 +1128,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1179,8 +1147,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1199,8 +1166,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1220,8 +1186,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1240,8 +1205,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1260,8 +1224,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1280,8 +1243,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1301,8 +1263,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1325,8 +1286,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1346,8 +1306,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1367,8 +1326,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1387,8 +1345,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1408,8 +1365,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1431,8 +1387,7 @@ static mut s_controls: controls_t = controls_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         torsoModel: 0,
@@ -1448,8 +1403,7 @@ static mut s_controls: controls_t = controls_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         headModel: 0,
@@ -1504,8 +1458,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1524,8 +1477,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1544,8 +1496,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1564,8 +1515,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1584,8 +1534,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1604,8 +1553,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1625,8 +1573,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1658,8 +1605,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1685,8 +1631,7 @@ static mut s_controls: controls_t = controls_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1699,8 +1644,7 @@ static mut s_controls: controls_t = controls_t {
     },
 };
 
-static mut controls_binding_color: vec4_t =
-    [1.00f32, 0.43f32, 0.00f32, 1.00f32];
+static mut controls_binding_color: vec4_t = [1.00f32, 0.43f32, 0.00f32, 1.00f32];
 
 static mut g_bindings: [bind_t; 36] = [
     {
@@ -2286,8 +2230,7 @@ unsafe extern "C" fn Controls_InitCvars() {
         (*cvarptr).value = trap_Cvar_VariableValue((*cvarptr).name);
         // get default value
         trap_Cvar_Reset((*cvarptr).name);
-        (*cvarptr).defaultvalue =
-            trap_Cvar_VariableValue((*cvarptr).name);
+        (*cvarptr).defaultvalue = trap_Cvar_VariableValue((*cvarptr).name);
         // restore current value
         trap_Cvar_SetValue((*cvarptr).name, (*cvarptr).value);
         cvarptr = cvarptr.offset(1)
@@ -2340,16 +2283,13 @@ Controls_UpdateModel
 */
 
 unsafe extern "C" fn Controls_UpdateModel(mut anim: i32) {
-    s_controls.playerViewangles[2 as i32 as usize] =
-        0 as i32 as vec_t;
+    s_controls.playerViewangles[2 as i32 as usize] = 0 as i32 as vec_t;
     s_controls.playerViewangles[1 as i32 as usize] = s_controls.playerViewangles[2 as i32 as usize];
     s_controls.playerViewangles[0 as i32 as usize] = s_controls.playerViewangles[1 as i32 as usize];
-    s_controls.playerMoveangles[2 as i32 as usize] =
-        0 as i32 as vec_t;
+    s_controls.playerMoveangles[2 as i32 as usize] = 0 as i32 as vec_t;
     s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerMoveangles[2 as i32 as usize];
     s_controls.playerMoveangles[0 as i32 as usize] = s_controls.playerMoveangles[1 as i32 as usize];
-    s_controls.playerViewangles[1 as i32 as usize] =
-        (180 as i32 - 30 as i32) as vec_t;
+    s_controls.playerViewangles[1 as i32 as usize] = (180 as i32 - 30 as i32) as vec_t;
     s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles[1 as i32 as usize];
     s_controls.playerLegs = LEGS_IDLE as i32;
     s_controls.playerTorso = TORSO_STAND as i32;
@@ -2373,14 +2313,8 @@ unsafe extern "C" fn Controls_UpdateModel(mut anim: i32) {
             s_controls.playerMoveangles[1 as i32 as usize] =
                 s_controls.playerViewangles[1 as i32 as usize] - 90 as i32 as f32
         }
-        10 => {
-            s_controls.playerViewangles[0 as i32 as usize] =
-                -(45 as i32) as vec_t
-        }
-        11 => {
-            s_controls.playerViewangles[0 as i32 as usize] =
-                45 as i32 as vec_t
-        }
+        10 => s_controls.playerViewangles[0 as i32 as usize] = -(45 as i32) as vec_t,
+        11 => s_controls.playerViewangles[0 as i32 as usize] = 45 as i32 as vec_t,
         12 => s_controls.playerWeapon = WP_GAUNTLET,
         13 => s_controls.playerWeapon = WP_MACHINEGUN,
         14 => s_controls.playerWeapon = WP_SHOTGUN,
@@ -2421,10 +2355,8 @@ unsafe extern "C" fn Controls_Update() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut y: i32 = 0;
-    let mut controls: *mut *mut menucommon_s =
-        0 as *mut *mut menucommon_s;
-    let mut control: *mut menucommon_s =
-        0 as *mut menucommon_s;
+    let mut controls: *mut *mut menucommon_s = 0 as *mut *mut menucommon_s;
+    let mut control: *mut menucommon_s = 0 as *mut menucommon_s;
     // disable all controls in all groups
     i = 0 as i32;
     while i < 4 as i32 {
@@ -2477,9 +2409,8 @@ unsafe extern "C" fn Controls_Update() {
             i += 1
         }
         // enable action item
-        (*(s_controls.menu.items[s_controls.menu.cursor as usize]
-            as *mut menucommon_s))
-            .flags &= !(0x2000 as i32 as u32);
+        (*(s_controls.menu.items[s_controls.menu.cursor as usize] as *mut menucommon_s)).flags &=
+            !(0x2000 as i32 as u32);
         // don't gray out player's name
         s_controls.name.generic.flags &= !(0x2000 as i32 as u32);
         return;
@@ -2543,9 +2474,8 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
     a = self_0 as *mut menuaction_s;
     x = (*a).generic.x;
     y = (*a).generic.y;
-    c = (Menu_ItemAtCursor(
-        (*a).generic.parent as *mut _tag_menuframework,
-    ) == a as *mut libc::c_void) as i32 as qboolean;
+    c = (Menu_ItemAtCursor((*a).generic.parent as *mut _tag_menuframework)
+        == a as *mut libc::c_void) as i32 as qboolean;
     b1 = g_bindings[(*a).generic.id as usize].bind1;
     if b1 == -(1 as i32) {
         libc::strcpy(
@@ -2557,11 +2487,7 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
         Q_strupr(name.as_mut_ptr());
         b2 = g_bindings[(*a).generic.id as usize].bind2;
         if b2 != -(1 as i32) {
-            trap_Key_KeynumToStringBuf(
-                b2,
-                name2.as_mut_ptr(),
-                32 as i32,
-            );
+            trap_Key_KeynumToStringBuf(b2, name2.as_mut_ptr(), 32 as i32);
             Q_strupr(name2.as_mut_ptr());
             libc::strcat(
                 name.as_mut_ptr(),
@@ -2827,10 +2753,7 @@ unsafe extern "C" fn Controls_SetConfig() {
         if (*bindptr).bind1 != -(1 as i32) {
             trap_Key_SetBinding((*bindptr).bind1, (*bindptr).command);
             if (*bindptr).bind2 != -(1 as i32) {
-                trap_Key_SetBinding(
-                    (*bindptr).bind2,
-                    (*bindptr).command,
-                );
+                trap_Key_SetBinding((*bindptr).bind2, (*bindptr).command);
             }
         }
         bindptr = bindptr.offset(1)
@@ -3010,9 +2933,8 @@ unsafe extern "C" fn Controls_MenuKey(mut key: i32) -> sfxHandle_t {
                 }
             }
             // assign key to local store
-            id = (*(s_controls.menu.items[s_controls.menu.cursor as usize]
-                as *mut menucommon_s))
-                .id;
+            id =
+                (*(s_controls.menu.items[s_controls.menu.cursor as usize] as *mut menucommon_s)).id;
             bindptr = g_bindings.as_mut_ptr();
             _i = 0 as i32;
             while !(*bindptr).label.is_null() {
@@ -3074,9 +2996,7 @@ Controls_ResetDefaults_Action
 =================
 */
 
-unsafe extern "C" fn Controls_ResetDefaults_Action(
-    mut result: qboolean,
-) {
+unsafe extern "C" fn Controls_ResetDefaults_Action(mut result: qboolean) {
     if result as u64 == 0 {
         return;
     }
@@ -3143,12 +3063,7 @@ unsafe extern "C" fn Controls_MenuEvent(mut ptr: *mut libc::c_void, mut event: i
                 UI_ConfirmMenu(
                     b"SET TO DEFAULTS?\x00" as *const u8 as *const libc::c_char,
                     Some(Controls_ResetDefaults_Draw as unsafe extern "C" fn() -> ()),
-                    Some(
-                        Controls_ResetDefaults_Action
-                            as unsafe extern "C" fn(
-                                _: qboolean,
-                            ) -> (),
-                    ),
+                    Some(Controls_ResetDefaults_Action as unsafe extern "C" fn(_: qboolean) -> ()),
                 );
             }
         }
@@ -3189,9 +3104,7 @@ unsafe extern "C" fn Controls_ActionEvent(mut ptr: *mut libc::c_void, mut event:
     if event == 2 as i32 {
         Controls_UpdateModel(0 as i32);
     } else if event == 1 as i32 {
-        Controls_UpdateModel(
-            g_bindings[(*(ptr as *mut menucommon_s)).id as usize].anim,
-        );
+        Controls_UpdateModel(g_bindings[(*(ptr as *mut menucommon_s)).id as usize].anim);
     } else if event == 3 as i32 && s_controls.waitingforkey as u64 == 0 {
         s_controls.waitingforkey = qtrue;
         Controls_Update();
@@ -3211,9 +3124,7 @@ unsafe extern "C" fn Controls_InitModel() {
     );
     UI_PlayerInfo_SetModel(
         &mut s_controls.playerinfo as *mut _ as *mut playerInfo_t,
-        UI_Cvar_VariableString(
-            b"model\x00" as *const u8 as *const libc::c_char,
-        ),
+        UI_Cvar_VariableString(b"model\x00" as *const u8 as *const libc::c_char),
     );
     Controls_UpdateModel(0 as i32);
 }
@@ -3225,14 +3136,10 @@ Controls_InitWeapons
 
 unsafe extern "C" fn Controls_InitWeapons() {
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
-    item = bg_itemlist
-        .as_mut_ptr()
-        .offset(1 as i32 as isize);
+    item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
         if !((*item).giType as u32 != IT_WEAPON as i32 as u32) {
-            trap_R_RegisterModel(
-                (*item).world_model[0 as i32 as usize],
-            );
+            trap_R_RegisterModel((*item).world_model[0 as i32 as usize]);
         }
         item = item.offset(1)
     }
@@ -3252,10 +3159,7 @@ unsafe extern "C" fn Controls_MenuInit() {
         ::std::mem::size_of::<controls_t>() as libc::c_ulong,
     );
     Controls_Cache();
-    s_controls.menu.key = Some(
-        Controls_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_controls.menu.key = Some(Controls_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_controls.menu.wrapAround = qtrue;
     s_controls.menu.fullscreen = qtrue;
     s_controls.banner.generic.type_0 = 10 as i32;
@@ -3750,13 +3654,11 @@ unsafe extern "C" fn Controls_MenuInit() {
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_controls.smoothmouse as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_controls.smoothmouse as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_controls.invertmouse as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_controls.invertmouse as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
@@ -3848,8 +3750,7 @@ unsafe extern "C" fn Controls_MenuInit() {
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_controls.autoswitch as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_controls.autoswitch as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
@@ -3865,8 +3766,7 @@ unsafe extern "C" fn Controls_MenuInit() {
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_controls.grenadelauncher as *mut menuaction_s
-            as *mut libc::c_void,
+        &mut s_controls.grenadelauncher as *mut menuaction_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
@@ -3951,18 +3851,10 @@ Controls_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn Controls_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
 }
 /*
 =================
@@ -3973,107 +3865,62 @@ UI_ControlsMenu
 
 pub unsafe extern "C" fn UI_ControlsMenu() {
     Controls_MenuInit();
-    UI_PushMenu(
-        &mut s_controls.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_controls.menu as *mut _ as *mut _tag_menuframework);
 }
 unsafe extern "C" fn run_static_initializers() {
     g_movement_controls = [
-        &mut s_controls.alwaysrun as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.run as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.walkforward as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.backpedal as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.stepleft as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.stepright as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.moveup as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.movedown as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.turnleft as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.turnright as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.sidestep as *mut menuaction_s
-            as *mut menucommon_s,
+        &mut s_controls.alwaysrun as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.run as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.walkforward as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.backpedal as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.stepleft as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.stepright as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.moveup as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.movedown as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.turnleft as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.turnright as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.sidestep as *mut menuaction_s as *mut menucommon_s,
         0 as *mut menucommon_s,
     ];
     g_weapons_controls = [
-        &mut s_controls.attack as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.nextweapon as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.prevweapon as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.autoswitch as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.chainsaw as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.machinegun as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.shotgun as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.grenadelauncher as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.rocketlauncher as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.lightning as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.railgun as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.plasma as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.bfg as *mut menuaction_s
-            as *mut menucommon_s,
+        &mut s_controls.attack as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.nextweapon as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.prevweapon as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.autoswitch as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.chainsaw as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.machinegun as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.shotgun as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.grenadelauncher as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.rocketlauncher as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.lightning as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.railgun as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.plasma as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.bfg as *mut menuaction_s as *mut menucommon_s,
         0 as *mut menucommon_s,
     ];
     g_looking_controls = [
-        &mut s_controls.sensitivity as *mut menuslider_s
-            as *mut menucommon_s,
-        &mut s_controls.smoothmouse as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.invertmouse as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.lookup as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.lookdown as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.mouselook as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.freelook as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.centerview as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.zoomview as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.joyenable as *mut menuradiobutton_s
-            as *mut menucommon_s,
-        &mut s_controls.joythreshold as *mut menuslider_s
-            as *mut menucommon_s,
+        &mut s_controls.sensitivity as *mut menuslider_s as *mut menucommon_s,
+        &mut s_controls.smoothmouse as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.invertmouse as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.lookup as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.lookdown as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.mouselook as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.freelook as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.centerview as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.zoomview as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.joyenable as *mut menuradiobutton_s as *mut menucommon_s,
+        &mut s_controls.joythreshold as *mut menuslider_s as *mut menucommon_s,
         0 as *mut menucommon_s,
     ];
     g_misc_controls = [
-        &mut s_controls.showscores as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.useitem as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.gesture as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.chat as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.chat2 as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.chat3 as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.chat4 as *mut menuaction_s
-            as *mut menucommon_s,
-        &mut s_controls.togglemenu as *mut menuaction_s
-            as *mut menucommon_s,
+        &mut s_controls.showscores as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.useitem as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.gesture as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.chat as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.chat2 as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.chat3 as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.chat4 as *mut menuaction_s as *mut menucommon_s,
+        &mut s_controls.togglemenu as *mut menuaction_s as *mut menucommon_s,
         0 as *mut menucommon_s,
     ]
 }

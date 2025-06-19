@@ -200,50 +200,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // syscalls.asm is included instead when building a qvm
 // Initialized in run_static_initializers
 
-static mut syscall: Option<
-    unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-> = None;
+static mut syscall: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t> = None;
 #[no_mangle]
 
 pub unsafe extern "C" fn dllEntry(
-    mut syscallptr: Option<
-        unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-    >,
+    mut syscallptr: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
 ) {
     syscall = syscallptr;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn PASSFLOAT(mut x: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = x;
     return fi.i;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Print(mut string: *const libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        UI_PRINT as i32 as intptr_t,
-        string,
-    );
+    syscall.expect("non-null function pointer")(UI_PRINT as i32 as intptr_t, string);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Error(mut string: *const libc::c_char) -> ! {
-    syscall.expect("non-null function pointer")(
-        UI_ERROR as i32 as intptr_t,
-        string,
-    );
+    syscall.expect("non-null function pointer")(UI_ERROR as i32 as intptr_t, string);
     // shut up GCC warning about returning functions, because we know better
     libc::exit(1 as i32);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Milliseconds() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_MILLISECONDS as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_MILLISECONDS as i32 as intptr_t) as i32;
 }
 #[no_mangle]
 
@@ -264,10 +251,7 @@ pub unsafe extern "C" fn trap_Cvar_Register(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Cvar_Update(mut cvar: *mut vmCvar_t) {
-    syscall.expect("non-null function pointer")(
-        UI_CVAR_UPDATE as i32 as intptr_t,
-        cvar,
-    );
+    syscall.expect("non-null function pointer")(UI_CVAR_UPDATE as i32 as intptr_t, cvar);
 }
 #[no_mangle]
 
@@ -275,17 +259,12 @@ pub unsafe extern "C" fn trap_Cvar_Set(
     mut var_name: *const libc::c_char,
     mut value: *const libc::c_char,
 ) {
-    syscall.expect("non-null function pointer")(
-        UI_CVAR_SET as i32 as intptr_t,
-        var_name,
-        value,
-    );
+    syscall.expect("non-null function pointer")(UI_CVAR_SET as i32 as intptr_t, var_name, value);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
         UI_CVAR_VARIABLEVALUE as i32 as intptr_t,
         var_name,
@@ -318,10 +297,7 @@ pub unsafe extern "C" fn trap_Cvar_SetValue(mut var_name: *const libc::c_char, m
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Cvar_Reset(mut name: *const libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        UI_CVAR_RESET as i32 as intptr_t,
-        name,
-    );
+    syscall.expect("non-null function pointer")(UI_CVAR_RESET as i32 as intptr_t, name);
 }
 #[no_mangle]
 
@@ -354,9 +330,7 @@ pub unsafe extern "C" fn trap_Cvar_InfoStringBuffer(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Argc() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_ARGC as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_ARGC as i32 as intptr_t) as i32;
 }
 // for the showing the status of a server
 // to retrieve the status of server to find a player
@@ -419,12 +393,7 @@ pub unsafe extern "C" fn trap_FS_Read(
     mut len: i32,
     mut f: fileHandle_t,
 ) {
-    syscall.expect("non-null function pointer")(
-        UI_FS_READ as i32 as intptr_t,
-        buffer,
-        len,
-        f,
-    );
+    syscall.expect("non-null function pointer")(UI_FS_READ as i32 as intptr_t, buffer, len, f);
 }
 #[no_mangle]
 
@@ -433,20 +402,12 @@ pub unsafe extern "C" fn trap_FS_Write(
     mut len: i32,
     mut f: fileHandle_t,
 ) {
-    syscall.expect("non-null function pointer")(
-        UI_FS_WRITE as i32 as intptr_t,
-        buffer,
-        len,
-        f,
-    );
+    syscall.expect("non-null function pointer")(UI_FS_WRITE as i32 as intptr_t, buffer, len, f);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_FS_FCloseFile(mut f: fileHandle_t) {
-    syscall.expect("non-null function pointer")(
-        UI_FS_FCLOSEFILE as i32 as intptr_t,
-        f,
-    );
+    syscall.expect("non-null function pointer")(UI_FS_FCLOSEFILE as i32 as intptr_t, f);
 }
 #[no_mangle]
 
@@ -480,23 +441,15 @@ pub unsafe extern "C" fn trap_FS_Seek(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_R_RegisterModel(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
-    return syscall.expect("non-null function pointer")(
-        UI_R_REGISTERMODEL as i32 as intptr_t,
-        name,
-    ) as qhandle_t;
+pub unsafe extern "C" fn trap_R_RegisterModel(mut name: *const libc::c_char) -> qhandle_t {
+    return syscall.expect("non-null function pointer")(UI_R_REGISTERMODEL as i32 as intptr_t, name)
+        as qhandle_t;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_R_RegisterSkin(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
-    return syscall.expect("non-null function pointer")(
-        UI_R_REGISTERSKIN as i32 as intptr_t,
-        name,
-    ) as qhandle_t;
+pub unsafe extern "C" fn trap_R_RegisterSkin(mut name: *const libc::c_char) -> qhandle_t {
+    return syscall.expect("non-null function pointer")(UI_R_REGISTERSKIN as i32 as intptr_t, name)
+        as qhandle_t;
 }
 #[no_mangle]
 
@@ -514,9 +467,7 @@ pub unsafe extern "C" fn trap_R_RegisterFont(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_R_RegisterShaderNoMip(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
+pub unsafe extern "C" fn trap_R_RegisterShaderNoMip(mut name: *const libc::c_char) -> qhandle_t {
     return syscall.expect("non-null function pointer")(
         UI_R_REGISTERSHADERNOMIP as i32 as intptr_t,
         name,
@@ -525,17 +476,12 @@ pub unsafe extern "C" fn trap_R_RegisterShaderNoMip(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_R_ClearScene() {
-    syscall.expect("non-null function pointer")(
-        UI_R_CLEARSCENE as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_R_CLEARSCENE as i32 as intptr_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_R_AddRefEntityToScene(mut re: *const refEntity_t) {
-    syscall.expect("non-null function pointer")(
-        UI_R_ADDREFENTITYTOSCENE as i32 as intptr_t,
-        re,
-    );
+    syscall.expect("non-null function pointer")(UI_R_ADDREFENTITYTOSCENE as i32 as intptr_t, re);
 }
 #[no_mangle]
 
@@ -572,18 +518,12 @@ pub unsafe extern "C" fn trap_R_AddLightToScene(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_R_RenderScene(mut fd: *const refdef_t) {
-    syscall.expect("non-null function pointer")(
-        UI_R_RENDERSCENE as i32 as intptr_t,
-        fd,
-    );
+    syscall.expect("non-null function pointer")(UI_R_RENDERSCENE as i32 as intptr_t, fd);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_R_SetColor(mut rgba: *const f32) {
-    syscall.expect("non-null function pointer")(
-        UI_R_SETCOLOR as i32 as intptr_t,
-        rgba,
-    );
+    syscall.expect("non-null function pointer")(UI_R_SETCOLOR as i32 as intptr_t, rgba);
 }
 #[no_mangle]
 
@@ -628,9 +568,7 @@ pub unsafe extern "C" fn trap_R_ModelBounds(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_UpdateScreen() {
-    syscall.expect("non-null function pointer")(
-        UI_UPDATESCREEN as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_UPDATESCREEN as i32 as intptr_t);
 }
 #[no_mangle]
 
@@ -654,10 +592,7 @@ pub unsafe extern "C" fn trap_CM_LerpTag(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_S_StartLocalSound(
-    mut sfx: sfxHandle_t,
-    mut channelNum: i32,
-) {
+pub unsafe extern "C" fn trap_S_StartLocalSound(mut sfx: sfxHandle_t, mut channelNum: i32) {
     syscall.expect("non-null function pointer")(
         UI_S_STARTLOCALSOUND as i32 as intptr_t,
         sfx,
@@ -715,26 +650,19 @@ pub unsafe extern "C" fn trap_Key_SetBinding(mut keynum: i32, mut binding: *cons
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Key_IsDown(
-    mut keynum: i32,
-) -> qboolean {
-    return syscall.expect("non-null function pointer")(
-        UI_KEY_ISDOWN as i32 as intptr_t,
-        keynum,
-    ) as qboolean;
+pub unsafe extern "C" fn trap_Key_IsDown(mut keynum: i32) -> qboolean {
+    return syscall.expect("non-null function pointer")(UI_KEY_ISDOWN as i32 as intptr_t, keynum)
+        as qboolean;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Key_GetOverstrikeMode() -> qboolean {
-    return syscall.expect("non-null function pointer")(
-        UI_KEY_GETOVERSTRIKEMODE as i32 as intptr_t,
-    ) as qboolean;
+    return syscall.expect("non-null function pointer")(UI_KEY_GETOVERSTRIKEMODE as i32 as intptr_t)
+        as qboolean;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Key_SetOverstrikeMode(
-    mut state: qboolean,
-) {
+pub unsafe extern "C" fn trap_Key_SetOverstrikeMode(mut state: qboolean) {
     syscall.expect("non-null function pointer")(
         UI_KEY_SETOVERSTRIKEMODE as i32 as intptr_t,
         state as u32,
@@ -743,24 +671,18 @@ pub unsafe extern "C" fn trap_Key_SetOverstrikeMode(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Key_ClearStates() {
-    syscall.expect("non-null function pointer")(
-        UI_KEY_CLEARSTATES as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_KEY_CLEARSTATES as i32 as intptr_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Key_GetCatcher() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_KEY_GETCATCHER as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_KEY_GETCATCHER as i32 as intptr_t)
+        as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_Key_SetCatcher(mut catcher: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_KEY_SETCATCHER as i32 as intptr_t,
-        catcher,
-    );
+    syscall.expect("non-null function pointer")(UI_KEY_SETCATCHER as i32 as intptr_t, catcher);
 }
 #[no_mangle]
 
@@ -774,18 +696,12 @@ pub unsafe extern "C" fn trap_GetClipboardData(mut buf: *mut libc::c_char, mut b
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_GetClientState(mut state: *mut uiClientState_t) {
-    syscall.expect("non-null function pointer")(
-        UI_GETCLIENTSTATE as i32 as intptr_t,
-        state,
-    );
+    syscall.expect("non-null function pointer")(UI_GETCLIENTSTATE as i32 as intptr_t, state);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_GetGlconfig(mut glconfig: *mut glconfig_t) {
-    syscall.expect("non-null function pointer")(
-        UI_GETGLCONFIG as i32 as intptr_t,
-        glconfig,
-    );
+    syscall.expect("non-null function pointer")(UI_GETGLCONFIG as i32 as intptr_t, glconfig);
 }
 #[no_mangle]
 
@@ -853,9 +769,8 @@ pub unsafe extern "C" fn trap_LAN_GetServerPing(mut source: i32, mut n: i32) -> 
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LAN_GetPingQueueCount() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_LAN_GETPINGQUEUECOUNT as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_LAN_GETPINGQUEUECOUNT as i32 as intptr_t)
+        as i32;
 }
 #[no_mangle]
 
@@ -874,32 +789,22 @@ pub unsafe extern "C" fn trap_LAN_ServerStatus(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LAN_SaveCachedServers() {
-    syscall.expect("non-null function pointer")(
-        UI_LAN_SAVECACHEDSERVERS as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_LAN_SAVECACHEDSERVERS as i32 as intptr_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LAN_LoadCachedServers() {
-    syscall.expect("non-null function pointer")(
-        UI_LAN_LOADCACHEDSERVERS as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_LAN_LOADCACHEDSERVERS as i32 as intptr_t);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LAN_ResetPings(mut n: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_LAN_RESETPINGS as i32 as intptr_t,
-        n,
-    );
+    syscall.expect("non-null function pointer")(UI_LAN_RESETPINGS as i32 as intptr_t, n);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_LAN_ClearPing(mut n: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_LAN_CLEARPING as i32 as intptr_t,
-        n,
-    );
+    syscall.expect("non-null function pointer")(UI_LAN_CLEARPING as i32 as intptr_t, n);
 }
 #[no_mangle]
 
@@ -956,9 +861,7 @@ pub unsafe extern "C" fn trap_LAN_ServerIsVisible(mut source: i32, mut n: i32) -
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_LAN_UpdateVisiblePings(
-    mut source: i32,
-) -> qboolean {
+pub unsafe extern "C" fn trap_LAN_UpdateVisiblePings(mut source: i32) -> qboolean {
     return syscall.expect("non-null function pointer")(
         UI_LAN_UPDATEVISIBLEPINGS as i32 as intptr_t,
         source,
@@ -1008,26 +911,18 @@ pub unsafe extern "C" fn trap_LAN_CompareServers(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_MemoryRemaining() -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_MEMORY_REMAINING as i32 as intptr_t,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_MEMORY_REMAINING as i32 as intptr_t)
+        as i32;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_GetCDKey(mut buf: *mut libc::c_char, mut buflen: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_GET_CDKEY as i32 as intptr_t,
-        buf,
-        buflen,
-    );
+    syscall.expect("non-null function pointer")(UI_GET_CDKEY as i32 as intptr_t, buf, buflen);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_SetCDKey(mut buf: *mut libc::c_char) {
-    syscall.expect("non-null function pointer")(
-        UI_SET_CDKEY as i32 as intptr_t,
-        buf,
-    );
+    syscall.expect("non-null function pointer")(UI_SET_CDKEY as i32 as intptr_t, buf);
 }
 #[no_mangle]
 
@@ -1048,17 +943,12 @@ pub unsafe extern "C" fn trap_PC_LoadSource(mut filename: *const libc::c_char) -
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_PC_FreeSource(mut handle: i32) -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_PC_FREE_SOURCE as i32 as intptr_t,
-        handle,
-    ) as i32;
+    return syscall.expect("non-null function pointer")(UI_PC_FREE_SOURCE as i32 as intptr_t, handle)
+        as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_PC_ReadToken(
-    mut handle: i32,
-    mut pc_token: *mut pc_token_t,
-) -> i32 {
+pub unsafe extern "C" fn trap_PC_ReadToken(mut handle: i32, mut pc_token: *mut pc_token_t) -> i32 {
     return syscall.expect("non-null function pointer")(
         UI_PC_READ_TOKEN as i32 as intptr_t,
         handle,
@@ -1082,9 +972,7 @@ pub unsafe extern "C" fn trap_PC_SourceFileAndLine(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_S_StopBackgroundTrack() {
-    syscall.expect("non-null function pointer")(
-        UI_S_STOPBACKGROUNDTRACK as i32 as intptr_t,
-    );
+    syscall.expect("non-null function pointer")(UI_S_STOPBACKGROUNDTRACK as i32 as intptr_t);
 }
 #[no_mangle]
 
@@ -1100,13 +988,9 @@ pub unsafe extern "C" fn trap_S_StartBackgroundTrack(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_RealTime(
-    mut qtime: *mut qtime_t,
-) -> i32 {
-    return syscall.expect("non-null function pointer")(
-        UI_REAL_TIME as i32 as intptr_t,
-        qtime,
-    ) as i32;
+pub unsafe extern "C" fn trap_RealTime(mut qtime: *mut qtime_t) -> i32 {
+    return syscall.expect("non-null function pointer")(UI_REAL_TIME as i32 as intptr_t, qtime)
+        as i32;
 }
 // this returns a handle.  arg0 is the name in the format "idlogo.roq", set arg1 to NULL, alteredstates to qfalse (do not alter gamestate)
 #[no_mangle]
@@ -1133,9 +1017,7 @@ pub unsafe extern "C" fn trap_CIN_PlayCinematic(
 // cinematics must be stopped in reverse order of when they are started
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_CIN_StopCinematic(
-    mut handle: i32,
-) -> e_status {
+pub unsafe extern "C" fn trap_CIN_StopCinematic(mut handle: i32) -> e_status {
     return syscall.expect("non-null function pointer")(
         UI_CIN_STOPCINEMATIC as i32 as intptr_t,
         handle,
@@ -1144,9 +1026,7 @@ pub unsafe extern "C" fn trap_CIN_StopCinematic(
 // will run a frame of the cinematic but will not draw it.  Will return FMV_EOF if the end of the cinematic has been reached.
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_CIN_RunCinematic(
-    mut handle: i32,
-) -> e_status {
+pub unsafe extern "C" fn trap_CIN_RunCinematic(mut handle: i32) -> e_status {
     return syscall.expect("non-null function pointer")(
         UI_CIN_RUNCINEMATIC as i32 as intptr_t,
         handle,
@@ -1156,10 +1036,7 @@ pub unsafe extern "C" fn trap_CIN_RunCinematic(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_CIN_DrawCinematic(mut handle: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_CIN_DRAWCINEMATIC as i32 as intptr_t,
-        handle,
-    );
+    syscall.expect("non-null function pointer")(UI_CIN_DRAWCINEMATIC as i32 as intptr_t, handle);
 }
 // allows you to resize the animation dynamically
 #[no_mangle]
@@ -1209,10 +1086,7 @@ pub unsafe extern "C" fn trap_VerifyCDKey(
 #[no_mangle]
 
 pub unsafe extern "C" fn trap_SetPbClStatus(mut status: i32) {
-    syscall.expect("non-null function pointer")(
-        UI_SET_PBCLSTATUS as i32 as intptr_t,
-        status,
-    );
+    syscall.expect("non-null function pointer")(UI_SET_PBCLSTATUS as i32 as intptr_t, status);
 }
 unsafe extern "C" fn run_static_initializers() {
     syscall = ::std::mem::transmute::<

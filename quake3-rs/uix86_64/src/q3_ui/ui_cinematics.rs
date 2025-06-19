@@ -104,8 +104,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -127,8 +126,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -154,8 +152,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -181,8 +178,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -204,8 +200,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -227,8 +222,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -250,8 +244,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -273,8 +266,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -296,8 +288,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -319,8 +310,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -342,8 +332,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -365,8 +354,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -388,8 +376,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -411,8 +398,7 @@ static mut cinematicsMenuInfo: cinematicsMenuInfo_t = cinematicsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -472,9 +458,7 @@ unsafe extern "C" fn UI_CinematicsMenu_Event(mut ptr: *mut libc::c_void, mut eve
             n,
         ),
     );
-    if uis.demoversion as u32 != 0
-        && (*(ptr as *mut menucommon_s)).id == 20 as i32
-    {
+    if uis.demoversion as u32 != 0 && (*(ptr as *mut menucommon_s)).id == 20 as i32 {
         trap_Cmd_ExecuteText(
             EXEC_APPEND as i32,
             b"disconnect; cinematic demoEnd.RoQ 1\n\x00" as *const u8 as *const libc::c_char,
@@ -703,48 +687,39 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_idlogo as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_idlogo as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_intro as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_intro as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier1 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier1 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier2 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier2 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier3 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier3 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier4 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier4 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier5 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier5 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier6 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier6 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut cinematicsMenuInfo.cin_tier7 as *mut menutext_s
-            as *mut libc::c_void,
+        &mut cinematicsMenuInfo.cin_tier7 as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -763,18 +738,10 @@ UI_CinematicsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_CinematicsMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -785,9 +752,7 @@ UI_CinematicsMenu
 
 pub unsafe extern "C" fn UI_CinematicsMenu() {
     UI_CinematicsMenu_Init();
-    UI_PushMenu(
-        &mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut cinematicsMenuInfo.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 ===========================================================================

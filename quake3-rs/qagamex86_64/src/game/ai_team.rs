@@ -175,9 +175,7 @@ BotValidTeamLeader
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotValidTeamLeader(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn BotValidTeamLeader(mut bs: *mut bot_state_t) -> i32 {
     if crate::stdlib::strlen((*bs).teamleader.as_mut_ptr()) == 0 {
         return qfalse as i32;
     }
@@ -193,9 +191,7 @@ BotNumTeamMates
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotNumTeamMates(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn BotNumTeamMates(mut bs: *mut bot_state_t) -> i32 {
     let mut i: i32 = 0;
     let mut numplayers: i32 = 0;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
@@ -221,11 +217,7 @@ pub unsafe extern "C" fn BotNumTeamMates(
             )) == TEAM_SPECTATOR as i32)
             {
                 //
-                if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut bot_state_s,
-                    i,
-                ) != 0
-                {
+                if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, i) != 0 {
                     numplayers += 1
                 }
             }
@@ -245,60 +237,55 @@ pub unsafe extern "C" fn BotClientTravelTimeToGoal(
     mut client: i32,
     mut goal: *mut bot_goal_t,
 ) -> i32 {
-    let mut ps: playerState_t =
-        playerState_t {
-            commandTime: 0,
-            pm_type: 0,
-            bobCycle: 0,
-            pm_flags: 0,
-            pm_time: 0,
-            origin: [0.; 3],
-            velocity: [0.; 3],
-            weaponTime: 0,
-            gravity: 0,
-            speed: 0,
-            delta_angles: [0; 3],
-            groundEntityNum: 0,
-            legsTimer: 0,
-            legsAnim: 0,
-            torsoTimer: 0,
-            torsoAnim: 0,
-            movementDir: 0,
-            grapplePoint: [0.; 3],
-            eFlags: 0,
-            eventSequence: 0,
-            events: [0; 2],
-            eventParms: [0; 2],
-            externalEvent: 0,
-            externalEventParm: 0,
-            externalEventTime: 0,
-            clientNum: 0,
-            weapon: 0,
-            weaponstate: 0,
-            viewangles: [0.; 3],
-            viewheight: 0,
-            damageEvent: 0,
-            damageYaw: 0,
-            damagePitch: 0,
-            damageCount: 0,
-            stats: [0; 16],
-            persistant: [0; 16],
-            powerups: [0; 16],
-            ammo: [0; 16],
-            generic1: 0,
-            loopSound: 0,
-            jumppad_ent: 0,
-            ping: 0,
-            pmove_framecount: 0,
-            jumppad_frame: 0,
-            entityEventSequence: 0,
-        };
+    let mut ps: playerState_t = playerState_t {
+        commandTime: 0,
+        pm_type: 0,
+        bobCycle: 0,
+        pm_flags: 0,
+        pm_time: 0,
+        origin: [0.; 3],
+        velocity: [0.; 3],
+        weaponTime: 0,
+        gravity: 0,
+        speed: 0,
+        delta_angles: [0; 3],
+        groundEntityNum: 0,
+        legsTimer: 0,
+        legsAnim: 0,
+        torsoTimer: 0,
+        torsoAnim: 0,
+        movementDir: 0,
+        grapplePoint: [0.; 3],
+        eFlags: 0,
+        eventSequence: 0,
+        events: [0; 2],
+        eventParms: [0; 2],
+        externalEvent: 0,
+        externalEventParm: 0,
+        externalEventTime: 0,
+        clientNum: 0,
+        weapon: 0,
+        weaponstate: 0,
+        viewangles: [0.; 3],
+        viewheight: 0,
+        damageEvent: 0,
+        damageYaw: 0,
+        damagePitch: 0,
+        damageCount: 0,
+        stats: [0; 16],
+        persistant: [0; 16],
+        powerups: [0; 16],
+        ammo: [0; 16],
+        generic1: 0,
+        loopSound: 0,
+        jumppad_ent: 0,
+        ping: 0,
+        pmove_framecount: 0,
+        jumppad_frame: 0,
+        entityEventSequence: 0,
+    };
     let mut areanum: i32 = 0;
-    if BotAI_GetClientState(
-        client,
-        &mut ps as *mut _ as *mut playerState_s,
-    ) != 0
-    {
+    if BotAI_GetClientState(client, &mut ps as *mut _ as *mut playerState_s) != 0 {
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(ps.origin.as_mut_ptr())
     } else {
         areanum = 0 as i32
@@ -347,9 +334,7 @@ pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
     let mut traveltimes: [i32; 64] = [0; 64];
     let mut goal: *mut bot_goal_t = 0 as *mut bot_goal_t;
     if crate::src::game::ai_dmq3::gametype == GT_CTF as i32 {
-        if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s)
-            == TEAM_RED as i32
-        {
+        if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) == TEAM_RED as i32 {
             goal = &mut crate::src::game::ai_dmq3::ctf_redflag
         } else {
             goal = &mut crate::src::game::ai_dmq3::ctf_blueflag
@@ -377,10 +362,7 @@ pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
             )) == TEAM_SPECTATOR as i32)
             {
                 //
-                if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut bot_state_s,
-                    i,
-                ) != 0
+                if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, i) != 0
                     && !goal.is_null()
                 {
                     //
@@ -539,10 +521,7 @@ BotSayTeamOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotSayTeamOrderAlways(
-    mut bs: *mut bot_state_t,
-    mut toclient: i32,
-) {
+pub unsafe extern "C" fn BotSayTeamOrderAlways(mut bs: *mut bot_state_t, mut toclient: i32) {
     let mut teamchat: [libc::c_char; 256] = [0; 256];
     let mut buf: [libc::c_char; 256] = [0; 256];
     let mut name: [libc::c_char; 36] = [0; 36];
@@ -566,11 +545,7 @@ pub unsafe extern "C" fn BotSayTeamOrderAlways(
             name.as_mut_ptr(),
             buf.as_mut_ptr(),
         );
-        trap_BotQueueConsoleMessage(
-            (*bs).cs,
-            1 as i32,
-            teamchat.as_mut_ptr(),
-        );
+        trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, teamchat.as_mut_ptr());
     } else {
         trap_BotEnterChat((*bs).cs, toclient, 2 as i32);
     };
@@ -582,10 +557,7 @@ BotSayTeamOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotSayTeamOrder(
-    mut bs: *mut bot_state_t,
-    mut toclient: i32,
-) {
+pub unsafe extern "C" fn BotSayTeamOrder(mut bs: *mut bot_state_t, mut toclient: i32) {
     BotSayTeamOrderAlways(bs, toclient);
 }
 /*
@@ -634,9 +606,7 @@ BotCTFOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
-    mut bs: *mut bot_state_t,
-) {
+pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(mut bs: *mut bot_state_t) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
     let mut attackers: i32 = 0;
@@ -891,9 +861,7 @@ BotCTFOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
-    mut bs: *mut bot_state_t,
-) {
+pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(mut bs: *mut bot_state_t) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
     let mut attackers: i32 = 0;
@@ -1226,9 +1194,7 @@ BotCTFOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
-    mut bs: *mut bot_state_t,
-) {
+pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(mut bs: *mut bot_state_t) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
     let mut attackers: i32 = 0;
@@ -1444,9 +1410,7 @@ BotCTFOrders
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
-    mut bs: *mut bot_state_t,
-) {
+pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(mut bs: *mut bot_state_t) {
     let mut numteammates: i32 = 0;
     let mut defenders: i32 = 0;
     let mut attackers: i32 = 0;
@@ -1786,9 +1750,7 @@ BotCTFOrders
 pub unsafe extern "C" fn BotCTFOrders(mut bs: *mut bot_state_t) {
     let mut flagstatus: i32 = 0;
     //
-    if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s)
-        == TEAM_RED as i32
-    {
+    if crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) == TEAM_RED as i32 {
         flagstatus = (*bs).redflagstatus * 2 as i32 + (*bs).blueflagstatus
     } else {
         flagstatus = (*bs).blueflagstatus * 2 as i32 + (*bs).redflagstatus
@@ -1894,11 +1856,7 @@ pub unsafe extern "C" fn BotTeamOrders(mut bs: *mut bot_state_t) {
             )) == TEAM_SPECTATOR as i32)
             {
                 //
-                if crate::src::game::ai_dmq3::BotSameTeam(
-                    bs as *mut bot_state_s,
-                    i,
-                ) != 0
-                {
+                if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, i) != 0 {
                     teammates[numteammates as usize] = i;
                     numteammates += 1
                 }
@@ -1952,9 +1910,7 @@ FindHumanTeamLeader
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FindHumanTeamLeader(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn FindHumanTeamLeader(mut bs: *mut bot_state_t) -> i32 {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 64 as i32 {
@@ -1964,20 +1920,15 @@ pub unsafe extern "C" fn FindHumanTeamLeader(
                 // if this player is ok with being the leader
                 if crate::src::game::ai_cmd::notleader[i as usize] == 0 {
                     // if this player is on the same team
-                    if crate::src::game::ai_dmq3::BotSameTeam(
-                        bs as *mut bot_state_s,
-                        i,
-                    ) != 0
-                    {
+                    if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, i) != 0 {
                         crate::src::game::ai_dmq3::ClientName(
                             i,
                             (*bs).teamleader.as_mut_ptr(),
                             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         // if not yet ordered to do anything
-                        if crate::src::game::ai_dmq3::BotSetLastOrderedTask(
-                            bs as *mut bot_state_s,
-                        ) == 0
+                        if crate::src::game::ai_dmq3::BotSetLastOrderedTask(bs as *mut bot_state_s)
+                            == 0
                         {
                             // go on defense by default
                             crate::src::game::ai_vcmd::BotVoiceChat_Defend(
@@ -2048,18 +1999,14 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
                 if (*bs).entergame_time + 10 as i32 as f32 > floattime {
                     (*bs).askteamleader_time = floattime
                         + 5 as i32 as f32
-                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-                            * 10 as i32 as f32
+                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 10 as i32 as f32
                 } else {
                     (*bs).becometeamleader_time = floattime
                         + 5 as i32 as f32
-                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-                            * 10 as i32 as f32
+                        + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 10 as i32 as f32
                 }
             }
-            if (*bs).askteamleader_time != 0.
-                && (*bs).askteamleader_time < floattime
-            {
+            if (*bs).askteamleader_time != 0. && (*bs).askteamleader_time < floattime {
                 // if asked for a team leader and no response
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
@@ -2070,12 +2017,9 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
                 (*bs).askteamleader_time = 0 as i32 as f32;
                 (*bs).becometeamleader_time = floattime
                     + 8 as i32 as f32
-                    + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-                        * 10 as i32 as f32
+                    + (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 10 as i32 as f32
             }
-            if (*bs).becometeamleader_time != 0.
-                && (*bs).becometeamleader_time < floattime
-            {
+            if (*bs).becometeamleader_time != 0. && (*bs).becometeamleader_time < floattime {
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
                     b"iamteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2113,9 +2057,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
         netname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
-    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
-        != 0 as i32
-    {
+    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) != 0 as i32 {
         return;
     }
     //
@@ -2130,8 +2072,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
             }
             //if it's time to give orders
             if (*bs).teamgiveorders_time != 0.
-                && (*bs).teamgiveorders_time
-                    < floattime - 5 as i32 as f32
+                && (*bs).teamgiveorders_time < floattime - 5 as i32 as f32
             {
                 BotTeamOrders(bs);
                 //give orders again after 120 seconds
@@ -2151,21 +2092,17 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut bot_state_t) {
                 (*bs).forceorders = qfalse as i32
             }
             //if there were no flag captures the last 3 minutes
-            if (*bs).lastflagcapture_time < floattime - 240 as i32 as f32
-            {
+            if (*bs).lastflagcapture_time < floattime - 240 as i32 as f32 {
                 (*bs).lastflagcapture_time = floattime;
                 //randomly change the CTF strategy
-                if (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
-                    < 0.4f64
-                {
+                if (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.4f64 {
                     (*bs).ctfstrategy ^= 1 as i32;
                     (*bs).teamgiveorders_time = floattime
                 }
             }
             //if it's time to give orders
             if (*bs).teamgiveorders_time != 0.
-                && (*bs).teamgiveorders_time
-                    < floattime - 3 as i32 as f32
+                && (*bs).teamgiveorders_time < floattime - 3 as i32 as f32
             {
                 BotCTFOrders(bs);
                 //

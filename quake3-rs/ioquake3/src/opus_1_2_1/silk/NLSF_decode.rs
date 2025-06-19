@@ -54,23 +54,19 @@ unsafe extern "C" fn silk_NLSF_residual_dequant(
     i = order as i32 - 1 as i32;
     while i >= 0 as i32 {
         pred_Q10 = out_Q10 as opus_int16 as opus_int32
-            * *pred_coef_Q8.offset(i as isize) as opus_int16
-                as opus_int32
+            * *pred_coef_Q8.offset(i as isize) as opus_int16 as opus_int32
             >> 8 as i32;
-        out_Q10 = ((*indices.offset(i as isize) as opus_uint32) << 10 as i32)
-            as opus_int32;
+        out_Q10 = ((*indices.offset(i as isize) as opus_uint32) << 10 as i32) as opus_int32;
         if out_Q10 > 0 as i32 {
-            out_Q10 = out_Q10
-                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32
+            out_Q10 =
+                out_Q10 - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32
         } else if out_Q10 < 0 as i32 {
-            out_Q10 = out_Q10
-                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32
+            out_Q10 =
+                out_Q10 + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32
         }
         out_Q10 = (pred_Q10 as i64
-            + (out_Q10 as i64 * quant_step_size_Q16 as opus_int16 as i64
-                >> 16 as i32)) as opus_int32;
+            + (out_Q10 as i64 * quant_step_size_Q16 as opus_int16 as i64 >> 16 as i32))
+            as opus_int32;
         *x_Q10.offset(i as isize) = out_Q10 as opus_int16;
         i -= 1
     }
@@ -337,8 +333,7 @@ pub unsafe extern "C" fn silk_NLSF_decode(
     let mut res_Q10: [opus_int16; 16] = [0; 16];
     let mut NLSF_Q15_tmp: opus_int32 = 0;
     let mut pCB_element: *const u8 = 0 as *const u8;
-    let mut pCB_Wght_Q9: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut pCB_Wght_Q9: *const opus_int16 = 0 as *const opus_int16;
     /* Unpack entropy table indices and predictor for current CB1 index */
     crate::src::opus_1_2_1::silk::NLSF_unpack::silk_NLSF_unpack(
         ec_ix.as_mut_ptr(),
@@ -363,13 +358,11 @@ pub unsafe extern "C" fn silk_NLSF_decode(
     ) as *const opus_int16;
     i = 0 as i32;
     while i < (*psNLSF_CB).order as i32 {
-        NLSF_Q15_tmp = ((res_Q10[i as usize] as opus_int32
-            as opus_uint32)
-            << 14 as i32) as opus_int32
+        NLSF_Q15_tmp = ((res_Q10[i as usize] as opus_int32 as opus_uint32) << 14 as i32)
+            as opus_int32
             / *pCB_Wght_Q9.offset(i as isize) as i32
-            + ((*pCB_element.offset(i as isize) as opus_int16
-                as opus_uint32)
-                << 7 as i32) as opus_int32;
+            + ((*pCB_element.offset(i as isize) as opus_int16 as opus_uint32) << 7 as i32)
+                as opus_int32;
         *pNLSF_Q15.offset(i as isize) = if 0 as i32 > 32767 as i32 {
             if NLSF_Q15_tmp > 0 as i32 {
                 0 as i32

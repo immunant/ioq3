@@ -64,9 +64,7 @@ pub unsafe extern "C" fn silk_encode_signs(
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
     i = 7 as i32 as opus_int16 as opus_int32
-        * (quantOffsetType
-            + ((signalType as opus_uint32) << 1 as i32)
-                as opus_int32) as opus_int16
+        * (quantOffsetType + ((signalType as opus_uint32) << 1 as i32) as opus_int32) as opus_int16
             as opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
@@ -195,9 +193,7 @@ pub unsafe extern "C" fn silk_decode_signs(
     icdf[1 as i32 as usize] = 0 as i32 as u8;
     q_ptr = pulses;
     i = 7 as i32 as opus_int16 as opus_int32
-        * (quantOffsetType
-            + ((signalType as opus_uint32) << 1 as i32)
-                as opus_int32) as opus_int16
+        * (quantOffsetType + ((signalType as opus_uint32) << 1 as i32) as opus_int32) as opus_int16
             as opus_int32;
     icdf_ptr = &*crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF
         .as_ptr()
@@ -224,10 +220,8 @@ pub unsafe extern "C" fn silk_decode_signs(
                             icdf.as_mut_ptr(),
                             8 as i32 as u32,
                         ) as opus_uint32)
-                            << 1 as i32)
-                            as opus_int32
-                            - 1 as i32))
-                        as opus_int16
+                            << 1 as i32) as opus_int32
+                            - 1 as i32)) as opus_int16
                 }
                 j += 1
             }

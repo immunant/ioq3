@@ -322,23 +322,19 @@ pub unsafe extern "C" fn R_PerformanceCounters() {
     if (*r_speeds).integer == 0 {
         // clear the counters even if we aren't printing
         crate::stdlib::memset(
-            &mut tr.pc
-                as *mut frontEndCounters_t as *mut libc::c_void,
+            &mut tr.pc as *mut frontEndCounters_t as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<frontEndCounters_t>() as libc::c_ulong,
         );
         crate::stdlib::memset(
-            &mut backEnd.pc
-                as *mut backEndCounters_t as *mut libc::c_void,
+            &mut backEnd.pc as *mut backEndCounters_t as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<backEndCounters_t>() as libc::c_ulong,
         );
         return;
     }
     if (*r_speeds).integer == 1 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%i/%i shaders/surfs %i leafs %i verts %i/%i tris %.2f mtex %.2f dc\n\x00" as *const u8
                 as *const libc::c_char,
@@ -347,118 +343,73 @@ pub unsafe extern "C" fn R_PerformanceCounters() {
             tr.pc.c_leafs,
             backEnd.pc.c_vertexes,
             backEnd.pc.c_indexes / 3 as i32,
-            backEnd
-                .pc
-                .c_totalIndexes
-                / 3 as i32,
+            backEnd.pc.c_totalIndexes / 3 as i32,
             (R_SumOfUsedImages() as f32 / 1000000.0f32) as f64,
-            (backEnd.pc.c_overDraw
-                / (glConfig.vidWidth
-                    * glConfig.vidHeight)
-                    as f32) as f64,
+            (backEnd.pc.c_overDraw / (glConfig.vidWidth * glConfig.vidHeight) as f32) as f64,
         );
     } else if (*r_speeds).integer == 2 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"(patch) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n\x00" as *const u8
                 as *const libc::c_char,
-            tr
-                .pc
-                .c_sphere_cull_patch_in,
-            tr
-                .pc
-                .c_sphere_cull_patch_clip,
-            tr
-                .pc
-                .c_sphere_cull_patch_out,
+            tr.pc.c_sphere_cull_patch_in,
+            tr.pc.c_sphere_cull_patch_clip,
+            tr.pc.c_sphere_cull_patch_out,
             tr.pc.c_box_cull_patch_in,
-            tr
-                .pc
-                .c_box_cull_patch_clip,
+            tr.pc.c_box_cull_patch_clip,
             tr.pc.c_box_cull_patch_out,
         );
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"(md3) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n\x00" as *const u8
                 as *const libc::c_char,
             tr.pc.c_sphere_cull_md3_in,
-            tr
-                .pc
-                .c_sphere_cull_md3_clip,
-            tr
-                .pc
-                .c_sphere_cull_md3_out,
+            tr.pc.c_sphere_cull_md3_clip,
+            tr.pc.c_sphere_cull_md3_out,
             tr.pc.c_box_cull_md3_in,
             tr.pc.c_box_cull_md3_clip,
             tr.pc.c_box_cull_md3_out,
         );
     } else if (*r_speeds).integer == 3 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"viewcluster: %i\n\x00" as *const u8 as *const libc::c_char,
             tr.viewCluster,
         );
     } else if (*r_speeds).integer == 4 as i32 {
-        if backEnd
-            .pc
-            .c_dlightVertexes
-            != 0
-        {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+        if backEnd.pc.c_dlightVertexes != 0 {
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"dlight srf:%i  culled:%i  verts:%i  tris:%i\n\x00" as *const u8
                     as *const libc::c_char,
                 tr.pc.c_dlightSurfaces,
-                tr
-                    .pc
-                    .c_dlightSurfacesCulled,
-                backEnd
-                    .pc
-                    .c_dlightVertexes,
-                backEnd
-                    .pc
-                    .c_dlightIndexes
-                    / 3 as i32,
+                tr.pc.c_dlightSurfacesCulled,
+                backEnd.pc.c_dlightVertexes,
+                backEnd.pc.c_dlightIndexes / 3 as i32,
             );
         }
     } else if (*r_speeds).integer == 5 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"zFar: %.0f\n\x00" as *const u8 as *const libc::c_char,
             tr.viewParms.zFar as f64,
         );
     } else if (*r_speeds).integer == 6 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"flare adds:%i tests:%i renders:%i\n\x00" as *const u8 as *const libc::c_char,
             backEnd.pc.c_flareAdds,
             backEnd.pc.c_flareTests,
-            backEnd
-                .pc
-                .c_flareRenders,
+            backEnd.pc.c_flareRenders,
         );
     }
     crate::stdlib::memset(
-        &mut tr.pc as *mut frontEndCounters_t
-            as *mut libc::c_void,
+        &mut tr.pc as *mut frontEndCounters_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<frontEndCounters_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut backEnd.pc
-            as *mut backEndCounters_t as *mut libc::c_void,
+        &mut backEnd.pc as *mut backEndCounters_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<backEndCounters_t>() as libc::c_ulong,
     );
@@ -470,11 +421,8 @@ R_IssueRenderCommands
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_IssueRenderCommands(
-    mut runPerformanceCounters: qboolean,
-) {
-    let mut cmdList: *mut renderCommandList_t =
-        0 as *mut renderCommandList_t;
+pub unsafe extern "C" fn R_IssueRenderCommands(mut runPerformanceCounters: qboolean) {
+    let mut cmdList: *mut renderCommandList_t = 0 as *mut renderCommandList_t;
     cmdList = &mut (*backEndData).commands;
     // add an end-of-list command
     *((*cmdList)
@@ -489,9 +437,7 @@ pub unsafe extern "C" fn R_IssueRenderCommands(
     // actually start the commands going
     if (*r_skipBackEnd).integer == 0 {
         // let it start on the new batch
-        RB_ExecuteRenderCommands(
-            (*cmdList).cmds.as_mut_ptr() as *const libc::c_void
-        );
+        RB_ExecuteRenderCommands((*cmdList).cmds.as_mut_ptr() as *const libc::c_void);
     };
 }
 /*
@@ -575,8 +521,7 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
     mut bytes: i32,
     mut reservedBytes: i32,
 ) -> *mut libc::c_void {
-    let mut cmdList: *mut renderCommandList_t =
-        0 as *mut renderCommandList_t;
+    let mut cmdList: *mut renderCommandList_t = 0 as *mut renderCommandList_t;
     cmdList = &mut (*backEndData).commands;
     bytes = ((bytes as libc::c_ulong)
         .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
@@ -593,9 +538,7 @@ pub unsafe extern "C" fn R_GetCommandBufferReserved(
             > (0x40000 as i32 as libc::c_ulong)
                 .wrapping_sub(::std::mem::size_of::<i32>() as libc::c_ulong)
         {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_FATAL as i32,
                 b"R_GetCommandBuffer: bad size %i\x00" as *const u8 as *const libc::c_char,
                 bytes,
@@ -638,15 +581,10 @@ R_AddDrawSurfCmd
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_AddDrawSurfCmd(
-    mut drawSurfs: *mut drawSurf_t,
-    mut numDrawSurfs: i32,
-) {
-    let mut cmd: *mut drawSurfsCommand_t =
-        0 as *mut drawSurfsCommand_t;
-    cmd = R_GetCommandBuffer(
-        ::std::mem::size_of::<drawSurfsCommand_t>() as libc::c_ulong as i32,
-    ) as *mut drawSurfsCommand_t;
+pub unsafe extern "C" fn R_AddDrawSurfCmd(mut drawSurfs: *mut drawSurf_t, mut numDrawSurfs: i32) {
+    let mut cmd: *mut drawSurfsCommand_t = 0 as *mut drawSurfsCommand_t;
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<drawSurfsCommand_t>() as libc::c_ulong as i32)
+        as *mut drawSurfsCommand_t;
     if cmd.is_null() {
         return;
     }
@@ -666,14 +604,12 @@ Passing NULL will set the color to white
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_SetColor(mut rgba: *const f32) {
-    let mut cmd: *mut setColorCommand_t =
-        0 as *mut setColorCommand_t;
+    let mut cmd: *mut setColorCommand_t = 0 as *mut setColorCommand_t;
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(
-        ::std::mem::size_of::<setColorCommand_t>() as libc::c_ulong as i32,
-    ) as *mut setColorCommand_t;
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<setColorCommand_t>() as libc::c_ulong as i32)
+        as *mut setColorCommand_t;
     if cmd.is_null() {
         return;
     }
@@ -710,20 +646,17 @@ pub unsafe extern "C" fn RE_StretchPic(
     mut t2: f32,
     mut hShader: qhandle_t,
 ) {
-    let mut cmd: *mut stretchPicCommand_t =
-        0 as *mut stretchPicCommand_t;
+    let mut cmd: *mut stretchPicCommand_t = 0 as *mut stretchPicCommand_t;
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(
-        ::std::mem::size_of::<stretchPicCommand_t>() as libc::c_ulong as i32,
-    ) as *mut stretchPicCommand_t;
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<stretchPicCommand_t>() as libc::c_ulong as i32)
+        as *mut stretchPicCommand_t;
     if cmd.is_null() {
         return;
     }
     (*cmd).commandId = RC_STRETCH_PIC as i32;
-    (*cmd).shader = R_GetShaderByHandle(hShader)
-        as *mut shader_s;
+    (*cmd).shader = R_GetShaderByHandle(hShader) as *mut shader_s;
     (*cmd).x = x;
     (*cmd).y = y;
     (*cmd).w = w;
@@ -787,10 +720,8 @@ for each RE_EndFrame
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
-    let mut cmd: *mut drawBufferCommand_t =
-        0 as *mut drawBufferCommand_t;
-    let mut colcmd: *mut colorMaskCommand_t =
-        0 as *mut colorMaskCommand_t;
+    let mut cmd: *mut drawBufferCommand_t = 0 as *mut drawBufferCommand_t;
+    let mut colcmd: *mut colorMaskCommand_t = 0 as *mut colorMaskCommand_t;
     if tr.registered as u64 == 0 {
         return;
     }
@@ -802,49 +733,33 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
     //
     if (*r_measureOverdraw).integer != 0 {
         if glConfig.stencilBits < 4 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"Warning: not enough stencil bits to measure overdraw: %d\n\x00" as *const u8
                     as *const libc::c_char,
                 glConfig.stencilBits,
             );
-            ri
-                .Cvar_Set
-                .expect("non-null function pointer")(
+            ri.Cvar_Set.expect("non-null function pointer")(
                 b"r_measureOverdraw\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
-            (*r_measureOverdraw).modified =
-                qfalse
+            (*r_measureOverdraw).modified = qfalse
         } else if (*r_shadows).integer == 2 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"Warning: stencil shadows and overdraw measurement are mutually exclusive\n\x00"
                     as *const u8 as *const libc::c_char,
             );
-            ri
-                .Cvar_Set
-                .expect("non-null function pointer")(
+            ri.Cvar_Set.expect("non-null function pointer")(
                 b"r_measureOverdraw\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
-            (*r_measureOverdraw).modified =
-                qfalse
+            (*r_measureOverdraw).modified = qfalse
         } else {
             R_IssuePendingRenderCommands();
-            qglEnable.expect("non-null function pointer")(
-                0xb90 as i32 as GLenum,
-            );
-            qglStencilMask.expect("non-null function pointer")(
-                !(0 as u32),
-            );
-            qglClearStencil.expect("non-null function pointer")(
-                0 as u32 as GLint,
-            );
+            qglEnable.expect("non-null function pointer")(0xb90 as i32 as GLenum);
+            qglStencilMask.expect("non-null function pointer")(!(0 as u32));
+            qglClearStencil.expect("non-null function pointer")(0 as u32 as GLint);
             qglStencilFunc.expect("non-null function pointer")(
                 0x207 as i32 as GLenum,
                 0 as u32 as GLint,
@@ -856,36 +771,28 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                 0x1e02 as i32 as GLenum,
             );
         }
-        (*r_measureOverdraw).modified =
-            qfalse
+        (*r_measureOverdraw).modified = qfalse
     } else {
         // this is only reached if it was on and is now off
         if (*r_measureOverdraw).modified as u64 != 0 {
             R_IssuePendingRenderCommands();
-            qglDisable.expect("non-null function pointer")(
-                0xb90 as i32 as GLenum,
-            );
+            qglDisable.expect("non-null function pointer")(0xb90 as i32 as GLenum);
         }
-        (*r_measureOverdraw).modified =
-            qfalse
+        (*r_measureOverdraw).modified = qfalse
     }
     //
     // texturemode stuff
     //
     if (*r_textureMode).modified as u64 != 0 {
         R_IssuePendingRenderCommands();
-        GL_TextureMode(
-            (*r_textureMode).string,
-        );
-        (*r_textureMode).modified =
-            qfalse
+        GL_TextureMode((*r_textureMode).string);
+        (*r_textureMode).modified = qfalse
     }
     //
     // gamma stuff
     //
     if (*r_gamma).modified as u64 != 0 {
-        (*r_gamma).modified =
-            qfalse;
+        (*r_gamma).modified = qfalse;
         R_IssuePendingRenderCommands();
         R_SetColorMappings();
     }
@@ -895,9 +802,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
         R_IssuePendingRenderCommands();
         err = qglGetError.expect("non-null function pointer")() as i32;
         if err != 0 as i32 {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_FATAL as i32,
                 b"RE_BeginFrame() - glGetError() failed (0x%x)!\x00" as *const u8
                     as *const libc::c_char,
@@ -918,9 +823,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
         } else if stereoFrame as u32 == STEREO_RIGHT as i32 as u32 {
             (*cmd).buffer = 0x403 as i32
         } else {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_FATAL as i32,
                 b"RE_BeginFrame: Stereo is enabled, but stereoFrame was %i\x00" as *const u8
                     as *const libc::c_char,
@@ -937,61 +840,43 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                     1 as i32 as GLboolean,
                     1 as i32 as GLboolean,
                 );
-                qglClearColor.expect("non-null function pointer")(
-                    0.0f32, 0.0f32, 0.0f32, 1.0f32,
-                );
-                qglDrawBuffer.expect("non-null function pointer")(
-                    0x404 as i32 as GLenum,
-                );
-                qglClear.expect("non-null function pointer")(
-                    0x4000 as i32 as GLbitfield,
-                );
-                qglDrawBuffer.expect("non-null function pointer")(
-                    0x405 as i32 as GLenum,
-                );
-                qglClear.expect("non-null function pointer")(
-                    0x4000 as i32 as GLbitfield,
-                );
-                (*r_anaglyphMode).modified =
-                    qfalse
+                qglClearColor.expect("non-null function pointer")(0.0f32, 0.0f32, 0.0f32, 1.0f32);
+                qglDrawBuffer.expect("non-null function pointer")(0x404 as i32 as GLenum);
+                qglClear.expect("non-null function pointer")(0x4000 as i32 as GLbitfield);
+                qglDrawBuffer.expect("non-null function pointer")(0x405 as i32 as GLenum);
+                qglClear.expect("non-null function pointer")(0x4000 as i32 as GLbitfield);
+                (*r_anaglyphMode).modified = qfalse
             }
             if stereoFrame as u32 == STEREO_LEFT as i32 as u32 {
                 cmd = R_GetCommandBuffer(
-                    ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong
-                        as i32,
+                    ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong as i32
                 ) as *mut drawBufferCommand_t;
                 if cmd.is_null() {
                     return;
                 }
-                colcmd = R_GetCommandBuffer(::std::mem::size_of::<
-                    colorMaskCommand_t,
-                >() as libc::c_ulong as i32)
-                    as *mut colorMaskCommand_t;
+                colcmd = R_GetCommandBuffer(
+                    ::std::mem::size_of::<colorMaskCommand_t>() as libc::c_ulong as i32
+                ) as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
                 }
             } else if stereoFrame as u32 == STEREO_RIGHT as i32 as u32 {
-                let mut cldcmd: *mut clearDepthCommand_t =
-                    0 as *mut clearDepthCommand_t;
-                cldcmd = R_GetCommandBuffer(::std::mem::size_of::<
-                    clearDepthCommand_t,
-                >() as libc::c_ulong as i32)
-                    as *mut clearDepthCommand_t;
+                let mut cldcmd: *mut clearDepthCommand_t = 0 as *mut clearDepthCommand_t;
+                cldcmd = R_GetCommandBuffer(
+                    ::std::mem::size_of::<clearDepthCommand_t>() as libc::c_ulong as i32
+                ) as *mut clearDepthCommand_t;
                 if cldcmd.is_null() {
                     return;
                 }
                 (*cldcmd).commandId = RC_CLEARDEPTH as i32;
-                colcmd = R_GetCommandBuffer(::std::mem::size_of::<
-                    colorMaskCommand_t,
-                >() as libc::c_ulong as i32)
-                    as *mut colorMaskCommand_t;
+                colcmd = R_GetCommandBuffer(
+                    ::std::mem::size_of::<colorMaskCommand_t>() as libc::c_ulong as i32
+                ) as *mut colorMaskCommand_t;
                 if colcmd.is_null() {
                     return;
                 }
             } else {
-                ri
-                    .Error
-                    .expect("non-null function pointer")(
+                ri.Error.expect("non-null function pointer")(
                     ERR_FATAL as i32,
                     b"RE_BeginFrame: Stereo is enabled, but stereoFrame was %i\x00" as *const u8
                         as *const libc::c_char,
@@ -1006,9 +891,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
             (*colcmd).commandId = RC_COLORMASK as i32
         } else {
             if stereoFrame as u32 != STEREO_CENTER as i32 as u32 {
-                ri
-                    .Error
-                    .expect("non-null function pointer")(
+                ri.Error.expect("non-null function pointer")(
                     ERR_FATAL as i32,
                     b"RE_BeginFrame: Stereo is disabled, but stereoFrame was %i\x00" as *const u8
                         as *const libc::c_char,
@@ -1016,8 +899,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                 );
             }
             cmd = R_GetCommandBuffer(
-                ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong
-                    as i32,
+                ::std::mem::size_of::<drawBufferCommand_t>() as libc::c_ulong as i32,
             ) as *mut drawBufferCommand_t;
             if cmd.is_null() {
                 return;
@@ -1032,8 +914,7 @@ pub unsafe extern "C" fn RE_BeginFrame(mut stereoFrame: stereoFrame_t) {
                     1 as i32 as GLboolean,
                     1 as i32 as GLboolean,
                 );
-                (*r_anaglyphMode).modified =
-                    qfalse
+                (*r_anaglyphMode).modified = qfalse
             }
             if Q_stricmp(
                 (*r_drawBuffer).string,
@@ -1058,8 +939,7 @@ Returns the number of msec spent in the back end
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_EndFrame(mut frontEndMsec: *mut i32, mut backEndMsec: *mut i32) {
-    let mut cmd: *mut swapBuffersCommand_t =
-        0 as *mut swapBuffersCommand_t;
+    let mut cmd: *mut swapBuffersCommand_t = 0 as *mut swapBuffersCommand_t;
     if tr.registered as u64 == 0 {
         return;
     }
@@ -1523,14 +1403,12 @@ pub unsafe extern "C" fn RE_TakeVideoFrame(
     mut encodeBuffer: *mut byte,
     mut motionJpeg: qboolean,
 ) {
-    let mut cmd: *mut videoFrameCommand_t =
-        0 as *mut videoFrameCommand_t;
+    let mut cmd: *mut videoFrameCommand_t = 0 as *mut videoFrameCommand_t;
     if tr.registered as u64 == 0 {
         return;
     }
-    cmd = R_GetCommandBuffer(
-        ::std::mem::size_of::<videoFrameCommand_t>() as libc::c_ulong as i32,
-    ) as *mut videoFrameCommand_t;
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<videoFrameCommand_t>() as libc::c_ulong as i32)
+        as *mut videoFrameCommand_t;
     if cmd.is_null() {
         return;
     }

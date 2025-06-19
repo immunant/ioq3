@@ -130,10 +130,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
     let mut val: i32 = 0 as i32;
     let mut fl: u32 = 0;
     let mut fm: u32 = 0;
-    fm = crate::src::opus_1_2_1::celt::entdec::ec_decode_bin(
-        dec as *mut ec_ctx,
-        15 as i32 as u32,
-    );
+    fm = crate::src::opus_1_2_1::celt::entdec::ec_decode_bin(dec as *mut ec_ctx, 15 as i32 as u32);
     fl = 0 as i32 as u32;
     if fm >= fs {
         val += 1;

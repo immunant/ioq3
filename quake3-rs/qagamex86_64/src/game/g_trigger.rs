@@ -450,8 +450,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn InitTrigger(mut self_0: *mut gentity_t) {
     if VectorCompare(
         (*self_0).s.angles.as_mut_ptr() as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
     ) == 0
     {
         G_SetMovedir(
@@ -459,10 +458,7 @@ pub unsafe extern "C" fn InitTrigger(mut self_0: *mut gentity_t) {
             (*self_0).movedir.as_mut_ptr(),
         ); // replaces the -1 from trap_SetBrushModel
     }
-    trap_SetBrushModel(
-        self_0 as *mut gentity_s,
-        (*self_0).model,
-    );
+    trap_SetBrushModel(self_0 as *mut gentity_s, (*self_0).model);
     (*self_0).r.contents = 0x40000000 as i32;
     (*self_0).r.svFlags = 0x1 as i32;
 }
@@ -477,10 +473,7 @@ pub unsafe extern "C" fn multi_wait(mut ent: *mut gentity_t) {
 // so wait for the delay time before firing
 #[no_mangle]
 
-pub unsafe extern "C" fn multi_trigger(
-    mut ent: *mut gentity_t,
-    mut activator: *mut gentity_t,
-) {
+pub unsafe extern "C" fn multi_trigger(mut ent: *mut gentity_t, mut activator: *mut gentity_t) {
     (*ent).activator = activator;
     if (*ent).nextthink != 0 {
         return;
@@ -488,31 +481,24 @@ pub unsafe extern "C" fn multi_trigger(
     }
     if !(*activator).client.is_null() {
         if (*ent).spawnflags & 1 as i32 != 0
-            && (*(*activator).client).sess.sessionTeam as u32
-                != TEAM_RED as i32 as u32
+            && (*(*activator).client).sess.sessionTeam as u32 != TEAM_RED as i32 as u32
         {
             return;
         }
         if (*ent).spawnflags & 2 as i32 != 0
-            && (*(*activator).client).sess.sessionTeam as u32
-                != TEAM_BLUE as i32 as u32
+            && (*(*activator).client).sess.sessionTeam as u32 != TEAM_BLUE as i32 as u32
         {
             return;
         }
     }
-    G_UseTargets(
-        ent as *mut gentity_s,
-        (*ent).activator as *mut gentity_s,
-    );
+    G_UseTargets(ent as *mut gentity_s, (*ent).activator as *mut gentity_s);
     if (*ent).wait > 0 as i32 as f32 {
-        (*ent).think =
-            Some(multi_wait as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*ent).think = Some(multi_wait as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).nextthink = (level.time as f64
             + ((*ent).wait as f64
                 + (*ent).random as f64
                     * (2.0f64
-                        * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                            as f64
+                        * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                             - 0.5f64)))
                 * 1000 as i32 as f64) as i32
     } else {
@@ -520,10 +506,7 @@ pub unsafe extern "C" fn multi_trigger(
         // called while looping through area links...
         (*ent).touch = None;
         (*ent).nextthink = level.time + 100 as i32;
-        (*ent).think = Some(
-            G_FreeEntity
-                as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-        )
+        (*ent).think = Some(G_FreeEntity as unsafe extern "C" fn(_: *mut gentity_t) -> ())
     };
 }
 #[no_mangle]
@@ -569,25 +552,15 @@ pub unsafe extern "C" fn SP_trigger_multiple(mut ent: *mut gentity_t) {
     );
     if (*ent).random >= (*ent).wait && (*ent).wait >= 0 as i32 as f32 {
         (*ent).random = (*ent).wait - 100 as i32 as f32;
-        G_Printf(
-            b"trigger_multiple has random >= wait\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"trigger_multiple has random >= wait\n\x00" as *const u8 as *const libc::c_char);
     }
     (*ent).touch = Some(
         Touch_Multi
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
     (*ent).use_0 = Some(
         Use_Multi
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
     InitTrigger(ent);
     trap_LinkEntity(ent as *mut gentity_s);
@@ -602,10 +575,7 @@ trigger_always
 #[no_mangle]
 
 pub unsafe extern "C" fn trigger_always_think(mut ent: *mut gentity_t) {
-    G_UseTargets(
-        ent as *mut gentity_s,
-        ent as *mut gentity_s,
-    );
+    G_UseTargets(ent as *mut gentity_s, ent as *mut gentity_s);
     G_FreeEntity(ent as *mut gentity_s);
 }
 /*QUAKED trigger_always (.5 .5 .5) (-8 -8 -8) (8 8 8)
@@ -616,9 +586,7 @@ This trigger will always fire.  It is activated by the world.
 pub unsafe extern "C" fn SP_trigger_always(mut ent: *mut gentity_t) {
     // we must have some delay to make sure our use targets are present
     (*ent).nextthink = level.time + 300 as i32;
-    (*ent).think = Some(
-        trigger_always_think as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    );
+    (*ent).think = Some(trigger_always_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
 }
 /*
 ==============================================================================
@@ -665,14 +633,10 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut gentity_t) {
         (*self_0).r.absmin[1 as i32 as usize] + (*self_0).r.absmax[1 as i32 as usize];
     origin[2 as i32 as usize] =
         (*self_0).r.absmin[2 as i32 as usize] + (*self_0).r.absmax[2 as i32 as usize];
-    origin[0 as i32 as usize] =
-        (origin[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    origin[1 as i32 as usize] =
-        (origin[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    origin[2 as i32 as usize] =
-        (origin[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    ent = G_PickTarget((*self_0).target)
-        as *mut gentity_s;
+    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    ent = G_PickTarget((*self_0).target) as *mut gentity_s;
     if ent.is_null() {
         G_FreeEntity(self_0 as *mut gentity_s);
         return;
@@ -716,14 +680,9 @@ pub unsafe extern "C" fn SP_trigger_push(mut self_0: *mut gentity_t) {
     (*self_0).s.eType = ET_PUSH_TRIGGER as i32;
     (*self_0).touch = Some(
         trigger_push_touch
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
-    (*self_0).think =
-        Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).think = Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*self_0).nextthink = level.time + 100 as i32;
     trap_LinkEntity(self_0 as *mut gentity_s);
 }
@@ -793,17 +752,12 @@ pub unsafe extern "C" fn SP_target_push(mut self_0: *mut gentity_t) {
         (*self_0).r.absmax[0 as i32 as usize] = (*self_0).s.origin[0 as i32 as usize];
         (*self_0).r.absmax[1 as i32 as usize] = (*self_0).s.origin[1 as i32 as usize];
         (*self_0).r.absmax[2 as i32 as usize] = (*self_0).s.origin[2 as i32 as usize];
-        (*self_0).think =
-            Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*self_0).think = Some(AimAtTarget as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*self_0).nextthink = level.time + 100 as i32
     }
     (*self_0).use_0 = Some(
         Use_target_push
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 // armor, shields, invulnerability, and godmode have no effect
@@ -839,13 +793,11 @@ pub unsafe extern "C" fn trigger_teleporter_touch(
     }
     // Spectators only?
     if (*self_0).spawnflags & 1 as i32 != 0
-        && (*(*other).client).sess.sessionTeam as u32
-            != TEAM_SPECTATOR as i32 as u32
+        && (*(*other).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32
     {
         return;
     }
-    dest = G_PickTarget((*self_0).target)
-        as *mut gentity_s;
+    dest = G_PickTarget((*self_0).target) as *mut gentity_s;
     if dest.is_null() {
         G_Printf(
             b"Couldn\'t find teleporter destination\n\x00" as *const u8 as *const libc::c_char,
@@ -884,11 +836,7 @@ pub unsafe extern "C" fn SP_trigger_teleport(mut self_0: *mut gentity_t) {
     (*self_0).s.eType = ET_TELEPORT_TRIGGER as i32;
     (*self_0).touch = Some(
         trigger_teleporter_touch
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
     trap_LinkEntity(self_0 as *mut gentity_s);
 }
@@ -976,22 +924,14 @@ pub unsafe extern "C" fn SP_trigger_hurt(mut self_0: *mut gentity_t) {
     );
     (*self_0).touch = Some(
         hurt_touch
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut trace_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut trace_t) -> (),
     );
     if (*self_0).damage == 0 {
         (*self_0).damage = 5 as i32
     }
     (*self_0).use_0 = Some(
         hurt_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
     // link in to the world if starting active
     if (*self_0).spawnflags & 1 as i32 != 0 {
@@ -1065,21 +1005,14 @@ pub unsafe extern "C" fn SP_func_timer(mut self_0: *mut gentity_t) {
     );
     (*self_0).use_0 = Some(
         func_timer_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
-    (*self_0).think =
-        Some(func_timer_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).think = Some(func_timer_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     if (*self_0).random >= (*self_0).wait {
         (*self_0).random = (*self_0).wait - 100 as i32 as f32;
         G_Printf(
             b"func_timer at %s has random >= wait\n\x00" as *const u8 as *const libc::c_char,
-            vtos(
-                (*self_0).s.origin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*self_0).s.origin.as_mut_ptr() as *const vec_t),
         );
     }
     if (*self_0).spawnflags & 1 as i32 != 0 {

@@ -100,16 +100,13 @@ pub struct loopback_t {
 }
 #[no_mangle]
 
-pub static mut showpackets: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut showpackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut showdrop: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut showdrop: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut qport: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut qport: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut netsrcString: [*mut libc::c_char; 2] = [
     b"client\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -201,20 +198,13 @@ pub unsafe extern "C" fn Netchan_TransmitNextFragment(mut chan: *mut netchan_t) 
     MSG_InitOOB(
         &mut send as *mut _ as *mut msg_t,
         send_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong as i32,
     ); // <-- only do the oob here
     outgoingSequence = ((*chan).outgoingSequence as u32 | (1 as u32) << 31 as i32) as i32;
-    MSG_WriteLong(
-        &mut send as *mut _ as *mut msg_t,
-        outgoingSequence,
-    );
+    MSG_WriteLong(&mut send as *mut _ as *mut msg_t, outgoingSequence);
     // send the qport if we are a client
     if (*chan).sock as u32 == NS_CLIENT as i32 as u32 {
-        MSG_WriteShort(
-            &mut send as *mut _ as *mut msg_t,
-            (*qport).integer,
-        );
+        MSG_WriteShort(&mut send as *mut _ as *mut msg_t, (*qport).integer);
     }
     if (*chan).compat as u64 == 0 {
         MSG_WriteLong(
@@ -231,10 +221,7 @@ pub unsafe extern "C" fn Netchan_TransmitNextFragment(mut chan: *mut netchan_t) 
         &mut send as *mut _ as *mut msg_t,
         (*chan).unsentFragmentStart,
     );
-    MSG_WriteShort(
-        &mut send as *mut _ as *mut msg_t,
-        fragmentLength,
-    );
+    MSG_WriteShort(&mut send as *mut _ as *mut msg_t, fragmentLength);
     MSG_WriteData(
         &mut send as *mut _ as *mut msg_t,
         (*chan)
@@ -326,19 +313,12 @@ pub unsafe extern "C" fn Netchan_Transmit(
     MSG_InitOOB(
         &mut send as *mut _ as *mut msg_t,
         send_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 1400]>() as libc::c_ulong as i32,
     );
-    MSG_WriteLong(
-        &mut send as *mut _ as *mut msg_t,
-        (*chan).outgoingSequence,
-    );
+    MSG_WriteLong(&mut send as *mut _ as *mut msg_t, (*chan).outgoingSequence);
     // send the qport if we are a client
     if (*chan).sock as u32 == NS_CLIENT as i32 as u32 {
-        MSG_WriteShort(
-            &mut send as *mut _ as *mut msg_t,
-            (*qport).integer,
-        );
+        MSG_WriteShort(&mut send as *mut _ as *mut msg_t, (*qport).integer);
     }
     if (*chan).compat as u64 == 0 {
         MSG_WriteLong(
@@ -393,8 +373,7 @@ pub unsafe extern "C" fn Netchan_Process(
     let mut sequence: i32 = 0;
     let mut fragmentStart: i32 = 0;
     let mut fragmentLength: i32 = 0;
-    let mut fragmented: qboolean =
-        qfalse;
+    let mut fragmented: qboolean = qfalse;
     // XOR unscramble all data in the packet after the header
     //	Netchan_UnScramblePacket( msg );
     // get sequence numbers
@@ -412,8 +391,7 @@ pub unsafe extern "C" fn Netchan_Process(
         MSG_ReadShort(msg as *mut msg_t);
     }
     if (*chan).compat as u64 == 0 {
-        let mut checksum: i32 =
-            MSG_ReadLong(msg as *mut msg_t);
+        let mut checksum: i32 = MSG_ReadLong(msg as *mut msg_t);
         // UDP spoofing protection
         if (*chan).challenge ^ sequence * (*chan).challenge != checksum {
             return qfalse;
@@ -421,10 +399,8 @@ pub unsafe extern "C" fn Netchan_Process(
     }
     // read the fragment information
     if fragmented as u64 != 0 {
-        fragmentStart =
-            MSG_ReadShort(msg as *mut msg_t); // stop warning message
-        fragmentLength =
-            MSG_ReadShort(msg as *mut msg_t)
+        fragmentStart = MSG_ReadShort(msg as *mut msg_t); // stop warning message
+        fragmentLength = MSG_ReadShort(msg as *mut msg_t)
     } else {
         fragmentStart = 0 as i32;
         fragmentLength = 0 as i32
@@ -455,9 +431,7 @@ pub unsafe extern "C" fn Netchan_Process(
         if (*showdrop).integer != 0 || (*showpackets).integer != 0 {
             Com_Printf(
                 b"%s:Out of order packet %i at %i\n\x00" as *const u8 as *const libc::c_char,
-                NET_AdrToString(
-                    (*chan).remoteAddress as netadr_t,
-                ),
+                NET_AdrToString((*chan).remoteAddress as netadr_t),
                 sequence,
                 (*chan).incomingSequence,
             );
@@ -472,9 +446,7 @@ pub unsafe extern "C" fn Netchan_Process(
         if (*showdrop).integer != 0 || (*showpackets).integer != 0 {
             Com_Printf(
                 b"%s:Dropped %i packets at %i\n\x00" as *const u8 as *const libc::c_char,
-                NET_AdrToString(
-                    (*chan).remoteAddress as netadr_t,
-                ),
+                NET_AdrToString((*chan).remoteAddress as netadr_t),
                 (*chan).dropped,
                 sequence,
             );
@@ -499,9 +471,7 @@ pub unsafe extern "C" fn Netchan_Process(
             if (*showdrop).integer != 0 || (*showpackets).integer != 0 {
                 Com_Printf(
                     b"%s:Dropped a message fragment\n\x00" as *const u8 as *const libc::c_char,
-                    NET_AdrToString(
-                        (*chan).remoteAddress as netadr_t,
-                    ),
+                    NET_AdrToString((*chan).remoteAddress as netadr_t),
                 );
             }
             // we can still keep the part that we have so far,
@@ -512,15 +482,12 @@ pub unsafe extern "C" fn Netchan_Process(
         if fragmentLength < 0 as i32
             || (*msg).readcount + fragmentLength > (*msg).cursize
             || ((*chan).fragmentLength + fragmentLength) as libc::c_ulong
-                > ::std::mem::size_of::<[byte; 16384]>()
-                    as libc::c_ulong
+                > ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
         {
             if (*showdrop).integer != 0 || (*showpackets).integer != 0 {
                 Com_Printf(
                     b"%s:illegal fragment length\n\x00" as *const u8 as *const libc::c_char,
-                    NET_AdrToString(
-                        (*chan).remoteAddress as netadr_t,
-                    ),
+                    NET_AdrToString((*chan).remoteAddress as netadr_t),
                 );
             }
             return qfalse;
@@ -541,9 +508,7 @@ pub unsafe extern "C" fn Netchan_Process(
         if (*chan).fragmentLength > (*msg).maxsize {
             Com_Printf(
                 b"%s:fragmentLength %i > msg->maxsize\n\x00" as *const u8 as *const libc::c_char,
-                NET_AdrToString(
-                    (*chan).remoteAddress as netadr_t,
-                ),
+                NET_AdrToString((*chan).remoteAddress as netadr_t),
                 (*chan).fragmentLength,
             );
             return qfalse;
@@ -650,11 +615,9 @@ unsafe extern "C" fn NET_QueuePacket(
     if offset > 999 as i32 {
         offset = 999 as i32
     }
-    new = S_Malloc(
-        ::std::mem::size_of::<packetQueue_t>() as libc::c_ulong as i32
-    ) as *mut packetQueue_t;
-    (*new).data =
-        S_Malloc(length) as *mut byte;
+    new = S_Malloc(::std::mem::size_of::<packetQueue_t>() as libc::c_ulong as i32)
+        as *mut packetQueue_t;
+    (*new).data = S_Malloc(length) as *mut byte;
     crate::stdlib::memcpy(
         (*new).data as *mut libc::c_void,
         data,
@@ -662,8 +625,7 @@ unsafe extern "C" fn NET_QueuePacket(
     );
     (*new).length = length;
     (*new).to = to;
-    (*new).release = Sys_Milliseconds()
-        + (offset as f32 / (*com_timescale).value) as i32;
+    (*new).release = Sys_Milliseconds() + (offset as f32 / (*com_timescale).value) as i32;
     (*new).next = 0 as *mut packetQueue_s;
     if packetQueue.is_null() {
         packetQueue = new;
@@ -723,24 +685,10 @@ pub unsafe extern "C" fn NET_SendPacket(
     if to.type_0 as u32 == NA_BAD as i32 as u32 {
         return;
     }
-    if sock as u32 == NS_CLIENT as i32 as u32
-        && (*cl_packetdelay).integer > 0 as i32
-    {
-        NET_QueuePacket(
-            length,
-            data,
-            to,
-            (*cl_packetdelay).integer,
-        );
-    } else if sock as u32 == NS_SERVER as i32 as u32
-        && (*sv_packetdelay).integer > 0 as i32
-    {
-        NET_QueuePacket(
-            length,
-            data,
-            to,
-            (*sv_packetdelay).integer,
-        );
+    if sock as u32 == NS_CLIENT as i32 as u32 && (*cl_packetdelay).integer > 0 as i32 {
+        NET_QueuePacket(length, data, to, (*cl_packetdelay).integer);
+    } else if sock as u32 == NS_SERVER as i32 as u32 && (*sv_packetdelay).integer > 0 as i32 {
+        NET_QueuePacket(length, data, to, (*sv_packetdelay).integer);
     } else {
         Sys_SendPacket(length, data, to as netadr_t);
     };
@@ -822,10 +770,7 @@ pub unsafe extern "C" fn NET_OutOfBandData(
     }
     mbuf.data = string.as_mut_ptr();
     mbuf.cursize = len + 4 as i32;
-    Huff_Compress(
-        &mut mbuf as *mut _ as *mut msg_t,
-        12 as i32,
-    );
+    Huff_Compress(&mut mbuf as *mut _ as *mut msg_t, 12 as i32);
     // send the datagram
     NET_SendPacket(sock, mbuf.cursize, mbuf.data as *const libc::c_void, adr);
 }
@@ -863,8 +808,7 @@ pub unsafe extern "C" fn NET_StringToAdr(
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if *base.as_mut_ptr() as i32 == '[' as i32
-        || Q_CountChar(base.as_mut_ptr(), ':' as i32 as libc::c_char)
-            > 1 as i32
+        || Q_CountChar(base.as_mut_ptr(), ':' as i32 as libc::c_char) > 1 as i32
     {
         // This is an ipv6 address, handle it specially.
         search = libc::strchr(base.as_mut_ptr(), ']' as i32);
@@ -889,13 +833,7 @@ pub unsafe extern "C" fn NET_StringToAdr(
         }
         search = base.as_mut_ptr()
     }
-    if Sys_StringToAdr(
-        search,
-        a as *mut netadr_t,
-        family,
-    ) as u64
-        == 0
-    {
+    if Sys_StringToAdr(search, a as *mut netadr_t, family) as u64 == 0 {
         (*a).type_0 = NA_BAD;
         return 0 as i32;
     }

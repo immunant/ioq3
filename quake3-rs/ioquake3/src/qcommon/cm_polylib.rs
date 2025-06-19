@@ -190,14 +190,8 @@ pub unsafe extern "C" fn RemoveColinearPoints(
             - (*(*w).p.as_mut_ptr().offset(k as isize))[1 as i32 as usize];
         v2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[2 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[2 as i32 as usize];
-        VectorNormalize2(
-            v1.as_mut_ptr() as *const vec_t,
-            v1.as_mut_ptr(),
-        );
-        VectorNormalize2(
-            v2.as_mut_ptr() as *const vec_t,
-            v2.as_mut_ptr(),
-        );
+        VectorNormalize2(v1.as_mut_ptr() as *const vec_t, v1.as_mut_ptr());
+        VectorNormalize2(v2.as_mut_ptr() as *const vec_t, v2.as_mut_ptr());
         if ((v1[0 as i32 as usize] * v2[0 as i32 as usize]
             + v1[1 as i32 as usize] * v2[1 as i32 as usize]
             + v1[2 as i32 as usize] * v2[2 as i32 as usize]) as f64)
@@ -221,9 +215,7 @@ pub unsafe extern "C" fn RemoveColinearPoints(
     crate::stdlib::memcpy(
         (*w).p.as_mut_ptr() as *mut libc::c_void,
         p.as_mut_ptr() as *const libc::c_void,
-        (nump as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (nump as libc::c_ulong).wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
 }
 /*
@@ -257,10 +249,7 @@ pub unsafe extern "C" fn WindingPlane(
         v1.as_mut_ptr() as *const vec_t,
         normal,
     );
-    VectorNormalize2(
-        normal as *const vec_t,
-        normal,
-    );
+    VectorNormalize2(normal as *const vec_t, normal);
     *dist = (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize]
         * *normal.offset(0 as i32 as isize)
         + (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize]
@@ -306,10 +295,8 @@ pub unsafe extern "C" fn WindingArea(
             d2.as_mut_ptr() as *const vec_t,
             cross.as_mut_ptr(),
         );
-        total = (total as f64
-            + 0.5f64
-                * VectorLength(cross.as_mut_ptr() as *const vec_t)
-                    as f64) as vec_t;
+        total = (total as f64 + 0.5f64 * VectorLength(cross.as_mut_ptr() as *const vec_t) as f64)
+            as vec_t;
         i += 1
     }
     return total;
@@ -414,8 +401,7 @@ pub unsafe extern "C" fn BaseWindingForPlane(
     x = -(1 as i32);
     i = 0 as i32;
     while i < 3 as i32 {
-        v = crate::stdlib::fabs(*normal.offset(i as isize) as f64)
-            as vec_t;
+        v = crate::stdlib::fabs(*normal.offset(i as isize) as f64) as vec_t;
         if v > max {
             x = i;
             max = v
@@ -442,10 +428,7 @@ pub unsafe extern "C" fn BaseWindingForPlane(
     vup[0 as i32 as usize] = vup[0 as i32 as usize] + *normal.offset(0 as i32 as isize) * -v;
     vup[1 as i32 as usize] = vup[1 as i32 as usize] + *normal.offset(1 as i32 as isize) * -v;
     vup[2 as i32 as usize] = vup[2 as i32 as usize] + *normal.offset(2 as i32 as isize) * -v;
-    VectorNormalize2(
-        vup.as_mut_ptr() as *const vec_t,
-        vup.as_mut_ptr(),
-    );
+    VectorNormalize2(vup.as_mut_ptr() as *const vec_t, vup.as_mut_ptr());
     org[0 as i32 as usize] = *normal.offset(0 as i32 as isize) * dist;
     org[1 as i32 as usize] = *normal.offset(1 as i32 as isize) * dist;
     org[2 as i32 as usize] = *normal.offset(2 as i32 as isize) * dist;
@@ -539,8 +522,7 @@ pub unsafe extern "C" fn CopyWinding(
     let mut c: *mut crate::src::qcommon::cm_polylib::winding_t =
         0 as *mut crate::src::qcommon::cm_polylib::winding_t;
     c = AllocWinding((*w).numpoints);
-    size = &mut *(*w).p.as_mut_ptr().offset((*w).numpoints as isize)
-        as *mut vec3_t as intptr_t
+    size = &mut *(*w).p.as_mut_ptr().offset((*w).numpoints as isize) as *mut vec3_t as intptr_t
         - w as intptr_t;
     crate::stdlib::memcpy(
         c as *mut libc::c_void,
@@ -676,10 +658,8 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
     static mut dot: vec_t = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t =
-        0 as *mut vec_t;
-    let mut p2: *mut vec_t =
-        0 as *mut vec_t;
+    let mut p1: *mut vec_t = 0 as *mut vec_t;
+    let mut p2: *mut vec_t = 0 as *mut vec_t;
     let mut mid: vec3_t = [0.; 3];
     let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
         0 as *mut crate::src::qcommon::cm_polylib::winding_t;
@@ -913,10 +893,8 @@ pub unsafe extern "C" fn ChopWindingInPlace(
     static mut dot: vec_t = 0.;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t =
-        0 as *mut vec_t;
-    let mut p2: *mut vec_t =
-        0 as *mut vec_t;
+    let mut p1: *mut vec_t = 0 as *mut vec_t;
+    let mut p2: *mut vec_t = 0 as *mut vec_t;
     let mut mid: vec3_t = [0.; 3];
     let mut f: *mut crate::src::qcommon::cm_polylib::winding_t =
         0 as *mut crate::src::qcommon::cm_polylib::winding_t;
@@ -1066,10 +1044,8 @@ CheckWinding
 pub unsafe extern "C" fn CheckWinding(mut w: *mut crate::src::qcommon::cm_polylib::winding_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut p1: *mut vec_t =
-        0 as *mut vec_t;
-    let mut p2: *mut vec_t =
-        0 as *mut vec_t;
+    let mut p1: *mut vec_t = 0 as *mut vec_t;
+    let mut p2: *mut vec_t = 0 as *mut vec_t;
     let mut d: vec_t = 0.;
     let mut edgedist: vec_t = 0.;
     let mut dir: vec3_t = [0.; 3];
@@ -1269,10 +1245,8 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     let mut hullPoints: [vec3_t; 128] = [[0.; 3]; 128];
     let mut newHullPoints: [vec3_t; 128] = [[0.; 3]; 128];
     let mut hullDirs: [vec3_t; 128] = [[0.; 3]; 128];
-    let mut hullSide: [qboolean; 128] =
-        [qfalse; 128];
-    let mut outside: qboolean =
-        qfalse;
+    let mut hullSide: [qboolean; 128] = [qfalse; 128];
+    let mut outside: qboolean = qfalse;
     if (*hull).is_null() {
         *hull = CopyWinding(w);
         return;
@@ -1281,9 +1255,8 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     crate::stdlib::memcpy(
         hullPoints.as_mut_ptr() as *mut libc::c_void,
         (**hull).p.as_mut_ptr() as *const libc::c_void,
-        (numHullPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (numHullPoints as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
     i = 0 as i32;
     while i < (*w).numpoints {
@@ -1298,10 +1271,7 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
                 - hullPoints[j as usize][1 as i32 as usize];
             dir[2 as i32 as usize] = hullPoints[k as usize][2 as i32 as usize]
                 - hullPoints[j as usize][2 as i32 as usize];
-            VectorNormalize2(
-                dir.as_mut_ptr() as *const vec_t,
-                dir.as_mut_ptr(),
-            );
+            VectorNormalize2(dir.as_mut_ptr() as *const vec_t, dir.as_mut_ptr());
             CrossProduct(
                 normal as *const vec_t,
                 dir.as_mut_ptr() as *const vec_t,
@@ -1372,10 +1342,8 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
                 crate::stdlib::memcpy(
                     hullPoints.as_mut_ptr() as *mut libc::c_void,
                     newHullPoints.as_mut_ptr() as *const libc::c_void,
-                    (numHullPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                        vec3_t,
-                    >()
-                        as libc::c_ulong),
+                    (numHullPoints as libc::c_ulong)
+                        .wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
                 );
             }
         }
@@ -1388,8 +1356,7 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
     crate::stdlib::memcpy(
         (*w).p.as_mut_ptr() as *mut libc::c_void,
         hullPoints.as_mut_ptr() as *const libc::c_void,
-        (numHullPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (numHullPoints as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
 }

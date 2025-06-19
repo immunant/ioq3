@@ -103,18 +103,14 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         return;
     } //end if
     if filename.is_null() || crate::stdlib::strlen(filename) == 0 {
-        botimport
-            .Print
-            .expect("non-null function pointer")(
+        botimport.Print.expect("non-null function pointer")(
             1 as i32,
             b"openlog <filename>\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         ); //end if
         return;
     }
     if !logfile.fp.is_null() {
-        botimport
-            .Print
-            .expect("non-null function pointer")(
+        botimport.Print.expect("non-null function pointer")(
             3 as i32,
             b"log file %s is already opened\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -133,9 +129,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
     );
     logfile.fp = crate::stdlib::fopen(ospath, b"wb\x00" as *const u8 as *const libc::c_char);
     if logfile.fp.is_null() {
-        botimport
-            .Print
-            .expect("non-null function pointer")(
+        botimport.Print.expect("non-null function pointer")(
             3 as i32,
             b"can\'t open the log file %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -144,9 +138,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         return;
     }
     Q_strncpyz(logfile.filename.as_mut_ptr(), filename, 1024 as i32);
-    botimport
-        .Print
-        .expect("non-null function pointer")(
+    botimport.Print.expect("non-null function pointer")(
         1 as i32,
         b"Opened log %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         logfile.filename.as_mut_ptr(),
@@ -167,9 +159,7 @@ pub unsafe extern "C" fn Log_Close() {
         return;
     } //end if
     if crate::stdlib::fclose(logfile.fp) != 0 {
-        botimport
-            .Print
-            .expect("non-null function pointer")(
+        botimport.Print.expect("non-null function pointer")(
             3 as i32,
             b"can\'t close log file %s\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -178,9 +168,7 @@ pub unsafe extern "C" fn Log_Close() {
         return;
     }
     logfile.fp = 0 as *mut FILE;
-    botimport
-        .Print
-        .expect("non-null function pointer")(
+    botimport.Print.expect("non-null function pointer")(
         1 as i32,
         b"Closed log %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         logfile.filename.as_mut_ptr(),
@@ -240,12 +228,10 @@ pub unsafe extern "C" fn Log_WriteTimeStamped(mut fmt: *mut libc::c_char, mut ar
         logfile.fp,
         b"%d   %02d:%02d:%02d:%02d   \x00" as *const u8 as *const libc::c_char,
         logfile.numwrites,
-        (botlibglobals.time / 60 as i32 as f32 / 60 as i32 as f32)
-            as i32,
+        (botlibglobals.time / 60 as i32 as f32 / 60 as i32 as f32) as i32,
         (botlibglobals.time / 60 as i32 as f32) as i32,
         botlibglobals.time as i32,
-        (botlibglobals.time * 100 as i32 as f32) as i32
-            - botlibglobals.time as i32 * 100 as i32,
+        (botlibglobals.time * 100 as i32 as f32) as i32 - botlibglobals.time as i32 * 100 as i32,
     );
     ap = args.clone();
     crate::stdlib::vfprintf(logfile.fp, fmt, ap.as_va_list());

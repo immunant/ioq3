@@ -302,8 +302,7 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
         LF_shp_Q14[i as usize] = ((silk_float2int((*psEncCtrl).LF_AR_shp[i as usize] * 16384.0f32)
             as opus_uint32)
             << 16 as i32) as opus_int32
-            | silk_float2int((*psEncCtrl).LF_MA_shp[i as usize] * 16384.0f32)
-                as opus_uint16 as i32;
+            | silk_float2int((*psEncCtrl).LF_MA_shp[i as usize] * 16384.0f32) as opus_uint16 as i32;
         Tilt_Q14[i as usize] = silk_float2int((*psEncCtrl).Tilt[i as usize] * 16384.0f32);
         HarmShapeGain_Q14[i as usize] =
             silk_float2int((*psEncCtrl).HarmShapeGain[i as usize] * 16384.0f32);
@@ -313,8 +312,8 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
     /* prediction and coding parameters */
     i = 0 as i32;
     while i < (*psEnc).sCmn.nb_subfr * 5 as i32 {
-        LTPCoef_Q14[i as usize] = silk_float2int((*psEncCtrl).LTPCoef[i as usize] * 16384.0f32)
-            as opus_int16;
+        LTPCoef_Q14[i as usize] =
+            silk_float2int((*psEncCtrl).LTPCoef[i as usize] * 16384.0f32) as opus_int16;
         i += 1
     }
     j = 0 as i32;

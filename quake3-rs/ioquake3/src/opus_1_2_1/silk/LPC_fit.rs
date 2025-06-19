@@ -272,10 +272,8 @@ pub unsafe extern "C" fn silk_LPC_fit(
         } else {
             163838 as i32
         }; /* ( silk_int32_MAX >> 14 ) + silk_int16_MAX = 163838 */
-        chirp_Q16 = (0.999f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
-            as opus_int32
-            - (((maxabs - 0x7fff as i32) as opus_uint32) << 14 as i32)
-                as opus_int32
+        chirp_Q16 = (0.999f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64) as opus_int32
+            - (((maxabs - 0x7fff as i32) as opus_uint32) << 14 as i32) as opus_int32
                 / (maxabs * (idx + 1 as i32) >> 2 as i32);
         crate::src::opus_1_2_1::silk::bwexpander_32::silk_bwexpander_32(a_QIN, d, chirp_Q16);
         i += 1
@@ -303,10 +301,8 @@ pub unsafe extern "C" fn silk_LPC_fit(
             } else {
                 ((*a_QIN.offset(k as isize) >> QIN - QOUT - 1 as i32) + 1 as i32) >> 1 as i32
             } as opus_int16;
-            *a_QIN.offset(k as isize) =
-                ((*a_QOUT.offset(k as isize) as opus_int32
-                    as opus_uint32)
-                    << QIN - QOUT) as opus_int32;
+            *a_QIN.offset(k as isize) = ((*a_QOUT.offset(k as isize) as opus_int32 as opus_uint32)
+                << QIN - QOUT) as opus_int32;
             k += 1
         }
     } else {

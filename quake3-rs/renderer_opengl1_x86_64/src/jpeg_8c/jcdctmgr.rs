@@ -278,10 +278,8 @@ unsafe extern "C" fn forward_DCT(
 {
     /* This routine is heavily used, so it's worth coding it tightly. */
     let mut fdct: my_fdct_ptr = (*cinfo).fdct as my_fdct_ptr; /* work area for FDCT subroutine */
-    let mut do_dct: forward_DCT_method_ptr =
-        (*fdct).do_dct[(*compptr).component_index as usize]; /* fold in the vertical offset once */
-    let mut divisors: *mut DCTELEM =
-        (*fdct).divisors[(*compptr).quant_tbl_no as usize];
+    let mut do_dct: forward_DCT_method_ptr = (*fdct).do_dct[(*compptr).component_index as usize]; /* fold in the vertical offset once */
+    let mut divisors: *mut DCTELEM = (*fdct).divisors[(*compptr).quant_tbl_no as usize];
     let mut workspace: [DCTELEM; 64] = [0; 64];
     let mut bi: JDIMENSION = 0;
     sample_data = sample_data.offset(start_row as isize);
@@ -297,8 +295,7 @@ unsafe extern "C" fn forward_DCT(
         let mut temp: DCTELEM = 0;
         let mut qval: DCTELEM = 0;
         let mut i: i32 = 0;
-        let mut output_ptr: JCOEFPTR =
-            (*coef_blocks.offset(bi as isize)).as_mut_ptr();
+        let mut output_ptr: JCOEFPTR = (*coef_blocks.offset(bi as isize)).as_mut_ptr();
         i = 0 as i32;
         while i < 64 as i32 {
             qval = *divisors.offset(i as isize);
@@ -336,8 +333,8 @@ unsafe extern "C" fn forward_DCT(
             i += 1
         }
         bi = bi.wrapping_add(1);
-        start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
-            as JDIMENSION
+        start_col =
+            (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32) as JDIMENSION
     }
 }
 
@@ -371,8 +368,7 @@ unsafe extern "C" fn forward_DCT_float(
         /* Quantize/descale the coefficients, and store into coef_blocks[] */
         let mut temp: f32 = 0.;
         let mut i: i32 = 0;
-        let mut output_ptr: JCOEFPTR =
-            (*coef_blocks.offset(bi as isize)).as_mut_ptr();
+        let mut output_ptr: JCOEFPTR = (*coef_blocks.offset(bi as isize)).as_mut_ptr();
         i = 0 as i32;
         while i < 64 as i32 {
             /* Apply the quantization and scaling factor */
@@ -388,8 +384,8 @@ unsafe extern "C" fn forward_DCT_float(
             i += 1
         }
         bi = bi.wrapping_add(1);
-        start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
-            as JDIMENSION
+        start_col =
+            (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32) as JDIMENSION
     }
 }
 /* DCT_FLOAT_SUPPORTED */
@@ -407,8 +403,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
     let mut ci: i32 = 0;
     let mut qtblno: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut method: i32 = 0 as i32;
     let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut dtbl: *mut DCTELEM = 0 as *mut DCTELEM;
@@ -793,16 +788,13 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     method = JDCT_FLOAT as i32
                 }
                 _ => {
-                    (*(*cinfo).err).msg_code =
-                        JERR_NOT_COMPILED as i32;
+                    (*(*cinfo).err).msg_code = JERR_NOT_COMPILED as i32;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
-                    .expect("non-null function pointer")(
-                        cinfo as j_common_ptr
-                    );
+                    .expect("non-null function pointer")(cinfo as j_common_ptr);
                 }
             },
             _ => {
@@ -814,9 +806,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         qtblno = (*compptr).quant_tbl_no;
@@ -832,9 +822,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         qtbl = (*cinfo).quant_tbl_ptrs[qtblno as usize];
         /* Compute divisors for this quant table */
@@ -854,11 +842,8 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                         cinfo as j_common_ptr,
                         1 as i32,
                         (64 as i32 as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<DCTELEM>() as libc::c_ulong
-                            ),
-                    )
-                        as *mut DCTELEM
+                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as libc::c_ulong),
+                    ) as *mut DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
                 i = 0 as i32;
@@ -963,22 +948,16 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                         cinfo as j_common_ptr,
                         1 as i32,
                         (64 as i32 as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<DCTELEM>() as libc::c_ulong
-                            ),
-                    )
-                        as *mut DCTELEM
+                            .wrapping_mul(::std::mem::size_of::<DCTELEM>() as libc::c_ulong),
+                    ) as *mut DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
                 i = 0 as i32;
                 while i < 64 as i32 {
-                    *dtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
-                        as INT32
-                        * aanscales[i as usize] as INT32
-                        + ((1 as i32 as INT32)
-                            << 14 as i32 - 3 as i32 - 1 as i32)
-                        >> 14 as i32 - 3 as i32)
-                        as DCTELEM;
+                    *dtbl.offset(i as isize) =
+                        ((*qtbl).quantval[i as usize] as INT32 * aanscales[i as usize] as INT32
+                            + ((1 as i32 as INT32) << 14 as i32 - 3 as i32 - 1 as i32)
+                            >> 14 as i32 - 3 as i32) as DCTELEM;
                     i += 1
                 }
                 (*fdct).pub_0.forward_DCT[ci as usize] = Some(
@@ -1066,9 +1045,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: j_compress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         ci += 1;

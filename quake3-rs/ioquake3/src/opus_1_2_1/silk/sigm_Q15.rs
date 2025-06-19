@@ -182,10 +182,8 @@ pub unsafe extern "C" fn silk_sigm_Q15(mut in_Q5: i32) -> i32
             /* Linear interpolation of look up table */
             ind = in_Q5 >> 5 as i32;
             return sigm_LUT_neg_Q15[ind as usize]
-                - sigm_LUT_slope_Q10[ind as usize] as opus_int16
-                    as opus_int32
-                    * (in_Q5 & 0x1f as i32) as opus_int16
-                        as opus_int32;
+                - sigm_LUT_slope_Q10[ind as usize] as opus_int16 as opus_int32
+                    * (in_Q5 & 0x1f as i32) as opus_int16 as opus_int32;
         }
     } else if in_Q5 >= 6 as i32 * 32 as i32 {
         return 32767 as i32;
@@ -195,9 +193,7 @@ pub unsafe extern "C" fn silk_sigm_Q15(mut in_Q5: i32) -> i32
         /* Linear interpolation of look up table */
         ind = in_Q5 >> 5 as i32;
         return sigm_LUT_pos_Q15[ind as usize]
-            + sigm_LUT_slope_Q10[ind as usize] as opus_int16
-                as opus_int32
-                * (in_Q5 & 0x1f as i32) as opus_int16
-                    as opus_int32;
+            + sigm_LUT_slope_Q10[ind as usize] as opus_int16 as opus_int32
+                * (in_Q5 & 0x1f as i32) as opus_int16 as opus_int32;
     };
 }

@@ -265,8 +265,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
     let mut idct: my_idct_ptr = (*cinfo).idct as my_idct_ptr;
     let mut ci: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut method: i32 = 0 as i32;
     let mut method_ptr: inverse_DCT_method_ptr = None;
     let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
@@ -719,16 +718,13 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                     method = JDCT_FLOAT as i32
                 }
                 _ => {
-                    (*(*cinfo).err).msg_code =
-                        JERR_NOT_COMPILED as i32;
+                    (*(*cinfo).err).msg_code = JERR_NOT_COMPILED as i32;
                     Some(
                         (*(*cinfo).err)
                             .error_exit
                             .expect("non-null function pointer"),
                     )
-                    .expect("non-null function pointer")(
-                        cinfo as j_common_ptr
-                    );
+                    .expect("non-null function pointer")(cinfo as j_common_ptr);
                 }
             },
             _ => {
@@ -740,9 +736,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
         }
         (*idct).pub_0.inverse_DCT[ci as usize] = method_ptr;
@@ -849,11 +843,9 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         ];
                         i = 0 as i32;
                         while i < 64 as i32 {
-                            *ifmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
-                                as INT32
+                            *ifmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize] as INT32
                                 * aanscales[i as usize] as INT32
-                                + ((1 as i32 as INT32)
-                                    << 14 as i32 - 2 as i32 - 1 as i32)
+                                + ((1 as i32 as INT32) << 14 as i32 - 2 as i32 - 1 as i32)
                                 >> 14 as i32 - 2 as i32)
                                 as IFAST_MULT_TYPE;
                             i += 1
@@ -897,15 +889,14 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         }
                     }
                     _ => {
-                        (*(*cinfo).err).msg_code =
-                            JERR_NOT_COMPILED as i32;
+                        (*(*cinfo).err).msg_code = JERR_NOT_COMPILED as i32;
                         Some(
                             (*(*cinfo).err)
                                 .error_exit
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
+                            cinfo as j_common_ptr
                         );
                     }
                 }
@@ -924,8 +915,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
 pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: j_decompress_ptr) {
     let mut idct: my_idct_ptr = 0 as *mut my_idct_controller;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     idct = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -937,8 +927,7 @@ pub unsafe extern "C" fn jinit_inverse_dct(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<my_idct_controller>() as libc::c_ulong,
     ) as my_idct_ptr;
     (*cinfo).idct = idct as *mut jpeg_inverse_dct;
-    (*idct).pub_0.start_pass =
-        Some(start_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
+    (*idct).pub_0.start_pass = Some(start_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
     while ci < (*cinfo).num_components {

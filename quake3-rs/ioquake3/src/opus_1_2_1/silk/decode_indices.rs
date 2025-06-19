@@ -460,8 +460,8 @@ pub unsafe extern "C" fn silk_decode_indices(
             ) as opus_int16 as i32;
             if delta_lagIndex > 0 as i32 {
                 delta_lagIndex = delta_lagIndex - 9 as i32;
-                (*psDec).indices.lagIndex = ((*psDec).ec_prevLagIndex as i32 + delta_lagIndex)
-                    as opus_int16;
+                (*psDec).indices.lagIndex =
+                    ((*psDec).ec_prevLagIndex as i32 + delta_lagIndex) as opus_int16;
                 decode_absolute_lagIndex = 0 as i32
             }
         }
@@ -479,8 +479,7 @@ pub unsafe extern "C" fn silk_decode_indices(
                     psRangeDec as *mut ec_ctx,
                     (*psDec).pitch_lag_low_bits_iCDF,
                     8 as i32 as u32,
-                ) as opus_int16 as i32)
-                as opus_int16
+                ) as opus_int16 as i32) as opus_int16
         }
         (*psDec).ec_prevLagIndex = (*psDec).indices.lagIndex;
         /* Get countour index */

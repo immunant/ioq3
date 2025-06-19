@@ -189,10 +189,8 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     let mut cl_ptr_Q5: *const u8 = 0 as *const u8;
     let mut cbk_ptr_Q7: *const i8 = 0 as *const i8;
     let mut cbk_gain_ptr_Q7: *const u8 = 0 as *const u8;
-    let mut XX_Q17_ptr: *const opus_int32 =
-        0 as *const opus_int32;
-    let mut xX_Q17_ptr: *const opus_int32 =
-        0 as *const opus_int32;
+    let mut XX_Q17_ptr: *const opus_int32 = 0 as *const opus_int32;
+    let mut xX_Q17_ptr: *const opus_int32 = 0 as *const opus_int32;
     let mut res_nrg_Q15_subfr: opus_int32 = 0;
     let mut res_nrg_Q15: opus_int32 = 0;
     let mut rate_dist_Q7_subfr: opus_int32 = 0;
@@ -213,8 +211,7 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
         /* Safety margin for pitch gain control, to take into account factors
         such as state rescaling/rewhitening. */
         let mut gain_safety: opus_int32 =
-            (0.4f64 * ((1 as i32 as i64) << 7 as i32) as f64 + 0.5f64)
-                as opus_int32;
+            (0.4f64 * ((1 as i32 as i64) << 7 as i32) as f64 + 0.5f64) as opus_int32;
         cl_ptr_Q5 =
             crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_gain_BITS_Q5_ptrs[k as usize];
         cbk_ptr_Q7 = crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_ptrs_Q7[k as usize];
@@ -308,8 +305,7 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
             *B_Q14.offset((j * 5 as i32 + k) as isize) = ((*cbk_ptr_Q7
                 .offset((*cbk_index.offset(j as isize) as i32 * 5 as i32 + k) as isize)
                 as opus_uint32)
-                << 7 as i32)
-                as opus_int32
+                << 7 as i32) as opus_int32
                 as opus_int16;
             k += 1
         }
@@ -321,9 +317,7 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
         res_nrg_Q15 = res_nrg_Q15 >> 2 as i32
     }
     *sum_log_gain_Q7 = best_sum_log_gain_Q7;
-    *pred_gain_dB_Q7 = -(3 as i32) as opus_int16
-        as opus_int32
+    *pred_gain_dB_Q7 = -(3 as i32) as opus_int16 as opus_int32
         * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(res_nrg_Q15)
-            - ((15 as i32) << 7 as i32)) as opus_int16
-            as opus_int32;
+            - ((15 as i32) << 7 as i32)) as opus_int16 as opus_int32;
 }

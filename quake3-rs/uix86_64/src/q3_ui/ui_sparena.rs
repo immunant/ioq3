@@ -195,17 +195,9 @@ pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
         b"special\x00" as *const u8 as *const libc::c_char,
     );
     if *txt.offset(0 as i32 as isize) != 0 {
-        if Q_stricmp(
-            txt,
-            b"training\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        if Q_stricmp(txt, b"training\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             level = -(4 as i32)
-        } else if Q_stricmp(
-            txt,
-            b"final\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        {
+        } else if Q_stricmp(txt, b"final\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
             level = crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers() * 4 as i32
         }
     }
@@ -213,10 +205,7 @@ pub unsafe extern "C" fn UI_SPArena_Start(mut arenaInfo: *const libc::c_char) {
         b"ui_spSelection\x00" as *const u8 as *const libc::c_char,
         level as f32,
     );
-    map = Info_ValueForKey(
-        arenaInfo,
-        b"map\x00" as *const u8 as *const libc::c_char,
-    );
+    map = Info_ValueForKey(arenaInfo, b"map\x00" as *const u8 as *const libc::c_char);
     crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
         EXEC_APPEND as i32,
         va(

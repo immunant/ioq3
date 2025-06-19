@@ -146,22 +146,15 @@ pub unsafe extern "C" fn UI_ParseInfos(
             break;
         }
         if libc::strcmp(token, b"{\x00" as *const u8 as *const libc::c_char) != 0 {
-            Com_Printf(
-                b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Missing { in info file\n\x00" as *const u8 as *const libc::c_char);
             break;
         } else if count == max {
-            Com_Printf(
-                b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Max infos exceeded\n\x00" as *const u8 as *const libc::c_char);
             break;
         } else {
             info[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
             loop {
-                token = COM_ParseExt(
-                    &mut buf,
-                    qtrue,
-                );
+                token = COM_ParseExt(&mut buf, qtrue);
                 if *token.offset(0 as i32 as isize) == 0 {
                     Com_Printf(
                         b"Unexpected end of info file\n\x00" as *const u8 as *const libc::c_char,
@@ -176,18 +169,11 @@ pub unsafe extern "C" fn UI_ParseInfos(
                         token,
                         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
-                    token = COM_ParseExt(
-                        &mut buf,
-                        qfalse,
-                    );
+                    token = COM_ParseExt(&mut buf, qfalse);
                     if *token.offset(0 as i32 as isize) == 0 {
                         libc::strcpy(token, b"<NULL>\x00" as *const u8 as *const libc::c_char);
                     }
-                    Info_SetValueForKey(
-                        info.as_mut_ptr(),
-                        key.as_mut_ptr(),
-                        token,
-                    );
+                    Info_SetValueForKey(info.as_mut_ptr(), key.as_mut_ptr(), token);
                 }
             }
             //NOTE: extra space for arena number
@@ -221,11 +207,7 @@ unsafe extern "C" fn UI_LoadArenasFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
     let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if f == 0 {
         trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -261,14 +243,13 @@ UI_LoadArenas
 
 unsafe extern "C" fn UI_LoadArenas() {
     let mut numdirs: i32 = 0;
-    let mut arenasFile: vmCvar_t =
-        vmCvar_t {
-            handle: 0,
-            modificationCount: 0,
-            value: 0.,
-            integer: 0,
-            string: [0; 256],
-        };
+    let mut arenasFile: vmCvar_t = vmCvar_t {
+        handle: 0,
+        modificationCount: 0,
+        value: 0.,
+        integer: 0,
+        string: [0; 256],
+    };
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 4096] = [0; 4096];
     let mut dirptr: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -349,8 +330,7 @@ unsafe extern "C" fn UI_LoadArenas() {
         );
         // if no type specified, it will be treated as "ffa"
         if !(*type_0 == 0) {
-            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
-            {
+            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null() {
                 // check for special single player arenas (training, final)
                 tag = Info_ValueForKey(
                     ui_arenaInfos[n as usize],
@@ -389,8 +369,7 @@ unsafe extern "C" fn UI_LoadArenas() {
         );
         // if no type specified, it will be treated as "ffa"
         if *type_0 != 0 {
-            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null()
-            {
+            if !libc::strstr(type_0, b"single\x00" as *const u8 as *const libc::c_char).is_null() {
                 // check for special single player arenas (training, final)
                 tag = Info_ValueForKey(
                     ui_arenaInfos[n as usize],
@@ -537,11 +516,7 @@ unsafe extern "C" fn UI_LoadBotsFromFile(mut filename: *mut libc::c_char) {
     let mut len: i32 = 0;
     let mut f: fileHandle_t = 0;
     let mut buf: [libc::c_char; 8192] = [0; 8192];
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if f == 0 {
         trap_Print(va(
             b"^1file not found: %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -582,14 +557,13 @@ UI_LoadBots
 */
 
 unsafe extern "C" fn UI_LoadBots() {
-    let mut botsFile: vmCvar_t =
-        vmCvar_t {
-            handle: 0,
-            modificationCount: 0,
-            value: 0.,
-            integer: 0,
-            string: [0; 256],
-        };
+    let mut botsFile: vmCvar_t = vmCvar_t {
+        handle: 0,
+        modificationCount: 0,
+        value: 0.,
+        integer: 0,
+        string: [0; 256],
+    };
     let mut numdirs: i32 = 0;
     let mut filename: [libc::c_char; 128] = [0; 128];
     let mut dirlist: [libc::c_char; 1024] = [0; 1024];
@@ -719,10 +693,7 @@ pub unsafe extern "C" fn UI_GetBestScore(mut level: i32, mut score: *mut i32, mu
             b"l%i\x00" as *const u8 as *const libc::c_char,
             level,
         );
-        skillScore = atoi(Info_ValueForKey(
-            scores.as_mut_ptr(),
-            arenaKey.as_mut_ptr(),
-        ));
+        skillScore = atoi(Info_ValueForKey(scores.as_mut_ptr(), arenaKey.as_mut_ptr()));
         if !(skillScore < 1 as i32 || skillScore > 8 as i32) {
             if bestScore == 0 || skillScore <= bestScore {
                 bestScore = skillScore;
@@ -753,9 +724,7 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
         return;
     }
     // validate skill
-    skill = trap_Cvar_VariableValue(
-        b"g_spSkill\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    skill = trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char) as i32;
     if skill < 1 as i32 || skill > 5 as i32 {
         return;
     }
@@ -775,10 +744,7 @@ pub unsafe extern "C" fn UI_SetBestScore(mut level: i32, mut score: i32) {
         b"l%i\x00" as *const u8 as *const libc::c_char,
         level,
     );
-    oldScore = atoi(Info_ValueForKey(
-        scores.as_mut_ptr(),
-        arenaKey.as_mut_ptr(),
-    ));
+    oldScore = atoi(Info_ValueForKey(scores.as_mut_ptr(), arenaKey.as_mut_ptr()));
     if oldScore != 0 && oldScore <= score {
         return;
     }
@@ -832,10 +798,7 @@ pub unsafe extern "C" fn UI_LogAwardData(mut award: i32, mut data: i32) {
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
-    oldValue = atoi(Info_ValueForKey(
-        awardData.as_mut_ptr(),
-        key.as_mut_ptr(),
-    ));
+    oldValue = atoi(Info_ValueForKey(awardData.as_mut_ptr(), key.as_mut_ptr()));
     Info_SetValueForKey(
         awardData.as_mut_ptr(),
         key.as_mut_ptr(),
@@ -870,10 +833,7 @@ pub unsafe extern "C" fn UI_GetAwardLevel(mut award: i32) -> i32 {
         b"a%i\x00" as *const u8 as *const libc::c_char,
         award,
     );
-    return atoi(Info_ValueForKey(
-        awardData.as_mut_ptr(),
-        key.as_mut_ptr(),
-    ));
+    return atoi(Info_ValueForKey(awardData.as_mut_ptr(), key.as_mut_ptr()));
 }
 /*
 ===============
@@ -931,9 +891,7 @@ UI_ShowTierVideo
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_ShowTierVideo(
-    mut tier: i32,
-) -> qboolean {
+pub unsafe extern "C" fn UI_ShowTierVideo(mut tier: i32) -> qboolean {
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut videos: [libc::c_char; 1024] = [0; 1024];
     if tier <= 0 as i32 {
@@ -950,11 +908,7 @@ pub unsafe extern "C" fn UI_ShowTierVideo(
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
-    if atoi(Info_ValueForKey(
-        videos.as_mut_ptr(),
-        key.as_mut_ptr(),
-    )) != 0
-    {
+    if atoi(Info_ValueForKey(videos.as_mut_ptr(), key.as_mut_ptr())) != 0 {
         return qfalse;
     }
     Info_SetValueForKey(
@@ -978,9 +932,7 @@ UI_CanShowTierVideo
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_CanShowTierVideo(
-    mut tier: i32,
-) -> qboolean {
+pub unsafe extern "C" fn UI_CanShowTierVideo(mut tier: i32) -> qboolean {
     let mut key: [libc::c_char; 16] = [0; 16];
     let mut videos: [libc::c_char; 1024] = [0; 1024];
     if tier == 0 {
@@ -1000,11 +952,7 @@ pub unsafe extern "C" fn UI_CanShowTierVideo(
         b"tier%i\x00" as *const u8 as *const libc::c_char,
         tier,
     );
-    if atoi(Info_ValueForKey(
-        videos.as_mut_ptr(),
-        key.as_mut_ptr(),
-    )) != 0
-    {
+    if atoi(Info_ValueForKey(videos.as_mut_ptr(), key.as_mut_ptr())) != 0 {
         return qtrue;
     }
     return qfalse;
@@ -1174,9 +1122,7 @@ pub unsafe extern "C" fn UI_SPUnlock_f() {
         UI_ShowTierVideo(tier);
         tier += 1
     }
-    trap_Print(
-        b"All levels unlocked at skill level 1\n\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_Print(b"All levels unlocked at skill level 1\n\x00" as *const u8 as *const libc::c_char);
     UI_SPLevelMenu_ReInit();
 }
 /*
@@ -1214,9 +1160,7 @@ pub unsafe extern "C" fn UI_SPUnlockMedals_f() {
         b"g_spAwards\x00" as *const u8 as *const libc::c_char,
         awardData.as_mut_ptr(),
     );
-    trap_Print(
-        b"All awards unlocked at 100\n\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_Print(b"All awards unlocked at 100\n\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================

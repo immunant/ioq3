@@ -289,16 +289,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub static mut podium1: *mut gentity_t =
-    0 as *const gentity_t as *mut gentity_t;
+pub static mut podium1: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
 #[no_mangle]
 
-pub static mut podium2: *mut gentity_t =
-    0 as *const gentity_t as *mut gentity_t;
+pub static mut podium2: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
 #[no_mangle]
 
-pub static mut podium3: *mut gentity_t =
-    0 as *const gentity_t as *mut gentity_t;
+pub static mut podium3: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
 /*
 ==================
 UpdateTournamentInfo
@@ -320,9 +317,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
     player = 0 as *mut gentity_t;
     i = 0 as i32;
     while i < level.maxclients {
-        player = &mut *g_entities
-            .as_mut_ptr()
-            .offset(i as isize) as *mut gentity_t;
+        player = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
         if !((*player).inuse as u64 == 0) {
             if (*player).r.svFlags & 0x8 as i32 == 0 {
                 break;
@@ -336,11 +331,9 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
     } // could be ET_INVISIBLE
     playerClientNum = i; // clear EF_TALK, etc
     CalculateRanks(); // clear powerups
-    if (*level
-        .clients
-        .offset(playerClientNum as isize))
-    .sess
-    .sessionTeam as u32
+    if (*level.clients.offset(playerClientNum as isize))
+        .sess
+        .sessionTeam as u32
         == TEAM_SPECTATOR as i32 as u32
     {
         Com_sprintf(
@@ -357,14 +350,11 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         } else {
             accuracy = 0 as i32
         } // don't bounce
-        perfect = if (*level
-            .clients
-            .offset(playerClientNum as isize))
-        .ps
-        .persistant[PERS_RANK as i32 as usize]
+        perfect = if (*level.clients.offset(playerClientNum as isize))
+            .ps
+            .persistant[PERS_RANK as i32 as usize]
             == 0 as i32
-            && (*(*player).client).ps.persistant[PERS_KILLED as i32 as usize]
-                == 0 as i32
+            && (*(*player).client).ps.persistant[PERS_KILLED as i32 as usize] == 0 as i32
         {
             1 as i32
         } else {
@@ -377,12 +367,9 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
             level.numNonSpectatorClients,
             playerClientNum,
             accuracy,
-            (*(*player).client).ps.persistant
-                [PERS_IMPRESSIVE_COUNT as i32 as usize],
-            (*(*player).client).ps.persistant
-                [PERS_EXCELLENT_COUNT as i32 as usize],
-            (*(*player).client).ps.persistant
-                [PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
+            (*(*player).client).ps.persistant[PERS_IMPRESSIVE_COUNT as i32 as usize],
+            (*(*player).client).ps.persistant[PERS_EXCELLENT_COUNT as i32 as usize],
+            (*(*player).client).ps.persistant[PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
             (*(*player).client).ps.persistant[PERS_SCORE as i32 as usize],
             perfect,
         );
@@ -396,12 +383,8 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             b" %i %i %i\x00" as *const u8 as *const libc::c_char,
             n,
-            (*level.clients.offset(n as isize))
-                .ps
-                .persistant[PERS_RANK as i32 as usize],
-            (*level.clients.offset(n as isize))
-                .ps
-                .persistant[PERS_SCORE as i32 as usize],
+            (*level.clients.offset(n as isize)).ps.persistant[PERS_RANK as i32 as usize],
+            (*level.clients.offset(n as isize)).ps.persistant[PERS_SCORE as i32 as usize],
         );
         msglen =
             (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
@@ -412,10 +395,7 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
         libc::strcat(msg.as_mut_ptr(), buf.as_mut_ptr());
         i += 1
     }
-    trap_SendConsoleCommand(
-        EXEC_APPEND as i32,
-        msg.as_mut_ptr(),
-    );
+    trap_SendConsoleCommand(EXEC_APPEND as i32, msg.as_mut_ptr());
 }
 
 unsafe extern "C" fn SpawnModelOnVictoryPad(
@@ -431,9 +411,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     let mut u: vec3_t = [0.; 3];
     body = G_Spawn() as *mut gentity_s;
     if body.is_null() {
-        G_Printf(
-            b"^1ERROR: out of gentities\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"^1ERROR: out of gentities\n\x00" as *const u8 as *const libc::c_char);
         return 0 as *mut gentity_t;
     }
     (*body).classname = (*(*ent).client).pers.netname.as_mut_ptr();
@@ -443,8 +421,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).s.eFlags = 0 as i32;
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
-    (*body).s.number =
-        body.offset_from(g_entities.as_mut_ptr()) as isize as i32;
+    (*body).s.number = body.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*body).timestamp = level.time;
     (*body).physicsObject = qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
@@ -477,12 +454,12 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).r.contents = 0x2000000 as i32;
     (*body).r.ownerNum = (*ent).r.ownerNum;
     (*body).takedamage = qfalse;
-    vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
-        - (*pad).r.currentOrigin[0 as i32 as usize];
-    vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
-        - (*pad).r.currentOrigin[1 as i32 as usize];
-    vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
-        - (*pad).r.currentOrigin[2 as i32 as usize];
+    vec[0 as i32 as usize] =
+        level.intermission_origin[0 as i32 as usize] - (*pad).r.currentOrigin[0 as i32 as usize];
+    vec[1 as i32 as usize] =
+        level.intermission_origin[1 as i32 as usize] - (*pad).r.currentOrigin[1 as i32 as usize];
+    vec[2 as i32 as usize] =
+        level.intermission_origin[2 as i32 as usize] - (*pad).r.currentOrigin[2 as i32 as usize];
     vectoangles(
         vec.as_mut_ptr() as *const vec_t,
         (*body).s.apos.trBase.as_mut_ptr(),
@@ -513,10 +490,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
         vec[1 as i32 as usize] + u[1 as i32 as usize] * *offset.offset(2 as i32 as isize);
     vec[2 as i32 as usize] =
         vec[2 as i32 as usize] + u[2 as i32 as usize] * *offset.offset(2 as i32 as isize);
-    G_SetOrigin(
-        body as *mut gentity_s,
-        vec.as_mut_ptr(),
-    );
+    G_SetOrigin(body as *mut gentity_s, vec.as_mut_ptr());
     trap_LinkEntity(body as *mut gentity_s);
     (*body).count = place;
     return body;
@@ -533,29 +507,18 @@ unsafe extern "C" fn CelebrateStop(mut player: *mut gentity_t) {
 }
 
 unsafe extern "C" fn CelebrateStart(mut player: *mut gentity_t) {
-    (*player).s.torsoAnim =
-        (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | TORSO_GESTURE as i32;
-    (*player).nextthink =
-        level.time + (34 as i32 * 66 as i32 + 50 as i32);
-    (*player).think =
-        Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*player).s.torsoAnim = (*player).s.torsoAnim & 128 as i32 ^ 128 as i32 | TORSO_GESTURE as i32;
+    (*player).nextthink = level.time + (34 as i32 * 66 as i32 + 50 as i32);
+    (*player).think = Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     /*
     player->client->ps.events[player->client->ps.eventSequence & (MAX_PS_EVENTS-1)] = EV_TAUNT;
     player->client->ps.eventParms[player->client->ps.eventSequence & (MAX_PS_EVENTS-1)] = 0;
     player->client->ps.eventSequence++;
     */
-    G_AddEvent(
-        player as *mut gentity_s,
-        EV_TAUNT as i32,
-        0 as i32,
-    );
+    G_AddEvent(player as *mut gentity_s, EV_TAUNT as i32, 0 as i32);
 }
 
-static mut offsetFirst: vec3_t = [
-    0 as i32 as vec_t,
-    0 as i32 as vec_t,
-    74 as i32 as vec_t,
-];
+static mut offsetFirst: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 74 as i32 as vec_t];
 
 static mut offsetSecond: vec3_t = [
     -(10 as i32) as vec_t,
@@ -577,56 +540,43 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
     let mut u: vec3_t = [0.; 3];
     (*podium).nextthink = level.time + 100 as i32;
     AngleVectors(
-        level
-            .intermission_angle
-            .as_mut_ptr() as *const vec_t,
+        level.intermission_angle.as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
         0 as *mut vec_t,
         0 as *mut vec_t,
     );
-    origin[0 as i32 as usize] = level.intermission_origin
-        [0 as i32 as usize]
+    origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         + vec[0 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[1 as i32 as usize] = level.intermission_origin
-        [1 as i32 as usize]
+    origin[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
         + vec[1 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] = level.intermission_origin
-        [2 as i32 as usize]
+    origin[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
         + vec[2 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] -= trap_Cvar_VariableIntegerValue(
-        b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
-    ) as f32;
-    G_SetOrigin(
-        podium as *mut gentity_s,
-        origin.as_mut_ptr(),
-    );
+    origin[2 as i32 as usize] -=
+        trap_Cvar_VariableIntegerValue(b"g_podiumDrop\x00" as *const u8 as *const libc::c_char)
+            as f32;
+    G_SetOrigin(podium as *mut gentity_s, origin.as_mut_ptr());
     if !podium1.is_null() {
-        vec[0 as i32 as usize] = level.intermission_origin
-            [0 as i32 as usize]
+        vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = level.intermission_origin
-            [1 as i32 as usize]
+        vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = level.intermission_origin
-            [2 as i32 as usize]
+        vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
         vectoangles(
             vec.as_mut_ptr() as *const vec_t,
             (*podium1).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium1).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as vec_t;
-        (*podium1).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as vec_t;
+        (*podium1).s.apos.trBase[0 as i32 as usize] = 0 as i32 as vec_t;
+        (*podium1).s.apos.trBase[2 as i32 as usize] = 0 as i32 as vec_t;
         AngleVectors(
             (*podium1).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
@@ -651,29 +601,21 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetFirst[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetFirst[2 as i32 as usize];
-        G_SetOrigin(
-            podium1 as *mut gentity_s,
-            vec.as_mut_ptr(),
-        );
+        G_SetOrigin(podium1 as *mut gentity_s, vec.as_mut_ptr());
     }
     if !podium2.is_null() {
-        vec[0 as i32 as usize] = level.intermission_origin
-            [0 as i32 as usize]
+        vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = level.intermission_origin
-            [1 as i32 as usize]
+        vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = level.intermission_origin
-            [2 as i32 as usize]
+        vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
         vectoangles(
             vec.as_mut_ptr() as *const vec_t,
             (*podium2).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium2).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as vec_t;
-        (*podium2).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as vec_t;
+        (*podium2).s.apos.trBase[0 as i32 as usize] = 0 as i32 as vec_t;
+        (*podium2).s.apos.trBase[2 as i32 as usize] = 0 as i32 as vec_t;
         AngleVectors(
             (*podium2).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
@@ -698,29 +640,21 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetSecond[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetSecond[2 as i32 as usize];
-        G_SetOrigin(
-            podium2 as *mut gentity_s,
-            vec.as_mut_ptr(),
-        );
+        G_SetOrigin(podium2 as *mut gentity_s, vec.as_mut_ptr());
     }
     if !podium3.is_null() {
-        vec[0 as i32 as usize] = level.intermission_origin
-            [0 as i32 as usize]
+        vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
             - (*podium).r.currentOrigin[0 as i32 as usize];
-        vec[1 as i32 as usize] = level.intermission_origin
-            [1 as i32 as usize]
+        vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
             - (*podium).r.currentOrigin[1 as i32 as usize];
-        vec[2 as i32 as usize] = level.intermission_origin
-            [2 as i32 as usize]
+        vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
             - (*podium).r.currentOrigin[2 as i32 as usize];
         vectoangles(
             vec.as_mut_ptr() as *const vec_t,
             (*podium3).s.apos.trBase.as_mut_ptr(),
         );
-        (*podium3).s.apos.trBase[0 as i32 as usize] =
-            0 as i32 as vec_t;
-        (*podium3).s.apos.trBase[2 as i32 as usize] =
-            0 as i32 as vec_t;
+        (*podium3).s.apos.trBase[0 as i32 as usize] = 0 as i32 as vec_t;
+        (*podium3).s.apos.trBase[2 as i32 as usize] = 0 as i32 as vec_t;
         AngleVectors(
             (*podium3).s.apos.trBase.as_mut_ptr() as *const vec_t,
             f.as_mut_ptr(),
@@ -745,10 +679,7 @@ unsafe extern "C" fn PodiumPlacementThink(mut podium: *mut gentity_t) {
             vec[1 as i32 as usize] + u[1 as i32 as usize] * offsetThird[2 as i32 as usize];
         vec[2 as i32 as usize] =
             vec[2 as i32 as usize] + u[2 as i32 as usize] * offsetThird[2 as i32 as usize];
-        G_SetOrigin(
-            podium3 as *mut gentity_s,
-            vec.as_mut_ptr(),
-        );
+        G_SetOrigin(podium3 as *mut gentity_s, vec.as_mut_ptr());
     };
 }
 
@@ -762,8 +693,7 @@ unsafe extern "C" fn SpawnPodium() -> *mut gentity_t {
     }
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*podium).s.eType = ET_GENERAL as i32;
-    (*podium).s.number =
-        podium.offset_from(g_entities.as_mut_ptr()) as isize as i32;
+    (*podium).s.number = podium.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*podium).clipmask = 1 as i32;
     (*podium).r.contents = 1 as i32;
     (*podium).s.modelindex = G_ModelIndex(
@@ -771,51 +701,39 @@ unsafe extern "C" fn SpawnPodium() -> *mut gentity_t {
             as *mut libc::c_char,
     );
     AngleVectors(
-        level
-            .intermission_angle
-            .as_mut_ptr() as *const vec_t,
+        level.intermission_angle.as_mut_ptr() as *const vec_t,
         vec.as_mut_ptr(),
         0 as *mut vec_t,
         0 as *mut vec_t,
     );
-    origin[0 as i32 as usize] = level.intermission_origin
-        [0 as i32 as usize]
+    origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
         + vec[0 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[1 as i32 as usize] = level.intermission_origin
-        [1 as i32 as usize]
+    origin[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
         + vec[1 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] = level.intermission_origin
-        [2 as i32 as usize]
+    origin[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
         + vec[2 as i32 as usize]
             * trap_Cvar_VariableIntegerValue(
                 b"g_podiumDist\x00" as *const u8 as *const libc::c_char,
             ) as f32;
-    origin[2 as i32 as usize] -= trap_Cvar_VariableIntegerValue(
-        b"g_podiumDrop\x00" as *const u8 as *const libc::c_char,
-    ) as f32;
-    G_SetOrigin(
-        podium as *mut gentity_s,
-        origin.as_mut_ptr(),
-    );
-    vec[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize]
-        - (*podium).r.currentOrigin[0 as i32 as usize];
-    vec[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize]
-        - (*podium).r.currentOrigin[1 as i32 as usize];
-    vec[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize]
-        - (*podium).r.currentOrigin[2 as i32 as usize];
-    (*podium).s.apos.trBase[1 as i32 as usize] = vectoyaw(
-        vec.as_mut_ptr() as *const vec_t,
-    );
+    origin[2 as i32 as usize] -=
+        trap_Cvar_VariableIntegerValue(b"g_podiumDrop\x00" as *const u8 as *const libc::c_char)
+            as f32;
+    G_SetOrigin(podium as *mut gentity_s, origin.as_mut_ptr());
+    vec[0 as i32 as usize] =
+        level.intermission_origin[0 as i32 as usize] - (*podium).r.currentOrigin[0 as i32 as usize];
+    vec[1 as i32 as usize] =
+        level.intermission_origin[1 as i32 as usize] - (*podium).r.currentOrigin[1 as i32 as usize];
+    vec[2 as i32 as usize] =
+        level.intermission_origin[2 as i32 as usize] - (*podium).r.currentOrigin[2 as i32 as usize];
+    (*podium).s.apos.trBase[1 as i32 as usize] = vectoyaw(vec.as_mut_ptr() as *const vec_t);
     trap_LinkEntity(podium as *mut gentity_s);
-    (*podium).think = Some(
-        PodiumPlacementThink as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    );
+    (*podium).think = Some(PodiumPlacementThink as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*podium).nextthink = level.time + 100 as i32;
     return podium;
 }
@@ -836,12 +754,9 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
     player = SpawnModelOnVictoryPad(
         podium,
         offsetFirst.as_mut_ptr(),
-        &mut *g_entities.as_mut_ptr().offset(
-            *level
-                .sortedClients
-                .as_mut_ptr()
-                .offset(0 as i32 as isize) as isize,
-        ),
+        &mut *g_entities
+            .as_mut_ptr()
+            .offset(*level.sortedClients.as_mut_ptr().offset(0 as i32 as isize) as isize),
         (*level
             .clients
             .offset(level.sortedClients[0 as i32 as usize] as isize))
@@ -851,19 +766,15 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
     );
     if !player.is_null() {
         (*player).nextthink = level.time + 2000 as i32;
-        (*player).think =
-            Some(CelebrateStart as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*player).think = Some(CelebrateStart as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         podium1 = player
     }
     player = SpawnModelOnVictoryPad(
         podium,
         offsetSecond.as_mut_ptr(),
-        &mut *g_entities.as_mut_ptr().offset(
-            *level
-                .sortedClients
-                .as_mut_ptr()
-                .offset(1 as i32 as isize) as isize,
-        ),
+        &mut *g_entities
+            .as_mut_ptr()
+            .offset(*level.sortedClients.as_mut_ptr().offset(1 as i32 as isize) as isize),
         (*level
             .clients
             .offset(level.sortedClients[1 as i32 as usize] as isize))
@@ -878,12 +789,9 @@ pub unsafe extern "C" fn SpawnModelsOnVictoryPads() {
         player = SpawnModelOnVictoryPad(
             podium,
             offsetThird.as_mut_ptr(),
-            &mut *g_entities.as_mut_ptr().offset(
-                *level
-                    .sortedClients
-                    .as_mut_ptr()
-                    .offset(2 as i32 as isize) as isize,
-            ),
+            &mut *g_entities
+                .as_mut_ptr()
+                .offset(*level.sortedClients.as_mut_ptr().offset(2 as i32 as isize) as isize),
             (*level
                 .clients
                 .offset(level.sortedClients[2 as i32 as usize] as isize))
@@ -1139,7 +1047,6 @@ pub unsafe extern "C" fn Svcmd_AbortPodium_f() {
     }
     if !podium1.is_null() {
         (*podium1).nextthink = level.time;
-        (*podium1).think =
-            Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ())
+        (*podium1).think = Some(CelebrateStop as unsafe extern "C" fn(_: *mut gentity_t) -> ())
     };
 }

@@ -180,116 +180,114 @@ pub use crate::src::cgame::cg_syscalls::trap_S_StartSound;
 
 #[no_mangle]
 
-pub static mut cg_localEntities: [localEntity_t; 512] =
-    [localEntity_t {
-        prev: 0 as *const localEntity_s as *mut localEntity_s,
-        next: 0 as *const localEntity_s as *mut localEntity_s,
-        leType: LE_MARK,
-        leFlags: 0,
-        startTime: 0,
-        endTime: 0,
-        fadeInTime: 0,
-        lifeRate: 0.,
-        pos: trajectory_t {
-            trType: TR_STATIONARY,
-            trTime: 0,
-            trDuration: 0,
-            trBase: [0.; 3],
-            trDelta: [0.; 3],
-        },
-        angles: trajectory_t {
-            trType: TR_STATIONARY,
-            trTime: 0,
-            trDuration: 0,
-            trBase: [0.; 3],
-            trDelta: [0.; 3],
-        },
-        bounceFactor: 0.,
-        color: [0.; 4],
+pub static mut cg_localEntities: [localEntity_t; 512] = [localEntity_t {
+    prev: 0 as *const localEntity_s as *mut localEntity_s,
+    next: 0 as *const localEntity_s as *mut localEntity_s,
+    leType: LE_MARK,
+    leFlags: 0,
+    startTime: 0,
+    endTime: 0,
+    fadeInTime: 0,
+    lifeRate: 0.,
+    pos: trajectory_t {
+        trType: TR_STATIONARY,
+        trTime: 0,
+        trDuration: 0,
+        trBase: [0.; 3],
+        trDelta: [0.; 3],
+    },
+    angles: trajectory_t {
+        trType: TR_STATIONARY,
+        trTime: 0,
+        trDuration: 0,
+        trBase: [0.; 3],
+        trDelta: [0.; 3],
+    },
+    bounceFactor: 0.,
+    color: [0.; 4],
+    radius: 0.,
+    light: 0.,
+    lightColor: [0.; 3],
+    leMarkType: LEMT_NONE,
+    leBounceSoundType: LEBS_NONE,
+    refEntity: refEntity_t {
+        reType: RT_MODEL,
+        renderfx: 0,
+        hModel: 0,
+        lightingOrigin: [0.; 3],
+        shadowPlane: 0.,
+        axis: [[0.; 3]; 3],
+        nonNormalizedAxes: qfalse,
+        origin: [0.; 3],
+        frame: 0,
+        oldorigin: [0.; 3],
+        oldframe: 0,
+        backlerp: 0.,
+        skinNum: 0,
+        customSkin: 0,
+        customShader: 0,
+        shaderRGBA: [0; 4],
+        shaderTexCoord: [0.; 2],
+        shaderTime: 0.,
         radius: 0.,
-        light: 0.,
-        lightColor: [0.; 3],
-        leMarkType: LEMT_NONE,
-        leBounceSoundType: LEBS_NONE,
-        refEntity: refEntity_t {
-            reType: RT_MODEL,
-            renderfx: 0,
-            hModel: 0,
-            lightingOrigin: [0.; 3],
-            shadowPlane: 0.,
-            axis: [[0.; 3]; 3],
-            nonNormalizedAxes: qfalse,
-            origin: [0.; 3],
-            frame: 0,
-            oldorigin: [0.; 3],
-            oldframe: 0,
-            backlerp: 0.,
-            skinNum: 0,
-            customSkin: 0,
-            customShader: 0,
-            shaderRGBA: [0; 4],
-            shaderTexCoord: [0.; 2],
-            shaderTime: 0.,
-            radius: 0.,
-            rotation: 0.,
-        },
-    }; 512];
+        rotation: 0.,
+    },
+}; 512];
 #[no_mangle]
 
-pub static mut cg_activeLocalEntities: localEntity_t =
-    localEntity_t {
-        prev: 0 as *const localEntity_s as *mut localEntity_s,
-        next: 0 as *const localEntity_s as *mut localEntity_s,
-        leType: LE_MARK,
-        leFlags: 0,
-        startTime: 0,
-        endTime: 0,
-        fadeInTime: 0,
-        lifeRate: 0.,
-        pos: trajectory_t {
-            trType: TR_STATIONARY,
-            trTime: 0,
-            trDuration: 0,
-            trBase: [0.; 3],
-            trDelta: [0.; 3],
-        },
-        angles: trajectory_t {
-            trType: TR_STATIONARY,
-            trTime: 0,
-            trDuration: 0,
-            trBase: [0.; 3],
-            trDelta: [0.; 3],
-        },
-        bounceFactor: 0.,
-        color: [0.; 4],
+pub static mut cg_activeLocalEntities: localEntity_t = localEntity_t {
+    prev: 0 as *const localEntity_s as *mut localEntity_s,
+    next: 0 as *const localEntity_s as *mut localEntity_s,
+    leType: LE_MARK,
+    leFlags: 0,
+    startTime: 0,
+    endTime: 0,
+    fadeInTime: 0,
+    lifeRate: 0.,
+    pos: trajectory_t {
+        trType: TR_STATIONARY,
+        trTime: 0,
+        trDuration: 0,
+        trBase: [0.; 3],
+        trDelta: [0.; 3],
+    },
+    angles: trajectory_t {
+        trType: TR_STATIONARY,
+        trTime: 0,
+        trDuration: 0,
+        trBase: [0.; 3],
+        trDelta: [0.; 3],
+    },
+    bounceFactor: 0.,
+    color: [0.; 4],
+    radius: 0.,
+    light: 0.,
+    lightColor: [0.; 3],
+    leMarkType: LEMT_NONE,
+    leBounceSoundType: LEBS_NONE,
+    refEntity: refEntity_t {
+        reType: RT_MODEL,
+        renderfx: 0,
+        hModel: 0,
+        lightingOrigin: [0.; 3],
+        shadowPlane: 0.,
+        axis: [[0.; 3]; 3],
+        nonNormalizedAxes: qfalse,
+        origin: [0.; 3],
+        frame: 0,
+        oldorigin: [0.; 3],
+        oldframe: 0,
+        backlerp: 0.,
+        skinNum: 0,
+        customSkin: 0,
+        customShader: 0,
+        shaderRGBA: [0; 4],
+        shaderTexCoord: [0.; 2],
+        shaderTime: 0.,
         radius: 0.,
-        light: 0.,
-        lightColor: [0.; 3],
-        leMarkType: LEMT_NONE,
-        leBounceSoundType: LEBS_NONE,
-        refEntity: refEntity_t {
-            reType: RT_MODEL,
-            renderfx: 0,
-            hModel: 0,
-            lightingOrigin: [0.; 3],
-            shadowPlane: 0.,
-            axis: [[0.; 3]; 3],
-            nonNormalizedAxes: qfalse,
-            origin: [0.; 3],
-            frame: 0,
-            oldorigin: [0.; 3],
-            oldframe: 0,
-            backlerp: 0.,
-            skinNum: 0,
-            customSkin: 0,
-            customShader: 0,
-            shaderRGBA: [0; 4],
-            shaderTexCoord: [0.; 2],
-            shaderTime: 0.,
-            radius: 0.,
-            rotation: 0.,
-        },
-    };
+        rotation: 0.,
+    },
+};
 // double linked list
 #[no_mangle]
 
@@ -333,9 +331,7 @@ CG_FreeLocalEntity
 
 pub unsafe extern "C" fn CG_FreeLocalEntity(mut le: *mut localEntity_t) {
     if (*le).prev.is_null() {
-        CG_Error(
-            b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Error(b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char);
     }
     // remove from the doubly linked active list
     (*(*le).prev).next = (*le).next;
@@ -398,12 +394,9 @@ pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut localEntity_t) {
     let mut t2: i32 = 0;
     let mut step: i32 = 0;
     let mut newOrigin: vec3_t = [0.; 3];
-    let mut blood: *mut localEntity_t =
-        0 as *mut localEntity_t;
+    let mut blood: *mut localEntity_t = 0 as *mut localEntity_t;
     step = 150 as i32;
-    t = step
-        * ((cg.time - cg.frametime + step)
-            / step);
+    t = step * ((cg.time - cg.frametime + step) / step);
     t2 = step * (cg.time / step);
     while t <= t2 {
         BG_EvaluateTrajectory(
@@ -413,8 +406,7 @@ pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut localEntity_t) {
         );
         blood = CG_SmokePuff(
             newOrigin.as_mut_ptr() as *const vec_t,
-            vec3_origin.as_mut_ptr()
-                as *const vec_t,
+            vec3_origin.as_mut_ptr() as *const vec_t,
             20 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -524,17 +516,12 @@ CG_ReflectVelocity
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ReflectVelocity(
-    mut le: *mut localEntity_t,
-    mut trace: *mut trace_t,
-) {
+pub unsafe extern "C" fn CG_ReflectVelocity(mut le: *mut localEntity_t, mut trace: *mut trace_t) {
     let mut velocity: vec3_t = [0.; 3];
     let mut dot: f32 = 0.;
     let mut hitTime: i32 = 0;
     // reflect the velocity on the trace plane
-    hitTime = ((cg.time - cg.frametime)
-        as f32
-        + cg.frametime as f32 * (*trace).fraction) as i32;
+    hitTime = ((cg.time - cg.frametime) as f32 + cg.frametime as f32 * (*trace).fraction) as i32;
     BG_EvaluateTrajectoryDelta(
         &mut (*le).pos as *mut _ as *const trajectory_t,
         hitTime,
@@ -564,8 +551,7 @@ pub unsafe extern "C" fn CG_ReflectVelocity(
         || (*trace).plane.normal[2 as i32 as usize] > 0 as i32 as f32
             && ((*le).pos.trDelta[2 as i32 as usize] < 40 as i32 as f32
                 || (*le).pos.trDelta[2 as i32 as usize]
-                    < -cg.frametime as f32
-                        * (*le).pos.trDelta[2 as i32 as usize])
+                    < -cg.frametime as f32 * (*le).pos.trDelta[2 as i32 as usize])
     {
         (*le).pos.trType = TR_STATIONARY
     };
@@ -579,23 +565,22 @@ CG_AddFragment
 
 pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
     let mut newOrigin: vec3_t = [0.; 3];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     if (*le).pos.trType as u32 == TR_STATIONARY as i32 as u32 {
         // sink into the ground if near the removal time
         let mut t: i32 = 0;
@@ -617,14 +602,10 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
                 as f64
                 - 16 as i32 as f64 * (1.0f64 - (t as f32 / 1000 as i32 as f32) as f64))
                 as f32;
-            trap_R_AddRefEntityToScene(
-                &mut (*le).refEntity as *mut _ as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(&mut (*le).refEntity as *mut _ as *const refEntity_t);
             (*le).refEntity.origin[2 as i32 as usize] = oldZ
         } else {
-            trap_R_AddRefEntityToScene(
-                &mut (*le).refEntity as *mut _ as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(&mut (*le).refEntity as *mut _ as *const refEntity_t);
         }
         return;
     }
@@ -661,9 +642,7 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
                 (*le).refEntity.axis.as_mut_ptr(),
             );
         }
-        trap_R_AddRefEntityToScene(
-            &mut (*le).refEntity as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut (*le).refEntity as *mut _ as *const refEntity_t);
         // add a blood trail
         if (*le).leBounceSoundType as u32 == LEBS_BLOOD as i32 as u32 {
             CG_BloodTrail(le);
@@ -673,10 +652,7 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
     // if it is in a nodrop zone, remove it
     // this keeps gibs from waiting at the bottom of pits of death
     // and floating levels
-    if CG_PointContents(
-        trace.endpos.as_mut_ptr() as *const vec_t,
-        0 as i32,
-    ) as u32
+    if CG_PointContents(trace.endpos.as_mut_ptr() as *const vec_t, 0 as i32) as u32
         & 0x80000000 as u32
         != 0
     {
@@ -689,9 +665,7 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut localEntity_t) {
     CG_FragmentBounceSound(le, &mut trace);
     // reflect the velocity on the trace plane
     CG_ReflectVelocity(le, &mut trace);
-    trap_R_AddRefEntityToScene(
-        &mut (*le).refEntity as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut (*le).refEntity as *mut _ as *const refEntity_t);
 }
 /*
 =====================================================================
@@ -714,17 +688,11 @@ pub unsafe extern "C" fn CG_AddFadeRGB(mut le: *mut localEntity_t) {
     re = &mut (*le).refEntity;
     c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
     c *= 0xff as i32 as f32;
-    (*re).shaderRGBA[0 as i32 as usize] =
-        ((*le).color[0 as i32 as usize] * c) as byte;
-    (*re).shaderRGBA[1 as i32 as usize] =
-        ((*le).color[1 as i32 as usize] * c) as byte;
-    (*re).shaderRGBA[2 as i32 as usize] =
-        ((*le).color[2 as i32 as usize] * c) as byte;
-    (*re).shaderRGBA[3 as i32 as usize] =
-        ((*le).color[3 as i32 as usize] * c) as byte;
-    trap_R_AddRefEntityToScene(
-        re as *const refEntity_t,
-    );
+    (*re).shaderRGBA[0 as i32 as usize] = ((*le).color[0 as i32 as usize] * c) as byte;
+    (*re).shaderRGBA[1 as i32 as usize] = ((*le).color[1 as i32 as usize] * c) as byte;
+    (*re).shaderRGBA[2 as i32 as usize] = ((*le).color[2 as i32 as usize] * c) as byte;
+    (*re).shaderRGBA[3 as i32 as usize] = ((*le).color[3 as i32 as usize] * c) as byte;
+    trap_R_AddRefEntityToScene(re as *const refEntity_t);
 }
 /*
 ==================
@@ -738,18 +706,17 @@ unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut localEntity_t) {
     let mut delta: vec3_t = [0.; 3];
     let mut len: f32 = 0.;
     re = &mut (*le).refEntity;
-    if (*le).fadeInTime > (*le).startTime && cg.time < (*le).fadeInTime
-    {
+    if (*le).fadeInTime > (*le).startTime && cg.time < (*le).fadeInTime {
         // fade / grow time
         c = (1.0f64
-            - (((*le).fadeInTime - cg.time) as f32
-                / ((*le).fadeInTime - (*le).startTime) as f32) as f64) as f32
+            - (((*le).fadeInTime - cg.time) as f32 / ((*le).fadeInTime - (*le).startTime) as f32)
+                as f64) as f32
     } else {
         // fade / grow time
         c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate
     }
-    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as byte;
+    (*re).shaderRGBA[3 as i32 as usize] =
+        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize]) as byte;
     if (*le).leFlags & LEF_PUFF_DONT_SCALE as i32 == 0 {
         (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32
     }
@@ -760,20 +727,18 @@ unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut localEntity_t) {
     );
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
-    delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - cg.refdef.vieworg[0 as i32 as usize];
-    delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - cg.refdef.vieworg[1 as i32 as usize];
-    delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - cg.refdef.vieworg[2 as i32 as usize];
+    delta[0 as i32 as usize] =
+        (*re).origin[0 as i32 as usize] - cg.refdef.vieworg[0 as i32 as usize];
+    delta[1 as i32 as usize] =
+        (*re).origin[1 as i32 as usize] - cg.refdef.vieworg[1 as i32 as usize];
+    delta[2 as i32 as usize] =
+        (*re).origin[2 as i32 as usize] - cg.refdef.vieworg[2 as i32 as usize];
     len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    trap_R_AddRefEntityToScene(
-        re as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(re as *const refEntity_t);
 }
 /*
 ===================
@@ -793,25 +758,23 @@ unsafe extern "C" fn CG_AddScaleFade(mut le: *mut localEntity_t) {
     re = &mut (*le).refEntity;
     // fade / grow time
     c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
-    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as byte;
+    (*re).shaderRGBA[3 as i32 as usize] =
+        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize]) as byte;
     (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
-    delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - cg.refdef.vieworg[0 as i32 as usize];
-    delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - cg.refdef.vieworg[1 as i32 as usize];
-    delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - cg.refdef.vieworg[2 as i32 as usize];
+    delta[0 as i32 as usize] =
+        (*re).origin[0 as i32 as usize] - cg.refdef.vieworg[0 as i32 as usize];
+    delta[1 as i32 as usize] =
+        (*re).origin[1 as i32 as usize] - cg.refdef.vieworg[1 as i32 as usize];
+    delta[2 as i32 as usize] =
+        (*re).origin[2 as i32 as usize] - cg.refdef.vieworg[2 as i32 as usize];
     len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    trap_R_AddRefEntityToScene(
-        re as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(re as *const refEntity_t);
 }
 /*
 =================
@@ -832,28 +795,26 @@ unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut localEntity_t) {
     re = &mut (*le).refEntity;
     // fade time
     c = ((*le).endTime - cg.time) as f32 * (*le).lifeRate;
-    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-        as byte;
+    (*re).shaderRGBA[3 as i32 as usize] =
+        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize]) as byte;
     (*re).origin[2 as i32 as usize] = ((*le).pos.trBase[2 as i32 as usize] as f64
         - (1.0f64 - c as f64) * (*le).pos.trDelta[2 as i32 as usize] as f64)
         as f32;
     (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 16 as i32 as f64) as f32;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
-    delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
-        - cg.refdef.vieworg[0 as i32 as usize];
-    delta[1 as i32 as usize] = (*re).origin[1 as i32 as usize]
-        - cg.refdef.vieworg[1 as i32 as usize];
-    delta[2 as i32 as usize] = (*re).origin[2 as i32 as usize]
-        - cg.refdef.vieworg[2 as i32 as usize];
+    delta[0 as i32 as usize] =
+        (*re).origin[0 as i32 as usize] - cg.refdef.vieworg[0 as i32 as usize];
+    delta[1 as i32 as usize] =
+        (*re).origin[1 as i32 as usize] - cg.refdef.vieworg[1 as i32 as usize];
+    delta[2 as i32 as usize] =
+        (*re).origin[2 as i32 as usize] - cg.refdef.vieworg[2 as i32 as usize];
     len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < (*le).radius {
         CG_FreeLocalEntity(le);
         return;
     }
-    trap_R_AddRefEntityToScene(
-        re as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(re as *const refEntity_t);
 }
 /*
 ================
@@ -865,14 +826,11 @@ unsafe extern "C" fn CG_AddExplosion(mut ex: *mut localEntity_t) {
     let mut ent: *mut refEntity_t = 0 as *mut refEntity_t;
     ent = &mut (*ex).refEntity;
     // add the entity
-    trap_R_AddRefEntityToScene(
-        ent as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(ent as *const refEntity_t);
     // add the dlight
     if (*ex).light != 0. {
         let mut light: f32 = 0.;
-        light = (cg.time - (*ex).startTime) as f32
-            / ((*ex).endTime - (*ex).startTime) as f32;
+        light = (cg.time - (*ex).startTime) as f32 / ((*ex).endTime - (*ex).startTime) as f32;
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
         } else {
@@ -919,8 +877,7 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut localEntity_t) {
     };
     let mut c: f32 = 0.;
     re = (*le).refEntity;
-    c = ((*le).endTime - cg.time) as f32
-        / ((*le).endTime - (*le).startTime) as f32;
+    c = ((*le).endTime - cg.time) as f32 / ((*le).endTime - (*le).startTime) as f32;
     if c > 1 as i32 as f32 {
         c = 1.0f64 as f32
         // can happen during connection problems
@@ -928,18 +885,14 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut localEntity_t) {
     re.shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
     re.shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
     re.shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
-    re.shaderRGBA[3 as i32 as usize] =
-        ((0xff as i32 as f32 * c) as f64 * 0.33f64) as byte;
+    re.shaderRGBA[3 as i32 as usize] = ((0xff as i32 as f32 * c) as f64 * 0.33f64) as byte;
     re.reType = RT_SPRITE;
     re.radius = (42 as i32 as f64 * (1.0f64 - c as f64) + 30 as i32 as f64) as f32;
-    trap_R_AddRefEntityToScene(
-        &mut re as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut re as *mut _ as *const refEntity_t);
     // add the dlight
     if (*le).light != 0. {
         let mut light: f32 = 0.;
-        light = (cg.time - (*le).startTime) as f32
-            / ((*le).endTime - (*le).startTime) as f32;
+        light = (cg.time - (*le).startTime) as f32 / ((*le).endTime - (*le).startTime) as f32;
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
         } else {
@@ -963,11 +916,7 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
     let mut delta: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
     let mut vec: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut c: f32 = 0.;
     let mut len: f32 = 0.;
     let mut i: i32 = 0;
@@ -999,8 +948,7 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
         }
     }
     if (c as f64) < 0.25f64 {
-        (*re).shaderRGBA[3 as i32 as usize] =
-            ((0xff as i32 * 4 as i32) as f32 * c) as byte
+        (*re).shaderRGBA[3 as i32 as usize] = ((0xff as i32 * 4 as i32) as f32 * c) as byte
     } else {
         (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte
     }
@@ -1009,12 +957,9 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
     origin[1 as i32 as usize] = (*le).pos.trBase[1 as i32 as usize];
     origin[2 as i32 as usize] = (*le).pos.trBase[2 as i32 as usize];
     origin[2 as i32 as usize] += 110 as i32 as f32 - c * 100 as i32 as f32;
-    dir[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
-        - origin[0 as i32 as usize];
-    dir[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
-        - origin[1 as i32 as usize];
-    dir[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize]
-        - origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize] - origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize] - origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize] - origin[2 as i32 as usize];
     CrossProduct(
         dir.as_mut_ptr() as *const vec_t,
         up.as_mut_ptr() as *const vec_t,
@@ -1041,12 +986,9 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
         as vec_t;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
-    delta[0 as i32 as usize] = origin[0 as i32 as usize]
-        - cg.refdef.vieworg[0 as i32 as usize];
-    delta[1 as i32 as usize] = origin[1 as i32 as usize]
-        - cg.refdef.vieworg[1 as i32 as usize];
-    delta[2 as i32 as usize] = origin[2 as i32 as usize]
-        - cg.refdef.vieworg[2 as i32 as usize];
+    delta[0 as i32 as usize] = origin[0 as i32 as usize] - cg.refdef.vieworg[0 as i32 as usize];
+    delta[1 as i32 as usize] = origin[1 as i32 as usize] - cg.refdef.vieworg[1 as i32 as usize];
+    delta[2 as i32 as usize] = origin[2 as i32 as usize] - cg.refdef.vieworg[2 as i32 as usize];
     len = VectorLength(delta.as_mut_ptr() as *const vec_t);
     if len < 20 as i32 as f32 {
         CG_FreeLocalEntity(le);
@@ -1078,11 +1020,9 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut localEntity_t) {
         (*re).origin[2 as i32 as usize] = origin[2 as i32 as usize]
             + vec[2 as i32 as usize]
                 * ((numdigits as f32 / 2 as i32 as f32 - i as f32) * 8 as i32 as f32);
-        (*re).customShader = cgs.media.numberShaders
-            [digits[(numdigits - 1 as i32 - i) as usize] as usize];
-        trap_R_AddRefEntityToScene(
-            re as *const refEntity_t,
-        );
+        (*re).customShader =
+            cgs.media.numberShaders[digits[(numdigits - 1 as i32 - i) as usize] as usize];
+        trap_R_AddRefEntityToScene(re as *const refEntity_t);
         i += 1
     }
 }
@@ -1330,8 +1270,7 @@ CG_AddLocalEntities
 
 pub unsafe extern "C" fn CG_AddLocalEntities() {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
-    let mut next: *mut localEntity_t =
-        0 as *mut localEntity_t;
+    let mut next: *mut localEntity_t = 0 as *mut localEntity_t;
     // walk the list backwards, so any new local entities generated
     // (trails, marks, etc) will be present this frame
     le = cg_activeLocalEntities.prev;

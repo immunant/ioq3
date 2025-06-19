@@ -320,8 +320,7 @@ static mut s_confirm: confirmMenu_t = confirmMenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -343,8 +342,7 @@ static mut s_confirm: confirmMenu_t = confirmMenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -440,9 +438,7 @@ unsafe extern "C" fn MessageMenu_Draw() {
         y += 18 as i32;
         i += 1
     }
-    Menu_Draw(
-        &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut s_confirm.menu as *mut _ as *mut _tag_menuframework);
     if s_confirm.draw.is_some() {
         s_confirm.draw.expect("non-null function pointer")();
     };
@@ -475,9 +471,7 @@ unsafe extern "C" fn ConfirmMenu_Draw() {
         0 as i32 | 0x2000 as i32,
         color_red.as_mut_ptr(),
     );
-    Menu_Draw(
-        &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut s_confirm.menu as *mut _ as *mut _tag_menuframework);
     if s_confirm.draw.is_some() {
         s_confirm.draw.expect("non-null function pointer")();
     };
@@ -490,9 +484,7 @@ ConfirmMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn ConfirmMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char);
 }
 /*
 =================
@@ -528,15 +520,9 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
         ::std::mem::size_of::<confirmMenu_t>() as libc::c_ulong,
     );
     ConfirmMenu_Cache();
-    n1 = UI_ProportionalStringWidth(
-        b"YES/NO\x00" as *const u8 as *const libc::c_char,
-    );
-    n2 = UI_ProportionalStringWidth(
-        b"YES\x00" as *const u8 as *const libc::c_char,
-    ) + 3 as i32;
-    n3 = UI_ProportionalStringWidth(
-        b"/\x00" as *const u8 as *const libc::c_char,
-    ) + 3 as i32;
+    n1 = UI_ProportionalStringWidth(b"YES/NO\x00" as *const u8 as *const libc::c_char);
+    n2 = UI_ProportionalStringWidth(b"YES\x00" as *const u8 as *const libc::c_char) + 3 as i32;
+    n3 = UI_ProportionalStringWidth(b"/\x00" as *const u8 as *const libc::c_char) + 3 as i32;
     l1 = 320 as i32 - n1 / 2 as i32;
     l2 = l1 + n2;
     l3 = l2 + n3;
@@ -546,14 +532,9 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
     s_confirm.action = action;
     s_confirm.style = style;
     s_confirm.menu.draw = Some(ConfirmMenu_Draw as unsafe extern "C" fn() -> ());
-    s_confirm.menu.key = Some(
-        ConfirmMenu_Key
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_confirm.menu.key = Some(ConfirmMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_confirm.menu.wrapAround = qtrue;
-    trap_GetClientState(
-        &mut cstate as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cstate as *mut _ as *mut uiClientState_t);
     if cstate.connState as u32 >= CA_CONNECTED as i32 as u32 {
         s_confirm.menu.fullscreen = qfalse
     } else {
@@ -587,9 +568,7 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
         &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
         &mut s_confirm.no as *mut menutext_s as *mut libc::c_void,
     );
-    UI_PushMenu(
-        &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_confirm.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
         &mut s_confirm.no as *mut menutext_s as *mut libc::c_void,
@@ -688,21 +667,14 @@ pub unsafe extern "C" fn UI_Message(mut lines: *mut *const libc::c_char) {
         ::std::mem::size_of::<confirmMenu_t>() as libc::c_ulong,
     );
     ConfirmMenu_Cache();
-    n1 = UI_ProportionalStringWidth(
-        b"OK\x00" as *const u8 as *const libc::c_char,
-    );
+    n1 = UI_ProportionalStringWidth(b"OK\x00" as *const u8 as *const libc::c_char);
     l1 = 320 as i32 - n1 / 2 as i32;
     s_confirm.lines = lines;
     s_confirm.style = 0x1 as i32 | 0x2000 as i32 | 0x10 as i32;
     s_confirm.menu.draw = Some(MessageMenu_Draw as unsafe extern "C" fn() -> ());
-    s_confirm.menu.key = Some(
-        ConfirmMenu_Key
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_confirm.menu.key = Some(ConfirmMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_confirm.menu.wrapAround = qtrue;
-    trap_GetClientState(
-        &mut cstate as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cstate as *mut _ as *mut uiClientState_t);
     if cstate.connState as u32 >= CA_CONNECTED as i32 as u32 {
         s_confirm.menu.fullscreen = qfalse
     } else {
@@ -722,9 +694,7 @@ pub unsafe extern "C" fn UI_Message(mut lines: *mut *const libc::c_char) {
         &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
         &mut s_confirm.yes as *mut menutext_s as *mut libc::c_void,
     );
-    UI_PushMenu(
-        &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_confirm.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut s_confirm.menu as *mut _ as *mut _tag_menuframework,
         &mut s_confirm.yes as *mut menutext_s as *mut libc::c_void,

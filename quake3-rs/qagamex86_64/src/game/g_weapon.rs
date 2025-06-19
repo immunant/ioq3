@@ -548,9 +548,7 @@ CheckGauntletAttack
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CheckGauntletAttack(
-    mut ent: *mut gentity_t,
-) -> qboolean {
+pub unsafe extern "C" fn CheckGauntletAttack(mut ent: *mut gentity_t) -> qboolean {
     let mut tr: trace_t = trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -606,15 +604,10 @@ pub unsafe extern "C" fn CheckGauntletAttack(
     if (*(*ent).client).noclip as u64 != 0 {
         return qfalse;
     }
-    traceEnt = &mut *g_entities
-        .as_mut_ptr()
-        .offset(tr.entityNum as isize) as *mut gentity_t;
+    traceEnt = &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
     // send blood impact
     if (*traceEnt).takedamage as u32 != 0 && !(*traceEnt).client.is_null() {
-        tent = G_TempEntity(
-            tr.endpos.as_mut_ptr(),
-            EV_MISSILE_HIT as i32,
-        ) as *mut gentity_s;
+        tent = G_TempEntity(tr.endpos.as_mut_ptr(), EV_MISSILE_HIT as i32) as *mut gentity_s;
         (*tent).s.otherEntityNum = (*traceEnt).s.number;
         (*tent).s.eventParm = DirToByte(tr.plane.normal.as_mut_ptr());
         (*tent).s.weapon = (*ent).s.weapon
@@ -623,11 +616,7 @@ pub unsafe extern "C" fn CheckGauntletAttack(
         return qfalse;
     }
     if (*(*ent).client).ps.powerups[PW_QUAD as i32 as usize] != 0 {
-        G_AddEvent(
-            ent as *mut gentity_s,
-            EV_POWERUP_QUAD as i32,
-            0 as i32,
-        );
+        G_AddEvent(ent as *mut gentity_s, EV_POWERUP_QUAD as i32, 0 as i32);
         s_quadFactor = g_quadfactor.value
     } else {
         s_quadFactor = 1 as i32 as f32
@@ -664,19 +653,14 @@ into a wall.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SnapVectorTowards(
-    mut v: *mut vec_t,
-    mut to: *mut vec_t,
-) {
+pub unsafe extern "C" fn SnapVectorTowards(mut v: *mut vec_t, mut to: *mut vec_t) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 3 as i32 {
         if *to.offset(i as isize) <= *v.offset(i as isize) {
-            *v.offset(i as isize) = crate::stdlib::floor(*v.offset(i as isize) as f64)
-                as vec_t
+            *v.offset(i as isize) = crate::stdlib::floor(*v.offset(i as isize) as f64) as vec_t
         } else {
-            *v.offset(i as isize) = crate::stdlib::ceil(*v.offset(i as isize) as f64)
-                as vec_t
+            *v.offset(i as isize) = crate::stdlib::ceil(*v.offset(i as isize) as f64) as vec_t
         }
         i += 1
     }
@@ -754,28 +738,21 @@ pub unsafe extern "C" fn Bullet_Fire(
         if tr.surfaceFlags & 0x10 as i32 != 0 {
             return;
         }
-        traceEnt = &mut *g_entities
-            .as_mut_ptr()
-            .offset(tr.entityNum as isize) as *mut gentity_t;
+        traceEnt = &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
         // snap the endpos to integers, but nudged towards the line
         SnapVectorTowards(tr.endpos.as_mut_ptr(), muzzle.as_mut_ptr());
         // send bullet impact
         if (*traceEnt).takedamage as u32 != 0 && !(*traceEnt).client.is_null() {
-            tent = G_TempEntity(
-                tr.endpos.as_mut_ptr(),
-                EV_BULLET_HIT_FLESH as i32,
-            ) as *mut gentity_s;
+            tent =
+                G_TempEntity(tr.endpos.as_mut_ptr(), EV_BULLET_HIT_FLESH as i32) as *mut gentity_s;
             (*tent).s.eventParm = (*traceEnt).s.number;
             if LogAccuracyHit(traceEnt, ent) as u64 != 0 {
                 (*(*ent).client).accuracy_hits += 1
             }
         } else {
-            tent = G_TempEntity(
-                tr.endpos.as_mut_ptr(),
-                EV_BULLET_HIT_WALL as i32,
-            ) as *mut gentity_s;
-            (*tent).s.eventParm =
-                DirToByte(tr.plane.normal.as_mut_ptr())
+            tent =
+                G_TempEntity(tr.endpos.as_mut_ptr(), EV_BULLET_HIT_WALL as i32) as *mut gentity_s;
+            (*tent).s.eventParm = DirToByte(tr.plane.normal.as_mut_ptr())
         }
         (*tent).s.otherEntityNum = (*ent).s.number;
         if (*traceEnt).takedamage as u64 != 0 {
@@ -841,8 +818,7 @@ pub unsafe extern "C" fn ShotgunPellet(
     let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
     let mut tr_start: vec3_t = [0.; 3];
     let mut tr_end: vec3_t = [0.; 3];
-    let mut hitClient: qboolean =
-        qfalse;
+    let mut hitClient: qboolean = qfalse;
     passent = (*ent).s.number;
     tr_start[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     tr_start[1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -861,9 +837,7 @@ pub unsafe extern "C" fn ShotgunPellet(
             passent,
             1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
         );
-        traceEnt = &mut *g_entities
-            .as_mut_ptr()
-            .offset(tr.entityNum as isize) as *mut gentity_t;
+        traceEnt = &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
         // send bullet impact
         if tr.surfaceFlags & 0x10 as i32 != 0 {
             return qfalse;
@@ -905,18 +879,11 @@ pub unsafe extern "C" fn ShotgunPattern(
     let mut forward_0: vec3_t = [0.; 3];
     let mut right_0: vec3_t = [0.; 3];
     let mut up_0: vec3_t = [0.; 3];
-    let mut hitClient: qboolean =
-        qfalse;
+    let mut hitClient: qboolean = qfalse;
     // derive the right and up vectors from the forward vector, because
     // the client won't have any other information
-    VectorNormalize2(
-        origin2 as *const vec_t,
-        forward_0.as_mut_ptr(),
-    );
-    PerpendicularVector(
-        right_0.as_mut_ptr(),
-        forward_0.as_mut_ptr() as *const vec_t,
-    );
+    VectorNormalize2(origin2 as *const vec_t, forward_0.as_mut_ptr());
+    PerpendicularVector(right_0.as_mut_ptr(), forward_0.as_mut_ptr() as *const vec_t);
     CrossProduct(
         forward_0.as_mut_ptr() as *const vec_t,
         right_0.as_mut_ptr() as *const vec_t,
@@ -925,12 +892,8 @@ pub unsafe extern "C" fn ShotgunPattern(
     // generate the "random" spread pattern
     i = 0 as i32;
     while i < 11 as i32 {
-        r = Q_crandom(&mut seed)
-            * 700 as i32 as f32
-            * 16 as i32 as f32;
-        u = Q_crandom(&mut seed)
-            * 700 as i32 as f32
-            * 16 as i32 as f32;
+        r = Q_crandom(&mut seed) * 700 as i32 as f32 * 16 as i32 as f32;
+        u = Q_crandom(&mut seed) * 700 as i32 as f32 * 16 as i32 as f32;
         end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
             + forward_0[0 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
@@ -955,19 +918,13 @@ pub unsafe extern "C" fn ShotgunPattern(
 pub unsafe extern "C" fn weapon_supershotgun_fire(mut ent: *mut gentity_t) {
     let mut tent: *mut gentity_t = 0 as *mut gentity_t;
     // send shotgun blast
-    tent = G_TempEntity(
-        muzzle.as_mut_ptr(),
-        EV_SHOTGUN as i32,
-    ) as *mut gentity_s; // seed for spread pattern
+    tent = G_TempEntity(muzzle.as_mut_ptr(), EV_SHOTGUN as i32) as *mut gentity_s; // seed for spread pattern
     (*tent).s.origin2[0 as i32 as usize] = forward[0 as i32 as usize] * 4096 as i32 as f32;
     (*tent).s.origin2[1 as i32 as usize] = forward[1 as i32 as usize] * 4096 as i32 as f32;
     (*tent).s.origin2[2 as i32 as usize] = forward[2 as i32 as usize] * 4096 as i32 as f32;
-    (*tent).s.origin2[0 as i32 as usize] =
-        (*tent).s.origin2[0 as i32 as usize] as i32 as vec_t;
-    (*tent).s.origin2[1 as i32 as usize] =
-        (*tent).s.origin2[1 as i32 as usize] as i32 as vec_t;
-    (*tent).s.origin2[2 as i32 as usize] =
-        (*tent).s.origin2[2 as i32 as usize] as i32 as vec_t;
+    (*tent).s.origin2[0 as i32 as usize] = (*tent).s.origin2[0 as i32 as usize] as i32 as vec_t;
+    (*tent).s.origin2[1 as i32 as usize] = (*tent).s.origin2[1 as i32 as usize] as i32 as vec_t;
+    (*tent).s.origin2[2 as i32 as usize] = (*tent).s.origin2[2 as i32 as usize] as i32 as vec_t;
     (*tent).s.eventParm = ::libc::rand() & 255 as i32;
     (*tent).s.otherEntityNum = (*ent).s.number;
     ShotgunPattern(
@@ -1044,23 +1001,22 @@ pub unsafe extern "C" fn Weapon_Plasmagun_Fire(mut ent: *mut gentity_t) {
 
 pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
     let mut end: vec3_t = [0.; 3];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut tent: *mut gentity_t = 0 as *mut gentity_t;
     let mut traceEnt: *mut gentity_t = 0 as *mut gentity_t;
     let mut damage: i32 = 0;
@@ -1068,8 +1024,7 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
     let mut hits: i32 = 0;
     let mut unlinked: i32 = 0;
     let mut passent: i32 = 0;
-    let mut unlinkedEntities: [*mut gentity_t; 4] =
-        [0 as *mut gentity_t; 4];
+    let mut unlinkedEntities: [*mut gentity_t; 4] = [0 as *mut gentity_t; 4];
     damage = (100 as i32 as f32 * s_quadFactor) as i32;
     end[0 as i32 as usize] =
         muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * 8192 as i32 as f32;
@@ -1094,10 +1049,7 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
         if trace.entityNum >= ((1 as i32) << 10 as i32) - 2 as i32 {
             break;
         }
-        traceEnt = &mut *g_entities
-            .as_mut_ptr()
-            .offset(trace.entityNum as isize)
-            as *mut gentity_t;
+        traceEnt = &mut *g_entities.as_mut_ptr().offset(trace.entityNum as isize) as *mut gentity_t;
         if (*traceEnt).takedamage as u64 != 0 {
             if LogAccuracyHit(traceEnt, ent) as u64 != 0 {
                 hits += 1
@@ -1117,9 +1069,7 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
             break;
         }
         // unlink this entity, so the next trace will go past it
-        trap_UnlinkEntity(
-            traceEnt as *mut gentity_s,
-        );
+        trap_UnlinkEntity(traceEnt as *mut gentity_s);
         unlinkedEntities[unlinked as usize] = traceEnt;
         unlinked += 1;
         if !(unlinked < 4 as i32) {
@@ -1129,19 +1079,14 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
     // link back in any entities we unlinked
     i = 0 as i32;
     while i < unlinked {
-        trap_LinkEntity(
-            unlinkedEntities[i as usize] as *mut gentity_s,
-        );
+        trap_LinkEntity(unlinkedEntities[i as usize] as *mut gentity_s);
         i += 1
     }
     // the final trace endpos will be the terminal point of the rail trail
     // snap the endpos to integers to save net bandwidth, but nudged towards the line
     SnapVectorTowards(trace.endpos.as_mut_ptr(), muzzle.as_mut_ptr());
     // send railgun beam effect
-    tent = G_TempEntity(
-        trace.endpos.as_mut_ptr(),
-        EV_RAILTRAIL as i32,
-    ) as *mut gentity_s;
+    tent = G_TempEntity(trace.endpos.as_mut_ptr(), EV_RAILTRAIL as i32) as *mut gentity_s;
     // set player number for custom colors on the railtrail
     (*tent).s.clientNum = (*ent).s.clientNum;
     (*tent).s.origin2[0 as i32 as usize] = muzzle[0 as i32 as usize];
@@ -1165,8 +1110,7 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
         (*tent).s.eventParm = 255 as i32
     // don't make the explosion at the end
     } else {
-        (*tent).s.eventParm =
-            DirToByte(trace.plane.normal.as_mut_ptr())
+        (*tent).s.eventParm = DirToByte(trace.plane.normal.as_mut_ptr())
     }
     (*tent).s.clientNum = (*ent).s.clientNum;
     // give the shooter a reward sound if they have made two railgun hits in a row
@@ -1178,8 +1122,7 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut gentity_t) {
         (*(*ent).client).accurateCount += hits;
         if (*(*ent).client).accurateCount >= 2 as i32 {
             (*(*ent).client).accurateCount -= 2 as i32;
-            (*(*ent).client).ps.persistant
-                [PERS_IMPRESSIVE_COUNT as i32 as usize] += 1;
+            (*(*ent).client).ps.persistant[PERS_IMPRESSIVE_COUNT as i32 as usize] += 1;
             // add the sprite over the player's head
             (*(*ent).client).ps.eFlags &= !(0x8000 as i32
                 | 0x8 as i32
@@ -1241,10 +1184,7 @@ pub unsafe extern "C" fn Weapon_HookThink(mut ent: *mut gentity_t) {
                 + (*(*ent).enemy).r.maxs[2 as i32 as usize]) as f64
                 * 0.5f64) as vec_t;
         SnapVectorTowards(v.as_mut_ptr(), oldorigin.as_mut_ptr());
-        G_SetOrigin(
-            ent as *mut gentity_s,
-            v.as_mut_ptr(),
-        );
+        G_SetOrigin(ent as *mut gentity_s, v.as_mut_ptr());
     }
     (*(*(*ent).parent).client).ps.grapplePoint[0 as i32 as usize] =
         (*ent).r.currentOrigin[0 as i32 as usize];
@@ -1307,9 +1247,7 @@ pub unsafe extern "C" fn Weapon_LightningFire(mut ent: *mut gentity_t) {
         if tr.entityNum == ((1 as i32) << 10 as i32) - 1 as i32 {
             return;
         }
-        traceEnt = &mut *g_entities
-            .as_mut_ptr()
-            .offset(tr.entityNum as isize) as *mut gentity_t;
+        traceEnt = &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut gentity_t;
         if (*traceEnt).takedamage as u64 != 0 {
             if LogAccuracyHit(traceEnt, ent) as u64 != 0 {
                 (*(*ent).client).accuracy_hits += 1
@@ -1326,21 +1264,13 @@ pub unsafe extern "C" fn Weapon_LightningFire(mut ent: *mut gentity_t) {
             );
         }
         if (*traceEnt).takedamage as u32 != 0 && !(*traceEnt).client.is_null() {
-            tent = G_TempEntity(
-                tr.endpos.as_mut_ptr(),
-                EV_MISSILE_HIT as i32,
-            ) as *mut gentity_s;
+            tent = G_TempEntity(tr.endpos.as_mut_ptr(), EV_MISSILE_HIT as i32) as *mut gentity_s;
             (*tent).s.otherEntityNum = (*traceEnt).s.number;
-            (*tent).s.eventParm =
-                DirToByte(tr.plane.normal.as_mut_ptr());
+            (*tent).s.eventParm = DirToByte(tr.plane.normal.as_mut_ptr());
             (*tent).s.weapon = (*ent).s.weapon
         } else if tr.surfaceFlags & 0x10 as i32 == 0 {
-            tent = G_TempEntity(
-                tr.endpos.as_mut_ptr(),
-                EV_MISSILE_MISS as i32,
-            ) as *mut gentity_s;
-            (*tent).s.eventParm =
-                DirToByte(tr.plane.normal.as_mut_ptr())
+            tent = G_TempEntity(tr.endpos.as_mut_ptr(), EV_MISSILE_MISS as i32) as *mut gentity_s;
+            (*tent).s.eventParm = DirToByte(tr.plane.normal.as_mut_ptr())
         }
     };
 }
@@ -1371,12 +1301,7 @@ pub unsafe extern "C" fn LogAccuracyHit(
     if (*(*target).client).ps.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return qfalse;
     }
-    if OnSameTeam(
-        target as *mut gentity_s,
-        attacker as *mut gentity_s,
-    ) as u64
-        != 0
-    {
+    if OnSameTeam(target as *mut gentity_s, attacker as *mut gentity_s) as u64 != 0 {
         return qfalse;
     }
     return qtrue;
@@ -1409,12 +1334,9 @@ pub unsafe extern "C" fn CalcMuzzlePoint(
     *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
         + *forward_0.offset(2 as i32 as isize) * 14 as i32 as f32;
     // snap to integer coordinates for more efficient network bandwidth usage
-    *muzzlePoint.offset(0 as i32 as isize) =
-        *muzzlePoint.offset(0 as i32 as isize) as i32 as vec_t;
-    *muzzlePoint.offset(1 as i32 as isize) =
-        *muzzlePoint.offset(1 as i32 as isize) as i32 as vec_t;
-    *muzzlePoint.offset(2 as i32 as isize) =
-        *muzzlePoint.offset(2 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(0 as i32 as isize) = *muzzlePoint.offset(0 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(1 as i32 as isize) = *muzzlePoint.offset(1 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize) as i32 as vec_t;
 }
 /*
 ===============
@@ -1445,12 +1367,9 @@ pub unsafe extern "C" fn CalcMuzzlePointOrigin(
     *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
         + *forward_0.offset(2 as i32 as isize) * 14 as i32 as f32;
     // snap to integer coordinates for more efficient network bandwidth usage
-    *muzzlePoint.offset(0 as i32 as isize) =
-        *muzzlePoint.offset(0 as i32 as isize) as i32 as vec_t;
-    *muzzlePoint.offset(1 as i32 as isize) =
-        *muzzlePoint.offset(1 as i32 as isize) as i32 as vec_t;
-    *muzzlePoint.offset(2 as i32 as isize) =
-        *muzzlePoint.offset(2 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(0 as i32 as isize) = *muzzlePoint.offset(0 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(1 as i32 as isize) = *muzzlePoint.offset(1 as i32 as isize) as i32 as vec_t;
+    *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize) as i32 as vec_t;
 }
 /*
 ===============
@@ -1466,9 +1385,7 @@ pub unsafe extern "C" fn FireWeapon(mut ent: *mut gentity_t) {
         s_quadFactor = 1 as i32 as f32
     }
     // track shots taken for accuracy tracking.  Grapple is not a weapon and gauntet is just not tracked
-    if (*ent).s.weapon != WP_GRAPPLING_HOOK as i32
-        && (*ent).s.weapon != WP_GAUNTLET as i32
-    {
+    if (*ent).s.weapon != WP_GRAPPLING_HOOK as i32 && (*ent).s.weapon != WP_GAUNTLET as i32 {
         (*(*ent).client).accuracy_shots += 1
     }
     // set aiming directions
@@ -1499,19 +1416,9 @@ pub unsafe extern "C" fn FireWeapon(mut ent: *mut gentity_t) {
         }
         2 => {
             if g_gametype.integer != GT_TEAM as i32 {
-                Bullet_Fire(
-                    ent,
-                    200 as i32 as f32,
-                    7 as i32,
-                    MOD_MACHINEGUN as i32,
-                );
+                Bullet_Fire(ent, 200 as i32 as f32, 7 as i32, MOD_MACHINEGUN as i32);
             } else {
-                Bullet_Fire(
-                    ent,
-                    200 as i32 as f32,
-                    5 as i32,
-                    MOD_MACHINEGUN as i32,
-                );
+                Bullet_Fire(ent, 200 as i32 as f32, 5 as i32, MOD_MACHINEGUN as i32);
             }
         }
         4 => {

@@ -108,10 +108,8 @@ pub unsafe extern "C" fn silk_init_encoder(
     );
     (*psEnc).sCmn.arch = arch;
     (*psEnc).sCmn.variable_HP_smth1_Q15 = (((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(
-        ((60 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
-            as opus_int32,
-    ) - ((16 as i32) << 7 as i32))
-        as opus_uint32)
+        ((60 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64) as opus_int32,
+    ) - ((16 as i32) << 7 as i32)) as opus_uint32)
         << 8 as i32) as opus_int32;
     (*psEnc).sCmn.variable_HP_smth2_Q15 = (*psEnc).sCmn.variable_HP_smth1_Q15;
     /* Used to deactivate LSF interpolation, pitch prediction */

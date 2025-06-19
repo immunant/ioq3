@@ -484,9 +484,7 @@ pub unsafe extern "C" fn CG_Draw3DModel(
     refdef.height = h as i32;
     refdef.time = cg.time;
     trap_R_ClearScene();
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
     trap_R_RenderScene(&mut refdef as *mut _ as *const refdef_t);
 }
 /*
@@ -512,19 +510,14 @@ pub unsafe extern "C" fn CG_DrawHead(
     let mut origin: vec3_t = [0.; 3];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
-    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize)
-        as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     if cg_draw3dIcons.integer != 0 {
         cm = (*ci).headModel;
         if cm == 0 {
             return;
         }
         // offset the origin y and z to center the head
-        trap_R_ModelBounds(
-            cm,
-            mins.as_mut_ptr(),
-            maxs.as_mut_ptr(),
-        );
+        trap_R_ModelBounds(cm, mins.as_mut_ptr(), maxs.as_mut_ptr());
         origin[2 as i32 as usize] =
             (-0.5f64 * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64) as vec_t;
         origin[1 as i32 as usize] =
@@ -585,11 +578,7 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
         angles[0 as i32 as usize] = angles[1 as i32 as usize];
         cm = cgs.media.redFlagModel;
         // offset the origin y and z to center the flag
-        trap_R_ModelBounds(
-            cm,
-            mins.as_mut_ptr(),
-            maxs.as_mut_ptr(),
-        );
+        trap_R_ModelBounds(cm, mins.as_mut_ptr(), maxs.as_mut_ptr());
         origin[2 as i32 as usize] =
             (-0.5f64 * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64) as vec_t;
         origin[1 as i32 as usize] =
@@ -622,15 +611,11 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
     } else if cg_drawIcons.integer != 0 {
         let mut item: *mut gitem_t = 0 as *mut gitem_t;
         if team == TEAM_RED as i32 {
-            item = BG_FindItemForPowerup(PW_REDFLAG)
-                as *mut gitem_s
+            item = BG_FindItemForPowerup(PW_REDFLAG) as *mut gitem_s
         } else if team == TEAM_BLUE as i32 {
-            item = BG_FindItemForPowerup(PW_BLUEFLAG)
-                as *mut gitem_s
+            item = BG_FindItemForPowerup(PW_BLUEFLAG) as *mut gitem_s
         } else if team == TEAM_FREE as i32 {
-            item =
-                BG_FindItemForPowerup(PW_NEUTRALFLAG)
-                    as *mut gitem_s
+            item = BG_FindItemForPowerup(PW_NEUTRALFLAG) as *mut gitem_s
         } else {
             return;
         }
@@ -640,9 +625,7 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
                 y,
                 w,
                 h,
-                cg_items[item.offset_from(bg_itemlist.as_mut_ptr())
-                    as isize as usize]
-                    .icon,
+                cg_items[item.offset_from(bg_itemlist.as_mut_ptr()) as isize as usize].icon,
             );
         }
     };
@@ -695,8 +678,8 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
             cg.headStartPitch = cg.headEndPitch;
             cg.headStartTime = cg.headEndTime;
             cg.headEndTime = ((cg.time + 100 as i32) as f32
-                + (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-                    * 2000 as i32 as f32) as i32;
+                + (libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 2000 as i32 as f32)
+                as i32;
             cg.headEndYaw = (180 as i32 as f64
                 + 20 as i32 as f64
                     * crate::stdlib::cos(
@@ -858,15 +841,12 @@ unsafe extern "C" fn CG_DrawStatusBar() {
             (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             TEAM_RED as i32,
         );
-    } else if cg.predictedPlayerState.powerups[PW_BLUEFLAG as i32 as usize] != 0
-    {
+    } else if cg.predictedPlayerState.powerups[PW_BLUEFLAG as i32 as usize] != 0 {
         CG_DrawStatusBarFlag(
             (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             TEAM_BLUE as i32,
         );
-    } else if cg.predictedPlayerState.powerups[PW_NEUTRALFLAG as i32 as usize]
-        != 0
-    {
+    } else if cg.predictedPlayerState.powerups[PW_NEUTRALFLAG as i32 as usize] != 0 {
         CG_DrawStatusBarFlag(
             (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             TEAM_FREE as i32,
@@ -995,8 +975,7 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: f32) -> f32 {
     if cg.attackerTime == 0 {
         return y;
     }
-    clientNum =
-        cg.predictedPlayerState.persistant[PERS_ATTACKER as i32 as usize];
+    clientNum = cg.predictedPlayerState.persistant[PERS_ATTACKER as i32 as usize];
     if clientNum < 0 as i32 || clientNum >= 64 as i32 || clientNum == (*cg.snap).ps.clientNum {
         return y;
     }
@@ -1151,10 +1130,8 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     if cg_drawTeamOverlay.integer == 0 {
         return y;
     }
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        != TEAM_RED as i32
-        && (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-            != TEAM_BLUE as i32
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] != TEAM_RED as i32
+        && (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] != TEAM_BLUE as i32
     {
         return y;
         // Not on any team
@@ -1174,8 +1151,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             .as_mut_ptr()
             .offset(sortedTeamPlayers[i as usize] as isize);
         if (*ci).infoValid as u32 != 0
-            && (*ci).team as u32
-                == (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] as u32
+            && (*ci).team as u32 == (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] as u32
         {
             plyrs += 1;
             len = CG_DrawStrlen((*ci).name.as_mut_ptr());
@@ -1220,9 +1196,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         y -= h as f32;
         ret_y = y as i32
     }
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        == TEAM_RED as i32
-    {
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
         hcolor[0 as i32 as usize] = 1.0f32;
         hcolor[1 as i32 as usize] = 0.0f32;
         hcolor[2 as i32 as usize] = 0.0f32;
@@ -1243,8 +1217,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             .as_mut_ptr()
             .offset(sortedTeamPlayers[i as usize] as isize);
         if (*ci).infoValid as u32 != 0
-            && (*ci).team as u32
-                == (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] as u32
+            && (*ci).team as u32 == (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] as u32
         {
             hcolor[3 as i32 as usize] = 1.0f64 as vec_t;
             hcolor[2 as i32 as usize] = hcolor[3 as i32 as usize];
@@ -1335,9 +1308,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             j = 0 as i32;
             while j <= PW_NUM_POWERUPS as i32 {
                 if (*ci).powerups & (1 as i32) << j != 0 {
-                    item = BG_FindItemForPowerup(
-                        j as powerup_t,
-                    ) as *mut gitem_s;
+                    item = BG_FindItemForPowerup(j as powerup_t) as *mut gitem_s;
                     if !item.is_null() {
                         CG_DrawPic(
                             xx as f32,
@@ -1372,9 +1343,7 @@ CG_DrawUpperRight
 unsafe extern "C" fn CG_DrawUpperRight(mut stereoFrame: stereoFrame_t) {
     let mut y: f32 = 0.;
     y = 0 as i32 as f32;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-        && cg_drawTeamOverlay.integer == 1 as i32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 && cg_drawTeamOverlay.integer == 1 as i32 {
         y = CG_DrawTeamOverlay(y, qtrue, qtrue)
     }
     if cg_drawSnapshot.integer != 0 {
@@ -1443,9 +1412,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
             (16 as i32 + 8 as i32) as f32,
             color.as_mut_ptr(),
         );
-        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-            == TEAM_BLUE as i32
-        {
+        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32 {
             CG_DrawPic(
                 x as f32,
                 y - 4 as i32 as f32,
@@ -1457,8 +1424,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
         CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         if cgs.gametype as u32 == GT_CTF as i32 as u32 {
             // Display flag status
-            item = BG_FindItemForPowerup(PW_BLUEFLAG)
-                as *mut gitem_s;
+            item = BG_FindItemForPowerup(PW_BLUEFLAG) as *mut gitem_s;
             if !item.is_null() {
                 y1 = y - 16 as i32 as f32 - 8 as i32 as f32;
                 if cgs.blueflag >= 0 as i32 && cgs.blueflag <= 2 as i32 {
@@ -1489,9 +1455,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
             (16 as i32 + 8 as i32) as f32,
             color.as_mut_ptr(),
         );
-        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-            == TEAM_RED as i32
-        {
+        if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
             CG_DrawPic(
                 x as f32,
                 y - 4 as i32 as f32,
@@ -1503,8 +1467,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
         CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
         if cgs.gametype as u32 == GT_CTF as i32 as u32 {
             // Display flag status
-            item = BG_FindItemForPowerup(PW_REDFLAG)
-                as *mut gitem_s;
+            item = BG_FindItemForPowerup(PW_REDFLAG) as *mut gitem_s;
             if !item.is_null() {
                 y1 = y - 16 as i32 as f32 - 8 as i32 as f32;
                 if cgs.redflag >= 0 as i32 && cgs.redflag <= 2 as i32 {
@@ -1536,8 +1499,8 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
         let mut spectator: qboolean = qfalse;
         x = 640 as i32;
         score = (*cg.snap).ps.persistant[PERS_SCORE as i32 as usize];
-        spectator = ((*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-            == TEAM_SPECTATOR as i32) as i32 as qboolean;
+        spectator = ((*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32)
+            as i32 as qboolean;
         // always show your score in the second box if not in first place
         if s1 != score {
             s2 = score
@@ -1703,9 +1666,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
     x = 640 as i32 - 48 as i32 - 32 as i32 * 2 as i32;
     i = 0 as i32;
     while i < active {
-        item = BG_FindItemForPowerup(
-            sorted[i as usize] as powerup_t,
-        ) as *mut gitem_s;
+        item = BG_FindItemForPowerup(sorted[i as usize] as powerup_t) as *mut gitem_s;
         if !item.is_null() {
             color = 1 as i32;
             y -= 48 as i32 as f32;
@@ -1755,9 +1716,7 @@ CG_DrawLowerRight
 unsafe extern "C" fn CG_DrawLowerRight() {
     let mut y: f32 = 0.;
     y = (480 as i32 - 48 as i32) as f32;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-        && cg_drawTeamOverlay.integer == 2 as i32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 && cg_drawTeamOverlay.integer == 2 as i32 {
         y = CG_DrawTeamOverlay(y, qtrue, qfalse)
     }
     y = CG_DrawScores(y);
@@ -1793,10 +1752,7 @@ unsafe extern "C" fn CG_DrawPickupItem(mut y: i32) -> i32 {
             CG_DrawBigString(
                 48 as i32 + 16 as i32,
                 y + (48 as i32 / 2 as i32 - 16 as i32 / 2 as i32),
-                (*bg_itemlist
-                    .as_mut_ptr()
-                    .offset(value as isize))
-                .pickup_name,
+                (*bg_itemlist.as_mut_ptr().offset(value as isize)).pickup_name,
                 *fadeColor.offset(0 as i32 as isize),
             );
             trap_R_SetColor(0 as *const f32);
@@ -1815,9 +1771,7 @@ CG_DrawLowerLeft
 unsafe extern "C" fn CG_DrawLowerLeft() {
     let mut y: f32 = 0.;
     y = (480 as i32 - 48 as i32) as f32;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-        && cg_drawTeamOverlay.integer == 3 as i32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 && cg_drawTeamOverlay.integer == 3 as i32 {
         y = CG_DrawTeamOverlay(y, qfalse, qfalse)
     }
     CG_DrawPickupItem(y as i32);
@@ -1851,16 +1805,12 @@ unsafe extern "C" fn CG_DrawTeamInfo() {
             cgs.teamLastChatPos += 1
         }
         h = (cgs.teamChatPos - cgs.teamLastChatPos) * (16 as i32 / 2 as i32);
-        if cgs.clientinfo[cg.clientNum as usize].team as u32
-            == TEAM_RED as i32 as u32
-        {
+        if cgs.clientinfo[cg.clientNum as usize].team as u32 == TEAM_RED as i32 as u32 {
             hcolor[0 as i32 as usize] = 1.0f32;
             hcolor[1 as i32 as usize] = 0.0f32;
             hcolor[2 as i32 as usize] = 0.0f32;
             hcolor[3 as i32 as usize] = 0.33f32
-        } else if cgs.clientinfo[cg.clientNum as usize].team as u32
-            == TEAM_BLUE as i32 as u32
-        {
+        } else if cgs.clientinfo[cg.clientNum as usize].team as u32 == TEAM_BLUE as i32 as u32 {
             hcolor[0 as i32 as usize] = 0.0f32;
             hcolor[1 as i32 as usize] = 0.0f32;
             hcolor[2 as i32 as usize] = 1.0f32;
@@ -1953,10 +1903,7 @@ unsafe extern "C" fn CG_DrawReward() {
             cg.rewardTime = cg.time;
             cg.rewardStack -= 1;
             color = CG_FadeColor(cg.rewardTime, 3000 as i32);
-            trap_S_StartLocalSound(
-                cg.rewardSound[0 as i32 as usize],
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cg.rewardSound[0 as i32 as usize], CHAN_ANNOUNCER as i32);
         } else {
             return;
         }
@@ -2059,9 +2006,7 @@ Pass NULL for a dropped packet.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddLagometerSnapshotInfo(
-    mut snap: *mut snapshot_t,
-) {
+pub unsafe extern "C" fn CG_AddLagometerSnapshotInfo(mut snap: *mut snapshot_t) {
     // dropped packet
     if snap.is_null() {
         lagometer.snapshotSamples[(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
@@ -2121,9 +2066,7 @@ unsafe extern "C" fn CG_DrawDisconnect() {
         y,
         48 as i32 as f32,
         48 as i32 as f32,
-        trap_R_RegisterShader(
-            b"gfx/2d/net.tga\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_R_RegisterShader(b"gfx/2d/net.tga\x00" as *const u8 as *const libc::c_char),
     );
 }
 /*
@@ -2418,9 +2361,7 @@ unsafe extern "C" fn CG_DrawCrosshair() {
     if cg_drawCrosshair.integer == 0 {
         return;
     }
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         return;
     }
     if cg.renderingThirdPerson as u64 != 0 {
@@ -2522,9 +2463,7 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     if cg_drawCrosshair.integer == 0 {
         return;
     }
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         return;
     }
     if cg.renderingThirdPerson as u64 != 0 {
@@ -2591,9 +2530,7 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     // scale the crosshair so it appears the same size for all distances
     ent.radius = w / 640 as i32 as f32 * xmax * trace.fraction * maxdist / zProj;
     ent.customShader = hShader;
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 =================
@@ -2643,16 +2580,12 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
         return;
     }
     // if the player is in fog, don't show it
-    content = CG_PointContents(
-        trace.endpos.as_mut_ptr() as *const vec_t,
-        0 as i32,
-    );
+    content = CG_PointContents(trace.endpos.as_mut_ptr() as *const vec_t, 0 as i32);
     if content & 64 as i32 != 0 {
         return;
     }
     // if the player is invisible, don't show it
-    if cg_entities[trace.entityNum as usize].currentState.powerups
-        & (1 as i32) << PW_INVIS as i32
+    if cg_entities[trace.entityNum as usize].currentState.powerups & (1 as i32) << PW_INVIS as i32
         != 0
     {
         return;
@@ -2745,10 +2678,7 @@ unsafe extern "C" fn CG_DrawVote() {
     // play a talk beep whenever it is modified
     if cgs.voteModified as u64 != 0 {
         cgs.voteModified = qfalse;
-        trap_S_StartLocalSound(
-            cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.talkSound, CHAN_LOCAL_SOUND as i32);
     }
     sec = (30000 as i32 - (cg.time - cgs.voteTime)) / 1000 as i32;
     if sec < 0 as i32 {
@@ -2773,13 +2703,9 @@ unsafe extern "C" fn CG_DrawTeamVote() {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut sec: i32 = 0;
     let mut cs_offset: i32 = 0;
-    if cgs.clientinfo[cg.clientNum as usize].team as u32
-        == TEAM_RED as i32 as u32
-    {
+    if cgs.clientinfo[cg.clientNum as usize].team as u32 == TEAM_RED as i32 as u32 {
         cs_offset = 0 as i32
-    } else if cgs.clientinfo[cg.clientNum as usize].team as u32
-        == TEAM_BLUE as i32 as u32
-    {
+    } else if cgs.clientinfo[cg.clientNum as usize].team as u32 == TEAM_BLUE as i32 as u32 {
         cs_offset = 1 as i32
     } else {
         return;
@@ -2790,10 +2716,7 @@ unsafe extern "C" fn CG_DrawTeamVote() {
     // play a talk beep whenever it is modified
     if cgs.teamVoteModified[cs_offset as usize] as u64 != 0 {
         cgs.teamVoteModified[cs_offset as usize] = qfalse;
-        trap_S_StartLocalSound(
-            cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.talkSound, CHAN_LOCAL_SOUND as i32);
     }
     sec = (30000 as i32 - (cg.time - cgs.teamVoteTime[cs_offset as usize])) / 1000 as i32;
     if sec < 0 as i32 {
@@ -2923,15 +2846,12 @@ unsafe extern "C" fn CG_DrawWarmup() {
         i = 0 as i32;
         while i < cgs.maxclients {
             if cgs.clientinfo[i as usize].infoValid as u32 != 0
-                && cgs.clientinfo[i as usize].team as u32
-                    == TEAM_FREE as i32 as u32
+                && cgs.clientinfo[i as usize].team as u32 == TEAM_FREE as i32 as u32
             {
                 if ci1.is_null() {
-                    ci1 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize)
-                        as *mut clientInfo_t
+                    ci1 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t
                 } else {
-                    ci2 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize)
-                        as *mut clientInfo_t
+                    ci2 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t
                 }
             }
             i += 1
@@ -3001,22 +2921,13 @@ unsafe extern "C" fn CG_DrawWarmup() {
         cg.warmupCount = sec;
         match sec {
             0 => {
-                trap_S_StartLocalSound(
-                    cgs.media.count1Sound,
-                    CHAN_ANNOUNCER as i32,
-                );
+                trap_S_StartLocalSound(cgs.media.count1Sound, CHAN_ANNOUNCER as i32);
             }
             1 => {
-                trap_S_StartLocalSound(
-                    cgs.media.count2Sound,
-                    CHAN_ANNOUNCER as i32,
-                );
+                trap_S_StartLocalSound(cgs.media.count2Sound, CHAN_ANNOUNCER as i32);
             }
             2 => {
-                trap_S_StartLocalSound(
-                    cgs.media.count3Sound,
-                    CHAN_ANNOUNCER as i32,
-                );
+                trap_S_StartLocalSound(cgs.media.count3Sound, CHAN_ANNOUNCER as i32);
             }
             _ => {}
         }
@@ -3064,9 +2975,7 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: stereoFrame_t) {
             return;
         }
     */
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         CG_DrawSpectator();
         if stereoFrame as u32 == STEREO_CENTER as i32 as u32 {
             CG_DrawCrosshair();
@@ -3120,8 +3029,7 @@ pub unsafe extern "C" fn CG_DrawActive(mut stereoView: stereoFrame_t) {
         return;
     }
     // optionally draw the tournement scoreboard instead
-    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32
         && (*cg.snap).ps.pm_flags & 8192 as i32 != 0
     {
         CG_DrawTourneyScoreboard();

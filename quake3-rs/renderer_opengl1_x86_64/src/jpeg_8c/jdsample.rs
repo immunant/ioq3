@@ -273,8 +273,7 @@ unsafe extern "C" fn sep_upsample(
 ) {
     let mut upsample: my_upsample_ptr = (*cinfo).upsample as my_upsample_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut num_rows: JDIMENSION = 0;
     /* Fill the conversion buffer, if it's empty */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
@@ -305,8 +304,7 @@ unsafe extern "C" fn sep_upsample(
     }
     /* Color-convert and emit rows */
     /* How many we have in the buffer: */
-    num_rows =
-        ((*cinfo).max_v_samp_factor - (*upsample).next_row_out) as JDIMENSION;
+    num_rows = ((*cinfo).max_v_samp_factor - (*upsample).next_row_out) as JDIMENSION;
     /* Not more than the distance to the end of the image.  Need this test
      * in case the image height is not a multiple of max_v_samp_factor:
      */
@@ -314,8 +312,7 @@ unsafe extern "C" fn sep_upsample(
         num_rows = (*upsample).rows_to_go
     }
     /* And not more than what the client can accept: */
-    out_rows_avail =
-        (out_rows_avail as u32).wrapping_sub(*out_row_ctr) as JDIMENSION;
+    out_rows_avail = (out_rows_avail as u32).wrapping_sub(*out_row_ctr) as JDIMENSION;
     if num_rows > out_rows_avail {
         num_rows = out_rows_avail
     }
@@ -333,8 +330,7 @@ unsafe extern "C" fn sep_upsample(
     );
     /* Adjust counts */
     *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as JDIMENSION;
-    (*upsample).rows_to_go =
-        ((*upsample).rows_to_go as u32).wrapping_sub(num_rows) as JDIMENSION;
+    (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows) as JDIMENSION;
     (*upsample).next_row_out = ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32;
     /* When the buffer is emptied, declare this input row group consumed */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
@@ -529,8 +525,7 @@ unsafe extern "C" fn h2v2_upsample(
 pub unsafe extern "C" fn jinit_upsampler(mut cinfo: j_decompress_ptr) {
     let mut upsample: my_upsample_ptr = 0 as *mut my_upsampler; /* until we find out differently */
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut need_buffer: boolean = 0;
     let mut h_in_group: i32 = 0;
     let mut v_in_group: i32 = 0;
@@ -547,9 +542,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<my_upsampler>() as libc::c_ulong,
     ) as my_upsample_ptr;
     (*cinfo).upsample = upsample as *mut jpeg_upsampler;
-    (*upsample).pub_0.start_pass = Some(
-        start_pass_upsample as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*upsample).pub_0.start_pass =
+        Some(start_pass_upsample as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*upsample).pub_0.upsample = Some(
         sep_upsample
             as unsafe extern "C" fn(
@@ -647,21 +641,16 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: j_decompress_ptr) {
                         _: *mut JSAMPARRAY,
                     ) -> (),
             );
-            (*upsample).h_expand[ci as usize] =
-                (h_out_group / h_in_group) as UINT8;
-            (*upsample).v_expand[ci as usize] =
-                (v_out_group / v_in_group) as UINT8
+            (*upsample).h_expand[ci as usize] = (h_out_group / h_in_group) as UINT8;
+            (*upsample).v_expand[ci as usize] = (v_out_group / v_in_group) as UINT8
         } else {
-            (*(*cinfo).err).msg_code =
-                JERR_FRACT_SAMPLE_NOTIMPL as i32;
+            (*(*cinfo).err).msg_code = JERR_FRACT_SAMPLE_NOTIMPL as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         if need_buffer != 0 {
             (*upsample).color_buf[ci as usize] = Some(

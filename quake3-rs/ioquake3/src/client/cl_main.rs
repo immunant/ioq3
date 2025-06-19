@@ -471,256 +471,193 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl_main.c  -- client main loop
 #[no_mangle]
 
-pub static mut cl_useMumble: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_useMumble: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_mumbleScale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mumbleScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipUseVAD: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipUseVAD: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipVADThreshold: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipVADThreshold: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipSend: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipSend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipSendTarget: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipSendTarget: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipGainDuringCapture: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipGainDuringCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipCaptureMult: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipCaptureMult: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipShowMeter: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipShowMeter: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voipProtocol: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voipProtocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_voip: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_voip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_renderer: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_renderer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_nodelta: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_nodelta: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_debugMove: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_debugMove: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_noprint: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_noprint: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_motd: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_motd: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut rcon_client_password: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut rcon_client_password: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut rconAddress: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut rconAddress: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_timeout: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timeout: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_maxpackets: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_maxpackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_packetdup: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_packetdup: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_timeNudge: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timeNudge: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_showTimeDelta: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showTimeDelta: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_freezeDemo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_freezeDemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_shownet: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_shownet: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_showSend: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showSend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_timedemo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timedemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_timedemoLog: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timedemoLog: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_autoRecordDemo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_autoRecordDemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_aviFrameRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_aviFrameRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_aviMotionJpeg: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_aviMotionJpeg: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_forceavidemo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_forceavidemo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_freelook: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_freelook: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_sensitivity: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_sensitivity: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_mouseAccel: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccel: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_mouseAccelOffset: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccelOffset: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_mouseAccelStyle: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_mouseAccelStyle: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_showMouseRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_showMouseRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut m_pitch: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut m_pitch: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut m_yaw: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut m_yaw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut m_forward: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut m_forward: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut m_side: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut m_side: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut m_filter: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut m_filter: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_pitch: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_pitch: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_yaw: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_yaw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_forward: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_forward: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_side: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_side: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_up: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_up: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_pitch_axis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_pitch_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_yaw_axis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_yaw_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_forward_axis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_forward_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_side_axis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_side_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut j_up_axis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut j_up_axis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_activeAction: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_activeAction: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_motdString: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_motdString: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_allowDownload: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_allowDownload: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_conXOffset: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_conXOffset: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_inGameVideo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_inGameVideo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_serverStatusResendTime: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_serverStatusResendTime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_lanForcePackets: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_lanForcePackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_guidServerUniq: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_guidServerUniq: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_consoleKeys: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_consoleKeys: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_rate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_rate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut cl: clientActive_t = clientActive_t {
@@ -1218,8 +1155,7 @@ pub static mut cls: clientStatic_t = clientStatic_t {
 };
 #[no_mangle]
 
-pub static mut cgvm: *mut vm_t =
-    0 as *const vm_t as *mut vm_t;
+pub static mut cgvm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
 #[no_mangle]
 
 pub static mut cl_reconnectArgs: [libc::c_char; 4096] = [0; 4096];
@@ -1228,8 +1164,7 @@ pub static mut cl_reconnectArgs: [libc::c_char; 4096] = [0; 4096];
 pub static mut cl_oldGame: [libc::c_char; 64] = [0; 64];
 #[no_mangle]
 
-pub static mut cl_oldGameSet: qboolean =
-    qfalse;
+pub static mut cl_oldGameSet: qboolean = qfalse;
 // Structure containing functions exported from refresh DLL
 #[no_mangle]
 
@@ -1361,10 +1296,7 @@ unsafe extern "C" fn CL_UpdateMumble() {
     );
 }
 
-unsafe extern "C" fn CL_UpdateVoipIgnore(
-    mut idstr: *const libc::c_char,
-    mut ignore: qboolean,
-) {
+unsafe extern "C" fn CL_UpdateVoipIgnore(mut idstr: *const libc::c_char, mut ignore: qboolean) {
     if *idstr as i32 >= '0' as i32 && *idstr as i32 <= '9' as i32 {
         let id: i32 = atoi(idstr);
         if id >= 0 as i32 && id < 64 as i32 {
@@ -1393,9 +1325,7 @@ unsafe extern "C" fn CL_UpdateVoipIgnore(
             return;
         }
     }
-    Com_Printf(
-        b"VoIP: invalid player ID#\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"VoIP: invalid player ID#\n\x00" as *const u8 as *const libc::c_char);
 }
 
 unsafe extern "C" fn CL_UpdateVoipGain(mut idstr: *const libc::c_char, mut gain: f32) {
@@ -1426,12 +1356,10 @@ pub unsafe extern "C" fn CL_Voip_f() {
     } else if clc.voipEnabled as u64 == 0 {
         reason = b"Server doesn\'t support VoIP\x00" as *const u8 as *const libc::c_char
     } else if clc.demoplaying as u64 == 0
-        && (Cvar_VariableValue(
-            b"g_gametype\x00" as *const u8 as *const libc::c_char,
-        ) == GT_SINGLE_PLAYER as i32 as f32
-            || Cvar_VariableValue(
-                b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
-            ) != 0.)
+        && (Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+            == GT_SINGLE_PLAYER as i32 as f32
+            || Cvar_VariableValue(b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char)
+                != 0.)
     {
         reason = b"running in single-player mode\x00" as *const u8 as *const libc::c_char
     }
@@ -1443,26 +1371,13 @@ pub unsafe extern "C" fn CL_Voip_f() {
         return;
     }
     if libc::strcmp(cmd, b"ignore\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
-        CL_UpdateVoipIgnore(
-            Cmd_Argv(2 as i32),
-            qtrue,
-        );
+        CL_UpdateVoipIgnore(Cmd_Argv(2 as i32), qtrue);
     } else if libc::strcmp(cmd, b"unignore\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
-        CL_UpdateVoipIgnore(
-            Cmd_Argv(2 as i32),
-            qfalse,
-        );
+        CL_UpdateVoipIgnore(Cmd_Argv(2 as i32), qfalse);
     } else if libc::strcmp(cmd, b"gain\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         if Cmd_Argc() > 3 as i32 {
-            CL_UpdateVoipGain(
-                Cmd_Argv(2 as i32),
-                atof(Cmd_Argv(3 as i32)) as f32,
-            );
-        } else if Q_isanumber(Cmd_Argv(
-            2 as i32,
-        )) as u64
-            != 0
-        {
+            CL_UpdateVoipGain(Cmd_Argv(2 as i32), atof(Cmd_Argv(3 as i32)) as f32);
+        } else if Q_isanumber(Cmd_Argv(2 as i32)) as u64 != 0 {
             let mut id: i32 = atoi(Cmd_Argv(2 as i32));
             if id >= 0 as i32 && id < 64 as i32 {
                 Com_Printf(
@@ -1472,9 +1387,7 @@ pub unsafe extern "C" fn CL_Voip_f() {
                     clc.voipGain[id as usize] as f64,
                 );
             } else {
-                Com_Printf(
-                    b"VoIP: invalid player ID#\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"VoIP: invalid player ID#\n\x00" as *const u8 as *const libc::c_char);
             }
         } else {
             Com_Printf(
@@ -1482,19 +1395,14 @@ pub unsafe extern "C" fn CL_Voip_f() {
             );
         }
     } else if libc::strcmp(cmd, b"muteall\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
-        Com_Printf(
-            b"VoIP: muting incoming voice\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"VoIP: muting incoming voice\n\x00" as *const u8 as *const libc::c_char);
         CL_AddReliableCommand(
             b"voip muteall\x00" as *const u8 as *const libc::c_char,
             qfalse,
         );
         clc.voipMuteAll = qtrue
-    } else if libc::strcmp(cmd, b"unmuteall\x00" as *const u8 as *const libc::c_char) == 0 as i32
-    {
-        Com_Printf(
-            b"VoIP: unmuting incoming voice\n\x00" as *const u8 as *const libc::c_char,
-        );
+    } else if libc::strcmp(cmd, b"unmuteall\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
+        Com_Printf(b"VoIP: unmuting incoming voice\n\x00" as *const u8 as *const libc::c_char);
         CL_AddReliableCommand(
             b"voip unmuteall\x00" as *const u8 as *const libc::c_char,
             qfalse,
@@ -1581,10 +1489,7 @@ pub unsafe extern "C" fn CL_VoipParseTargets() {
                     8 as i32,
                 ) == 0
                 {
-                    val = VM_Call(
-                        cgvm,
-                        CG_LAST_ATTACKER as i32,
-                    ) as i32;
+                    val = VM_Call(cgvm, CG_LAST_ATTACKER as i32) as i32;
                     target = target.offset(8 as i32 as isize)
                 } else if Q_stricmpn(
                     target,
@@ -1592,10 +1497,7 @@ pub unsafe extern "C" fn CL_VoipParseTargets() {
                     9 as i32,
                 ) == 0
                 {
-                    val = VM_Call(
-                        cgvm,
-                        CG_CROSSHAIR_PLAYER as i32,
-                    ) as i32;
+                    val = VM_Call(cgvm, CG_CROSSHAIR_PLAYER as i32) as i32;
                     target = target.offset(9 as i32 as isize)
                 } else {
                     while *target as i32 != 0
@@ -1635,12 +1537,9 @@ Record more audio from the hardware if required and encode it into Opus
 
 unsafe extern "C" fn CL_CaptureVoip() {
     let audioMult: f32 = (*cl_voipCaptureMult).value;
-    let useVad: qboolean =
-        ((*cl_voipUseVAD).integer != 0 as i32) as i32 as qboolean;
-    let mut initialFrame: qboolean =
-        qfalse;
-    let mut finalFrame: qboolean =
-        qfalse;
+    let useVad: qboolean = ((*cl_voipUseVAD).integer != 0 as i32) as i32 as qboolean;
+    let mut initialFrame: qboolean = qfalse;
+    let mut finalFrame: qboolean = qfalse;
     // if we're using Mumble, don't try to handle VoIP transmission ourselves.
     if (*cl_useMumble).integer != 0 {
         return;
@@ -1660,9 +1559,7 @@ unsafe extern "C" fn CL_CaptureVoip() {
                 b"Set \'Data Rate\' to \'LAN/Cable/xDSL\' in \'Setup/System/Network\'.\n\x00"
                     as *const u8 as *const libc::c_char,
             ); // packet is pending transmission, don't record more yet.
-            Com_Printf(
-                b"Until then, VoIP is disabled.\n\x00" as *const u8 as *const libc::c_char,
-            ); // lots of things reset this.
+            Com_Printf(b"Until then, VoIP is disabled.\n\x00" as *const u8 as *const libc::c_char); // lots of things reset this.
             Cvar_Set(
                 b"cl_voip\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
@@ -1703,8 +1600,7 @@ unsafe extern "C" fn CL_CaptureVoip() {
         );
     }
     if (*cl_voipSend).modified as u64 != 0 {
-        let mut dontCapture: qboolean =
-            qfalse;
+        let mut dontCapture: qboolean = qfalse;
         if clc.state as u32 != CA_ACTIVE as i32 as u32 {
             dontCapture = qtrue
         } else if clc.voipEnabled as u64 == 0 {
@@ -1777,10 +1673,7 @@ unsafe extern "C" fn CL_CaptureVoip() {
                 return;
             }
             voipFrames = samples / (20 as i32 * 48 as i32);
-            crate::src::client::snd_main::S_Capture(
-                samples,
-                sampbuffer.as_mut_ptr() as *mut byte,
-            );
+            crate::src::client::snd_main::S_Capture(samples, sampbuffer.as_mut_ptr() as *mut byte);
             // check the "power" of this packet...
             i = 0 as i32;
             while i < samples {
@@ -1796,8 +1689,7 @@ unsafe extern "C" fn CL_CaptureVoip() {
                 sampbuffer.as_mut_ptr(),
                 samples,
                 clc.voipOutgoingData.as_mut_ptr() as *mut u8,
-                ::std::mem::size_of::<[byte; 1024]>()
-                    as libc::c_ulong as opus_int32,
+                ::std::mem::size_of::<[byte; 1024]>() as libc::c_ulong as opus_int32,
             );
             if bytes <= 0 as i32 {
                 Com_DPrintf(
@@ -1895,10 +1787,7 @@ Dumps the current net message, prefixed by the length
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_WriteDemoMessage(
-    mut msg: *mut msg_t,
-    mut headerBytes: i32,
-) {
+pub unsafe extern "C" fn CL_WriteDemoMessage(mut msg: *mut msg_t, mut headerBytes: i32) {
     let mut len: i32 = 0;
     let mut swlen: i32 = 0;
     // write the packet sequence
@@ -1935,9 +1824,7 @@ stop recording a demo
 pub unsafe extern "C" fn CL_StopRecord_f() {
     let mut len: i32 = 0;
     if clc.demorecording as u64 == 0 {
-        Com_Printf(
-            b"Not recording a demo.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Not recording a demo.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // finish up
@@ -1956,9 +1843,7 @@ pub unsafe extern "C" fn CL_StopRecord_f() {
     clc.demofile = 0 as i32;
     clc.demorecording = qfalse;
     clc.spDemoRecording = qfalse;
-    Com_Printf(
-        b"Stopped demo.\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"Stopped demo.\n\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ==================
@@ -2025,80 +1910,67 @@ pub unsafe extern "C" fn CL_Record_f() {
     };
     let mut i: i32 = 0;
     let mut len: i32 = 0;
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
-    let mut nullstate: entityState_t =
-        entityState_t {
-            number: 0,
-            eType: 0,
-            eFlags: 0,
-            pos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            apos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            time: 0,
-            time2: 0,
-            origin: [0.; 3],
-            origin2: [0.; 3],
-            angles: [0.; 3],
-            angles2: [0.; 3],
-            otherEntityNum: 0,
-            otherEntityNum2: 0,
-            groundEntityNum: 0,
-            constantLight: 0,
-            loopSound: 0,
-            modelindex: 0,
-            modelindex2: 0,
-            clientNum: 0,
-            frame: 0,
-            solid: 0,
-            event: 0,
-            eventParm: 0,
-            powerups: 0,
-            weapon: 0,
-            legsAnim: 0,
-            torsoAnim: 0,
-            generic1: 0,
-        };
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut nullstate: entityState_t = entityState_t {
+        number: 0,
+        eType: 0,
+        eFlags: 0,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        time: 0,
+        time2: 0,
+        origin: [0.; 3],
+        origin2: [0.; 3],
+        angles: [0.; 3],
+        angles2: [0.; 3],
+        otherEntityNum: 0,
+        otherEntityNum2: 0,
+        groundEntityNum: 0,
+        constantLight: 0,
+        loopSound: 0,
+        modelindex: 0,
+        modelindex2: 0,
+        clientNum: 0,
+        frame: 0,
+        solid: 0,
+        event: 0,
+        eventParm: 0,
+        powerups: 0,
+        weapon: 0,
+        legsAnim: 0,
+        torsoAnim: 0,
+        generic1: 0,
+    };
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     if Cmd_Argc() > 2 as i32 {
-        Com_Printf(
-            b"record <demoname>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"record <demoname>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if clc.demorecording as u64 != 0 {
         if clc.spDemoRecording as u64 == 0 {
-            Com_Printf(
-                b"Already recording.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Already recording.\n\x00" as *const u8 as *const libc::c_char);
         }
         return;
     }
     if clc.state as u32 != CA_ACTIVE as i32 as u32 {
-        Com_Printf(
-            b"You must be in a level to record.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"You must be in a level to record.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // sync 0 doesn't prevent recording, so not forcing it off .. everyone does g_sync 1 ; record ; g_sync 0 ..
-    if NET_IsLocalAddress(
-        clc.serverAddress as netadr_t,
-    ) as u32
-        != 0
-        && Cvar_VariableValue(
-            b"g_synchronousClients\x00" as *const u8 as *const libc::c_char,
-        ) == 0.
+    if NET_IsLocalAddress(clc.serverAddress as netadr_t) as u32 != 0
+        && Cvar_VariableValue(b"g_synchronousClients\x00" as *const u8 as *const libc::c_char) == 0.
     {
         Com_Printf(b"^3WARNING: You should set \'g_synchronousClients 1\' for smoother demo recording\n\x00"
                        as *const u8 as *const libc::c_char);
@@ -2172,16 +2044,11 @@ pub unsafe extern "C" fn CL_Record_f() {
     );
     clc.demofile = FS_FOpenFileWrite(name.as_mut_ptr());
     if clc.demofile == 0 {
-        Com_Printf(
-            b"ERROR: couldn\'t open.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"ERROR: couldn\'t open.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     clc.demorecording = qtrue;
-    if Cvar_VariableValue(
-        b"ui_recordSPDemo\x00" as *const u8 as *const libc::c_char,
-    ) != 0.
-    {
+    if Cvar_VariableValue(b"ui_recordSPDemo\x00" as *const u8 as *const libc::c_char) != 0. {
         clc.spDemoRecording = qtrue
     } else {
         clc.spDemoRecording = qfalse
@@ -2197,23 +2064,13 @@ pub unsafe extern "C" fn CL_Record_f() {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
     );
     MSG_Bitstream(&mut buf as *mut _ as *mut msg_t);
     // NOTE, MRE: all server->client messages now acknowledge
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.reliableSequence,
-    );
-    MSG_WriteByte(
-        &mut buf as *mut _ as *mut msg_t,
-        svc_gamestate as i32,
-    );
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.serverCommandSequence,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.reliableSequence);
+    MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, svc_gamestate as i32);
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.serverCommandSequence);
     // configstrings
     i = 0 as i32;
     while i < 1024 as i32 {
@@ -2223,18 +2080,9 @@ pub unsafe extern "C" fn CL_Record_f() {
                 .stringData
                 .as_mut_ptr()
                 .offset(cl.gameState.stringOffsets[i as usize] as isize);
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                svc_configstring as i32,
-            );
-            MSG_WriteShort(
-                &mut buf as *mut _ as *mut msg_t,
-                i,
-            );
-            MSG_WriteBigString(
-                &mut buf as *mut _ as *mut msg_t,
-                s,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, svc_configstring as i32);
+            MSG_WriteShort(&mut buf as *mut _ as *mut msg_t, i);
+            MSG_WriteBigString(&mut buf as *mut _ as *mut msg_t, s);
         }
         i += 1
     }
@@ -2246,13 +2094,9 @@ pub unsafe extern "C" fn CL_Record_f() {
     );
     i = 0 as i32;
     while i < (1 as i32) << 10 as i32 {
-        ent = &mut *cl.entityBaselines.as_mut_ptr().offset(i as isize)
-            as *mut entityState_t;
+        ent = &mut *cl.entityBaselines.as_mut_ptr().offset(i as isize) as *mut entityState_t;
         if !((*ent).number == 0) {
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                svc_baseline as i32,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, svc_baseline as i32);
             MSG_WriteDeltaEntity(
                 &mut buf as *mut _ as *mut msg_t,
                 &mut nullstate as *mut _ as *mut entityState_s,
@@ -2262,26 +2106,14 @@ pub unsafe extern "C" fn CL_Record_f() {
         }
         i += 1
     }
-    MSG_WriteByte(
-        &mut buf as *mut _ as *mut msg_t,
-        svc_EOF as i32,
-    );
+    MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, svc_EOF as i32);
     // finished writing the gamestate stuff
     // write the client num
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.clientNum,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.clientNum);
     // write the checksum feed
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.checksumFeed,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.checksumFeed);
     // finished writing the client packet
-    MSG_WriteByte(
-        &mut buf as *mut _ as *mut msg_t,
-        svc_EOF as i32,
-    );
+    MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, svc_EOF as i32);
     // write it to the demo file
     len = clc.serverMessageSequence - 1 as i32;
     FS_Write(
@@ -2295,11 +2127,7 @@ pub unsafe extern "C" fn CL_Record_f() {
         4 as i32,
         clc.demofile,
     );
-    FS_Write(
-        buf.data as *const libc::c_void,
-        buf.cursize,
-        clc.demofile,
-    );
+    FS_Write(buf.data as *const libc::c_void, buf.cursize, clc.demofile);
     // the rest of the demo file will be copied from net messages
 }
 /*
@@ -2457,8 +2285,7 @@ pub unsafe extern "C" fn CL_ReadDemoMessage() {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         bufData.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
     );
     // get the length
     r = FS_Read(
@@ -2481,23 +2308,15 @@ pub unsafe extern "C" fn CL_ReadDemoMessage() {
             b"CL_ReadDemoMessage: demoMsglen > MAX_MSGLEN\x00" as *const u8 as *const libc::c_char,
         );
     }
-    r = FS_Read(
-        buf.data as *mut libc::c_void,
-        buf.cursize,
-        clc.demofile,
-    );
+    r = FS_Read(buf.data as *mut libc::c_void, buf.cursize, clc.demofile);
     if r != buf.cursize {
-        Com_Printf(
-            b"Demo file was truncated.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Demo file was truncated.\n\x00" as *const u8 as *const libc::c_char);
         CL_DemoCompleted();
         return;
     }
     clc.lastPacketTime = cls.realtime;
     buf.readcount = 0 as i32;
-    CL_ParseServerMessage(
-        &mut buf as *mut _ as *mut msg_t,
-    );
+    CL_ParseServerMessage(&mut buf as *mut _ as *mut msg_t);
 }
 /*
 ====================
@@ -2521,11 +2340,7 @@ unsafe extern "C" fn CL_WalkDemoExt(
             b"dm_\x00" as *const u8 as *const libc::c_char,
             (*com_legacyprotocol).integer,
         );
-        FS_FOpenFileRead(
-            name,
-            demofile,
-            qtrue,
-        );
+        FS_FOpenFileRead(name, demofile, qtrue);
         if *demofile != 0 {
             Com_Printf(
                 b"Demo file: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -2534,9 +2349,7 @@ unsafe extern "C" fn CL_WalkDemoExt(
             return (*com_legacyprotocol).integer;
         }
     }
-    if (*com_protocol).integer
-        != (*com_legacyprotocol).integer
-    {
+    if (*com_protocol).integer != (*com_legacyprotocol).integer {
         Com_sprintf(
             name,
             4096 as i32,
@@ -2545,11 +2358,7 @@ unsafe extern "C" fn CL_WalkDemoExt(
             b"dm_\x00" as *const u8 as *const libc::c_char,
             (*com_protocol).integer,
         );
-        FS_FOpenFileRead(
-            name,
-            demofile,
-            qtrue,
-        );
+        FS_FOpenFileRead(name, demofile, qtrue);
         if *demofile != 0 {
             Com_Printf(
                 b"Demo file: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -2562,23 +2371,11 @@ unsafe extern "C" fn CL_WalkDemoExt(
         b"Not found: %s\n\x00" as *const u8 as *const libc::c_char,
         name,
     );
-    while *demo_protocols
-        .as_mut_ptr()
-        .offset(i as isize)
-        != 0
-    {
-        if *demo_protocols
-            .as_mut_ptr()
-            .offset(i as isize)
-            == (*com_legacyprotocol).integer
-        {
+    while *demo_protocols.as_mut_ptr().offset(i as isize) != 0 {
+        if *demo_protocols.as_mut_ptr().offset(i as isize) == (*com_legacyprotocol).integer {
             continue;
         }
-        if *demo_protocols
-            .as_mut_ptr()
-            .offset(i as isize)
-            == (*com_protocol).integer
-        {
+        if *demo_protocols.as_mut_ptr().offset(i as isize) == (*com_protocol).integer {
             continue;
         }
         Com_sprintf(
@@ -2587,23 +2384,15 @@ unsafe extern "C" fn CL_WalkDemoExt(
             b"demos/%s.%s%d\x00" as *const u8 as *const libc::c_char,
             arg,
             b"dm_\x00" as *const u8 as *const libc::c_char,
-            *demo_protocols
-                .as_mut_ptr()
-                .offset(i as isize),
+            *demo_protocols.as_mut_ptr().offset(i as isize),
         );
-        FS_FOpenFileRead(
-            name,
-            demofile,
-            qtrue,
-        );
+        FS_FOpenFileRead(name, demofile, qtrue);
         if *demofile != 0 {
             Com_Printf(
                 b"Demo file: %s\n\x00" as *const u8 as *const libc::c_char,
                 name,
             );
-            return *demo_protocols
-                .as_mut_ptr()
-                .offset(i as isize);
+            return *demo_protocols.as_mut_ptr().offset(i as isize);
         } else {
             Com_Printf(
                 b"Not found: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -2656,9 +2445,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
     let mut i: i32 = 0;
     let mut retry: [libc::c_char; 4096] = [0; 4096];
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"demo <demoname>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"demo <demoname>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // make sure a local server is killed
@@ -2693,24 +2480,13 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
             ),
         );
         i = 0 as i32;
-        while *demo_protocols
-            .as_mut_ptr()
-            .offset(i as isize)
-            != 0
-        {
-            if *demo_protocols
-                .as_mut_ptr()
-                .offset(i as isize)
-                == protocol
-            {
+        while *demo_protocols.as_mut_ptr().offset(i as isize) != 0 {
+            if *demo_protocols.as_mut_ptr().offset(i as isize) == protocol {
                 break;
             }
             i += 1
         }
-        if *demo_protocols
-            .as_mut_ptr()
-            .offset(i as isize)
-            != 0
+        if *demo_protocols.as_mut_ptr().offset(i as isize) != 0
             || protocol == (*com_protocol).integer
             || protocol == (*com_legacyprotocol).integer
         {
@@ -2720,11 +2496,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
                 b"demos/%s\x00" as *const u8 as *const libc::c_char,
                 arg.as_mut_ptr(),
             );
-            FS_FOpenFileRead(
-                name.as_mut_ptr(),
-                &mut clc.demofile,
-                qtrue,
-            );
+            FS_FOpenFileRead(name.as_mut_ptr(), &mut clc.demofile, qtrue);
         } else {
             let mut len: i32 = 0;
             Com_Printf(
@@ -2740,11 +2512,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
                     .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
                     .wrapping_sub(1 as i32 as libc::c_ulong) as i32
             }
-            Q_strncpyz(
-                retry.as_mut_ptr(),
-                arg.as_mut_ptr(),
-                len + 1 as i32,
-            );
+            Q_strncpyz(retry.as_mut_ptr(), arg.as_mut_ptr(), len + 1 as i32);
             retry[len as usize] = '\u{0}' as i32 as libc::c_char;
             protocol = CL_WalkDemoExt(retry.as_mut_ptr(), name.as_mut_ptr(), &mut clc.demofile)
         }
@@ -2814,9 +2582,7 @@ pub unsafe extern "C" fn CL_NextDemo() {
     let mut v: [libc::c_char; 1024] = [0; 1024];
     Q_strncpyz(
         v.as_mut_ptr(),
-        Cvar_VariableString(
-            b"nextdemo\x00" as *const u8 as *const libc::c_char,
-        ),
+        Cvar_VariableString(b"nextdemo\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     v[(1024 as i32 - 1 as i32) as usize] = 0 as i32 as libc::c_char;
@@ -2881,9 +2647,7 @@ pub unsafe extern "C" fn CL_ClearMemory(mut shutdownRef: qboolean) {
     // shutdown all the client stuff
     CL_ShutdownAll(shutdownRef);
     // if not running a server clear the whole hunk
-    if com_sv_running.is_null()
-        || (*com_sv_running).integer == 0
-    {
+    if com_sv_running.is_null() || (*com_sv_running).integer == 0 {
         // clear the whole hunk
         Hunk_Clear();
         // clear collision map data
@@ -2949,8 +2713,7 @@ pub unsafe extern "C" fn CL_MapLoading() {
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong,
         );
         crate::stdlib::memset(
-            &mut cl.gameState as *mut gameState_t
-                as *mut libc::c_void,
+            &mut cl.gameState as *mut gameState_t as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<gameState_t>() as libc::c_ulong,
         );
@@ -3009,10 +2772,7 @@ update cl_guid using QKEY_FILE and optional prefix
 unsafe extern "C" fn CL_UpdateGUID(mut prefix: *const libc::c_char, mut prefix_len: i32) {
     let mut f: fileHandle_t = 0;
     let mut len: i32 = 0;
-    len = FS_SV_FOpenFileRead(
-        b"qkey\x00" as *const u8 as *const libc::c_char,
-        &mut f,
-    ) as i32;
+    len = FS_SV_FOpenFileRead(b"qkey\x00" as *const u8 as *const libc::c_char, &mut f) as i32;
     FS_FCloseFile(f);
     if len != 2048 as i32 {
         Cvar_Set(
@@ -3042,10 +2802,7 @@ unsafe extern "C" fn CL_OldGame() {
             cl_oldGame.as_mut_ptr(),
             qtrue,
         ) as *mut cvar_s;
-        FS_ConditionalRestart(
-            clc.checksumFeed,
-            qfalse,
-        );
+        FS_ConditionalRestart(clc.checksumFeed, qfalse);
     };
 }
 /*
@@ -3061,9 +2818,7 @@ This is also called on Com_Error and Com_Quit, so it shouldn't cause any errors
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_Disconnect(mut showMainMenu: qboolean) {
-    if com_cl_running.is_null()
-        || (*com_cl_running).integer == 0
-    {
+    if com_cl_running.is_null() || (*com_cl_running).integer == 0 {
         return;
     }
     // shutting down the client so enter full screen ui mode
@@ -3120,21 +2875,14 @@ pub unsafe extern "C" fn CL_Disconnect(mut showMainMenu: qboolean) {
         clc.demofile = 0 as i32
     }
     if !uivm.is_null() && showMainMenu as u32 != 0 {
-        VM_Call(
-            uivm,
-            UI_SET_ACTIVE_MENU as i32,
-            UIMENU_NONE as i32,
-        );
+        VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_NONE as i32);
     }
     SCR_StopCinematic();
     S_ClearSoundBuffer();
     // send a disconnect message to the server
     // send it a few times in case one is dropped
     if clc.state as u32 >= CA_CONNECTED as i32 as u32 {
-        CL_AddReliableCommand(
-            b"disconnect\x00" as *const u8 as *const libc::c_char,
-            qtrue,
-        );
+        CL_AddReliableCommand(b"disconnect\x00" as *const u8 as *const libc::c_char, qtrue);
         CL_WritePacket();
         CL_WritePacket();
         CL_WritePacket();
@@ -3162,8 +2910,7 @@ pub unsafe extern "C" fn CL_Disconnect(mut showMainMenu: qboolean) {
         b"1\x00" as *const u8 as *const libc::c_char,
     );
     // not connected to a pure server anymore
-    cl_connectedToPureServer =
-        qfalse as i32;
+    cl_connectedToPureServer = qfalse as i32;
     // not connected to voip server anymore.
     clc.voipEnabled = qfalse;
     // Stop recording any video
@@ -3236,9 +2983,7 @@ pub unsafe extern "C" fn CL_RequestMotd() {
         NA_IP,
     ) == 0
     {
-        Com_Printf(
-            b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     cls.updateServer.port = crate::src::qcommon::q_shared::ShortSwap(27951 as i32 as i16) as u16;
@@ -3256,9 +3001,7 @@ pub unsafe extern "C" fn CL_RequestMotd() {
         cls.updateChallenge.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         b"%i\x00" as *const u8 as *const libc::c_char,
-        ((rand() as u32) << 16 as i32
-            ^ rand() as u32
-            ^ Com_Milliseconds() as u32) as i32,
+        ((rand() as u32) << 16 as i32 ^ rand() as u32 ^ Com_Milliseconds() as u32) as i32,
     );
     Info_SetValueForKey(
         info.as_mut_ptr(),
@@ -3327,8 +3070,7 @@ pub unsafe extern "C" fn CL_RequestAuthorization() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut l: i32 = 0;
-    let mut fs: *mut cvar_t =
-        0 as *mut cvar_t;
+    let mut fs: *mut cvar_t = 0 as *mut cvar_t;
     if cls.authorizeServer.port == 0 {
         Com_Printf(
             b"Resolving %s\n\x00" as *const u8 as *const libc::c_char,
@@ -3340,9 +3082,7 @@ pub unsafe extern "C" fn CL_RequestAuthorization() {
             NA_IP,
         ) == 0
         {
-            Com_Printf(
-                b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Couldn\'t resolve address\n\x00" as *const u8 as *const libc::c_char);
             return;
         }
         cls.authorizeServer.port =
@@ -3368,8 +3108,7 @@ pub unsafe extern "C" fn CL_RequestAuthorization() {
     }
     i = 0 as i32;
     while i < l {
-        if cl_cdkey[i as usize] as i32 >= '0' as i32
-            && cl_cdkey[i as usize] as i32 <= '9' as i32
+        if cl_cdkey[i as usize] as i32 >= '0' as i32 && cl_cdkey[i as usize] as i32 <= '9' as i32
             || cl_cdkey[i as usize] as i32 >= 'a' as i32
                 && cl_cdkey[i as usize] as i32 <= 'z' as i32
             || cl_cdkey[i as usize] as i32 >= 'A' as i32
@@ -3409,20 +3148,13 @@ CL_ForwardToServer_f
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ForwardToServer_f() {
-    if clc.state as u32 != CA_ACTIVE as i32 as u32
-        || clc.demoplaying as u32 != 0
-    {
-        Com_Printf(
-            b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char,
-        );
+    if clc.state as u32 != CA_ACTIVE as i32 as u32 || clc.demoplaying as u32 != 0 {
+        Com_Printf(b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // don't forward the first argument
     if Cmd_Argc() > 1 as i32 {
-        CL_AddReliableCommand(
-            Cmd_Args(),
-            qfalse,
-        );
+        CL_AddReliableCommand(Cmd_Args(), qfalse);
     };
 }
 /*
@@ -3482,9 +3214,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
     let mut argc: i32 = Cmd_Argc();
     let mut family: netadrtype_t = NA_UNSPEC;
     if argc != 2 as i32 && argc != 3 as i32 {
-        Com_Printf(
-            b"usage: connect [-4|-6] server\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: connect [-4|-6] server\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if argc == 2 as i32 {
@@ -3539,9 +3269,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
         ) == 0
     {
         // if running a local server, kill it
-        SV_Shutdown(
-            b"Server quit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        );
+        SV_Shutdown(b"Server quit\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
     }
     // make sure a local server is killed
     Cvar_Set(
@@ -3563,9 +3291,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
         family,
     ) == 0
     {
-        Com_Printf(
-            b"Bad server address\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Bad server address\n\x00" as *const u8 as *const libc::c_char);
         clc.state = CA_DISCONNECTED;
         return;
     }
@@ -3573,9 +3299,7 @@ pub unsafe extern "C" fn CL_Connect_f() {
         clc.serverAddress.port =
             crate::src::qcommon::q_shared::ShortSwap(27960 as i32 as i16) as u16
     }
-    serverString = NET_AdrToStringwPort(
-        clc.serverAddress as netadr_t,
-    );
+    serverString = NET_AdrToStringwPort(clc.serverAddress as netadr_t);
     Com_Printf(
         b"%s resolved to %s\n\x00" as *const u8 as *const libc::c_char,
         clc.servername.as_mut_ptr(),
@@ -3588,18 +3312,13 @@ pub unsafe extern "C" fn CL_Connect_f() {
     }
     // if we aren't playing on a lan, we need to authenticate
     // with the cd key
-    if NET_IsLocalAddress(
-        clc.serverAddress as netadr_t,
-    ) as u64
-        != 0
-    {
+    if NET_IsLocalAddress(clc.serverAddress as netadr_t) as u64 != 0 {
         clc.state = CA_CHALLENGING
     } else {
         clc.state = CA_CONNECTING;
         // Set a client challenge number that ideally is mirrored back by the server.
-        clc.challenge = ((rand() as u32) << 16 as i32
-            ^ rand() as u32
-            ^ Com_Milliseconds() as u32) as i32
+        clc.challenge =
+            ((rand() as u32) << 16 as i32 ^ rand() as u32 ^ Com_Milliseconds() as u32) as i32
     } // CL_CheckForResend() will fire immediately
     Key_SetCatcher(0 as i32);
     clc.connectTime = -(99999 as i32);
@@ -3625,11 +3344,7 @@ unsafe extern "C" fn CL_CompleteRcon(mut args: *mut libc::c_char, mut argNum: i3
             b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         if p > args {
-            Field_CompleteCommand(
-                p,
-                qtrue,
-                qtrue,
-            );
+            Field_CompleteCommand(p, qtrue, qtrue);
         }
     };
 }
@@ -3666,19 +3381,14 @@ unsafe extern "C" fn CL_CompletePlayerName(mut _args: *mut libc::c_char, mut arg
                     cl.gameState.stringOffsets[(32 as i32 + 256 as i32 + 256 as i32 + i) as usize]
                         as isize,
                 );
-                name = Info_ValueForKey(
-                    info,
-                    b"n\x00" as *const u8 as *const libc::c_char,
-                );
+                name = Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char);
                 if !(*name.offset(0 as i32 as isize) as i32 == '\u{0}' as i32) {
                     Q_strncpyz(
                         names[nameCount as usize].as_mut_ptr(),
                         name,
                         ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
                     );
-                    Q_CleanStr(
-                        names[nameCount as usize].as_mut_ptr(),
-                    );
+                    Q_CleanStr(names[nameCount as usize].as_mut_ptr());
                     namesPtr[nameCount as usize] = names[nameCount as usize].as_mut_ptr();
                     nameCount += 1
                 }
@@ -3801,10 +3511,7 @@ CL_ResetPureClientAtServer
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ResetPureClientAtServer() {
-    CL_AddReliableCommand(
-        b"vdr\x00" as *const u8 as *const libc::c_char,
-        qfalse,
-    );
+    CL_AddReliableCommand(b"vdr\x00" as *const u8 as *const libc::c_char, qfalse);
 }
 /*
 =================
@@ -3828,12 +3535,7 @@ pub unsafe extern "C" fn CL_Vid_Restart_f() {
     }
     // don't let them loop during the restart
     crate::src::client::snd_main::S_StopAllSounds();
-    if FS_ConditionalRestart(
-        clc.checksumFeed,
-        qtrue,
-    ) as u64
-        == 0
-    {
+    if FS_ConditionalRestart(clc.checksumFeed, qtrue) as u64 == 0 {
         // if not running a server clear the whole hunk
         if (*com_sv_running).integer != 0 {
             // clear all the client data on the hunk
@@ -3943,9 +3645,7 @@ pub unsafe extern "C" fn CL_Configstrings_f() {
     let mut i: i32 = 0;
     let mut ofs: i32 = 0;
     if clc.state as u32 != CA_ACTIVE as i32 as u32 {
-        Com_Printf(
-            b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     i = 0 as i32;
@@ -3969,9 +3669,7 @@ CL_Clientinfo_f
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_Clientinfo_f() {
-    Com_Printf(
-        b"--------- Client Information ---------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"--------- Client Information ---------\n\x00" as *const u8 as *const libc::c_char);
     Com_Printf(
         b"state: %i\n\x00" as *const u8 as *const libc::c_char,
         clc.state as u32,
@@ -3980,13 +3678,9 @@ pub unsafe extern "C" fn CL_Clientinfo_f() {
         b"Server: %s\n\x00" as *const u8 as *const libc::c_char,
         clc.servername.as_mut_ptr(),
     );
-    Com_Printf(
-        b"User info settings:\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"User info settings:\n\x00" as *const u8 as *const libc::c_char);
     Info_Print(Cvar_InfoString(0x2 as i32));
-    Com_Printf(
-        b"--------------------------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"--------------------------------------\n\x00" as *const u8 as *const libc::c_char);
 }
 //====================================================================
 /*
@@ -4018,10 +3712,7 @@ pub unsafe extern "C" fn CL_DownloadsComplete() {
         clc.downloadRestart = qfalse; // We possibly downloaded a pak, restart the file system to load it
         FS_Restart(clc.checksumFeed);
         // inform the server so we get new gamestate info
-        CL_AddReliableCommand(
-            b"donedl\x00" as *const u8 as *const libc::c_char,
-            qfalse,
-        );
+        CL_AddReliableCommand(b"donedl\x00" as *const u8 as *const libc::c_char, qfalse);
         // by sending the donedl command we request a new gamestate
         // so we don't want to load stuff yet
         return;
@@ -4122,14 +3813,11 @@ pub unsafe extern "C" fn CL_NextDownload() {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut remoteName: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut localName: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut useCURL: qboolean =
-        qfalse;
+    let mut useCURL: qboolean = qfalse;
     // A download has finished, check whether this matches a referenced checksum
     if *clc.downloadName.as_mut_ptr() != 0 {
         let mut zippath: *mut libc::c_char = FS_BuildOSPath(
-            Cvar_VariableString(
-                b"fs_homepath\x00" as *const u8 as *const libc::c_char,
-            ),
+            Cvar_VariableString(b"fs_homepath\x00" as *const u8 as *const libc::c_char),
             clc.downloadName.as_mut_ptr(),
             b"\x00" as *const u8 as *const libc::c_char,
         );
@@ -4318,10 +4006,7 @@ pub unsafe extern "C" fn CL_CheckForResend() {
             // requesting a challenge .. IPv6 users always get in as authorize server supports no ipv6.
             if (*com_standalone).integer == 0
                 && clc.serverAddress.type_0 as u32 == NA_IP as i32 as u32
-                && Sys_IsLANAddress(
-                    clc.serverAddress as netadr_t,
-                ) as u64
-                    == 0
+                && Sys_IsLANAddress(clc.serverAddress as netadr_t) as u64 == 0
             {
                 CL_RequestAuthorization();
             }
@@ -4344,17 +4029,13 @@ pub unsafe extern "C" fn CL_CheckForResend() {
         }
         4 => {
             // sending back the challenge
-            port = Cvar_VariableValue(
-                b"net_qport\x00" as *const u8 as *const libc::c_char,
-            ) as i32;
+            port = Cvar_VariableValue(b"net_qport\x00" as *const u8 as *const libc::c_char) as i32;
             Q_strncpyz(
                 info.as_mut_ptr(),
                 Cvar_InfoString(0x2 as i32),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             );
-            if (*com_legacyprotocol).integer
-                == (*com_protocol).integer
-            {
+            if (*com_legacyprotocol).integer == (*com_protocol).integer {
                 clc.compat = qtrue
             }
             if clc.compat as u64 != 0 {
@@ -4428,27 +4109,16 @@ pub unsafe extern "C" fn CL_MotdPacket(mut from: netadr_t) {
     let mut challenge: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut info: *mut libc::c_char = 0 as *mut libc::c_char;
     // if not from our server, ignore it
-    if NET_CompareAdr(
-        from as netadr_t,
-        cls.updateServer as netadr_t,
-    ) as u64
-        == 0
-    {
+    if NET_CompareAdr(from as netadr_t, cls.updateServer as netadr_t) as u64 == 0 {
         return;
     }
     info = Cmd_Argv(1 as i32);
     // check challenge
-    challenge = Info_ValueForKey(
-        info,
-        b"challenge\x00" as *const u8 as *const libc::c_char,
-    );
+    challenge = Info_ValueForKey(info, b"challenge\x00" as *const u8 as *const libc::c_char);
     if libc::strcmp(challenge, cls.updateChallenge.as_mut_ptr()) != 0 {
         return;
     }
-    challenge = Info_ValueForKey(
-        info,
-        b"motd\x00" as *const u8 as *const libc::c_char,
-    );
+    challenge = Info_ValueForKey(info, b"motd\x00" as *const u8 as *const libc::c_char);
     Q_strncpyz(
         cls.updateInfoString.as_mut_ptr(),
         info,
@@ -4509,10 +4179,8 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         scope_id: 0,
     }; 256];
     let mut numservers: i32 = 0;
-    let mut buffptr: *mut byte =
-        0 as *mut byte;
-    let mut buffend: *mut byte =
-        0 as *mut byte;
+    let mut buffptr: *mut byte = 0 as *mut byte;
+    let mut buffend: *mut byte = 0 as *mut byte;
     Com_Printf(
         b"CL_ServersResponsePacket from %s\n\x00" as *const u8 as *const libc::c_char,
         NET_AdrToStringwPort(*from as netadr_t),
@@ -4539,17 +4207,14 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         if *buffptr as i32 == '\\' as i32 {
             buffptr = buffptr.offset(1);
             if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
-                < (::std::mem::size_of::<[byte; 4]>()
-                    as libc::c_ulong)
+                < (::std::mem::size_of::<[byte; 4]>() as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
                     .wrapping_add(1 as i32 as libc::c_ulong)
             {
                 break;
             }
             i = 0 as i32;
-            while (i as libc::c_ulong)
-                < ::std::mem::size_of::<[byte; 4]>() as libc::c_ulong
-            {
+            while (i as libc::c_ulong) < ::std::mem::size_of::<[byte; 4]>() as libc::c_ulong {
                 let fresh5 = buffptr;
                 buffptr = buffptr.offset(1);
                 addresses[numservers as usize].ip[i as usize] = *fresh5;
@@ -4563,18 +4228,14 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
             }
             buffptr = buffptr.offset(1);
             if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
-                < (::std::mem::size_of::<[byte; 16]>()
-                    as libc::c_ulong)
+                < (::std::mem::size_of::<[byte; 16]>() as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
                     .wrapping_add(1 as i32 as libc::c_ulong)
             {
                 break;
             }
             i = 0 as i32;
-            while (i as libc::c_ulong)
-                < ::std::mem::size_of::<[byte; 16]>()
-                    as libc::c_ulong
-            {
+            while (i as libc::c_ulong) < ::std::mem::size_of::<[byte; 16]>() as libc::c_ulong {
                 let fresh6 = buffptr;
                 buffptr = buffptr.offset(1);
                 addresses[numservers as usize].ip6[i as usize] = *fresh6;
@@ -4608,8 +4269,7 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
     while i < numservers && count < 4096 as i32 {
         // build net address
         let mut server: *mut serverInfo_t =
-            &mut *cls.globalServers.as_mut_ptr().offset(count as isize)
-                as *mut serverInfo_t;
+            &mut *cls.globalServers.as_mut_ptr().offset(count as isize) as *mut serverInfo_t;
         // Tequila: It's possible to have sent many master server requests. Then
         // we may receive many times the same addresses from the master server.
         // We just avoid to add a server if it is still in the global servers list.
@@ -4660,10 +4320,7 @@ Responses to broadcasts, etc
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_ConnectionlessPacket(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+pub unsafe extern "C" fn CL_ConnectionlessPacket(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // skip the -1
     let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut challenge: i32 = 0 as i32;
@@ -4718,12 +4375,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
             clc.compat = qtrue
         }
         if clc.compat as u64 != 0 {
-            if NET_CompareAdr(
-                from as netadr_t,
-                clc.serverAddress as netadr_t,
-            ) as u64
-                == 0
-            {
+            if NET_CompareAdr(from as netadr_t, clc.serverAddress as netadr_t) as u64 == 0 {
                 // This challenge response is not coming from the expected address.
                 // Check whether we have a matching client challenge to prevent
                 // connection hi-jacking.
@@ -4763,9 +4415,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
     ) == 0
     {
         if clc.state as u32 >= CA_CONNECTED as i32 as u32 {
-            Com_Printf(
-                b"Dup connect received. Ignored.\n\x00" as *const u8 as *const libc::c_char,
-            ); // send first packet immediately
+            Com_Printf(b"Dup connect received. Ignored.\n\x00" as *const u8 as *const libc::c_char); // send first packet immediately
             return;
         }
         if clc.state as u32 != CA_CHALLENGING as i32 as u32 {
@@ -4775,12 +4425,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
             );
             return;
         }
-        if NET_CompareAdr(
-            from as netadr_t,
-            clc.serverAddress as netadr_t,
-        ) as u64
-            == 0
-        {
+        if NET_CompareAdr(from as netadr_t, clc.serverAddress as netadr_t) as u64 == 0 {
             Com_Printf(
                 b"connectResponse from wrong address. Ignored.\n\x00" as *const u8
                     as *const libc::c_char,
@@ -4810,9 +4455,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
             NS_CLIENT,
             &mut clc.netchan as *mut _ as *mut netchan_t,
             from as netadr_t,
-            Cvar_VariableValue(
-                b"net_qport\x00" as *const u8 as *const libc::c_char,
-            ) as i32,
+            Cvar_VariableValue(b"net_qport\x00" as *const u8 as *const libc::c_char) as i32,
             clc.challenge,
             clc.compat,
         );
@@ -4821,38 +4464,20 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
         return;
     }
     // server responding to an info broadcast
-    if Q_stricmp(
-        c,
-        b"infoResponse\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(c, b"infoResponse\x00" as *const u8 as *const libc::c_char) == 0 {
         CL_ServerInfoPacket(from, msg);
         return;
     }
     // server responding to a get playerlist
-    if Q_stricmp(
-        c,
-        b"statusResponse\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(c, b"statusResponse\x00" as *const u8 as *const libc::c_char) == 0 {
         CL_ServerStatusResponse(from, msg);
         return;
     }
     // echo request from server
-    if Q_stricmp(c, b"echo\x00" as *const u8 as *const libc::c_char)
-        == 0
-    {
+    if Q_stricmp(c, b"echo\x00" as *const u8 as *const libc::c_char) == 0 {
         // NOTE: we may have to add exceptions for auth and update servers
-        if NET_CompareAdr(
-            from as netadr_t,
-            clc.serverAddress as netadr_t,
-        ) as u32
-            != 0
-            || NET_CompareAdr(
-                from as netadr_t,
-                cls.rconAddress as netadr_t,
-            ) as u32
-                != 0
+        if NET_CompareAdr(from as netadr_t, clc.serverAddress as netadr_t) as u32 != 0
+            || NET_CompareAdr(from as netadr_t, cls.rconAddress as netadr_t) as u32 != 0
         {
             NET_OutOfBandPrint(
                 NS_CLIENT,
@@ -4864,36 +4489,20 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
         return;
     }
     // cd check
-    if Q_stricmp(
-        c,
-        b"keyAuthorize\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(c, b"keyAuthorize\x00" as *const u8 as *const libc::c_char) == 0 {
         // we don't use these now, so dump them on the floor
         return;
     }
     // global MOTD from id
-    if Q_stricmp(c, b"motd\x00" as *const u8 as *const libc::c_char)
-        == 0
-    {
+    if Q_stricmp(c, b"motd\x00" as *const u8 as *const libc::c_char) == 0 {
         CL_MotdPacket(from);
         return;
     }
     // echo request from server
-    if Q_stricmp(c, b"print\x00" as *const u8 as *const libc::c_char)
-        == 0
-    {
+    if Q_stricmp(c, b"print\x00" as *const u8 as *const libc::c_char) == 0 {
         // NOTE: we may have to add exceptions for auth and update servers
-        if NET_CompareAdr(
-            from as netadr_t,
-            clc.serverAddress as netadr_t,
-        ) as u32
-            != 0
-            || NET_CompareAdr(
-                from as netadr_t,
-                cls.rconAddress as netadr_t,
-            ) as u32
-                != 0
+        if NET_CompareAdr(from as netadr_t, clc.serverAddress as netadr_t) as u32 != 0
+            || NET_CompareAdr(from as netadr_t, cls.rconAddress as netadr_t) as u32 != 0
         {
             s = MSG_ReadString(msg as *mut msg_t);
             Q_strncpyz(
@@ -4901,10 +4510,7 @@ pub unsafe extern "C" fn CL_ConnectionlessPacket(
                 s,
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
             );
-            Com_Printf(
-                b"%s\x00" as *const u8 as *const libc::c_char,
-                s,
-            );
+            Com_Printf(b"%s\x00" as *const u8 as *const libc::c_char, s);
         }
         return;
     }
@@ -4941,10 +4547,7 @@ A packet has arrived from the main event loop
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_PacketEvent(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+pub unsafe extern "C" fn CL_PacketEvent(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut headerBytes: i32 = 0;
     clc.lastPacketTime = cls.realtime;
     if (*msg).cursize >= 4 as i32 && *((*msg).data as *mut i32) == -(1 as i32) {
@@ -4965,12 +4568,7 @@ pub unsafe extern "C" fn CL_PacketEvent(
     //
     // packet from server
     //
-    if NET_CompareAdr(
-        from as netadr_t,
-        clc.netchan.remoteAddress as netadr_t,
-    ) as u64
-        == 0
-    {
+    if NET_CompareAdr(from as netadr_t, clc.netchan.remoteAddress as netadr_t) as u64 == 0 {
         Com_DPrintf(
             b"%s:sequenced packet without connection\n\x00" as *const u8 as *const libc::c_char,
             NET_AdrToStringwPort(from as netadr_t),
@@ -5023,9 +4621,7 @@ pub unsafe extern "C" fn CL_CheckTimeout() {
         cl.timeoutcount += 1;
         if cl.timeoutcount > 5 as i32 {
             // timeoutcount saves debugger
-            Com_Printf(
-                b"\nServer connection timed out.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"\nServer connection timed out.\n\x00" as *const u8 as *const libc::c_char);
             CL_Disconnect(qtrue);
             return;
         }
@@ -5045,9 +4641,7 @@ pub unsafe extern "C" fn CL_CheckPaused() -> qboolean {
     // if cl_paused->modified is set, the cvar has only been changed in
     // this frame. Keep paused in this frame to ensure the server doesn't
     // lag behind.
-    if (*cl_paused).integer != 0
-        || (*cl_paused).modified as u32 != 0
-    {
+    if (*cl_paused).integer != 0 || (*cl_paused).modified as u32 != 0 {
         return qtrue;
     }
     return qfalse;
@@ -5113,11 +4707,7 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
     if cls.cddialog as u64 != 0 {
         // bring up the cd error dialog if needed
         cls.cddialog = qfalse;
-        VM_Call(
-            uivm,
-            UI_SET_ACTIVE_MENU as i32,
-            UIMENU_NEED_CD as i32,
-        );
+        VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_NEED_CD as i32);
     } else if clc.state as u32 == CA_DISCONNECTED as i32 as u32
         && Key_GetCatcher() & 0x2 as i32 == 0
         && (*com_sv_running).integer == 0
@@ -5125,25 +4715,13 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
     {
         // if disconnected, bring up the menu
         crate::src::client::snd_main::S_StopAllSounds();
-        VM_Call(
-            uivm,
-            UI_SET_ACTIVE_MENU as i32,
-            UIMENU_MAIN as i32,
-        );
+        VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_MAIN as i32);
     }
     // if recording an avi, lock to a fixed fps
-    if CL_VideoRecording() as u32 != 0
-        && (*cl_aviFrameRate).integer != 0
-        && msec != 0
-    {
+    if CL_VideoRecording() as u32 != 0 && (*cl_aviFrameRate).integer != 0 && msec != 0 {
         // save the current screen
-        if clc.state as u32 == CA_ACTIVE as i32 as u32
-            || (*cl_forceavidemo).integer != 0
-        {
-            let mut fps: f32 = if (*cl_aviFrameRate).value
-                * (*com_timescale).value
-                < 1000.0f32
-            {
+        if clc.state as u32 == CA_ACTIVE as i32 as u32 || (*cl_forceavidemo).integer != 0 {
+            let mut fps: f32 = if (*cl_aviFrameRate).value * (*com_timescale).value < 1000.0f32 {
                 ((*cl_aviFrameRate).value) * (*com_timescale).value
             } else {
                 1000.0f32
@@ -5164,25 +4742,22 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
             && clc.demoplaying as u64 == 0
         {
             // If not recording a demo, and we should be, start one
-            let mut now: qtime_t =
-                qtime_t {
-                    tm_sec: 0,
-                    tm_min: 0,
-                    tm_hour: 0,
-                    tm_mday: 0,
-                    tm_mon: 0,
-                    tm_year: 0,
-                    tm_wday: 0,
-                    tm_yday: 0,
-                    tm_isdst: 0,
-                };
+            let mut now: qtime_t = qtime_t {
+                tm_sec: 0,
+                tm_min: 0,
+                tm_hour: 0,
+                tm_mday: 0,
+                tm_mon: 0,
+                tm_year: 0,
+                tm_wday: 0,
+                tm_yday: 0,
+                tm_isdst: 0,
+            };
             let mut nowString: *mut libc::c_char = 0 as *mut libc::c_char;
             let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
             let mut mapName: [libc::c_char; 64] = [0; 64];
             let mut serverName: [libc::c_char; 4096] = [0; 4096];
-            Com_RealTime(
-                &mut now as *mut _ as *mut qtime_s,
-            );
+            Com_RealTime(&mut now as *mut _ as *mut qtime_s);
             nowString = va(
                 b"%04d%02d%02d%02d%02d%02d\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -5226,9 +4801,7 @@ pub unsafe extern "C" fn CL_Frame(mut msec: i32) {
                     mapName.as_mut_ptr(),
                 ),
             );
-        } else if clc.state as u32 != CA_ACTIVE as i32 as u32
-            && clc.demorecording as u32 != 0
-        {
+        } else if clc.state as u32 != CA_ACTIVE as i32 as u32 && clc.demorecording as u32 != 0 {
             // Recording, but not CA_ACTIVE, so stop recording
             CL_StopRecord_f();
         }
@@ -5346,10 +4919,8 @@ pub unsafe extern "C" fn CL_InitRenderer() {
     cls.consoleShader = re.RegisterShader.expect("non-null function pointer")(
         b"console\x00" as *const u8 as *const libc::c_char,
     );
-    g_console_field_width =
-        cls.glconfig.vidWidth / 8 as i32 - 2 as i32;
-    crate::src::client::cl_keys::g_consoleField.widthInChars =
-        g_console_field_width;
+    g_console_field_width = cls.glconfig.vidWidth / 8 as i32 - 2 as i32;
+    crate::src::client::cl_keys::g_consoleField.widthInChars = g_console_field_width;
 }
 /*
 ============================
@@ -5361,9 +4932,7 @@ This is the only place that any of these functions are called from
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_StartHunkUsers(
-    mut rendererOnly: qboolean,
-) {
+pub unsafe extern "C" fn CL_StartHunkUsers(mut rendererOnly: qboolean) {
     if com_cl_running.is_null() {
         return;
     }
@@ -5406,8 +4975,7 @@ pub unsafe extern "C" fn CL_RefMalloc(mut size: i32) -> *mut libc::c_void {
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ScaledMilliseconds() -> i32 {
-    return (Sys_Milliseconds() as f32
-        * (*com_timescale).value) as i32;
+    return (Sys_Milliseconds() as f32 * (*com_timescale).value) as i32;
 }
 /*
 ============
@@ -5462,9 +5030,7 @@ pub unsafe extern "C" fn CL_InitRef() {
     let mut ret: *mut refexport_t = 0 as *mut refexport_t;
     let mut GetRefAPI: GetRefAPI_t = None;
     let mut dllName: [libc::c_char; 4096] = [0; 4096];
-    Com_Printf(
-        b"----- Initializing Renderer ----\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"----- Initializing Renderer ----\n\x00" as *const u8 as *const libc::c_char);
     cl_renderer = Cvar_Get(
         b"cl_renderer\x00" as *const u8 as *const libc::c_char,
         b"opengl2\x00" as *const u8 as *const libc::c_char,
@@ -5476,29 +5042,20 @@ pub unsafe extern "C" fn CL_InitRef() {
         b"renderer_%s_x86_64.so\x00" as *const u8 as *const libc::c_char,
         (*cl_renderer).string,
     );
-    rendererLib = crate::src::sys::sys_main::Sys_LoadDll(
-        dllName.as_mut_ptr(),
-        qfalse,
-    );
-    if rendererLib.is_null()
-        && libc::strcmp((*cl_renderer).string, (*cl_renderer).resetString) != 0
+    rendererLib = crate::src::sys::sys_main::Sys_LoadDll(dllName.as_mut_ptr(), qfalse);
+    if rendererLib.is_null() && libc::strcmp((*cl_renderer).string, (*cl_renderer).resetString) != 0
     {
         Com_Printf(
             b"failed:\n\"%s\"\n\x00" as *const u8 as *const libc::c_char,
             crate::stdlib::SDL_GetError(),
         );
-        Cvar_ForceReset(
-            b"cl_renderer\x00" as *const u8 as *const libc::c_char,
-        );
+        Cvar_ForceReset(b"cl_renderer\x00" as *const u8 as *const libc::c_char);
         Com_sprintf(
             dllName.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             b"renderer_opengl2_x86_64.so\x00" as *const u8 as *const libc::c_char,
         );
-        rendererLib = crate::src::sys::sys_main::Sys_LoadDll(
-            dllName.as_mut_ptr(),
-            qfalse,
-        )
+        rendererLib = crate::src::sys::sys_main::Sys_LoadDll(dllName.as_mut_ptr(), qfalse)
     }
     if rendererLib.is_null() {
         Com_Printf(
@@ -5510,12 +5067,11 @@ pub unsafe extern "C" fn CL_InitRef() {
             b"Failed to load renderer\x00" as *const u8 as *const libc::c_char,
         );
     }
-    GetRefAPI = ::std::mem::transmute::<*mut libc::c_void, GetRefAPI_t>(
-        crate::stdlib::SDL_LoadFunction(
+    GetRefAPI =
+        ::std::mem::transmute::<*mut libc::c_void, GetRefAPI_t>(crate::stdlib::SDL_LoadFunction(
             rendererLib,
             b"GetRefAPI\x00" as *const u8 as *const libc::c_char,
-        ),
-    );
+        ));
     if GetRefAPI.is_none() {
         Com_Error(
             ERR_FATAL as i32,
@@ -5523,51 +5079,28 @@ pub unsafe extern "C" fn CL_InitRef() {
             crate::stdlib::SDL_GetError(),
         );
     }
-    ri.Cmd_AddCommand = Some(
-        Cmd_AddCommand
-            as unsafe extern "C" fn(_: *const libc::c_char, _: xcommand_t) -> (),
-    );
-    ri.Cmd_RemoveCommand = Some(
-        Cmd_RemoveCommand
-            as unsafe extern "C" fn(_: *const libc::c_char) -> (),
-    );
+    ri.Cmd_AddCommand =
+        Some(Cmd_AddCommand as unsafe extern "C" fn(_: *const libc::c_char, _: xcommand_t) -> ());
+    ri.Cmd_RemoveCommand =
+        Some(Cmd_RemoveCommand as unsafe extern "C" fn(_: *const libc::c_char) -> ());
     ri.Cmd_Argc = Some(Cmd_Argc as unsafe extern "C" fn() -> i32);
-    ri.Cmd_Argv = Some(
-        Cmd_Argv as unsafe extern "C" fn(_: i32) -> *mut libc::c_char,
-    );
-    ri.Cmd_ExecuteText = Some(
-        Cbuf_ExecuteText
-            as unsafe extern "C" fn(_: i32, _: *const libc::c_char) -> (),
-    );
+    ri.Cmd_Argv = Some(Cmd_Argv as unsafe extern "C" fn(_: i32) -> *mut libc::c_char);
+    ri.Cmd_ExecuteText =
+        Some(Cbuf_ExecuteText as unsafe extern "C" fn(_: i32, _: *const libc::c_char) -> ());
     ri.Printf =
         Some(CL_RefPrintf as unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> ());
-    ri.Error = Some(
-        Com_Error
-            as unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> !,
-    );
+    ri.Error = Some(Com_Error as unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> !);
     ri.Milliseconds = Some(CL_ScaledMilliseconds as unsafe extern "C" fn() -> i32);
     ri.Malloc = Some(CL_RefMalloc as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
-    ri.Free = Some(
-        Z_Free as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
-    );
-    ri.Hunk_Alloc = Some(
-        Hunk_Alloc
-            as unsafe extern "C" fn(
-                _: i32,
-                _: ha_pref,
-            ) -> *mut libc::c_void,
-    );
-    ri.Hunk_AllocateTempMemory = Some(
-        Hunk_AllocateTempMemory
-            as unsafe extern "C" fn(_: i32) -> *mut libc::c_void,
-    );
-    ri.Hunk_FreeTempMemory = Some(
-        Hunk_FreeTempMemory
-            as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
-    );
+    ri.Free = Some(Z_Free as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
+    ri.Hunk_Alloc =
+        Some(Hunk_Alloc as unsafe extern "C" fn(_: i32, _: ha_pref) -> *mut libc::c_void);
+    ri.Hunk_AllocateTempMemory =
+        Some(Hunk_AllocateTempMemory as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
+    ri.Hunk_FreeTempMemory =
+        Some(Hunk_FreeTempMemory as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     ri.CM_ClusterPVS = Some(
-        crate::src::qcommon::cm_test::CM_ClusterPVS
-            as unsafe extern "C" fn(_: i32) -> *mut byte,
+        crate::src::qcommon::cm_test::CM_ClusterPVS as unsafe extern "C" fn(_: i32) -> *mut byte,
     );
     ri.CM_DrawDebugSurface = Some(
         crate::src::qcommon::cm_patch::CM_DrawDebugSurface
@@ -5579,17 +5112,13 @@ pub unsafe extern "C" fn CL_InitRef() {
         FS_ReadFile
             as unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> isize,
     );
-    ri.FS_FreeFile = Some(
-        FS_FreeFile as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
-    );
+    ri.FS_FreeFile = Some(FS_FreeFile as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     ri.FS_WriteFile = Some(
         FS_WriteFile
             as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_void, _: i32) -> (),
     );
-    ri.FS_FreeFileList = Some(
-        FS_FreeFileList
-            as unsafe extern "C" fn(_: *mut *mut libc::c_char) -> (),
-    );
+    ri.FS_FreeFileList =
+        Some(FS_FreeFileList as unsafe extern "C" fn(_: *mut *mut libc::c_char) -> ());
     ri.FS_ListFiles = Some(
         FS_ListFiles
             as unsafe extern "C" fn(
@@ -5598,16 +5127,10 @@ pub unsafe extern "C" fn CL_InitRef() {
                 _: *mut i32,
             ) -> *mut *mut libc::c_char,
     );
-    ri.FS_FileIsInPAK = Some(
-        FS_FileIsInPAK
-            as unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32,
-    );
-    ri.FS_FileExists = Some(
-        FS_FileExists
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-            ) -> qboolean,
-    );
+    ri.FS_FileIsInPAK =
+        Some(FS_FileIsInPAK as unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32);
+    ri.FS_FileExists =
+        Some(FS_FileExists as unsafe extern "C" fn(_: *const libc::c_char) -> qboolean);
     ri.Cvar_Get = Some(
         Cvar_Get
             as unsafe extern "C" fn(
@@ -5617,36 +5140,20 @@ pub unsafe extern "C" fn CL_InitRef() {
             ) -> *mut cvar_t,
     );
     ri.Cvar_Set = Some(
-        Cvar_Set
-            as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),
+        Cvar_Set as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),
     );
-    ri.Cvar_SetValue = Some(
-        Cvar_SetValue
-            as unsafe extern "C" fn(_: *const libc::c_char, _: f32) -> (),
-    );
+    ri.Cvar_SetValue =
+        Some(Cvar_SetValue as unsafe extern "C" fn(_: *const libc::c_char, _: f32) -> ());
     ri.Cvar_CheckRange = Some(
-        Cvar_CheckRange
-            as unsafe extern "C" fn(
-                _: *mut cvar_t,
-                _: f32,
-                _: f32,
-                _: qboolean,
-            ) -> (),
+        Cvar_CheckRange as unsafe extern "C" fn(_: *mut cvar_t, _: f32, _: f32, _: qboolean) -> (),
     );
     ri.Cvar_SetDescription = Some(
-        Cvar_SetDescription
-            as unsafe extern "C" fn(
-                _: *mut cvar_t,
-                _: *const libc::c_char,
-            ) -> (),
+        Cvar_SetDescription as unsafe extern "C" fn(_: *mut cvar_t, _: *const libc::c_char) -> (),
     );
-    ri.Cvar_VariableIntegerValue = Some(
-        Cvar_VariableIntegerValue
-            as unsafe extern "C" fn(_: *const libc::c_char) -> i32,
-    );
+    ri.Cvar_VariableIntegerValue =
+        Some(Cvar_VariableIntegerValue as unsafe extern "C" fn(_: *const libc::c_char) -> i32);
     // cinematic stuff
-    ri.CIN_UploadCinematic =
-        Some(CIN_UploadCinematic as unsafe extern "C" fn(_: i32) -> ());
+    ri.CIN_UploadCinematic = Some(CIN_UploadCinematic as unsafe extern "C" fn(_: i32) -> ());
     ri.CIN_PlayCinematic = Some(
         CIN_PlayCinematic
             as unsafe extern "C" fn(
@@ -5658,36 +5165,23 @@ pub unsafe extern "C" fn CL_InitRef() {
                 _: i32,
             ) -> i32,
     );
-    ri.CIN_RunCinematic = Some(
-        CIN_RunCinematic
-            as unsafe extern "C" fn(_: i32) -> e_status,
-    );
-    ri.CL_WriteAVIVideoFrame = Some(
-        CL_WriteAVIVideoFrame
-            as unsafe extern "C" fn(_: *const byte, _: i32) -> (),
-    );
-    ri.IN_Init = Some(
-        IN_Init as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
-    );
+    ri.CIN_RunCinematic = Some(CIN_RunCinematic as unsafe extern "C" fn(_: i32) -> e_status);
+    ri.CL_WriteAVIVideoFrame =
+        Some(CL_WriteAVIVideoFrame as unsafe extern "C" fn(_: *const byte, _: i32) -> ());
+    ri.IN_Init = Some(IN_Init as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     ri.IN_Shutdown = Some(IN_Shutdown as unsafe extern "C" fn() -> ());
     ri.IN_Restart = Some(IN_Restart as unsafe extern "C" fn() -> ());
     ri.ftol = Some(qftolsse as unsafe extern "C" fn(_: f32) -> isize);
     ri.Sys_SetEnv = Some(
-        Sys_SetEnv
-            as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),
+        Sys_SetEnv as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),
     );
     ri.Sys_GLimpSafeInit =
         Some(crate::src::sys::sys_unix::Sys_GLimpSafeInit as unsafe extern "C" fn() -> ());
     ri.Sys_GLimpInit =
         Some(crate::src::sys::sys_unix::Sys_GLimpInit as unsafe extern "C" fn() -> ());
-    ri.Sys_LowPhysicalMemory = Some(
-        Sys_LowPhysicalMemory
-            as unsafe extern "C" fn() -> qboolean,
-    );
+    ri.Sys_LowPhysicalMemory = Some(Sys_LowPhysicalMemory as unsafe extern "C" fn() -> qboolean);
     ret = GetRefAPI.expect("non-null function pointer")(8 as i32, &mut ri);
-    Com_Printf(
-        b"-------------------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"-------------------------------\n\x00" as *const u8 as *const libc::c_char);
     if ret.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -5710,10 +5204,7 @@ pub unsafe extern "C" fn CL_SetModel_f() {
     arg = Cmd_Argv(1 as i32);
     if *arg.offset(0 as i32 as isize) != 0 {
         Cvar_Set(b"model\x00" as *const u8 as *const libc::c_char, arg);
-        Cvar_Set(
-            b"headmodel\x00" as *const u8 as *const libc::c_char,
-            arg,
-        );
+        Cvar_Set(b"headmodel\x00" as *const u8 as *const libc::c_char, arg);
     } else {
         Cvar_VariableStringBuffer(
             b"model\x00" as *const u8 as *const libc::c_char,
@@ -5820,15 +5311,10 @@ unsafe extern "C" fn CL_GenerateQKey() {
     let mut len: i32 = 0 as i32;
     let mut buff: [u8; 2048] = [0; 2048];
     let mut f: fileHandle_t = 0;
-    len = FS_SV_FOpenFileRead(
-        b"qkey\x00" as *const u8 as *const libc::c_char,
-        &mut f,
-    ) as i32;
+    len = FS_SV_FOpenFileRead(b"qkey\x00" as *const u8 as *const libc::c_char, &mut f) as i32;
     FS_FCloseFile(f);
     if len == 2048 as i32 {
-        Com_Printf(
-            b"QKEY found.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"QKEY found.\n\x00" as *const u8 as *const libc::c_char);
         return;
     } else {
         if len > 0 as i32 {
@@ -5837,16 +5323,12 @@ unsafe extern "C" fn CL_GenerateQKey() {
                 2048 as i32,
             );
         }
-        Com_Printf(
-            b"QKEY building random string\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"QKEY building random string\n\x00" as *const u8 as *const libc::c_char);
         Com_RandomBytes(
             buff.as_mut_ptr(),
             ::std::mem::size_of::<[u8; 2048]>() as libc::c_ulong as i32,
         );
-        f = FS_SV_FOpenFileWrite(
-            b"qkey\x00" as *const u8 as *const libc::c_char,
-        );
+        f = FS_SV_FOpenFileWrite(b"qkey\x00" as *const u8 as *const libc::c_char);
         if f == 0 {
             Com_Printf(
                 b"QKEY could not open %s for write\n\x00" as *const u8 as *const libc::c_char,
@@ -5860,9 +5342,7 @@ unsafe extern "C" fn CL_GenerateQKey() {
             f,
         );
         FS_FCloseFile(f);
-        Com_Printf(
-            b"QKEY generated\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"QKEY generated\n\x00" as *const u8 as *const libc::c_char);
     };
 }
 #[no_mangle]
@@ -5877,9 +5357,7 @@ pub unsafe extern "C" fn CL_Sayto_f() {
     let mut clientNum: i32 = 0;
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     if Cmd_Argc() < 3 as i32 {
-        Com_Printf(
-            b"sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"sayto <player name> <text>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     rawname = Cmd_Argv(1 as i32);
@@ -5901,15 +5379,11 @@ pub unsafe extern "C" fn CL_Sayto_f() {
         );
         Q_strncpyz(
             cleanName.as_mut_ptr(),
-            Info_ValueForKey(
-                info,
-                b"n\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char),
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
         );
         Q_CleanStr(cleanName.as_mut_ptr());
-        if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr()) == 0
-        {
+        if Q_stricmp(cleanName.as_mut_ptr(), name.as_mut_ptr()) == 0 {
             clientNum = i;
             break;
         } else {
@@ -5946,9 +5420,7 @@ CL_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_Init() {
-    Com_Printf(
-        b"----- Client Initialization -----\n\x00" as *const u8 as *const libc::c_char,
-    ); // no longer CA_UNINITIALIZED
+    Com_Printf(b"----- Client Initialization -----\n\x00" as *const u8 as *const libc::c_char); // no longer CA_UNINITIALIZED
     Con_Init();
     if com_fullyInitialized as u64 == 0 {
         CL_ClearState();
@@ -6054,14 +5526,12 @@ pub unsafe extern "C" fn CL_Init() {
         b"cl_pitchspeed\x00" as *const u8 as *const libc::c_char,
         b"140\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
-    )
-        as *mut cvar_s;
+    ) as *mut cvar_s;
     cl_anglespeedkey = Cvar_Get(
         b"cl_anglespeedkey\x00" as *const u8 as *const libc::c_char,
         b"1.5\x00" as *const u8 as *const libc::c_char,
         0 as i32,
-    )
-        as *mut cvar_s;
+    ) as *mut cvar_s;
     cl_maxpackets = Cvar_Get(
         b"cl_maxpackets\x00" as *const u8 as *const libc::c_char,
         b"30\x00" as *const u8 as *const libc::c_char,
@@ -6608,12 +6078,9 @@ pub unsafe extern "C" fn CL_Shutdown(
     mut disconnect: qboolean,
     mut quit: qboolean,
 ) {
-    static mut recursive: qboolean =
-        qfalse;
+    static mut recursive: qboolean = qfalse;
     // check whether the client is running at all.
-    if !(!com_cl_running.is_null()
-        && (*com_cl_running).integer != 0)
-    {
+    if !(!com_cl_running.is_null() && (*com_cl_running).integer != 0) {
         return;
     }
     Com_Printf(
@@ -6621,9 +6088,7 @@ pub unsafe extern "C" fn CL_Shutdown(
         finalmsg,
     );
     if recursive as u64 != 0 {
-        Com_Printf(
-            b"WARNING: Recursive shutdown\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"WARNING: Recursive shutdown\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     recursive = qtrue;
@@ -6634,56 +6099,28 @@ pub unsafe extern "C" fn CL_Shutdown(
     CL_ClearMemory(qtrue);
     CL_Snd_Shutdown();
     Cmd_RemoveCommand(b"cmd\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"configstrings\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"clientinfo\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"snd_restart\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"vid_restart\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"disconnect\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"configstrings\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"clientinfo\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"snd_restart\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"vid_restart\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"disconnect\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"record\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"demo\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"cinematic\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"stoprecord\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"cinematic\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"stoprecord\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"connect\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"reconnect\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"localservers\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"globalservers\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"reconnect\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"localservers\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"globalservers\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"rcon\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"ping\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"serverstatus\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"serverstatus\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"showip\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"fs_openedList\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"fs_referencedList\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"fs_openedList\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"fs_referencedList\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"model\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"video\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"stopvideo\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"stopvideo\x00" as *const u8 as *const libc::c_char);
     CL_ShutdownInput();
     Con_Shutdown();
     Cvar_Set(
@@ -6697,9 +6134,7 @@ pub unsafe extern "C" fn CL_Shutdown(
         ::std::mem::size_of::<clientStatic_t>() as libc::c_ulong,
     );
     Key_SetCatcher(0 as i32);
-    Com_Printf(
-        b"-----------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"-----------------------\n\x00" as *const u8 as *const libc::c_char);
 }
 
 unsafe extern "C" fn CL_SetServerInfo(
@@ -6715,18 +6150,12 @@ unsafe extern "C" fn CL_SetServerInfo(
             ));
             Q_strncpyz(
                 (*server).hostName.as_mut_ptr(),
-                Info_ValueForKey(
-                    info,
-                    b"hostname\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"hostname\x00" as *const u8 as *const libc::c_char),
                 32 as i32,
             );
             Q_strncpyz(
                 (*server).mapName.as_mut_ptr(),
-                Info_ValueForKey(
-                    info,
-                    b"mapname\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char),
                 32 as i32,
             );
             (*server).maxClients = atoi(Info_ValueForKey(
@@ -6735,10 +6164,7 @@ unsafe extern "C" fn CL_SetServerInfo(
             ));
             Q_strncpyz(
                 (*server).game.as_mut_ptr(),
-                Info_ValueForKey(
-                    info,
-                    b"game\x00" as *const u8 as *const libc::c_char,
-                ),
+                Info_ValueForKey(info, b"game\x00" as *const u8 as *const libc::c_char),
                 32 as i32,
             );
             (*server).gameType = atoi(Info_ValueForKey(
@@ -6836,18 +6262,14 @@ CL_ServerInfoPacket
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_ServerInfoPacket(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+pub unsafe extern "C" fn CL_ServerInfoPacket(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut i: i32 = 0;
     let mut type_0: i32 = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
     let mut infoString: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut prot: i32 = 0;
     let mut gamename: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut gameMismatch: qboolean =
-        qfalse;
+    let mut gameMismatch: qboolean = qfalse;
     infoString = MSG_ReadString(msg as *mut msg_t);
     // if this isn't the correct gamename, ignore it
     gamename = Info_ValueForKey(
@@ -6859,10 +6281,8 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(
         gameMismatch = qfalse
     } else {
         gameMismatch = (*gamename == 0
-            || libc::strcmp(
-                gamename,
-                (*com_gamename).string,
-            ) != 0 as i32) as i32 as qboolean
+            || libc::strcmp(gamename, (*com_gamename).string) != 0 as i32)
+            as i32 as qboolean
     }
     if gameMismatch as u64 != 0 {
         Com_DPrintf(
@@ -6876,9 +6296,7 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(
         infoString,
         b"protocol\x00" as *const u8 as *const libc::c_char,
     ));
-    if prot != (*com_protocol).integer
-        && prot != (*com_legacyprotocol).integer
-    {
+    if prot != (*com_protocol).integer && prot != (*com_legacyprotocol).integer {
         Com_DPrintf(
             b"Different protocol info packet: %s\n\x00" as *const u8 as *const libc::c_char,
             infoString,
@@ -6890,15 +6308,10 @@ pub unsafe extern "C" fn CL_ServerInfoPacket(
     while i < 32 as i32 {
         if cl_pinglist[i as usize].adr.port as i32 != 0
             && cl_pinglist[i as usize].time == 0
-            && NET_CompareAdr(
-                from as netadr_t,
-                cl_pinglist[i as usize].adr as netadr_t,
-            ) as u32
-                != 0
+            && NET_CompareAdr(from as netadr_t, cl_pinglist[i as usize].adr as netadr_t) as u32 != 0
         {
             // calc ping time
-            cl_pinglist[i as usize].time =
-                Sys_Milliseconds() - cl_pinglist[i as usize].start;
+            cl_pinglist[i as usize].time = Sys_Milliseconds() - cl_pinglist[i as usize].start;
             Com_DPrintf(
                 b"ping time %dms from %s\n\x00" as *const u8 as *const libc::c_char,
                 cl_pinglist[i as usize].time,
@@ -6994,9 +6407,7 @@ CL_GetServerStatus
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GetServerStatus(
-    mut from: netadr_t,
-) -> *mut serverStatus_t {
+pub unsafe extern "C" fn CL_GetServerStatus(mut from: netadr_t) -> *mut serverStatus_t {
     let mut i: i32 = 0;
     let mut oldest: i32 = 0;
     let mut oldestTime: i32 = 0;
@@ -7237,12 +6648,7 @@ pub unsafe extern "C" fn CL_ServerStatus(
         return qfalse as i32;
     }
     // get the address
-    if NET_StringToAdr(
-        serverAddress,
-        &mut to as *mut _ as *mut netadr_t,
-        NA_UNSPEC,
-    ) == 0
-    {
+    if NET_StringToAdr(serverAddress, &mut to as *mut _ as *mut netadr_t, NA_UNSPEC) == 0 {
         return qfalse as i32;
     }
     serverStatus = CL_GetServerStatus(to);
@@ -7252,12 +6658,7 @@ pub unsafe extern "C" fn CL_ServerStatus(
         return qfalse as i32;
     }
     // if this server status request has the same address
-    if NET_CompareAdr(
-        to as netadr_t,
-        (*serverStatus).address as netadr_t,
-    ) as u64
-        != 0
-    {
+    if NET_CompareAdr(to as netadr_t, (*serverStatus).address as netadr_t) as u64 != 0 {
         // if we received a response for this server status request
         if (*serverStatus).pending as u64 == 0 {
             Q_strncpyz(
@@ -7270,9 +6671,7 @@ pub unsafe extern "C" fn CL_ServerStatus(
             return qtrue as i32;
         } else {
             // resend the request regularly
-            if (*serverStatus).startTime
-                < Com_Milliseconds()
-                    - (*cl_serverStatusResendTime).integer
+            if (*serverStatus).startTime < Com_Milliseconds() - (*cl_serverStatusResendTime).integer
             {
                 (*serverStatus).print = qfalse;
                 (*serverStatus).pending = qtrue;
@@ -7311,10 +6710,7 @@ CL_ServerStatusResponse
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_ServerStatusResponse(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+pub unsafe extern "C" fn CL_ServerStatusResponse(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut info: [libc::c_char; 1024] = [0; 1024];
     let mut i: i32 = 0;
@@ -7353,9 +6749,7 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(
         s,
     );
     if (*serverStatus).print as u64 != 0 {
-        Com_Printf(
-            b"Server settings:\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Server settings:\n\x00" as *const u8 as *const libc::c_char);
         // print cvars
         while *s != 0 {
             i = 0 as i32;
@@ -7400,12 +6794,8 @@ pub unsafe extern "C" fn CL_ServerStatusResponse(
         b"\\\x00" as *const u8 as *const libc::c_char,
     );
     if (*serverStatus).print as u64 != 0 {
-        Com_Printf(
-            b"\nPlayers:\n\x00" as *const u8 as *const libc::c_char,
-        );
-        Com_Printf(
-            b"num: score: ping: name:\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"\nPlayers:\n\x00" as *const u8 as *const libc::c_char);
+        Com_Printf(b"num: score: ping: name:\n\x00" as *const u8 as *const libc::c_char);
     }
     i = 0 as i32;
     s = MSG_ReadStringLine(msg as *mut msg_t);
@@ -7489,8 +6879,8 @@ pub unsafe extern "C" fn CL_LocalServers_f() {
     while i < 128 as i32 {
         let mut b: qboolean = cls.localServers[i as usize].visible;
         crate::stdlib::memset(
-            &mut *cls.localServers.as_mut_ptr().offset(i as isize)
-                as *mut serverInfo_t as *mut libc::c_void,
+            &mut *cls.localServers.as_mut_ptr().offset(i as isize) as *mut serverInfo_t
+                as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<serverInfo_t>() as libc::c_ulong,
         );
@@ -7622,11 +7012,7 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
     }
     // reset the list, waiting for response
     // -1 is used to distinguish a "no response"
-    i = NET_StringToAdr(
-        masteraddress,
-        &mut to as *mut _ as *mut netadr_t,
-        NA_UNSPEC,
-    );
+    i = NET_StringToAdr(masteraddress, &mut to as *mut _ as *mut netadr_t, NA_UNSPEC);
     if i == 0 {
         Com_Printf(
             b"CL_GlobalServers_f: Error: could not resolve address of master %s\n\x00" as *const u8
@@ -7647,12 +7033,10 @@ pub unsafe extern "C" fn CL_GlobalServers_f() {
     cls.numglobalservers = -(1 as i32);
     cls.pingUpdateSource = 2 as i32;
     // Use the extended query for IPv6 masters
-    if to.type_0 as u32 == NA_IP6 as i32 as u32
-        || to.type_0 as u32 == NA_MULTICAST6 as i32 as u32
-    {
-        let mut v4enabled: i32 = Cvar_VariableIntegerValue(
-            b"net_enabled\x00" as *const u8 as *const libc::c_char,
-        ) & 0x1 as i32;
+    if to.type_0 as u32 == NA_IP6 as i32 as u32 || to.type_0 as u32 == NA_MULTICAST6 as i32 as u32 {
+        let mut v4enabled: i32 =
+            Cvar_VariableIntegerValue(b"net_enabled\x00" as *const u8 as *const libc::c_char)
+                & 0x1 as i32;
         if v4enabled != 0 {
             Com_sprintf(
                 command.as_mut_ptr(),
@@ -7733,17 +7117,13 @@ pub unsafe extern "C" fn CL_GetPing(
         *pingtime = 0 as i32;
         return;
     }
-    str = NET_AdrToStringwPort(
-        cl_pinglist[n as usize].adr as netadr_t,
-    );
+    str = NET_AdrToStringwPort(cl_pinglist[n as usize].adr as netadr_t);
     Q_strncpyz(buf, str, buflen);
     time = cl_pinglist[n as usize].time;
     if time == 0 {
         // check for timeout
         time = Sys_Milliseconds() - cl_pinglist[n as usize].start;
-        maxPing = Cvar_VariableIntegerValue(
-            b"cl_maxPing\x00" as *const u8 as *const libc::c_char,
-        );
+        maxPing = Cvar_VariableIntegerValue(b"cl_maxPing\x00" as *const u8 as *const libc::c_char);
         if maxPing < 100 as i32 {
             maxPing = 100 as i32
         }
@@ -7774,11 +7154,7 @@ pub unsafe extern "C" fn CL_GetPingInfo(mut n: i32, mut buf: *mut libc::c_char, 
         }
         return;
     }
-    Q_strncpyz(
-        buf,
-        cl_pinglist[n as usize].info.as_mut_ptr(),
-        buflen,
-    );
+    Q_strncpyz(buf, cl_pinglist[n as usize].info.as_mut_ptr(), buflen);
 }
 /*
 ==================
@@ -7900,9 +7276,7 @@ pub unsafe extern "C" fn CL_Ping_f() {
     let mut family: netadrtype_t = NA_UNSPEC;
     argc = Cmd_Argc();
     if argc != 2 as i32 && argc != 3 as i32 {
-        Com_Printf(
-            b"usage: ping [-4|-6] server\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: ping [-4|-6] server\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if argc == 2 as i32 {
@@ -7933,12 +7307,7 @@ pub unsafe extern "C" fn CL_Ping_f() {
         0 as i32,
         ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
     );
-    if NET_StringToAdr(
-        server,
-        &mut to as *mut _ as *mut netadr_t,
-        family,
-    ) == 0
-    {
+    if NET_StringToAdr(server, &mut to as *mut _ as *mut netadr_t, family) == 0 {
         return;
     }
     pingptr = CL_GetFreePing();
@@ -7963,9 +7332,7 @@ CL_UpdateVisiblePings_f
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_UpdateVisiblePings_f(
-    mut source: i32,
-) -> qboolean {
+pub unsafe extern "C" fn CL_UpdateVisiblePings_f(mut source: i32) -> qboolean {
     let mut slots: i32 = 0;
     let mut i: i32 = 0;
     let mut buff: [libc::c_char; 1024] = [0; 1024];
@@ -7978,8 +7345,7 @@ pub unsafe extern "C" fn CL_UpdateVisiblePings_f(
     cls.pingUpdateSource = source;
     slots = CL_GetPingQueueCount();
     if slots < 32 as i32 {
-        let mut server: *mut serverInfo_t =
-            0 as *mut serverInfo_t;
+        let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
         match source {
             0 => {
                 server = &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize)
@@ -8030,15 +7396,13 @@ pub unsafe extern "C" fn CL_UpdateVisiblePings_f(
                             j += 1
                         }
                         crate::stdlib::memcpy(
-                            &mut (*cl_pinglist.as_mut_ptr().offset(j as isize)).adr
-                                as *mut netadr_t
+                            &mut (*cl_pinglist.as_mut_ptr().offset(j as isize)).adr as *mut netadr_t
                                 as *mut libc::c_void,
                             &mut (*server.offset(i as isize)).adr as *mut netadr_t
                                 as *const libc::c_void,
                             ::std::mem::size_of::<netadr_t>() as libc::c_ulong,
                         );
-                        cl_pinglist[j as usize].start =
-                            Sys_Milliseconds();
+                        cl_pinglist[j as usize].start = Sys_Milliseconds();
                         cl_pinglist[j as usize].time = 0 as i32;
                         NET_OutOfBandPrint(
                             NS_CLIENT,
@@ -8109,12 +7473,8 @@ pub unsafe extern "C" fn CL_ServerStatus_f() {
     let mut family: netadrtype_t = NA_UNSPEC;
     argc = Cmd_Argc();
     if argc != 2 as i32 && argc != 3 as i32 {
-        if clc.state as u32 != CA_ACTIVE as i32 as u32
-            || clc.demoplaying as u32 != 0
-        {
-            Com_Printf(
-                b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char,
-            );
+        if clc.state as u32 != CA_ACTIVE as i32 as u32 || clc.demoplaying as u32 != 0 {
+            Com_Printf(b"Not connected to a server.\n\x00" as *const u8 as *const libc::c_char);
             Com_Printf(
                 b"usage: serverstatus [-4|-6] server\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -8152,12 +7512,7 @@ pub unsafe extern "C" fn CL_ServerStatus_f() {
             server = Cmd_Argv(2 as i32)
         }
         toptr = &mut to;
-        if NET_StringToAdr(
-            server,
-            toptr as *mut netadr_t,
-            family,
-        ) == 0
-        {
+        if NET_StringToAdr(server, toptr as *mut netadr_t, family) == 0 {
             return;
         }
     }
@@ -8227,9 +7582,7 @@ pub unsafe extern "C" fn CL_CDKeyValidate(
         b"%02x\x00" as *const u8 as *const libc::c_char,
         sum as i32,
     );
-    if !checksum.is_null()
-        && Q_stricmp(chs.as_mut_ptr(), checksum) == 0
-    {
+    if !checksum.is_null() && Q_stricmp(chs.as_mut_ptr(), checksum) == 0 {
         return qtrue;
     }
     if checksum.is_null() {

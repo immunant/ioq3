@@ -416,8 +416,7 @@ pub static mut glConfig: glconfig_t = glconfig_t {
 };
 #[no_mangle]
 
-pub static mut textureFilterAnisotropic: qboolean =
-    qfalse;
+pub static mut textureFilterAnisotropic: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut maxAnisotropy: i32 = 0 as i32;
@@ -436,415 +435,313 @@ pub static mut glState: glstate_t = glstate_t {
 };
 #[no_mangle]
 
-pub static mut com_altivec: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut com_altivec: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_flareSize: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareSize: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_flareFade: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareFade: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_flareCoeff: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flareCoeff: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_railWidth: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railWidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_railCoreWidth: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railCoreWidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_railSegmentLength: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_railSegmentLength: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ignoreFastPath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignoreFastPath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_verbose: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_verbose: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ignore: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignore: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_displayRefresh: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_displayRefresh: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_detailTextures: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_detailTextures: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_znear: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_znear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_zproj: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_zproj: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_stereoSeparation: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stereoSeparation: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_skipBackEnd: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_skipBackEnd: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_stereoEnabled: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stereoEnabled: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_anaglyphMode: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_anaglyphMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_greyscale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_greyscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ignorehwgamma: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignorehwgamma: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_measureOverdraw: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_measureOverdraw: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_inGameVideo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_inGameVideo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_fastsky: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fastsky: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_drawSun: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawSun: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_dynamiclight: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_dynamiclight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_dlightBacks: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_dlightBacks: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_lodbias: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodbias: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_lodscale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_norefresh: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_norefresh: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_drawentities: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawentities: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_drawworld: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawworld: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_speeds: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_speeds: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_fullbright: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fullbright: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_novis: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_novis: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_nocull: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nocull: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_facePlaneCull: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_facePlaneCull: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_showcluster: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showcluster: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_nocurves: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nocurves: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_allowExtensions: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_allowExtensions: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_compressed_textures: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_compressed_textures: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_multitexture: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_multitexture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_compiled_vertex_array: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_compiled_vertex_array: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_texture_env_add: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_texture_env_add: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_texture_filter_anisotropic: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_texture_filter_anisotropic: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_max_anisotropy: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_max_anisotropy: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ignoreGLErrors: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ignoreGLErrors: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_logFile: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_logFile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_stencilbits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_stencilbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_depthbits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_depthbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_colorbits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_colorbits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_primitives: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_primitives: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_texturebits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_texturebits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ext_multisample: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ext_multisample: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_drawBuffer: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_drawBuffer: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_lightmap: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lightmap: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_vertexLight: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_vertexLight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_uiFullScreen: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_uiFullScreen: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_shadows: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_shadows: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_flares: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_flares: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_mode: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_mode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_nobind: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_nobind: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_singleShader: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_singleShader: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_roundImagesDown: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_roundImagesDown: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_colorMipLevels: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_colorMipLevels: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_picmip: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_picmip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_showtris: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showtris: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_showsky: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showsky: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_shownormals: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_shownormals: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_finish: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_finish: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_clear: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_clear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_swapInterval: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_swapInterval: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_textureMode: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_textureMode: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_offsetFactor: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_offsetFactor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_offsetUnits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_offsetUnits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_gamma: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_gamma: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_intensity: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_intensity: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_lockpvs: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lockpvs: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_noportals: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_noportals: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_portalOnly: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_portalOnly: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_subdivisions: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_subdivisions: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_lodCurveError: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_lodCurveError: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_fullscreen: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_fullscreen: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_noborder: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_noborder: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_customwidth: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customwidth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_customheight: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customheight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_customPixelAspect: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_customPixelAspect: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_overBrightBits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_overBrightBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_mapOverBrightBits: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_mapOverBrightBits: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_debugSurface: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugSurface: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_simpleMipMaps: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_simpleMipMaps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_showImages: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_showImages: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_ambientScale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_ambientScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_directedScale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_directedScale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_debugLight: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugLight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_debugSort: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_debugSort: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_printShaders: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_printShaders: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_saveFontData: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_saveFontData: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_marksOnTriangleMeshes: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_marksOnTriangleMeshes: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_aviMotionJpegQuality: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_aviMotionJpegQuality: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_screenshotJpegQuality: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_screenshotJpegQuality: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut r_maxpolys: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_maxpolys: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut max_polys: i32 = 0;
 #[no_mangle]
 
-pub static mut r_maxpolyverts: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut r_maxpolyverts: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut max_polyverts: i32 = 0;
@@ -872,10 +769,7 @@ unsafe extern "C" fn InitOpenGL() {
         let mut temp: GLint = 0;
         GLimp_Init(qtrue);
         // OpenGL driver constants
-        qglGetIntegerv.expect("non-null function pointer")(
-            0xd33 as i32 as GLenum,
-            &mut temp,
-        );
+        qglGetIntegerv.expect("non-null function pointer")(0xd33 as i32 as GLenum, &mut temp);
         glConfig.maxTextureSize = temp;
         // stubbed or broken drivers may have reported 0...
         if glConfig.maxTextureSize <= 0 as i32 {
@@ -948,9 +842,7 @@ pub unsafe extern "C" fn GL_CheckErrors() {
             );
         }
     }
-    ri
-        .Error
-        .expect("non-null function pointer")(
+    ri.Error.expect("non-null function pointer")(
         ERR_FATAL as i32,
         b"GL_CheckErrors: %s\x00" as *const u8 as *const libc::c_char,
         s.as_mut_ptr(),
@@ -1159,26 +1051,20 @@ pub unsafe extern "C" fn R_GetModeInfo(
 
 unsafe extern "C" fn R_ModeList_f() {
     let mut i: i32 = 0;
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\n\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < s_numVidModes {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%s\n\x00" as *const u8 as *const libc::c_char,
             r_vidModes[i as usize].description,
         );
         i += 1
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -1227,17 +1113,12 @@ pub unsafe extern "C" fn RB_ReadPixels(
     mut offset: *mut size_t,
     mut padlen: *mut i32,
 ) -> *mut byte {
-    let mut buffer: *mut byte =
-        0 as *mut byte;
-    let mut bufstart: *mut byte =
-        0 as *mut byte;
+    let mut buffer: *mut byte = 0 as *mut byte;
+    let mut bufstart: *mut byte = 0 as *mut byte;
     let mut padwidth: i32 = 0;
     let mut linelen: i32 = 0;
     let mut packAlign: GLint = 0;
-    qglGetIntegerv.expect("non-null function pointer")(
-        0xd05 as i32 as GLenum,
-        &mut packAlign,
-    );
+    qglGetIntegerv.expect("non-null function pointer")(0xd05 as i32 as GLenum, &mut packAlign);
     linelen = width * 3 as i32;
     padwidth = linelen + packAlign - 1 as i32 & !(packAlign - 1 as i32);
     // Allocate a few more bytes so that we can choose an alignment we like
@@ -1249,12 +1130,10 @@ pub unsafe extern "C" fn RB_ReadPixels(
             .wrapping_add(packAlign as libc::c_ulong)
             .wrapping_sub(1 as i32 as libc::c_ulong) as i32,
     ) as *mut byte;
-    bufstart = ((buffer as intptr_t as libc::c_ulong).wrapping_add(*offset)
-        as intptr_t
+    bufstart = ((buffer as intptr_t as libc::c_ulong).wrapping_add(*offset) as intptr_t
         + packAlign as isize
         - 1 as i32 as isize
-        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void
-        as *mut byte;
+        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void as *mut byte;
     qglReadPixels.expect("non-null function pointer")(
         x,
         y,
@@ -1282,18 +1161,12 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     mut height: i32,
     mut fileName: *mut libc::c_char,
 ) {
-    let mut allbuf: *mut byte =
-        0 as *mut byte; // uncompressed type
-    let mut buffer: *mut byte =
-        0 as *mut byte; // pixel size
-    let mut srcptr: *mut byte =
-        0 as *mut byte;
-    let mut destptr: *mut byte =
-        0 as *mut byte;
-    let mut endline: *mut byte =
-        0 as *mut byte;
-    let mut endmem: *mut byte =
-        0 as *mut byte;
+    let mut allbuf: *mut byte = 0 as *mut byte; // uncompressed type
+    let mut buffer: *mut byte = 0 as *mut byte; // pixel size
+    let mut srcptr: *mut byte = 0 as *mut byte;
+    let mut destptr: *mut byte = 0 as *mut byte;
+    let mut endline: *mut byte = 0 as *mut byte;
+    let mut endmem: *mut byte = 0 as *mut byte;
     let mut temp: byte = 0;
     let mut linelen: i32 = 0;
     let mut padlen: i32 = 0;
@@ -1307,13 +1180,10 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
         18 as i32 as libc::c_ulong,
     );
     *buffer.offset(2 as i32 as isize) = 2 as i32 as byte;
-    *buffer.offset(12 as i32 as isize) =
-        (width & 255 as i32) as byte;
+    *buffer.offset(12 as i32 as isize) = (width & 255 as i32) as byte;
     *buffer.offset(13 as i32 as isize) = (width >> 8 as i32) as byte;
-    *buffer.offset(14 as i32 as isize) =
-        (height & 255 as i32) as byte;
-    *buffer.offset(15 as i32 as isize) =
-        (height >> 8 as i32) as byte;
+    *buffer.offset(14 as i32 as isize) = (height & 255 as i32) as byte;
+    *buffer.offset(15 as i32 as isize) = (height >> 8 as i32) as byte;
     *buffer.offset(16 as i32 as isize) = 24 as i32 as byte;
     // swap rgb to bgr and remove padding from line endings
     linelen = width * 3 as i32;
@@ -1341,21 +1211,14 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     memcount = (linelen * height) as size_t;
     // gamma correct
     if glConfig.deviceSupportsGamma as u64 != 0 {
-        R_GammaCorrect(
-            allbuf.offset(offset as isize),
-            memcount as i32,
-        );
+        R_GammaCorrect(allbuf.offset(offset as isize), memcount as i32);
     }
-    ri
-        .FS_WriteFile
-        .expect("non-null function pointer")(
+    ri.FS_WriteFile.expect("non-null function pointer")(
         fileName,
         buffer as *const libc::c_void,
         memcount.wrapping_add(18 as i32 as libc::c_ulong) as i32,
     );
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(allbuf as *mut libc::c_void);
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(allbuf as *mut libc::c_void);
 }
 /*
 ==================
@@ -1371,8 +1234,7 @@ pub unsafe extern "C" fn RB_TakeScreenshotJPEG(
     mut height: i32,
     mut fileName: *mut libc::c_char,
 ) {
-    let mut buffer: *mut byte =
-        0 as *mut byte;
+    let mut buffer: *mut byte = 0 as *mut byte;
     let mut offset: size_t = 0 as i32 as size_t;
     let mut memcount: size_t = 0;
     let mut padlen: i32 = 0;
@@ -1380,10 +1242,7 @@ pub unsafe extern "C" fn RB_TakeScreenshotJPEG(
     memcount = ((width * 3 as i32 + padlen) * height) as size_t;
     // gamma correct
     if glConfig.deviceSupportsGamma as u64 != 0 {
-        R_GammaCorrect(
-            buffer.offset(offset as isize),
-            memcount as i32,
-        );
+        R_GammaCorrect(buffer.offset(offset as isize), memcount as i32);
     }
     RE_SaveJPG(
         fileName,
@@ -1393,9 +1252,7 @@ pub unsafe extern "C" fn RB_TakeScreenshotJPEG(
         buffer.offset(offset as isize),
         padlen,
     );
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(buffer as *mut libc::c_void);
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(buffer as *mut libc::c_void);
 }
 /*
 ==================
@@ -1407,8 +1264,7 @@ RB_TakeScreenshotCmd
 pub unsafe extern "C" fn RB_TakeScreenshotCmd(
     mut data: *const libc::c_void,
 ) -> *const libc::c_void {
-    let mut cmd: *const screenshotCommand_t =
-        0 as *const screenshotCommand_t;
+    let mut cmd: *const screenshotCommand_t = 0 as *const screenshotCommand_t;
     cmd = data as *const screenshotCommand_t;
     if (*cmd).jpeg as u64 != 0 {
         RB_TakeScreenshotJPEG(
@@ -1445,11 +1301,9 @@ pub unsafe extern "C" fn R_TakeScreenshot(
     mut jpeg: qboolean,
 ) {
     static mut fileName: [libc::c_char; 4096] = [0; 4096]; // bad things if two screenshots per frame?
-    let mut cmd: *mut screenshotCommand_t =
-        0 as *mut screenshotCommand_t;
-    cmd = R_GetCommandBuffer(::std::mem::size_of::<
-        screenshotCommand_t,
-    >() as libc::c_ulong as i32) as *mut screenshotCommand_t;
+    let mut cmd: *mut screenshotCommand_t = 0 as *mut screenshotCommand_t;
+    cmd = R_GetCommandBuffer(::std::mem::size_of::<screenshotCommand_t>() as libc::c_ulong as i32)
+        as *mut screenshotCommand_t;
     if cmd.is_null() {
         return;
     }
@@ -1558,16 +1412,11 @@ the menu system, sampled down from full screen distorted images
 
 pub unsafe extern "C" fn R_LevelShot() {
     let mut checkname: [libc::c_char; 4096] = [0; 4096]; // uncompressed type
-    let mut buffer: *mut byte =
-        0 as *mut byte; // pixel size
-    let mut source: *mut byte =
-        0 as *mut byte;
-    let mut allsource: *mut byte =
-        0 as *mut byte;
-    let mut src: *mut byte =
-        0 as *mut byte;
-    let mut dst: *mut byte =
-        0 as *mut byte;
+    let mut buffer: *mut byte = 0 as *mut byte; // pixel size
+    let mut source: *mut byte = 0 as *mut byte;
+    let mut allsource: *mut byte = 0 as *mut byte;
+    let mut src: *mut byte = 0 as *mut byte;
+    let mut dst: *mut byte = 0 as *mut byte;
     let mut offset: size_t = 0 as i32 as size_t;
     let mut padlen: i32 = 0;
     let mut x: i32 = 0;
@@ -1583,9 +1432,7 @@ pub unsafe extern "C" fn R_LevelShot() {
         checkname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
         b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char,
-        (*tr.world)
-            .baseName
-            .as_mut_ptr(),
+        (*tr.world).baseName.as_mut_ptr(),
     );
     allsource = RB_ReadPixels(
         0 as i32,
@@ -1655,22 +1502,14 @@ pub unsafe extern "C" fn R_LevelShot() {
             128 as i32 * 128 as i32 * 3 as i32,
         );
     }
-    ri
-        .FS_WriteFile
-        .expect("non-null function pointer")(
+    ri.FS_WriteFile.expect("non-null function pointer")(
         checkname.as_mut_ptr(),
         buffer as *const libc::c_void,
         128 as i32 * 128 as i32 * 3 as i32 + 18 as i32,
     );
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(buffer as *mut libc::c_void);
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(allsource as *mut libc::c_void);
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(buffer as *mut libc::c_void);
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(allsource as *mut libc::c_void);
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"Wrote %s\n\x00" as *const u8 as *const libc::c_char,
         checkname.as_mut_ptr(),
@@ -1695,9 +1534,7 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
     static mut lastNumber: i32 = -(1 as i32);
     let mut silent: qboolean = qfalse;
     if libc::strcmp(
-        ri
-            .Cmd_Argv
-            .expect("non-null function pointer")(1 as i32),
+        ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         b"levelshot\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -1705,9 +1542,7 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
         return;
     }
     if libc::strcmp(
-        ri
-            .Cmd_Argv
-            .expect("non-null function pointer")(1 as i32),
+        ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         b"silent\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -1715,20 +1550,13 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
     } else {
         silent = qfalse
     }
-    if ri
-        .Cmd_Argc
-        .expect("non-null function pointer")()
-        == 2 as i32
-        && silent as u64 == 0
-    {
+    if ri.Cmd_Argc.expect("non-null function pointer")() == 2 as i32 && silent as u64 == 0 {
         // explicit filename
         Com_sprintf(
             checkname.as_mut_ptr(),
             4096 as i32,
             b"screenshots/%s.tga\x00" as *const u8 as *const libc::c_char,
-            ri
-                .Cmd_Argv
-                .expect("non-null function pointer")(1 as i32),
+            ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         );
     } else {
         // scan for a free filename
@@ -1741,9 +1569,7 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
         // scan for a free number
         while lastNumber <= 9999 as i32 {
             R_ScreenshotFilename(lastNumber, checkname.as_mut_ptr());
-            if ri
-                .FS_FileExists
-                .expect("non-null function pointer")(checkname.as_mut_ptr()) as u64
+            if ri.FS_FileExists.expect("non-null function pointer")(checkname.as_mut_ptr()) as u64
                 == 0
             {
                 break;
@@ -1751,9 +1577,7 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
             lastNumber += 1
         }
         if lastNumber >= 9999 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"ScreenShot: Couldn\'t create a file\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -1770,9 +1594,7 @@ pub unsafe extern "C" fn R_ScreenShot_f() {
         qfalse,
     );
     if silent as u64 == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Wrote %s\n\x00" as *const u8 as *const libc::c_char,
             checkname.as_mut_ptr(),
@@ -1786,9 +1608,7 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
     static mut lastNumber: i32 = -(1 as i32);
     let mut silent: qboolean = qfalse;
     if libc::strcmp(
-        ri
-            .Cmd_Argv
-            .expect("non-null function pointer")(1 as i32),
+        ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         b"levelshot\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -1796,9 +1616,7 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
         return;
     }
     if libc::strcmp(
-        ri
-            .Cmd_Argv
-            .expect("non-null function pointer")(1 as i32),
+        ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         b"silent\x00" as *const u8 as *const libc::c_char,
     ) == 0
     {
@@ -1806,20 +1624,13 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
     } else {
         silent = qfalse
     }
-    if ri
-        .Cmd_Argc
-        .expect("non-null function pointer")()
-        == 2 as i32
-        && silent as u64 == 0
-    {
+    if ri.Cmd_Argc.expect("non-null function pointer")() == 2 as i32 && silent as u64 == 0 {
         // explicit filename
         Com_sprintf(
             checkname.as_mut_ptr(),
             4096 as i32,
             b"screenshots/%s.jpg\x00" as *const u8 as *const libc::c_char,
-            ri
-                .Cmd_Argv
-                .expect("non-null function pointer")(1 as i32),
+            ri.Cmd_Argv.expect("non-null function pointer")(1 as i32),
         );
     } else {
         // scan for a free filename
@@ -1832,9 +1643,7 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
         // scan for a free number
         while lastNumber <= 9999 as i32 {
             R_ScreenshotFilenameJPEG(lastNumber, checkname.as_mut_ptr());
-            if ri
-                .FS_FileExists
-                .expect("non-null function pointer")(checkname.as_mut_ptr()) as u64
+            if ri.FS_FileExists.expect("non-null function pointer")(checkname.as_mut_ptr()) as u64
                 == 0
             {
                 break;
@@ -1842,9 +1651,7 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
             lastNumber += 1
         }
         if lastNumber == 10000 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"ScreenShot: Couldn\'t create a file\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -1861,9 +1668,7 @@ pub unsafe extern "C" fn R_ScreenShotJPEG_f() {
         qtrue,
     );
     if silent as u64 == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Wrote %s\n\x00" as *const u8 as *const libc::c_char,
             checkname.as_mut_ptr(),
@@ -1882,10 +1687,8 @@ RB_TakeVideoFrameCmd
 pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
     mut data: *const libc::c_void,
 ) -> *const libc::c_void {
-    let mut cmd: *const videoFrameCommand_t =
-        0 as *const videoFrameCommand_t;
-    let mut cBuf: *mut byte =
-        0 as *mut byte;
+    let mut cmd: *const videoFrameCommand_t = 0 as *const videoFrameCommand_t;
+    let mut cBuf: *mut byte = 0 as *mut byte;
     let mut memcount: size_t = 0;
     let mut linelen: size_t = 0;
     let mut padwidth: i32 = 0;
@@ -1894,10 +1697,7 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
     let mut avipadlen: i32 = 0;
     let mut packAlign: GLint = 0;
     cmd = data as *const videoFrameCommand_t;
-    qglGetIntegerv.expect("non-null function pointer")(
-        0xd05 as i32 as GLenum,
-        &mut packAlign,
-    );
+    qglGetIntegerv.expect("non-null function pointer")(0xd05 as i32 as GLenum, &mut packAlign);
     linelen = ((*cmd).width * 3 as i32) as size_t;
     // Alignment stuff for glReadPixels
     padwidth = (linelen
@@ -1911,10 +1711,8 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
         .wrapping_sub(1 as i32 as libc::c_ulong)
         & !(4 as i32 - 1 as i32) as libc::c_ulong) as i32;
     avipadlen = (avipadwidth as libc::c_ulong).wrapping_sub(linelen) as i32;
-    cBuf = ((*cmd).captureBuffer as intptr_t + packAlign as isize
-        - 1 as i32 as isize
-        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void
-        as *mut byte;
+    cBuf = ((*cmd).captureBuffer as intptr_t + packAlign as isize - 1 as i32 as isize
+        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void as *mut byte;
     qglReadPixels.expect("non-null function pointer")(
         0 as i32,
         0 as i32,
@@ -1939,18 +1737,15 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
             cBuf,
             padlen,
         );
-        ri
-            .CL_WriteAVIVideoFrame
-            .expect("non-null function pointer")((*cmd).encodeBuffer, memcount as i32);
+        ri.CL_WriteAVIVideoFrame.expect("non-null function pointer")(
+            (*cmd).encodeBuffer,
+            memcount as i32,
+        );
     } else {
-        let mut lineend: *mut byte =
-            0 as *mut byte;
-        let mut memend: *mut byte =
-            0 as *mut byte;
-        let mut srcptr: *mut byte =
-            0 as *mut byte;
-        let mut destptr: *mut byte =
-            0 as *mut byte;
+        let mut lineend: *mut byte = 0 as *mut byte;
+        let mut memend: *mut byte = 0 as *mut byte;
+        let mut srcptr: *mut byte = 0 as *mut byte;
+        let mut destptr: *mut byte = 0 as *mut byte;
         srcptr = cBuf;
         destptr = (*cmd).encodeBuffer;
         memend = srcptr.offset(memcount as isize);
@@ -1977,10 +1772,9 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
             destptr = destptr.offset(avipadlen as isize);
             srcptr = srcptr.offset(padlen as isize)
         }
-        ri
-            .CL_WriteAVIVideoFrame
-            .expect("non-null function pointer")(
-            (*cmd).encodeBuffer, avipadwidth * (*cmd).height
+        ri.CL_WriteAVIVideoFrame.expect("non-null function pointer")(
+            (*cmd).encodeBuffer,
+            avipadwidth * (*cmd).height,
         );
     }
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
@@ -1992,12 +1786,8 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
 #[no_mangle]
 
 pub unsafe extern "C" fn GL_SetDefaultState() {
-    qglClearDepth.expect("non-null function pointer")(
-        1.0f32 as GLclampd,
-    );
-    qglCullFace.expect("non-null function pointer")(
-        0x404 as i32 as GLenum,
-    );
+    qglClearDepth.expect("non-null function pointer")(1.0f32 as GLclampd);
+    qglCullFace.expect("non-null function pointer")(0x404 as i32 as GLenum);
     qglColor4f.expect("non-null function pointer")(
         1 as i32 as GLfloat,
         1 as i32 as GLfloat,
@@ -2010,27 +1800,17 @@ pub unsafe extern "C" fn GL_SetDefaultState() {
         GL_SelectTexture(1 as i32);
         GL_TextureMode((*r_textureMode).string);
         GL_TexEnv(0x2100 as i32);
-        qglDisable.expect("non-null function pointer")(
-            0xde1 as i32 as GLenum,
-        );
+        qglDisable.expect("non-null function pointer")(0xde1 as i32 as GLenum);
         GL_SelectTexture(0 as i32);
     }
-    qglEnable.expect("non-null function pointer")(
-        0xde1 as i32 as GLenum,
-    );
+    qglEnable.expect("non-null function pointer")(0xde1 as i32 as GLenum);
     GL_TextureMode((*r_textureMode).string);
     GL_TexEnv(0x2100 as i32);
-    qglShadeModel.expect("non-null function pointer")(
-        0x1d01 as i32 as GLenum,
-    );
-    qglDepthFunc.expect("non-null function pointer")(
-        0x203 as i32 as GLenum,
-    );
+    qglShadeModel.expect("non-null function pointer")(0x1d01 as i32 as GLenum);
+    qglDepthFunc.expect("non-null function pointer")(0x203 as i32 as GLenum);
     // the vertex array is always enabled, but the color and texture
     // arrays are enabled and disabled around the compiled vertex array call
-    qglEnableClientState.expect("non-null function pointer")(
-        0x8074 as i32 as GLenum,
-    );
+    qglEnableClientState.expect("non-null function pointer")(0x8074 as i32 as GLenum);
     //
     // make sure our GL state vector is set correctly
     //
@@ -2039,21 +1819,11 @@ pub unsafe extern "C" fn GL_SetDefaultState() {
         0x408 as i32 as GLenum,
         0x1b02 as i32 as GLenum,
     );
-    qglDepthMask.expect("non-null function pointer")(
-        1 as i32 as GLboolean,
-    );
-    qglDisable.expect("non-null function pointer")(
-        0xb71 as i32 as GLenum,
-    );
-    qglEnable.expect("non-null function pointer")(
-        0xc11 as i32 as GLenum,
-    );
-    qglDisable.expect("non-null function pointer")(
-        0xb44 as i32 as GLenum,
-    );
-    qglDisable.expect("non-null function pointer")(
-        0xbe2 as i32 as GLenum,
-    );
+    qglDepthMask.expect("non-null function pointer")(1 as i32 as GLboolean);
+    qglDisable.expect("non-null function pointer")(0xb71 as i32 as GLenum);
+    qglEnable.expect("non-null function pointer")(0xc11 as i32 as GLenum);
+    qglDisable.expect("non-null function pointer")(0xb44 as i32 as GLenum);
+    qglDisable.expect("non-null function pointer")(0xbe2 as i32 as GLenum);
 }
 /*
 ================
@@ -2075,9 +1845,7 @@ pub unsafe extern "C" fn R_PrintLongString(mut string: *const libc::c_char) {
             p,
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%s\x00" as *const u8 as *const libc::c_char,
             buffer.as_mut_ptr(),
@@ -2101,30 +1869,22 @@ unsafe extern "C" fn GfxInfo_f() {
         b"windowed\x00" as *const u8 as *const libc::c_char,
         b"fullscreen\x00" as *const u8 as *const libc::c_char,
     ];
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\nGL_VENDOR: %s\n\x00" as *const u8 as *const libc::c_char,
         glConfig.vendor_string.as_mut_ptr(),
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"GL_RENDERER: %s\n\x00" as *const u8 as *const libc::c_char,
         glConfig.renderer_string.as_mut_ptr(),
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"GL_VERSION: %s\n\x00" as *const u8 as *const libc::c_char,
         glConfig.version_string.as_mut_ptr(),
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"GL_EXTENSIONS: \x00" as *const u8 as *const libc::c_char,
     );
@@ -2137,9 +1897,7 @@ unsafe extern "C" fn GfxInfo_f() {
         );
         i = 0 as i32;
         while i < numExtensions {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"%s \x00" as *const u8 as *const libc::c_char,
                 qglGetStringi.expect("non-null function pointer")(
@@ -2152,29 +1910,21 @@ unsafe extern "C" fn GfxInfo_f() {
     } else {
         R_PrintLongString(glConfig.extensions_string.as_mut_ptr());
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\n\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"GL_MAX_TEXTURE_SIZE: %d\n\x00" as *const u8 as *const libc::c_char,
         glConfig.maxTextureSize,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"GL_MAX_TEXTURE_UNITS_ARB: %d\n\x00" as *const u8 as *const libc::c_char,
         glConfig.numTextureUnits,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\nPIXELFORMAT: color(%d-bits) Z(%d-bit) stencil(%d-bits)\n\x00" as *const u8
             as *const libc::c_char,
@@ -2182,9 +1932,7 @@ unsafe extern "C" fn GfxInfo_f() {
         glConfig.depthBits,
         glConfig.stencilBits,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"MODE: %d, %d x %d %s hz:\x00" as *const u8 as *const libc::c_char,
         (*r_mode).integer,
@@ -2193,33 +1941,25 @@ unsafe extern "C" fn GfxInfo_f() {
         fsstrings[((*r_fullscreen).integer == 1 as i32) as i32 as usize],
     );
     if glConfig.displayFrequency != 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%d\n\x00" as *const u8 as *const libc::c_char,
             glConfig.displayFrequency,
         );
     } else {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"N/A\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     if glConfig.deviceSupportsGamma as u64 != 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"GAMMA: hardware w/ %d overbright bits\n\x00" as *const u8 as *const libc::c_char,
             tr.overbrightBits,
         );
     } else {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"GAMMA: software w/ %d overbright bits\n\x00" as *const u8 as *const libc::c_char,
             tr.overbrightBits,
@@ -2228,9 +1968,7 @@ unsafe extern "C" fn GfxInfo_f() {
     // rendering primitives
     let mut primitives: i32 = 0;
     // default is to use triangles if compiled vertex arrays are present
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"rendering primitives: \x00" as *const u8 as *const libc::c_char,
     );
@@ -2243,115 +1981,84 @@ unsafe extern "C" fn GfxInfo_f() {
         }
     }
     if primitives == -(1 as i32) {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"none\n\x00" as *const u8 as *const libc::c_char,
         );
     } else if primitives == 2 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"single glDrawElements\n\x00" as *const u8 as *const libc::c_char,
         );
     } else if primitives == 1 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"multiple glArrayElement\n\x00" as *const u8 as *const libc::c_char,
         );
     } else if primitives == 3 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"multiple glColor4ubv + glTexCoord2fv + glVertex3fv\n\x00" as *const u8
                 as *const libc::c_char,
         );
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"texturemode: %s\n\x00" as *const u8 as *const libc::c_char,
         (*r_textureMode).string,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"picmip: %d\n\x00" as *const u8 as *const libc::c_char,
         (*r_picmip).integer,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"texture bits: %d\n\x00" as *const u8 as *const libc::c_char,
         (*r_texturebits).integer,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"multitexture: %s\n\x00" as *const u8 as *const libc::c_char,
         enablestrings[qglActiveTextureARB.is_some() as i32 as usize],
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"compiled vertex arrays: %s\n\x00" as *const u8 as *const libc::c_char,
         enablestrings[qglLockArraysEXT.is_some() as i32 as usize],
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"texenv add: %s\n\x00" as *const u8 as *const libc::c_char,
         enablestrings[(glConfig.textureEnvAddAvailable as u32 != 0 as i32 as u32) as i32 as usize],
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"compressed textures: %s\n\x00" as *const u8 as *const libc::c_char,
-        enablestrings[(glConfig.textureCompression as u32
-            != TC_NONE as i32 as u32) as i32 as usize],
+        enablestrings
+            [(glConfig.textureCompression as u32 != TC_NONE as i32 as u32) as i32 as usize],
     );
-    if (*r_vertexLight).integer != 0
-        || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
+    if (*r_vertexLight).integer != 0 || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
     {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"HACK: using vertex lightmap approximation\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     if glConfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"HACK: ragePro approximations\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     if glConfig.hardwareType as u32 == GLHW_RIVA128 as i32 as u32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"HACK: riva128 approximations\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     if (*r_finish).integer != 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Forcing glFinish\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -2365,9 +2072,7 @@ R_Register
 #[no_mangle]
 
 pub unsafe extern "C" fn R_Register() {
-    com_altivec = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    com_altivec = ri.Cvar_Get.expect("non-null function pointer")(
         b"com_altivec\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
@@ -2375,242 +2080,174 @@ pub unsafe extern "C" fn R_Register() {
     //
     // latched and archived variables
     //
-    r_allowExtensions = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_allowExtensions = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_allowExtensions\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_compressed_textures = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_compressed_textures = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_compressed_textures\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_multitexture = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_multitexture = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_multitexture\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_compiled_vertex_array = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_compiled_vertex_array = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_compiled_vertex_array\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_texture_env_add = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_texture_env_add = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_texture_env_add\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_texture_filter_anisotropic = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_texture_filter_anisotropic = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_texture_filter_anisotropic\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_max_anisotropy = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_max_anisotropy = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_max_anisotropy\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_picmip = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_picmip = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_picmip\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_roundImagesDown = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_roundImagesDown = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_roundImagesDown\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_colorMipLevels = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_colorMipLevels = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_colorMipLevels\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     );
-    ri
-        .Cvar_CheckRange
-        .expect("non-null function pointer")(
+    ri.Cvar_CheckRange.expect("non-null function pointer")(
         r_picmip,
         0 as i32 as f32,
         16 as i32 as f32,
         qtrue,
     );
-    r_detailTextures = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_detailTextures = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_detailtextures\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_texturebits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_texturebits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_texturebits\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_colorbits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_colorbits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_colorbits\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_stencilbits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_stencilbits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_stencilbits\x00" as *const u8 as *const libc::c_char,
         b"8\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_depthbits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_depthbits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_depthbits\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ext_multisample = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ext_multisample = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ext_multisample\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    ri
-        .Cvar_CheckRange
-        .expect("non-null function pointer")(
+    ri.Cvar_CheckRange.expect("non-null function pointer")(
         r_ext_multisample,
         0 as i32 as f32,
         4 as i32 as f32,
         qtrue,
     );
-    r_overBrightBits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_overBrightBits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_overBrightBits\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ignorehwgamma = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ignorehwgamma = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ignorehwgamma\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_mode = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_mode = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_mode\x00" as *const u8 as *const libc::c_char,
         b"3\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_fullscreen = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_fullscreen = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_noborder = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_noborder = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_noborder\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_customwidth = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_customwidth = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_customwidth\x00" as *const u8 as *const libc::c_char,
         b"1600\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_customheight = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_customheight = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_customheight\x00" as *const u8 as *const libc::c_char,
         b"1024\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_customPixelAspect = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_customPixelAspect = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_customPixelAspect\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_simpleMipMaps = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_simpleMipMaps = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_simpleMipMaps\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_vertexLight = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_vertexLight = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_uiFullScreen = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_uiFullScreen = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_uifullscreen\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     );
-    r_subdivisions = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_subdivisions = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_subdivisions\x00" as *const u8 as *const libc::c_char,
         b"4\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_stereoEnabled = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_stereoEnabled = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_stereoEnabled\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_ignoreFastPath = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ignoreFastPath = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ignoreFastPath\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_greyscale = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_greyscale = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_greyscale\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    ri
-        .Cvar_CheckRange
-        .expect("non-null function pointer")(
+    ri.Cvar_CheckRange.expect("non-null function pointer")(
         r_greyscale,
         0 as i32 as f32,
         1 as i32 as f32,
@@ -2619,45 +2256,33 @@ pub unsafe extern "C" fn R_Register() {
     //
     // temporary latched variables that can only change over a restart
     //
-    r_displayRefresh = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_displayRefresh = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_displayRefresh\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     );
-    ri
-        .Cvar_CheckRange
-        .expect("non-null function pointer")(
+    ri.Cvar_CheckRange.expect("non-null function pointer")(
         r_displayRefresh,
         0 as i32 as f32,
         200 as i32 as f32,
         qtrue,
     );
-    r_fullbright = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_fullbright = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_fullbright\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x200 as i32,
     );
-    r_mapOverBrightBits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_mapOverBrightBits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_mapOverBrightBits\x00" as *const u8 as *const libc::c_char,
         b"2\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     );
-    r_intensity = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_intensity = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_intensity\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     );
-    r_singleShader = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_singleShader = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_singleShader\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32 | 0x20 as i32,
@@ -2665,178 +2290,128 @@ pub unsafe extern "C" fn R_Register() {
     //
     // archived variables that can change at any time
     //
-    r_lodCurveError = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_lodCurveError = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_lodCurveError\x00" as *const u8 as *const libc::c_char,
         b"250\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x200 as i32,
     );
-    r_lodbias = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_lodbias = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_lodbias\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_flares = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_flares = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_flares\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_znear = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_znear = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_znear\x00" as *const u8 as *const libc::c_char,
         b"4\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    ri
-        .Cvar_CheckRange
-        .expect("non-null function pointer")(
+    ri.Cvar_CheckRange.expect("non-null function pointer")(
         r_znear,
         0.001f32,
         200 as i32 as f32,
         qfalse,
     );
-    r_zproj = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_zproj = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_zproj\x00" as *const u8 as *const libc::c_char,
         b"64\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_stereoSeparation = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_stereoSeparation = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_stereoSeparation\x00" as *const u8 as *const libc::c_char,
         b"64\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_ignoreGLErrors = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ignoreGLErrors = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ignoreGLErrors\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_fastsky = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_fastsky = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_fastsky\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_inGameVideo = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_inGameVideo = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_inGameVideo\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_drawSun = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_drawSun = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_drawSun\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_dynamiclight = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_dynamiclight = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_dynamiclight\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_dlightBacks = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_dlightBacks = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_dlightBacks\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_finish = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_finish = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_finish\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_textureMode = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_textureMode = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_textureMode\x00" as *const u8 as *const libc::c_char,
         b"GL_LINEAR_MIPMAP_NEAREST\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_swapInterval = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_swapInterval = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_swapInterval\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x20 as i32,
     );
-    r_gamma = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_gamma = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_gamma\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_facePlaneCull = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_facePlaneCull = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_facePlaneCull\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_railWidth = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_railWidth = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_railWidth\x00" as *const u8 as *const libc::c_char,
         b"16\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_railCoreWidth = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_railCoreWidth = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_railCoreWidth\x00" as *const u8 as *const libc::c_char,
         b"6\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_railSegmentLength = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_railSegmentLength = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_railSegmentLength\x00" as *const u8 as *const libc::c_char,
         b"32\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_primitives = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_primitives = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_primitives\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_ambientScale = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ambientScale = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ambientScale\x00" as *const u8 as *const libc::c_char,
         b"0.6\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_directedScale = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_directedScale = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_directedScale\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_anaglyphMode = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_anaglyphMode = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_anaglyphMode\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
@@ -2844,282 +2419,202 @@ pub unsafe extern "C" fn R_Register() {
     //
     // temporary variables that can change at any time
     //
-    r_showImages = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_showImages = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_showImages\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
     );
-    r_debugLight = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_debugLight = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_debuglight\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x100 as i32,
     );
-    r_debugSort = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_debugSort = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_debugSort\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_printShaders = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_printShaders = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_printShaders\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     );
-    r_saveFontData = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_saveFontData = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_saveFontData\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     );
-    r_nocurves = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_nocurves = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_nocurves\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_drawworld = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_drawworld = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_drawworld\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_lightmap = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_lightmap = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_lightmap\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     );
-    r_portalOnly = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_portalOnly = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_portalOnly\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_flareSize = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_flareSize = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_flareSize\x00" as *const u8 as *const libc::c_char,
         b"40\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_flareFade = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_flareFade = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_flareFade\x00" as *const u8 as *const libc::c_char,
         b"7\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_flareCoeff = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_flareCoeff = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_flareCoeff\x00" as *const u8 as *const libc::c_char,
         b"150\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_skipBackEnd = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_skipBackEnd = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_skipBackEnd\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_measureOverdraw = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_measureOverdraw = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_measureOverdraw\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_lodscale = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_lodscale = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_lodscale\x00" as *const u8 as *const libc::c_char,
         b"5\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_norefresh = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_norefresh = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_norefresh\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_drawentities = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_drawentities = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_drawentities\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_ignore = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_ignore = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_ignore\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_nocull = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_nocull = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_nocull\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_novis = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_novis = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_novis\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_showcluster = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_showcluster = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_showcluster\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_speeds = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_speeds = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_speeds\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_verbose = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_verbose = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_verbose\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_logFile = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_logFile = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_logFile\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_debugSurface = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_debugSurface = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_debugSurface\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_nobind = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_nobind = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_nobind\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_showtris = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_showtris = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_showtris\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_showsky = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_showsky = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_showsky\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_shownormals = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_shownormals = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_shownormals\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_clear = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_clear = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_clear\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_offsetFactor = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_offsetFactor = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_offsetfactor\x00" as *const u8 as *const libc::c_char,
         b"-1\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_offsetUnits = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_offsetUnits = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_offsetunits\x00" as *const u8 as *const libc::c_char,
         b"-2\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_drawBuffer = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_drawBuffer = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_drawBuffer\x00" as *const u8 as *const libc::c_char,
         b"GL_BACK\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_lockpvs = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_lockpvs = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_lockpvs\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_noportals = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_noportals = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_noportals\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x200 as i32,
     );
-    r_shadows = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_shadows = ri.Cvar_Get.expect("non-null function pointer")(
         b"cg_shadows\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
         0 as i32,
     );
-    r_marksOnTriangleMeshes = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_marksOnTriangleMeshes = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_marksOnTriangleMeshes\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_aviMotionJpegQuality = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_aviMotionJpegQuality = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_aviMotionJpegQuality\x00" as *const u8 as *const libc::c_char,
         b"90\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_screenshotJpegQuality = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_screenshotJpegQuality = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_screenshotJpegQuality\x00" as *const u8 as *const libc::c_char,
         b"90\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     );
-    r_maxpolys = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_maxpolys = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_maxpolys\x00" as *const u8 as *const libc::c_char,
         va(
             b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3127,9 +2622,7 @@ pub unsafe extern "C" fn R_Register() {
         ),
         0 as i32,
     );
-    r_maxpolyverts = ri
-        .Cvar_Get
-        .expect("non-null function pointer")(
+    r_maxpolyverts = ri.Cvar_Get.expect("non-null function pointer")(
         b"r_maxpolyverts\x00" as *const u8 as *const libc::c_char,
         va(
             b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3139,57 +2632,39 @@ pub unsafe extern "C" fn R_Register() {
     );
     // make sure all the commands added here are also
     // removed in R_Shutdown
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"imagelist\x00" as *const u8 as *const libc::c_char,
         Some(R_ImageList_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"shaderlist\x00" as *const u8 as *const libc::c_char,
         Some(R_ShaderList_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"skinlist\x00" as *const u8 as *const libc::c_char,
         Some(R_SkinList_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"modellist\x00" as *const u8 as *const libc::c_char,
         Some(R_Modellist_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"modelist\x00" as *const u8 as *const libc::c_char,
         Some(R_ModeList_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"screenshot\x00" as *const u8 as *const libc::c_char,
         Some(R_ScreenShot_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"screenshotJPEG\x00" as *const u8 as *const libc::c_char,
         Some(R_ScreenShotJPEG_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"gfxinfo\x00" as *const u8 as *const libc::c_char,
         Some(GfxInfo_f as unsafe extern "C" fn() -> ()),
     );
-    ri
-        .Cmd_AddCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_AddCommand.expect("non-null function pointer")(
         b"minimize\x00" as *const u8 as *const libc::c_char,
         Some(GLimp_Minimize as unsafe extern "C" fn() -> ()),
     );
@@ -3204,39 +2679,29 @@ R_Init
 pub unsafe extern "C" fn R_Init() {
     let mut err: i32 = 0;
     let mut i: i32 = 0;
-    let mut ptr: *mut byte =
-        0 as *mut byte;
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    let mut ptr: *mut byte = 0 as *mut byte;
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"----- R_Init -----\n\x00" as *const u8 as *const libc::c_char,
     );
     // clear all our internal state
     crate::stdlib::memset(
-        &mut tr as *mut trGlobals_t
-            as *mut libc::c_void,
+        &mut tr as *mut trGlobals_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<trGlobals_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut backEnd as *mut backEndState_t
-            as *mut libc::c_void,
+        &mut backEnd as *mut backEndState_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<backEndState_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
-        &mut tess as *mut shaderCommands_t
-            as *mut libc::c_void,
+        &mut tess as *mut shaderCommands_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<shaderCommands_t>() as libc::c_ulong,
     );
-    if ::std::mem::size_of::<glconfig_t>() as libc::c_ulong
-        != 11332 as i32 as libc::c_ulong
-    {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+    if ::std::mem::size_of::<glconfig_t>() as libc::c_ulong != 11332 as i32 as libc::c_ulong {
+        ri.Error.expect("non-null function pointer")(
             ERR_FATAL as i32,
             b"Mod ABI incompatible: sizeof(glconfig_t) == %u != 11332\x00" as *const u8
                 as *const libc::c_char,
@@ -3244,21 +2709,14 @@ pub unsafe extern "C" fn R_Init() {
         );
     }
     //	Swap_Init();
-    if tess.xyz.as_mut_ptr() as intptr_t
-        & 15 as i32 as isize
-        != 0
-    {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+    if tess.xyz.as_mut_ptr() as intptr_t & 15 as i32 as isize != 0 {
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"tess.xyz not 16 byte aligned\n\x00" as *const u8 as *const libc::c_char,
         );
     }
     crate::stdlib::memset(
-        tess
-            .constantColor255
-            .as_mut_ptr() as *mut libc::c_void,
+        tess.constantColor255.as_mut_ptr() as *mut libc::c_void,
         255 as i32,
         ::std::mem::size_of::<[color4ub_t; 1000]>() as libc::c_ulong,
     );
@@ -3272,29 +2730,22 @@ pub unsafe extern "C" fn R_Init() {
                 * 3.14159265358979323846f64
                 / 180.0f32 as f64,
         ) as f32;
-        tr.squareTable[i as usize] = if i < 1024 as i32 / 2 as i32
-        {
+        tr.squareTable[i as usize] = if i < 1024 as i32 / 2 as i32 {
             1.0f32
         } else {
             -1.0f32
         };
-        tr.sawToothTable[i as usize] =
-            i as f32 / 1024 as i32 as f32;
-        tr.inverseSawToothTable[i as usize] =
-            1.0f32 - tr.sawToothTable[i as usize];
+        tr.sawToothTable[i as usize] = i as f32 / 1024 as i32 as f32;
+        tr.inverseSawToothTable[i as usize] = 1.0f32 - tr.sawToothTable[i as usize];
         if i < 1024 as i32 / 2 as i32 {
             if i < 1024 as i32 / 4 as i32 {
-                tr.triangleTable[i as usize] =
-                    i as f32 / (1024 as i32 / 4 as i32) as f32
+                tr.triangleTable[i as usize] = i as f32 / (1024 as i32 / 4 as i32) as f32
             } else {
-                tr.triangleTable[i as usize] = 1.0f32
-                    - tr.triangleTable
-                        [(i - 1024 as i32 / 4 as i32) as usize]
+                tr.triangleTable[i as usize] =
+                    1.0f32 - tr.triangleTable[(i - 1024 as i32 / 4 as i32) as usize]
             }
         } else {
-            tr.triangleTable[i as usize] =
-                -tr.triangleTable
-                    [(i - 1024 as i32 / 2 as i32) as usize]
+            tr.triangleTable[i as usize] = -tr.triangleTable[(i - 1024 as i32 / 2 as i32) as usize]
         }
         i += 1
     }
@@ -3309,9 +2760,7 @@ pub unsafe extern "C" fn R_Init() {
     if max_polyverts < 3000 as i32 {
         max_polyverts = 3000 as i32
     }
-    ptr = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    ptr = ri.Hunk_Alloc.expect("non-null function pointer")(
         (::std::mem::size_of::<backEndData_t>() as libc::c_ulong)
             .wrapping_add(
                 (::std::mem::size_of::<srfPoly_t>() as libc::c_ulong)
@@ -3332,8 +2781,7 @@ pub unsafe extern "C" fn R_Init() {
         .offset(
             (::std::mem::size_of::<srfPoly_t>() as libc::c_ulong)
                 .wrapping_mul(max_polys as libc::c_ulong) as isize,
-        )
-        as *mut polyVert_t;
+        ) as *mut polyVert_t;
     R_InitNextFrame();
     InitOpenGL();
     R_InitImages();
@@ -3343,9 +2791,7 @@ pub unsafe extern "C" fn R_Init() {
     R_InitFreeType();
     err = qglGetError.expect("non-null function pointer")() as i32;
     if err != 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"glGetError() = 0x%x\n\x00" as *const u8 as *const libc::c_char,
             err,
@@ -3353,9 +2799,7 @@ pub unsafe extern "C" fn R_Init() {
     }
     // print info
     GfxInfo_f();
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"----- finished R_Init -----\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -3686,55 +3130,37 @@ RE_Shutdown
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_Shutdown(mut destroyWindow: qboolean) {
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"RE_Shutdown( %i )\n\x00" as *const u8 as *const libc::c_char,
         destroyWindow as u32,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"imagelist\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"imagelist\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"shaderlist\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"shaderlist\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"skinlist\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"skinlist\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"modellist\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"modellist\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"modelist\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"modelist\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"screenshot\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"screenshot\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
         b"screenshotJPEG\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(b"gfxinfo\x00" as *const u8 as *const libc::c_char);
-    ri
-        .Cmd_RemoveCommand
-        .expect("non-null function pointer")(
-        b"minimize\x00" as *const u8 as *const libc::c_char
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"gfxinfo\x00" as *const u8 as *const libc::c_char,
+    );
+    ri.Cmd_RemoveCommand.expect("non-null function pointer")(
+        b"minimize\x00" as *const u8 as *const libc::c_char,
     );
     if tr.registered as u64 != 0 {
         R_IssuePendingRenderCommands();
@@ -3771,11 +3197,7 @@ Touch all images to make sure they are resident
 
 pub unsafe extern "C" fn RE_EndRegistration() {
     R_IssuePendingRenderCommands();
-    if ri
-        .Sys_LowPhysicalMemory
-        .expect("non-null function pointer")() as u64
-        == 0
-    {
+    if ri.Sys_LowPhysicalMemory.expect("non-null function pointer")() as u64 == 0 {
         RB_ShowImages();
     };
 }
@@ -3830,9 +3252,7 @@ pub unsafe extern "C" fn GetRefAPI(
         ::std::mem::size_of::<refexport_t>() as libc::c_ulong,
     );
     if apiVersion != 8 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Mismatched REF_API_VERSION: expected %i, got %i\n\x00" as *const u8
                 as *const libc::c_char,
@@ -3842,53 +3262,22 @@ pub unsafe extern "C" fn GetRefAPI(
         return 0 as *mut refexport_t;
     }
     // the RE_ functions are Renderer Entry points
-    re.Shutdown =
-        Some(RE_Shutdown as unsafe extern "C" fn(_: qboolean) -> ());
-    re.BeginRegistration = Some(
-        RE_BeginRegistration
-            as unsafe extern "C" fn(_: *mut glconfig_t) -> (),
-    );
-    re.RegisterModel = Some(
-        RE_RegisterModel
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-            ) -> qhandle_t,
-    );
-    re.RegisterSkin = Some(
-        RE_RegisterSkin
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-            ) -> qhandle_t,
-    );
-    re.RegisterShader = Some(
-        RE_RegisterShader
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-            ) -> qhandle_t,
-    );
-    re.RegisterShaderNoMip = Some(
-        RE_RegisterShaderNoMip
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-            ) -> qhandle_t,
-    );
-    re.LoadWorld = Some(
-        RE_LoadWorldMap
-            as unsafe extern "C" fn(_: *const libc::c_char) -> (),
-    );
-    re.SetWorldVisData = Some(
-        RE_SetWorldVisData
-            as unsafe extern "C" fn(_: *const byte) -> (),
-    );
+    re.Shutdown = Some(RE_Shutdown as unsafe extern "C" fn(_: qboolean) -> ());
+    re.BeginRegistration =
+        Some(RE_BeginRegistration as unsafe extern "C" fn(_: *mut glconfig_t) -> ());
+    re.RegisterModel =
+        Some(RE_RegisterModel as unsafe extern "C" fn(_: *const libc::c_char) -> qhandle_t);
+    re.RegisterSkin =
+        Some(RE_RegisterSkin as unsafe extern "C" fn(_: *const libc::c_char) -> qhandle_t);
+    re.RegisterShader =
+        Some(RE_RegisterShader as unsafe extern "C" fn(_: *const libc::c_char) -> qhandle_t);
+    re.RegisterShaderNoMip =
+        Some(RE_RegisterShaderNoMip as unsafe extern "C" fn(_: *const libc::c_char) -> qhandle_t);
+    re.LoadWorld = Some(RE_LoadWorldMap as unsafe extern "C" fn(_: *const libc::c_char) -> ());
+    re.SetWorldVisData = Some(RE_SetWorldVisData as unsafe extern "C" fn(_: *const byte) -> ());
     re.EndRegistration = Some(RE_EndRegistration as unsafe extern "C" fn() -> ());
-    re.BeginFrame = Some(
-        RE_BeginFrame
-            as unsafe extern "C" fn(_: stereoFrame_t) -> (),
-    );
-    re.EndFrame = Some(
-        RE_EndFrame
-            as unsafe extern "C" fn(_: *mut i32, _: *mut i32) -> (),
-    );
+    re.BeginFrame = Some(RE_BeginFrame as unsafe extern "C" fn(_: stereoFrame_t) -> ());
+    re.EndFrame = Some(RE_EndFrame as unsafe extern "C" fn(_: *mut i32, _: *mut i32) -> ());
     re.MarkFragments = Some(
         R_MarkFragments
             as unsafe extern "C" fn(
@@ -3913,27 +3302,14 @@ pub unsafe extern "C" fn GetRefAPI(
             ) -> i32,
     );
     re.ModelBounds = Some(
-        R_ModelBounds
-            as unsafe extern "C" fn(
-                _: qhandle_t,
-                _: *mut vec_t,
-                _: *mut vec_t,
-            ) -> (),
+        R_ModelBounds as unsafe extern "C" fn(_: qhandle_t, _: *mut vec_t, _: *mut vec_t) -> (),
     );
-    re.ClearScene =
-        Some(RE_ClearScene as unsafe extern "C" fn() -> ());
-    re.AddRefEntityToScene = Some(
-        RE_AddRefEntityToScene
-            as unsafe extern "C" fn(_: *const refEntity_t) -> (),
-    );
+    re.ClearScene = Some(RE_ClearScene as unsafe extern "C" fn() -> ());
+    re.AddRefEntityToScene =
+        Some(RE_AddRefEntityToScene as unsafe extern "C" fn(_: *const refEntity_t) -> ());
     re.AddPolyToScene = Some(
         RE_AddPolyToScene
-            as unsafe extern "C" fn(
-                _: qhandle_t,
-                _: i32,
-                _: *const polyVert_t,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: qhandle_t, _: i32, _: *const polyVert_t, _: i32) -> (),
     );
     re.LightForPoint = Some(
         R_LightForPoint
@@ -3946,31 +3322,14 @@ pub unsafe extern "C" fn GetRefAPI(
     );
     re.AddLightToScene = Some(
         RE_AddLightToScene
-            as unsafe extern "C" fn(
-                _: *const vec_t,
-                _: f32,
-                _: f32,
-                _: f32,
-                _: f32,
-            ) -> (),
+            as unsafe extern "C" fn(_: *const vec_t, _: f32, _: f32, _: f32, _: f32) -> (),
     );
     re.AddAdditiveLightToScene = Some(
         RE_AddAdditiveLightToScene
-            as unsafe extern "C" fn(
-                _: *const vec_t,
-                _: f32,
-                _: f32,
-                _: f32,
-                _: f32,
-            ) -> (),
+            as unsafe extern "C" fn(_: *const vec_t, _: f32, _: f32, _: f32, _: f32) -> (),
     );
-    re.RenderScene = Some(
-        RE_RenderScene
-            as unsafe extern "C" fn(_: *const refdef_t) -> (),
-    );
-    re.SetColor = Some(
-        RE_SetColor as unsafe extern "C" fn(_: *const f32) -> (),
-    );
+    re.RenderScene = Some(RE_RenderScene as unsafe extern "C" fn(_: *const refdef_t) -> ());
+    re.SetColor = Some(RE_SetColor as unsafe extern "C" fn(_: *const f32) -> ());
     re.DrawStretchPic = Some(
         RE_StretchPic
             as unsafe extern "C" fn(
@@ -4013,11 +3372,7 @@ pub unsafe extern "C" fn GetRefAPI(
     );
     re.RegisterFont = Some(
         RE_RegisterFont
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: i32,
-                _: *mut fontInfo_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *const libc::c_char, _: i32, _: *mut fontInfo_t) -> (),
     );
     re.RemapShader = Some(
         R_RemapShader
@@ -4027,29 +3382,12 @@ pub unsafe extern "C" fn GetRefAPI(
                 _: *const libc::c_char,
             ) -> (),
     );
-    re.GetEntityToken = Some(
-        R_GetEntityToken
-            as unsafe extern "C" fn(
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> qboolean,
-    );
-    re.inPVS = Some(
-        R_inPVS
-            as unsafe extern "C" fn(
-                _: *const vec_t,
-                _: *const vec_t,
-            ) -> qboolean,
-    );
+    re.GetEntityToken =
+        Some(R_GetEntityToken as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> qboolean);
+    re.inPVS = Some(R_inPVS as unsafe extern "C" fn(_: *const vec_t, _: *const vec_t) -> qboolean);
     re.TakeVideoFrame = Some(
         RE_TakeVideoFrame
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: *mut byte,
-                _: *mut byte,
-                _: qboolean,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: i32, _: *mut byte, _: *mut byte, _: qboolean) -> (),
     );
     return &mut re;
 }

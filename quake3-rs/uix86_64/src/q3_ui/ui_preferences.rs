@@ -79,8 +79,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -102,8 +101,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -129,8 +127,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -156,8 +153,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -185,8 +181,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -206,8 +201,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -227,8 +221,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -248,8 +241,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -269,8 +261,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -290,8 +281,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -311,8 +301,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -332,8 +321,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -353,8 +341,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -382,8 +369,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -403,8 +389,7 @@ static mut s_preferences: preferences_t = preferences_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -431,44 +416,41 @@ static mut teamoverlay_names: [*const libc::c_char; 5] = [
 ];
 
 unsafe extern "C" fn Preferences_SetMenuItems() {
-    s_preferences.crosshair.curvalue = trap_Cvar_VariableValue(
-        b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char,
-    ) as i32
-        % 10 as i32;
-    s_preferences.simpleitems.curvalue = (trap_Cvar_VariableValue(
-        b"cg_simpleItems\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.brass.curvalue = (trap_Cvar_VariableValue(
-        b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.wallmarks.curvalue = (trap_Cvar_VariableValue(
-        b"cg_marks\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.identifytarget.curvalue = (trap_Cvar_VariableValue(
-        b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.dynamiclights.curvalue = (trap_Cvar_VariableValue(
-        b"r_dynamiclight\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.highqualitysky.curvalue = (trap_Cvar_VariableValue(
-        b"r_fastsky\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32 as f32) as i32;
-    s_preferences.synceveryframe.curvalue = (trap_Cvar_VariableValue(
-        b"r_finish\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
-    s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue(
-        b"cg_forcemodel\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
+    s_preferences.crosshair.curvalue =
+        trap_Cvar_VariableValue(b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char) as i32
+            % 10 as i32;
+    s_preferences.simpleitems.curvalue =
+        (trap_Cvar_VariableValue(b"cg_simpleItems\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.brass.curvalue =
+        (trap_Cvar_VariableValue(b"cg_brassTime\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.wallmarks.curvalue =
+        (trap_Cvar_VariableValue(b"cg_marks\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.identifytarget.curvalue =
+        (trap_Cvar_VariableValue(b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.dynamiclights.curvalue =
+        (trap_Cvar_VariableValue(b"r_dynamiclight\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.highqualitysky.curvalue =
+        (trap_Cvar_VariableValue(b"r_fastsky\x00" as *const u8 as *const libc::c_char)
+            == 0 as i32 as f32) as i32;
+    s_preferences.synceveryframe.curvalue =
+        (trap_Cvar_VariableValue(b"r_finish\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
+    s_preferences.forcemodel.curvalue =
+        (trap_Cvar_VariableValue(b"cg_forcemodel\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
     s_preferences.drawteamoverlay.curvalue = Com_Clamp(
         0 as i32 as f32,
         3 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char),
     ) as i32;
-    s_preferences.allowdownload.curvalue = (trap_Cvar_VariableValue(
-        b"cl_allowDownload\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32) as i32;
+    s_preferences.allowdownload.curvalue =
+        (trap_Cvar_VariableValue(b"cl_allowDownload\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32 as f32) as i32;
 }
 
 unsafe extern "C" fn Preferences_Event(mut ptr: *mut libc::c_void, mut notification: i32) {
@@ -496,9 +478,7 @@ unsafe extern "C" fn Preferences_Event(mut ptr: *mut libc::c_void, mut notificat
         }
         130 => {
             if s_preferences.brass.curvalue != 0 {
-                trap_Cvar_Reset(
-                    b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
-                );
+                trap_Cvar_Reset(b"cg_brassTime\x00" as *const u8 as *const libc::c_char);
             } else {
                 trap_Cvar_SetValue(
                     b"cg_brassTime\x00" as *const u8 as *const libc::c_char,
@@ -575,8 +555,7 @@ unsafe extern "C" fn Crosshair_Draw(mut self_0: *mut libc::c_void) {
     x = (*s).generic.x;
     y = (*s).generic.y;
     style = 0x10 as i32;
-    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32 as qboolean;
     if (*s).generic.flags & 0x2000 as i32 as u32 != 0 {
         color = text_color_disabled.as_mut_ptr()
     } else if focus as u64 != 0 {
@@ -808,13 +787,11 @@ unsafe extern "C" fn Preferences_MenuInit() {
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.simpleitems as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.simpleitems as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.wallmarks as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.wallmarks as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
@@ -822,38 +799,31 @@ unsafe extern "C" fn Preferences_MenuInit() {
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.dynamiclights as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.dynamiclights as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.identifytarget as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.identifytarget as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.highqualitysky as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.highqualitysky as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.synceveryframe as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.synceveryframe as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.forcemodel as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.forcemodel as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.drawteamoverlay as *mut menulist_s
-            as *mut libc::c_void,
+        &mut s_preferences.drawteamoverlay as *mut menulist_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-        &mut s_preferences.allowdownload as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut s_preferences.allowdownload as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
@@ -870,28 +840,16 @@ Preferences_Cache
 
 pub unsafe extern "C" fn Preferences_Cache() {
     let mut n: i32 = 0;
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
     n = 0 as i32;
     while n < 10 as i32 {
-        s_preferences.crosshairShader[n as usize] =
-            trap_R_RegisterShaderNoMip(
-                va(
-                    b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char
-                        as *mut libc::c_char,
-                    'a' as i32 + n,
-                ),
-            );
+        s_preferences.crosshairShader[n as usize] = trap_R_RegisterShaderNoMip(va(
+            b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
+            'a' as i32 + n,
+        ));
         n += 1
     }
 }
@@ -990,7 +948,5 @@ UI_PreferencesMenu
 
 pub unsafe extern "C" fn UI_PreferencesMenu() {
     Preferences_MenuInit();
-    UI_PushMenu(
-        &mut s_preferences.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_preferences.menu as *mut _ as *mut _tag_menuframework);
 }

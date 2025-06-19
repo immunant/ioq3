@@ -168,8 +168,7 @@ pub unsafe extern "C" fn silk_interpolate(
     i = 0 as i32;
     while i < d {
         *xi.offset(i as isize) = (*x0.offset(i as isize) as i32
-            + ((*x1.offset(i as isize) as i32 - *x0.offset(i as isize) as i32)
-                as opus_int16
+            + ((*x1.offset(i as isize) as i32 - *x0.offset(i as isize) as i32) as opus_int16
                 as opus_int32
                 * ifact_Q2 as opus_int16 as opus_int32
                 >> 2 as i32)) as opus_int16;

@@ -142,8 +142,7 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
     let mut ix: i32 = 0;
     let mut out32_Q12: opus_int32 = 0;
     let mut out32: opus_int32 = 0;
-    let mut in_ptr: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut in_ptr: *const opus_int16 = 0 as *const opus_int16;
     ix = d;
     while ix < len {
         in_ptr = &*in_0.offset((ix - 1 as i32) as isize) as *const opus_int16;
@@ -153,34 +152,28 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
         cases where the result wraps around can only be triggered by invalid streams*/
         out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
             (*in_ptr.offset(-(1 as i32) as isize) as opus_int32
-                * *B.offset(1 as i32 as isize) as opus_int32)
-                as opus_uint32,
+                * *B.offset(1 as i32 as isize) as opus_int32) as opus_uint32,
         ) as opus_int32;
         out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
             (*in_ptr.offset(-(2 as i32) as isize) as opus_int32
-                * *B.offset(2 as i32 as isize) as opus_int32)
-                as opus_uint32,
+                * *B.offset(2 as i32 as isize) as opus_int32) as opus_uint32,
         ) as opus_int32;
         out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
             (*in_ptr.offset(-(3 as i32) as isize) as opus_int32
-                * *B.offset(3 as i32 as isize) as opus_int32)
-                as opus_uint32,
+                * *B.offset(3 as i32 as isize) as opus_int32) as opus_uint32,
         ) as opus_int32;
         out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
             (*in_ptr.offset(-(4 as i32) as isize) as opus_int32
-                * *B.offset(4 as i32 as isize) as opus_int32)
-                as opus_uint32,
+                * *B.offset(4 as i32 as isize) as opus_int32) as opus_uint32,
         ) as opus_int32;
         out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
             (*in_ptr.offset(-(5 as i32) as isize) as opus_int32
-                * *B.offset(5 as i32 as isize) as opus_int32)
-                as opus_uint32,
+                * *B.offset(5 as i32 as isize) as opus_int32) as opus_uint32,
         ) as opus_int32;
         j = 6 as i32;
         while j < d {
             out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
-                (*in_ptr.offset(-j as isize) as opus_int32
-                    * *B.offset(j as isize) as opus_int32)
+                (*in_ptr.offset(-j as isize) as opus_int32 * *B.offset(j as isize) as opus_int32)
                     as opus_uint32,
             ) as opus_int32;
             out32_Q12 = (out32_Q12 as opus_uint32).wrapping_add(
@@ -191,12 +184,9 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
             j += 2 as i32
         }
         /* Subtract prediction */
-        out32_Q12 = (((*in_ptr.offset(1 as i32 as isize) as opus_int32
-            as opus_uint32)
-            << 12 as i32) as opus_int32
-            as opus_uint32)
-            .wrapping_sub(out32_Q12 as opus_uint32)
-            as opus_int32;
+        out32_Q12 = (((*in_ptr.offset(1 as i32 as isize) as opus_int32 as opus_uint32) << 12 as i32)
+            as opus_int32 as opus_uint32)
+            .wrapping_sub(out32_Q12 as opus_uint32) as opus_int32;
         /* Scale to Q0 */
         out32 = if 12 as i32 == 1 as i32 {
             (out32_Q12 >> 1 as i32) + (out32_Q12 & 1 as i32)
@@ -214,8 +204,9 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
         ix += 1
     }
     /* Set first d output samples to zero */
-    crate::stdlib::memset(out as *mut libc::c_void, 0 as i32,
-           (d as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
+    crate::stdlib::memset(
+        out as *mut libc::c_void,
+        0 as i32,
+        (d as libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
 }

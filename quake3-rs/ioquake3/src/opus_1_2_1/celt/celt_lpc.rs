@@ -266,8 +266,8 @@ pub unsafe extern "C" fn celt_fir_c(
     let mut rnum: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(ord as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong).wrapping_mul(ord as libc::c_ulong)
+            as usize,
     );
     rnum = fresh19.as_mut_ptr() as *mut opus_val16;
     i = 0 as i32;
@@ -322,8 +322,8 @@ pub unsafe extern "C" fn celt_iir(
     let mut y: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(ord as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong).wrapping_mul(ord as libc::c_ulong)
+            as usize,
     );
     rden = fresh20.as_mut_ptr() as *mut opus_val16;
     let mut fresh21 = ::std::vec::from_elem(
@@ -415,8 +415,8 @@ pub unsafe extern "C" fn _celt_autocorr(
     let mut xx: *mut opus_val16 = 0 as *mut opus_val16;
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(n as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong).wrapping_mul(n as libc::c_ulong)
+            as usize,
     );
     xx = fresh22.as_mut_ptr() as *mut opus_val16;
     if overlap == 0 as i32 {
@@ -437,14 +437,7 @@ pub unsafe extern "C" fn _celt_autocorr(
         xptr = xx
     }
     shift = 0 as i32;
-    celt_pitch_xcorr_c(
-        xptr,
-        xptr,
-        ac,
-        fastN,
-        lag + 1 as i32,
-        arch,
-    );
+    celt_pitch_xcorr_c(xptr, xptr, ac, fastN, lag + 1 as i32, arch);
     k = 0 as i32;
     while k <= lag {
         i = k + fastN;

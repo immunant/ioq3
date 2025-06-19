@@ -98,8 +98,7 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut msg_t) {
     let mut sbit: i32 = 0;
     let mut soob: i32 = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte =
-        0 as *mut byte;
+    let mut string: *mut byte = 0 as *mut byte;
     if (*msg).cursize <= 12 as i32 {
         return;
     }
@@ -110,20 +109,16 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut msg_t) {
     (*msg).readcount = 0 as i32;
     (*msg).oob = qfalse;
     serverId = MSG_ReadLong(msg as *mut msg_t);
-    messageAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t);
-    reliableAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t);
+    messageAcknowledge = MSG_ReadLong(msg as *mut msg_t);
+    reliableAcknowledge = MSG_ReadLong(msg as *mut msg_t);
     (*msg).oob = soob as qboolean;
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
-    string = clc.serverCommands
-        [(reliableAcknowledge & 64 as i32 - 1 as i32) as usize]
-        .as_mut_ptr() as *mut byte;
+    string = clc.serverCommands[(reliableAcknowledge & 64 as i32 - 1 as i32) as usize].as_mut_ptr()
+        as *mut byte;
     index = 0 as i32;
     //
-    key = (clc.challenge ^ serverId ^ messageAcknowledge)
-        as byte;
+    key = (clc.challenge ^ serverId ^ messageAcknowledge) as byte;
     i = 12 as i32;
     while i < (*msg).cursize {
         // modify the key with the last received now acknowledged server command
@@ -133,16 +128,14 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut msg_t) {
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key =
-                (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as byte
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as byte
         } else {
-            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
-                as byte
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32)) as byte
         }
         index += 1;
         // encode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
-            as byte;
+        *(*msg).data.offset(i as isize) =
+            (*(*msg).data.offset(i as isize) as i32 ^ key as i32) as byte;
         i += 1
     }
 }
@@ -161,8 +154,7 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut msg_t) {
     let mut i: isize = 0;
     let mut index: isize = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte =
-        0 as *mut byte;
+    let mut string: *mut byte = 0 as *mut byte;
     let mut srdc: i32 = 0;
     let mut sbit: i32 = 0;
     let mut soob: i32 = 0;
@@ -170,18 +162,15 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut msg_t) {
     sbit = (*msg).bit;
     soob = (*msg).oob as i32;
     (*msg).oob = qfalse;
-    reliableAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t) as isize;
+    reliableAcknowledge = MSG_ReadLong(msg as *mut msg_t) as isize;
     (*msg).oob = soob as qboolean;
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
-    string = clc.reliableCommands
-        [(reliableAcknowledge & (64 as i32 - 1 as i32) as isize) as usize]
+    string = clc.reliableCommands[(reliableAcknowledge & (64 as i32 - 1 as i32) as isize) as usize]
         .as_mut_ptr() as *mut byte;
     index = 0 as i32 as isize;
     // xor the client challenge with the netchan sequence number (need something that changes every message)
-    key = (clc.challenge as u32 ^ *((*msg).data as *mut u32))
-        as byte;
+    key = (clc.challenge as u32 ^ *((*msg).data as *mut u32)) as byte;
     i = ((*msg).readcount + 4 as i32) as isize;
     while i < (*msg).cursize as isize {
         // modify the key with the last sent and with this message acknowledged client command
@@ -191,16 +180,15 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut msg_t) {
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize))
-                as byte
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize)) as byte
         } else {
             key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
                 as byte
         }
         index += 1;
         // decode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
-            as byte;
+        *(*msg).data.offset(i as isize) =
+            (*(*msg).data.offset(i as isize) as i32 ^ key as i32) as byte;
         i += 1
     }
 }
@@ -211,13 +199,9 @@ CL_Netchan_TransmitNextFragment
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_Netchan_TransmitNextFragment(
-    mut chan: *mut netchan_t,
-) -> qboolean {
+pub unsafe extern "C" fn CL_Netchan_TransmitNextFragment(mut chan: *mut netchan_t) -> qboolean {
     if (*chan).unsentFragments as u64 != 0 {
-        Netchan_TransmitNextFragment(
-            chan as *mut netchan_t,
-        );
+        Netchan_TransmitNextFragment(chan as *mut netchan_t);
         return qtrue;
     }
     return qfalse;
@@ -229,22 +213,12 @@ CL_Netchan_Transmit
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_Netchan_Transmit(
-    mut chan: *mut netchan_t,
-    mut msg: *mut msg_t,
-) {
-    MSG_WriteByte(
-        msg as *mut msg_t,
-        clc_EOF as i32,
-    );
+pub unsafe extern "C" fn CL_Netchan_Transmit(mut chan: *mut netchan_t, mut msg: *mut msg_t) {
+    MSG_WriteByte(msg as *mut msg_t, clc_EOF as i32);
     if (*chan).compat as u64 != 0 {
         CL_Netchan_Encode(msg);
     }
-    Netchan_Transmit(
-        chan as *mut netchan_t,
-        (*msg).cursize,
-        (*msg).data,
-    );
+    Netchan_Transmit(chan as *mut netchan_t, (*msg).cursize, (*msg).data);
     // Transmit all fragments without delay
     while CL_Netchan_TransmitNextFragment(chan) as u64 != 0 {
         Com_DPrintf(
@@ -471,10 +445,7 @@ pub unsafe extern "C" fn CL_Netchan_Process(
     mut msg: *mut msg_t,
 ) -> qboolean {
     let mut ret: i32 = 0;
-    ret = Netchan_Process(
-        chan as *mut netchan_t,
-        msg as *mut msg_t,
-    ) as i32;
+    ret = Netchan_Process(chan as *mut netchan_t, msg as *mut msg_t) as i32;
     if ret == 0 {
         return qfalse;
     }

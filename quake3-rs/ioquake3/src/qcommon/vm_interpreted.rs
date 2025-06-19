@@ -147,15 +147,12 @@ pub unsafe extern "C" fn VM_StackTrace(
     loop {
         Com_Printf(
             b"%s\n\x00" as *const u8 as *const libc::c_char,
-            VM_ValueToSymbol(
-                vm as *mut vm_s,
-                programCounter,
-            ),
+            VM_ValueToSymbol(vm as *mut vm_s, programCounter),
         );
         programStack = *(&mut *(*vm).dataBase.offset((programStack + 4 as i32) as isize)
             as *mut byte as *mut i32);
-        programCounter = *(&mut *(*vm).dataBase.offset(programStack as isize)
-            as *mut byte as *mut i32);
+        programCounter =
+            *(&mut *(*vm).dataBase.offset(programStack as isize) as *mut byte as *mut i32);
         if !(programCounter != -(1 as i32) && {
             count += 1;
             (count) < 32 as i32
@@ -171,29 +168,21 @@ VM_PrepareInterpreter
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_PrepareInterpreter(
-    mut vm: *mut vm_t,
-    mut header: *mut vmHeader_t,
-) {
+pub unsafe extern "C" fn VM_PrepareInterpreter(mut vm: *mut vm_t, mut header: *mut vmHeader_t) {
     let mut op: i32 = 0; // we're now int aligned
     let mut byte_pc: i32 = 0;
     let mut int_pc: i32 = 0;
-    let mut code: *mut byte =
-        0 as *mut byte;
+    let mut code: *mut byte = 0 as *mut byte;
     let mut instruction: i32 = 0;
     let mut codeBase: *mut i32 = 0 as *mut i32;
-    (*vm).codeBase = Hunk_Alloc(
-        (*vm).codeLength * 4 as i32,
-        h_high,
-    ) as *mut byte;
+    (*vm).codeBase = Hunk_Alloc((*vm).codeLength * 4 as i32, h_high) as *mut byte;
     //	memcpy( vm->codeBase, (byte *)header + header->codeOffset, vm->codeLength );
     // we don't need to translate the instructions, but we still need
     // to find each instructions starting point for jumps
     byte_pc = 0 as i32;
     int_pc = byte_pc;
     instruction = 0 as i32;
-    code =
-        (header as *mut byte).offset((*header).codeOffset as isize);
+    code = (header as *mut byte).offset((*header).codeOffset as isize);
     codeBase = (*vm).codeBase as *mut i32;
     // Copy and expand instructions to words while building instruction table
     while instruction < (*header).instructionCount {
@@ -214,9 +203,8 @@ pub unsafe extern "C" fn VM_PrepareInterpreter(
         match op {
             3 | 8 | 9 | 4 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24
             | 25 | 26 | 34 => {
-                *codeBase.offset(int_pc as isize) = loadWord(&mut *code.offset(byte_pc as isize)
-                    as *mut byte
-                    as *mut libc::c_void);
+                *codeBase.offset(int_pc as isize) =
+                    loadWord(&mut *code.offset(byte_pc as isize) as *mut byte as *mut libc::c_void);
                 byte_pc += 4 as i32;
                 int_pc += 1
             }
@@ -334,10 +322,7 @@ locals from sp
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_CallInterpreted(
-    mut vm: *mut vm_t,
-    mut args: *mut i32,
-) -> i32 {
+pub unsafe extern "C" fn VM_CallInterpreted(mut vm: *mut vm_t, mut args: *mut i32) -> i32 {
     let mut current_block: u64;
     let mut stack: [byte; 1039] = [0; 1039];
     let mut opStack: *mut i32 = 0 as *mut i32;
@@ -345,8 +330,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
     let mut programCounter: i32 = 0;
     let mut programStack: i32 = 0;
     let mut stackOnEntry: i32 = 0;
-    let mut image: *mut byte =
-        0 as *mut byte;
+    let mut image: *mut byte = 0 as *mut byte;
     let mut codeImage: *mut i32 = 0 as *mut i32;
     let mut v1: i32 = 0;
     let mut dataMask: i32 = 0;
@@ -364,20 +348,17 @@ pub unsafe extern "C" fn VM_CallInterpreted(
     programStack -= 8 as i32 + 4 as i32 * 13 as i32;
     arg = 0 as i32;
     while arg < 13 as i32 {
-        *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize)
-            as *mut byte as *mut i32) = *args.offset(arg as isize);
+        *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize) as *mut byte
+            as *mut i32) = *args.offset(arg as isize);
         arg += 1
     }
-    *(&mut *image.offset((programStack + 4 as i32) as isize)
-        as *mut byte as *mut i32) = 0 as i32;
-    *(&mut *image.offset(programStack as isize) as *mut byte
-        as *mut i32) = -(1 as i32);
+    *(&mut *image.offset((programStack + 4 as i32) as isize) as *mut byte as *mut i32) = 0 as i32;
+    *(&mut *image.offset(programStack as isize) as *mut byte as *mut i32) = -(1 as i32);
     VM_Debug(0 as i32);
     // leave a free spot at start of stack so
     // that as long as opStack is valid, opStack-1 will
     // not corrupt anything
-    opStack = (stack.as_mut_ptr() as intptr_t + 16 as i32 as isize
-        - 1 as i32 as isize
+    opStack = (stack.as_mut_ptr() as intptr_t + 16 as i32 as isize - 1 as i32 as isize
         & !(16 as i32 - 1 as i32) as isize) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
     opStackOfs = 0 as i32 as uint8_t;
@@ -418,15 +399,13 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     29 => {
                         let ref mut fresh3 = *opStack.offset(opStackOfs as isize);
-                        *fresh3 = *(&mut *image.offset((r0 & dataMask) as isize)
-                            as *mut byte
+                        *fresh3 = *(&mut *image.offset((r0 & dataMask) as isize) as *mut byte
                             as *mut i32);
                         r0 = *fresh3
                     }
                     28 => {
                         let ref mut fresh4 = *opStack.offset(opStackOfs as isize);
-                        *fresh4 = *(&mut *image.offset((r0 & dataMask) as isize)
-                            as *mut byte
+                        *fresh4 = *(&mut *image.offset((r0 & dataMask) as isize) as *mut byte
                             as *mut u16) as i32;
                         r0 = *fresh4
                     }
@@ -436,22 +415,19 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         r0 = *fresh5
                     }
                     32 => {
-                        *(&mut *image.offset((r1 & dataMask) as isize)
-                            as *mut byte
-                            as *mut i32) = r0;
+                        *(&mut *image.offset((r1 & dataMask) as isize) as *mut byte as *mut i32) =
+                            r0;
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     31 => {
-                        *(&mut *image.offset((r1 & dataMask) as isize)
-                            as *mut byte
-                            as *mut i16) = r0 as i16;
+                        *(&mut *image.offset((r1 & dataMask) as isize) as *mut byte as *mut i16) =
+                            r0 as i16;
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
                     30 => {
-                        *image.offset((r1 & dataMask) as isize) =
-                            r0 as byte;
+                        *image.offset((r1 & dataMask) as isize) = r0 as byte;
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
                         continue 'c_7647;
                     }
@@ -460,8 +436,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         *(&mut *image.offset(
                             (*codeImage.offset(programCounter as isize) + programStack & dataMask)
                                 as isize,
-                        ) as *mut byte
-                            as *mut i32) = r0;
+                        ) as *mut byte as *mut i32) = r0;
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         programCounter += 1 as i32;
                         continue 'c_7647;
@@ -478,9 +453,8 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     5 => {
                         // save current program counter
-                        *(&mut *image.offset(programStack as isize)
-                            as *mut byte
-                            as *mut i32) = programCounter;
+                        *(&mut *image.offset(programStack as isize) as *mut byte as *mut i32) =
+                            programCounter;
                         // jump to the location on the stack
                         programCounter = r0;
                         opStackOfs = opStackOfs.wrapping_sub(1);
@@ -491,8 +465,7 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                             // save the stack to allow recursive VM entry
                             //				temp = vm->callLevel;
                             (*vm).programStack = programStack - 4 as i32;
-                            *(&mut *image.offset((programStack + 4 as i32) as isize)
-                                as *mut byte
+                            *(&mut *image.offset((programStack + 4 as i32) as isize) as *mut byte
                                 as *mut i32) = -(1 as i32) - programCounter;
                             //VM_LogSyscalls( (int *)&image[ programStack + 4 ] );
                             // the vm has ints on the stack, we expect
@@ -501,18 +474,15 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                                 != ::std::mem::size_of::<i32>() as libc::c_ulong
                             {
                                 let mut argarr: [intptr_t; 16] = [0; 16];
-                                let mut imagePtr: *mut i32 = &mut *image
-                                    .offset(programStack as isize)
-                                    as *mut byte
-                                    as *mut i32;
+                                let mut imagePtr: *mut i32 =
+                                    &mut *image.offset(programStack as isize) as *mut byte
+                                        as *mut i32;
                                 let mut i: i32 = 0;
                                 i = 0 as i32;
                                 while (i as libc::c_ulong)
-                                    < (::std::mem::size_of::<[intptr_t; 16]>()
-                                        as libc::c_ulong)
+                                    < (::std::mem::size_of::<[intptr_t; 16]>() as libc::c_ulong)
                                         .wrapping_div(
-                                            ::std::mem::size_of::<intptr_t>()
-                                                as libc::c_ulong,
+                                            ::std::mem::size_of::<intptr_t>() as libc::c_ulong
                                         )
                                 {
                                     imagePtr = imagePtr.offset(1);
@@ -569,9 +539,8 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         v1 = *codeImage.offset(programCounter as isize);
                         programStack += v1;
                         // grab the saved program counter
-                        programCounter = *(&mut *image.offset(programStack as isize)
-                            as *mut byte
-                            as *mut i32);
+                        programCounter =
+                            *(&mut *image.offset(programStack as isize) as *mut byte as *mut i32);
                         // check for leaving the VM
                         if programCounter == -(1 as i32) {
                             break 's_105;
@@ -704,11 +673,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     21 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) == *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            == *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 6186816898867308296;
                             break;
                         } else {
@@ -718,11 +687,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     22 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) != *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            != *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 11226769033371074123;
                             break;
                         } else {
@@ -732,11 +701,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     23 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) < *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            < *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 4122836492991094814;
                             break;
                         } else {
@@ -746,11 +715,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     24 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) <= *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            <= *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 654039154479240366;
                             break;
                         } else {
@@ -760,11 +729,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     25 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) > *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            > *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 2346768750020253347;
                             break;
                         } else {
@@ -774,11 +743,11 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                     }
                     26 => {
                         opStackOfs = (opStackOfs as i32 - 2 as i32) as uint8_t;
-                        if *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                        ) >= *(opStack as *mut f32).offset(
-                            (opStackOfs as i32 + 2 as i32) as uint8_t as isize,
-                        ) {
+                        if *(opStack as *mut f32)
+                            .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize)
+                            >= *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 2 as i32) as uint8_t as isize)
+                        {
                             current_block = 14187386403465544025;
                             break;
                         } else {
@@ -877,36 +846,32 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
-                            + *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                            );
+                            + *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize);
                         continue 'c_7647;
                     }
                     55 => {
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
-                            - *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                            );
+                            - *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize);
                         continue 'c_7647;
                     }
                     56 => {
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
-                            / *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                            );
+                            / *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize);
                         continue 'c_7647;
                     }
                     57 => {
                         opStackOfs = opStackOfs.wrapping_sub(1);
                         *(opStack as *mut f32).offset(opStackOfs as isize) = *(opStack as *mut f32)
                             .offset(opStackOfs as isize)
-                            * *(opStack as *mut f32).offset(
-                                (opStackOfs as i32 + 1 as i32) as uint8_t as isize,
-                            );
+                            * *(opStack as *mut f32)
+                                .offset((opStackOfs as i32 + 1 as i32) as uint8_t as isize);
                         continue 'c_7647;
                     }
                     58 => {
@@ -915,9 +880,8 @@ pub unsafe extern "C" fn VM_CallInterpreted(
                         continue 'c_7647;
                     }
                     59 => {
-                        *opStack.offset(opStackOfs as isize) = qftolsse(
-                            *(opStack as *mut f32).offset(opStackOfs as isize),
-                        ) as i32;
+                        *opStack.offset(opStackOfs as isize) =
+                            qftolsse(*(opStack as *mut f32).offset(opStackOfs as isize)) as i32;
                         continue 'c_7647;
                     }
                     35 => {

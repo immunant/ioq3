@@ -63,32 +63,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut s_volume: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_volume: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_muted: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muted: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_musicVolume: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_musicVolume: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_doppler: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_doppler: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_backend: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_backend: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_muteWhenMinimized: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muteWhenMinimized: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_muteWhenUnfocused: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_muteWhenUnfocused: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut si: soundInterface_t = soundInterface_t {
     Shutdown: None,
@@ -123,9 +116,7 @@ S_ValidateInterface
 =================
 */
 
-unsafe extern "C" fn S_ValidSoundInterface(
-    mut si_0: *mut soundInterface_t,
-) -> qboolean {
+unsafe extern "C" fn S_ValidSoundInterface(mut si_0: *mut soundInterface_t) -> qboolean {
     if (*si_0).Shutdown.is_none() {
         return qfalse;
     }
@@ -227,10 +218,7 @@ S_StartLocalSound
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_StartLocalSound(
-    mut sfx: sfxHandle_t,
-    mut channelNum: i32,
-) {
+pub unsafe extern "C" fn S_StartLocalSound(mut sfx: sfxHandle_t, mut channelNum: i32) {
     if si.StartLocalSound.is_some() {
         si.StartLocalSound.expect("non-null function pointer")(sfx, channelNum);
     };
@@ -304,9 +292,7 @@ S_ClearLoopingSounds
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_ClearLoopingSounds(
-    mut killall: qboolean,
-) {
+pub unsafe extern "C" fn S_ClearLoopingSounds(mut killall: qboolean) {
     if si.ClearLoopingSounds.is_some() {
         si.ClearLoopingSounds.expect("non-null function pointer")(killall);
     };
@@ -383,10 +369,7 @@ S_UpdateEntityPosition
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_UpdateEntityPosition(
-    mut entityNum: i32,
-    mut origin: *const vec_t,
-) {
+pub unsafe extern "C" fn S_UpdateEntityPosition(mut entityNum: i32, mut origin: *const vec_t) {
     if si.UpdateEntityPosition.is_some() {
         si.UpdateEntityPosition.expect("non-null function pointer")(entityNum, origin);
     };
@@ -400,18 +383,14 @@ S_Update
 
 pub unsafe extern "C" fn S_Update() {
     if (*s_muted).integer != 0 {
-        if !((*s_muteWhenMinimized).integer != 0
-            && (*com_minimized).integer != 0)
-            && !((*s_muteWhenUnfocused).integer != 0
-                && (*com_unfocused).integer != 0)
+        if !((*s_muteWhenMinimized).integer != 0 && (*com_minimized).integer != 0)
+            && !((*s_muteWhenUnfocused).integer != 0 && (*com_unfocused).integer != 0)
         {
             (*s_muted).integer = qfalse as i32;
             (*s_muted).modified = qtrue
         }
-    } else if (*s_muteWhenMinimized).integer != 0
-        && (*com_minimized).integer != 0
-        || (*s_muteWhenUnfocused).integer != 0
-            && (*com_unfocused).integer != 0
+    } else if (*s_muteWhenMinimized).integer != 0 && (*com_minimized).integer != 0
+        || (*s_muteWhenUnfocused).integer != 0 && (*com_unfocused).integer != 0
     {
         (*s_muted).integer = qtrue as i32;
         (*s_muted).modified = qtrue
@@ -871,10 +850,7 @@ S_Capture
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_Capture(
-    mut samples: i32,
-    mut data: *mut byte,
-) {
+pub unsafe extern "C" fn S_Capture(mut samples: i32, mut data: *mut byte) {
     if si.Capture.is_some() {
         si.Capture.expect("non-null function pointer")(samples, data);
     };
@@ -961,15 +937,9 @@ pub unsafe extern "C" fn S_Play_f() {
     }
     i = 1 as i32;
     while i < c {
-        h = si.RegisterSound.expect("non-null function pointer")(
-            Cmd_Argv(i),
-            qfalse,
-        );
+        h = si.RegisterSound.expect("non-null function pointer")(Cmd_Argv(i), qfalse);
         if h != 0 {
-            si.StartLocalSound.expect("non-null function pointer")(
-                h,
-                CHAN_LOCAL_SOUND as i32,
-            );
+            si.StartLocalSound.expect("non-null function pointer")(h, CHAN_LOCAL_SOUND as i32);
         }
         i += 1
     }
@@ -1026,13 +996,9 @@ S_Init
 #[no_mangle]
 
 pub unsafe extern "C" fn S_Init() {
-    let mut cv: *mut cvar_t =
-        0 as *mut cvar_t;
-    let mut started: qboolean =
-        qfalse;
-    Com_Printf(
-        b"------ Initializing Sound ------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    let mut cv: *mut cvar_t = 0 as *mut cvar_t;
+    let mut started: qboolean = qfalse;
+    Com_Printf(b"------ Initializing Sound ------\n\x00" as *const u8 as *const libc::c_char);
     s_volume = Cvar_Get(
         b"s_volume\x00" as *const u8 as *const libc::c_char,
         b"0.8\x00" as *const u8 as *const libc::c_char,
@@ -1074,9 +1040,7 @@ pub unsafe extern "C" fn S_Init() {
         0 as i32,
     ) as *mut cvar_s;
     if (*cv).integer == 0 {
-        Com_Printf(
-            b"Sound disabled.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Sound disabled.\n\x00" as *const u8 as *const libc::c_char);
     } else {
         crate::src::client::snd_codec::S_CodecInit();
         Cmd_AddCommand(
@@ -1110,18 +1074,14 @@ pub unsafe extern "C" fn S_Init() {
         ) as *mut cvar_s;
         if (*cv).integer != 0 {
             //OpenAL
-            started = S_AL_Init(
-                &mut si as *mut _ as *mut soundInterface_t,
-            );
+            started = S_AL_Init(&mut si as *mut _ as *mut soundInterface_t);
             Cvar_Set(
                 b"s_backend\x00" as *const u8 as *const libc::c_char,
                 b"OpenAL\x00" as *const u8 as *const libc::c_char,
             );
         }
         if started as u64 == 0 {
-            started = S_Base_Init(
-                &mut si as *mut _ as *mut soundInterface_t,
-            );
+            started = S_Base_Init(&mut si as *mut _ as *mut soundInterface_t);
             Cvar_Set(
                 b"s_backend\x00" as *const u8 as *const libc::c_char,
                 b"base\x00" as *const u8 as *const libc::c_char,
@@ -1139,14 +1099,10 @@ pub unsafe extern "C" fn S_Init() {
                 b"Sound initialization successful.\n\x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            Com_Printf(
-                b"Sound initialization failed.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Sound initialization failed.\n\x00" as *const u8 as *const libc::c_char);
         }
     }
-    Com_Printf(
-        b"--------------------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"--------------------------------\n\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -1229,9 +1185,7 @@ pub unsafe extern "C" fn S_Shutdown() {
     );
     Cmd_RemoveCommand(b"play\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"music\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"stopmusic\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"stopmusic\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"s_list\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"s_stop\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"s_info\x00" as *const u8 as *const libc::c_char);

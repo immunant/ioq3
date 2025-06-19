@@ -517,8 +517,7 @@ pub unsafe extern "C" fn silk_decode_core(
     let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
     let mut A_Q12_tmp: [opus_int16; 16] = [0; 16];
     let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q15: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut sLTP_Q15: *mut opus_int32 = 0 as *mut opus_int32;
     let mut LTP_pred_Q13: opus_int32 = 0;
     let mut LPC_pred_Q10: opus_int32 = 0;
     let mut Gain_Q10: opus_int32 = 0;
@@ -526,16 +525,11 @@ pub unsafe extern "C" fn silk_decode_core(
     let mut gain_adj_Q16: opus_int32 = 0;
     let mut rand_seed: opus_int32 = 0;
     let mut offset_Q10: opus_int32 = 0;
-    let mut pred_lag_ptr: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut pexc_Q14: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut pres_Q14: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut res_Q14: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut sLPC_Q14: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut pexc_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut pres_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut res_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut sLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
@@ -563,8 +557,7 @@ pub unsafe extern "C" fn silk_decode_core(
     sLPC_Q14 = fresh3.as_mut_ptr() as *mut opus_int32;
     offset_Q10 = crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10
         [((*psDec).indices.signalType as i32 >> 1 as i32) as usize]
-        [(*psDec).indices.quantOffsetType as usize]
-        as opus_int32;
+        [(*psDec).indices.quantOffsetType as usize] as opus_int32;
     if ((*psDec).indices.NLSFInterpCoef_Q2 as i32) < (1 as i32) << 2 as i32 {
         NLSF_interpolation_flag = 1 as i32
     } else {
@@ -574,14 +567,11 @@ pub unsafe extern "C" fn silk_decode_core(
     rand_seed = (*psDec).indices.Seed as opus_int32;
     i = 0 as i32;
     while i < (*psDec).frame_length {
-        rand_seed = (907633515 as i32 as opus_uint32).wrapping_add(
-            (rand_seed as opus_uint32)
-                .wrapping_mul(196314165 as i32 as opus_uint32),
-        ) as opus_int32;
-        (*psDec).exc_Q14[i as usize] = ((*pulses.offset(i as isize)
-            as opus_int32
-            as opus_uint32)
-            << 14 as i32) as opus_int32;
+        rand_seed = (907633515 as i32 as opus_uint32)
+            .wrapping_add((rand_seed as opus_uint32).wrapping_mul(196314165 as i32 as opus_uint32))
+            as opus_int32;
+        (*psDec).exc_Q14[i as usize] =
+            ((*pulses.offset(i as isize) as opus_int32 as opus_uint32) << 14 as i32) as opus_int32;
         if (*psDec).exc_Q14[i as usize] > 0 as i32 {
             (*psDec).exc_Q14[i as usize] -= (80 as i32) << 4 as i32
         } else if (*psDec).exc_Q14[i as usize] < 0 as i32 {
@@ -597,11 +587,12 @@ pub unsafe extern "C" fn silk_decode_core(
         i += 1
     }
     /* Copy LPC state */
-    crate::stdlib::memcpy(sLPC_Q14 as *mut libc::c_void,
-           (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
-           (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        sLPC_Q14 as *mut libc::c_void,
+        (*psDec).sLPC_Q14_buf.as_mut_ptr() as *const libc::c_void,
+        (16 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
     pexc_Q14 = (*psDec).exc_Q14.as_mut_ptr();
     pxq = xq;
     sLTP_buf_idx = (*psDec).ltp_mem_length;
@@ -614,15 +605,13 @@ pub unsafe extern "C" fn silk_decode_core(
         crate::stdlib::memcpy(
             A_Q12_tmp.as_mut_ptr() as *mut libc::c_void,
             A_Q12 as *const libc::c_void,
-            ((*psDec).LPC_order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int16,
-            >() as libc::c_ulong),
+            ((*psDec).LPC_order as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
         );
         B_Q14 = &mut *(*psDecCtrl)
             .LTPCoef_Q14
             .as_mut_ptr()
-            .offset((k * 5 as i32) as isize)
-            as *mut opus_int16;
+            .offset((k * 5 as i32) as isize) as *mut opus_int16;
         signalType = (*psDec).indices.signalType as i32;
         Gain_Q10 = (*psDecCtrl).Gains_Q16[k as usize] >> 6 as i32;
         inv_gain_Q31 = silk_INVERSE32_varQ((*psDecCtrl).Gains_Q16[k as usize], 47 as i32);
@@ -636,9 +625,9 @@ pub unsafe extern "C" fn silk_decode_core(
             /* Scale short term state */
             i = 0 as i32;
             while i < 16 as i32 {
-                *sLPC_Q14.offset(i as isize) =
-                    (gain_adj_Q16 as i64 * *sLPC_Q14.offset(i as isize) as i64 >> 16 as i32)
-                        as opus_int32;
+                *sLPC_Q14.offset(i as isize) = (gain_adj_Q16 as i64
+                    * *sLPC_Q14.offset(i as isize) as i64
+                    >> 16 as i32) as opus_int32;
                 i += 1
             }
         } else {
@@ -655,13 +644,11 @@ pub unsafe extern "C" fn silk_decode_core(
             crate::stdlib::memset(
                 B_Q14 as *mut libc::c_void,
                 0 as i32,
-                (5 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    opus_int16,
-                >() as libc::c_ulong),
+                (5 as i32 as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
             );
             *B_Q14.offset((5 as i32 / 2 as i32) as isize) =
-                (0.25f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64)
-                    as opus_int32
+                (0.25f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64) as opus_int32
                     as opus_int16;
             signalType = 2 as i32;
             (*psDecCtrl).pitchL[k as usize] = (*psDec).lagPrev
@@ -680,12 +667,10 @@ pub unsafe extern "C" fn silk_decode_core(
                             .outBuf
                             .as_mut_ptr()
                             .offset((*psDec).ltp_mem_length as isize)
-                            as *mut opus_int16
-                            as *mut libc::c_void,
+                            as *mut opus_int16 as *mut libc::c_void,
                         xq as *const libc::c_void,
                         ((2 as i32 * (*psDec).subfr_length) as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                as libc::c_ulong),
+                            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
                     );
                 }
                 crate::src::opus_1_2_1::silk::LPC_analysis_filter::silk_LPC_analysis_filter(
@@ -702,13 +687,10 @@ pub unsafe extern "C" fn silk_decode_core(
                 /* After rewhitening the LTP state is unscaled */
                 if k == 0 as i32 {
                     /* Do LTP downscaling to reduce inter-packet dependency */
-                    inv_gain_Q31 = (((inv_gain_Q31 as i64
-                        * (*psDecCtrl).LTP_scale_Q14 as opus_int16 as i64
-                        >> 16 as i32)
-                        as opus_int32
-                        as opus_uint32)
-                        << 2 as i32)
-                        as opus_int32
+                    inv_gain_Q31 =
+                        (((inv_gain_Q31 as i64 * (*psDecCtrl).LTP_scale_Q14 as opus_int16 as i64
+                            >> 16 as i32) as opus_int32 as opus_uint32)
+                            << 2 as i32) as opus_int32
                 }
                 i = 0 as i32;
                 while i < lag + 5 as i32 / 2 as i32 {
@@ -744,38 +726,30 @@ pub unsafe extern "C" fn silk_decode_core(
                 LTP_pred_Q13 = (LTP_pred_Q13 as i64
                     + (*pred_lag_ptr.offset(0 as i32 as isize) as i64
                         * *B_Q14.offset(0 as i32 as isize) as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LTP_pred_Q13 = (LTP_pred_Q13 as i64
                     + (*pred_lag_ptr.offset(-(1 as i32) as isize) as i64
                         * *B_Q14.offset(1 as i32 as isize) as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LTP_pred_Q13 = (LTP_pred_Q13 as i64
                     + (*pred_lag_ptr.offset(-(2 as i32) as isize) as i64
                         * *B_Q14.offset(2 as i32 as isize) as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LTP_pred_Q13 = (LTP_pred_Q13 as i64
                     + (*pred_lag_ptr.offset(-(3 as i32) as isize) as i64
                         * *B_Q14.offset(3 as i32 as isize) as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LTP_pred_Q13 = (LTP_pred_Q13 as i64
                     + (*pred_lag_ptr.offset(-(4 as i32) as isize) as i64
                         * *B_Q14.offset(4 as i32 as isize) as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 pred_lag_ptr = pred_lag_ptr.offset(1);
                 /* Generate LPC excitation */
                 *pres_Q14.offset(i as isize) = *pexc_Q14.offset(i as isize)
-                    + ((LTP_pred_Q13 as opus_uint32) << 1 as i32)
-                        as opus_int32;
+                    + ((LTP_pred_Q13 as opus_uint32) << 1 as i32) as opus_int32;
                 /* Update states */
-                *sLTP_Q15.offset(sLTP_buf_idx as isize) = ((*pres_Q14.offset(i as isize)
-                    as opus_uint32)
-                    << 1 as i32)
-                    as opus_int32;
+                *sLTP_Q15.offset(sLTP_buf_idx as isize) =
+                    ((*pres_Q14.offset(i as isize) as opus_uint32) << 1 as i32) as opus_int32;
                 sLTP_buf_idx += 1;
                 i += 1
             }
@@ -831,43 +805,34 @@ pub unsafe extern "C" fn silk_decode_core(
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 11 as i32) as isize) as i64
                         * A_Q12_tmp[10 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 12 as i32) as isize) as i64
                         * A_Q12_tmp[11 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 13 as i32) as isize) as i64
                         * A_Q12_tmp[12 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 14 as i32) as isize) as i64
                         * A_Q12_tmp[13 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 15 as i32) as isize) as i64
                         * A_Q12_tmp[14 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32;
+                        >> 16 as i32)) as opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
                     + (*sLPC_Q14.offset((16 as i32 + i - 16 as i32) as isize) as i64
                         * A_Q12_tmp[15 as i32 as usize] as i64
-                        >> 16 as i32))
-                    as opus_int32
+                        >> 16 as i32)) as opus_int32
             }
-            *sLPC_Q14.offset((16 as i32 + i) as isize) = if (*pres_Q14.offset(i as isize)
-                as opus_uint32)
-                .wrapping_add(
+            *sLPC_Q14.offset((16 as i32 + i) as isize) =
+                if (*pres_Q14.offset(i as isize) as opus_uint32).wrapping_add(
                     (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
-                        (if LPC_pred_Q10
-                            > 0x80000000 as u32 as opus_int32 >> 4 as i32
-                        {
+                        (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32 {
                             (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
@@ -880,62 +845,22 @@ pub unsafe extern "C" fn silk_decode_core(
                         (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
-                            (if LPC_pred_Q10
-                                < 0x80000000 as u32 as opus_int32 >> 4 as i32
-                            {
+                            (if LPC_pred_Q10 < 0x80000000 as u32 as opus_int32 >> 4 as i32 {
                                 (0x80000000 as u32 as opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
                         })
                     }) as opus_uint32)
-                        << 4 as i32) as opus_int32
-                        as opus_uint32,
-                )
-                & 0x80000000 as u32
-                == 0 as i32 as u32
-            {
-                if (*pres_Q14.offset(i as isize)
-                    & (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
-                        > 0x7fffffff as i32 >> 4 as i32
-                    {
-                        (if LPC_pred_Q10
-                            > 0x80000000 as u32 as opus_int32 >> 4 as i32
-                        {
-                            (0x80000000 as u32 as opus_int32) >> 4 as i32
-                        } else {
-                            (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
-                                (0x7fffffff as i32) >> 4 as i32
-                            } else {
-                                LPC_pred_Q10
-                            })
-                        })
-                    } else {
-                        (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
-                            (0x7fffffff as i32) >> 4 as i32
-                        } else {
-                            (if LPC_pred_Q10
-                                < 0x80000000 as u32 as opus_int32 >> 4 as i32
-                            {
-                                (0x80000000 as u32 as opus_int32) >> 4 as i32
-                            } else {
-                                LPC_pred_Q10
-                            })
-                        })
-                    }) as opus_uint32)
-                        << 4 as i32) as opus_int32) as u32
-                    & 0x80000000 as u32
-                    != 0 as i32 as u32
+                        << 4 as i32) as opus_int32 as opus_uint32,
+                ) & 0x80000000 as u32
+                    == 0 as i32 as u32
                 {
-                    0x80000000 as u32 as opus_int32
-                } else {
-                    (*pres_Q14.offset(i as isize))
-                        + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
+                    if (*pres_Q14.offset(i as isize)
+                        & (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                             > 0x7fffffff as i32 >> 4 as i32
                         {
-                            (if LPC_pred_Q10
-                                > 0x80000000 as u32 as opus_int32 >> 4 as i32
-                            {
+                            (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32 {
                                 (0x80000000 as u32 as opus_int32) >> 4 as i32
                             } else {
                                 (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
@@ -948,61 +873,50 @@ pub unsafe extern "C" fn silk_decode_core(
                             (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
                                 (0x7fffffff as i32) >> 4 as i32
                             } else {
-                                (if LPC_pred_Q10
-                                    < 0x80000000 as u32 as opus_int32
-                                        >> 4 as i32
-                                {
-                                    (0x80000000 as u32 as opus_int32)
-                                        >> 4 as i32
+                                (if LPC_pred_Q10 < 0x80000000 as u32 as opus_int32 >> 4 as i32 {
+                                    (0x80000000 as u32 as opus_int32) >> 4 as i32
                                 } else {
                                     LPC_pred_Q10
                                 })
                             })
                         }) as opus_uint32)
-                            << 4 as i32)
-                            as opus_int32
-                }
-            } else if (*pres_Q14.offset(i as isize)
-                | (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
-                    > 0x7fffffff as i32 >> 4 as i32
-                {
-                    (if LPC_pred_Q10
-                        > 0x80000000 as u32 as opus_int32 >> 4 as i32
+                            << 4 as i32) as opus_int32) as u32
+                        & 0x80000000 as u32
+                        != 0 as i32 as u32
                     {
-                        (0x80000000 as u32 as opus_int32) >> 4 as i32
+                        0x80000000 as u32 as opus_int32
                     } else {
-                        (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
-                            (0x7fffffff as i32) >> 4 as i32
-                        } else {
-                            LPC_pred_Q10
-                        })
-                    })
-                } else {
-                    (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
-                        (0x7fffffff as i32) >> 4 as i32
-                    } else {
-                        (if LPC_pred_Q10
-                            < 0x80000000 as u32 as opus_int32 >> 4 as i32
-                        {
-                            (0x80000000 as u32 as opus_int32) >> 4 as i32
-                        } else {
-                            LPC_pred_Q10
-                        })
-                    })
-                }) as opus_uint32)
-                    << 4 as i32) as opus_int32) as u32
-                & 0x80000000 as u32
-                == 0 as i32 as u32
-            {
-                0x7fffffff as i32
-            } else {
-                (*pres_Q14.offset(i as isize))
-                    + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
+                        (*pres_Q14.offset(i as isize))
+                            + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
+                                > 0x7fffffff as i32 >> 4 as i32
+                            {
+                                (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32 {
+                                    (0x80000000 as u32 as opus_int32) >> 4 as i32
+                                } else {
+                                    (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
+                                        (0x7fffffff as i32) >> 4 as i32
+                                    } else {
+                                        LPC_pred_Q10
+                                    })
+                                })
+                            } else {
+                                (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
+                                    (0x7fffffff as i32) >> 4 as i32
+                                } else {
+                                    (if LPC_pred_Q10 < 0x80000000 as u32 as opus_int32 >> 4 as i32 {
+                                        (0x80000000 as u32 as opus_int32) >> 4 as i32
+                                    } else {
+                                        LPC_pred_Q10
+                                    })
+                                })
+                            }) as opus_uint32)
+                                << 4 as i32) as opus_int32
+                    }
+                } else if (*pres_Q14.offset(i as isize)
+                    | (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
-                        (if LPC_pred_Q10
-                            > 0x80000000 as u32 as opus_int32 >> 4 as i32
-                        {
+                        (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32 {
                             (0x80000000 as u32 as opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
@@ -1015,17 +929,45 @@ pub unsafe extern "C" fn silk_decode_core(
                         (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
-                            (if LPC_pred_Q10
-                                < 0x80000000 as u32 as opus_int32 >> 4 as i32
-                            {
+                            (if LPC_pred_Q10 < 0x80000000 as u32 as opus_int32 >> 4 as i32 {
                                 (0x80000000 as u32 as opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
                         })
                     }) as opus_uint32)
-                        << 4 as i32) as opus_int32
-            };
+                        << 4 as i32) as opus_int32) as u32
+                    & 0x80000000 as u32
+                    == 0 as i32 as u32
+                {
+                    0x7fffffff as i32
+                } else {
+                    (*pres_Q14.offset(i as isize))
+                        + (((if 0x80000000 as u32 as opus_int32 >> 4 as i32
+                            > 0x7fffffff as i32 >> 4 as i32
+                        {
+                            (if LPC_pred_Q10 > 0x80000000 as u32 as opus_int32 >> 4 as i32 {
+                                (0x80000000 as u32 as opus_int32) >> 4 as i32
+                            } else {
+                                (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
+                                    (0x7fffffff as i32) >> 4 as i32
+                                } else {
+                                    LPC_pred_Q10
+                                })
+                            })
+                        } else {
+                            (if LPC_pred_Q10 > 0x7fffffff as i32 >> 4 as i32 {
+                                (0x7fffffff as i32) >> 4 as i32
+                            } else {
+                                (if LPC_pred_Q10 < 0x80000000 as u32 as opus_int32 >> 4 as i32 {
+                                    (0x80000000 as u32 as opus_int32) >> 4 as i32
+                                } else {
+                                    LPC_pred_Q10
+                                })
+                            })
+                        }) as opus_uint32)
+                            << 4 as i32) as opus_int32
+                };
             *pxq.offset(i as isize) = if (if 8 as i32 == 1 as i32 {
                 ((*sLPC_Q14.offset((16 as i32 + i) as isize) as i64 * Gain_Q10 as i64 >> 16 as i32)
                     as opus_int32
@@ -1079,20 +1021,20 @@ pub unsafe extern "C" fn silk_decode_core(
         /* Update LPC filter state */
         crate::stdlib::memcpy(
             sLPC_Q14 as *mut libc::c_void,
-            &mut *sLPC_Q14.offset((*psDec).subfr_length as isize)
-                as *mut opus_int32 as *const libc::c_void,
-            (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int32,
-            >() as libc::c_ulong),
+            &mut *sLPC_Q14.offset((*psDec).subfr_length as isize) as *mut opus_int32
+                as *const libc::c_void,
+            (16 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
         );
         pexc_Q14 = pexc_Q14.offset((*psDec).subfr_length as isize);
         pxq = pxq.offset((*psDec).subfr_length as isize);
         k += 1
     }
     /* Save LPC state */
-    crate::stdlib::memcpy((*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
-           sLPC_Q14 as *const libc::c_void,
-           (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        (*psDec).sLPC_Q14_buf.as_mut_ptr() as *mut libc::c_void,
+        sLPC_Q14 as *const libc::c_void,
+        (16 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
 }

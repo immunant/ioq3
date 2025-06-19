@@ -91,8 +91,7 @@ pub unsafe extern "C" fn isqrt32(mut _val: opus_uint32) -> u32 {
         t = (g << 1 as i32).wrapping_add(b) << bshift;
         if t <= _val {
             g = g.wrapping_add(b);
-            _val = (_val as u32).wrapping_sub(t) as opus_uint32
-                as opus_uint32
+            _val = (_val as u32).wrapping_sub(t) as opus_uint32 as opus_uint32
         }
         b >>= 1 as i32;
         bshift -= 1;

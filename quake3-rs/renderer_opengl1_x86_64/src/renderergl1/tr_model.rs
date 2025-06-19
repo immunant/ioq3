@@ -261,12 +261,8 @@ pub use crate::tr_local_h::TMOD_TURBULENT;
 #[derive(Copy, Clone)]
 pub struct modelExtToLoaderMap_t {
     pub ext: *mut libc::c_char,
-    pub ModelLoader: Option<
-        unsafe extern "C" fn(
-            _: *const libc::c_char,
-            _: *mut model_t,
-        ) -> qhandle_t,
-    >,
+    pub ModelLoader:
+        Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut model_t) -> qhandle_t>,
 }
 
 #[repr(C)]
@@ -339,9 +335,7 @@ pub unsafe extern "C" fn R_RegisterMD3(
                 fext,
             );
         }
-        ri
-            .FS_ReadFile
-            .expect("non-null function pointer")(namebuf.as_mut_ptr(), &mut buf.v);
+        ri.FS_ReadFile.expect("non-null function pointer")(namebuf.as_mut_ptr(), &mut buf.v);
         if !buf.u.is_null() {
             ident = *buf.u as i32;
             if ident
@@ -352,18 +346,14 @@ pub unsafe extern "C" fn R_RegisterMD3(
             {
                 loaded = R_LoadMD3(mod_0, lod, buf.u as *mut libc::c_void, name)
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"R_RegisterMD3: unknown fileid for %s\n\x00" as *const u8
                         as *const libc::c_char,
                     name,
                 );
             }
-            ri
-                .FS_FreeFile
-                .expect("non-null function pointer")(buf.v);
+            ri.FS_FreeFile.expect("non-null function pointer")(buf.v);
             if !(loaded as u64 != 0) {
                 break;
             }
@@ -401,10 +391,9 @@ pub unsafe extern "C" fn R_RegisterMDR(
     let mut ident: i32 = 0;
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
-    filesize = ri
-        .FS_ReadFile
-        .expect("non-null function pointer")(
-        name, &mut buf.v as *mut *mut libc::c_void
+    filesize = ri.FS_ReadFile.expect("non-null function pointer")(
+        name,
+        &mut buf.v as *mut *mut libc::c_void,
     ) as i32;
     if buf.u.is_null() {
         (*mod_0).type_0 = MOD_BAD;
@@ -419,13 +408,9 @@ pub unsafe extern "C" fn R_RegisterMDR(
     {
         loaded = R_LoadMDR(mod_0, buf.u as *mut libc::c_void, filesize, name)
     }
-    ri
-        .FS_FreeFile
-        .expect("non-null function pointer")(buf.v);
+    ri.FS_FreeFile.expect("non-null function pointer")(buf.v);
     if loaded as u64 == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_RegisterMDR: couldn\'t load mdr file %s\n\x00" as *const u8 as *const libc::c_char,
             name,
@@ -449,10 +434,9 @@ pub unsafe extern "C" fn R_RegisterIQM(
     let mut buf: C2RustUnnamed_122 = C2RustUnnamed_122 { u: 0 as *mut u32 };
     let mut loaded: qboolean = qfalse;
     let mut filesize: i32 = 0;
-    filesize = ri
-        .FS_ReadFile
-        .expect("non-null function pointer")(
-        name, &mut buf.v as *mut *mut libc::c_void
+    filesize = ri.FS_ReadFile.expect("non-null function pointer")(
+        name,
+        &mut buf.v as *mut *mut libc::c_void,
     ) as i32;
     if buf.u.is_null() {
         (*mod_0).type_0 = MOD_BAD;
@@ -464,13 +448,9 @@ pub unsafe extern "C" fn R_RegisterIQM(
         filesize,
         name,
     );
-    ri
-        .FS_FreeFile
-        .expect("non-null function pointer")(buf.v);
+    ri.FS_FreeFile.expect("non-null function pointer")(buf.v);
     if loaded as u64 == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_RegisterIQM: couldn\'t load iqm file %s\n\x00" as *const u8 as *const libc::c_char,
             name,
@@ -493,8 +473,7 @@ static mut modelLoaders: [modelExtToLoaderMap_t; 3] = {
                         as unsafe extern "C" fn(
                             _: *const libc::c_char,
                             _: *mut model_t,
-                        )
-                            -> qhandle_t,
+                        ) -> qhandle_t,
                 ),
             };
             init
@@ -507,8 +486,7 @@ static mut modelLoaders: [modelExtToLoaderMap_t; 3] = {
                         as unsafe extern "C" fn(
                             _: *const libc::c_char,
                             _: *mut model_t,
-                        )
-                            -> qhandle_t,
+                        ) -> qhandle_t,
                 ),
             };
             init
@@ -521,8 +499,7 @@ static mut modelLoaders: [modelExtToLoaderMap_t; 3] = {
                         as unsafe extern "C" fn(
                             _: *const libc::c_char,
                             _: *mut model_t,
-                        )
-                            -> qhandle_t,
+                        ) -> qhandle_t,
                 ),
             };
             init
@@ -538,9 +515,7 @@ static mut numModelLoaders: i32 = 0;
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_GetModelByHandle(
-    mut index: qhandle_t,
-) -> *mut model_t {
+pub unsafe extern "C" fn R_GetModelByHandle(mut index: qhandle_t) -> *mut model_t {
     let mut mod_0: *mut model_t = 0 as *mut model_t;
     // out of range gets the defualt model
     if index < 1 as i32 || index >= tr.numModels {
@@ -560,15 +535,12 @@ pub unsafe extern "C" fn R_AllocModel() -> *mut model_t {
     if tr.numModels == 1024 as i32 {
         return 0 as *mut model_t;
     }
-    mod_0 = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    mod_0 = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<model_t>() as libc::c_ulong as i32,
         h_low,
     ) as *mut model_t;
     (*mod_0).index = tr.numModels;
-    tr.models
-        [tr.numModels as usize] = mod_0;
+    tr.models[tr.numModels as usize] = mod_0;
     tr.numModels += 1;
     return mod_0;
 }
@@ -586,31 +558,24 @@ asked for again.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RE_RegisterModel(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
+pub unsafe extern "C" fn RE_RegisterModel(mut name: *const libc::c_char) -> qhandle_t {
     let mut mod_0: *mut model_t = 0 as *mut model_t;
     let mut hModel: qhandle_t = 0;
-    let mut orgNameFailed: qboolean =
-        qfalse;
+    let mut orgNameFailed: qboolean = qfalse;
     let mut orgLoader: i32 = -(1 as i32);
     let mut i: i32 = 0;
     let mut localName: [libc::c_char; 64] = [0; 64];
     let mut ext: *const libc::c_char = 0 as *const libc::c_char;
     let mut altName: [libc::c_char; 64] = [0; 64];
     if name.is_null() || *name.offset(0 as i32 as isize) == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"RE_RegisterModel: NULL name\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Model name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -633,9 +598,7 @@ pub unsafe extern "C" fn RE_RegisterModel(
     // allocate a new model_t
     mod_0 = R_AllocModel();
     if mod_0.is_null() {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"RE_RegisterModel: R_AllocModel() failed for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -680,11 +643,7 @@ pub unsafe extern "C" fn RE_RegisterModel(
                 // try again without the extension
                 orgNameFailed = qtrue;
                 orgLoader = i;
-                COM_StripExtension(
-                    name,
-                    localName.as_mut_ptr(),
-                    64 as i32,
-                );
+                COM_StripExtension(name, localName.as_mut_ptr(), 64 as i32);
             } else {
                 // Something loaded
                 return (*mod_0).index;
@@ -711,9 +670,7 @@ pub unsafe extern "C" fn RE_RegisterModel(
             );
             if hModel != 0 {
                 if orgNameFailed as u64 != 0 {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_DEVELOPER as i32,
                         b"WARNING: %s not present, using %s instead\n\x00" as *const u8
                             as *const libc::c_char,
@@ -777,9 +734,7 @@ unsafe extern "C" fn R_LoadMD3(
     pinmodel = buffer as *mut md3Header_t;
     version = (*pinmodel).version;
     if version != 15 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMD3: %s has wrong version (%i should be %i)\n\x00" as *const u8
                 as *const libc::c_char,
@@ -792,11 +747,8 @@ unsafe extern "C" fn R_LoadMD3(
     (*mod_0).type_0 = MOD_MESH;
     size = (*pinmodel).ofsEnd;
     (*mod_0).dataSize += size;
-    (*mod_0).md3[lod as usize] = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
-        size, h_low
-    ) as *mut md3Header_t;
+    (*mod_0).md3[lod as usize] =
+        ri.Hunk_Alloc.expect("non-null function pointer")(size, h_low) as *mut md3Header_t;
     crate::stdlib::memcpy(
         (*mod_0).md3[lod as usize] as *mut libc::c_void,
         buffer,
@@ -812,9 +764,7 @@ unsafe extern "C" fn R_LoadMD3(
     (*(*mod_0).md3[lod as usize]).ofsSurfaces = (*(*mod_0).md3[lod as usize]).ofsSurfaces;
     (*(*mod_0).md3[lod as usize]).ofsEnd = (*(*mod_0).md3[lod as usize]).ofsEnd;
     if (*(*mod_0).md3[lod as usize]).numFrames < 1 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMD3: %s has no frames\n\x00" as *const u8 as *const libc::c_char,
             mod_name,
@@ -823,8 +773,7 @@ unsafe extern "C" fn R_LoadMD3(
     }
     // swap all the frames
     frame = ((*mod_0).md3[lod as usize] as *mut byte)
-        .offset((*(*mod_0).md3[lod as usize]).ofsFrames as isize)
-        as *mut md3Frame_t;
+        .offset((*(*mod_0).md3[lod as usize]).ofsFrames as isize) as *mut md3Frame_t;
     i = 0 as i32;
     while i < (*(*mod_0).md3[lod as usize]).numFrames {
         (*frame).radius = (*frame).radius;
@@ -842,8 +791,7 @@ unsafe extern "C" fn R_LoadMD3(
     }
     // swap all the tags
     tag = ((*mod_0).md3[lod as usize] as *mut byte)
-        .offset((*(*mod_0).md3[lod as usize]).ofsTags as isize)
-        as *mut md3Tag_t;
+        .offset((*(*mod_0).md3[lod as usize]).ofsTags as isize) as *mut md3Tag_t;
     i = 0 as i32;
     while i < (*(*mod_0).md3[lod as usize]).numTags * (*(*mod_0).md3[lod as usize]).numFrames {
         j = 0 as i32;
@@ -859,8 +807,7 @@ unsafe extern "C" fn R_LoadMD3(
     }
     // swap all the surfaces
     surf = ((*mod_0).md3[lod as usize] as *mut byte)
-        .offset((*(*mod_0).md3[lod as usize]).ofsSurfaces as isize)
-        as *mut md3Surface_t;
+        .offset((*(*mod_0).md3[lod as usize]).ofsSurfaces as isize) as *mut md3Surface_t;
     i = 0 as i32;
     while i < (*(*mod_0).md3[lod as usize]).numSurfaces {
         (*surf).ident = (*surf).ident;
@@ -875,9 +822,7 @@ unsafe extern "C" fn R_LoadMD3(
         (*surf).ofsXyzNormals = (*surf).ofsXyzNormals;
         (*surf).ofsEnd = (*surf).ofsEnd;
         if (*surf).numVerts >= 1000 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"R_LoadMD3: %s has more than %i verts on %s (%i).\n\x00" as *const u8
                     as *const libc::c_char,
@@ -893,9 +838,7 @@ unsafe extern "C" fn R_LoadMD3(
             return qfalse;
         }
         if (*surf).numTriangles * 3 as i32 >= 6 as i32 * 1000 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"R_LoadMD3: %s has more than %i triangles on %s (%i).\n\x00" as *const u8
                     as *const libc::c_char,
@@ -921,17 +864,11 @@ unsafe extern "C" fn R_LoadMD3(
             (*surf).name[(j - 2 as i32) as usize] = 0 as i32 as libc::c_char
         }
         // register the shaders
-        shader = (surf as *mut byte)
-            .offset((*surf).ofsShaders as isize)
-            as *mut md3Shader_t;
+        shader = (surf as *mut byte).offset((*surf).ofsShaders as isize) as *mut md3Shader_t;
         j = 0 as i32;
         while j < (*surf).numShaders {
             let mut sh: *mut shader_t = 0 as *mut shader_t;
-            sh = R_FindShader(
-                (*shader).name.as_mut_ptr(),
-                -(1 as i32),
-                qtrue,
-            ) as *mut shader_s;
+            sh = R_FindShader((*shader).name.as_mut_ptr(), -(1 as i32), qtrue) as *mut shader_s;
             if (*sh).defaultShader as u64 != 0 {
                 (*shader).shaderIndex = 0 as i32
             } else {
@@ -941,9 +878,7 @@ unsafe extern "C" fn R_LoadMD3(
             shader = shader.offset(1)
         }
         // swap all the triangles
-        tri = (surf as *mut byte)
-            .offset((*surf).ofsTriangles as isize)
-            as *mut md3Triangle_t;
+        tri = (surf as *mut byte).offset((*surf).ofsTriangles as isize) as *mut md3Triangle_t;
         j = 0 as i32;
         while j < (*surf).numTriangles {
             (*tri).indexes[0 as i32 as usize] = (*tri).indexes[0 as i32 as usize];
@@ -953,8 +888,7 @@ unsafe extern "C" fn R_LoadMD3(
             tri = tri.offset(1)
         }
         // swap all the ST
-        st = (surf as *mut byte).offset((*surf).ofsSt as isize)
-            as *mut md3St_t;
+        st = (surf as *mut byte).offset((*surf).ofsSt as isize) as *mut md3St_t;
         j = 0 as i32;
         while j < (*surf).numVerts {
             (*st).st[0 as i32 as usize] = (*st).st[0 as i32 as usize];
@@ -963,9 +897,7 @@ unsafe extern "C" fn R_LoadMD3(
             st = st.offset(1)
         }
         // swap all the XyzNormals
-        xyz = (surf as *mut byte)
-            .offset((*surf).ofsXyzNormals as isize)
-            as *mut md3XyzNormal_t;
+        xyz = (surf as *mut byte).offset((*surf).ofsXyzNormals as isize) as *mut md3XyzNormal_t;
         j = 0 as i32;
         while j < (*surf).numVerts * (*surf).numFrames {
             (*xyz).xyz[0 as i32 as usize] = (*xyz).xyz[0 as i32 as usize];
@@ -976,8 +908,7 @@ unsafe extern "C" fn R_LoadMD3(
             xyz = xyz.offset(1)
         }
         // find the next surface
-        surf = (surf as *mut byte).offset((*surf).ofsEnd as isize)
-            as *mut md3Surface_t;
+        surf = (surf as *mut byte).offset((*surf).ofsEnd as isize) as *mut md3Surface_t;
         i += 1
     }
     return qtrue;
@@ -1018,9 +949,7 @@ unsafe extern "C" fn R_LoadMDR(
     pinmodel = buffer as *mut mdrHeader_t;
     (*pinmodel).version = (*pinmodel).version;
     if (*pinmodel).version != 2 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMDR: %s has wrong version (%i should be %i)\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1032,9 +961,7 @@ unsafe extern "C" fn R_LoadMDR(
     }
     size = (*pinmodel).ofsEnd;
     if size > filesize {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMDR: Header of %s is broken. Wrong filesize declared!\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1058,9 +985,7 @@ unsafe extern "C" fn R_LoadMDR(
         size = (size as libc::c_ulong).wrapping_add(
             (((*pinmodel).numFrames * (*pinmodel).numBones) as libc::c_ulong).wrapping_mul(
                 (::std::mem::size_of::<mdrBone_t>() as libc::c_ulong)
-                    .wrapping_sub(
-                        ::std::mem::size_of::<mdrCompBone_t>() as libc::c_ulong
-                    ),
+                    .wrapping_sub(::std::mem::size_of::<mdrCompBone_t>() as libc::c_ulong),
             ),
         ) as i32
     }
@@ -1068,18 +993,14 @@ unsafe extern "C" fn R_LoadMDR(
     if (*pinmodel).numBones < 0 as i32
         || (::std::mem::size_of::<mdrHeader_t>() as libc::c_ulong).wrapping_add(
             ((*pinmodel).numFrames as libc::c_ulong).wrapping_mul(
-                (::std::mem::size_of::<mdrFrame_t>() as libc::c_ulong)
-                    .wrapping_add(
-                        (((*pinmodel).numBones - 1 as i32) as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<mdrBone_t>()
-                                as libc::c_ulong),
-                    ),
+                (::std::mem::size_of::<mdrFrame_t>() as libc::c_ulong).wrapping_add(
+                    (((*pinmodel).numBones - 1 as i32) as libc::c_ulong)
+                        .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as libc::c_ulong),
+                ),
             ),
         ) > size as libc::c_ulong
     {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8 as *const libc::c_char,
             mod_name,
@@ -1087,10 +1008,7 @@ unsafe extern "C" fn R_LoadMDR(
         return qfalse;
     }
     (*mod_0).dataSize += size;
-    mdr = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(size, h_low)
-        as *mut mdrHeader_t;
+    mdr = ri.Hunk_Alloc.expect("non-null function pointer")(size, h_low) as *mut mdrHeader_t;
     (*mod_0).modelData = mdr as *mut libc::c_void;
     // Copy all the values over from the file and fix endian issues in the process, if necessary.
     (*mdr).ident = (*pinmodel).ident; // Don't need to swap byte order on this one, we already did above.
@@ -1107,9 +1025,7 @@ unsafe extern "C" fn R_LoadMDR(
     // We don't care about the other offset values, we'll generate them ourselves while loading.
     (*mod_0).numLods = (*mdr).numLODs;
     if (*mdr).numFrames < 1 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMDR: %s has no frames\n\x00" as *const u8 as *const libc::c_char,
             mod_name,
@@ -1118,15 +1034,11 @@ unsafe extern "C" fn R_LoadMDR(
     }
     /* The first frame will be put into the first free space after the header */
     frame = mdr.offset(1 as i32 as isize) as *mut mdrFrame_t;
-    (*mdr).ofsFrames = (frame as *mut byte)
-        .offset_from(mdr as *mut byte)
-        as isize as i32;
+    (*mdr).ofsFrames = (frame as *mut byte).offset_from(mdr as *mut byte) as isize as i32;
     if (*pinmodel).ofsFrames < 0 as i32 {
-        let mut cframe: *mut mdrCompFrame_t =
-            0 as *mut mdrCompFrame_t;
+        let mut cframe: *mut mdrCompFrame_t = 0 as *mut mdrCompFrame_t;
         // compressed model...
-        cframe = (pinmodel as *mut byte)
-            .offset(-((*pinmodel).ofsFrames as isize))
+        cframe = (pinmodel as *mut byte).offset(-((*pinmodel).ofsFrames as isize))
             as *mut mdrCompFrame_t; // No name supplied in the compressed version.
         i = 0 as i32;
         while i < (*mdr).numFrames {
@@ -1172,11 +1084,9 @@ unsafe extern "C" fn R_LoadMDR(
                 j += 1
             }
             // Next Frame...
-            cframe = &mut *(*cframe).bones.as_mut_ptr().offset(j as isize)
-                as *mut mdrCompBone_t
+            cframe = &mut *(*cframe).bones.as_mut_ptr().offset(j as isize) as *mut mdrCompBone_t
                 as *mut mdrCompFrame_t;
-            frame = &mut *(*frame).bones.as_mut_ptr().offset(j as isize)
-                as *mut mdrBone_t
+            frame = &mut *(*frame).bones.as_mut_ptr().offset(j as isize) as *mut mdrBone_t
                 as *mut mdrFrame_t;
             i += 1
         }
@@ -1184,9 +1094,8 @@ unsafe extern "C" fn R_LoadMDR(
         let mut curframe: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
         // uncompressed model...
         //
-        curframe = (pinmodel as *mut byte)
-            .offset((*pinmodel).ofsFrames as isize)
-            as *mut mdrFrame_t;
+        curframe =
+            (pinmodel as *mut byte).offset((*pinmodel).ofsFrames as isize) as *mut mdrFrame_t;
         // swap all the frames
         i = 0 as i32;
         while i < (*mdr).numFrames {
@@ -1208,9 +1117,7 @@ unsafe extern "C" fn R_LoadMDR(
             j = 0 as i32;
             while j
                 < ((*mdr).numBones as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<mdrBone_t>() as libc::c_ulong
-                    )
+                    .wrapping_mul(::std::mem::size_of::<mdrBone_t>() as libc::c_ulong)
                     .wrapping_div(4 as i32 as libc::c_ulong) as i32
             {
                 *((*frame).bones.as_mut_ptr() as *mut f32).offset(j as isize) =
@@ -1220,32 +1127,23 @@ unsafe extern "C" fn R_LoadMDR(
             curframe = &mut *(*curframe)
                 .bones
                 .as_mut_ptr()
-                .offset((*mdr).numBones as isize)
-                as *mut mdrBone_t
+                .offset((*mdr).numBones as isize) as *mut mdrBone_t
                 as *mut mdrFrame_t;
             frame = &mut *(*frame).bones.as_mut_ptr().offset((*mdr).numBones as isize)
-                as *mut mdrBone_t
-                as *mut mdrFrame_t;
+                as *mut mdrBone_t as *mut mdrFrame_t;
             i += 1
         }
     }
     // frame should now point to the first free address after all frames.
     lod = frame as *mut mdrLOD_t;
-    (*mdr).ofsLODs = (lod as *mut byte)
-        .offset_from(mdr as *mut byte) as isize
-        as i32;
-    curlod = (pinmodel as *mut byte)
-        .offset((*pinmodel).ofsLODs as isize) as *mut mdrLOD_t;
+    (*mdr).ofsLODs = (lod as *mut byte).offset_from(mdr as *mut byte) as isize as i32;
+    curlod = (pinmodel as *mut byte).offset((*pinmodel).ofsLODs as isize) as *mut mdrLOD_t;
     // swap all the LOD's
     l = 0 as i32;
     while l < (*mdr).numLODs {
         // simple bounds check
-        if lod.offset(1 as i32 as isize) as *mut byte
-            > (mdr as *mut byte).offset(size as isize)
-        {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+        if lod.offset(1 as i32 as isize) as *mut byte > (mdr as *mut byte).offset(size as isize) {
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8 as *const libc::c_char,
                 mod_name,
@@ -1255,21 +1153,15 @@ unsafe extern "C" fn R_LoadMDR(
         (*lod).numSurfaces = (*curlod).numSurfaces;
         // swap all the surfaces
         surf = lod.offset(1 as i32 as isize) as *mut mdrSurface_t;
-        (*lod).ofsSurfaces = (surf as *mut byte)
-            .offset_from(lod as *mut byte)
-            as isize as i32;
-        cursurf = (curlod as *mut byte)
-            .offset((*curlod).ofsSurfaces as isize)
-            as *mut mdrSurface_t;
+        (*lod).ofsSurfaces = (surf as *mut byte).offset_from(lod as *mut byte) as isize as i32;
+        cursurf = (curlod as *mut byte).offset((*curlod).ofsSurfaces as isize) as *mut mdrSurface_t;
         i = 0 as i32;
         while i < (*lod).numSurfaces {
             // simple bounds check
             if surf.offset(1 as i32 as isize) as *mut byte
                 > (mdr as *mut byte).offset(size as isize)
             {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1289,17 +1181,13 @@ unsafe extern "C" fn R_LoadMDR(
                 (*cursurf).shader.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
-            (*surf).ofsHeader = (mdr as *mut byte)
-                .offset_from(surf as *mut byte)
-                as isize as i32;
+            (*surf).ofsHeader = (mdr as *mut byte).offset_from(surf as *mut byte) as isize as i32;
             (*surf).numVerts = (*cursurf).numVerts;
             (*surf).numTriangles = (*cursurf).numTriangles;
             // numBoneReferences and BoneReferences generally seem to be unused
             // now do the checks that may fail.
             if (*surf).numVerts >= 1000 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"R_LoadMDR: %s has more than %i verts on %s (%i).\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1315,9 +1203,7 @@ unsafe extern "C" fn R_LoadMDR(
                 return qfalse;
             }
             if (*surf).numTriangles * 3 as i32 >= 6 as i32 * 1000 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"R_LoadMDR: %s has more than %i triangles on %s (%i).\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1335,11 +1221,7 @@ unsafe extern "C" fn R_LoadMDR(
             // lowercase the surface name so skin compares are faster
             Q_strlwr((*surf).name.as_mut_ptr());
             // register the shaders
-            sh = R_FindShader(
-                (*surf).shader.as_mut_ptr(),
-                -(1 as i32),
-                qtrue,
-            ) as *mut shader_s;
+            sh = R_FindShader((*surf).shader.as_mut_ptr(), -(1 as i32), qtrue) as *mut shader_s;
             if (*sh).defaultShader as u64 != 0 {
                 (*surf).shaderIndex = 0 as i32
             } else {
@@ -1347,28 +1229,20 @@ unsafe extern "C" fn R_LoadMDR(
             }
             // now copy the vertexes.
             v = surf.offset(1 as i32 as isize) as *mut mdrVertex_t;
-            (*surf).ofsVerts = (v as *mut byte)
-                .offset_from(surf as *mut byte)
-                as isize as i32;
-            curv = (cursurf as *mut byte)
-                .offset((*cursurf).ofsVerts as isize)
-                as *mut mdrVertex_t;
+            (*surf).ofsVerts = (v as *mut byte).offset_from(surf as *mut byte) as isize as i32;
+            curv = (cursurf as *mut byte).offset((*cursurf).ofsVerts as isize) as *mut mdrVertex_t;
             j = 0 as i32;
             while j < (*surf).numVerts {
                 (*curv).numWeights = (*curv).numWeights;
                 // simple bounds check
                 if (*curv).numWeights < 0 as i32
-                    || (v.offset(1 as i32 as isize) as *mut byte)
-                        .offset(
-                            (((*curv).numWeights - 1 as i32) as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<mdrWeight_t>()
-                                    as libc::c_ulong) as isize,
-                        )
-                        > (mdr as *mut byte).offset(size as isize)
+                    || (v.offset(1 as i32 as isize) as *mut byte).offset(
+                        (((*curv).numWeights - 1 as i32) as libc::c_ulong)
+                            .wrapping_mul(::std::mem::size_of::<mdrWeight_t>() as libc::c_ulong)
+                            as isize,
+                    ) > (mdr as *mut byte).offset(size as isize)
                 {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_WARNING as i32,
                         b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8
                             as *const libc::c_char,
@@ -1382,8 +1256,8 @@ unsafe extern "C" fn R_LoadMDR(
                 (*v).texCoords[0 as i32 as usize] = (*curv).texCoords[0 as i32 as usize];
                 (*v).texCoords[1 as i32 as usize] = (*curv).texCoords[1 as i32 as usize];
                 (*v).numWeights = (*curv).numWeights;
-                weight = &mut *(*v).weights.as_mut_ptr().offset(0 as i32 as isize)
-                    as *mut mdrWeight_t;
+                weight =
+                    &mut *(*v).weights.as_mut_ptr().offset(0 as i32 as isize) as *mut mdrWeight_t;
                 curweight = &mut *(*curv).weights.as_mut_ptr().offset(0 as i32 as isize)
                     as *mut mdrWeight_t;
                 // Now copy all the weights
@@ -1404,21 +1278,16 @@ unsafe extern "C" fn R_LoadMDR(
             }
             // we know the offset to the triangles now:
             tri = v as *mut mdrTriangle_t;
-            (*surf).ofsTriangles = (tri as *mut byte)
-                .offset_from(surf as *mut byte)
-                as isize as i32;
-            curtri = (cursurf as *mut byte)
-                .offset((*cursurf).ofsTriangles as isize)
+            (*surf).ofsTriangles =
+                (tri as *mut byte).offset_from(surf as *mut byte) as isize as i32;
+            curtri = (cursurf as *mut byte).offset((*cursurf).ofsTriangles as isize)
                 as *mut mdrTriangle_t;
             // simple bounds check
             if (*surf).numTriangles < 0 as i32
-                || tri.offset((*surf).numTriangles as isize)
-                    as *mut byte
+                || tri.offset((*surf).numTriangles as isize) as *mut byte
                     > (mdr as *mut byte).offset(size as isize)
             {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1436,41 +1305,30 @@ unsafe extern "C" fn R_LoadMDR(
                 j += 1
             }
             // tri now points to the end of the surface.
-            (*surf).ofsEnd = (tri as *mut byte)
-                .offset_from(surf as *mut byte)
-                as isize as i32;
+            (*surf).ofsEnd = (tri as *mut byte).offset_from(surf as *mut byte) as isize as i32;
             surf = tri as *mut mdrSurface_t;
             // find the next surface.
-            cursurf = (cursurf as *mut byte)
-                .offset((*cursurf).ofsEnd as isize)
-                as *mut mdrSurface_t;
+            cursurf =
+                (cursurf as *mut byte).offset((*cursurf).ofsEnd as isize) as *mut mdrSurface_t;
             i += 1
         }
         // surf points to the next lod now.
-        (*lod).ofsEnd = (surf as *mut byte)
-            .offset_from(lod as *mut byte)
-            as isize as i32;
+        (*lod).ofsEnd = (surf as *mut byte).offset_from(lod as *mut byte) as isize as i32;
         lod = surf as *mut mdrLOD_t;
         // find the next LOD.
-        curlod = (curlod as *mut byte)
-            .offset((*curlod).ofsEnd as isize) as *mut mdrLOD_t;
+        curlod = (curlod as *mut byte).offset((*curlod).ofsEnd as isize) as *mut mdrLOD_t;
         l += 1
     }
     // lod points to the first tag now, so update the offset too.
     tag = lod as *mut mdrTag_t;
-    (*mdr).ofsTags = (tag as *mut byte)
-        .offset_from(mdr as *mut byte) as isize
-        as i32;
-    curtag = (pinmodel as *mut byte)
-        .offset((*pinmodel).ofsTags as isize) as *mut mdrTag_t;
+    (*mdr).ofsTags = (tag as *mut byte).offset_from(mdr as *mut byte) as isize as i32;
+    curtag = (pinmodel as *mut byte).offset((*pinmodel).ofsTags as isize) as *mut mdrTag_t;
     // simple bounds check
     if (*mdr).numTags < 0 as i32
         || tag.offset((*mdr).numTags as isize) as *mut byte
             > (mdr as *mut byte).offset(size as isize)
     {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_LoadMDR: %s has broken structure.\n\x00" as *const u8 as *const libc::c_char,
             mod_name,
@@ -1490,9 +1348,7 @@ unsafe extern "C" fn R_LoadMDR(
         i += 1
     }
     // And finally we know the real offset to the end.
-    (*mdr).ofsEnd = (tag as *mut byte)
-        .offset_from(mdr as *mut byte) as isize
-        as i32;
+    (*mdr).ofsEnd = (tag as *mut byte).offset_from(mdr as *mut byte) as isize as i32;
     // phew! we're done.
     return qtrue;
 }
@@ -1670,9 +1526,7 @@ pub unsafe extern "C" fn R_Modellist_f() {
             }
             j += 1
         }
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%8i : (%i) %s\n\x00" as *const u8 as *const libc::c_char,
             (*mod_0).dataSize,
@@ -1682,9 +1536,7 @@ pub unsafe extern "C" fn R_Modellist_f() {
         total += (*mod_0).dataSize;
         i += 1
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"%8i : Total models\n\x00" as *const u8 as *const libc::c_char,
         total,
@@ -1709,8 +1561,7 @@ unsafe extern "C" fn R_GetTag(
         // it is possible to have a bad frame while changing models, so don't error
         frame = (*mod_0).numFrames - 1 as i32
     }
-    tag = ((mod_0 as *mut byte).offset((*mod_0).ofsTags as isize)
-        as *mut md3Tag_t)
+    tag = ((mod_0 as *mut byte).offset((*mod_0).ofsTags as isize) as *mut md3Tag_t)
         .offset((frame * (*mod_0).numTags) as isize);
     i = 0 as i32;
     while i < (*mod_0).numTags {
@@ -1741,8 +1592,7 @@ pub unsafe extern "C" fn R_GetAnimTag(
         // it is possible to have a bad frame while changing models, so don't error
         framenum = (*mod_0).numFrames - 1 as i32
     }
-    tag = (mod_0 as *mut byte).offset((*mod_0).ofsTags as isize)
-        as *mut mdrTag_t;
+    tag = (mod_0 as *mut byte).offset((*mod_0).ofsTags as isize) as *mut mdrTag_t;
     i = 0 as i32;
     while i < (*mod_0).numTags {
         if libc::strcmp((*tag).name.as_mut_ptr(), tagName) == 0 {
@@ -1756,13 +1606,11 @@ pub unsafe extern "C" fn R_GetAnimTag(
             frameSize = &mut *(*(0 as *mut mdrFrame_t))
                 .bones
                 .as_mut_ptr()
-                .offset((*mod_0).numBones as isize)
-                as *mut mdrBone_t
+                .offset((*mod_0).numBones as isize) as *mut mdrBone_t
                 as intptr_t as i32;
             frame = (mod_0 as *mut byte)
                 .offset((*mod_0).ofsFrames as isize)
-                .offset((framenum * frameSize) as isize)
-                as *mut mdrFrame_t;
+                .offset((framenum * frameSize) as isize) as *mut mdrFrame_t;
             j = 0 as i32;
             while j < 3 as i32 {
                 k = 0 as i32;
@@ -1847,8 +1695,7 @@ pub unsafe extern "C" fn R_LerpTag(
         } else if (*model).type_0 as u32 == MOD_IQM as i32 as u32 {
             return R_IQMLerpTag(
                 tag as *mut orientation_t,
-                (*model).modelData as *mut iqmData_t
-                    as *mut iqmData_t,
+                (*model).modelData as *mut iqmData_t as *mut iqmData_t,
                 startFrame,
                 endFrame,
                 frac,
@@ -2122,13 +1969,10 @@ pub unsafe extern "C" fn R_ModelBounds(
         return;
     } else {
         if (*model).type_0 as u32 == MOD_MESH as i32 as u32 {
-            let mut header: *mut md3Header_t =
-                0 as *mut md3Header_t;
+            let mut header: *mut md3Header_t = 0 as *mut md3Header_t;
             let mut frame: *mut md3Frame_t = 0 as *mut md3Frame_t;
             header = (*model).md3[0 as i32 as usize];
-            frame = (header as *mut byte)
-                .offset((*header).ofsFrames as isize)
-                as *mut md3Frame_t;
+            frame = (header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t;
             *mins.offset(0 as i32 as isize) = (*frame).bounds[0 as i32 as usize][0 as i32 as usize];
             *mins.offset(1 as i32 as isize) = (*frame).bounds[0 as i32 as usize][1 as i32 as usize];
             *mins.offset(2 as i32 as isize) = (*frame).bounds[0 as i32 as usize][2 as i32 as usize];
@@ -2138,13 +1982,10 @@ pub unsafe extern "C" fn R_ModelBounds(
             return;
         } else {
             if (*model).type_0 as u32 == MOD_MDR as i32 as u32 {
-                let mut header_0: *mut mdrHeader_t =
-                    0 as *mut mdrHeader_t;
-                let mut frame_0: *mut mdrFrame_t =
-                    0 as *mut mdrFrame_t;
+                let mut header_0: *mut mdrHeader_t = 0 as *mut mdrHeader_t;
+                let mut frame_0: *mut mdrFrame_t = 0 as *mut mdrFrame_t;
                 header_0 = (*model).modelData as *mut mdrHeader_t;
-                frame_0 = (header_0 as *mut byte)
-                    .offset((*header_0).ofsFrames as isize)
+                frame_0 = (header_0 as *mut byte).offset((*header_0).ofsFrames as isize)
                     as *mut mdrFrame_t;
                 *mins.offset(0 as i32 as isize) =
                     (*frame_0).bounds[0 as i32 as usize][0 as i32 as usize];
@@ -2161,8 +2002,7 @@ pub unsafe extern "C" fn R_ModelBounds(
                 return;
             } else {
                 if (*model).type_0 as u32 == MOD_IQM as i32 as u32 {
-                    let mut iqmData: *mut iqmData_t =
-                        0 as *mut iqmData_t;
+                    let mut iqmData: *mut iqmData_t = 0 as *mut iqmData_t;
                     iqmData = (*model).modelData as *mut iqmData_t;
                     if !(*iqmData).bounds.is_null() {
                         *mins.offset(0 as i32 as isize) =

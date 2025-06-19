@@ -443,9 +443,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         loop {
             let fresh0 = i;
@@ -483,9 +481,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         code <<= 1 as i32;
         si += 1
@@ -498,11 +494,9 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
             /* valoffset[l] = huffval[] index of 1st symbol of code length l,
              * minus the minimum code of length l
              */
-            (*dtbl).valoffset[l as usize] =
-                p as INT32 - huffcode[p as usize] as INT32;
+            (*dtbl).valoffset[l as usize] = p as INT32 - huffcode[p as usize] as INT32;
             p += (*htbl).bits[l as usize] as i32;
-            (*dtbl).maxcode[l as usize] =
-                huffcode[(p - 1 as i32) as usize] as INT32
+            (*dtbl).maxcode[l as usize] = huffcode[(p - 1 as i32) as usize] as INT32
         /* maximum code of length l */
         } else {
             (*dtbl).maxcode[l as usize] = -(1 as i32) as INT32
@@ -559,9 +553,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             i += 1
         }
@@ -687,8 +679,7 @@ unsafe extern "C" fn jpeg_fill_bit_buffer(
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        -(1 as i32),
+                        cinfo as j_common_ptr, -(1 as i32)
                     );
                     (*((*cinfo).entropy as huff_entropy_ptr)).insufficient_data = 1 as i32
                 }
@@ -780,10 +771,7 @@ unsafe extern "C" fn jpeg_huff_decode(
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            (*state).cinfo as j_common_ptr,
-            -(1 as i32),
-        );
+        .expect("non-null function pointer")((*state).cinfo as j_common_ptr, -(1 as i32));
         return 0 as i32;
         /* fake a zero as the safest result */
     }
@@ -794,9 +782,7 @@ unsafe extern "C" fn jpeg_huff_decode(
  * Returns FALSE if must suspend.
  */
 
-unsafe extern "C" fn process_restart(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+unsafe extern "C" fn process_restart(mut cinfo: j_decompress_ptr) -> boolean {
     let mut entropy: huff_entropy_ptr = (*cinfo).entropy as huff_entropy_ptr;
     let mut ci: i32 = 0;
     /* Throw away any unused bits remaining in bit buffer; */
@@ -883,8 +869,7 @@ unsafe extern "C" fn decode_mcu_DC_first(
         last_dc_val: [0; 4],
     };
     let mut tbl: *mut d_derived_tbl = 0 as *mut d_derived_tbl;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Process restart marker if needed; may have to suspend */
     if (*cinfo).restart_interval != 0 {
         if (*entropy).restarts_to_go == 0 as i32 as u32 {
@@ -1118,8 +1103,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
                         r
                     };
                     /* Scale and output coefficient in natural (dezigzagged) order */
-                    (*block)[*natural_order.offset(k as isize) as usize] =
-                        (s << Al) as JCOEF
+                    (*block)[*natural_order.offset(k as isize) as usize] = (s << Al) as JCOEF
                 } else if r == 15 as i32 {
                     /* ZRL */
                     k += 15 as i32
@@ -1211,8 +1195,7 @@ unsafe extern "C" fn decode_mcu_DC_refine(
         }
         bits_left -= 1 as i32;
         if (get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize] != 0 {
-            (*block)[0 as i32 as usize] =
-                ((*block)[0 as i32 as usize] as i32 | p1) as JCOEF
+            (*block)[0 as i32 as usize] = ((*block)[0 as i32 as usize] as i32 | p1) as JCOEF
         }
         blkn += 1
     }
@@ -1366,8 +1349,7 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                     if s != 0 {
                         if s != 1 as i32 {
                             /* size of new coef should always be 1 */
-                            (*(*cinfo).err).msg_code =
-                                JWRN_HUFF_BAD_CODE as i32;
+                            (*(*cinfo).err).msg_code = JWRN_HUFF_BAD_CODE as i32;
                             Some(
                                 (*(*cinfo).err)
                                     .emit_message
@@ -1447,11 +1429,9 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                                 if *thiscoef as i32 & p1 == 0 as i32 {
                                     /* do nothing if already set it */
                                     if *thiscoef as i32 >= 0 as i32 {
-                                        *thiscoef =
-                                            (*thiscoef as i32 + p1) as JCOEF
+                                        *thiscoef = (*thiscoef as i32 + p1) as JCOEF
                                     } else {
-                                        *thiscoef =
-                                            (*thiscoef as i32 + m1) as JCOEF
+                                        *thiscoef = (*thiscoef as i32 + m1) as JCOEF
                                     }
                                 }
                             }
@@ -1487,8 +1467,7 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                     /* Re-zero any output coefficients that we made newly nonzero */
                     while num_newnz > 0 as i32 {
                         num_newnz -= 1;
-                        (*block)[newnz_pos[num_newnz as usize] as usize] =
-                            0 as i32 as JCOEF
+                        (*block)[newnz_pos[num_newnz as usize] as usize] = 0 as i32 as JCOEF
                     }
                     return 0 as i32;
                 }
@@ -1523,11 +1502,9 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                                 if *thiscoef as i32 & p1 == 0 as i32 {
                                     /* do nothing if already changed it */
                                     if *thiscoef as i32 >= 0 as i32 {
-                                        *thiscoef =
-                                            (*thiscoef as i32 + p1) as JCOEF
+                                        *thiscoef = (*thiscoef as i32 + p1) as JCOEF
                                     } else {
-                                        *thiscoef =
-                                            (*thiscoef as i32 + m1) as JCOEF
+                                        *thiscoef = (*thiscoef as i32 + m1) as JCOEF
                                     }
                                 }
                             }
@@ -1763,8 +1740,7 @@ unsafe extern "C" fn decode_mcu_sub(
                          * Note: the extra entries in natural_order[] will save us
                          * if k > Se, which could happen if the data is corrupted.
                          */
-                        (*block)[*natural_order.offset(k as isize) as usize] =
-                            s as JCOEF
+                        (*block)[*natural_order.offset(k as isize) as usize] = s as JCOEF
                     } else {
                         if r != 15 as i32 {
                             current_block_136 = 2544535129495155983;
@@ -2086,9 +2062,8 @@ unsafe extern "C" fn decode_mcu(
                          * Note: the extra entries in jpeg_natural_order[] will save us
                          * if k >= DCTSIZE2, which could happen if the data is corrupted.
                          */
-                        (*block)[*jpeg_natural_order
-                            .as_ptr()
-                            .offset(k as isize) as usize] = s as JCOEF
+                        (*block)[*jpeg_natural_order.as_ptr().offset(k as isize) as usize] =
+                            s as JCOEF
                     } else {
                         if r != 15 as i32 {
                             current_block_134 = 14358540534591340610;
@@ -2218,8 +2193,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
     let mut blkn: i32 = 0;
     let mut tbl: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if (*cinfo).progressive_mode != 0 {
         /* Validate progressive scan parameters */
         if (*cinfo).Ss == 0 as i32 {
@@ -2282,9 +2256,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             _ => {}
         }
@@ -2301,8 +2273,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                 .offset(0 as i32 as isize) as *mut i32;
             if (*cinfo).Ss != 0 && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32 {
                 /* AC without prior DC scan */
-                (*(*cinfo).err).msg_code =
-                    JWRN_BOGUS_PROGRESSION as i32;
+                (*(*cinfo).err).msg_code = JWRN_BOGUS_PROGRESSION as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = cindex;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 0 as i32;
                 Some(
@@ -2311,8 +2282,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as j_common_ptr,
-                    -(1 as i32),
+                    cinfo as j_common_ptr, -(1 as i32)
                 );
             }
             coefi = (*cinfo).Ss;
@@ -2323,8 +2293,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                     *coef_bit_ptr.offset(coefi as isize)
                 };
                 if (*cinfo).Ah != expected {
-                    (*(*cinfo).err).msg_code =
-                        JWRN_BOGUS_PROGRESSION as i32;
+                    (*(*cinfo).err).msg_code = JWRN_BOGUS_PROGRESSION as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = cindex;
                     (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = coefi;
                     Some(
@@ -2333,8 +2302,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        -(1 as i32),
+                        cinfo as j_common_ptr, -(1 as i32)
                     );
                 }
                 *coef_bit_ptr.offset(coefi as isize) = (*cinfo).Al;
@@ -2347,37 +2315,23 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
             if (*cinfo).Ss == 0 as i32 {
                 (*entropy).pub_0.decode_mcu = Some(
                     decode_mcu_DC_first
-                        as unsafe extern "C" fn(
-                            _: j_decompress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             } else {
                 (*entropy).pub_0.decode_mcu = Some(
                     decode_mcu_AC_first
-                        as unsafe extern "C" fn(
-                            _: j_decompress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             }
         } else if (*cinfo).Ss == 0 as i32 {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu_DC_refine
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         } else {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu_AC_refine
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         }
         ci = 0 as i32;
@@ -2431,10 +2385,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
                     .emit_message
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr,
-                -(1 as i32),
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr, -(1 as i32));
         }
         /* Select MCU decoding routine */
         /* We retain the hard-coded case for full-size blocks.
@@ -2446,18 +2397,12 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: j_decompress_ptr) {
         if (*cinfo).lim_Se != 64 as i32 - 1 as i32 {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu_sub
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         } else {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         }
         ci = 0 as i32;
@@ -2605,10 +2550,8 @@ pub unsafe extern "C" fn jinit_huff_decoder(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<huff_entropy_decoder>() as libc::c_ulong,
     ) as huff_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_decoder;
-    (*entropy).pub_0.start_pass = Some(
-        start_pass_huff_decoder
-            as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*entropy).pub_0.start_pass =
+        Some(start_pass_huff_decoder as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     if (*cinfo).progressive_mode != 0 {
         /* Create progression status table */
         let mut coef_bit_ptr: *mut i32 = 0 as *mut i32;

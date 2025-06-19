@@ -157,10 +157,8 @@ pub static mut uis: uiStatic_t = uiStatic_t {
     cursorx: 0,
     cursory: 0,
     menusp: 0,
-    activemenu: 0 as *const menuframework_s
-        as *mut menuframework_s,
-    stack: [0 as *const menuframework_s
-        as *mut menuframework_s; 8],
+    activemenu: 0 as *const menuframework_s as *mut menuframework_s,
+    stack: [0 as *const menuframework_s as *mut menuframework_s; 8],
     glconfig: glconfig_t {
         renderer_string: [0; 1024],
         vendor_string: [0; 1024],
@@ -203,8 +201,7 @@ pub static mut uis: uiStatic_t = uiStatic_t {
 };
 #[no_mangle]
 
-pub static mut m_entersound: qboolean =
-    qfalse;
+pub static mut m_entersound: qboolean = qfalse;
 // after a frame, so caching won't disrupt the sound
 #[no_mangle]
 
@@ -440,9 +437,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut menuframework_s) {
     }
     if i == uis.menusp {
         if uis.menusp >= 8 as i32 {
-            trap_Error(
-                b"UI_PushMenu: menu stack overflow\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_Error(b"UI_PushMenu: menu stack overflow\x00" as *const u8 as *const libc::c_char);
         }
         let fresh0 = uis.menusp;
         uis.menusp = uis.menusp + 1;
@@ -461,10 +456,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut menuframework_s) {
         if (*item).flags & (0x2000 as i32 as u32 | 0x800 as i32 as u32 | 0x4000 as i32 as u32) == 0
         {
             (*menu).cursor_prev = -(1 as i32);
-            Menu_SetCursor(
-                menu as *mut _tag_menuframework,
-                i,
-            );
+            Menu_SetCursor(menu as *mut _tag_menuframework, i);
             break;
         } else {
             i += 1
@@ -480,15 +472,10 @@ UI_PopMenu
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_PopMenu() {
-    trap_S_StartLocalSound(
-        menu_out_sound,
-        CHAN_LOCAL_SOUND as i32,
-    );
+    trap_S_StartLocalSound(menu_out_sound, CHAN_LOCAL_SOUND as i32);
     uis.menusp -= 1;
     if uis.menusp < 0 as i32 {
-        trap_Error(
-            b"UI_PopMenu: menu stack underflow\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_Error(b"UI_PopMenu: menu stack underflow\x00" as *const u8 as *const libc::c_char);
     }
     if uis.menusp != 0 {
         uis.activemenu = uis.stack[(uis.menusp - 1 as i32) as usize];
@@ -502,9 +489,7 @@ pub unsafe extern "C" fn UI_PopMenu() {
 pub unsafe extern "C" fn UI_ForceMenuOff() {
     uis.menusp = 0 as i32;
     uis.activemenu = 0 as *mut menuframework_s;
-    trap_Key_SetCatcher(
-        trap_Key_GetCatcher() & !(0x2 as i32),
-    );
+    trap_Key_SetCatcher(trap_Key_GetCatcher() & !(0x2 as i32));
     trap_Key_ClearStates();
     trap_Cvar_Set(
         b"cl_paused\x00" as *const u8 as *const libc::c_char,
@@ -932,12 +917,9 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         );
     }
     if style & 0x2000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
-        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
-        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64) as vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64) as vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64) as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
             x,
@@ -950,20 +932,16 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         return;
     }
     if style & 0x4000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
-        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
-        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-            as vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64) as vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64) as vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64) as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
         drawcolor[0 as i32 as usize] = *color.offset(0 as i32 as isize);
         drawcolor[1 as i32 as usize] = *color.offset(1 as i32 as isize);
         drawcolor[2 as i32 as usize] = *color.offset(2 as i32 as isize);
-        drawcolor[3 as i32 as usize] = (0.5f64
-            + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64))
-            as vec_t;
+        drawcolor[3 as i32 as usize] =
+            (0.5f64 + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64)) as vec_t;
         UI_DrawProportionalString2(
             x,
             y,
@@ -1167,14 +1145,10 @@ pub unsafe extern "C" fn UI_DrawString(
         charh = 16 as i32
     }
     if style & 0x4000 as i32 != 0 {
-        lowlight[0 as i32 as usize] = (0.8f64 * *color.offset(0 as i32 as isize) as f64)
-            as vec_t;
-        lowlight[1 as i32 as usize] = (0.8f64 * *color.offset(1 as i32 as isize) as f64)
-            as vec_t;
-        lowlight[2 as i32 as usize] = (0.8f64 * *color.offset(2 as i32 as isize) as f64)
-            as vec_t;
-        lowlight[3 as i32 as usize] = (0.8f64 * *color.offset(3 as i32 as isize) as f64)
-            as vec_t;
+        lowlight[0 as i32 as usize] = (0.8f64 * *color.offset(0 as i32 as isize) as f64) as vec_t;
+        lowlight[1 as i32 as usize] = (0.8f64 * *color.offset(1 as i32 as isize) as f64) as vec_t;
+        lowlight[2 as i32 as usize] = (0.8f64 * *color.offset(2 as i32 as isize) as f64) as vec_t;
+        lowlight[3 as i32 as usize] = (0.8f64 * *color.offset(3 as i32 as isize) as f64) as vec_t;
         UI_LerpColor(
             color,
             lowlight.as_mut_ptr(),
@@ -1236,9 +1210,7 @@ pub unsafe extern "C" fn UI_DrawChar(
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_IsFullscreen() -> qboolean {
-    if !uis.activemenu.is_null()
-        && trap_Key_GetCatcher() & 0x2 as i32 != 0
-    {
+    if !uis.activemenu.is_null() && trap_Key_GetCatcher() & 0x2 as i32 != 0 {
         return (*uis.activemenu).fullscreen;
     }
     return qfalse;
@@ -1280,10 +1252,7 @@ pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: uiMenuCommand_t) {
             UI_ConfirmMenu(
                 b"Insert the CD\x00" as *const u8 as *const libc::c_char,
                 None,
-                Some(
-                    NeedCDAction
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(NeedCDAction as unsafe extern "C" fn(_: qboolean) -> ()),
             );
             return;
         }
@@ -1291,10 +1260,7 @@ pub unsafe extern "C" fn UI_SetActiveMenu(mut menu: uiMenuCommand_t) {
             UI_ConfirmMenu(
                 b"Bad CD Key\x00" as *const u8 as *const libc::c_char,
                 None,
-                Some(
-                    NeedCDKeyAction
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(NeedCDKeyAction as unsafe extern "C" fn(_: qboolean) -> ()),
             );
             return;
         }
@@ -1332,16 +1298,10 @@ pub unsafe extern "C" fn UI_KeyEvent(mut key: i32, mut down: i32) {
     if (*uis.activemenu).key.is_some() {
         s = (*uis.activemenu).key.expect("non-null function pointer")(key)
     } else {
-        s = Menu_DefaultKey(
-            uis.activemenu as *mut _tag_menuframework,
-            key,
-        )
+        s = Menu_DefaultKey(uis.activemenu as *mut _tag_menuframework, key)
     }
     if s > 0 as i32 && s != menu_null_sound {
-        trap_S_StartLocalSound(
-            s,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(s, CHAN_LOCAL_SOUND as i32);
     };
 }
 /*
@@ -1385,10 +1345,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
             {
                 // set focus to item at cursor
                 if (*uis.activemenu).cursor != i {
-                    Menu_SetCursor(
-                        uis.activemenu as *mut _tag_menuframework,
-                        i,
-                    );
+                    Menu_SetCursor(uis.activemenu as *mut _tag_menuframework, i);
                     (*((*uis.activemenu).items[(*uis.activemenu).cursor_prev as usize]
                         as *mut menucommon_s))
                         .flags &= !(0x200 as i32 as u32);
@@ -1398,10 +1355,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
                         & 0x100000 as i32 as u32
                         == 0
                     {
-                        trap_S_StartLocalSound(
-                            menu_move_sound,
-                            CHAN_LOCAL_SOUND as i32,
-                        );
+                        trap_S_StartLocalSound(menu_move_sound, CHAN_LOCAL_SOUND as i32);
                     }
                 }
                 (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
@@ -1415,8 +1369,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     }
     if (*uis.activemenu).nitems > 0 as i32 {
         // out of any region
-        (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize]
-            as *mut menucommon_s))
+        (*((*uis.activemenu).items[(*uis.activemenu).cursor as usize] as *mut menucommon_s))
             .flags &= !(0x200 as i32 as u32)
     };
 }
@@ -1491,36 +1444,22 @@ UI_ConsoleCommand
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_ConsoleCommand(
-    mut realTime: i32,
-) -> qboolean {
+pub unsafe extern "C" fn UI_ConsoleCommand(mut realTime: i32) -> qboolean {
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     uis.frametime = realTime - uis.realtime;
     uis.realtime = realTime;
     cmd = UI_Argv(0 as i32);
     // ensure minimum menu data is available
     Menu_Cache();
-    if Q_stricmp(
-        cmd,
-        b"levelselect\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"levelselect\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_SPLevelMenu_f();
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"postgame\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"postgame\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_SPPostgameMenu_f();
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"ui_cache\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"ui_cache\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_Cache_f();
         return qtrue;
     }
@@ -1540,27 +1479,15 @@ pub unsafe extern "C" fn UI_ConsoleCommand(
         UI_TeamOrdersMenu_f();
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"iamacheater\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"iamacheater\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_SPUnlock_f();
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"iamamonkey\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"iamamonkey\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_SPUnlockMedals_f();
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"ui_cdkey\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"ui_cdkey\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         UI_CDKeyMenu_f();
         return qtrue;
     }
@@ -1585,9 +1512,7 @@ pub unsafe extern "C" fn UI_Init() {
     UI_RegisterCvars();
     UI_InitGameinfo();
     // cache redundant calulations
-    trap_GetGlconfig(
-        &mut uis.glconfig as *mut _ as *mut glconfig_t,
-    );
+    trap_GetGlconfig(&mut uis.glconfig as *mut _ as *mut glconfig_t);
     // for 640x480 virtualized screen
     uis.xscale = (uis.glconfig.vidWidth as f64 * (1.0f64 / 640.0f64)) as f32;
     uis.yscale = (uis.glconfig.vidHeight as f64 * (1.0f64 / 480.0f64)) as f32;
@@ -1828,9 +1753,7 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
         if (*uis.activemenu).draw.is_some() {
             (*uis.activemenu).draw.expect("non-null function pointer")();
         } else {
-            Menu_Draw(
-                uis.activemenu as *mut _tag_menuframework,
-            );
+            Menu_Draw(uis.activemenu as *mut _tag_menuframework);
         }
         if uis.firstdraw as u64 != 0 {
             UI_MouseEvent(0 as i32, 0 as i32);
@@ -1850,10 +1773,7 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
     // menu has been drawn, to avoid delay while
     // caching images
     if m_entersound as u64 != 0 {
-        trap_S_StartLocalSound(
-            menu_in_sound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(menu_in_sound, CHAN_LOCAL_SOUND as i32);
         m_entersound = qfalse
     };
 }

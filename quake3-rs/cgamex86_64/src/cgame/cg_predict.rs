@@ -348,8 +348,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // It also handles local physics interaction, like fragments bouncing off walls
 
 static mut cg_pmove: pmove_t = pmove_t {
-    ps: 0 as *const playerState_t
-        as *mut playerState_t,
+    ps: 0 as *const playerState_t as *mut playerState_t,
     cmd: usercmd_t {
         serverTime: 0,
         angles: [0; 3],
@@ -379,8 +378,7 @@ static mut cg_pmove: pmove_t = pmove_t {
 
 static mut cg_numSolidEntities: i32 = 0;
 
-static mut cg_solidEntities: [*mut centity_t; 256] =
-    [0 as *const centity_t as *mut centity_t; 256];
+static mut cg_solidEntities: [*mut centity_t; 256] = [0 as *const centity_t as *mut centity_t; 256];
 
 static mut cg_numTriggerEntities: i32 = 0;
 
@@ -401,8 +399,7 @@ pub unsafe extern "C" fn CG_BuildSolidList() {
     let mut i: i32 = 0;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
     let mut snap: *mut snapshot_t = 0 as *mut snapshot_t;
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
     cg_numSolidEntities = 0 as i32;
     cg_numTriggerEntities = 0 as i32;
     if !cg.nextSnap.is_null()
@@ -453,25 +450,23 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
     let mut x: i32 = 0;
     let mut zd: i32 = 0;
     let mut zu: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
     let mut cmodel: clipHandle_t = 0;
     let mut bmins: vec3_t = [0.; 3];
     let mut bmaxs: vec3_t = [0.; 3];
@@ -490,8 +485,7 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
                 angles[1 as i32 as usize] = (*cent).lerpAngles[1 as i32 as usize];
                 angles[2 as i32 as usize] = (*cent).lerpAngles[2 as i32 as usize];
                 BG_EvaluateTrajectory(
-                    &mut (*cent).currentState.pos as *mut _
-                        as *const trajectory_t,
+                    &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
                     cg.physicsTime,
                     origin.as_mut_ptr(),
                 );
@@ -510,12 +504,9 @@ unsafe extern "C" fn CG_ClipMoveToEntities(
                     bmins.as_mut_ptr() as *const vec_t,
                     bmaxs.as_mut_ptr() as *const vec_t,
                 );
-                angles[0 as i32 as usize] =
-                    vec3_origin[0 as i32 as usize];
-                angles[1 as i32 as usize] =
-                    vec3_origin[1 as i32 as usize];
-                angles[2 as i32 as usize] =
-                    vec3_origin[2 as i32 as usize];
+                angles[0 as i32 as usize] = vec3_origin[0 as i32 as usize];
+                angles[1 as i32 as usize] = vec3_origin[1 as i32 as usize];
+                angles[2 as i32 as usize] = vec3_origin[2 as i32 as usize];
                 origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
                 origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
                 origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
@@ -601,13 +592,9 @@ CG_PointContents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_PointContents(
-    mut point: *const vec_t,
-    mut passEntityNum: i32,
-) -> i32 {
+pub unsafe extern "C" fn CG_PointContents(mut point: *const vec_t, mut passEntityNum: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
     let mut cmodel: clipHandle_t = 0;
     let mut contents: i32 = 0;
@@ -623,10 +610,8 @@ pub unsafe extern "C" fn CG_PointContents(
                     contents |= trap_CM_TransformedPointContents(
                         point,
                         cmodel,
-                        (*cent).lerpOrigin.as_mut_ptr()
-                            as *const vec_t,
-                        (*cent).lerpAngles.as_mut_ptr()
-                            as *const vec_t,
+                        (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
+                        (*cent).lerpAngles.as_mut_ptr() as *const vec_t,
                     )
                 }
             }
@@ -645,13 +630,10 @@ cg.snap->player_state and cg.nextFrame->player_state
 ========================
 */
 
-unsafe extern "C" fn CG_InterpolatePlayerState(
-    mut grabAngles: qboolean,
-) {
+unsafe extern "C" fn CG_InterpolatePlayerState(mut grabAngles: qboolean) {
     let mut f: f32 = 0.;
     let mut i: i32 = 0;
-    let mut out: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut out: *mut playerState_t = 0 as *mut playerState_t;
     let mut prev: *mut snapshot_t = 0 as *mut snapshot_t;
     let mut next: *mut snapshot_t = 0 as *mut snapshot_t;
     out = &mut cg.predictedPlayerState;
@@ -660,22 +642,18 @@ unsafe extern "C" fn CG_InterpolatePlayerState(
     *out = (*cg.snap).ps;
     // if we are still allowing local input, short circuit the view angles
     if grabAngles as u64 != 0 {
-        let mut cmd: usercmd_t =
-            usercmd_t {
-                serverTime: 0,
-                angles: [0; 3],
-                buttons: 0,
-                weapon: 0,
-                forwardmove: 0,
-                rightmove: 0,
-                upmove: 0,
-            };
+        let mut cmd: usercmd_t = usercmd_t {
+            serverTime: 0,
+            angles: [0; 3],
+            buttons: 0,
+            weapon: 0,
+            forwardmove: 0,
+            rightmove: 0,
+            upmove: 0,
+        };
         let mut cmdNum: i32 = 0;
         cmdNum = trap_GetCurrentCmdNumber();
-        trap_GetUserCmd(
-            cmdNum,
-            &mut cmd as *mut _ as *mut usercmd_s,
-        );
+        trap_GetUserCmd(cmdNum, &mut cmd as *mut _ as *mut usercmd_s);
         PM_UpdateViewAngles(
             out as *mut playerState_s,
             &mut cmd as *mut _ as *const usercmd_s,
@@ -688,8 +666,7 @@ unsafe extern "C" fn CG_InterpolatePlayerState(
     if next.is_null() || (*next).serverTime <= (*prev).serverTime {
         return;
     }
-    f = (cg.time - (*prev).serverTime) as f32
-        / ((*next).serverTime - (*prev).serverTime) as f32;
+    f = (cg.time - (*prev).serverTime) as f32 / ((*next).serverTime - (*prev).serverTime) as f32;
     i = (*next).ps.bobCycle;
     if i < (*prev).ps.bobCycle {
         i += 256 as i32
@@ -724,8 +701,7 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
         return;
     }
     if BG_PlayerTouchesItem(
-        &mut cg.predictedPlayerState as *mut _
-            as *mut playerState_s,
+        &mut cg.predictedPlayerState as *mut _ as *mut playerState_s,
         &mut (*cent).currentState as *mut _ as *mut entityState_s,
         cg.time,
     ) as u64
@@ -740,8 +716,7 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
     if BG_CanItemBeGrabbed(
         cgs.gametype as i32,
         &mut (*cent).currentState as *mut _ as *const entityState_s,
-        &mut cg.predictedPlayerState as *mut _
-            as *const playerState_s,
+        &mut cg.predictedPlayerState as *mut _ as *const playerState_s,
     ) as u64
         == 0
     {
@@ -750,24 +725,17 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
     }
     item = &mut *bg_itemlist
         .as_mut_ptr()
-        .offset((*cent).currentState.modelindex as isize)
-        as *mut gitem_t;
+        .offset((*cent).currentState.modelindex as isize) as *mut gitem_t;
     // Special case for flags.
     // We don't predict touching our own flag
     if cgs.gametype as u32 == GT_CTF as i32 as u32 {
-        if cg
-            .predictedPlayerState
-            .persistant[PERS_TEAM as i32 as usize]
-            == TEAM_RED as i32
+        if cg.predictedPlayerState.persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32
             && (*item).giType as u32 == IT_TEAM as i32 as u32
             && (*item).giTag == PW_REDFLAG as i32
         {
             return;
         }
-        if cg
-            .predictedPlayerState
-            .persistant[PERS_TEAM as i32 as usize]
-            == TEAM_BLUE as i32
+        if cg.predictedPlayerState.persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32
             && (*item).giType as u32 == IT_TEAM as i32 as u32
             && (*item).giTag == PW_BLUEFLAG as i32
         {
@@ -778,8 +746,7 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
     BG_AddPredictableEventToPlayerstate(
         EV_ITEM_PICKUP as i32,
         (*cent).currentState.modelindex,
-        &mut cg.predictedPlayerState as *mut _
-            as *mut playerState_s,
+        &mut cg.predictedPlayerState as *mut _ as *mut playerState_s,
     );
     // remove it from the frame so it won't be drawn
     (*cent).currentState.eFlags |= 0x80 as i32;
@@ -787,11 +754,9 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut centity_t) {
     (*cent).miscTime = cg.time;
     // if it's a weapon, give them some predicted ammo so the autoswitch will work
     if (*item).giType as u32 == IT_WEAPON as i32 as u32 {
-        cg.predictedPlayerState.stats
-            [STAT_WEAPONS as i32 as usize] |= (1 as i32) << (*item).giTag;
+        cg.predictedPlayerState.stats[STAT_WEAPONS as i32 as usize] |= (1 as i32) << (*item).giTag;
         if cg.predictedPlayerState.ammo[(*item).giTag as usize] == 0 {
-            cg.predictedPlayerState.ammo[(*item).giTag as usize] =
-                1 as i32
+            cg.predictedPlayerState.ammo[(*item).giTag as usize] = 1 as i32
         }
     };
 }
@@ -805,43 +770,32 @@ Predict push triggers and items
 
 unsafe extern "C" fn CG_TouchTriggerPrediction() {
     let mut i: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
     let mut cmodel: clipHandle_t = 0;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
-    let mut spectator: qboolean =
-        qfalse;
+    let mut spectator: qboolean = qfalse;
     // dead clients don't activate triggers
-    if cg.predictedPlayerState.stats
-        [STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return;
     }
-    spectator = (cg.predictedPlayerState.pm_type
-        == PM_SPECTATOR as i32) as i32
-        as qboolean;
-    if cg.predictedPlayerState.pm_type
-        != PM_NORMAL as i32
-        && spectator as u64 == 0
-    {
+    spectator = (cg.predictedPlayerState.pm_type == PM_SPECTATOR as i32) as i32 as qboolean;
+    if cg.predictedPlayerState.pm_type != PM_NORMAL as i32 && spectator as u64 == 0 {
         return;
     }
     i = 0 as i32;
@@ -855,16 +809,8 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
             if !(cmodel == 0) {
                 trap_CM_BoxTrace(
                     &mut trace as *mut _ as *mut trace_t,
-                    cg
-                        .predictedPlayerState
-                        .origin
-                        .as_mut_ptr()
-                        as *const vec_t,
-                    cg
-                        .predictedPlayerState
-                        .origin
-                        .as_mut_ptr()
-                        as *const vec_t,
+                    cg.predictedPlayerState.origin.as_mut_ptr() as *const vec_t,
+                    cg.predictedPlayerState.origin.as_mut_ptr() as *const vec_t,
                     cg_pmove.mins.as_mut_ptr() as *const vec_t,
                     cg_pmove.maxs.as_mut_ptr() as *const vec_t,
                     cmodel,
@@ -872,12 +818,10 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
                 );
                 if !(trace.startsolid as u64 == 0) {
                     if (*ent).eType == ET_TELEPORT_TRIGGER as i32 {
-                        cg.hyperspace =
-                            qtrue
+                        cg.hyperspace = qtrue
                     } else if (*ent).eType == ET_PUSH_TRIGGER as i32 {
                         BG_TouchJumpPad(
-                            &mut cg.predictedPlayerState as *mut _
-                                as *mut playerState_s,
+                            &mut cg.predictedPlayerState as *mut _ as *mut playerState_s,
                             ent as *mut entityState_s,
                         );
                     }
@@ -887,19 +831,9 @@ unsafe extern "C" fn CG_TouchTriggerPrediction() {
         i += 1
     }
     // if we didn't touch a jump pad this pmove frame
-    if cg
-        .predictedPlayerState
-        .jumppad_frame
-        != cg
-            .predictedPlayerState
-            .pmove_framecount
-    {
-        cg
-            .predictedPlayerState
-            .jumppad_frame = 0 as i32;
-        cg
-            .predictedPlayerState
-            .jumppad_ent = 0 as i32
+    if cg.predictedPlayerState.jumppad_frame != cg.predictedPlayerState.pmove_framecount {
+        cg.predictedPlayerState.jumppad_frame = 0 as i32;
+        cg.predictedPlayerState.jumppad_ent = 0 as i32
     };
 }
 /*
@@ -1150,95 +1084,87 @@ to ease the jerk.
 pub unsafe extern "C" fn CG_PredictPlayerState() {
     let mut cmdNum: i32 = 0; // will be set if touching a trigger_teleport
     let mut current: i32 = 0;
-    let mut oldPlayerState: playerState_t =
-        playerState_t {
-            commandTime: 0,
-            pm_type: 0,
-            bobCycle: 0,
-            pm_flags: 0,
-            pm_time: 0,
-            origin: [0.; 3],
-            velocity: [0.; 3],
-            weaponTime: 0,
-            gravity: 0,
-            speed: 0,
-            delta_angles: [0; 3],
-            groundEntityNum: 0,
-            legsTimer: 0,
-            legsAnim: 0,
-            torsoTimer: 0,
-            torsoAnim: 0,
-            movementDir: 0,
-            grapplePoint: [0.; 3],
-            eFlags: 0,
-            eventSequence: 0,
-            events: [0; 2],
-            eventParms: [0; 2],
-            externalEvent: 0,
-            externalEventParm: 0,
-            externalEventTime: 0,
-            clientNum: 0,
-            weapon: 0,
-            weaponstate: 0,
-            viewangles: [0.; 3],
-            viewheight: 0,
-            damageEvent: 0,
-            damageYaw: 0,
-            damagePitch: 0,
-            damageCount: 0,
-            stats: [0; 16],
-            persistant: [0; 16],
-            powerups: [0; 16],
-            ammo: [0; 16],
-            generic1: 0,
-            loopSound: 0,
-            jumppad_ent: 0,
-            ping: 0,
-            pmove_framecount: 0,
-            jumppad_frame: 0,
-            entityEventSequence: 0,
-        };
+    let mut oldPlayerState: playerState_t = playerState_t {
+        commandTime: 0,
+        pm_type: 0,
+        bobCycle: 0,
+        pm_flags: 0,
+        pm_time: 0,
+        origin: [0.; 3],
+        velocity: [0.; 3],
+        weaponTime: 0,
+        gravity: 0,
+        speed: 0,
+        delta_angles: [0; 3],
+        groundEntityNum: 0,
+        legsTimer: 0,
+        legsAnim: 0,
+        torsoTimer: 0,
+        torsoAnim: 0,
+        movementDir: 0,
+        grapplePoint: [0.; 3],
+        eFlags: 0,
+        eventSequence: 0,
+        events: [0; 2],
+        eventParms: [0; 2],
+        externalEvent: 0,
+        externalEventParm: 0,
+        externalEventTime: 0,
+        clientNum: 0,
+        weapon: 0,
+        weaponstate: 0,
+        viewangles: [0.; 3],
+        viewheight: 0,
+        damageEvent: 0,
+        damageYaw: 0,
+        damagePitch: 0,
+        damageCount: 0,
+        stats: [0; 16],
+        persistant: [0; 16],
+        powerups: [0; 16],
+        ammo: [0; 16],
+        generic1: 0,
+        loopSound: 0,
+        jumppad_ent: 0,
+        ping: 0,
+        pmove_framecount: 0,
+        jumppad_frame: 0,
+        entityEventSequence: 0,
+    };
     let mut moved: qboolean = qfalse;
-    let mut oldestCmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
-    let mut latestCmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
+    let mut oldestCmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
+    let mut latestCmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
     cg.hyperspace = qfalse;
     // if this is the first frame we must guarantee
     // predictedPlayerState is valid even if there is some
     // other error condition
     if cg.validPPS as u64 == 0 {
         cg.validPPS = qtrue;
-        cg.predictedPlayerState =
-            (*cg.snap).ps
+        cg.predictedPlayerState = (*cg.snap).ps
     }
     // demo playback just copies the moves
-    if cg.demoPlayback as u32 != 0
-        || (*cg.snap).ps.pm_flags & 4096 as i32 != 0
-    {
+    if cg.demoPlayback as u32 != 0 || (*cg.snap).ps.pm_flags & 4096 as i32 != 0 {
         CG_InterpolatePlayerState(qfalse);
         return;
     }
     // non-predicting local movement will grab the latest angles
-    if cg_nopredict.integer != 0
-        || cg_synchronousClients.integer != 0
-    {
+    if cg_nopredict.integer != 0 || cg_synchronousClients.integer != 0 {
         CG_InterpolatePlayerState(qtrue);
         return;
     }
@@ -1256,24 +1182,18 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                 _: i32,
             ) -> (),
     );
-    cg_pmove.pointcontents = Some(
-        CG_PointContents
-            as unsafe extern "C" fn(_: *const vec_t, _: i32) -> i32,
-    );
+    cg_pmove.pointcontents =
+        Some(CG_PointContents as unsafe extern "C" fn(_: *const vec_t, _: i32) -> i32);
     if (*cg_pmove.ps).pm_type == PM_DEAD as i32 {
         cg_pmove.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32) & !(0x2000000 as i32)
     } else {
         cg_pmove.tracemask = 1 as i32 | 0x10000 as i32 | 0x2000000 as i32
     }
-    if (*cg.snap).ps.persistant
-        [PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    if (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         cg_pmove.tracemask &= !(0x2000000 as i32)
         // spectators can fly through bodies
     }
-    cg_pmove.noFootsteps = (cgs.dmflags & 32 as i32 > 0 as i32) as i32
-        as qboolean;
+    cg_pmove.noFootsteps = (cgs.dmflags & 32 as i32 > 0 as i32) as i32 as qboolean;
     // save the state before the pmove so we can detect transitions
     oldPlayerState = cg.predictedPlayerState;
     current = trap_GetCurrentCmdNumber();
@@ -1281,13 +1201,8 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     // can't accurately predict a current position, so just freeze at
     // the last good position we had
     cmdNum = current - 64 as i32 + 1 as i32;
-    trap_GetUserCmd(
-        cmdNum,
-        &mut oldestCmd as *mut _ as *mut usercmd_s,
-    );
-    if oldestCmd.serverTime > (*cg.snap).ps.commandTime
-        && oldestCmd.serverTime < cg.time
-    {
+    trap_GetUserCmd(cmdNum, &mut oldestCmd as *mut _ as *mut usercmd_s);
+    if oldestCmd.serverTime > (*cg.snap).ps.commandTime && oldestCmd.serverTime < cg.time {
         // special check for map_restart
         if cg_showmiss.integer != 0 {
             CG_Printf(
@@ -1297,10 +1212,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         return;
     }
     // get the latest command so we can know which commands are from previous map_restarts
-    trap_GetUserCmd(
-        current,
-        &mut latestCmd as *mut _ as *mut usercmd_s,
-    );
+    trap_GetUserCmd(current, &mut latestCmd as *mut _ as *mut usercmd_s);
     // get the most recent information we have, even if
     // the server time is beyond our current cg.time,
     // because predicted player positions are going to
@@ -1309,34 +1221,24 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         && cg.nextFrameTeleport as u64 == 0
         && cg.thisFrameTeleport as u64 == 0
     {
-        cg.predictedPlayerState =
-            (*cg.nextSnap).ps; // | cg_pmove_fixed.integer;
-        cg.physicsTime =
-            (*cg.nextSnap).serverTime
+        cg.predictedPlayerState = (*cg.nextSnap).ps; // | cg_pmove_fixed.integer;
+        cg.physicsTime = (*cg.nextSnap).serverTime
     } else {
-        cg.predictedPlayerState =
-            (*cg.snap).ps;
-        cg.physicsTime =
-            (*cg.snap).serverTime
+        cg.predictedPlayerState = (*cg.snap).ps;
+        cg.physicsTime = (*cg.snap).serverTime
     }
     if pmove_msec.integer < 8 as i32 {
         trap_Cvar_Set(
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"8\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut pmove_msec as *mut _
-                as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut pmove_msec as *mut _ as *mut vmCvar_t);
     } else if pmove_msec.integer > 33 as i32 {
         trap_Cvar_Set(
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"33\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut pmove_msec as *mut _
-                as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut pmove_msec as *mut _ as *mut vmCvar_t);
     }
     cg_pmove.pmove_fixed = pmove_fixed.integer;
     cg_pmove.pmove_msec = pmove_msec.integer;
@@ -1345,10 +1247,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     cmdNum = current - 64 as i32 + 1 as i32;
     while cmdNum <= current {
         // get the command
-        trap_GetUserCmd(
-            cmdNum,
-            &mut cg_pmove.cmd as *mut _ as *mut usercmd_s,
-        );
+        trap_GetUserCmd(cmdNum, &mut cg_pmove.cmd as *mut _ as *mut usercmd_s);
         if cg_pmove.pmove_fixed != 0 {
             PM_UpdateViewAngles(
                 cg_pmove.ps as *mut playerState_s,
@@ -1358,11 +1257,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         // check for predictable events that changed from previous predictions
         //CG_CheckChangedPredictableEvents(&cg.predictedPlayerState);
         // don't do anything if the time is before the snapshot player time
-        if !(cg_pmove.cmd.serverTime
-            <= cg
-                .predictedPlayerState
-                .commandTime)
-        {
+        if !(cg_pmove.cmd.serverTime <= cg.predictedPlayerState.commandTime) {
             // don't do anything if the command was from a previous map_restart
             if !(cg_pmove.cmd.serverTime > latestCmd.serverTime) {
                 // check for a prediction error from last frame
@@ -1370,55 +1265,36 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                 // from the snapshot, but on a wan we will have
                 // to predict several commands to get to the point
                 // we want to compare
-                if cg
-                    .predictedPlayerState
-                    .commandTime
-                    == oldPlayerState.commandTime
-                {
+                if cg.predictedPlayerState.commandTime == oldPlayerState.commandTime {
                     let mut delta: vec3_t = [0.; 3];
                     let mut len: f32 = 0.;
                     if cg.thisFrameTeleport as u64 != 0 {
                         // a teleport will not cause an error decay
-                        cg.predictedError[2 as i32 as usize] =
-                            0 as i32 as vec_t;
-                        cg.predictedError[1 as i32 as usize] =
-                            cg.predictedError[2 as i32 as usize];
-                        cg.predictedError[0 as i32 as usize] =
-                            cg.predictedError[1 as i32 as usize];
+                        cg.predictedError[2 as i32 as usize] = 0 as i32 as vec_t;
+                        cg.predictedError[1 as i32 as usize] = cg.predictedError[2 as i32 as usize];
+                        cg.predictedError[0 as i32 as usize] = cg.predictedError[1 as i32 as usize];
                         if cg_showmiss.integer != 0 {
                             CG_Printf(
                                 b"PredictionTeleport\n\x00" as *const u8 as *const libc::c_char,
                             );
                         }
-                        cg.thisFrameTeleport =
-                            qfalse
+                        cg.thisFrameTeleport = qfalse
                     } else {
                         let mut adjusted: vec3_t = [0.; 3];
                         let mut new_angles: vec3_t = [0.; 3];
                         CG_AdjustPositionForMover(
-                            cg
-                                .predictedPlayerState
-                                .origin
-                                .as_mut_ptr()
-                                as *const vec_t,
-                            cg
-                                .predictedPlayerState
-                                .groundEntityNum,
+                            cg.predictedPlayerState.origin.as_mut_ptr() as *const vec_t,
+                            cg.predictedPlayerState.groundEntityNum,
                             cg.physicsTime,
                             cg.oldTime,
                             adjusted.as_mut_ptr(),
-                            cg
-                                .predictedPlayerState
-                                .viewangles
-                                .as_mut_ptr(),
+                            cg.predictedPlayerState.viewangles.as_mut_ptr(),
                             new_angles.as_mut_ptr(),
                         );
                         if cg_showmiss.integer != 0 {
                             if VectorCompare(
-                                oldPlayerState.origin.as_mut_ptr()
-                                    as *const vec_t,
-                                adjusted.as_mut_ptr()
-                                    as *const vec_t,
+                                oldPlayerState.origin.as_mut_ptr() as *const vec_t,
+                                adjusted.as_mut_ptr() as *const vec_t,
                             ) == 0
                             {
                                 CG_Printf(
@@ -1432,9 +1308,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                             oldPlayerState.origin[1 as i32 as usize] - adjusted[1 as i32 as usize];
                         delta[2 as i32 as usize] =
                             oldPlayerState.origin[2 as i32 as usize] - adjusted[2 as i32 as usize];
-                        len = VectorLength(
-                            delta.as_mut_ptr() as *const vec_t
-                        );
+                        len = VectorLength(delta.as_mut_ptr() as *const vec_t);
                         if len as f64 > 0.1f64 {
                             if cg_showmiss.integer != 0 {
                                 CG_Printf(
@@ -1446,16 +1320,12 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                             if cg_errorDecay.integer != 0 {
                                 let mut t: i32 = 0;
                                 let mut f: f32 = 0.;
-                                t = cg.time
-                                    - cg.predictedErrorTime;
-                                f = (cg_errorDecay.value - t as f32)
-                                    / cg_errorDecay.value;
+                                t = cg.time - cg.predictedErrorTime;
+                                f = (cg_errorDecay.value - t as f32) / cg_errorDecay.value;
                                 if f < 0 as i32 as f32 {
                                     f = 0 as i32 as f32
                                 }
-                                if f > 0 as i32 as f32
-                                    && cg_showmiss.integer != 0
-                                {
+                                if f > 0 as i32 as f32 && cg_showmiss.integer != 0 {
                                     CG_Printf(
                                         b"Double prediction decay: %f\n\x00" as *const u8
                                             as *const libc::c_char,
@@ -1463,36 +1333,25 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                                     );
                                 }
                                 cg.predictedError[0 as i32 as usize] =
-                                    cg.predictedError
-                                        [0 as i32 as usize]
-                                        * f;
+                                    cg.predictedError[0 as i32 as usize] * f;
                                 cg.predictedError[1 as i32 as usize] =
-                                    cg.predictedError
-                                        [1 as i32 as usize]
-                                        * f;
+                                    cg.predictedError[1 as i32 as usize] * f;
                                 cg.predictedError[2 as i32 as usize] =
-                                    cg.predictedError[2 as i32 as usize]
-                                        * f
+                                    cg.predictedError[2 as i32 as usize] * f
                             } else {
-                                cg.predictedError[2 as i32 as usize] =
-                                    0 as i32 as vec_t;
+                                cg.predictedError[2 as i32 as usize] = 0 as i32 as vec_t;
                                 cg.predictedError[1 as i32 as usize] =
-                                    cg.predictedError
-                                        [2 as i32 as usize];
+                                    cg.predictedError[2 as i32 as usize];
                                 cg.predictedError[0 as i32 as usize] =
                                     cg.predictedError[1 as i32 as usize]
                             }
-                            cg.predictedError[0 as i32 as usize] = delta
-                                [0 as i32 as usize]
-                                + cg.predictedError[0 as i32 as usize];
-                            cg.predictedError[1 as i32 as usize] = delta
-                                [1 as i32 as usize]
-                                + cg.predictedError[1 as i32 as usize];
-                            cg.predictedError[2 as i32 as usize] = delta
-                                [2 as i32 as usize]
-                                + cg.predictedError[2 as i32 as usize];
-                            cg.predictedErrorTime =
-                                cg.oldTime
+                            cg.predictedError[0 as i32 as usize] =
+                                delta[0 as i32 as usize] + cg.predictedError[0 as i32 as usize];
+                            cg.predictedError[1 as i32 as usize] =
+                                delta[1 as i32 as usize] + cg.predictedError[1 as i32 as usize];
+                            cg.predictedError[2 as i32 as usize] =
+                                delta[2 as i32 as usize] + cg.predictedError[2 as i32 as usize];
+                            cg.predictedErrorTime = cg.oldTime
                         }
                     }
                 }
@@ -1500,15 +1359,12 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                 // when it actually inflicts damage
                 cg_pmove.gauntletHit = qfalse;
                 if cg_pmove.pmove_fixed != 0 {
-                    cg_pmove.cmd.serverTime = (cg_pmove.cmd.serverTime
-                        + pmove_msec.integer
+                    cg_pmove.cmd.serverTime = (cg_pmove.cmd.serverTime + pmove_msec.integer
                         - 1 as i32)
                         / pmove_msec.integer
                         * pmove_msec.integer
                 }
-                Pmove(
-                    &mut cg_pmove as *mut _ as *mut pmove_t,
-                );
+                Pmove(&mut cg_pmove as *mut _ as *mut pmove_t);
                 moved = qtrue;
                 // add push trigger movement effects
                 CG_TouchTriggerPrediction();
@@ -1525,65 +1381,34 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     }
     if moved as u64 == 0 {
         if cg_showmiss.integer != 0 {
-            CG_Printf(
-                b"not moved\n\x00" as *const u8 as *const libc::c_char,
-            );
+            CG_Printf(b"not moved\n\x00" as *const u8 as *const libc::c_char);
         }
         return;
     }
     // adjust for the movement of the groundentity
     CG_AdjustPositionForMover(
-        cg
-            .predictedPlayerState
-            .origin
-            .as_mut_ptr() as *const vec_t,
-        cg
-            .predictedPlayerState
-            .groundEntityNum,
+        cg.predictedPlayerState.origin.as_mut_ptr() as *const vec_t,
+        cg.predictedPlayerState.groundEntityNum,
         cg.physicsTime,
         cg.time,
-        cg
-            .predictedPlayerState
-            .origin
-            .as_mut_ptr(),
-        cg
-            .predictedPlayerState
-            .viewangles
-            .as_mut_ptr(),
-        cg
-            .predictedPlayerState
-            .viewangles
-            .as_mut_ptr(),
+        cg.predictedPlayerState.origin.as_mut_ptr(),
+        cg.predictedPlayerState.viewangles.as_mut_ptr(),
+        cg.predictedPlayerState.viewangles.as_mut_ptr(),
     );
     if cg_showmiss.integer != 0 {
-        if cg
-            .predictedPlayerState
-            .eventSequence
-            > oldPlayerState.eventSequence + 2 as i32
-        {
-            CG_Printf(
-                b"WARNING: dropped event\n\x00" as *const u8 as *const libc::c_char,
-            );
+        if cg.predictedPlayerState.eventSequence > oldPlayerState.eventSequence + 2 as i32 {
+            CG_Printf(b"WARNING: dropped event\n\x00" as *const u8 as *const libc::c_char);
         }
     }
     // fire events and other transition triggered things
     CG_TransitionPlayerState(
-        &mut cg.predictedPlayerState as *mut _
-            as *mut playerState_s,
+        &mut cg.predictedPlayerState as *mut _ as *mut playerState_s,
         &mut oldPlayerState as *mut _ as *mut playerState_s,
     );
     if cg_showmiss.integer != 0 {
-        if cg.eventSequence
-            > cg
-                .predictedPlayerState
-                .eventSequence
-        {
-            CG_Printf(
-                b"WARNING: double event\n\x00" as *const u8 as *const libc::c_char,
-            );
-            cg.eventSequence = cg
-                .predictedPlayerState
-                .eventSequence
+        if cg.eventSequence > cg.predictedPlayerState.eventSequence {
+            CG_Printf(b"WARNING: double event\n\x00" as *const u8 as *const libc::c_char);
+            cg.eventSequence = cg.predictedPlayerState.eventSequence
         }
     };
 }

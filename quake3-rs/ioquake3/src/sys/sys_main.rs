@@ -8469,9 +8469,8 @@ Sys_PIDFileName
 */
 
 unsafe extern "C" fn Sys_PIDFileName(mut gamedir: *const libc::c_char) -> *mut libc::c_char {
-    let mut homePath: *const libc::c_char = Cvar_VariableString(
-        b"fs_homepath\x00" as *const u8 as *const libc::c_char,
-    );
+    let mut homePath: *const libc::c_char =
+        Cvar_VariableString(b"fs_homepath\x00" as *const u8 as *const libc::c_char);
     if *homePath as i32 != '\u{0}' as i32 {
         return va(
             b"%s/%s/%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -8503,9 +8502,7 @@ Return qtrue if there is an existing stale PID file
 =================
 */
 
-unsafe extern "C" fn Sys_WritePIDFile(
-    mut gamedir: *const libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn Sys_WritePIDFile(mut gamedir: *const libc::c_char) -> qboolean {
     let mut pidFile: *mut libc::c_char = Sys_PIDFileName(gamedir);
     let mut f: *mut FILE = 0 as *mut FILE;
     let mut stale: qboolean = qfalse;
@@ -8694,34 +8691,28 @@ Sys_GetProcessorFeatures
 pub unsafe extern "C" fn Sys_GetProcessorFeatures() -> cpuFeatures_t {
     let mut features: cpuFeatures_t = 0 as cpuFeatures_t;
     if crate::stdlib::SDL_HasRDTSC() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_RDTSC as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_RDTSC as i32 as u32)
     }
     if crate::stdlib::SDL_Has3DNow() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_3DNOW as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_3DNOW as i32 as u32)
     }
     if crate::stdlib::SDL_HasMMX() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_MMX as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_MMX as i32 as u32)
     }
     if crate::stdlib::SDL_HasSSE() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_SSE as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_SSE as i32 as u32)
     }
     if crate::stdlib::SDL_HasSSE2() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_SSE2 as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_SSE2 as i32 as u32)
     }
     if crate::stdlib::SDL_HasAltiVec() as u64 != 0 {
-        features = ::std::mem::transmute::<u32, cpuFeatures_t>(
-            features as u32 | CF_ALTIVEC as i32 as u32,
-        )
+        features =
+            ::std::mem::transmute::<u32, cpuFeatures_t>(features as u32 | CF_ALTIVEC as i32 as u32)
     }
     return features;
 }
@@ -8762,9 +8753,7 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
         30 as i32, 31 as i32, 32 as i32, 33 as i32, 34 as i32, 36 as i32, 35 as i32, 0 as i32,
     ];
     while *msg != 0 {
-        if Q_IsColorString(msg) as u32 != 0
-            || *msg as i32 == '\n' as i32
-        {
+        if Q_IsColorString(msg) as u32 != 0 || *msg as i32 == '\n' as i32 {
             // First empty the buffer
             if length > 0 as i32 {
                 buffer[length as usize] = '\u{0}' as i32 as libc::c_char;
@@ -8886,9 +8875,7 @@ Sys_UnloadDll
 
 pub unsafe extern "C" fn Sys_UnloadDll(mut dllHandle: *mut libc::c_void) {
     if dllHandle.is_null() {
-        Com_Printf(
-            b"Sys_UnloadDll(NULL)\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Sys_UnloadDll(NULL)\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     crate::stdlib::SDL_UnloadObject(dllHandle);
@@ -8976,9 +8963,8 @@ pub unsafe extern "C" fn Sys_LoadDll(
             );
         }
         if dllhandle.is_null() {
-            let mut basePath: *const libc::c_char = Cvar_VariableString(
-                b"fs_basepath\x00" as *const u8 as *const libc::c_char,
-            );
+            let mut basePath: *const libc::c_char =
+                Cvar_VariableString(b"fs_basepath\x00" as *const u8 as *const libc::c_char);
             if basePath.is_null() || *basePath == 0 {
                 basePath = b".\x00" as *const u8 as *const libc::c_char
             }
@@ -9032,16 +9018,12 @@ Used to load a development dll instead of a virtual machine
 pub unsafe extern "C" fn Sys_LoadGameDll(
     mut name: *const libc::c_char,
     mut entryPoint: *mut Option<unsafe extern "C" fn(_: i32, _: ...) -> intptr_t>,
-    mut systemcalls: Option<
-        unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-    >,
+    mut systemcalls: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
 ) -> *mut libc::c_void {
     let mut libHandle: *mut libc::c_void = 0 as *mut libc::c_void;
     let mut dllEntry: Option<
         unsafe extern "C" fn(
-            _: Option<
-                unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t,
-            >,
+            _: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
         ) -> (),
     > = None;
     if Sys_DllExtension(name) as u64 == 0 {
@@ -9069,12 +9051,7 @@ pub unsafe extern "C" fn Sys_LoadGameDll(
         *mut libc::c_void,
         Option<
             unsafe extern "C" fn(
-                _: Option<
-                    unsafe extern "C" fn(
-                        _: intptr_t,
-                        _: ...
-                    ) -> intptr_t,
-                >,
+                _: Option<unsafe extern "C" fn(_: intptr_t, _: ...) -> intptr_t>,
             ) -> (),
         >,
     >(crate::stdlib::SDL_LoadFunction(
@@ -9168,8 +9145,7 @@ Sys_SigHandler
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_SigHandler(mut signal_0: i32) -> ! {
-    static mut signalcaught: qboolean =
-        qfalse;
+    static mut signalcaught: qboolean = qfalse;
     if signalcaught as u64 != 0 {
         crate::stdlib::fprintf(
             crate::stdlib::stderr,
@@ -10264,17 +10240,14 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
     // Set the initial time base
     Sys_Milliseconds();
     Sys_ParseArgs(argc, argv);
-    Sys_SetBinaryPath(Sys_Dirname(
-        *argv.offset(0 as i32 as isize),
-    ));
+    Sys_SetBinaryPath(Sys_Dirname(*argv.offset(0 as i32 as isize)));
     Sys_SetDefaultInstallPath(Sys_BinaryPath());
     // Concatenate the command line for passing to Com_Init
     i = 1 as i32;
     while i < argc {
-        let containsSpaces: qboolean =
-            (libc::strchr(*argv.offset(i as isize), ' ' as i32)
-                != 0 as *mut libc::c_void as *mut libc::c_char) as i32
-                as qboolean;
+        let containsSpaces: qboolean = (libc::strchr(*argv.offset(i as isize), ' ' as i32)
+            != 0 as *mut libc::c_void as *mut libc::c_char)
+            as i32 as qboolean;
         if containsSpaces as u64 != 0 {
             Q_strcat(
                 commandLine.as_mut_ptr(),
@@ -10306,38 +10279,33 @@ pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> 
     NET_Init();
     signal(
         4 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
+            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
+        )),
     );
     signal(
         8 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
+            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
+        )),
     );
     signal(
         11 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
+            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
+        )),
     );
     signal(
         15 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
+            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
+        )),
     );
     signal(
         2 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
+            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
+        )),
     );
     loop {
         Com_Frame();

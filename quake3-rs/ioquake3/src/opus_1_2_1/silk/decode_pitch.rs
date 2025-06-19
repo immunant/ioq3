@@ -83,10 +83,8 @@ pub unsafe extern "C" fn silk_decode_pitch(
         .offset(0 as i32 as isize) as *const i8;
         cbk_size = 12 as i32
     }
-    min_lag = 2 as i32 as opus_int16 as opus_int32
-        * Fs_kHz as opus_int16 as opus_int32;
-    max_lag = 18 as i32 as opus_int16 as opus_int32
-        * Fs_kHz as opus_int16 as opus_int32;
+    min_lag = 2 as i32 as opus_int16 as opus_int32 * Fs_kHz as opus_int16 as opus_int32;
+    max_lag = 18 as i32 as opus_int16 as opus_int32 * Fs_kHz as opus_int16 as opus_int32;
     lag = min_lag + lagIndex as i32;
     k = 0 as i32;
     while k < nb_subfr {

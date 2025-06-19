@@ -179,30 +179,10 @@ pub struct cin_cache {
     pub samplesPerLine: isize,
     pub roq_id: u32,
     pub screenDelta: isize,
-    pub VQ0: Option<
-        unsafe extern "C" fn(
-            _: *mut byte,
-            _: *mut libc::c_void,
-        ) -> (),
-    >,
-    pub VQ1: Option<
-        unsafe extern "C" fn(
-            _: *mut byte,
-            _: *mut libc::c_void,
-        ) -> (),
-    >,
-    pub VQNormal: Option<
-        unsafe extern "C" fn(
-            _: *mut byte,
-            _: *mut libc::c_void,
-        ) -> (),
-    >,
-    pub VQBuffer: Option<
-        unsafe extern "C" fn(
-            _: *mut byte,
-            _: *mut libc::c_void,
-        ) -> (),
-    >,
+    pub VQ0: Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
+    pub VQ1: Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
+    pub VQNormal: Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
+    pub VQBuffer: Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
     pub samplesPerPixel: isize,
     pub gray: *mut byte,
     pub xsize: u32,
@@ -275,8 +255,7 @@ static mut cin: cinematics_t = cinematics_t {
     file: [0; 65536],
     sqrTable: [0; 256],
     mcomp: [0; 256],
-    qStatus: [[0 as *const byte
-        as *mut byte; 32768]; 2],
+    qStatus: [[0 as *const byte as *mut byte; 32768]; 2],
     oldXOff: 0,
     oldYOff: 0,
     oldysize: 0,
@@ -316,8 +295,7 @@ static mut cinTable: [cin_cache; 16] = [cin_cache {
     VQNormal: None,
     VQBuffer: None,
     samplesPerPixel: 0,
-    gray: 0 as *const byte
-        as *mut byte,
+    gray: 0 as *const byte as *mut byte,
     xsize: 0,
     ysize: 0,
     maxsize: 0,
@@ -332,8 +310,7 @@ static mut cinTable: [cin_cache; 16] = [cin_cache {
     t: [0; 2],
     roqFPS: 0,
     playonwalls: 0,
-    buf: 0 as *const byte
-        as *mut byte,
+    buf: 0 as *const byte as *mut byte,
     drawX: 0,
     drawY: 0,
 }; 16];
@@ -576,11 +553,7 @@ pub unsafe extern "C" fn RllDecodeStereoToMono(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn move8_32(
-    mut src: *mut byte,
-    mut dst: *mut byte,
-    mut spl: i32,
-) {
+unsafe extern "C" fn move8_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 8 as i32 {
@@ -602,11 +575,7 @@ unsafe extern "C" fn move8_32(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn move4_32(
-    mut src: *mut byte,
-    mut dst: *mut byte,
-    mut spl: i32,
-) {
+unsafe extern "C" fn move4_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 4 as i32 {
@@ -628,11 +597,7 @@ unsafe extern "C" fn move4_32(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn blit8_32(
-    mut src: *mut byte,
-    mut dst: *mut byte,
-    mut spl: i32,
-) {
+unsafe extern "C" fn blit8_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 8 as i32 {
@@ -654,11 +619,7 @@ unsafe extern "C" fn blit8_32(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn blit4_32(
-    mut src: *mut byte,
-    mut dst: *mut byte,
-    mut spl: i32,
-) {
+unsafe extern "C" fn blit4_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 4 as i32 {
@@ -680,11 +641,7 @@ unsafe extern "C" fn blit4_32(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn blit2_32(
-    mut src: *mut byte,
-    mut dst: *mut byte,
-    mut spl: i32,
-) {
+unsafe extern "C" fn blit2_32(mut src: *mut byte, mut dst: *mut byte, mut spl: i32) {
     crate::stdlib::memcpy(
         dst as *mut libc::c_void,
         src as *const libc::c_void,
@@ -704,10 +661,7 @@ unsafe extern "C" fn blit2_32(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn blitVQQuad32fs(
-    mut status: *mut *mut byte,
-    mut data: *mut u8,
-) {
+unsafe extern "C" fn blitVQQuad32fs(mut status: *mut *mut byte, mut data: *mut u8) {
     let mut newd: u16 = 0;
     let mut celdata: u16 = 0;
     let mut code: u16 = 0;
@@ -765,8 +719,7 @@ unsafe extern "C" fn blitVQQuad32fs(
                             // 4x4 vq code
                             blit4_32(
                                 &mut *vq4.as_mut_ptr().offset((*data as i32 * 32 as i32) as isize)
-                                    as *mut u16
-                                    as *mut byte,
+                                    as *mut u16 as *mut byte,
                                 *status.offset(index as isize),
                                 spl,
                             );
@@ -776,32 +729,28 @@ unsafe extern "C" fn blitVQQuad32fs(
                             // 2x2 vq code
                             blit2_32(
                                 &mut *vq2.as_mut_ptr().offset((*data as i32 * 8 as i32) as isize)
-                                    as *mut u16
-                                    as *mut byte,
+                                    as *mut u16 as *mut byte,
                                 *status.offset(index as isize),
                                 spl,
                             );
                             data = data.offset(1);
                             blit2_32(
                                 &mut *vq2.as_mut_ptr().offset((*data as i32 * 8 as i32) as isize)
-                                    as *mut u16
-                                    as *mut byte,
+                                    as *mut u16 as *mut byte,
                                 (*status.offset(index as isize)).offset(8 as i32 as isize),
                                 spl,
                             );
                             data = data.offset(1);
                             blit2_32(
                                 &mut *vq2.as_mut_ptr().offset((*data as i32 * 8 as i32) as isize)
-                                    as *mut u16
-                                    as *mut byte,
+                                    as *mut u16 as *mut byte,
                                 (*status.offset(index as isize)).offset((spl * 2 as i32) as isize),
                                 spl,
                             );
                             data = data.offset(1);
                             blit2_32(
                                 &mut *vq2.as_mut_ptr().offset((*data as i32 * 8 as i32) as isize)
-                                    as *mut u16
-                                    as *mut byte,
+                                    as *mut u16 as *mut byte,
                                 (*status.offset(index as isize))
                                     .offset((spl * 2 as i32) as isize)
                                     .offset(8 as i32 as isize),
@@ -953,10 +902,7 @@ unsafe extern "C" fn yuv_to_rgb24(mut y: isize, mut u: isize, mut v: isize) -> u
 *
 ******************************************************************************/
 
-unsafe extern "C" fn decodeCodeBook(
-    mut input: *mut byte,
-    mut roq_flags: u16,
-) {
+unsafe extern "C" fn decodeCodeBook(mut input: *mut byte, mut roq_flags: u16) {
     let mut i: isize = 0;
     let mut j: isize = 0;
     let mut two: isize = 0;
@@ -971,14 +917,10 @@ unsafe extern "C" fn decodeCodeBook(
     let mut y3: isize = 0;
     let mut cr: isize = 0;
     let mut cb: isize = 0;
-    let mut bbptr: *mut byte =
-        0 as *mut byte;
-    let mut baptr: *mut byte =
-        0 as *mut byte;
-    let mut bcptr: *mut byte =
-        0 as *mut byte;
-    let mut bdptr: *mut byte =
-        0 as *mut byte;
+    let mut bbptr: *mut byte = 0 as *mut byte;
+    let mut baptr: *mut byte = 0 as *mut byte;
+    let mut bcptr: *mut byte = 0 as *mut byte;
+    let mut bdptr: *mut byte = 0 as *mut byte;
     let mut iaptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
     let mut ibptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
     let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
@@ -1783,12 +1725,12 @@ unsafe extern "C" fn decodeCodeBook(
             while i < four {
                 let fresh220 = input;
                 input = input.offset(1);
-                baptr = (vq2.as_mut_ptr() as *mut byte)
-                    .offset((*fresh220 as i32 * 8 as i32) as isize);
+                baptr =
+                    (vq2.as_mut_ptr() as *mut byte).offset((*fresh220 as i32 * 8 as i32) as isize);
                 let fresh221 = input;
                 input = input.offset(1);
-                bbptr = (vq2.as_mut_ptr() as *mut byte)
-                    .offset((*fresh221 as i32 * 8 as i32) as isize);
+                bbptr =
+                    (vq2.as_mut_ptr() as *mut byte).offset((*fresh221 as i32 * 8 as i32) as isize);
                 j = 0 as i32 as isize;
                 while j < 2 as i32 as isize {
                     let fresh222 = bcptr;
@@ -2017,12 +1959,10 @@ unsafe extern "C" fn decodeCodeBook(
         while i < four {
             let fresh280 = input;
             input = input.offset(1);
-            baptr = (vq2.as_mut_ptr() as *mut byte)
-                .offset((*fresh280 as i32 * 2 as i32) as isize);
+            baptr = (vq2.as_mut_ptr() as *mut byte).offset((*fresh280 as i32 * 2 as i32) as isize);
             let fresh281 = input;
             input = input.offset(1);
-            bbptr = (vq2.as_mut_ptr() as *mut byte)
-                .offset((*fresh281 as i32 * 2 as i32) as isize);
+            bbptr = (vq2.as_mut_ptr() as *mut byte).offset((*fresh281 as i32 * 2 as i32) as isize);
             j = 0 as i32 as isize;
             while j < 2 as i32 as isize {
                 let fresh282 = bcptr;
@@ -2160,8 +2100,7 @@ unsafe extern "C" fn recurseQuad(
     mut xOff: isize,
     mut yOff: isize,
 ) {
-    let mut scroff: *mut byte =
-        0 as *mut byte;
+    let mut scroff: *mut byte = 0 as *mut byte;
     let mut bigx: isize = 0;
     let mut bigy: isize = 0;
     let mut lowx: isize = 0;
@@ -2222,8 +2161,7 @@ unsafe extern "C" fn setupQuad(mut xOff: isize, mut yOff: isize) {
     let mut i: isize = 0; // eoq
     let mut x: isize = 0;
     let mut y: isize = 0;
-    let mut temp: *mut byte =
-        0 as *mut byte;
+    let mut temp: *mut byte = 0 as *mut byte;
     if xOff == cin.oldXOff
         && yOff == cin.oldYOff
         && cinTable[currentHandle as usize].ysize as isize == cin.oldysize
@@ -2303,8 +2241,7 @@ unsafe extern "C" fn readQuadInfo(mut qData: *mut byte) {
     cinTable[currentHandle as usize].drawX = cinTable[currentHandle as usize].CIN_WIDTH as isize;
     cinTable[currentHandle as usize].drawY = cinTable[currentHandle as usize].CIN_HEIGHT as isize;
     // rage pro is very slow at 512 wide textures, voodoo can't do it at all
-    if cls.glconfig.hardwareType as u32
-        == GLHW_RAGEPRO as i32 as u32
+    if cls.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32
         || cls.glconfig.maxTextureSize <= 256 as i32
     {
         if cinTable[currentHandle as usize].drawX > 256 as i32 as isize {
@@ -2375,44 +2312,16 @@ unsafe extern "C" fn initRoQ() {
         return;
     }
     cinTable[currentHandle as usize].VQNormal = ::std::mem::transmute::<
-        Option<
-            unsafe extern "C" fn(
-                _: *mut *mut byte,
-                _: *mut u8,
-            ) -> (),
-        >,
-        Option<
-            unsafe extern "C" fn(
-                _: *mut byte,
-                _: *mut libc::c_void,
-            ) -> (),
-        >,
+        Option<unsafe extern "C" fn(_: *mut *mut byte, _: *mut u8) -> ()>,
+        Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
     >(Some(
-        blitVQQuad32fs
-            as unsafe extern "C" fn(
-                _: *mut *mut byte,
-                _: *mut u8,
-            ) -> (),
+        blitVQQuad32fs as unsafe extern "C" fn(_: *mut *mut byte, _: *mut u8) -> (),
     ));
     cinTable[currentHandle as usize].VQBuffer = ::std::mem::transmute::<
-        Option<
-            unsafe extern "C" fn(
-                _: *mut *mut byte,
-                _: *mut u8,
-            ) -> (),
-        >,
-        Option<
-            unsafe extern "C" fn(
-                _: *mut byte,
-                _: *mut libc::c_void,
-            ) -> (),
-        >,
+        Option<unsafe extern "C" fn(_: *mut *mut byte, _: *mut u8) -> ()>,
+        Option<unsafe extern "C" fn(_: *mut byte, _: *mut libc::c_void) -> ()>,
     >(Some(
-        blitVQQuad32fs
-            as unsafe extern "C" fn(
-                _: *mut *mut byte,
-                _: *mut u8,
-            ) -> (),
+        blitVQQuad32fs as unsafe extern "C" fn(_: *mut *mut byte, _: *mut u8) -> (),
     ));
     cinTable[currentHandle as usize].samplesPerPixel = 4 as i32 as isize;
     ROQ_GenYUVTables();
@@ -2470,8 +2379,7 @@ unsafe extern "C" fn RoQReset() {
 ******************************************************************************/
 
 unsafe extern "C" fn RoQInterrupt() {
-    let mut framedata: *mut byte =
-        0 as *mut byte;
+    let mut framedata: *mut byte = 0 as *mut byte;
     let mut sbuf: [i16; 32768] = [0; 32768];
     let mut ssize: i32 = 0;
     if currentHandle < 0 as i32 {
@@ -2485,9 +2393,7 @@ unsafe extern "C" fn RoQInterrupt() {
         cinTable[currentHandle as usize].iFile,
     );
     if cinTable[currentHandle as usize].RoQPlayed >= cinTable[currentHandle as usize].ROQSize {
-        if cinTable[currentHandle as usize].holdAtEnd as u32
-            == qfalse as i32 as u32
-        {
+        if cinTable[currentHandle as usize].holdAtEnd as u32 == qfalse as i32 as u32 {
             if cinTable[currentHandle as usize].looping as u64 != 0 {
                 RoQReset();
             } else {
@@ -2516,8 +2422,7 @@ unsafe extern "C" fn RoQInterrupt() {
                     cinTable[currentHandle as usize]
                         .VQ1
                         .expect("non-null function pointer")(
-                        cin.qStatus[1 as i32 as usize].as_mut_ptr()
-                            as *mut byte,
+                        cin.qStatus[1 as i32 as usize].as_mut_ptr() as *mut byte,
                         framedata as *mut libc::c_void,
                     );
                     cinTable[currentHandle as usize].buf = cin
@@ -2534,8 +2439,7 @@ unsafe extern "C" fn RoQInterrupt() {
                     cinTable[currentHandle as usize]
                         .VQ0
                         .expect("non-null function pointer")(
-                        cin.qStatus[0 as i32 as usize].as_mut_ptr()
-                            as *mut byte,
+                        cin.qStatus[0 as i32 as usize].as_mut_ptr() as *mut byte,
                         framedata as *mut libc::c_void,
                     );
                     cinTable[currentHandle as usize].buf = cin.linbuf.as_mut_ptr()
@@ -2618,9 +2522,8 @@ unsafe extern "C" fn RoQInterrupt() {
                 }
             }
             4144 => {
-                cinTable[currentHandle as usize].inMemory = cinTable[currentHandle as usize]
-                    .roq_flags
-                    as qboolean;
+                cinTable[currentHandle as usize].inMemory =
+                    cinTable[currentHandle as usize].roq_flags as qboolean;
                 cinTable[currentHandle as usize].RoQFrameSize = 0 as i32 as u32
             }
             4115 => cinTable[currentHandle as usize].RoQFrameSize = 0 as i32 as u32,
@@ -2631,9 +2534,7 @@ unsafe extern "C" fn RoQInterrupt() {
         // read in next frame data
         //
         if cinTable[currentHandle as usize].RoQPlayed >= cinTable[currentHandle as usize].ROQSize {
-            if cinTable[currentHandle as usize].holdAtEnd as u32
-                == qfalse as i32 as u32
-            {
+            if cinTable[currentHandle as usize].holdAtEnd as u32 == qfalse as i32 as u32 {
                 if cinTable[currentHandle as usize].looping as u64 != 0 {
                     RoQReset();
                 } else {
@@ -2672,8 +2573,7 @@ unsafe extern "C" fn RoQInterrupt() {
             return;
         }
         if !(cinTable[currentHandle as usize].inMemory as u32 != 0
-            && cinTable[currentHandle as usize].status as u32
-                != FMV_EOF as i32 as u32)
+            && cinTable[currentHandle as usize].status as u32 != FMV_EOF as i32 as u32)
         {
             break;
         }
@@ -2738,14 +2638,10 @@ unsafe extern "C" fn RoQShutdown() {
     if cinTable[currentHandle as usize].buf.is_null() {
         return;
     }
-    if cinTable[currentHandle as usize].status as u32
-        == FMV_IDLE as i32 as u32
-    {
+    if cinTable[currentHandle as usize].status as u32 == FMV_IDLE as i32 as u32 {
         return;
     }
-    Com_DPrintf(
-        b"finished cinematic\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_DPrintf(b"finished cinematic\n\x00" as *const u8 as *const libc::c_char);
     cinTable[currentHandle as usize].status = FMV_IDLE;
     if cinTable[currentHandle as usize].iFile != 0 {
         FS_FCloseFile(cinTable[currentHandle as usize].iFile);
@@ -2757,9 +2653,7 @@ unsafe extern "C" fn RoQShutdown() {
         // if we are aborting the intro cinematic with
         // a devmap command, nextmap would be valid by
         // the time it was referenced
-        s = Cvar_VariableString(
-            b"nextmap\x00" as *const u8 as *const libc::c_char,
-        );
+        s = Cvar_VariableString(b"nextmap\x00" as *const u8 as *const libc::c_char);
         if *s.offset(0 as i32 as isize) != 0 {
             Cbuf_ExecuteText(
                 EXEC_APPEND as i32,
@@ -2785,13 +2679,10 @@ CIN_StopCinematic
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CIN_StopCinematic(
-    mut handle: i32,
-) -> e_status {
+pub unsafe extern "C" fn CIN_StopCinematic(mut handle: i32) -> e_status {
     if handle < 0 as i32
         || handle >= 16 as i32
-        || cinTable[handle as usize].status as u32
-            == FMV_EOF as i32 as u32
+        || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
     {
         return FMV_EOF;
     }
@@ -2804,9 +2695,7 @@ pub unsafe extern "C" fn CIN_StopCinematic(
         return FMV_EOF;
     }
     if cinTable[currentHandle as usize].alterGameState as u64 != 0 {
-        if clc.state as u32
-            != CA_CINEMATIC as i32 as u32
-        {
+        if clc.state as u32 != CA_CINEMATIC as i32 as u32 {
             return cinTable[currentHandle as usize].status;
         }
     }
@@ -2823,15 +2712,12 @@ Fetch and decompress the pending frame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CIN_RunCinematic(
-    mut handle: i32,
-) -> e_status {
+pub unsafe extern "C" fn CIN_RunCinematic(mut handle: i32) -> e_status {
     let mut start: i32 = 0 as i32;
     let mut thisTime: i32 = 0 as i32;
     if handle < 0 as i32
         || handle >= 16 as i32
-        || cinTable[handle as usize].status as u32
-            == FMV_EOF as i32 as u32
+        || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
     {
         return FMV_EOF;
     }
@@ -2846,15 +2732,11 @@ pub unsafe extern "C" fn CIN_RunCinematic(
     }
     currentHandle = handle;
     if cinTable[currentHandle as usize].alterGameState as u64 != 0 {
-        if clc.state as u32
-            != CA_CINEMATIC as i32 as u32
-        {
+        if clc.state as u32 != CA_CINEMATIC as i32 as u32 {
             return cinTable[currentHandle as usize].status;
         }
     }
-    if cinTable[currentHandle as usize].status as u32
-        == FMV_IDLE as i32 as u32
-    {
+    if cinTable[currentHandle as usize].status as u32 == FMV_IDLE as i32 as u32 {
         return cinTable[currentHandle as usize].status;
     }
     thisTime = CL_ScaledMilliseconds();
@@ -2869,8 +2751,7 @@ pub unsafe extern "C" fn CIN_RunCinematic(
             / 100 as i32) as isize;
     start = cinTable[currentHandle as usize].startTime;
     while cinTable[currentHandle as usize].tfps != cinTable[currentHandle as usize].numQuads
-        && cinTable[currentHandle as usize].status as u32
-            == FMV_PLAY as i32 as u32
+        && cinTable[currentHandle as usize].status as u32 == FMV_PLAY as i32 as u32
     {
         RoQInterrupt();
         if start != cinTable[currentHandle as usize].startTime {
@@ -2881,14 +2762,10 @@ pub unsafe extern "C" fn CIN_RunCinematic(
         }
     }
     cinTable[currentHandle as usize].lastTime = thisTime;
-    if cinTable[currentHandle as usize].status as u32
-        == FMV_LOOPED as i32 as u32
-    {
+    if cinTable[currentHandle as usize].status as u32 == FMV_LOOPED as i32 as u32 {
         cinTable[currentHandle as usize].status = FMV_PLAY
     }
-    if cinTable[currentHandle as usize].status as u32
-        == FMV_EOF as i32 as u32
-    {
+    if cinTable[currentHandle as usize].status as u32 == FMV_EOF as i32 as u32 {
         if cinTable[currentHandle as usize].looping as u64 != 0 {
             RoQReset();
         } else {
@@ -2994,15 +2871,10 @@ pub unsafe extern "C" fn CIN_PlayCinematic(
     if cinTable[currentHandle as usize].alterGameState as u64 != 0 {
         // close the menu
         if !uivm.is_null() {
-            VM_Call(
-                uivm,
-                UI_SET_ACTIVE_MENU as i32,
-                UIMENU_NONE as i32,
-            );
+            VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_NONE as i32);
         }
     } else {
-        cinTable[currentHandle as usize].playonwalls =
-            (*cl_inGameVideo).integer
+        cinTable[currentHandle as usize].playonwalls = (*cl_inGameVideo).integer
     }
     initRoQ();
     FS_Read(
@@ -3029,9 +2901,7 @@ pub unsafe extern "C" fn CIN_PlayCinematic(
         }
         return currentHandle;
     }
-    Com_DPrintf(
-        b"trFMV::play(), invalid RoQ ID\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_DPrintf(b"trFMV::play(), invalid RoQ ID\n\x00" as *const u8 as *const libc::c_char);
     RoQShutdown();
     return -(1 as i32);
 }
@@ -3046,8 +2916,7 @@ pub unsafe extern "C" fn CIN_SetExtents(
 ) {
     if handle < 0 as i32
         || handle >= 16 as i32
-        || cinTable[handle as usize].status as u32
-            == FMV_EOF as i32 as u32
+        || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
     {
         return;
     }
@@ -3059,14 +2928,10 @@ pub unsafe extern "C" fn CIN_SetExtents(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CIN_SetLooping(
-    mut handle: i32,
-    mut loop_0: qboolean,
-) {
+pub unsafe extern "C" fn CIN_SetLooping(mut handle: i32, mut loop_0: qboolean) {
     if handle < 0 as i32
         || handle >= 16 as i32
-        || cinTable[handle as usize].status as u32
-            == FMV_EOF as i32 as u32
+        || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
     {
         return;
     }
@@ -3088,8 +2953,7 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
     let mut xm: i32 = 0;
     let mut ym: i32 = 0;
     let mut ll: i32 = 0;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     buf = cinTable[handle as usize].buf;
     xm = cinTable[handle as usize].CIN_WIDTH / 256 as i32;
     ym = cinTable[handle as usize].CIN_HEIGHT / 256 as i32;
@@ -3099,10 +2963,8 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
     }
     buf3 = buf as *mut i32;
     if xm == 2 as i32 && ym == 2 as i32 {
-        let mut bc2: *mut byte =
-            0 as *mut byte;
-        let mut bc3: *mut byte =
-            0 as *mut byte;
+        let mut bc2: *mut byte = 0 as *mut byte;
+        let mut bc3: *mut byte = 0 as *mut byte;
         let mut ic: i32 = 0;
         let mut iiy: i32 = 0;
         bc2 = buf2 as *mut byte;
@@ -3118,8 +2980,7 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
                         + *bc3.offset((iiy + 4 as i32 + ic) as isize) as i32
                         + *bc3.offset((iiy + 2048 as i32 + ic) as isize) as i32
                         + *bc3.offset((iiy + 2048 as i32 + 4 as i32 + ic) as isize) as i32
-                        >> 2 as i32)
-                        as byte;
+                        >> 2 as i32) as byte;
                     bc2 = bc2.offset(1);
                     ic += 1
                 }
@@ -3128,10 +2989,8 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
             iy += 1
         }
     } else if xm == 2 as i32 && ym == 1 as i32 {
-        let mut bc2_0: *mut byte =
-            0 as *mut byte;
-        let mut bc3_0: *mut byte =
-            0 as *mut byte;
+        let mut bc2_0: *mut byte = 0 as *mut byte;
+        let mut bc3_0: *mut byte = 0 as *mut byte;
         let mut ic_0: i32 = 0;
         let mut iiy_0: i32 = 0;
         bc2_0 = buf2 as *mut byte;
@@ -3145,8 +3004,7 @@ pub unsafe extern "C" fn CIN_ResampleCinematic(mut handle: i32, mut buf2: *mut i
                 while ic_0 < ix + 4 as i32 {
                     *bc2_0 = (*bc3_0.offset((iiy_0 + ic_0) as isize) as i32
                         + *bc3_0.offset((iiy_0 + 4 as i32 + ic_0) as isize) as i32
-                        >> 1 as i32)
-                        as byte;
+                        >> 1 as i32) as byte;
                     bc2_0 = bc2_0.offset(1);
                     ic_0 += 1
                 }
@@ -3179,12 +3037,10 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
     let mut y: f32 = 0.;
     let mut w: f32 = 0.;
     let mut h: f32 = 0.;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     if handle < 0 as i32
         || handle >= 16 as i32
-        || cinTable[handle as usize].status as u32
-            == FMV_EOF as i32 as u32
+        || cinTable[handle as usize].status as u32 == FMV_EOF as i32 as u32
     {
         return;
     }
@@ -3202,13 +3058,9 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
             || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
     {
         let mut buf2: *mut i32 = 0 as *mut i32;
-        buf2 = Hunk_AllocateTempMemory(
-            256 as i32 * 256 as i32 * 4 as i32,
-        ) as *mut i32;
+        buf2 = Hunk_AllocateTempMemory(256 as i32 * 256 as i32 * 4 as i32) as *mut i32;
         CIN_ResampleCinematic(handle, buf2);
-        re
-            .DrawStretchRaw
-            .expect("non-null function pointer")(
+        re.DrawStretchRaw.expect("non-null function pointer")(
             x as i32,
             y as i32,
             w as i32,
@@ -3223,9 +3075,7 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
         Hunk_FreeTempMemory(buf2 as *mut libc::c_void);
         return;
     }
-    re
-        .DrawStretchRaw
-        .expect("non-null function pointer")(
+    re.DrawStretchRaw.expect("non-null function pointer")(
         x as i32,
         y as i32,
         w as i32,
@@ -3244,25 +3094,15 @@ pub unsafe extern "C" fn CL_PlayCinematic_f() {
     let mut arg: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut bits: i32 = 1 as i32;
-    Com_DPrintf(
-        b"CL_PlayCinematic_f\n\x00" as *const u8 as *const libc::c_char,
-    );
-    if clc.state as u32
-        == CA_CINEMATIC as i32 as u32
-    {
+    Com_DPrintf(b"CL_PlayCinematic_f\n\x00" as *const u8 as *const libc::c_char);
+    if clc.state as u32 == CA_CINEMATIC as i32 as u32 {
         SCR_StopCinematic();
     }
     arg = Cmd_Argv(1 as i32);
     s = Cmd_Argv(2 as i32);
     if !s.is_null() && *s.offset(0 as i32 as isize) as i32 == '1' as i32
-        || Q_stricmp(
-            arg,
-            b"demoend.roq\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
-        || Q_stricmp(
-            arg,
-            b"end.roq\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32
+        || Q_stricmp(arg, b"demoend.roq\x00" as *const u8 as *const libc::c_char) == 0 as i32
+        || Q_stricmp(arg, b"end.roq\x00" as *const u8 as *const libc::c_char) == 0 as i32
     {
         bits |= 4 as i32
     }
@@ -3275,8 +3115,7 @@ pub unsafe extern "C" fn CL_PlayCinematic_f() {
         loop {
             SCR_RunCinematic();
             if !(cinTable[currentHandle as usize].buf.is_null()
-                && cinTable[currentHandle as usize].status as u32
-                    == FMV_PLAY as i32 as u32)
+                && cinTable[currentHandle as usize].status as u32 == FMV_PLAY as i32 as u32)
             {
                 break;
             }
@@ -3527,13 +3366,9 @@ pub unsafe extern "C" fn CIN_UploadCinematic(mut handle: i32) {
                 || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
         {
             let mut buf2: *mut i32 = 0 as *mut i32;
-            buf2 = Hunk_AllocateTempMemory(
-                256 as i32 * 256 as i32 * 4 as i32,
-            ) as *mut i32;
+            buf2 = Hunk_AllocateTempMemory(256 as i32 * 256 as i32 * 4 as i32) as *mut i32;
             CIN_ResampleCinematic(handle, buf2);
-            re
-                .UploadCinematic
-                .expect("non-null function pointer")(
+            re.UploadCinematic.expect("non-null function pointer")(
                 cinTable[handle as usize].CIN_WIDTH,
                 cinTable[handle as usize].CIN_HEIGHT,
                 256 as i32,
@@ -3546,9 +3381,7 @@ pub unsafe extern "C" fn CIN_UploadCinematic(mut handle: i32) {
             Hunk_FreeTempMemory(buf2 as *mut libc::c_void);
         } else {
             // Upload video at normal resolution
-            re
-                .UploadCinematic
-                .expect("non-null function pointer")(
+            re.UploadCinematic.expect("non-null function pointer")(
                 cinTable[handle as usize].CIN_WIDTH,
                 cinTable[handle as usize].CIN_HEIGHT,
                 cinTable[handle as usize].drawX as i32,

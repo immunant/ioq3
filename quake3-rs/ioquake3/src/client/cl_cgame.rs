@@ -432,10 +432,7 @@ CL_GetUserCmd
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GetUserCmd(
-    mut cmdNumber: i32,
-    mut ucmd: *mut usercmd_t,
-) -> qboolean {
+pub unsafe extern "C" fn CL_GetUserCmd(mut cmdNumber: i32, mut ucmd: *mut usercmd_t) -> qboolean {
     // cmds[cmdNumber] is the last properly generated command
     // can't return anything that we haven't created yet
     if cmdNumber > cl.cmdNumber {
@@ -480,13 +477,10 @@ pub unsafe extern "C" fn CL_GetParseEntityState(
         );
     }
     // can't return anything that has been overwritten in the circular buffer
-    if parseEntityNumber
-        <= cl.parseEntitiesNum - 32 as i32 * 256 as i32
-    {
+    if parseEntityNumber <= cl.parseEntitiesNum - 32 as i32 * 256 as i32 {
         return qfalse;
     }
-    *state = cl.parseEntities
-        [(parseEntityNumber & 32 as i32 * 256 as i32 - 1 as i32) as usize];
+    *state = cl.parseEntities[(parseEntityNumber & 32 as i32 * 256 as i32 - 1 as i32) as usize];
     return qtrue;
 }
 /*
@@ -532,16 +526,13 @@ pub unsafe extern "C" fn CL_GetSnapshot(
     clSnap = &mut *cl
         .snapshots
         .as_mut_ptr()
-        .offset((snapshotNumber & 32 as i32 - 1 as i32) as isize)
-        as *mut clSnapshot_t;
+        .offset((snapshotNumber & 32 as i32 - 1 as i32) as isize) as *mut clSnapshot_t;
     if (*clSnap).valid as u64 == 0 {
         return qfalse;
     }
     // if the entities in the frame have fallen out of their
     // circular buffer, we can't return it
-    if cl.parseEntitiesNum - (*clSnap).parseEntitiesNum
-        >= 32 as i32 * 256 as i32
-    {
+    if cl.parseEntitiesNum - (*clSnap).parseEntitiesNum >= 32 as i32 * 256 as i32 {
         return qfalse;
     }
     // write the snapshot
@@ -609,12 +600,11 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
     let mut i: i32 = 0;
     let mut index: i32 = 0;
     let mut dup: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut oldGs: gameState_t =
-        gameState_t {
-            stringOffsets: [0; 1024],
-            stringData: [0; 16000],
-            dataCount: 0,
-        };
+    let mut oldGs: gameState_t = gameState_t {
+        stringOffsets: [0; 1024],
+        stringData: [0; 16000],
+        dataCount: 0,
+    };
     let mut len: i32 = 0;
     index = atoi(Cmd_Argv(1 as i32));
     if index < 0 as i32 || index >= 1024 as i32 {
@@ -638,8 +628,7 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
     // build the new gameState_t
     oldGs = cl.gameState;
     crate::stdlib::memset(
-        &mut cl.gameState
-            as *mut gameState_t as *mut libc::c_void,
+        &mut cl.gameState as *mut gameState_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<gameState_t>() as libc::c_ulong,
     );
@@ -664,15 +653,12 @@ pub unsafe extern "C" fn CL_ConfigstringModified() {
                 );
             }
             // append it to the gameState string buffer
-            cl.gameState.stringOffsets[i as usize] =
-                cl.gameState.dataCount;
+            cl.gameState.stringOffsets[i as usize] = cl.gameState.dataCount;
             crate::stdlib::memcpy(
-                cl
-                    .gameState
+                cl.gameState
                     .stringData
                     .as_mut_ptr()
-                    .offset(cl.gameState.dataCount as isize)
-                    as *mut libc::c_void,
+                    .offset(cl.gameState.dataCount as isize) as *mut libc::c_void,
                 dup as *const libc::c_void,
                 (len + 1 as i32) as libc::c_ulong,
             );
@@ -695,9 +681,7 @@ Set up argc/argv for the given command
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_GetServerCommand(
-    mut serverCommandNumber: i32,
-) -> qboolean {
+pub unsafe extern "C" fn CL_GetServerCommand(mut serverCommandNumber: i32) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut cmd: *mut libc::c_char = 0 as *mut libc::c_char;
     static mut bigConfigString: [libc::c_char; 8192] = [0; 8192];
@@ -722,9 +706,7 @@ pub unsafe extern "C" fn CL_GetServerCommand(
                 as *const libc::c_char,
         );
     }
-    s = clc.serverCommands
-        [(serverCommandNumber & 64 as i32 - 1 as i32) as usize]
-        .as_mut_ptr();
+    s = clc.serverCommands[(serverCommandNumber & 64 as i32 - 1 as i32) as usize].as_mut_ptr();
     clc.lastExecutedServerCommand = serverCommandNumber;
     Com_DPrintf(
         b"serverCommand: %i : %s\n\x00" as *const u8 as *const libc::c_char,
@@ -811,8 +793,7 @@ pub unsafe extern "C" fn CL_GetServerCommand(
         crate::stdlib::memset(
             cl.cmds.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[usercmd_t; 64]>()
-                as libc::c_ulong,
+            ::std::mem::size_of::<[usercmd_t; 64]>() as libc::c_ulong,
         );
         return qtrue;
     }
@@ -856,11 +837,7 @@ Just adds default parameters that cgame doesn't need to know about
 
 pub unsafe extern "C" fn CL_CM_LoadMap(mut mapname: *const libc::c_char) {
     let mut checksum: i32 = 0;
-    crate::src::qcommon::cm_load::CM_LoadMap(
-        mapname,
-        qtrue,
-        &mut checksum,
-    );
+    crate::src::qcommon::cm_load::CM_LoadMap(mapname, qtrue, &mut checksum);
 }
 /*
 ====================
@@ -871,24 +848,18 @@ CL_ShutdonwCGame
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ShutdownCGame() {
-    Key_SetCatcher(
-        Key_GetCatcher() & !(0x8 as i32),
-    );
+    Key_SetCatcher(Key_GetCatcher() & !(0x8 as i32));
     cls.cgameStarted = qfalse;
     if cgvm.is_null() {
         return;
     }
-    VM_Call(
-        cgvm,
-        CG_SHUTDOWN as i32,
-    );
+    VM_Call(cgvm, CG_SHUTDOWN as i32);
     VM_Free(cgvm);
     cgvm = 0 as *mut vm_t;
 }
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = f;
     return fi.i;
 }
@@ -901,15 +872,12 @@ The cgame module is making a system call
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_CgameSystemCalls(
-    mut args: *mut intptr_t,
-) -> intptr_t {
+pub unsafe extern "C" fn CL_CgameSystemCalls(mut args: *mut intptr_t) -> intptr_t {
     match *args.offset(0 as i32 as isize) {
         0 => {
             Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -917,47 +885,36 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             Com_Error(
                 ERR_DROP as i32,
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
         }
         2 => return Sys_Milliseconds() as intptr_t,
         3 => {
             Cvar_Register(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vmCvar_t
-                    as *mut vmCvar_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         4 => {
-            Cvar_Update(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut vmCvar_t
-                as *mut vmCvar_t);
+            Cvar_Update(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t
+            );
             return 0 as i32 as intptr_t;
         }
         5 => {
             Cvar_SetSafe(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         6 => {
             Cvar_VariableStringBuffer(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -966,26 +923,22 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         8 => {
             Cmd_ArgvBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         9 => {
             Cmd_ArgsBuffer(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         10 => {
             return FS_FOpenFileByMode(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut fileHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut fileHandle_t,
                 *args.offset(3 as i32 as isize) as fsMode_t,
             ) as intptr_t
         }
@@ -1006,9 +959,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         13 => {
-            FS_FCloseFile(
-                *args.offset(1 as i32 as isize) as fileHandle_t
-            );
+            FS_FCloseFile(*args.offset(1 as i32 as isize) as fileHandle_t);
             return 0 as i32 as intptr_t;
         }
         89 => {
@@ -1019,28 +970,20 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             ) as intptr_t
         }
         14 => {
-            Cbuf_AddText(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *const libc::c_char);
+            Cbuf_AddText(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         15 => {
-            CL_AddCgameCommand(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            );
+            CL_AddCgameCommand(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         72 => {
-            Cmd_RemoveCommandSafe(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *const libc::c_char);
+            Cmd_RemoveCommandSafe(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         16 => {
             CL_AddReliableCommand(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 qfalse,
             );
             return 0 as i32 as intptr_t;
@@ -1055,10 +998,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         18 => {
-            CL_CM_LoadMap(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            );
+            CL_CM_LoadMap(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         19 => return crate::src::qcommon::cm_load::CM_NumInlineModels() as intptr_t,
@@ -1069,53 +1009,39 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         }
         22 => {
             return crate::src::qcommon::cm_load::CM_TempBoxModel(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
                 qfalse as i32,
             ) as intptr_t
         }
         82 => {
             return crate::src::qcommon::cm_load::CM_TempBoxModel(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
                 qtrue as i32,
             ) as intptr_t
         }
         23 => {
             return crate::src::qcommon::cm_test::CM_PointContents(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 *args.offset(2 as i32 as isize) as clipHandle_t,
             ) as intptr_t
         }
         24 => {
             return crate::src::qcommon::cm_test::CM_TransformedPointContents(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 *args.offset(2 as i32 as isize) as clipHandle_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *const vec_t,
             ) as intptr_t
         }
         25 => {
             crate::src::qcommon::cm_trace::CM_BoxTrace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
                 *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
                 qfalse as i32,
@@ -1124,17 +1050,11 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         }
         83 => {
             crate::src::qcommon::cm_trace::CM_BoxTrace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
                 *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
                 qtrue as i32,
@@ -1143,71 +1063,48 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         }
         26 => {
             crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
                 *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(8 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(9 as i32 as isize)) as *const vec_t,
                 qfalse as i32,
             );
             return 0 as i32 as intptr_t;
         }
         84 => {
             crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut trace_t
-                    as *mut trace_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut trace_t as *mut trace_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
                 *args.offset(6 as i32 as isize) as clipHandle_t,
                 *args.offset(7 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(8 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(9 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(8 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(9 as i32 as isize)) as *const vec_t,
                 qtrue as i32,
             );
             return 0 as i32 as intptr_t;
         }
         27 => {
-            return re
-                .MarkFragments
-                .expect("non-null function pointer")(
+            return re.MarkFragments.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec3_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec3_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
                 *args.offset(4 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut vec_t,
                 *args.offset(6 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(7 as i32 as isize))
-                    as *mut markFragment_t,
+                VM_ArgPtr(*args.offset(7 as i32 as isize)) as *mut markFragment_t,
             ) as intptr_t
         }
         28 => {
             crate::src::client::snd_main::S_StartSound(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as sfxHandle_t,
@@ -1230,10 +1127,8 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         31 => {
             crate::src::client::snd_main::S_AddLoopingSound(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
                 *args.offset(4 as i32 as isize) as sfxHandle_t,
             );
             return 0 as i32 as intptr_t;
@@ -1241,10 +1136,8 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         80 => {
             crate::src::client::snd_main::S_AddRealLoopingSound(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const vec_t,
                 *args.offset(4 as i32 as isize) as sfxHandle_t,
             );
             return 0 as i32 as intptr_t;
@@ -1256,154 +1149,110 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         32 => {
             crate::src::client::snd_main::S_UpdateEntityPosition(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
             );
             return 0 as i32 as intptr_t;
         }
         33 => {
             crate::src::client::snd_main::S_Respatialize(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec3_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec3_t,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         34 => {
             return crate::src::client::snd_main::S_RegisterSound(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as qboolean,
             ) as intptr_t
         }
         35 => {
             crate::src::client::snd_main::S_StartBackgroundTrack(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         36 => {
-            re
-                .LoadWorld
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.LoadWorld.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            )
-                as *const libc::c_char
-            );
+            ) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         37 => {
-            return re
-                .RegisterModel
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterModel.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         38 => {
-            return re
-                .RegisterSkin
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterSkin.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         39 => {
-            return re
-                .RegisterShader
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterShader.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         57 => {
-            return re
-                .RegisterShaderNoMip
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterShaderNoMip.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         59 => {
-            re
-                .RegisterFont
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+            re.RegisterFont.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut fontInfo_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut fontInfo_t,
             );
             return 0 as i32 as intptr_t;
         }
         40 => {
-            re
-                .ClearScene
-                .expect("non-null function pointer")();
+            re.ClearScene.expect("non-null function pointer")();
             return 0 as i32 as intptr_t;
         }
         41 => {
-            re
-                .AddRefEntityToScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.AddRefEntityToScene.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *const refEntity_t
-            );
+                as *const refEntity_t);
             return 0 as i32 as intptr_t;
         }
         42 => {
-            re
-                .AddPolyToScene
-                .expect("non-null function pointer")(
+            re.AddPolyToScene.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as qhandle_t,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const polyVert_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const polyVert_t,
                 1 as i32,
             );
             return 0 as i32 as intptr_t;
         }
         87 => {
-            re
-                .AddPolyToScene
-                .expect("non-null function pointer")(
+            re.AddPolyToScene.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as qhandle_t,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const polyVert_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const polyVert_t,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         73 => {
-            return re
-                .LightForPoint
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut vec_t,
+            return re.LightForPoint.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut vec_t,
             ) as intptr_t
         }
         43 => {
-            re
-                .AddLightToScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+            re.AddLightToScene.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
@@ -1412,11 +1261,9 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         85 => {
-            re
-                .AddAdditiveLightToScene
+            re.AddAdditiveLightToScene
                 .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
@@ -1425,30 +1272,19 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         44 => {
-            re
-                .RenderScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.RenderScene.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            )
-                as *const refdef_t
-            );
+            ) as *const refdef_t);
             return 0 as i32 as intptr_t;
         }
         45 => {
-            re
-                .SetColor
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.SetColor.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            ) as *const f32
-            );
+            ) as *const f32);
             return 0 as i32 as intptr_t;
         }
         46 => {
-            re
-                .DrawStretchPic
-                .expect("non-null function pointer")(
+            re.DrawStretchPic.expect("non-null function pointer")(
                 _vmf(*args.offset(1 as i32 as isize)),
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
@@ -1462,43 +1298,29 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         47 => {
-            re
-                .ModelBounds
-                .expect("non-null function pointer")(
+            re.ModelBounds.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as qhandle_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
             );
             return 0 as i32 as intptr_t;
         }
         48 => {
-            return re
-                .LerpTag
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut orientation_t,
+            return re.LerpTag.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut orientation_t,
                 *args.offset(2 as i32 as isize) as qhandle_t,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
                 _vmf(*args.offset(5 as i32 as isize)),
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *const libc::c_char,
             ) as intptr_t
         }
         49 => {
-            CL_GetGlconfig(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut glconfig_t,
-            );
+            CL_GetGlconfig(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut glconfig_t);
             return 0 as i32 as intptr_t;
         }
         50 => {
-            CL_GetGameState(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut gameState_t,
-            );
+            CL_GetGameState(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut gameState_t);
             return 0 as i32 as intptr_t;
         }
         51 => {
@@ -1511,20 +1333,15 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         52 => {
             return CL_GetSnapshot(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut snapshot_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut snapshot_t,
             ) as intptr_t
         }
-        53 => {
-            return CL_GetServerCommand(*args.offset(1 as i32 as isize) as i32)
-                as intptr_t
-        }
+        53 => return CL_GetServerCommand(*args.offset(1 as i32 as isize) as i32) as intptr_t,
         54 => return CL_GetCurrentCmdNumber() as intptr_t,
         55 => {
             return CL_GetUserCmd(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut usercmd_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut usercmd_t,
             ) as intptr_t
         }
         56 => {
@@ -1534,9 +1351,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             );
             return 0 as i32 as intptr_t;
         }
-        58 => {
-            return Hunk_MemoryRemaining() as intptr_t
-        }
+        58 => return Hunk_MemoryRemaining() as intptr_t,
         60 => {
             return crate::src::client::cl_keys::Key_IsDown(*args.offset(1 as i32 as isize) as i32)
                 as intptr_t
@@ -1545,9 +1360,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         62 => {
             // Don't allow the cgame module to close the console
             Key_SetCatcher(
-                (*args.offset(1 as i32 as isize)
-                    | (Key_GetCatcher() & 0x1 as i32) as isize)
-                    as i32,
+                (*args.offset(1 as i32 as isize) | (Key_GetCatcher() & 0x1 as i32) as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1574,10 +1387,8 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
         }
         102 => {
             crate::stdlib::strncpy(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
             return *args.offset(1 as i32 as isize);
@@ -1613,26 +1424,22 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 crate::stdlib::ceil(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
             ) as intptr_t
         }
-        111 => {
-            return FloatAsInt(Q_acos(_vmf(
-                *args.offset(1 as i32 as isize),
-            ))) as intptr_t
-        }
+        111 => return FloatAsInt(Q_acos(_vmf(*args.offset(1 as i32 as isize)))) as intptr_t,
         64 => {
             return (*botlib_export)
                 .PC_AddGlobalDefine
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *mut libc::c_char) as intptr_t
         }
         65 => {
             return (*botlib_export)
                 .PC_LoadSourceHandle
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         66 => {
             return (*botlib_export)
@@ -1646,8 +1453,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 .PC_ReadTokenHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut pc_token_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut pc_token_t,
             ) as intptr_t
         }
         68 => {
@@ -1655,8 +1461,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 .PC_SourceFileAndLine
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as intptr_t
         }
@@ -1665,24 +1470,17 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         70 => {
-            return Com_RealTime(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut qtime_t
-                as *mut qtime_s)
-                as intptr_t
+            return Com_RealTime(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut qtime_t as *mut qtime_s
+            ) as intptr_t
         }
         71 => {
-            qsnapvectorsse(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut vec_t);
+            qsnapvectorsse(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vec_t);
             return 0 as i32 as intptr_t;
         }
         74 => {
             return CIN_PlayCinematic(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
@@ -1690,16 +1488,8 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 *args.offset(6 as i32 as isize) as i32,
             ) as intptr_t
         }
-        75 => {
-            return CIN_StopCinematic(
-                *args.offset(1 as i32 as isize) as i32
-            ) as intptr_t
-        }
-        76 => {
-            return CIN_RunCinematic(
-                *args.offset(1 as i32 as isize) as i32
-            ) as intptr_t
-        }
+        75 => return CIN_StopCinematic(*args.offset(1 as i32 as isize) as i32) as intptr_t,
+        76 => return CIN_RunCinematic(*args.offset(1 as i32 as isize) as i32) as intptr_t,
         77 => {
             CIN_DrawCinematic(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as intptr_t;
@@ -1715,15 +1505,10 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             return 0 as i32 as intptr_t;
         }
         79 => {
-            re
-                .RemapShader
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+            re.RemapShader.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1739,22 +1524,15 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
                 case CG_GETCAMERAINFO:
                     return getCameraInfo(args[1], VMA(2), VMA(3));
             */
-            return re
-                .GetEntityToken
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+            return re.GetEntityToken.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             ) as intptr_t;
         }
         88 => {
-            return re
-                .inPVS
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const vec_t,
+            return re.inPVS.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const vec_t,
             ) as intptr_t
         }
         _ => {
@@ -1789,13 +1567,8 @@ pub unsafe extern "C" fn CL_InitCGame() {
         .gameState
         .stringData
         .as_mut_ptr()
-        .offset(
-            cl.gameState.stringOffsets[0 as i32 as usize] as isize,
-        );
-    mapname = Info_ValueForKey(
-        info,
-        b"mapname\x00" as *const u8 as *const libc::c_char,
-    );
+        .offset(cl.gameState.stringOffsets[0 as i32 as usize] as isize);
+    mapname = Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char);
     Com_sprintf(
         cl.mapname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -1803,9 +1576,8 @@ pub unsafe extern "C" fn CL_InitCGame() {
         mapname,
     );
     // load the dll or bytecode
-    interpret = Cvar_VariableValue(
-        b"vm_cgame\x00" as *const u8 as *const libc::c_char,
-    ) as vmInterpret_t;
+    interpret =
+        Cvar_VariableValue(b"vm_cgame\x00" as *const u8 as *const libc::c_char) as vmInterpret_t;
     if cl_connectedToPureServer != 0 {
         // if sv_pure is set we only allow qvms to be loaded
         if interpret as u32 != VMI_COMPILED as i32 as u32
@@ -1816,10 +1588,7 @@ pub unsafe extern "C" fn CL_InitCGame() {
     }
     cgvm = VM_Create(
         b"cgame\x00" as *const u8 as *const libc::c_char,
-        Some(
-            CL_CgameSystemCalls
-                as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
-        ),
+        Some(CL_CgameSystemCalls as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t),
         interpret,
     );
     if cgvm.is_null() {
@@ -1840,9 +1609,7 @@ pub unsafe extern "C" fn CL_InitCGame() {
         clc.clientNum,
     );
     // reset any CVAR_CHEAT cvars registered by cgame
-    if clc.demoplaying as u64 == 0
-        && cl_connectedToCheatServer == 0
-    {
+    if clc.demoplaying as u64 == 0 && cl_connectedToCheatServer == 0 {
         Cvar_SetCheatState();
     }
     // we will send a usercmd this frame, which
@@ -1855,9 +1622,7 @@ pub unsafe extern "C" fn CL_InitCGame() {
     );
     // have the renderer touch all its images, so they are present
     // on the card even if the driver does deferred loading
-    re
-        .EndRegistration
-        .expect("non-null function pointer")();
+    re.EndRegistration.expect("non-null function pointer")();
     // make sure everything is paged in
     if Sys_LowPhysicalMemory() as u64 == 0 {
         Com_TouchMemory();
@@ -2202,10 +1967,7 @@ pub unsafe extern "C" fn CL_GameCommand() -> qboolean {
     if cgvm.is_null() {
         return qfalse;
     }
-    return VM_Call(
-        cgvm,
-        CG_CONSOLE_COMMAND as i32,
-    ) as qboolean;
+    return VM_Call(cgvm, CG_CONSOLE_COMMAND as i32) as qboolean;
 }
 /*
 =====================
@@ -2234,35 +1996,25 @@ pub unsafe extern "C" fn CL_AdjustTimeDelta() {
     if clc.demoplaying as u64 != 0 {
         return;
     } // FIXME: is this a problem for cgame?
-    newDelta =
-        cl.snap.serverTime - cls.realtime;
+    newDelta = cl.snap.serverTime - cls.realtime;
     deltaDelta = abs(newDelta - cl.serverTimeDelta);
     if deltaDelta > 500 as i32 {
         cl.serverTimeDelta = newDelta;
-        cl.oldServerTime =
-            cl.snap.serverTime;
-        cl.serverTime =
-            cl.snap.serverTime;
+        cl.oldServerTime = cl.snap.serverTime;
+        cl.serverTime = cl.snap.serverTime;
         if (*cl_showTimeDelta).integer != 0 {
-            Com_Printf(
-                b"<RESET> \x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"<RESET> \x00" as *const u8 as *const libc::c_char);
         }
     } else if deltaDelta > 100 as i32 {
         // fast adjust, cut the difference in half
         if (*cl_showTimeDelta).integer != 0 {
-            Com_Printf(
-                b"<FAST> \x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"<FAST> \x00" as *const u8 as *const libc::c_char);
         }
-        cl.serverTimeDelta =
-            cl.serverTimeDelta + newDelta >> 1 as i32
-    } else if (*com_timescale).value == 0 as i32 as f32
-        || (*com_timescale).value == 1 as i32 as f32
+        cl.serverTimeDelta = cl.serverTimeDelta + newDelta >> 1 as i32
+    } else if (*com_timescale).value == 0 as i32 as f32 || (*com_timescale).value == 1 as i32 as f32
     {
         if cl.extrapolatedSnapshot as u64 != 0 {
-            cl.extrapolatedSnapshot =
-                qfalse;
+            cl.extrapolatedSnapshot = qfalse;
             cl.serverTimeDelta -= 2 as i32
         } else {
             // slow drift adjust, only move 1 or 2 msec
@@ -2294,31 +2046,21 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
     }
     clc.state = CA_ACTIVE;
     // set the timedelta so we are exactly on this first frame
-    cl.serverTimeDelta =
-        cl.snap.serverTime - cls.realtime;
+    cl.serverTimeDelta = cl.snap.serverTime - cls.realtime;
     cl.oldServerTime = cl.snap.serverTime;
-    clc.timeDemoBaseTime =
-        cl.snap.serverTime;
+    clc.timeDemoBaseTime = cl.snap.serverTime;
     // if this is the first frame of active play,
     // execute the contents of activeAction now
     // this is to allow scripting a timedemo to start right
     // after loading
-    if *(*cl_activeAction)
-        .string
-        .offset(0 as i32 as isize)
-        != 0
-    {
-        Cbuf_AddText(
-            (*cl_activeAction).string,
-        );
+    if *(*cl_activeAction).string.offset(0 as i32 as isize) != 0 {
+        Cbuf_AddText((*cl_activeAction).string);
         Cvar_Set(
             b"activeAction\x00" as *const u8 as *const libc::c_char,
             b"\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*cl_useMumble).integer != 0
-        && crate::src::client::libmumblelink::mumble_islinked() == 0
-    {
+    if (*cl_useMumble).integer != 0 && crate::src::client::libmumblelink::mumble_islinked() == 0 {
         let mut ret: i32 = crate::src::client::libmumblelink::mumble_link(
             b"ioquake3\x00" as *const u8 as *const libc::c_char,
         );
@@ -2334,13 +2076,12 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
     if clc.voipCodecInitialized as u64 == 0 {
         let mut i: i32 = 0;
         let mut error: i32 = 0;
-        clc.opusEncoder =
-            crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_create(
-                48000 as i32,
-                1 as i32,
-                2048 as i32,
-                &mut error,
-            );
+        clc.opusEncoder = crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_create(
+            48000 as i32,
+            1 as i32,
+            2048 as i32,
+            &mut error,
+        );
         if error != 0 {
             Com_DPrintf(
                 b"VoIP: Error opus_encoder_create %d\n\x00" as *const u8 as *const libc::c_char,
@@ -2365,13 +2106,11 @@ pub unsafe extern "C" fn CL_FirstSnapshot() {
                 );
                 return;
             }
-            clc.voipIgnore[i as usize] =
-                qfalse;
+            clc.voipIgnore[i as usize] = qfalse;
             clc.voipGain[i as usize] = 1.0f32;
             i += 1
         }
-        clc.voipCodecInitialized =
-            qtrue;
+        clc.voipCodecInitialized = qtrue;
         clc.voipMuteAll = qfalse;
         Cmd_AddCommand(
             b"voip\x00" as *const u8 as *const libc::c_char,
@@ -2596,20 +2335,15 @@ CL_SetCGameTime
 
 pub unsafe extern "C" fn CL_SetCGameTime() {
     // getting a valid frame message ends the connection process
-    if clc.state as u32
-        != CA_ACTIVE as i32 as u32
-    {
-        if clc.state as u32
-            != CA_PRIMED as i32 as u32
-        {
+    if clc.state as u32 != CA_ACTIVE as i32 as u32 {
+        if clc.state as u32 != CA_PRIMED as i32 as u32 {
             return;
         }
         if clc.demoplaying as u64 != 0 {
             // we shouldn't get the first snapshot on the same frame
             // as the gamestate, because it causes a bad time skip
             if clc.firstDemoFrameSkipped as u64 == 0 {
-                clc.firstDemoFrameSkipped =
-                    qtrue;
+                clc.firstDemoFrameSkipped = qtrue;
                 return;
             }
             CL_ReadDemoMessage();
@@ -2618,9 +2352,7 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
             cl.newSnapshots = qfalse;
             CL_FirstSnapshot();
         }
-        if clc.state as u32
-            != CA_ACTIVE as i32 as u32
-        {
+        if clc.state as u32 != CA_ACTIVE as i32 as u32 {
             return;
         }
     }
@@ -2632,27 +2364,19 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
         );
     }
     // allow pause in single player
-    if (*sv_paused).integer != 0
-        && CL_CheckPaused() as u32 != 0
-        && (*com_sv_running).integer != 0
-    {
+    if (*sv_paused).integer != 0 && CL_CheckPaused() as u32 != 0 && (*com_sv_running).integer != 0 {
         // paused
         return;
     }
-    if cl.snap.serverTime
-        < cl.oldFrameServerTime
-    {
+    if cl.snap.serverTime < cl.oldFrameServerTime {
         Com_Error(
             ERR_DROP as i32,
             b"cl.snap.serverTime < cl.oldFrameServerTime\x00" as *const u8 as *const libc::c_char,
         );
     }
-    cl.oldFrameServerTime =
-        cl.snap.serverTime;
+    cl.oldFrameServerTime = cl.snap.serverTime;
     // get our current view of time
-    if !(clc.demoplaying as u32 != 0
-        && (*cl_freezeDemo).integer != 0)
-    {
+    if !(clc.demoplaying as u32 != 0 && (*cl_freezeDemo).integer != 0) {
         // cl_timeNudge is a user adjustable cvar that allows more
         // or less latency to be added in the interest of better
         // smoothness or better responsiveness.
@@ -2663,26 +2387,17 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
         } else if tn > 30 as i32 {
             tn = 30 as i32
         }
-        cl.serverTime = cls.realtime
-            + cl.serverTimeDelta
-            - tn;
+        cl.serverTime = cls.realtime + cl.serverTimeDelta - tn;
         // guarantee that time will never flow backwards, even if
         // serverTimeDelta made an adjustment or cl_timeNudge was changed
-        if cl.serverTime
-            < cl.oldServerTime
-        {
-            cl.serverTime =
-                cl.oldServerTime
+        if cl.serverTime < cl.oldServerTime {
+            cl.serverTime = cl.oldServerTime
         }
         cl.oldServerTime = cl.serverTime;
         // note if we are almost past the latest frame (without timeNudge),
         // so we will try and adjust back a bit when the next snapshot arrives
-        if cls.realtime
-            + cl.serverTimeDelta
-            >= cl.snap.serverTime - 5 as i32
-        {
-            cl.extrapolatedSnapshot =
-                qtrue
+        if cls.realtime + cl.serverTimeDelta >= cl.snap.serverTime - 5 as i32 {
+            cl.extrapolatedSnapshot = qtrue
         }
     }
     // if we have gotten new snapshots, drift serverTimeDelta
@@ -2706,8 +2421,7 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
         let mut frameDuration: i32 = 0;
         if clc.timeDemoStart == 0 {
             clc.timeDemoLastFrame = now;
-            clc.timeDemoStart =
-                clc.timeDemoLastFrame;
+            clc.timeDemoStart = clc.timeDemoLastFrame;
             clc.timeDemoMinDuration = 2147483647 as i32;
             clc.timeDemoMaxDuration = 0 as i32
         }
@@ -2725,26 +2439,17 @@ pub unsafe extern "C" fn CL_SetCGameTime() {
             if frameDuration > 127 as i32 * 2 as i32 + 1 as i32 {
                 frameDuration = 127 as i32 * 2 as i32 + 1 as i32
             }
-            clc.timeDemoDurations[((clc
-                .timeDemoFrames
-                - 1 as i32)
-                % 4096 as i32)
-                as usize] = frameDuration as u8
+            clc.timeDemoDurations[((clc.timeDemoFrames - 1 as i32) % 4096 as i32) as usize] =
+                frameDuration as u8
         }
         clc.timeDemoFrames += 1;
-        cl.serverTime = clc
-            .timeDemoBaseTime
-            + clc.timeDemoFrames * 50 as i32
+        cl.serverTime = clc.timeDemoBaseTime + clc.timeDemoFrames * 50 as i32
     }
-    while cl.serverTime
-        >= cl.snap.serverTime
-    {
+    while cl.serverTime >= cl.snap.serverTime {
         // feed another messag, which should change
         // the contents of cl.snap
         CL_ReadDemoMessage();
-        if clc.state as u32
-            != CA_ACTIVE as i32 as u32
-        {
+        if clc.state as u32 != CA_ACTIVE as i32 as u32 {
             return;
             // end of demo
         }

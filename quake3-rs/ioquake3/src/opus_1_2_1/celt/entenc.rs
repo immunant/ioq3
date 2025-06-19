@@ -71,10 +71,7 @@ See entdec.c and the references for implementation details \cite{Mar79,MNW98}.
  URL="http://www.stanford.edu/class/ee398/handouts/papers/Moffat98ArithmCoding.pdf"
 }*/
 
-unsafe extern "C" fn ec_write_byte(
-    mut _this: *mut ec_enc,
-    mut _value: u32,
-) -> i32 {
+unsafe extern "C" fn ec_write_byte(mut _this: *mut ec_enc, mut _value: u32) -> i32 {
     if (*_this).offs.wrapping_add((*_this).end_offs) >= (*_this).storage {
         return -(1 as i32);
     }
@@ -84,10 +81,7 @@ unsafe extern "C" fn ec_write_byte(
     return 0 as i32;
 }
 
-unsafe extern "C" fn ec_write_byte_at_end(
-    mut _this: *mut ec_enc,
-    mut _value: u32,
-) -> i32 {
+unsafe extern "C" fn ec_write_byte_at_end(mut _this: *mut ec_enc, mut _value: u32) -> i32 {
     if (*_this).offs.wrapping_add((*_this).end_offs) >= (*_this).storage {
         return -(1 as i32);
     }
@@ -108,10 +102,7 @@ This gives a theoretical limit of a few billion symbols in a single packet on
 The alternative is to truncate the range in order to force a carry, but
  requires similar carry tracking in the decoder, needlessly slowing it down.*/
 
-unsafe extern "C" fn ec_enc_carry_out(
-    mut _this: *mut ec_enc,
-    mut _c: i32,
-) {
+unsafe extern "C" fn ec_enc_carry_out(mut _this: *mut ec_enc, mut _c: i32) {
     if _c as u32 != ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32) {
         /*No further carry propagation possible, flush buffer.*/
         let mut carry: i32 = 0;
@@ -142,9 +133,7 @@ unsafe extern "C" fn ec_enc_carry_out(
 }
 #[inline]
 
-unsafe extern "C" fn ec_enc_normalize(
-    mut _this: *mut ec_enc,
-) {
+unsafe extern "C" fn ec_enc_normalize(mut _this: *mut ec_enc) {
     /*If the range is too small, output some bits and rescale it.*/
     while (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32 {
         ec_enc_carry_out(
@@ -197,8 +186,8 @@ pub unsafe extern "C" fn ec_encode(
         ) as opus_uint32;
         (*_this).rng = r.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
-        (*_this).rng = ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fh)))
-            as opus_uint32
+        (*_this).rng =
+            ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fh))) as opus_uint32
     }
     ec_enc_normalize(_this);
 }
@@ -229,11 +218,7 @@ pub unsafe extern "C" fn ec_encode_bin(
 /*The probability of having a "one" is 1/(1<<_logp).*/
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_enc_bit_logp(
-    mut _this: *mut ec_enc,
-    mut _val: i32,
-    mut _logp: u32,
-) {
+pub unsafe extern "C" fn ec_enc_bit_logp(mut _this: *mut ec_enc, mut _val: i32, mut _logp: u32) {
     let mut r: opus_uint32 = 0;
     let mut s: opus_uint32 = 0;
     let mut l: opus_uint32 = 0;
@@ -309,19 +294,13 @@ pub unsafe extern "C" fn ec_enc_uint(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_enc_bits(
-    mut _this: *mut ec_enc,
-    mut _fl: opus_uint32,
-    mut _bits: u32,
-) {
+pub unsafe extern "C" fn ec_enc_bits(mut _this: *mut ec_enc, mut _fl: opus_uint32, mut _bits: u32) {
     let mut window: ec_window = 0;
     let mut used: i32 = 0;
     window = (*_this).end_window;
     used = (*_this).nend_bits;
     if (used as u32).wrapping_add(_bits)
-        > (::std::mem::size_of::<ec_window>()
-            as libc::c_ulong as i32
-            * 8 as i32) as u32
+        > (::std::mem::size_of::<ec_window>() as libc::c_ulong as i32 * 8 as i32) as u32
     {
         loop {
             (*_this).error |= ec_write_byte_at_end(
@@ -370,10 +349,7 @@ pub unsafe extern "C" fn ec_enc_patch_initial_bits(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_enc_shrink(
-    mut _this: *mut ec_enc,
-    mut _size: opus_uint32,
-) {
+pub unsafe extern "C" fn ec_enc_shrink(mut _this: *mut ec_enc, mut _size: opus_uint32) {
     crate::stdlib::memmove(
         (*_this)
             .buf
@@ -487,9 +463,7 @@ All reamining output bytes are flushed to the output buffer.
 ec_enc_init() must be called before the encoder can be used again.*/
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_enc_done(
-    mut _this: *mut ec_enc,
-) {
+pub unsafe extern "C" fn ec_enc_done(mut _this: *mut ec_enc) {
     let mut window: ec_window = 0;
     let mut used: i32 = 0;
     let mut msk: opus_uint32 = 0;

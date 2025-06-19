@@ -394,8 +394,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -421,8 +420,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -448,8 +446,7 @@ static mut postgameMenuInfo: postgameMenuInfo_t = postgameMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -590,9 +587,7 @@ UI_SPPostgameMenu_MenuKey
 =================
 */
 
-unsafe extern "C" fn UI_SPPostgameMenu_MenuKey(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn UI_SPPostgameMenu_MenuKey(mut key: i32) -> sfxHandle_t {
     if uis.realtime < postgameMenuInfo.ignoreKeysTime {
         return 0 as i32;
     }
@@ -815,10 +810,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
     if postgameMenuInfo.phase == 1 as i32 {
         timer = uis.realtime - postgameMenuInfo.starttime;
         if timer >= 1000 as i32 && postgameMenuInfo.winnerSound != 0 {
-            trap_S_StartLocalSound(
-                postgameMenuInfo.winnerSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(postgameMenuInfo.winnerSound, CHAN_ANNOUNCER as i32);
             postgameMenuInfo.winnerSound = 0 as i32
         }
         if timer < 5000 as i32 {
@@ -843,9 +835,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
     // phase 3
     if postgameMenuInfo.phase == 3 as i32 {
         if uis.demoversion as u64 != 0 {
-            if postgameMenuInfo.won == 1 as i32
-                && UI_ShowTierVideo(8 as i32) as u32 != 0
-            {
+            if postgameMenuInfo.won == 1 as i32 && UI_ShowTierVideo(8 as i32) as u32 != 0 {
                 trap_Cvar_Set(
                     b"nextmap\x00" as *const u8 as *const libc::c_char,
                     b"\x00" as *const u8 as *const libc::c_char,
@@ -857,9 +847,7 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
                 return;
             }
         } else if postgameMenuInfo.won > -(1 as i32)
-            && UI_ShowTierVideo(postgameMenuInfo.won + 1 as i32)
-                as u32
-                != 0
+            && UI_ShowTierVideo(postgameMenuInfo.won + 1 as i32) as u32 != 0
         {
             if postgameMenuInfo.won == postgameMenuInfo.lastTier {
                 trap_Cvar_Set(
@@ -894,15 +882,10 @@ unsafe extern "C" fn UI_SPPostgameMenu_MenuDraw() {
         postgameMenuInfo.item_next.generic.flags &= !(0x4000 as i32 as u32);
         postgameMenuInfo.item_menu.generic.flags &= !(0x4000 as i32 as u32);
         UI_SPPostgameMenu_DrawAwardsMedals(postgameMenuInfo.numAwards);
-        Menu_Draw(
-            &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        );
+        Menu_Draw(&mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework);
     }
     // draw the scoreboard
-    if trap_Cvar_VariableValue(
-        b"ui_spScoreboard\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-    {
+    if trap_Cvar_VariableValue(b"ui_spScoreboard\x00" as *const u8 as *const libc::c_char) == 0. {
         return;
     }
     timer = uis.realtime - postgameMenuInfo.scoreboardtime;
@@ -924,36 +907,20 @@ UI_SPPostgameMenu_Cache
 
 pub unsafe extern "C" fn UI_SPPostgameMenu_Cache() {
     let mut n: i32 = 0;
-    let mut buildscript: qboolean =
-        qfalse;
-    buildscript = trap_Cvar_VariableValue(
-        b"com_buildscript\x00" as *const u8 as *const libc::c_char,
-    ) as qboolean;
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/menu_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/menu_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/replay_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/replay_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/next_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/next_1\x00" as *const u8 as *const libc::c_char,
-    );
+    let mut buildscript: qboolean = qfalse;
+    buildscript =
+        trap_Cvar_VariableValue(b"com_buildscript\x00" as *const u8 as *const libc::c_char)
+            as qboolean;
+    trap_R_RegisterShaderNoMip(b"menu/art/menu_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/menu_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/replay_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/replay_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/next_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/next_1\x00" as *const u8 as *const libc::c_char);
     n = 0 as i32;
     while n < 6 as i32 {
         trap_R_RegisterShaderNoMip(ui_medalPicNames[n as usize]);
-        trap_S_RegisterSound(
-            ui_medalSounds[n as usize],
-            qfalse,
-        );
+        trap_S_RegisterSound(ui_medalSounds[n as usize], qfalse);
         n += 1
     }
     if buildscript as u64 != 0 {
@@ -979,10 +946,8 @@ UI_SPPostgameMenu_Init
 
 unsafe extern "C" fn UI_SPPostgameMenu_Init() {
     postgameMenuInfo.menu.wrapAround = qtrue;
-    postgameMenuInfo.menu.key = Some(
-        UI_SPPostgameMenu_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    postgameMenuInfo.menu.key =
+        Some(UI_SPPostgameMenu_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     postgameMenuInfo.menu.draw = Some(UI_SPPostgameMenu_MenuDraw as unsafe extern "C" fn() -> ());
     postgameMenuInfo.ignoreKeysTime = uis.realtime + 1500 as i32;
     UI_SPPostgameMenu_Cache();
@@ -1033,18 +998,15 @@ unsafe extern "C" fn UI_SPPostgameMenu_Init() {
         b"menu/art/next_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     Menu_AddItem(
         &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut postgameMenuInfo.item_menu as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut postgameMenuInfo.item_menu as *mut menubitmap_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut postgameMenuInfo.item_again as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut postgameMenuInfo.item_again as *mut menubitmap_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut postgameMenuInfo.item_next as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut postgameMenuInfo.item_next as *mut menubitmap_s as *mut libc::c_void,
     );
 }
 
@@ -1067,9 +1029,7 @@ unsafe extern "C" fn Prepname(mut index: i32) {
     );
     Q_CleanStr(name.as_mut_ptr());
     len = crate::stdlib::strlen(name.as_mut_ptr()) as i32;
-    while len != 0
-        && UI_ProportionalStringWidth(name.as_mut_ptr()) > 256 as i32
-    {
+    while len != 0 && UI_ProportionalStringWidth(name.as_mut_ptr()) > 256 as i32 {
         len -= 1;
         name[len as usize] = 0 as i32 as libc::c_char
     }
@@ -1273,15 +1233,9 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     }
     n = 0 as i32;
     while n < postgameMenuInfo.numClients {
-        postgameMenuInfo.clientNums[n as usize] = atoi(UI_Argv(
-            8 as i32 + n * 3 as i32 + 1 as i32,
-        ));
-        postgameMenuInfo.ranks[n as usize] = atoi(UI_Argv(
-            8 as i32 + n * 3 as i32 + 2 as i32,
-        ));
-        postgameMenuInfo.scores[n as usize] = atoi(UI_Argv(
-            8 as i32 + n * 3 as i32 + 3 as i32,
-        ));
+        postgameMenuInfo.clientNums[n as usize] = atoi(UI_Argv(8 as i32 + n * 3 as i32 + 1 as i32));
+        postgameMenuInfo.ranks[n as usize] = atoi(UI_Argv(8 as i32 + n * 3 as i32 + 2 as i32));
+        postgameMenuInfo.scores[n as usize] = atoi(UI_Argv(8 as i32 + n * 3 as i32 + 3 as i32));
         if postgameMenuInfo.clientNums[n as usize] == playerClientNum {
             playerGameRank = (postgameMenuInfo.ranks[n as usize] & !(0x4000 as i32)) + 1 as i32
         }
@@ -1289,26 +1243,16 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     }
     UI_SetBestScore(postgameMenuInfo.level, playerGameRank);
     // process award stats and prepare presentation data
-    awardValues[AWARD_ACCURACY as i32 as usize] =
-        atoi(UI_Argv(3 as i32));
-    awardValues[AWARD_IMPRESSIVE as i32 as usize] =
-        atoi(UI_Argv(4 as i32));
-    awardValues[AWARD_EXCELLENT as i32 as usize] =
-        atoi(UI_Argv(5 as i32));
-    awardValues[AWARD_GAUNTLET as i32 as usize] =
-        atoi(UI_Argv(6 as i32));
-    awardValues[AWARD_FRAGS as i32 as usize] =
-        atoi(UI_Argv(7 as i32));
-    awardValues[AWARD_PERFECT as i32 as usize] =
-        atoi(UI_Argv(8 as i32));
+    awardValues[AWARD_ACCURACY as i32 as usize] = atoi(UI_Argv(3 as i32));
+    awardValues[AWARD_IMPRESSIVE as i32 as usize] = atoi(UI_Argv(4 as i32));
+    awardValues[AWARD_EXCELLENT as i32 as usize] = atoi(UI_Argv(5 as i32));
+    awardValues[AWARD_GAUNTLET as i32 as usize] = atoi(UI_Argv(6 as i32));
+    awardValues[AWARD_FRAGS as i32 as usize] = atoi(UI_Argv(7 as i32));
+    awardValues[AWARD_PERFECT as i32 as usize] = atoi(UI_Argv(8 as i32));
     postgameMenuInfo.numAwards = 0 as i32;
     if awardValues[AWARD_ACCURACY as i32 as usize] >= 50 as i32 {
-        UI_LogAwardData(
-            AWARD_ACCURACY as i32,
-            1 as i32,
-        );
-        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            AWARD_ACCURACY as i32;
+        UI_LogAwardData(AWARD_ACCURACY as i32, 1 as i32);
+        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] = AWARD_ACCURACY as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
             awardValues[AWARD_ACCURACY as i32 as usize];
         postgameMenuInfo.numAwards += 1
@@ -1329,8 +1273,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
             AWARD_EXCELLENT as i32,
             awardValues[AWARD_EXCELLENT as i32 as usize],
         );
-        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            AWARD_EXCELLENT as i32;
+        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] = AWARD_EXCELLENT as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
             awardValues[AWARD_EXCELLENT as i32 as usize];
         postgameMenuInfo.numAwards += 1
@@ -1340,41 +1283,27 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
             AWARD_GAUNTLET as i32,
             awardValues[AWARD_GAUNTLET as i32 as usize],
         );
-        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            AWARD_GAUNTLET as i32;
+        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] = AWARD_GAUNTLET as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] =
             awardValues[AWARD_GAUNTLET as i32 as usize];
         postgameMenuInfo.numAwards += 1
     }
-    oldFrags =
-        UI_GetAwardLevel(AWARD_FRAGS as i32)
-            / 100 as i32;
-    UI_LogAwardData(
-        AWARD_FRAGS as i32,
-        awardValues[AWARD_FRAGS as i32 as usize],
-    );
-    newFrags =
-        UI_GetAwardLevel(AWARD_FRAGS as i32)
-            / 100 as i32;
+    oldFrags = UI_GetAwardLevel(AWARD_FRAGS as i32) / 100 as i32;
+    UI_LogAwardData(AWARD_FRAGS as i32, awardValues[AWARD_FRAGS as i32 as usize]);
+    newFrags = UI_GetAwardLevel(AWARD_FRAGS as i32) / 100 as i32;
     if newFrags > oldFrags {
-        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            AWARD_FRAGS as i32;
+        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] = AWARD_FRAGS as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] = newFrags * 100 as i32;
         postgameMenuInfo.numAwards += 1
     }
     if awardValues[AWARD_PERFECT as i32 as usize] != 0 {
-        UI_LogAwardData(
-            AWARD_PERFECT as i32,
-            1 as i32,
-        );
-        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] =
-            AWARD_PERFECT as i32;
+        UI_LogAwardData(AWARD_PERFECT as i32, 1 as i32);
+        postgameMenuInfo.awardsEarned[postgameMenuInfo.numAwards as usize] = AWARD_PERFECT as i32;
         postgameMenuInfo.awardsLevels[postgameMenuInfo.numAwards as usize] = 1 as i32;
         postgameMenuInfo.numAwards += 1
     }
     if playerGameRank == 1 as i32 {
-        postgameMenuInfo.won =
-            UI_TierCompleted(postgameMenuInfo.level)
+        postgameMenuInfo.won = UI_TierCompleted(postgameMenuInfo.level)
     } else {
         postgameMenuInfo.won = -(1 as i32)
     }
@@ -1383,20 +1312,16 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     trap_Key_SetCatcher(0x2 as i32);
     uis.menusp = 0 as i32;
     UI_SPPostgameMenu_Init();
-    UI_PushMenu(
-        &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework);
     if playerGameRank == 1 as i32 {
         Menu_SetCursorToItem(
             &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut postgameMenuInfo.item_next as *mut menubitmap_s
-                as *mut libc::c_void,
+            &mut postgameMenuInfo.item_next as *mut menubitmap_s as *mut libc::c_void,
         );
     } else {
         Menu_SetCursorToItem(
             &mut postgameMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut postgameMenuInfo.item_again as *mut menubitmap_s
-                as *mut libc::c_void,
+            &mut postgameMenuInfo.item_again as *mut menubitmap_s as *mut libc::c_void,
         );
     }
     Prepname(0 as i32);
@@ -1427,11 +1352,7 @@ pub unsafe extern "C" fn UI_SPPostgameMenu_f() {
     }
     postgameMenuInfo.phase = 1 as i32;
     postgameMenuInfo.lastTier = UI_GetNumSPTiers();
-    if !UI_GetSpecialArenaInfo(
-        b"final\x00" as *const u8 as *const libc::c_char,
-    )
-    .is_null()
-    {
+    if !UI_GetSpecialArenaInfo(b"final\x00" as *const u8 as *const libc::c_char).is_null() {
         postgameMenuInfo.lastTier += 1
     };
 }

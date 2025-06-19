@@ -308,9 +308,7 @@ pub unsafe extern "C" fn hysteresis_decision(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn celt_lcg_rand(
-    mut seed: opus_uint32,
-) -> opus_uint32 {
+pub unsafe extern "C" fn celt_lcg_rand(mut seed: opus_uint32) -> opus_uint32 {
     return (1664525 as i32 as u32)
         .wrapping_mul(seed)
         .wrapping_add(1013904223 as i32 as u32);
@@ -319,9 +317,7 @@ pub unsafe extern "C" fn celt_lcg_rand(
 with this approximation is important because it has an impact on the bit allocation */
 #[no_mangle]
 
-pub unsafe extern "C" fn bitexact_cos(
-    mut x: opus_int16,
-) -> opus_int16 {
+pub unsafe extern "C" fn bitexact_cos(mut x: opus_int16) -> opus_int16 {
     let mut tmp: opus_int32 = 0;
     let mut x2: opus_int16 = 0;
     tmp = 4096 as i32 + x as opus_int32 * x as i32 >> 13 as i32;
@@ -334,11 +330,8 @@ pub unsafe extern "C" fn bitexact_cos(
                         + x2 as opus_int32
                             * (8277 as i32
                                 + (16384 as i32
-                                    + -(626 as i32) as opus_int16
-                                        as opus_int32
-                                        * x2 as i32
-                                    >> 15 as i32))
-                                as opus_int16
+                                    + -(626 as i32) as opus_int16 as opus_int32 * x2 as i32
+                                    >> 15 as i32)) as opus_int16
                                 as i32
                         >> 15 as i32)) as opus_int16 as i32
             >> 15 as i32)) as opus_int16;
@@ -359,16 +352,14 @@ pub unsafe extern "C" fn bitexact_log2tan(mut isin: i32, mut icos: i32) -> i32 {
         + (16384 as i32
             + isin as opus_int16 as opus_int32
                 * ((16384 as i32
-                    + isin as opus_int16 as opus_int32
-                        * -(2597 as i32) as opus_int16 as i32
+                    + isin as opus_int16 as opus_int32 * -(2597 as i32) as opus_int16 as i32
                     >> 15 as i32)
                     + 7932 as i32) as opus_int16 as i32
             >> 15 as i32)
         - (16384 as i32
             + icos as opus_int16 as opus_int32
                 * ((16384 as i32
-                    + icos as opus_int16 as opus_int32
-                        * -(2597 as i32) as opus_int16 as i32
+                    + icos as opus_int16 as opus_int32 * -(2597 as i32) as opus_int16 as i32
                     >> 15 as i32)
                     + 7932 as i32) as opus_int16 as i32
             >> 15 as i32);
@@ -565,8 +556,7 @@ pub unsafe extern "C" fn anti_collapse(
         depth = (celt_udiv(
             (1 as i32 + *pulses.offset(i as isize)) as opus_uint32,
             (*(*m).eBands.offset((i + 1 as i32) as isize) as i32
-                - *(*m).eBands.offset(i as isize) as i32)
-                as opus_uint32,
+                - *(*m).eBands.offset(i as isize) as i32) as opus_uint32,
         ) >> LM) as i32;
         thresh = 0.5f32 * celt_exp2(-0.125f32 * depth as f32);
         sqrt_1 = 1.0f32 / crate::stdlib::sqrt((N0 << LM) as f64) as f32;
@@ -695,11 +685,7 @@ unsafe extern "C" fn intensity_stereo(
     }
 }
 
-unsafe extern "C" fn stereo_split(
-    mut X: *mut celt_norm,
-    mut Y: *mut celt_norm,
-    mut N: i32,
-) {
+unsafe extern "C" fn stereo_split(mut X: *mut celt_norm, mut Y: *mut celt_norm, mut N: i32) {
     let mut j: i32 = 0;
     j = 0 as i32;
     while j < N {
@@ -811,9 +797,7 @@ pub unsafe extern "C" fn spreading_decision(
                 j = 0 as i32; /* Q13 */
                 while j < N {
                     let mut x2N: opus_val32 = 0.;
-                    x2N = *x.offset(j as isize)
-                        * *x.offset(j as isize)
-                        * N as opus_val32;
+                    x2N = *x.offset(j as isize) * *x.offset(j as isize) * N as opus_val32;
                     if x2N < 0.25f32 {
                         tcount[0 as i32 as usize] += 1
                     }
@@ -870,10 +854,7 @@ pub unsafe extern "C" fn spreading_decision(
     }
     /*printf("%d %d %d\n", hf_sum, *hf_average, *tapset_decision);*/
     /* end has to be non-zero */
-    sum = celt_udiv(
-        sum as opus_uint32,
-        nbBands as opus_uint32,
-    ) as i32;
+    sum = celt_udiv(sum as opus_uint32, nbBands as opus_uint32) as i32;
     /* Recursive averaging */
     sum = sum + *average >> 1 as i32;
     *average = sum;
@@ -916,8 +897,8 @@ unsafe extern "C" fn deinterleave_hadamard(
     N = N0 * stride;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+            as usize,
     );
     tmp = fresh3.as_mut_ptr() as *mut celt_norm;
     if hadamard != 0 {
@@ -968,8 +949,8 @@ unsafe extern "C" fn interleave_hadamard(
     N = N0 * stride;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+            as usize,
     );
     tmp = fresh4.as_mut_ptr() as *mut celt_norm;
     if hadamard != 0 {
@@ -1098,12 +1079,10 @@ unsafe extern "C" fn compute_theta(
     let mut tell: opus_int32 = 0;
     let mut inv: i32 = 0 as i32;
     let mut encode: i32 = 0;
-    let mut m: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut m: *const OpusCustomMode = 0 as *const OpusCustomMode;
     let mut i: i32 = 0;
     let mut intensity: i32 = 0;
-    let mut ec: *mut ec_ctx =
-        0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
     let mut bandE: *const celt_ener = 0 as *const celt_ener;
     encode = (*ctx).encode;
     m = (*ctx).m;
@@ -1130,9 +1109,7 @@ unsafe extern "C" fn compute_theta(
         2) they are orthogonal. */
         itheta = crate::src::opus_1_2_1::celt::vq::stereo_itheta(X, Y, stereo, N, (*ctx).arch)
     }
-    tell = ec_tell_frac(
-        ec as *mut ec_ctx,
-    ) as opus_int32;
+    tell = ec_tell_frac(ec as *mut ec_ctx) as opus_int32;
     if qn != 1 as i32 {
         if encode != 0 {
             if stereo == 0 || (*ctx).theta_round == 0 as i32 {
@@ -1142,19 +1119,13 @@ unsafe extern "C" fn compute_theta(
                     /* Check if the selected value of theta will cause the bit allocation
                     to inject noise on one side. If so, make sure the energy of that side
                     is zero. */
-                    let mut unquantized: i32 = celt_udiv(
-                        (itheta * 16384 as i32) as opus_uint32,
-                        qn as opus_uint32,
-                    ) as i32;
+                    let mut unquantized: i32 =
+                        celt_udiv((itheta * 16384 as i32) as opus_uint32, qn as opus_uint32) as i32;
                     imid = bitexact_cos(unquantized as opus_int16) as i32;
-                    iside = bitexact_cos(
-                        (16384 as i32 - unquantized) as opus_int16,
-                    ) as i32;
+                    iside = bitexact_cos((16384 as i32 - unquantized) as opus_int16) as i32;
                     delta = 16384 as i32
-                        + ((N - 1 as i32) << 7 as i32) as opus_int16
-                            as opus_int32
-                            * bitexact_log2tan(iside, imid) as opus_int16
-                                as i32
+                        + ((N - 1 as i32) << 7 as i32) as opus_int16 as opus_int32
+                            * bitexact_log2tan(iside, imid) as opus_int16 as i32
                         >> 15 as i32;
                     if delta > *b {
                         itheta = qn
@@ -1216,10 +1187,8 @@ unsafe extern "C" fn compute_theta(
                 );
             } else {
                 let mut fs: i32 = 0;
-                fs = crate::src::opus_1_2_1::celt::entdec::ec_decode(
-                    ec as *mut ec_ctx,
-                    ft as u32,
-                ) as i32;
+                fs = crate::src::opus_1_2_1::celt::entdec::ec_decode(ec as *mut ec_ctx, ft as u32)
+                    as i32;
                 if fs < (x0 + 1 as i32) * p0 {
                     x = fs / p0
                 } else {
@@ -1281,10 +1250,8 @@ unsafe extern "C" fn compute_theta(
                 /* Triangular pdf */
                 let mut fl_0: i32 = 0 as i32;
                 let mut fm: i32 = 0;
-                fm = crate::src::opus_1_2_1::celt::entdec::ec_decode(
-                    ec as *mut ec_ctx,
-                    ft_0 as u32,
-                ) as i32;
+                fm = crate::src::opus_1_2_1::celt::entdec::ec_decode(ec as *mut ec_ctx, ft_0 as u32)
+                    as i32;
                 if fm < (qn >> 1 as i32) * ((qn >> 1 as i32) + 1 as i32) >> 1 as i32 {
                     itheta = (isqrt32(
                         (8 as i32 as u32)
@@ -1296,15 +1263,11 @@ unsafe extern "C" fn compute_theta(
                     fs_0 = itheta + 1 as i32;
                     fl_0 = itheta * (itheta + 1 as i32) >> 1 as i32
                 } else {
-                    itheta = (((2 as i32 * (qn + 1 as i32)) as u32).wrapping_sub(
-                        isqrt32(
-                            (8 as i32 as u32)
-                                .wrapping_mul(
-                                    (ft_0 - fm - 1 as i32) as opus_uint32,
-                                )
-                                .wrapping_add(1 as i32 as u32),
-                        ),
-                    ) >> 1 as i32) as i32;
+                    itheta = (((2 as i32 * (qn + 1 as i32)) as u32).wrapping_sub(isqrt32(
+                        (8 as i32 as u32)
+                            .wrapping_mul((ft_0 - fm - 1 as i32) as opus_uint32)
+                            .wrapping_add(1 as i32 as u32),
+                    )) >> 1 as i32) as i32;
                     fs_0 = qn + 1 as i32 - itheta;
                     fl_0 = ft_0 - ((qn + 1 as i32 - itheta) * (qn + 2 as i32 - itheta) >> 1 as i32)
                 }
@@ -1316,10 +1279,7 @@ unsafe extern "C" fn compute_theta(
                 );
             }
         }
-        itheta = celt_udiv(
-            (itheta * 16384 as i32) as opus_uint32,
-            qn as opus_uint32,
-        ) as i32;
+        itheta = celt_udiv((itheta * 16384 as i32) as opus_uint32, qn as opus_uint32) as i32;
         if encode != 0 && stereo != 0 {
             if itheta == 0 as i32 {
                 intensity_stereo(m, X, Y, bandE, i, N);
@@ -1362,10 +1322,7 @@ unsafe extern "C" fn compute_theta(
         }
         itheta = 0 as i32
     }
-    qalloc = ec_tell_frac(
-        ec as *mut ec_ctx,
-    )
-    .wrapping_sub(tell as u32) as i32;
+    qalloc = ec_tell_frac(ec as *mut ec_ctx).wrapping_sub(tell as u32) as i32;
     *b -= qalloc;
     if itheta == 0 as i32 {
         imid = 32767 as i32;
@@ -1383,8 +1340,7 @@ unsafe extern "C" fn compute_theta(
         /* This is the mid vs side allocation that minimizes squared error
         in that band. */
         delta = 16384 as i32
-            + ((N - 1 as i32) << 7 as i32) as opus_int16
-                as opus_int32
+            + ((N - 1 as i32) << 7 as i32) as opus_int16 as opus_int32
                 * bitexact_log2tan(iside, imid) as opus_int16 as i32
             >> 15 as i32
     }
@@ -1407,8 +1363,7 @@ unsafe extern "C" fn quant_band_n1(
     let mut stereo: i32 = 0;
     let mut x: *mut celt_norm = X;
     let mut encode: i32 = 0;
-    let mut ec: *mut ec_ctx =
-        0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
     encode = (*ctx).encode;
     ec = (*ctx).ec;
     stereo = (Y != 0 as *mut libc::c_void as *mut celt_norm) as i32;
@@ -1473,12 +1428,10 @@ unsafe extern "C" fn quant_partition(
     let mut cm: u32 = 0 as i32 as u32;
     let mut Y: *mut celt_norm = 0 as *mut celt_norm;
     let mut encode: i32 = 0;
-    let mut m: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut m: *const OpusCustomMode = 0 as *const OpusCustomMode;
     let mut i: i32 = 0;
     let mut spread: i32 = 0;
-    let mut ec: *mut ec_ctx =
-        0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
     encode = (*ctx).encode;
     m = (*ctx).m;
     i = (*ctx).i;
@@ -1646,9 +1599,7 @@ unsafe extern "C" fn quant_partition(
                         X as *mut libc::c_void,
                         0 as i32,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            ),
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong),
                     );
                 } else {
                     if lowband.is_null() {
@@ -1656,9 +1607,8 @@ unsafe extern "C" fn quant_partition(
                         j = 0 as i32;
                         while j < N {
                             (*ctx).seed = celt_lcg_rand((*ctx).seed);
-                            *X.offset(j as isize) = ((*ctx).seed as opus_int32
-                                >> 20 as i32)
-                                as celt_norm;
+                            *X.offset(j as isize) =
+                                ((*ctx).seed as opus_int32 >> 20 as i32) as celt_norm;
                             j += 1
                         }
                         cm = cm_mask
@@ -1716,10 +1666,7 @@ unsafe extern "C" fn quant_band(
     encode = (*ctx).encode;
     tf_change = (*ctx).tf_change;
     longBlocks = (B0 == 1 as i32) as i32;
-    N_B = celt_udiv(
-        N_B as opus_uint32,
-        B as opus_uint32,
-    ) as i32;
+    N_B = celt_udiv(N_B as opus_uint32, B as opus_uint32) as i32;
     /* Special case for one sample */
     if N == 1 as i32 {
         return quant_band_n1(ctx, X, 0 as *mut celt_norm, b, lowband_out);
@@ -1895,8 +1842,7 @@ unsafe extern "C" fn quant_band_stereo(
     };
     let mut orig_fill: i32 = 0;
     let mut encode: i32 = 0;
-    let mut ec: *mut ec_ctx =
-        0 as *mut ec_ctx;
+    let mut ec: *mut ec_ctx = 0 as *mut ec_ctx;
     encode = (*ctx).encode;
     ec = (*ctx).ec;
     /* Special case for one sample */
@@ -2113,8 +2059,7 @@ unsafe extern "C" fn special_hybrid_folding(
     Copies no data for CELT-only mode. */
     crate::stdlib::memcpy(
         &mut *norm.offset(n1 as isize) as *mut celt_norm as *mut libc::c_void,
-        &mut *norm.offset((2 as i32 * n1 - n2) as isize) as *mut celt_norm
-            as *const libc::c_void,
+        &mut *norm.offset((2 as i32 * n1 - n2) as isize) as *mut celt_norm as *const libc::c_void,
         ((n2 - n1) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
             .wrapping_add(
@@ -2381,9 +2326,7 @@ pub unsafe extern "C" fn quant_all_bands(
         }
         N = M * *eBands.offset((i + 1 as i32) as isize) as i32
             - M * *eBands.offset(i as isize) as i32;
-        tell = ec_tell_frac(
-            ec as *mut ec_ctx,
-        ) as opus_int32;
+        tell = ec_tell_frac(ec as *mut ec_ctx) as opus_int32;
         /* Compute how many bits we want to allocate to this band */
         if i != start {
             balance -= tell
@@ -2564,36 +2507,34 @@ pub unsafe extern "C" fn quant_all_bands(
         } else {
             if !Y.is_null() {
                 if theta_rdo != 0 && i < intensity {
-                    let mut ec_save: ec_ctx =
-                        ec_ctx {
-                            buf: 0 as *mut u8,
-                            storage: 0,
-                            end_offs: 0,
-                            end_window: 0,
-                            nend_bits: 0,
-                            nbits_total: 0,
-                            offs: 0,
-                            rng: 0,
-                            val: 0,
-                            ext: 0,
-                            rem: 0,
-                            error: 0,
-                        };
-                    let mut ec_save2: ec_ctx =
-                        ec_ctx {
-                            buf: 0 as *mut u8,
-                            storage: 0,
-                            end_offs: 0,
-                            end_window: 0,
-                            nend_bits: 0,
-                            nbits_total: 0,
-                            offs: 0,
-                            rng: 0,
-                            val: 0,
-                            ext: 0,
-                            rem: 0,
-                            error: 0,
-                        };
+                    let mut ec_save: ec_ctx = ec_ctx {
+                        buf: 0 as *mut u8,
+                        storage: 0,
+                        end_offs: 0,
+                        end_window: 0,
+                        nend_bits: 0,
+                        nbits_total: 0,
+                        offs: 0,
+                        rng: 0,
+                        val: 0,
+                        ext: 0,
+                        rem: 0,
+                        error: 0,
+                    };
+                    let mut ec_save2: ec_ctx = ec_ctx {
+                        buf: 0 as *mut u8,
+                        storage: 0,
+                        end_offs: 0,
+                        end_window: 0,
+                        nend_bits: 0,
+                        nbits_total: 0,
+                        offs: 0,
+                        rng: 0,
+                        val: 0,
+                        ext: 0,
+                        rem: 0,
+                        error: 0,
+                    };
                     let mut ctx_save: band_ctx = band_ctx {
                         encode: 0,
                         resynth: 0,
@@ -2651,9 +2592,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         X_save as *mut libc::c_void,
                         X as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * X_save.offset_from(X) as isize)
                                     as libc::c_ulong,
@@ -2663,9 +2602,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         Y_save as *mut libc::c_void,
                         Y as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * Y_save.offset_from(Y) as isize)
                                     as libc::c_ulong,
@@ -2705,9 +2642,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         X_save2 as *mut libc::c_void,
                         X as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * X_save2.offset_from(X) as isize)
                                     as libc::c_ulong,
@@ -2717,9 +2652,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         Y_save2 as *mut libc::c_void,
                         Y as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * Y_save2.offset_from(Y) as isize)
                                     as libc::c_ulong,
@@ -2732,8 +2665,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 .offset(-(norm_offset as isize))
                                 as *const libc::c_void,
                             (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>()
-                                    as libc::c_ulong)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as i32 as isize
                                         * norm_save2.offset_from(
@@ -2768,9 +2700,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         X as *mut libc::c_void,
                         X_save as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * X.offset_from(X_save) as isize)
                                     as libc::c_ulong,
@@ -2780,9 +2710,7 @@ pub unsafe extern "C" fn quant_all_bands(
                         Y as *mut libc::c_void,
                         Y_save as *const libc::c_void,
                         (N as libc::c_ulong)
-                            .wrapping_mul(
-                                ::std::mem::size_of::<celt_norm>() as libc::c_ulong
-                            )
+                            .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize * Y.offset_from(Y_save) as isize)
                                     as libc::c_ulong,
@@ -2825,8 +2753,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             X as *mut libc::c_void,
                             X_save2 as *const libc::c_void,
                             (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>()
-                                    as libc::c_ulong)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as i32 as isize * X.offset_from(X_save2) as isize)
                                         as libc::c_ulong,
@@ -2836,8 +2763,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             Y as *mut libc::c_void,
                             Y_save2 as *const libc::c_void,
                             (N as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<celt_norm>()
-                                    as libc::c_ulong)
+                                .wrapping_mul(::std::mem::size_of::<celt_norm>() as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as i32 as isize * Y.offset_from(Y_save2) as isize)
                                         as libc::c_ulong,
@@ -2850,8 +2776,9 @@ pub unsafe extern "C" fn quant_all_bands(
                                     as *mut libc::c_void,
                                 norm_save2 as *const libc::c_void,
                                 (N as libc::c_ulong)
-                                    .wrapping_mul(::std::mem::size_of::<celt_norm>()
-                                        as libc::c_ulong)
+                                    .wrapping_mul(
+                                        ::std::mem::size_of::<celt_norm>() as libc::c_ulong
+                                    )
                                     .wrapping_add(
                                         (0 as i32 as isize
                                             * norm

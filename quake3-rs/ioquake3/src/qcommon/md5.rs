@@ -59,10 +59,7 @@ unsafe extern "C" fn MD5Init(mut ctx: *mut MD5Context) {
  * the data and converts bytes into longwords for this routine.
  */
 
-unsafe extern "C" fn MD5Transform(
-    mut buf: *mut uint32_t,
-    mut in_0: *const uint32_t,
-) {
+unsafe extern "C" fn MD5Transform(mut buf: *mut uint32_t, mut in_0: *const uint32_t) {
     let mut a: uint32_t = 0;
     let mut b: uint32_t = 0;
     let mut c: uint32_t = 0;
@@ -541,9 +538,8 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
     if (*ctx).bits[0 as i32 as usize] < t {
         (*ctx).bits[1 as i32 as usize] = (*ctx).bits[1 as i32 as usize].wrapping_add(1)
     }
-    (*ctx).bits[1 as i32 as usize] = ((*ctx).bits[1 as i32 as usize] as u32)
-        .wrapping_add(len >> 29 as i32)
-        as uint32_t;
+    (*ctx).bits[1 as i32 as usize] =
+        ((*ctx).bits[1 as i32 as usize] as u32).wrapping_add(len >> 29 as i32) as uint32_t;
     t = t >> 3 as i32 & 0x3f as i32 as u32;
     /* Handle any leading odd-sized chunks */
     if t != 0 {
@@ -564,8 +560,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
         );
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
-            (*ctx).in_0.as_mut_ptr() as *mut uint32_t
-                as *const uint32_t,
+            (*ctx).in_0.as_mut_ptr() as *mut uint32_t as *const uint32_t,
         );
         buf = buf.offset(t as isize);
         len = len.wrapping_sub(t)
@@ -579,8 +574,7 @@ unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut
         );
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
-            (*ctx).in_0.as_mut_ptr() as *mut uint32_t
-                as *const uint32_t,
+            (*ctx).in_0.as_mut_ptr() as *mut uint32_t as *const uint32_t,
         );
         buf = buf.offset(64 as i32 as isize);
         len = len.wrapping_sub(64 as i32 as u32)
@@ -616,8 +610,7 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
         crate::stdlib::memset(p as *mut libc::c_void, 0 as i32, count as libc::c_ulong);
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
-            (*ctx).in_0.as_mut_ptr() as *mut uint32_t
-                as *const uint32_t,
+            (*ctx).in_0.as_mut_ptr() as *mut uint32_t as *const uint32_t,
         );
         /* Now fill the next block with 56 bytes */
         crate::stdlib::memset(
@@ -705,8 +698,7 @@ pub unsafe extern "C" fn Com_MD5File(
     loop {
         r = crate::src::qcommon::files::FS_Read(
             buffer.as_mut_ptr() as *mut libc::c_void,
-            ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong
-                as i32,
+            ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong as i32,
             f,
         );
         if r < 1 as i32 {
@@ -717,8 +709,7 @@ pub unsafe extern "C" fn Com_MD5File(
         }
         total += r;
         MD5Update(&mut md5, buffer.as_mut_ptr(), r as u32);
-        if (r as libc::c_ulong)
-            < ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong
+        if (r as libc::c_ulong) < ::std::mem::size_of::<[byte; 2048]>() as libc::c_ulong
             || total >= length
         {
             break;

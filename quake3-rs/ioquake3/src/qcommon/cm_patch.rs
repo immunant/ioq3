@@ -383,8 +383,7 @@ static mut debugPatchCollide: *const crate::src::qcommon::cm_patch::patchCollide
 static mut debugFacet: *const crate::src::qcommon::cm_patch::facet_t =
     0 as *const crate::src::qcommon::cm_patch::facet_t;
 
-static mut debugBlock: qboolean =
-    qfalse;
+static mut debugBlock: qboolean = qfalse;
 
 static mut debugBlockPoints: [vec3_t; 4] = [[0.; 3]; 4];
 /*
@@ -404,9 +403,7 @@ CM_SignbitsForNormal
 =================
 */
 
-unsafe extern "C" fn CM_SignbitsForNormal(
-    mut normal: *mut vec_t,
-) -> i32 {
+unsafe extern "C" fn CM_SignbitsForNormal(mut normal: *mut vec_t) -> i32 {
     let mut bits: i32 = 0;
     let mut j: i32 = 0;
     bits = 0 as i32;
@@ -485,8 +482,8 @@ unsafe extern "C" fn CM_NeedsSubdivision(
     // calculate the linear midpoint
     i = 0 as i32;
     while i < 3 as i32 {
-        lmid[i as usize] = (0.5f64 * (*a.offset(i as isize) + *c.offset(i as isize)) as f64)
-            as vec_t;
+        lmid[i as usize] =
+            (0.5f64 * (*a.offset(i as isize) + *c.offset(i as isize)) as f64) as vec_t;
         i += 1
     }
     // calculate the exact curve midpoint
@@ -525,13 +522,12 @@ unsafe extern "C" fn CM_Subdivide(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 3 as i32 {
-        *out1.offset(i as isize) = (0.5f64 * (*a.offset(i as isize) + *b.offset(i as isize)) as f64)
-            as vec_t;
-        *out3.offset(i as isize) = (0.5f64 * (*b.offset(i as isize) + *c.offset(i as isize)) as f64)
-            as vec_t;
-        *out2.offset(i as isize) = (0.5f64
-            * (*out1.offset(i as isize) + *out3.offset(i as isize)) as f64)
-            as vec_t;
+        *out1.offset(i as isize) =
+            (0.5f64 * (*a.offset(i as isize) + *b.offset(i as isize)) as f64) as vec_t;
+        *out3.offset(i as isize) =
+            (0.5f64 * (*b.offset(i as isize) + *c.offset(i as isize)) as f64) as vec_t;
+        *out2.offset(i as isize) =
+            (0.5f64 * (*out1.offset(i as isize) + *out3.offset(i as isize)) as f64) as vec_t;
         i += 1
     }
 }
@@ -548,8 +544,7 @@ unsafe extern "C" fn CM_TransposeGrid(mut grid: *mut crate::src::qcommon::cm_pat
     let mut j: i32 = 0;
     let mut l: i32 = 0;
     let mut temp: vec3_t = [0.; 3];
-    let mut tempWrap: qboolean =
-        qfalse;
+    let mut tempWrap: qboolean = qfalse;
     if (*grid).width > (*grid).height {
         i = 0 as i32;
         while i < (*grid).height {
@@ -782,10 +777,7 @@ unsafe extern "C" fn CM_SubdivideGridColumns(
     }
 }
 
-unsafe extern "C" fn CM_ComparePoints(
-    mut a: *mut f32,
-    mut b: *mut f32,
-) -> qboolean {
+unsafe extern "C" fn CM_ComparePoints(mut a: *mut f32, mut b: *mut f32) -> qboolean {
     let mut d: f32 = 0.;
     d = *a.offset(0 as i32 as isize) - *b.offset(0 as i32 as isize);
     if (d as f64) < -0.1f64 || d as f64 > 0.1f64 {
@@ -1102,9 +1094,7 @@ unsafe extern "C" fn CM_GridPlane(
         return p;
     }
     // should never happen
-    Com_Printf(
-        b"WARNING: CM_GridPlane unresolvable\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"WARNING: CM_GridPlane unresolvable\n\x00" as *const u8 as *const libc::c_char);
     return -(1 as i32);
 }
 /*
@@ -1356,8 +1346,7 @@ unsafe extern "C" fn CM_ValidateFacet(
 ) -> qboolean {
     let mut plane: [f32; 4] = [0.; 4];
     let mut j: i32 = 0;
-    let mut w: *mut winding_t =
-        0 as *mut winding_t;
+    let mut w: *mut winding_t = 0 as *mut winding_t;
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
     if (*facet).surfacePlane == -(1 as i32) {
         return qfalse;
@@ -1366,16 +1355,11 @@ unsafe extern "C" fn CM_ValidateFacet(
     plane[1 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
     plane[2 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
     plane[3 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
-    w = BaseWindingForPlane(
-        plane.as_mut_ptr(),
-        plane[3 as i32 as usize],
-    ) as *mut winding_t;
+    w = BaseWindingForPlane(plane.as_mut_ptr(), plane[3 as i32 as usize]) as *mut winding_t;
     j = 0 as i32;
     while j < (*facet).numBorders && !w.is_null() {
         if (*facet).borderPlanes[j as usize] == -(1 as i32) {
-            FreeWinding(
-                w as *mut winding_t,
-            );
+            FreeWinding(w as *mut winding_t);
             return qfalse;
         }
         plane[0 as i32 as usize] =
@@ -1387,12 +1371,9 @@ unsafe extern "C" fn CM_ValidateFacet(
         plane[3 as i32 as usize] =
             planes[(*facet).borderPlanes[j as usize] as usize].plane[3 as i32 as usize];
         if (*facet).borderInward[j as usize] == 0 {
-            plane[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
-                - plane[0 as i32 as usize];
-            plane[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
-                - plane[1 as i32 as usize];
-            plane[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
-                - plane[2 as i32 as usize];
+            plane[0 as i32 as usize] = vec3_origin[0 as i32 as usize] - plane[0 as i32 as usize];
+            plane[1 as i32 as usize] = vec3_origin[1 as i32 as usize] - plane[1 as i32 as usize];
+            plane[2 as i32 as usize] = vec3_origin[2 as i32 as usize] - plane[2 as i32 as usize];
             plane[3 as i32 as usize] = -plane[3 as i32 as usize]
         }
         ChopWindingInPlace(
@@ -1413,9 +1394,7 @@ unsafe extern "C" fn CM_ValidateFacet(
         bounds[0 as i32 as usize].as_mut_ptr(),
         bounds[1 as i32 as usize].as_mut_ptr(),
     );
-    FreeWinding(
-        w as *mut winding_t,
-    );
+    FreeWinding(w as *mut winding_t);
     j = 0 as i32;
     while j < 3 as i32 {
         if bounds[1 as i32 as usize][j as usize] - bounds[0 as i32 as usize][j as usize]
@@ -1453,10 +1432,8 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     let mut plane: [f32; 4] = [0.; 4];
     let mut d: f32 = 0.;
     let mut newplane: [f32; 4] = [0.; 4];
-    let mut w: *mut winding_t =
-        0 as *mut winding_t;
-    let mut w2: *mut winding_t =
-        0 as *mut winding_t;
+    let mut w: *mut winding_t = 0 as *mut winding_t;
+    let mut w2: *mut winding_t = 0 as *mut winding_t;
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut vec: vec3_t = [0.; 3];
@@ -1465,10 +1442,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     plane[1 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
     plane[2 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
     plane[3 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
-    w = BaseWindingForPlane(
-        plane.as_mut_ptr(),
-        plane[3 as i32 as usize],
-    ) as *mut winding_t;
+    w = BaseWindingForPlane(plane.as_mut_ptr(), plane[3 as i32 as usize]) as *mut winding_t;
     j = 0 as i32;
     while j < (*facet).numBorders && !w.is_null() {
         if !((*facet).borderPlanes[j as usize] == (*facet).surfacePlane) {
@@ -1481,15 +1455,12 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
             plane[3 as i32 as usize] =
                 planes[(*facet).borderPlanes[j as usize] as usize].plane[3 as i32 as usize];
             if (*facet).borderInward[j as usize] == 0 {
-                plane[0 as i32 as usize] = vec3_origin
-                    [0 as i32 as usize]
-                    - plane[0 as i32 as usize];
-                plane[1 as i32 as usize] = vec3_origin
-                    [1 as i32 as usize]
-                    - plane[1 as i32 as usize];
-                plane[2 as i32 as usize] = vec3_origin
-                    [2 as i32 as usize]
-                    - plane[2 as i32 as usize];
+                plane[0 as i32 as usize] =
+                    vec3_origin[0 as i32 as usize] - plane[0 as i32 as usize];
+                plane[1 as i32 as usize] =
+                    vec3_origin[1 as i32 as usize] - plane[1 as i32 as usize];
+                plane[2 as i32 as usize] =
+                    vec3_origin[2 as i32 as usize] - plane[2 as i32 as usize];
                 plane[3 as i32 as usize] = -plane[3 as i32 as usize]
             }
             ChopWindingInPlace(
@@ -1504,11 +1475,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     if w.is_null() {
         return;
     }
-    WindingBounds(
-        w as *mut winding_t,
-        mins.as_mut_ptr(),
-        maxs.as_mut_ptr(),
-    );
+    WindingBounds(w as *mut winding_t, mins.as_mut_ptr(), maxs.as_mut_ptr());
     // add the axial planes
     axis = 0 as i32;
     while axis < 3 as i32 {
@@ -1551,8 +1518,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                     } else {
                         (*facet).borderPlanes[(*facet).numBorders as usize] =
                             CM_FindPlane2(plane.as_mut_ptr(), &mut flipped);
-                        (*facet).borderNoAdjust[(*facet).numBorders as usize] =
-                            qfalse;
+                        (*facet).borderNoAdjust[(*facet).numBorders as usize] = qfalse;
                         (*facet).borderInward[(*facet).numBorders as usize] = flipped;
                         (*facet).numBorders += 1
                     }
@@ -1601,10 +1567,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                             vec2.as_mut_ptr() as *const vec_t,
                             plane.as_mut_ptr(),
                         );
-                        if !((VectorNormalize(plane.as_mut_ptr())
-                            as f64)
-                            < 0.5f64)
-                        {
+                        if !((VectorNormalize(plane.as_mut_ptr()) as f64) < 0.5f64) {
                             plane[3 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
                                 [0 as i32 as usize]
                                 * plane[0 as i32 as usize]
@@ -1686,8 +1649,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                                             (*facet).borderInward[(*facet).numBorders as usize] =
                                                 flipped;
                                             //
-                                            w2 =  CopyWinding(w as *mut winding_t)
-    as *mut winding_t; //end if
+                                            w2 = CopyWinding(w as *mut winding_t) as *mut winding_t; //end if
                                             newplane[0 as i32 as usize] = planes[(*facet)
                                                 .borderPlanes
                                                 [(*facet).numBorders as usize]
@@ -1724,13 +1686,12 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                                                 newplane[3 as i32 as usize] =
                                                     -newplane[3 as i32 as usize]
                                             }
-                                            ChopWindingInPlace(&mut w2 as *mut _ as *mut *mut winding_t,
-                                                               newplane.as_mut_ptr(),
-                                                               newplane[3 as
-                                                                            i32
-                                                                            as
-                                                                            usize],
-                                                               0.1f32);
+                                            ChopWindingInPlace(
+                                                &mut w2 as *mut _ as *mut *mut winding_t,
+                                                newplane.as_mut_ptr(),
+                                                newplane[3 as i32 as usize],
+                                                0.1f32,
+                                            );
                                             if w2.is_null() {
                                                 crate::src::qcommon::common::Com_DPrintf(b"WARNING: CM_AddFacetBevels... invalid bevel\n\x00"
                                                                 as *const u8
@@ -1756,20 +1717,15 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
         }
         j += 1
     }
-    FreeWinding(
-        w as *mut winding_t,
-    );
+    FreeWinding(w as *mut winding_t);
     //add opposite plane
     if (*facet).numBorders >= 4 as i32 + 6 as i32 + 16 as i32 {
-        Com_Printf(
-            b"ERROR: too many bevels\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"ERROR: too many bevels\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     (*facet).borderPlanes[(*facet).numBorders as usize] = (*facet).surfacePlane;
     (*facet).borderNoAdjust[(*facet).numBorders as usize] = qfalse;
-    (*facet).borderInward[(*facet).numBorders as usize] =
-        qtrue as i32;
+    (*facet).borderInward[(*facet).numBorders as usize] = qtrue as i32;
     (*facet).numBorders += 1;
     //BSPC
 }
@@ -1908,14 +1864,14 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
                     (*facet).borderNoAdjust[0 as i32 as usize] =
                         noAdjust[EN_TOP as i32 as usize] as qboolean;
                     (*facet).borderPlanes[1 as i32 as usize] = borders[EN_RIGHT as i32 as usize];
-                    (*facet).borderNoAdjust[1 as i32 as usize] = noAdjust[EN_RIGHT as i32 as usize]
-                        as qboolean;
+                    (*facet).borderNoAdjust[1 as i32 as usize] =
+                        noAdjust[EN_RIGHT as i32 as usize] as qboolean;
                     (*facet).borderPlanes[2 as i32 as usize] = borders[EN_BOTTOM as i32 as usize];
-                    (*facet).borderNoAdjust[2 as i32 as usize] = noAdjust[EN_BOTTOM as i32 as usize]
-                        as qboolean;
+                    (*facet).borderNoAdjust[2 as i32 as usize] =
+                        noAdjust[EN_BOTTOM as i32 as usize] as qboolean;
                     (*facet).borderPlanes[3 as i32 as usize] = borders[EN_LEFT as i32 as usize];
-                    (*facet).borderNoAdjust[3 as i32 as usize] = noAdjust[EN_LEFT as i32 as usize]
-                        as qboolean;
+                    (*facet).borderNoAdjust[3 as i32 as usize] =
+                        noAdjust[EN_LEFT as i32 as usize] as qboolean;
                     CM_SetBorderInward(facet, grid, gridPlanes.as_mut_ptr(), i, j, -(1 as i32));
                     if CM_ValidateFacet(facet) as u64 != 0 {
                         CM_AddFacetBevels(facet);
@@ -2114,8 +2070,7 @@ pub unsafe extern "C" fn CM_GeneratePatchCollide(
         j = 0 as i32;
         while j < grid.height {
             AddPointToBounds(
-                grid.points[i as usize][j as usize].as_mut_ptr()
-                    as *const vec_t,
+                grid.points[i as usize][j as usize].as_mut_ptr() as *const vec_t,
                 (*pf).bounds[0 as i32 as usize].as_mut_ptr(),
                 (*pf).bounds[1 as i32 as usize].as_mut_ptr(),
             );
@@ -2155,8 +2110,7 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
     mut tw: *mut traceWork_t,
     mut pc: *const crate::src::qcommon::cm_patch::patchCollide_s,
 ) {
-    let mut frontFacing: [qboolean; 2048] =
-        [qfalse; 2048];
+    let mut frontFacing: [qboolean; 2048] = [qfalse; 2048];
     let mut intersection: [f32; 2048] = [0.; 2048];
     let mut intersect: f32 = 0.;
     let mut planes_0: *const crate::src::qcommon::cm_patch::patchPlane_t =
@@ -2169,12 +2123,9 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
     let mut offset: f32 = 0.;
     let mut d1: f32 = 0.;
     let mut d2: f32 = 0.;
-    static mut cv: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
+    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
     //BSPC
-    if (*cm_playerCurveClip).integer == 0 || (*tw).isPoint as u64 == 0
-    {
+    if (*cm_playerCurveClip).integer == 0 || (*tw).isPoint as u64 == 0 {
         return;
     }
     // determine the trace's relationship to all planes
@@ -2242,8 +2193,7 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
                                 b"r_debugSurfaceUpdate\x00" as *const u8 as *const libc::c_char,
                                 b"1\x00" as *const u8 as *const libc::c_char,
                                 0 as i32,
-                            )
-                                as *mut cvar_s
+                            ) as *mut cvar_s
                         }
                         if (*cv).integer != 0 {
                             debugPatchCollide = pc;
@@ -2384,9 +2334,7 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
     ];
     let mut startp: vec3_t = [0.; 3];
     let mut endp: vec3_t = [0.; 3];
-    static mut cv: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
+    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
     //BSPC
     if CM_BoundsIntersect(
         (*tw).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
@@ -2581,8 +2529,7 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
                                     b"r_debugSurfaceUpdate\x00" as *const u8 as *const libc::c_char,
                                     b"1\x00" as *const u8 as *const libc::c_char,
                                     0 as i32,
-                                )
-                                    as *mut cvar_s
+                                ) as *mut cvar_s
                             }
                             if !cv.is_null() && (*cv).integer != 0 {
                                 debugPatchCollide = pc;
@@ -2838,18 +2785,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn CM_DrawDebugSurface(
     mut drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
 ) {
-    static mut cv: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
-    static mut cv2: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
+    static mut cv: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut cv2: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
     let mut pc: *const crate::src::qcommon::cm_patch::patchCollide_t =
         0 as *const crate::src::qcommon::cm_patch::patchCollide_t;
     let mut facet: *mut crate::src::qcommon::cm_patch::facet_t =
         0 as *mut crate::src::qcommon::cm_patch::facet_t;
-    let mut w: *mut winding_t =
-        0 as *mut winding_t;
+    let mut w: *mut winding_t = 0 as *mut winding_t;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -2864,11 +2806,7 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
         -(15 as i32) as vec_t,
         -(28 as i32) as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        15 as i32 as vec_t,
-        15 as i32 as vec_t,
-        28 as i32 as vec_t,
-    ];
+    let mut maxs: vec3_t = [15 as i32 as vec_t, 15 as i32 as vec_t, 28 as i32 as vec_t];
     //vec3_t mins = {0, 0, 0}, maxs = {0, 0, 0};
     let mut v1: vec3_t = [0.; 3];
     let mut v2: vec3_t = [0.; 3];
@@ -2918,15 +2856,12 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                 (*(*pc).planes.offset(planenum as isize)).plane[3 as i32 as usize];
             //planenum = facet->surfacePlane;
             if inward != 0 {
-                plane[0 as i32 as usize] = vec3_origin
-                    [0 as i32 as usize]
-                    - plane[0 as i32 as usize];
-                plane[1 as i32 as usize] = vec3_origin
-                    [1 as i32 as usize]
-                    - plane[1 as i32 as usize];
-                plane[2 as i32 as usize] = vec3_origin
-                    [2 as i32 as usize]
-                    - plane[2 as i32 as usize];
+                plane[0 as i32 as usize] =
+                    vec3_origin[0 as i32 as usize] - plane[0 as i32 as usize];
+                plane[1 as i32 as usize] =
+                    vec3_origin[1 as i32 as usize] - plane[1 as i32 as usize];
+                plane[2 as i32 as usize] =
+                    vec3_origin[2 as i32 as usize] - plane[2 as i32 as usize];
                 plane[3 as i32 as usize] = -plane[3 as i32 as usize]
             }
             plane[3 as i32 as usize] += (*cv).value;
@@ -2950,10 +2885,7 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                         + v1[2 as i32 as usize] * v2[2 as i32 as usize]) as f64,
                 )) as f32;
             //*/
-            w = BaseWindingForPlane(
-                plane.as_mut_ptr(),
-                plane[3 as i32 as usize],
-            ) as *mut winding_t;
+            w = BaseWindingForPlane(plane.as_mut_ptr(), plane[3 as i32 as usize]) as *mut winding_t;
             j = 0 as i32;
             while j < (*facet).numBorders + 1 as i32 && !w.is_null() {
                 //
@@ -2976,15 +2908,12 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                     plane[3 as i32 as usize] =
                         (*(*pc).planes.offset(curplanenum as isize)).plane[3 as i32 as usize];
                     if curinward == 0 {
-                        plane[0 as i32 as usize] = vec3_origin
-                            [0 as i32 as usize]
-                            - plane[0 as i32 as usize];
-                        plane[1 as i32 as usize] = vec3_origin
-                            [1 as i32 as usize]
-                            - plane[1 as i32 as usize];
-                        plane[2 as i32 as usize] = vec3_origin
-                            [2 as i32 as usize]
-                            - plane[2 as i32 as usize];
+                        plane[0 as i32 as usize] =
+                            vec3_origin[0 as i32 as usize] - plane[0 as i32 as usize];
+                        plane[1 as i32 as usize] =
+                            vec3_origin[1 as i32 as usize] - plane[1 as i32 as usize];
+                        plane[2 as i32 as usize] =
+                            vec3_origin[2 as i32 as usize] - plane[2 as i32 as usize];
                         plane[3 as i32 as usize] = -plane[3 as i32 as usize]
                     }
                     //			if ( !facet->borderNoAdjust[j] ) {
@@ -3033,9 +2962,7 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                         (*(*w).p.as_mut_ptr().offset(0 as i32 as isize)).as_mut_ptr(),
                     );
                 }
-                FreeWinding(
-                    w as *mut winding_t,
-                );
+                FreeWinding(w as *mut winding_t);
             } else {
                 Com_Printf(
                     b"winding chopped away by border planes\n\x00" as *const u8

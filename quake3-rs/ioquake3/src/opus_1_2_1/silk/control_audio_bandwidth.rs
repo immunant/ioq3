@@ -138,8 +138,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
     let mut fs_kHz: i32 = 0;
     let mut fs_Hz: opus_int32 = 0;
     fs_kHz = (*psEncC).fs_kHz;
-    fs_Hz = fs_kHz as opus_int16 as opus_int32
-        * 1000 as i32 as opus_int16 as opus_int32;
+    fs_Hz = fs_kHz as opus_int16 as opus_int32 * 1000 as i32 as opus_int16 as opus_int32;
     if fs_Hz == 0 as i32 {
         /* Encoder has just been initialized */
         fs_Hz = if (*psEncC).desiredInternal_fs_Hz < (*psEncC).API_fs_Hz {
@@ -173,8 +172,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
         }
         if (*psEncC).allow_bandwidth_switch != 0 || (*encControl).opusCanSwitch != 0 {
             /* Check if we should switch down */
-            if (*psEncC).fs_kHz as opus_int16
-                as opus_int32
+            if (*psEncC).fs_kHz as opus_int16 as opus_int32
                 * 1000 as i32 as opus_int16 as opus_int32
                 > (*psEncC).desiredInternal_fs_Hz
             {
@@ -186,8 +184,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[opus_int32; 2]>()
-                            as libc::c_ulong,
+                        ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
                     );
                 }
                 if (*encControl).opusCanSwitch != 0 {
@@ -208,8 +205,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     /* Direction: down (at double speed) */
                     (*psEncC).sLP.mode = -(2 as i32)
                 }
-            } else if ((*psEncC).fs_kHz as opus_int16
-                as opus_int32
+            } else if ((*psEncC).fs_kHz as opus_int16 as opus_int32
                 * 1000 as i32 as opus_int16 as opus_int32)
                 < (*psEncC).desiredInternal_fs_Hz
             {
@@ -228,8 +224,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
                         0 as i32,
-                        ::std::mem::size_of::<[opus_int32; 2]>()
-                            as libc::c_ulong,
+                        ::std::mem::size_of::<[opus_int32; 2]>() as libc::c_ulong,
                     );
                     /* Direction: up */
                     (*psEncC).sLP.mode = 1 as i32

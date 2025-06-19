@@ -199,8 +199,7 @@ unsafe extern "C" fn unzlocal_getShort(
     if err == 0 as i32 {
         err = unzlocal_getByte(pzlib_filefunc_def, filestream, &mut i)
     }
-    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 8 as i32)
-        as uLong;
+    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 8 as i32) as uLong;
     if err == 0 as i32 {
         *pX = x
     } else {
@@ -222,18 +221,15 @@ unsafe extern "C" fn unzlocal_getLong(
     if err == 0 as i32 {
         err = unzlocal_getByte(pzlib_filefunc_def, filestream, &mut i)
     }
-    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 8 as i32)
-        as uLong;
+    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 8 as i32) as uLong;
     if err == 0 as i32 {
         err = unzlocal_getByte(pzlib_filefunc_def, filestream, &mut i)
     }
-    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 16 as i32)
-        as uLong;
+    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 16 as i32) as uLong;
     if err == 0 as i32 {
         err = unzlocal_getByte(pzlib_filefunc_def, filestream, &mut i)
     }
-    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 24 as i32)
-        as uLong;
+    x = (x as libc::c_ulong).wrapping_add((i as uLong) << 24 as i32) as uLong;
     if err == 0 as i32 {
         *pX = x
     } else {
@@ -352,8 +348,8 @@ unsafe extern "C" fn unzlocal_SearchCentralDir(
         if uBackRead.wrapping_add(0x400 as i32 as libc::c_ulong) > uMaxBack {
             uBackRead = uMaxBack
         } else {
-            uBackRead = (uBackRead as libc::c_ulong).wrapping_add(0x400 as i32 as libc::c_ulong)
-                as uLong
+            uBackRead =
+                (uBackRead as libc::c_ulong).wrapping_add(0x400 as i32 as libc::c_ulong) as uLong
         }
         uReadPos = uSizeFile.wrapping_sub(uBackRead);
         uReadSize =
@@ -486,8 +482,8 @@ pub unsafe extern "C" fn unzOpen2(
     let mut s: *mut unz_s = 0 as *mut unz_s; /* number the the disk with central dir, used
                                              for spaning ZIP, unsupported, always 0*/
     let mut central_pos: uLong = 0; /* total number of entries in
-                                                    the central dir
-                                                    (same than number_entry on nospan) */
+                                    the central dir
+                                    (same than number_entry on nospan) */
     let mut uL: uLong = 0;
     let mut number_disk: uLong = 0;
     let mut number_disk_with_CD: uLong = 0;
@@ -497,9 +493,7 @@ pub unsafe extern "C" fn unzOpen2(
         return 0 as *mut libc::c_void;
     }
     if pzlib_filefunc_def.is_null() {
-        fill_fopen_filefunc(
-            &mut us.z_filefunc as *mut _ as *mut zlib_filefunc_def_s,
-        );
+        fill_fopen_filefunc(&mut us.z_filefunc as *mut _ as *mut zlib_filefunc_def_s);
     } else {
         us.z_filefunc = *pzlib_filefunc_def
     }
@@ -596,10 +590,7 @@ pub unsafe extern "C" fn unzOpen2(
 pub unsafe extern "C" fn unzOpen(
     mut path: *const libc::c_char,
 ) -> crate::src::qcommon::unzip::unzFile {
-    return unzOpen2(
-        path,
-        0 as *mut zlib_filefunc_def,
-    );
+    return unzOpen2(path, 0 as *mut zlib_filefunc_def);
 }
 /*
 Close a ZipFile opened with unzipOpen.
@@ -667,9 +658,8 @@ unsafe extern "C" fn unzlocal_DosDateToTmuDate(
         .wrapping_div(0x800 as i32 as libc::c_ulong) as uInt;
     (*ptm).tm_min = (ulDosDate & 0x7e0 as i32 as libc::c_ulong)
         .wrapping_div(0x20 as i32 as libc::c_ulong) as uInt;
-    (*ptm).tm_sec = (2 as i32 as libc::c_ulong)
-        .wrapping_mul(ulDosDate & 0x1f as i32 as libc::c_ulong)
-        as uInt;
+    (*ptm).tm_sec =
+        (2 as i32 as libc::c_ulong).wrapping_mul(ulDosDate & 0x1f as i32 as libc::c_ulong) as uInt;
 }
 /*
   Get Info about the current file in the zipfile, with internal only info
@@ -1358,8 +1348,7 @@ unsafe extern "C" fn unzlocal_CheckCurrentFileCoherencyHeader(
     } else if err == 0 as i32 && size_filename != (*s).cur_file_info.size_filename {
         err = -(103 as i32)
     }
-    *piSizeVar = (*piSizeVar as u32).wrapping_add(size_filename as uInt)
-        as uInt;
+    *piSizeVar = (*piSizeVar as u32).wrapping_add(size_filename as uInt) as uInt;
     if unzlocal_getShort(&mut (*s).z_filefunc, (*s).filestream, &mut size_extra_field) != 0 as i32 {
         err = -(1 as i32)
     }
@@ -1369,8 +1358,7 @@ unsafe extern "C" fn unzlocal_CheckCurrentFileCoherencyHeader(
         .wrapping_add(0x1e as i32 as libc::c_ulong)
         .wrapping_add(size_filename);
     *psize_local_extrafield = size_extra_field as uInt;
-    *piSizeVar = (*piSizeVar as u32).wrapping_add(size_extra_field as uInt)
-        as uInt;
+    *piSizeVar = (*piSizeVar as u32).wrapping_add(size_extra_field as uInt) as uInt;
     return err;
 }
 /*
@@ -1623,14 +1611,12 @@ pub unsafe extern "C" fn unzReadCurrentFile(
             {
                 return -(1 as i32);
             }
-            (*pfile_in_zip_read_info).pos_in_zipfile = ((*pfile_in_zip_read_info).pos_in_zipfile
-                as libc::c_ulong)
-                .wrapping_add(uReadThis as libc::c_ulong)
-                as uLong;
+            (*pfile_in_zip_read_info).pos_in_zipfile =
+                ((*pfile_in_zip_read_info).pos_in_zipfile as libc::c_ulong)
+                    .wrapping_add(uReadThis as libc::c_ulong) as uLong;
             (*pfile_in_zip_read_info).rest_read_compressed =
                 ((*pfile_in_zip_read_info).rest_read_compressed as libc::c_ulong)
-                    .wrapping_sub(uReadThis as libc::c_ulong)
-                    as uLong;
+                    .wrapping_sub(uReadThis as libc::c_ulong) as uLong;
             (*pfile_in_zip_read_info).stream.next_in =
                 (*pfile_in_zip_read_info).read_buffer as *mut Bytef;
             (*pfile_in_zip_read_info).stream.avail_in = uReadThis
@@ -1669,14 +1655,11 @@ pub unsafe extern "C" fn unzReadCurrentFile(
             );
             (*pfile_in_zip_read_info).rest_read_uncompressed =
                 ((*pfile_in_zip_read_info).rest_read_uncompressed as libc::c_ulong)
-                    .wrapping_sub(uDoCopy as libc::c_ulong)
-                    as uLong;
+                    .wrapping_sub(uDoCopy as libc::c_ulong) as uLong;
             (*pfile_in_zip_read_info).stream.avail_in =
-                ((*pfile_in_zip_read_info).stream.avail_in as u32).wrapping_sub(uDoCopy)
-                    as uInt;
+                ((*pfile_in_zip_read_info).stream.avail_in as u32).wrapping_sub(uDoCopy) as uInt;
             (*pfile_in_zip_read_info).stream.avail_out =
-                ((*pfile_in_zip_read_info).stream.avail_out as u32).wrapping_sub(uDoCopy)
-                    as uInt;
+                ((*pfile_in_zip_read_info).stream.avail_out as u32).wrapping_sub(uDoCopy) as uInt;
             (*pfile_in_zip_read_info).stream.next_out = (*pfile_in_zip_read_info)
                 .stream
                 .next_out
@@ -1685,10 +1668,9 @@ pub unsafe extern "C" fn unzReadCurrentFile(
                 .stream
                 .next_in
                 .offset(uDoCopy as isize);
-            (*pfile_in_zip_read_info).stream.total_out = ((*pfile_in_zip_read_info).stream.total_out
-                as libc::c_ulong)
-                .wrapping_add(uDoCopy as libc::c_ulong)
-                as uLong;
+            (*pfile_in_zip_read_info).stream.total_out =
+                ((*pfile_in_zip_read_info).stream.total_out as libc::c_ulong)
+                    .wrapping_add(uDoCopy as libc::c_ulong) as uLong;
             iRead = (iRead as u32).wrapping_add(uDoCopy) as uInt
         } else {
             let mut uTotalOutBefore: uLong = 0;
@@ -1713,11 +1695,8 @@ pub unsafe extern "C" fn unzReadCurrentFile(
             }
             uTotalOutAfter = (*pfile_in_zip_read_info).stream.total_out;
             uOutThis = uTotalOutAfter.wrapping_sub(uTotalOutBefore);
-            (*pfile_in_zip_read_info).crc32 = crc32(
-                (*pfile_in_zip_read_info).crc32,
-                bufBefore,
-                uOutThis as uInt,
-            );
+            (*pfile_in_zip_read_info).crc32 =
+                crc32((*pfile_in_zip_read_info).crc32, bufBefore, uOutThis as uInt);
             (*pfile_in_zip_read_info).rest_read_uncompressed =
                 ((*pfile_in_zip_read_info).rest_read_uncompressed as libc::c_ulong)
                     .wrapping_sub(uOutThis) as uLong;
@@ -1746,9 +1725,7 @@ pub unsafe extern "C" fn unzReadCurrentFile(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn unztell(
-    mut file: crate::src::qcommon::unzip::unzFile,
-) -> off_t {
+pub unsafe extern "C" fn unztell(mut file: crate::src::qcommon::unzip::unzFile) -> off_t {
     let mut s: *mut unz_s = 0 as *mut unz_s;
     let mut pfile_in_zip_read_info: *mut file_in_zip_read_info_s =
         0 as *mut file_in_zip_read_info_s;
@@ -1897,9 +1874,7 @@ pub unsafe extern "C" fn unzCloseCurrentFile(mut file: crate::src::qcommon::unzi
     }
     (*pfile_in_zip_read_info).read_buffer = 0 as *mut libc::c_char;
     if (*pfile_in_zip_read_info).stream_initialised != 0 {
-        inflateEnd(
-            &mut (*pfile_in_zip_read_info).stream as *mut _ as *mut z_stream_s,
-        );
+        inflateEnd(&mut (*pfile_in_zip_read_info).stream as *mut _ as *mut z_stream_s);
     }
     (*pfile_in_zip_read_info).stream_initialised = 0 as i32 as uLong;
     if !pfile_in_zip_read_info.is_null() {
@@ -1969,9 +1944,7 @@ pub unsafe extern "C" fn unzGetGlobalComment(
 /* Additions by RX '2004 */
 #[no_mangle]
 
-pub unsafe extern "C" fn unzGetOffset(
-    mut file: crate::src::qcommon::unzip::unzFile,
-) -> uLong {
+pub unsafe extern "C" fn unzGetOffset(mut file: crate::src::qcommon::unzip::unzFile) -> uLong {
     let mut s: *mut unz_s = 0 as *mut unz_s;
     if file.is_null() {
         return -(102 as i32) as uLong;

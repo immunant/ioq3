@@ -41,31 +41,29 @@ pub union poor {
 
 static mut registeredFontCount: i32 = 0 as i32;
 
-static mut registeredFont: [fontInfo_t; 6] =
-    [fontInfo_t {
-        glyphs: [glyphInfo_t {
-            height: 0,
-            top: 0,
-            bottom: 0,
-            pitch: 0,
-            xSkip: 0,
-            imageWidth: 0,
-            imageHeight: 0,
-            s: 0.,
-            t: 0.,
-            s2: 0.,
-            t2: 0.,
-            glyph: 0,
-            shaderName: [0; 32],
-        }; 256],
-        glyphScale: 0.,
-        name: [0; 64],
-    }; 6];
+static mut registeredFont: [fontInfo_t; 6] = [fontInfo_t {
+    glyphs: [glyphInfo_t {
+        height: 0,
+        top: 0,
+        bottom: 0,
+        pitch: 0,
+        xSkip: 0,
+        imageWidth: 0,
+        imageHeight: 0,
+        s: 0.,
+        t: 0.,
+        s2: 0.,
+        t2: 0.,
+        glyph: 0,
+        shaderName: [0; 32],
+    }; 256],
+    glyphScale: 0.,
+    name: [0; 64],
+}; 6];
 
 static mut fdOffset: i32 = 0;
 
-static mut fdFile: *mut byte =
-    0 as *const byte as *mut byte;
+static mut fdFile: *mut byte = 0 as *const byte as *mut byte;
 #[no_mangle]
 
 pub unsafe extern "C" fn readInt() -> i32 {
@@ -137,8 +135,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
         {
             crate::stdlib::memcpy(
                 font as *mut libc::c_void,
-                &mut *registeredFont.as_mut_ptr().offset(i as isize)
-                    as *mut fontInfo_t
+                &mut *registeredFont.as_mut_ptr().offset(i as isize) as *mut fontInfo_t
                     as *const libc::c_void,
                 ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong,
             );
@@ -151,9 +148,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
         .expect("non-null function pointer")(
         name.as_mut_ptr(), 0 as *mut *mut libc::c_void
     ) as i32;
-    if len as libc::c_ulong
-        == ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong
-    {
+    if len as libc::c_ulong == ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong {
         crate::src::renderergl1::tr_main::ri
             .FS_ReadFile
             .expect("non-null function pointer")(name.as_mut_ptr(), &mut faceData);
@@ -175,8 +170,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
             (*font).glyphs[i as usize].glyph = readInt();
             Q_strncpyz(
                 (*font).glyphs[i as usize].shaderName.as_mut_ptr(),
-                &mut *fdFile.offset(fdOffset as isize) as *mut byte
-                    as *const libc::c_char,
+                &mut *fdFile.offset(fdOffset as isize) as *mut byte as *const libc::c_char,
                 ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
             );
             fdOffset = (fdOffset as libc::c_ulong)
@@ -187,8 +181,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
         (*font).glyphScale = readFloat();
         crate::stdlib::memcpy(
             (*font).name.as_mut_ptr() as *mut libc::c_void,
-            &mut *fdFile.offset(fdOffset as isize) as *mut byte
-                as *const libc::c_void,
+            &mut *fdFile.offset(fdOffset as isize) as *mut byte as *const libc::c_void,
             64 as i32 as libc::c_ulong,
         );
         //		Com_Memcpy(font, faceData, sizeof(fontInfo_t));
@@ -208,8 +201,8 @@ pub unsafe extern "C" fn RE_RegisterFont(
         let fresh0 = registeredFontCount;
         registeredFontCount = registeredFontCount + 1;
         crate::stdlib::memcpy(
-            &mut *registeredFont.as_mut_ptr().offset(fresh0 as isize)
-                as *mut fontInfo_t as *mut libc::c_void,
+            &mut *registeredFont.as_mut_ptr().offset(fresh0 as isize) as *mut fontInfo_t
+                as *mut libc::c_void,
             font as *const libc::c_void,
             ::std::mem::size_of::<fontInfo_t>() as libc::c_ulong,
         );

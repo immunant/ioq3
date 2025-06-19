@@ -393,21 +393,18 @@ pub unsafe extern "C" fn silk_sum_sqr_shift(
     nrg = len;
     i = 0 as i32;
     while i < len - 1 as i32 {
-        nrg_tmp = (*x.offset(i as isize) as opus_int32
-            * *x.offset(i as isize) as opus_int32)
+        nrg_tmp = (*x.offset(i as isize) as opus_int32 * *x.offset(i as isize) as opus_int32)
             as opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
             (*x.offset((i + 1 as i32) as isize) as opus_int32
-                * *x.offset((i + 1 as i32) as isize) as opus_int32)
-                as opus_uint32,
+                * *x.offset((i + 1 as i32) as isize) as opus_int32) as opus_uint32,
         ) as opus_int32 as opus_uint32;
         nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32;
         i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
-        nrg_tmp = (*x.offset(i as isize) as opus_int32
-            * *x.offset(i as isize) as opus_int32)
+        nrg_tmp = (*x.offset(i as isize) as opus_int32 * *x.offset(i as isize) as opus_int32)
             as opus_uint32;
         nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32
     }
@@ -417,21 +414,18 @@ pub unsafe extern "C" fn silk_sum_sqr_shift(
     nrg = 0 as i32;
     i = 0 as i32;
     while i < len - 1 as i32 {
-        nrg_tmp = (*x.offset(i as isize) as opus_int32
-            * *x.offset(i as isize) as opus_int32)
+        nrg_tmp = (*x.offset(i as isize) as opus_int32 * *x.offset(i as isize) as opus_int32)
             as opus_uint32;
         nrg_tmp = nrg_tmp.wrapping_add(
             (*x.offset((i + 1 as i32) as isize) as opus_int32
-                * *x.offset((i + 1 as i32) as isize) as opus_int32)
-                as opus_uint32,
+                * *x.offset((i + 1 as i32) as isize) as opus_int32) as opus_uint32,
         ) as opus_int32 as opus_uint32;
         nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32;
         i += 2 as i32
     }
     if i < len {
         /* One sample left to process */
-        nrg_tmp = (*x.offset(i as isize) as opus_int32
-            * *x.offset(i as isize) as opus_int32)
+        nrg_tmp = (*x.offset(i as isize) as opus_int32 * *x.offset(i as isize) as opus_int32)
             as opus_uint32;
         nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as opus_int32
     }

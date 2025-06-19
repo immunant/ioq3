@@ -489,10 +489,7 @@ Used as a positional target for calculations in the utilities (spotlights, etc),
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_info_camp(mut self_0: *mut gentity_t) {
-    G_SetOrigin(
-        self_0 as *mut gentity_s,
-        (*self_0).s.origin.as_mut_ptr(),
-    );
+    G_SetOrigin(self_0 as *mut gentity_s, (*self_0).s.origin.as_mut_ptr());
 }
 /*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for calculations in the utilities (spotlights, etc), but removed during gameplay.
@@ -509,10 +506,7 @@ target_position does the same thing
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_info_notnull(mut self_0: *mut gentity_t) {
-    G_SetOrigin(
-        self_0 as *mut gentity_s,
-        (*self_0).s.origin.as_mut_ptr(),
-    );
+    G_SetOrigin(self_0 as *mut gentity_s, (*self_0).s.origin.as_mut_ptr());
 }
 /*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) linear
 Non-displayed light.
@@ -735,24 +729,17 @@ pub unsafe extern "C" fn TeleportPlayer(
     mut angles: *mut vec_t,
 ) {
     let mut tent: *mut gentity_t = 0 as *mut gentity_t;
-    let mut noAngles: qboolean =
-        qfalse;
-    noAngles = (*angles.offset(0 as i32 as isize) as f64 > 999999.0f64) as i32
-        as qboolean;
+    let mut noAngles: qboolean = qfalse;
+    noAngles = (*angles.offset(0 as i32 as isize) as f64 > 999999.0f64) as i32 as qboolean;
     // use temp events at source and destination to prevent the effect
     // from getting dropped by a second player event
-    if (*(*player).client).sess.sessionTeam as u32
-        != TEAM_SPECTATOR as i32 as u32
-    {
+    if (*(*player).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32 {
         tent = G_TempEntity(
             (*(*player).client).ps.origin.as_mut_ptr(),
             EV_PLAYER_TELEPORT_OUT as i32,
         ) as *mut gentity_s;
         (*tent).s.clientNum = (*player).s.clientNum;
-        tent = G_TempEntity(
-            origin,
-            EV_PLAYER_TELEPORT_IN as i32,
-        ) as *mut gentity_s;
+        tent = G_TempEntity(origin, EV_PLAYER_TELEPORT_IN as i32) as *mut gentity_s;
         (*tent).s.clientNum = (*player).s.clientNum
     }
     // unlink to make sure it can't possibly interfere with G_KillBox
@@ -778,17 +765,12 @@ pub unsafe extern "C" fn TeleportPlayer(
         (*(*player).client).ps.pm_time = 160 as i32;
         (*(*player).client).ps.pm_flags |= 64 as i32;
         // set angles
-        SetClientViewAngle(
-            player as *mut gentity_s,
-            angles,
-        );
+        SetClientViewAngle(player as *mut gentity_s, angles);
     }
     // toggle the teleport bit so the client knows to not lerp
     (*(*player).client).ps.eFlags ^= 0x4 as i32;
     // kill anything at the destination
-    if (*(*player).client).sess.sessionTeam as u32
-        != TEAM_SPECTATOR as i32 as u32
-    {
+    if (*(*player).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32 {
         G_KillBox(player as *mut gentity_s);
     }
     // save results of pmove
@@ -801,9 +783,7 @@ pub unsafe extern "C" fn TeleportPlayer(
     (*player).r.currentOrigin[0 as i32 as usize] = (*(*player).client).ps.origin[0 as i32 as usize];
     (*player).r.currentOrigin[1 as i32 as usize] = (*(*player).client).ps.origin[1 as i32 as usize];
     (*player).r.currentOrigin[2 as i32 as usize] = (*(*player).client).ps.origin[2 as i32 as usize];
-    if (*(*player).client).sess.sessionTeam as u32
-        != TEAM_SPECTATOR as i32 as u32
-    {
+    if (*(*player).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32 {
         trap_LinkEntity(player as *mut gentity_s);
     };
 }
@@ -831,8 +811,7 @@ pub unsafe extern "C" fn locateCamera(mut ent: *mut gentity_t) {
     let mut dir: vec3_t = [0.; 3];
     let mut target: *mut gentity_t = 0 as *mut gentity_t;
     let mut owner: *mut gentity_t = 0 as *mut gentity_t;
-    owner =
-        G_PickTarget((*ent).target) as *mut gentity_s;
+    owner = G_PickTarget((*ent).target) as *mut gentity_s;
     if owner.is_null() {
         G_Printf(
             b"Couldn\'t find target for misc_partal_surface\n\x00" as *const u8
@@ -861,8 +840,7 @@ pub unsafe extern "C" fn locateCamera(mut ent: *mut gentity_t) {
     (*ent).s.origin2[1 as i32 as usize] = (*owner).s.origin[1 as i32 as usize];
     (*ent).s.origin2[2 as i32 as usize] = (*owner).s.origin[2 as i32 as usize];
     // see if the portal_camera has a target
-    target = G_PickTarget((*owner).target)
-        as *mut gentity_s;
+    target = G_PickTarget((*owner).target) as *mut gentity_s;
     if !target.is_null() {
         dir[0 as i32 as usize] =
             (*target).s.origin[0 as i32 as usize] - (*owner).s.origin[0 as i32 as usize];
@@ -897,8 +875,7 @@ pub unsafe extern "C" fn SP_misc_portal_surface(mut ent: *mut gentity_t) {
         (*ent).s.origin2[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
         (*ent).s.origin2[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize]
     } else {
-        (*ent).think =
-            Some(locateCamera as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+        (*ent).think = Some(locateCamera as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).nextthink = level.time + 100 as i32
     };
 }
@@ -957,10 +934,7 @@ pub unsafe extern "C" fn Use_Shooter(
         dir[2 as i32 as usize] = (*ent).movedir[2 as i32 as usize]
     }
     // randomize a bit
-    PerpendicularVector(
-        up.as_mut_ptr(),
-        dir.as_mut_ptr() as *const vec_t,
-    );
+    PerpendicularVector(up.as_mut_ptr(), dir.as_mut_ptr() as *const vec_t);
     CrossProduct(
         up.as_mut_ptr() as *const vec_t,
         dir.as_mut_ptr() as *const vec_t,
@@ -1003,16 +977,11 @@ pub unsafe extern "C" fn Use_Shooter(
         }
         _ => {}
     }
-    G_AddEvent(
-        ent as *mut gentity_s,
-        EV_FIRE_WEAPON as i32,
-        0 as i32,
-    );
+    G_AddEvent(ent as *mut gentity_s, EV_FIRE_WEAPON as i32, 0 as i32);
 }
 
 unsafe extern "C" fn InitShooter_Finish(mut ent: *mut gentity_t) {
-    (*ent).enemy =
-        G_PickTarget((*ent).target) as *mut gentity_s;
+    (*ent).enemy = G_PickTarget((*ent).target) as *mut gentity_s;
     (*ent).think = None;
     (*ent).nextthink = 0 as i32;
 }
@@ -1021,21 +990,11 @@ unsafe extern "C" fn InitShooter_Finish(mut ent: *mut gentity_t) {
 pub unsafe extern "C" fn InitShooter(mut ent: *mut gentity_t, mut weapon: i32) {
     (*ent).use_0 = Some(
         Use_Shooter
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
     (*ent).s.weapon = weapon;
-    RegisterItem(BG_FindItemForWeapon(
-        weapon as weapon_t,
-    ) as *mut gitem_s
-        as *mut gitem_s);
-    G_SetMovedir(
-        (*ent).s.angles.as_mut_ptr(),
-        (*ent).movedir.as_mut_ptr(),
-    );
+    RegisterItem(BG_FindItemForWeapon(weapon as weapon_t) as *mut gitem_s as *mut gitem_s);
+    G_SetMovedir((*ent).s.angles.as_mut_ptr(), (*ent).movedir.as_mut_ptr());
     if (*ent).random == 0. {
         (*ent).random = 1.0f64 as f32
     }
@@ -1044,9 +1003,7 @@ pub unsafe extern "C" fn InitShooter(mut ent: *mut gentity_t, mut weapon: i32) {
             as f32;
     // target might be a moving object, so we can't set movedir for it
     if !(*ent).target.is_null() {
-        (*ent).think = Some(
-            InitShooter_Finish as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-        );
+        (*ent).think = Some(InitShooter_Finish as unsafe extern "C" fn(_: *mut gentity_t) -> ());
         (*ent).nextthink = level.time + 500 as i32
     }
     trap_LinkEntity(ent as *mut gentity_s);

@@ -228,22 +228,15 @@ pub unsafe extern "C" fn CG_CheckAmmo() {
     let mut previous: i32 = 0;
     let mut weapons: i32 = 0;
     // see about how many seconds of ammo we have remaining
-    weapons = (*cg.snap).ps.stats
-        [STAT_WEAPONS as i32 as usize];
+    weapons = (*cg.snap).ps.stats[STAT_WEAPONS as i32 as usize];
     total = 0 as i32;
     i = WP_MACHINEGUN as i32;
     while i < WP_NUM_WEAPONS as i32 {
         if !(weapons & (1 as i32) << i == 0) {
             if !((*cg.snap).ps.ammo[i as usize] < 0 as i32) {
                 match i {
-                    5 | 4 | 7 | 3 => {
-                        total +=
-                            (*cg.snap).ps.ammo[i as usize] * 1000 as i32
-                    }
-                    _ => {
-                        total +=
-                            (*cg.snap).ps.ammo[i as usize] * 200 as i32
-                    }
+                    5 | 4 | 7 | 3 => total += (*cg.snap).ps.ammo[i as usize] * 1000 as i32,
+                    _ => total += (*cg.snap).ps.ammo[i as usize] * 200 as i32,
                 }
                 if total >= 5000 as i32 {
                     cg.lowAmmoWarning = 0 as i32;
@@ -261,10 +254,7 @@ pub unsafe extern "C" fn CG_CheckAmmo() {
     }
     // play a sound on transitions
     if cg.lowAmmoWarning != previous {
-        trap_S_StartLocalSound(
-            cgs.media.noAmmoSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.noAmmoSound, CHAN_LOCAL_SOUND as i32);
     };
 }
 /*
@@ -289,8 +279,7 @@ pub unsafe extern "C" fn CG_DamageFeedback(mut yawByte: i32, mut pitchByte: i32,
     // show the attacking player's head and name in corner
     cg.attackerTime = cg.time;
     // the lower on health you are, the greater the view kick will be
-    health = (*cg.snap).ps.stats
-        [STAT_HEALTH as i32 as usize];
+    health = (*cg.snap).ps.stats[STAT_HEALTH as i32 as usize];
     if health < 40 as i32 {
         scale = 1 as i32 as f32
     } else {
@@ -322,36 +311,18 @@ pub unsafe extern "C" fn CG_DamageFeedback(mut yawByte: i32, mut pitchByte: i32,
             0 as *mut vec_t,
             0 as *mut vec_t,
         );
-        dir[0 as i32 as usize] =
-            vec3_origin[0 as i32 as usize] - dir[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            vec3_origin[1 as i32 as usize] - dir[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            vec3_origin[2 as i32 as usize] - dir[2 as i32 as usize];
-        front = dir[0 as i32 as usize]
-            * cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-            + dir[1 as i32 as usize]
-                * cg.refdef.viewaxis[0 as i32 as usize]
-                    [1 as i32 as usize]
-            + dir[2 as i32 as usize]
-                * cg.refdef.viewaxis[0 as i32 as usize]
-                    [2 as i32 as usize];
-        left = dir[0 as i32 as usize]
-            * cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
-            + dir[1 as i32 as usize]
-                * cg.refdef.viewaxis[1 as i32 as usize]
-                    [1 as i32 as usize]
-            + dir[2 as i32 as usize]
-                * cg.refdef.viewaxis[1 as i32 as usize]
-                    [2 as i32 as usize];
-        up = dir[0 as i32 as usize]
-            * cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-            + dir[1 as i32 as usize]
-                * cg.refdef.viewaxis[2 as i32 as usize]
-                    [1 as i32 as usize]
-            + dir[2 as i32 as usize]
-                * cg.refdef.viewaxis[2 as i32 as usize]
-                    [2 as i32 as usize];
+        dir[0 as i32 as usize] = vec3_origin[0 as i32 as usize] - dir[0 as i32 as usize];
+        dir[1 as i32 as usize] = vec3_origin[1 as i32 as usize] - dir[1 as i32 as usize];
+        dir[2 as i32 as usize] = vec3_origin[2 as i32 as usize] - dir[2 as i32 as usize];
+        front = dir[0 as i32 as usize] * cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
+            + dir[1 as i32 as usize] * cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
+            + dir[2 as i32 as usize] * cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
+        left = dir[0 as i32 as usize] * cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
+            + dir[1 as i32 as usize] * cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
+            + dir[2 as i32 as usize] * cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+        up = dir[0 as i32 as usize] * cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
+            + dir[1 as i32 as usize] * cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
+            + dir[2 as i32 as usize] * cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
         dir[0 as i32 as usize] = front;
         dir[1 as i32 as usize] = left;
         dir[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -385,10 +356,8 @@ pub unsafe extern "C" fn CG_DamageFeedback(mut yawByte: i32, mut pitchByte: i32,
         kick = 10 as i32 as f32
     }
     cg.damageValue = kick;
-    cg.v_dmg_time =
-        (cg.time + 500 as i32) as f32;
-    cg.damageTime =
-        (*cg.snap).serverTime as f32;
+    cg.v_dmg_time = (cg.time + 500 as i32) as f32;
+    cg.damageTime = (*cg.snap).serverTime as f32;
 }
 /*
 ================
@@ -422,15 +391,10 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
     let mut event: i32 = 0;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
     if (*ps).externalEvent != 0 && (*ps).externalEvent != (*ops).externalEvent {
-        cent = &mut *cg_entities
-            .as_mut_ptr()
-            .offset((*ps).clientNum as isize) as *mut centity_t;
+        cent = &mut *cg_entities.as_mut_ptr().offset((*ps).clientNum as isize) as *mut centity_t;
         (*cent).currentState.event = (*ps).externalEvent;
         (*cent).currentState.eventParm = (*ps).externalEventParm;
-        CG_EntityEvent(
-            cent as *mut centity_s,
-            (*cent).lerpOrigin.as_mut_ptr(),
-        );
+        CG_EntityEvent(cent as *mut centity_s, (*cent).lerpOrigin.as_mut_ptr());
     }
     cent = &mut cg.predictedPlayerEntity;
     // go through the predictable events buffer
@@ -445,12 +409,8 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
             event = (*ps).events[(i & 2 as i32 - 1 as i32) as usize];
             (*cent).currentState.event = event;
             (*cent).currentState.eventParm = (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
-            CG_EntityEvent(
-                cent as *mut centity_s,
-                (*cent).lerpOrigin.as_mut_ptr(),
-            );
-            cg.predictableEvents[(i & 16 as i32 - 1 as i32) as usize] =
-                event;
+            CG_EntityEvent(cent as *mut centity_s, (*cent).lerpOrigin.as_mut_ptr());
+            cg.predictableEvents[(i & 16 as i32 - 1 as i32) as usize] = event;
             cg.eventSequence += 1
         }
         i += 1
@@ -463,9 +423,7 @@ CG_CheckChangedPredictableEvents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_CheckChangedPredictableEvents(
-    mut ps: *mut playerState_t,
-) {
+pub unsafe extern "C" fn CG_CheckChangedPredictableEvents(mut ps: *mut playerState_t) {
     let mut i: i32 = 0;
     let mut event: i32 = 0;
     let mut cent: *mut centity_t = 0 as *mut centity_t;
@@ -478,19 +436,14 @@ pub unsafe extern "C" fn CG_CheckChangedPredictableEvents(
             if i > cg.eventSequence - 16 as i32 {
                 // if the new playerstate event is different from a previously predicted one
                 if (*ps).events[(i & 2 as i32 - 1 as i32) as usize]
-                    != cg.predictableEvents
-                        [(i & 16 as i32 - 1 as i32) as usize]
+                    != cg.predictableEvents[(i & 16 as i32 - 1 as i32) as usize]
                 {
                     event = (*ps).events[(i & 2 as i32 - 1 as i32) as usize];
                     (*cent).currentState.event = event;
                     (*cent).currentState.eventParm =
                         (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
-                    CG_EntityEvent(
-                        cent as *mut centity_s,
-                        (*cent).lerpOrigin.as_mut_ptr(),
-                    );
-                    cg.predictableEvents
-                        [(i & 16 as i32 - 1 as i32) as usize] = event;
+                    CG_EntityEvent(cent as *mut centity_s, (*cent).lerpOrigin.as_mut_ptr());
+                    cg.predictableEvents[(i & 16 as i32 - 1 as i32) as usize] = event;
                     if cg_showmiss.integer != 0 {
                         CG_Printf(
                             b"WARNING: changed predicted event\n\x00" as *const u8
@@ -509,19 +462,12 @@ pushReward
 ==================
 */
 
-unsafe extern "C" fn pushReward(
-    mut sfx: sfxHandle_t,
-    mut shader: qhandle_t,
-    mut rewardCount: i32,
-) {
+unsafe extern "C" fn pushReward(mut sfx: sfxHandle_t, mut shader: qhandle_t, mut rewardCount: i32) {
     if cg.rewardStack < 10 as i32 - 1 as i32 {
         cg.rewardStack += 1;
-        cg.rewardSound
-            [cg.rewardStack as usize] = sfx;
-        cg.rewardShader
-            [cg.rewardStack as usize] = shader;
-        cg.rewardCount
-            [cg.rewardStack as usize] = rewardCount
+        cg.rewardSound[cg.rewardStack as usize] = sfx;
+        cg.rewardShader[cg.rewardStack as usize] = shader;
+        cg.rewardCount[cg.rewardStack as usize] = rewardCount
     };
 }
 /*
@@ -539,26 +485,16 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
     let mut reward: i32 = 0;
     let mut sfx: sfxHandle_t = 0;
     // don't play the sounds if the player just changed teams
-    if (*ps).persistant[PERS_TEAM as i32 as usize]
-        != (*ops).persistant[PERS_TEAM as i32 as usize]
-    {
+    if (*ps).persistant[PERS_TEAM as i32 as usize] != (*ops).persistant[PERS_TEAM as i32 as usize] {
         return;
     }
     // hit changes
-    if (*ps).persistant[PERS_HITS as i32 as usize]
-        > (*ops).persistant[PERS_HITS as i32 as usize]
-    {
-        trap_S_StartLocalSound(
-            cgs.media.hitSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+    if (*ps).persistant[PERS_HITS as i32 as usize] > (*ops).persistant[PERS_HITS as i32 as usize] {
+        trap_S_StartLocalSound(cgs.media.hitSound, CHAN_LOCAL_SOUND as i32);
     } else if (*ps).persistant[PERS_HITS as i32 as usize]
         < (*ops).persistant[PERS_HITS as i32 as usize]
     {
-        trap_S_StartLocalSound(
-            cgs.media.hitTeamSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.hitTeamSound, CHAN_LOCAL_SOUND as i32);
     }
     // health changes of more than -1 should make pain sounds
     if (*ps).stats[STAT_HEALTH as i32 as usize]
@@ -566,8 +502,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
     {
         if (*ps).stats[STAT_HEALTH as i32 as usize] > 0 as i32 {
             CG_PainEvent(
-                &mut cg.predictedPlayerEntity as *mut _
-                    as *mut centity_s,
+                &mut cg.predictedPlayerEntity as *mut _ as *mut centity_s,
                 (*ps).stats[STAT_HEALTH as i32 as usize],
             );
         }
@@ -654,33 +589,21 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         if (*ps).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x1 as i32
             != (*ops).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x1 as i32
         {
-            trap_S_StartLocalSound(
-                cgs.media.deniedSound,
-                CHAN_ANNOUNCER as i32,
-            );
-        } else if (*ps).persistant[PERS_PLAYEREVENTS as i32 as usize]
-            & 0x2 as i32
+            trap_S_StartLocalSound(cgs.media.deniedSound, CHAN_ANNOUNCER as i32);
+        } else if (*ps).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x2 as i32
             != (*ops).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x2 as i32
         {
-            trap_S_StartLocalSound(
-                cgs.media.humiliationSound,
-                CHAN_ANNOUNCER as i32,
-            );
-        } else if (*ps).persistant[PERS_PLAYEREVENTS as i32 as usize]
-            & 0x4 as i32
+            trap_S_StartLocalSound(cgs.media.humiliationSound, CHAN_ANNOUNCER as i32);
+        } else if (*ps).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x4 as i32
             != (*ops).persistant[PERS_PLAYEREVENTS as i32 as usize] & 0x4 as i32
         {
-            trap_S_StartLocalSound(
-                cgs.media.holyShitSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.holyShitSound, CHAN_ANNOUNCER as i32);
         }
         reward = qtrue as i32
     }
     // check for flag pickup
     if cgs.gametype as u32 > GT_TEAM as i32 as u32 {
-        if (*ps).powerups[PW_REDFLAG as i32 as usize]
-            != (*ops).powerups[PW_REDFLAG as i32 as usize]
+        if (*ps).powerups[PW_REDFLAG as i32 as usize] != (*ops).powerups[PW_REDFLAG as i32 as usize]
             && (*ps).powerups[PW_REDFLAG as i32 as usize] != 0
             || (*ps).powerups[PW_BLUEFLAG as i32 as usize]
                 != (*ops).powerups[PW_BLUEFLAG as i32 as usize]
@@ -689,10 +612,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
                 != (*ops).powerups[PW_NEUTRALFLAG as i32 as usize]
                 && (*ps).powerups[PW_NEUTRALFLAG as i32 as usize] != 0
         {
-            trap_S_StartLocalSound(
-                cgs.media.youHaveFlagSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.youHaveFlagSound, CHAN_ANNOUNCER as i32);
         }
     }
     // lead changes
@@ -703,26 +623,15 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
             if (*ps).persistant[PERS_RANK as i32 as usize]
                 != (*ops).persistant[PERS_RANK as i32 as usize]
             {
-                if (cgs.gametype as u32)
-                    < GT_TEAM as i32 as u32
-                {
+                if (cgs.gametype as u32) < GT_TEAM as i32 as u32 {
                     if (*ps).persistant[PERS_RANK as i32 as usize] == 0 as i32 {
-                        CG_AddBufferedSound(
-                            cgs.media.takenLeadSound,
-                        );
-                    } else if (*ps).persistant[PERS_RANK as i32 as usize]
-                        == 0x4000 as i32
-                    {
-                        CG_AddBufferedSound(
-                            cgs.media.tiedLeadSound,
-                        );
-                    } else if (*ops).persistant[PERS_RANK as i32 as usize]
-                        & !(0x4000 as i32)
+                        CG_AddBufferedSound(cgs.media.takenLeadSound);
+                    } else if (*ps).persistant[PERS_RANK as i32 as usize] == 0x4000 as i32 {
+                        CG_AddBufferedSound(cgs.media.tiedLeadSound);
+                    } else if (*ops).persistant[PERS_RANK as i32 as usize] & !(0x4000 as i32)
                         == 0 as i32
                     {
-                        CG_AddBufferedSound(
-                            cgs.media.lostLeadSound,
-                        );
+                        CG_AddBufferedSound(cgs.media.lostLeadSound);
                     }
                 }
             }
@@ -733,70 +642,44 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         let mut msec: i32 = 0;
         msec = cg.time - cgs.levelStartTime;
         if cg.timelimitWarnings & 4 as i32 == 0
-            && msec
-                > (cgs.timelimit * 60 as i32 + 2 as i32) * 1000 as i32
+            && msec > (cgs.timelimit * 60 as i32 + 2 as i32) * 1000 as i32
         {
             cg.timelimitWarnings |= 1 as i32 | 2 as i32 | 4 as i32;
-            trap_S_StartLocalSound(
-                cgs.media.suddenDeathSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.suddenDeathSound, CHAN_ANNOUNCER as i32);
         } else if cg.timelimitWarnings & 2 as i32 == 0
-            && msec
-                > (cgs.timelimit - 1 as i32) * 60 as i32 * 1000 as i32
+            && msec > (cgs.timelimit - 1 as i32) * 60 as i32 * 1000 as i32
         {
             cg.timelimitWarnings |= 1 as i32 | 2 as i32;
-            trap_S_StartLocalSound(
-                cgs.media.oneMinuteSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.oneMinuteSound, CHAN_ANNOUNCER as i32);
         } else if cgs.timelimit > 5 as i32
             && cg.timelimitWarnings & 1 as i32 == 0
-            && msec
-                > (cgs.timelimit - 5 as i32) * 60 as i32 * 1000 as i32
+            && msec > (cgs.timelimit - 5 as i32) * 60 as i32 * 1000 as i32
         {
             cg.timelimitWarnings |= 1 as i32;
-            trap_S_StartLocalSound(
-                cgs.media.fiveMinuteSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.fiveMinuteSound, CHAN_ANNOUNCER as i32);
         }
     }
     // fraglimit warnings
-    if cgs.fraglimit > 0 as i32
-        && (cgs.gametype as u32)
-            < GT_CTF as i32 as u32
-    {
+    if cgs.fraglimit > 0 as i32 && (cgs.gametype as u32) < GT_CTF as i32 as u32 {
         highScore = cgs.scores1;
-        if cgs.gametype as u32
-            == GT_TEAM as i32 as u32
-            && cgs.scores2 > highScore
-        {
+        if cgs.gametype as u32 == GT_TEAM as i32 as u32 && cgs.scores2 > highScore {
             highScore = cgs.scores2
         }
-        if cg.fraglimitWarnings & 4 as i32 == 0
-            && highScore == cgs.fraglimit - 1 as i32
-        {
+        if cg.fraglimitWarnings & 4 as i32 == 0 && highScore == cgs.fraglimit - 1 as i32 {
             cg.fraglimitWarnings |= 1 as i32 | 2 as i32 | 4 as i32;
-            CG_AddBufferedSound(
-                cgs.media.oneFragSound,
-            );
+            CG_AddBufferedSound(cgs.media.oneFragSound);
         } else if cgs.fraglimit > 2 as i32
             && cg.fraglimitWarnings & 2 as i32 == 0
             && highScore == cgs.fraglimit - 2 as i32
         {
             cg.fraglimitWarnings |= 1 as i32 | 2 as i32;
-            CG_AddBufferedSound(
-                cgs.media.twoFragSound,
-            );
+            CG_AddBufferedSound(cgs.media.twoFragSound);
         } else if cgs.fraglimit > 3 as i32
             && cg.fraglimitWarnings & 1 as i32 == 0
             && highScore == cgs.fraglimit - 3 as i32
         {
             cg.fraglimitWarnings |= 1 as i32;
-            CG_AddBufferedSound(
-                cgs.media.threeFragSound,
-            );
+            CG_AddBufferedSound(cgs.media.threeFragSound);
         }
     };
 }
@@ -1086,10 +969,8 @@ pub unsafe extern "C" fn CG_TransitionPlayerState(
         CG_Respawn();
         cg.mapRestart = qfalse
     }
-    if (*cg.snap).ps.pm_type
-        != PM_INTERMISSION as i32
-        && (*ps).persistant[PERS_TEAM as i32 as usize]
-            != TEAM_SPECTATOR as i32
+    if (*cg.snap).ps.pm_type != PM_INTERMISSION as i32
+        && (*ps).persistant[PERS_TEAM as i32 as usize] != TEAM_SPECTATOR as i32
     {
         CG_CheckLocalSounds(ps, ops);
     }

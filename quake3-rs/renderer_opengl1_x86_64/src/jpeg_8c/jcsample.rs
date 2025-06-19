@@ -326,8 +326,7 @@ unsafe extern "C" fn sep_downsample(
 ) {
     let mut downsample: my_downsample_ptr = (*cinfo).downsample as my_downsample_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut in_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut out_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
     ci = 0 as i32;
@@ -413,12 +412,9 @@ unsafe extern "C" fn int_downsample(
             }
             let fresh2 = outptr;
             outptr = outptr.offset(1);
-            *fresh2 =
-                ((outvalue + numpix2 as isize) / numpix as isize) as JSAMPLE;
+            *fresh2 = ((outvalue + numpix2 as isize) / numpix as isize) as JSAMPLE;
             outcol = outcol.wrapping_add(1);
-            outcol_h = (outcol_h as u32).wrapping_add(h_expand as u32)
-                as JDIMENSION
-                as JDIMENSION
+            outcol_h = (outcol_h as u32).wrapping_add(h_expand as u32) as JDIMENSION as JDIMENSION
         }
         inrow += v_expand;
         outrow += 1
@@ -616,8 +612,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
      * factors are scaled by 2^16 = 65536.
      * Also recall that SF = smoothing_factor / 1024.
      */
-    memberscale =
-        (16384 as i32 - (*cinfo).smoothing_factor * 80 as i32) as INT32; /* scaled (1-5*SF)/4 */
+    memberscale = (16384 as i32 - (*cinfo).smoothing_factor * 80 as i32) as INT32; /* scaled (1-5*SF)/4 */
     neighscale = ((*cinfo).smoothing_factor * 16 as i32) as INT32; /* scaled SF/4 */
     outrow = 0 as i32;
     inrow = outrow;
@@ -631,8 +626,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         membersum = (*inptr0 as i32
             + *inptr0.offset(1 as i32 as isize) as i32
             + *inptr1 as i32
-            + *inptr1.offset(1 as i32 as isize) as i32)
-            as INT32;
+            + *inptr1.offset(1 as i32 as isize) as i32) as INT32;
         neighsum = (*above_ptr as i32
             + *above_ptr.offset(1 as i32 as isize) as i32
             + *below_ptr as i32
@@ -640,8 +634,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
             + *inptr0 as i32
             + *inptr0.offset(2 as i32 as isize) as i32
             + *inptr1 as i32
-            + *inptr1.offset(2 as i32 as isize) as i32)
-            as INT32;
+            + *inptr1.offset(2 as i32 as isize) as i32) as INT32;
         neighsum += neighsum;
         neighsum += (*above_ptr as i32
             + *above_ptr.offset(2 as i32 as isize) as i32
@@ -661,8 +654,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
             membersum = (*inptr0 as i32
                 + *inptr0.offset(1 as i32 as isize) as i32
                 + *inptr1 as i32
-                + *inptr1.offset(1 as i32 as isize) as i32)
-                as INT32;
+                + *inptr1.offset(1 as i32 as isize) as i32) as INT32;
             /* sum of edge-neighbor pixels */
             neighsum = (*above_ptr as i32
                 + *above_ptr.offset(1 as i32 as isize) as i32
@@ -671,8 +663,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
                 + *inptr0.offset(-(1 as i32) as isize) as i32
                 + *inptr0.offset(2 as i32 as isize) as i32
                 + *inptr1.offset(-(1 as i32) as isize) as i32
-                + *inptr1.offset(2 as i32 as isize) as i32)
-                as INT32;
+                + *inptr1.offset(2 as i32 as isize) as i32) as INT32;
             /* The edge-neighbors count twice as much as corner-neighbors */
             neighsum += neighsum;
             /* Add in the corner-neighbors */
@@ -685,8 +676,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
             /* round, descale and output it */
             let fresh6 = outptr;
             outptr = outptr.offset(1);
-            *fresh6 =
-                (membersum + 32768 as i32 as isize >> 16 as i32) as JSAMPLE;
+            *fresh6 = (membersum + 32768 as i32 as isize >> 16 as i32) as JSAMPLE;
             inptr0 = inptr0.offset(2 as i32 as isize);
             inptr1 = inptr1.offset(2 as i32 as isize);
             above_ptr = above_ptr.offset(2 as i32 as isize);
@@ -697,8 +687,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         membersum = (*inptr0 as i32
             + *inptr0.offset(1 as i32 as isize) as i32
             + *inptr1 as i32
-            + *inptr1.offset(1 as i32 as isize) as i32)
-            as INT32;
+            + *inptr1.offset(1 as i32 as isize) as i32) as INT32;
         neighsum = (*above_ptr as i32
             + *above_ptr.offset(1 as i32 as isize) as i32
             + *below_ptr as i32
@@ -706,8 +695,7 @@ unsafe extern "C" fn h2v2_smooth_downsample(
             + *inptr0.offset(-(1 as i32) as isize) as i32
             + *inptr0.offset(1 as i32 as isize) as i32
             + *inptr1.offset(-(1 as i32) as isize) as i32
-            + *inptr1.offset(1 as i32 as isize) as i32)
-            as INT32;
+            + *inptr1.offset(1 as i32 as isize) as i32) as INT32;
         neighsum += neighsum;
         neighsum += (*above_ptr.offset(-(1 as i32) as isize) as i32
             + *above_ptr.offset(1 as i32 as isize) as i32
@@ -799,8 +787,7 @@ unsafe extern "C" fn fullsize_smooth_downsample(
             membersum = membersum * memberscale + neighsum * neighscale;
             let fresh12 = outptr;
             outptr = outptr.offset(1);
-            *fresh12 =
-                (membersum + 32768 as i32 as isize >> 16 as i32) as JSAMPLE;
+            *fresh12 = (membersum + 32768 as i32 as isize >> 16 as i32) as JSAMPLE;
             lastcolsum = colsum;
             colsum = nextcolsum;
             colctr = colctr.wrapping_sub(1)
@@ -823,8 +810,7 @@ unsafe extern "C" fn fullsize_smooth_downsample(
 pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
     let mut downsample: my_downsample_ptr = 0 as *mut my_downsampler;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut smoothok: boolean = 1 as i32;
     let mut h_in_group: i32 = 0;
     let mut v_in_group: i32 = 0;
@@ -841,9 +827,8 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
         ::std::mem::size_of::<my_downsampler>() as libc::c_ulong,
     ) as my_downsample_ptr;
     (*cinfo).downsample = downsample as *mut jpeg_downsampler;
-    (*downsample).pub_0.start_pass = Some(
-        start_pass_downsample as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-    );
+    (*downsample).pub_0.start_pass =
+        Some(start_pass_downsample as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     (*downsample).pub_0.downsample = Some(
         sep_downsample
             as unsafe extern "C" fn(
@@ -946,21 +931,16 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
                         _: JSAMPARRAY,
                     ) -> (),
             );
-            (*downsample).h_expand[ci as usize] =
-                (h_in_group / h_out_group) as UINT8;
-            (*downsample).v_expand[ci as usize] =
-                (v_in_group / v_out_group) as UINT8
+            (*downsample).h_expand[ci as usize] = (h_in_group / h_out_group) as UINT8;
+            (*downsample).v_expand[ci as usize] = (v_in_group / v_out_group) as UINT8
         } else {
-            (*(*cinfo).err).msg_code =
-                JERR_FRACT_SAMPLE_NOTIMPL as i32;
+            (*(*cinfo).err).msg_code = JERR_FRACT_SAMPLE_NOTIMPL as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         ci += 1;
         compptr = compptr.offset(1)
@@ -972,8 +952,6 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: j_compress_ptr) {
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            cinfo as j_common_ptr, 0 as i32
-        );
+        .expect("non-null function pointer")(cinfo as j_common_ptr, 0 as i32);
     };
 }

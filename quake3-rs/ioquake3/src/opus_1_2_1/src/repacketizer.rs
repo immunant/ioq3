@@ -101,8 +101,7 @@ Written by Jean-Marc Valin */
 #[no_mangle]
 
 pub unsafe extern "C" fn opus_repacketizer_get_size() -> i32 {
-    return ::std::mem::size_of::<OpusRepacketizer>() as libc::c_ulong
-        as i32;
+    return ::std::mem::size_of::<OpusRepacketizer>() as libc::c_ulong as i32;
 }
 #[no_mangle]
 
@@ -114,12 +113,9 @@ pub unsafe extern "C" fn opus_repacketizer_init(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_repacketizer_create() -> *mut OpusRepacketizer
-{
-    let mut rp: *mut OpusRepacketizer =
-        0 as *mut OpusRepacketizer;
-    rp = opus_alloc(opus_repacketizer_get_size() as size_t)
-        as *mut OpusRepacketizer;
+pub unsafe extern "C" fn opus_repacketizer_create() -> *mut OpusRepacketizer {
+    let mut rp: *mut OpusRepacketizer = 0 as *mut OpusRepacketizer;
+    rp = opus_alloc(opus_repacketizer_get_size() as size_t) as *mut OpusRepacketizer;
     if rp.is_null() {
         return 0 as *mut OpusRepacketizer;
     }
@@ -127,9 +123,7 @@ pub unsafe extern "C" fn opus_repacketizer_create() -> *mut OpusRepacketizer
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_repacketizer_destroy(
-    mut rp: *mut OpusRepacketizer,
-) {
+pub unsafe extern "C" fn opus_repacketizer_destroy(mut rp: *mut OpusRepacketizer) {
     opus_free(rp as *mut libc::c_void);
 }
 
@@ -191,9 +185,7 @@ pub unsafe extern "C" fn opus_repacketizer_cat(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_repacketizer_get_nb_frames(
-    mut rp: *mut OpusRepacketizer,
-) -> i32 {
+pub unsafe extern "C" fn opus_repacketizer_get_nb_frames(mut rp: *mut OpusRepacketizer) -> i32 {
     return (*rp).nb_frames;
 }
 #[no_mangle]
@@ -257,10 +249,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             let fresh2 = ptr;
             ptr = ptr.offset(1);
             *fresh2 = ((*rp).toc as i32 & 0xfc as i32 | 0x2 as i32) as u8;
-            ptr = ptr.offset(encode_size(
-                *len.offset(0 as i32 as isize) as i32,
-                ptr,
-            ) as isize)
+            ptr = ptr.offset(encode_size(*len.offset(0 as i32 as isize) as i32, ptr) as isize)
         }
     }
     if count > 2 as i32 || pad != 0 && tot_size < maxlen {
@@ -341,19 +330,13 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         if vbr != 0 {
             i = 0 as i32;
             while i < count - 1 as i32 {
-                ptr = ptr.offset(encode_size(
-                    *len.offset(i as isize) as i32,
-                    ptr,
-                ) as isize);
+                ptr = ptr.offset(encode_size(*len.offset(i as isize) as i32, ptr) as isize);
                 i += 1
             }
         }
     }
     if self_delimited != 0 {
-        let mut sdlen: i32 = encode_size(
-            *len.offset((count - 1 as i32) as isize) as i32,
-            ptr,
-        );
+        let mut sdlen: i32 = encode_size(*len.offset((count - 1 as i32) as isize) as i32, ptr);
         ptr = ptr.offset(sdlen as isize)
     }
     /* Copy the actual data */
@@ -1078,10 +1061,7 @@ pub unsafe extern "C" fn opus_packet_pad(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_packet_unpad(
-    mut data: *mut u8,
-    mut len: opus_int32,
-) -> opus_int32 {
+pub unsafe extern "C" fn opus_packet_unpad(mut data: *mut u8, mut len: opus_int32) -> opus_int32 {
     let mut rp: OpusRepacketizer = OpusRepacketizer {
         toc: 0,
         nb_frames: 0,
