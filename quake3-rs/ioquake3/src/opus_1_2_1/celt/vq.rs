@@ -416,7 +416,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
             since the condition is more often false than true and using
             a cmov introduces data dependencies across iterations. The optimal
             choice may be architecture-dependent. */
-            if (best_den * Rxy > Ryy * best_num) as i32 as libc::c_long != 0 {
+            if (best_den * Rxy > Ryy * best_num) as i32 as isize != 0 {
                 best_den = Ryy;
                 best_num = Rxy;
                 best_id = j

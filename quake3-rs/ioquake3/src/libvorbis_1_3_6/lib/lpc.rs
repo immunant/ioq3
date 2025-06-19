@@ -166,42 +166,42 @@ pub unsafe extern "C" fn vorbis_lpc_predict(
     mut prime: *mut f32,
     mut m: i32,
     mut data: *mut f32,
-    mut n: libc::c_long,
+    mut n: isize,
 ) {
     /* in: coeff[0...m-1] LPC coefficients
          prime[0...m-1] initial values (allocated size of n+m-1)
     out: data[0...n-1] data samples */
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut o: libc::c_long = 0;
-    let mut p: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut o: isize = 0;
+    let mut p: isize = 0;
     let mut y: f32 = 0.;
     let mut fresh3 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul((m as libc::c_long + n) as libc::c_ulong) as usize,
+            .wrapping_mul((m as isize + n) as libc::c_ulong) as usize,
     );
     let mut work: *mut f32 = fresh3.as_mut_ptr() as *mut f32;
     if prime.is_null() {
-        i = 0 as i32 as libc::c_long;
-        while i < m as libc::c_long {
+        i = 0 as i32 as isize;
+        while i < m as isize {
             *work.offset(i as isize) = 0.0f32;
             i += 1
         }
     } else {
-        i = 0 as i32 as libc::c_long;
-        while i < m as libc::c_long {
+        i = 0 as i32 as isize;
+        while i < m as isize {
             *work.offset(i as isize) = *prime.offset(i as isize);
             i += 1
         }
     }
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < n {
         y = 0 as i32 as f32;
         o = i;
-        p = m as libc::c_long;
-        j = 0 as i32 as libc::c_long;
-        while j < m as libc::c_long {
+        p = m as isize;
+        j = 0 as i32 as isize;
+        while j < m as isize {
             let fresh4 = o;
             o = o + 1;
             p -= 1;

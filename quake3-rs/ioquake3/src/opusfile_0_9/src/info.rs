@@ -159,7 +159,7 @@ pub unsafe extern "C" fn opus_head_parse(
                 as *const libc::c_void,
             head.mapping.as_mut_ptr().offset_from(
                 &mut head as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead as *mut u8,
-            ) as libc::c_long as libc::c_ulong,
+            ) as isize as libc::c_ulong,
         );
     }
     return 0 as i32;
@@ -209,7 +209,7 @@ unsafe extern "C" fn op_tags_ensure_capacity(
     let mut comment_lengths: *mut i32 = 0 as *mut i32;
     let mut cur_ncomments: i32 = 0;
     let mut size: crate::stddef_h::size_t = 0;
-    if (_ncomments >= 2147483647 as i32 as crate::stddef_h::size_t) as i32 as libc::c_long != 0 {
+    if (_ncomments >= 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
         return -(129 as i32);
     }
     size = (::std::mem::size_of::<i32>() as libc::c_ulong)
@@ -226,7 +226,7 @@ unsafe extern "C" fn op_tags_ensure_capacity(
     comment_lengths = (*_tags).comment_lengths;
     comment_lengths =
         crate::stdlib::realloc((*_tags).comment_lengths as *mut libc::c_void, size) as *mut i32;
-    if comment_lengths.is_null() as i32 as libc::c_long != 0 {
+    if comment_lengths.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     if (*_tags).comment_lengths.is_null() {
@@ -243,7 +243,7 @@ unsafe extern "C" fn op_tags_ensure_capacity(
     }
     user_comments = crate::stdlib::realloc((*_tags).user_comments as *mut libc::c_void, size)
         as *mut *mut libc::c_char;
-    if user_comments.is_null() as i32 as libc::c_long != 0 {
+    if user_comments.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     if (*_tags).user_comments.is_null() {
@@ -265,11 +265,11 @@ unsafe extern "C" fn op_strdup_with_len(
     let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
     size = (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
         .wrapping_mul(_len.wrapping_add(1 as i32 as libc::c_ulong));
-    if (size < _len) as i32 as libc::c_long != 0 {
+    if (size < _len) as i32 as isize != 0 {
         return 0 as *mut libc::c_char;
     }
     ret = crate::stdlib::malloc(size) as *mut libc::c_char;
-    if !ret.is_null() as i32 as libc::c_long != 0 {
+    if !ret.is_null() as i32 as isize != 0 {
         ret = crate::stdlib::memcpy(
             ret as *mut libc::c_void,
             _s as *const libc::c_void,
@@ -395,7 +395,7 @@ unsafe extern "C" fn opus_tags_parse_impl(
         if !_tags.is_null() {
             let ref mut fresh5 = *(*_tags).user_comments.offset(ncomments as isize);
             *fresh5 = crate::stdlib::malloc(len) as *mut libc::c_char;
-            if (*(*_tags).user_comments.offset(ncomments as isize)).is_null() as i32 as libc::c_long
+            if (*(*_tags).user_comments.offset(ncomments as isize)).is_null() as i32 as isize
                 != 0
             {
                 return -(129 as i32);
@@ -457,12 +457,12 @@ unsafe extern "C" fn opus_tags_copy_impl(
     let mut ci: i32 = 0;
     vendor = (*_src).vendor;
     (*_dst).vendor = op_strdup_with_len(vendor, crate::stdlib::strlen(vendor));
-    if (*_dst).vendor.is_null() as i32 as libc::c_long != 0 {
+    if (*_dst).vendor.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     ncomments = (*_src).comments;
     ret = op_tags_ensure_capacity(_dst, ncomments as crate::stddef_h::size_t);
-    if (ret < 0 as i32) as i32 as libc::c_long != 0 {
+    if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
     ci = 0 as i32;
@@ -474,7 +474,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
             *(*_src).user_comments.offset(ci as isize),
             len as crate::stddef_h::size_t,
         );
-        if (*(*_dst).user_comments.offset(ci as isize)).is_null() as i32 as libc::c_long != 0 {
+        if (*(*_dst).user_comments.offset(ci as isize)).is_null() as i32 as isize != 0 {
             return -(129 as i32);
         }
         *(*_dst).comment_lengths.offset(ci as isize) = len;
@@ -487,7 +487,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
         if len_0 > 0 as i32 {
             let ref mut fresh7 = *(*_dst).user_comments.offset(ncomments as isize);
             *fresh7 = crate::stdlib::malloc(len_0 as libc::c_ulong) as *mut libc::c_char;
-            if (*(*_dst).user_comments.offset(ncomments as isize)).is_null() as i32 as libc::c_long
+            if (*(*_dst).user_comments.offset(ncomments as isize)).is_null() as i32 as isize
                 != 0
             {
                 return -(129 as i32);
@@ -518,7 +518,7 @@ pub unsafe extern "C" fn opus_tags_copy(
     let mut ret: i32 = 0;
     opus_tags_init(&mut dst);
     ret = opus_tags_copy_impl(&mut dst, _src);
-    if (ret < 0 as i32) as i32 as libc::c_long != 0 {
+    if (ret < 0 as i32) as i32 as isize != 0 {
         opus_tags_clear(&mut dst);
     } else {
         *_dst = dst
@@ -539,7 +539,7 @@ pub unsafe extern "C" fn opus_tags_add(
     let mut ret: i32 = 0;
     ncomments = (*_tags).comments;
     ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as crate::stddef_h::size_t);
-    if (ret < 0 as i32) as i32 as libc::c_long != 0 {
+    if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
     tag_len = crate::stdlib::strlen(_tag);
@@ -560,7 +560,7 @@ pub unsafe extern "C" fn opus_tags_add(
                 .wrapping_add(2 as i32 as libc::c_ulong),
         ),
     ) as *mut libc::c_char;
-    if comment.is_null() as i32 as libc::c_long != 0 {
+    if comment.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     crate::stdlib::memcpy(
@@ -596,12 +596,12 @@ pub unsafe extern "C" fn opus_tags_add_comment(
     let mut ret: i32 = 0;
     ncomments = (*_tags).comments;
     ret = op_tags_ensure_capacity(_tags, (ncomments + 1 as i32) as crate::stddef_h::size_t);
-    if (ret < 0 as i32) as i32 as libc::c_long != 0 {
+    if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
     comment_len = crate::stdlib::strlen(_comment) as i32;
     comment = op_strdup_with_len(_comment, comment_len as crate::stddef_h::size_t);
-    if comment.is_null() as i32 as libc::c_long != 0 {
+    if comment.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     let ref mut fresh9 = *(*_tags).user_comments.offset(ncomments as isize);
@@ -628,14 +628,14 @@ pub unsafe extern "C" fn opus_tags_set_binary_suffix(
     }
     ncomments = (*_tags).comments;
     ret = op_tags_ensure_capacity(_tags, ncomments as crate::stddef_h::size_t);
-    if (ret < 0 as i32) as i32 as libc::c_long != 0 {
+    if (ret < 0 as i32) as i32 as isize != 0 {
         return ret;
     }
     binary_suffix_data = crate::stdlib::realloc(
         *(*_tags).user_comments.offset(ncomments as isize) as *mut libc::c_void,
         _len as libc::c_ulong,
     ) as *mut u8;
-    if binary_suffix_data.is_null() as i32 as libc::c_long != 0 {
+    if binary_suffix_data.is_null() as i32 as isize != 0 {
         return -(129 as i32);
     }
     crate::stdlib::memcpy(
@@ -656,7 +656,7 @@ pub unsafe extern "C" fn opus_tagcompare(
 ) -> i32 {
     let mut tag_len: crate::stddef_h::size_t = 0;
     tag_len = crate::stdlib::strlen(_tag_name);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as libc::c_long != 0 {
+    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
         return -(1 as i32);
     }
     return opus_tagncompare(_tag_name, tag_len as i32, _comment);
@@ -689,7 +689,7 @@ pub unsafe extern "C" fn opus_tags_query(
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     tag_len = crate::stdlib::strlen(_tag);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as libc::c_long != 0 {
+    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
         return 0 as *const libc::c_char;
     }
     ncomments = (*_tags).comments;
@@ -724,7 +724,7 @@ pub unsafe extern "C" fn opus_tags_query_count(
     let mut ncomments: i32 = 0;
     let mut ci: i32 = 0;
     tag_len = crate::stdlib::strlen(_tag);
-    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as libc::c_long != 0 {
+    if (tag_len > 2147483647 as i32 as crate::stddef_h::size_t) as i32 as isize != 0 {
         return 0 as i32;
     }
     ncomments = (*_tags).comments;

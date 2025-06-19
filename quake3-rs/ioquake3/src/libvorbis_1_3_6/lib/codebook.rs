@@ -2,24 +2,24 @@
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct static_codebook {
-    pub dim: libc::c_long,
-    pub entries: libc::c_long,
+    pub dim: isize,
+    pub entries: isize,
     pub lengthlist: *mut libc::c_char,
     pub maptype: i32,
-    pub q_min: libc::c_long,
-    pub q_delta: libc::c_long,
+    pub q_min: isize,
+    pub q_delta: isize,
     pub q_quant: i32,
     pub q_sequencep: i32,
-    pub quantlist: *mut libc::c_long,
+    pub quantlist: *mut isize,
     pub allocedp: i32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct codebook {
-    pub dim: libc::c_long,
-    pub entries: libc::c_long,
-    pub used_entries: libc::c_long,
+    pub dim: isize,
+    pub entries: isize,
+    pub used_entries: isize,
     pub c: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
     pub valuelist: *mut f32,
     pub codelist: *mut crate::config_types_h::ogg_uint32_t,
@@ -70,8 +70,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     mut c: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
     mut opb: *mut crate::ogg_h::oggpack_buffer,
 ) -> i32 {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
     let mut ordered: i32 = 0 as i32;
     /* first the basic parameters */
     crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
@@ -91,16 +91,16 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     );
     /* pack the codewords.  There are two packings; length ordered and
     length random.  Decide between the two now. */
-    i = 1 as i32 as libc::c_long;
+    i = 1 as i32 as isize;
     while i < (*c).entries {
         if *(*c)
             .lengthlist
-            .offset((i - 1 as i32 as libc::c_long) as isize) as i32
+            .offset((i - 1 as i32 as isize) as isize) as i32
             == 0 as i32
             || (*(*c).lengthlist.offset(i as isize) as i32)
                 < *(*c)
                     .lengthlist
-                    .offset((i - 1 as i32 as libc::c_long) as isize) as i32
+                    .offset((i - 1 as i32 as isize) as isize) as i32
         {
             break;
         }
@@ -113,7 +113,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         /* length ordered.  We only need to say how many codewords of
         each length.  The actual codewords are generated
         deterministically */
-        let mut count: libc::c_long = 0 as i32 as libc::c_long; /* ordered */
+        let mut count: isize = 0 as i32 as isize; /* ordered */
         crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
             opb as *mut crate::ogg_h::oggpack_buffer,
             1 as i32 as libc::c_ulong,
@@ -124,15 +124,15 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as libc::c_ulong,
             5 as i32,
         );
-        i = 1 as i32 as libc::c_long;
+        i = 1 as i32 as isize;
         while i < (*c).entries {
             let mut this: libc::c_char = *(*c).lengthlist.offset(i as isize);
             let mut last: libc::c_char = *(*c)
                 .lengthlist
-                .offset((i - 1 as i32 as libc::c_long) as isize);
+                .offset((i - 1 as i32 as isize) as isize);
             if this as i32 > last as i32 {
-                j = last as libc::c_long;
-                while j < this as libc::c_long {
+                j = last as isize;
+                while j < this as isize {
                     crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         (i - count) as libc::c_ulong,
@@ -164,7 +164,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         /* algortihmic mapping has use for 'unused entries', which we tag
         here.  The algorithmic mapping happens as usual, but the unused
         entry has no codeword. */
-        i = 0 as i32 as libc::c_long; /* no unused entries */
+        i = 0 as i32 as isize; /* no unused entries */
         while i < (*c).entries {
             if *(*c).lengthlist.offset(i as isize) as i32 == 0 as i32 {
                 break; /* we have unused entries; thus we tag */
@@ -177,7 +177,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 0 as i32 as libc::c_ulong,
                 1 as i32,
             );
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < (*c).entries {
                 crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                     opb as *mut crate::ogg_h::oggpack_buffer,
@@ -192,7 +192,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 1 as i32 as libc::c_ulong,
                 1 as i32,
             );
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < (*c).entries {
                 if *(*c).lengthlist.offset(i as isize) as i32 == 0 as i32 {
                     crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
@@ -273,8 +273,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 }
             }
             /* quantized values */
-            i = 0 as i32 as libc::c_long;
-            while i < quantvals as libc::c_long {
+            i = 0 as i32 as isize;
+            while i < quantvals as isize {
                 crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                     opb as *mut crate::ogg_h::oggpack_buffer,
                     ::libc::labs(*(*c).quantlist.offset(i as isize)) as libc::c_ulong,
@@ -298,8 +298,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
     mut opb: *mut crate::ogg_h::oggpack_buffer,
 ) -> *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook {
     let mut current_block: u64;
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
     let mut s: *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook =
         crate::stdlib::calloc(
             1 as i32 as libc::c_ulong,
@@ -311,7 +311,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
     if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         opb as *mut crate::ogg_h::oggpack_buffer,
         24 as i32,
-    ) != 0x564342 as i32 as libc::c_long)
+    ) != 0x564342 as i32 as isize)
     {
         /* first the basic parameters */
         (*s).dim = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
@@ -322,7 +322,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
             opb as *mut crate::ogg_h::oggpack_buffer,
             24 as i32,
         );
-        if !((*s).entries == -(1 as i32) as libc::c_long) {
+        if !((*s).entries == -(1 as i32) as isize) {
             if !(crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
                 (*s).dim as crate::config_types_h::ogg_uint32_t,
             ) + crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -339,7 +339,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         current_block = 14523784380283086299;
                         match current_block {
                             14523784380283086299 => {
-                                let mut unused: libc::c_long = 0;
+                                let mut unused: isize = 0;
                                 /* allocated but unused entries? */
                                 unused = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                     opb as *mut crate::ogg_h::oggpack_buffer,
@@ -347,8 +347,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                 );
                                 if (*s).entries
                                     * (if unused != 0 { 1 as i32 } else { 5 as i32 })
-                                        as libc::c_long
-                                    + 7 as i32 as libc::c_long
+                                        as isize
+                                    + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
                                         - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
@@ -366,7 +366,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     /* allocated but unused entries? */
                                     if unused != 0 {
                                         /* yes, unused entries */
-                                        i = 0 as i32 as libc::c_long;
+                                        i = 0 as i32 as isize;
                                         loop {
                                             if !(i < (*s).entries) {
                                                 current_block = 15004371738079956865;
@@ -377,16 +377,16 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 1 as i32,
                                             ) != 0
                                             {
-                                                let mut num: libc::c_long =
+                                                let mut num: isize =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                                  5 as
                                                                      i32);
-                                                if num == -(1 as i32) as libc::c_long {
+                                                if num == -(1 as i32) as isize {
                                                     current_block = 15187751986642917127;
                                                     break;
                                                 }
                                                 *(*s).lengthlist.offset(i as isize) =
-                                                    (num + 1 as i32 as libc::c_long) as libc::c_char
+                                                    (num + 1 as i32 as isize) as libc::c_char
                                             } else {
                                                 *(*s).lengthlist.offset(i as isize) =
                                                     0 as i32 as libc::c_char
@@ -395,22 +395,22 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         }
                                     } else {
                                         /* all entries used; no tagging */
-                                        i = 0 as i32 as libc::c_long;
+                                        i = 0 as i32 as isize;
                                         loop {
                                             if !(i < (*s).entries) {
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            let mut num_0: libc::c_long =
+                                            let mut num_0: isize =
                                                 crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                              5 as
                                                                  i32);
-                                            if num_0 == -(1 as i32) as libc::c_long {
+                                            if num_0 == -(1 as i32) as isize {
                                                 current_block = 15187751986642917127;
                                                 break;
                                             }
                                             *(*s).lengthlist.offset(i as isize) =
-                                                (num_0 + 1 as i32 as libc::c_long) as libc::c_char;
+                                                (num_0 + 1 as i32 as isize) as libc::c_char;
                                             i += 1
                                         }
                                     }
@@ -419,12 +419,12 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             _ =>
                             /* ordered */
                             {
-                                let mut length: libc::c_long =
+                                let mut length: isize =
                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                         opb as *mut crate::ogg_h::oggpack_buffer,
                                         5 as i32,
-                                    ) + 1 as i32 as libc::c_long;
-                                if length == 0 as i32 as libc::c_long {
+                                    ) + 1 as i32 as isize;
+                                if length == 0 as i32 as isize {
                                     current_block = 15187751986642917127;
                                 } else {
                                     (*s).lengthlist = crate::stdlib::malloc(
@@ -432,36 +432,36 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             .wrapping_mul((*s).entries as libc::c_ulong),
                                     )
                                         as *mut libc::c_char;
-                                    i = 0 as i32 as libc::c_long;
+                                    i = 0 as i32 as isize;
                                     loop {
                                         if !(i < (*s).entries) {
                                             current_block = 15004371738079956865;
                                             break;
                                         }
-                                        let mut num_1: libc::c_long =
+                                        let mut num_1: isize =
                                             crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                          crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
                                                                       - i) as
                                                                      crate::config_types_h::ogg_uint32_t));
-                                        if num_1 == -(1 as i32) as libc::c_long {
+                                        if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        if length > 32 as i32 as libc::c_long
+                                        if length > 32 as i32 as isize
                                             || num_1 > (*s).entries - i
-                                            || num_1 > 0 as i32 as libc::c_long
-                                                && num_1 - 1 as i32 as libc::c_long
-                                                    >> length - 1 as i32 as libc::c_long
-                                                    > 1 as i32 as libc::c_long
+                                            || num_1 > 0 as i32 as isize
+                                                && num_1 - 1 as i32 as isize
+                                                    >> length - 1 as i32 as isize
+                                                    > 1 as i32 as isize
                                         {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        if length > 32 as i32 as libc::c_long {
+                                        if length > 32 as i32 as isize {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        j = 0 as i32 as libc::c_long;
+                                        j = 0 as i32 as isize;
                                         while j < num_1 {
                                             *(*s).lengthlist.offset(i as isize) =
                                                 length as libc::c_char;
@@ -503,7 +503,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                       i32)
                                                          +
                                                          1 as i32 as
-                                                             libc::c_long) as
+                                                             isize) as
                                                         i32;
                                                 (*s).q_sequencep =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
@@ -517,9 +517,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
-                                                                == 0 as i32 as libc::c_long
+                                                                == 0 as i32 as isize
                                                             {
-                                                                0 as i32 as libc::c_long
+                                                                0 as i32 as isize
                                                             } else {
                                                                 crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
@@ -537,7 +537,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             7 as i32
                                                             >>
                                                             3 as i32)
-                                                           as libc::c_long >
+                                                           as isize >
                                                            (*opb).storage -
                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
                                                        {
@@ -545,20 +545,20 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             15187751986642917127;
                                                     } else {
                                                         (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<libc::c_long>()
+                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
                                                                         as
                                                                         libc::c_ulong).wrapping_mul(quantvals
                                                                                                         as
                                                                                                         libc::c_ulong))
                                                                 as
-                                                                *mut libc::c_long;
+                                                                *mut isize;
                                                         i =
                                                             0 as i32
                                                                 as
-                                                                libc::c_long;
+                                                                isize;
                                                         while i <
                                                                   quantvals as
-                                                                      libc::c_long
+                                                                      isize
                                                               {
                                                             *(*s).quantlist.offset(i
                                                                                        as
@@ -580,7 +580,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                    -(1 as
                                                                          i32)
                                                                        as
-                                                                       libc::c_long
+                                                                       isize
                                                            {
                                                             current_block =
                                                                 15187751986642917127;
@@ -621,7 +621,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                       i32)
                                                          +
                                                          1 as i32 as
-                                                             libc::c_long) as
+                                                             isize) as
                                                         i32;
                                                 (*s).q_sequencep =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
@@ -635,9 +635,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
-                                                                == 0 as i32 as libc::c_long
+                                                                == 0 as i32 as isize
                                                             {
-                                                                0 as i32 as libc::c_long
+                                                                0 as i32 as isize
                                                             } else {
                                                                 crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
@@ -654,7 +654,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             7 as i32
                                                             >>
                                                             3 as i32)
-                                                           as libc::c_long >
+                                                           as isize >
                                                            (*opb).storage -
                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
                                                        {
@@ -662,20 +662,20 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             15187751986642917127;
                                                     } else {
                                                         (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<libc::c_long>()
+                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
                                                                         as
                                                                         libc::c_ulong).wrapping_mul(quantvals
                                                                                                         as
                                                                                                         libc::c_ulong))
                                                                 as
-                                                                *mut libc::c_long;
+                                                                *mut isize;
                                                         i =
                                                             0 as i32
                                                                 as
-                                                                libc::c_long;
+                                                                isize;
                                                         while i <
                                                                   quantvals as
-                                                                      libc::c_long
+                                                                      isize
                                                               {
                                                             *(*s).quantlist.offset(i
                                                                                        as
@@ -697,7 +697,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                    -(1 as
                                                                          i32)
                                                                        as
-                                                                       libc::c_long
+                                                                       isize
                                                            {
                                                             current_block =
                                                                 15187751986642917127;
@@ -724,15 +724,15 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         current_block = 3437258052017859086;
                         match current_block {
                             14523784380283086299 => {
-                                let mut unused: libc::c_long = 0;
+                                let mut unused: isize = 0;
                                 unused = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                     opb as *mut crate::ogg_h::oggpack_buffer,
                                     1 as i32,
                                 );
                                 if (*s).entries
                                     * (if unused != 0 { 1 as i32 } else { 5 as i32 })
-                                        as libc::c_long
-                                    + 7 as i32 as libc::c_long
+                                        as isize
+                                    + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
                                         - crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
@@ -747,7 +747,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     )
                                         as *mut libc::c_char;
                                     if unused != 0 {
-                                        i = 0 as i32 as libc::c_long;
+                                        i = 0 as i32 as isize;
                                         loop {
                                             if !(i < (*s).entries) {
                                                 current_block = 15004371738079956865;
@@ -758,16 +758,16 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 1 as i32,
                                             ) != 0
                                             {
-                                                let mut num: libc::c_long =
+                                                let mut num: isize =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                                  5 as
                                                                      i32);
-                                                if num == -(1 as i32) as libc::c_long {
+                                                if num == -(1 as i32) as isize {
                                                     current_block = 15187751986642917127;
                                                     break;
                                                 }
                                                 *(*s).lengthlist.offset(i as isize) =
-                                                    (num + 1 as i32 as libc::c_long) as libc::c_char
+                                                    (num + 1 as i32 as isize) as libc::c_char
                                             } else {
                                                 *(*s).lengthlist.offset(i as isize) =
                                                     0 as i32 as libc::c_char
@@ -775,34 +775,34 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             i += 1
                                         }
                                     } else {
-                                        i = 0 as i32 as libc::c_long;
+                                        i = 0 as i32 as isize;
                                         loop {
                                             if !(i < (*s).entries) {
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            let mut num_0: libc::c_long =
+                                            let mut num_0: isize =
                                                 crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                              5 as
                                                                  i32);
-                                            if num_0 == -(1 as i32) as libc::c_long {
+                                            if num_0 == -(1 as i32) as isize {
                                                 current_block = 15187751986642917127;
                                                 break;
                                             }
                                             *(*s).lengthlist.offset(i as isize) =
-                                                (num_0 + 1 as i32 as libc::c_long) as libc::c_char;
+                                                (num_0 + 1 as i32 as isize) as libc::c_char;
                                             i += 1
                                         }
                                     }
                                 }
                             }
                             _ => {
-                                let mut length: libc::c_long =
+                                let mut length: isize =
                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                         opb as *mut crate::ogg_h::oggpack_buffer,
                                         5 as i32,
-                                    ) + 1 as i32 as libc::c_long;
-                                if length == 0 as i32 as libc::c_long {
+                                    ) + 1 as i32 as isize;
+                                if length == 0 as i32 as isize {
                                     current_block = 15187751986642917127;
                                 } else {
                                     (*s).lengthlist = crate::stdlib::malloc(
@@ -810,36 +810,36 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             .wrapping_mul((*s).entries as libc::c_ulong),
                                     )
                                         as *mut libc::c_char;
-                                    i = 0 as i32 as libc::c_long;
+                                    i = 0 as i32 as isize;
                                     loop {
                                         if !(i < (*s).entries) {
                                             current_block = 15004371738079956865;
                                             break;
                                         }
-                                        let mut num_1: libc::c_long =
+                                        let mut num_1: isize =
                                             crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
                                                          crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
                                                                       - i) as
                                                                      crate::config_types_h::ogg_uint32_t));
-                                        if num_1 == -(1 as i32) as libc::c_long {
+                                        if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        if length > 32 as i32 as libc::c_long
+                                        if length > 32 as i32 as isize
                                             || num_1 > (*s).entries - i
-                                            || num_1 > 0 as i32 as libc::c_long
-                                                && num_1 - 1 as i32 as libc::c_long
-                                                    >> length - 1 as i32 as libc::c_long
-                                                    > 1 as i32 as libc::c_long
+                                            || num_1 > 0 as i32 as isize
+                                                && num_1 - 1 as i32 as isize
+                                                    >> length - 1 as i32 as isize
+                                                    > 1 as i32 as isize
                                         {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        if length > 32 as i32 as libc::c_long {
+                                        if length > 32 as i32 as isize {
                                             current_block = 15187751986642917127;
                                             break;
                                         }
-                                        j = 0 as i32 as libc::c_long;
+                                        j = 0 as i32 as isize;
                                         while j < num_1 {
                                             *(*s).lengthlist.offset(i as isize) =
                                                 length as libc::c_char;
@@ -877,7 +877,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                       i32)
                                                          +
                                                          1 as i32 as
-                                                             libc::c_long) as
+                                                             isize) as
                                                         i32;
                                                 (*s).q_sequencep =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
@@ -891,9 +891,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
-                                                                == 0 as i32 as libc::c_long
+                                                                == 0 as i32 as isize
                                                             {
-                                                                0 as i32 as libc::c_long
+                                                                0 as i32 as isize
                                                             } else {
                                                                 crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
@@ -910,7 +910,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             7 as i32
                                                             >>
                                                             3 as i32)
-                                                           as libc::c_long >
+                                                           as isize >
                                                            (*opb).storage -
                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
                                                        {
@@ -918,20 +918,20 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             15187751986642917127;
                                                     } else {
                                                         (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<libc::c_long>()
+                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
                                                                         as
                                                                         libc::c_ulong).wrapping_mul(quantvals
                                                                                                         as
                                                                                                         libc::c_ulong))
                                                                 as
-                                                                *mut libc::c_long;
+                                                                *mut isize;
                                                         i =
                                                             0 as i32
                                                                 as
-                                                                libc::c_long;
+                                                                isize;
                                                         while i <
                                                                   quantvals as
-                                                                      libc::c_long
+                                                                      isize
                                                               {
                                                             *(*s).quantlist.offset(i
                                                                                        as
@@ -953,7 +953,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                    -(1 as
                                                                          i32)
                                                                        as
-                                                                       libc::c_long
+                                                                       isize
                                                            {
                                                             current_block =
                                                                 15187751986642917127;
@@ -989,7 +989,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                       i32)
                                                          +
                                                          1 as i32 as
-                                                             libc::c_long) as
+                                                             isize) as
                                                         i32;
                                                 (*s).q_sequencep =
                                                     crate::src::libogg_1_3_3::src::bitwise::oggpack_read(opb as *mut crate::ogg_h::oggpack_buffer,
@@ -1003,9 +1003,9 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
-                                                                == 0 as i32 as libc::c_long
+                                                                == 0 as i32 as isize
                                                             {
-                                                                0 as i32 as libc::c_long
+                                                                0 as i32 as isize
                                                             } else {
                                                                 crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals(s as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook)
                                                             }
@@ -1022,7 +1022,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             7 as i32
                                                             >>
                                                             3 as i32)
-                                                           as libc::c_long >
+                                                           as isize >
                                                            (*opb).storage -
                                                                crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(opb as *mut crate::ogg_h::oggpack_buffer)
                                                        {
@@ -1030,20 +1030,20 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                             15187751986642917127;
                                                     } else {
                                                         (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<libc::c_long>()
+                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
                                                                         as
                                                                         libc::c_ulong).wrapping_mul(quantvals
                                                                                                         as
                                                                                                         libc::c_ulong))
                                                                 as
-                                                                *mut libc::c_long;
+                                                                *mut isize;
                                                         i =
                                                             0 as i32
                                                                 as
-                                                                libc::c_long;
+                                                                isize;
                                                         while i <
                                                                   quantvals as
-                                                                      libc::c_long
+                                                                      isize
                                                               {
                                                             *(*s).quantlist.offset(i
                                                                                        as
@@ -1065,7 +1065,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                    -(1 as
                                                                          i32)
                                                                        as
-                                                                       libc::c_long
+                                                                       isize
                                                            {
                                                             current_block =
                                                                 15187751986642917127;
@@ -1107,7 +1107,7 @@ pub unsafe extern "C" fn vorbis_book_encode(
     mut a: i32,
     mut b: *mut crate::ogg_h::oggpack_buffer,
 ) -> i32 {
-    if a < 0 as i32 || a as libc::c_long >= (*(*book).c).entries {
+    if a < 0 as i32 || a as isize >= (*(*book).c).entries {
         return 0 as i32;
     }
     crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
@@ -1139,30 +1139,30 @@ unsafe extern "C" fn bitreverse(
 unsafe extern "C" fn decode_packed_entry_number(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut b: *mut crate::ogg_h::oggpack_buffer,
-) -> libc::c_long {
+) -> isize {
     let mut read: i32 = (*book).dec_maxlength;
-    let mut lo: libc::c_long = 0;
-    let mut hi: libc::c_long = 0;
-    let mut lok: libc::c_long = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
+    let mut lo: isize = 0;
+    let mut hi: isize = 0;
+    let mut lok: isize = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
         b as *mut crate::ogg_h::oggpack_buffer,
         (*book).dec_firsttablen,
     );
-    if lok >= 0 as i32 as libc::c_long {
-        let mut entry: libc::c_long = *(*book).dec_firsttable.offset(lok as isize) as libc::c_long;
+    if lok >= 0 as i32 as isize {
+        let mut entry: isize = *(*book).dec_firsttable.offset(lok as isize) as isize;
         if entry as libc::c_ulong & 0x80000000 as libc::c_ulong != 0 {
-            lo = entry >> 15 as i32 & 0x7fff as i32 as libc::c_long;
-            hi = (*book).used_entries - (entry & 0x7fff as i32 as libc::c_long)
+            lo = entry >> 15 as i32 & 0x7fff as i32 as isize;
+            hi = (*book).used_entries - (entry & 0x7fff as i32 as isize)
         } else {
             crate::src::libogg_1_3_3::src::bitwise::oggpack_adv(
                 b as *mut crate::ogg_h::oggpack_buffer,
                 *(*book)
                     .dec_codelengths
-                    .offset((entry - 1 as i32 as libc::c_long) as isize) as i32,
+                    .offset((entry - 1 as i32 as isize) as isize) as i32,
             );
-            return entry - 1 as i32 as libc::c_long;
+            return entry - 1 as i32 as isize;
         }
     } else {
-        lo = 0 as i32 as libc::c_long;
+        lo = 0 as i32 as isize;
         hi = (*book).used_entries
     }
     /* Single entry codebooks use a firsttablen of 1 and a
@@ -1174,24 +1174,24 @@ unsafe extern "C" fn decode_packed_entry_number(
         b as *mut crate::ogg_h::oggpack_buffer,
         read,
     );
-    while lok < 0 as i32 as libc::c_long && read > 1 as i32 {
+    while lok < 0 as i32 as isize && read > 1 as i32 {
         read -= 1;
         lok = crate::src::libogg_1_3_3::src::bitwise::oggpack_look(
             b as *mut crate::ogg_h::oggpack_buffer,
             read,
         )
     }
-    if lok < 0 as i32 as libc::c_long {
-        return -(1 as i32) as libc::c_long;
+    if lok < 0 as i32 as isize {
+        return -(1 as i32) as isize;
     }
     /* bisect search for the codeword in the ordered list */
     let mut testword: crate::config_types_h::ogg_uint32_t =
         bitreverse(lok as crate::config_types_h::ogg_uint32_t);
-    while hi - lo > 1 as i32 as libc::c_long {
-        let mut p: libc::c_long = hi - lo >> 1 as i32;
-        let mut test: libc::c_long =
-            (*(*book).codelist.offset((lo + p) as isize) > testword) as i32 as libc::c_long;
-        lo += p & test - 1 as i32 as libc::c_long;
+    while hi - lo > 1 as i32 as isize {
+        let mut p: isize = hi - lo >> 1 as i32;
+        let mut test: isize =
+            (*(*book).codelist.offset((lo + p) as isize) > testword) as i32 as isize;
+        lo += p & test - 1 as i32 as isize;
         hi -= p & -test
     }
     if *(*book).dec_codelengths.offset(lo as isize) as i32 <= read {
@@ -1205,7 +1205,7 @@ unsafe extern "C" fn decode_packed_entry_number(
         b as *mut crate::ogg_h::oggpack_buffer,
         read,
     );
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 /* Decode side is specced and easier, because we don't need to find
 matches using different criteria; we simply read and map.  There are
@@ -1226,15 +1226,15 @@ addmul==2 -> multiplicitive */
 pub unsafe extern "C" fn vorbis_book_decode(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut b: *mut crate::ogg_h::oggpack_buffer,
-) -> libc::c_long {
-    if (*book).used_entries > 0 as i32 as libc::c_long {
-        let mut packed_entry: libc::c_long = decode_packed_entry_number(book, b);
-        if packed_entry >= 0 as i32 as libc::c_long {
-            return *(*book).dec_index.offset(packed_entry as isize) as libc::c_long;
+) -> isize {
+    if (*book).used_entries > 0 as i32 as isize {
+        let mut packed_entry: isize = decode_packed_entry_number(book, b);
+        if packed_entry >= 0 as i32 as isize {
+            return *(*book).dec_index.offset(packed_entry as isize) as isize;
         }
     }
     /* if there's no dec_index, the codebook unpacking isn't collapsed */
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 /* returns 0 on OK or -1 on eof *************************************/
 /* decode vector / dim granularity gaurding is done in the upper layer */
@@ -1245,15 +1245,15 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
     mut a: *mut f32,
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut n: i32,
-) -> libc::c_long {
-    if (*book).used_entries > 0 as i32 as libc::c_long {
-        let mut step: i32 = (n as libc::c_long / (*book).dim) as i32;
+) -> isize {
+    if (*book).used_entries > 0 as i32 as isize {
+        let mut step: i32 = (n as isize / (*book).dim) as i32;
         let mut fresh0 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+            (::std::mem::size_of::<isize>() as libc::c_ulong)
                 .wrapping_mul(step as libc::c_ulong) as usize,
         );
-        let mut entry: *mut libc::c_long = fresh0.as_mut_ptr() as *mut libc::c_long;
+        let mut entry: *mut isize = fresh0.as_mut_ptr() as *mut isize;
         let mut fresh1 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<*mut f32>() as libc::c_ulong).wrapping_mul(step as libc::c_ulong)
@@ -1266,8 +1266,8 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         i = 0 as i32;
         while i < step {
             *entry.offset(i as isize) = decode_packed_entry_number(book, b);
-            if *entry.offset(i as isize) == -(1 as i32) as libc::c_long {
-                return -(1 as i32) as libc::c_long;
+            if *entry.offset(i as isize) == -(1 as i32) as isize {
+                return -(1 as i32) as isize;
             }
             let ref mut fresh2 = *t.offset(i as isize);
             *fresh2 = (*book)
@@ -1277,7 +1277,7 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         }
         i = 0 as i32;
         o = 0 as i32;
-        while (i as libc::c_long) < (*book).dim {
+        while (i as isize) < (*book).dim {
             j = 0 as i32;
             while o + j < n && j < step {
                 *a.offset((o + j) as isize) += *(*t.offset(j as isize)).offset(i as isize);
@@ -1287,7 +1287,7 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
             o += step
         }
     }
-    return 0 as i32 as libc::c_long;
+    return 0 as i32 as isize;
 }
 /* decode vector / dim granularity gaurding is done in the upper layer */
 #[no_mangle]
@@ -1297,8 +1297,8 @@ pub unsafe extern "C" fn vorbis_book_decodev_add(
     mut a: *mut f32,
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut n: i32,
-) -> libc::c_long {
-    if (*book).used_entries > 0 as i32 as libc::c_long {
+) -> isize {
+    if (*book).used_entries > 0 as i32 as isize {
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let mut entry: i32 = 0;
@@ -1307,13 +1307,13 @@ pub unsafe extern "C" fn vorbis_book_decodev_add(
         while i < n {
             entry = decode_packed_entry_number(book, b) as i32;
             if entry == -(1 as i32) {
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
             t = (*book)
                 .valuelist
-                .offset((entry as libc::c_long * (*book).dim) as isize);
+                .offset((entry as isize * (*book).dim) as isize);
             j = 0 as i32;
-            while i < n && (j as libc::c_long) < (*book).dim {
+            while i < n && (j as isize) < (*book).dim {
                 let fresh3 = j;
                 j = j + 1;
                 let fresh4 = i;
@@ -1322,7 +1322,7 @@ pub unsafe extern "C" fn vorbis_book_decodev_add(
             }
         }
     }
-    return 0 as i32 as libc::c_long;
+    return 0 as i32 as isize;
 }
 /* unlike the others, we guard against n not being an integer number
 of <dim> internally rather than in the upper layer (called only by
@@ -1334,8 +1334,8 @@ pub unsafe extern "C" fn vorbis_book_decodev_set(
     mut a: *mut f32,
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut n: i32,
-) -> libc::c_long {
-    if (*book).used_entries > 0 as i32 as libc::c_long {
+) -> isize {
+    if (*book).used_entries > 0 as i32 as isize {
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let mut entry: i32 = 0;
@@ -1344,13 +1344,13 @@ pub unsafe extern "C" fn vorbis_book_decodev_set(
         while i < n {
             entry = decode_packed_entry_number(book, b) as i32;
             if entry == -(1 as i32) {
-                return -(1 as i32) as libc::c_long;
+                return -(1 as i32) as isize;
             }
             t = (*book)
                 .valuelist
-                .offset((entry as libc::c_long * (*book).dim) as isize);
+                .offset((entry as isize * (*book).dim) as isize);
             j = 0 as i32;
-            while i < n && (j as libc::c_long) < (*book).dim {
+            while i < n && (j as isize) < (*book).dim {
                 let fresh5 = j;
                 j = j + 1;
                 let fresh6 = i;
@@ -1367,33 +1367,33 @@ pub unsafe extern "C" fn vorbis_book_decodev_set(
             *a.offset(fresh7 as isize) = 0.0f32
         }
     }
-    return 0 as i32 as libc::c_long;
+    return 0 as i32 as isize;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_decodevv_add(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut a: *mut *mut f32,
-    mut offset: libc::c_long,
+    mut offset: isize,
     mut ch: i32,
     mut b: *mut crate::ogg_h::oggpack_buffer,
     mut n: i32,
-) -> libc::c_long {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut entry: libc::c_long = 0;
+) -> isize {
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut entry: isize = 0;
     let mut chptr: i32 = 0 as i32;
-    if (*book).used_entries > 0 as i32 as libc::c_long {
-        let mut m: i32 = ((offset + n as libc::c_long) / ch as libc::c_long) as i32;
-        i = offset / ch as libc::c_long;
-        while i < m as libc::c_long {
+    if (*book).used_entries > 0 as i32 as isize {
+        let mut m: i32 = ((offset + n as isize) / ch as isize) as i32;
+        i = offset / ch as isize;
+        while i < m as isize {
             entry = decode_packed_entry_number(book, b);
-            if entry == -(1 as i32) as libc::c_long {
-                return -(1 as i32) as libc::c_long;
+            if entry == -(1 as i32) as isize {
+                return -(1 as i32) as isize;
             }
             let mut t: *const f32 = (*book).valuelist.offset((entry * (*book).dim) as isize);
-            j = 0 as i32 as libc::c_long;
-            while i < m as libc::c_long && j < (*book).dim {
+            j = 0 as i32 as isize;
+            while i < m as isize && j < (*book).dim {
                 let fresh8 = chptr;
                 chptr = chptr + 1;
                 *(*a.offset(fresh8 as isize)).offset(i as isize) += *t.offset(j as isize);
@@ -1405,5 +1405,5 @@ pub unsafe extern "C" fn vorbis_book_decodevv_add(
             }
         }
     }
-    return 0 as i32 as libc::c_long;
+    return 0 as i32 as isize;
 }

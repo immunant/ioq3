@@ -1091,7 +1091,7 @@ pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
             o = o.offset(1);
             *fresh1 = *fresh0
         }
-        l = o.offset_from(key.as_mut_ptr()) as libc::c_long as i32;
+        l = o.offset_from(key.as_mut_ptr()) as isize as i32;
         if l < 20 as i32 {
             crate::stdlib::memset(
                 o as *mut libc::c_void,
@@ -2512,8 +2512,8 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
         );
     }
     // cacheline align
-    s_hunkData = (s_hunkData as crate::stdlib::intptr_t + 31 as i32 as libc::c_long
-        & !(31 as i32) as libc::c_long)
+    s_hunkData = (s_hunkData as crate::stdlib::intptr_t + 31 as i32 as isize
+        & !(31 as i32) as isize)
         as *mut crate::src::qcommon::q_shared::byte;
     Hunk_Clear();
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -4130,7 +4130,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
             );
             *brk = tmp;
             accu =
-                (accu as libc::c_long - brk.offset_from(buf.as_mut_ptr()) as libc::c_long) as i32;
+                (accu as isize - brk.offset_from(buf.as_mut_ptr()) as isize) as i32;
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,
                 brk as *const libc::c_void,

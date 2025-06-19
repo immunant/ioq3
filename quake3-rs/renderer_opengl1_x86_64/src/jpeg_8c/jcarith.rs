@@ -285,15 +285,15 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
     /* Section D.1.8: Termination of encoding */
     /* Find the e->c in the coding interval with the largest
      * number of trailing zero bits */
-    temp = (*e).a - 1 as i32 as libc::c_long + (*e).c & 0xffff0000 as libc::c_long;
+    temp = (*e).a - 1 as i32 as isize + (*e).c & 0xffff0000 as isize;
     if temp < (*e).c {
-        (*e).c = temp + 0x8000 as libc::c_long
+        (*e).c = temp + 0x8000 as isize
     } else {
         (*e).c = temp
     }
     /* Send remaining bytes to output */
     (*e).c <<= (*e).ct;
-    if (*e).c & 0xf8000000 as libc::c_long != 0 {
+    if (*e).c & 0xf8000000 as isize != 0 {
         /* One final overflow has to be handled */
         if (*e).buffer >= 0 as i32 {
             if (*e).zc != 0 {
@@ -348,7 +348,7 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
         }
     }
     /* Output final bytes only if they are not 0x00 */
-    if (*e).c & 0x7fff800 as libc::c_long != 0 {
+    if (*e).c & 0x7fff800 as isize != 0 {
         if (*e).zc != 0 {
             loop
             /* output final pending zero bytes */
@@ -361,18 +361,18 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
             }
         }
         emit_byte(
-            ((*e).c >> 19 as i32 & 0xff as i32 as libc::c_long) as i32,
+            ((*e).c >> 19 as i32 & 0xff as i32 as isize) as i32,
             cinfo,
         );
-        if (*e).c >> 19 as i32 & 0xff as i32 as libc::c_long == 0xff as i32 as libc::c_long {
+        if (*e).c >> 19 as i32 & 0xff as i32 as isize == 0xff as i32 as isize {
             emit_byte(0 as i32, cinfo);
         }
-        if (*e).c & 0x7f800 as libc::c_long != 0 {
+        if (*e).c & 0x7f800 as isize != 0 {
             emit_byte(
-                ((*e).c >> 11 as i32 & 0xff as i32 as libc::c_long) as i32,
+                ((*e).c >> 11 as i32 & 0xff as i32 as isize) as i32,
                 cinfo,
             );
-            if (*e).c >> 11 as i32 & 0xff as i32 as libc::c_long == 0xff as i32 as libc::c_long {
+            if (*e).c >> 11 as i32 & 0xff as i32 as isize == 0xff as i32 as isize {
                 emit_byte(0 as i32, cinfo);
             }
         }
@@ -418,9 +418,9 @@ unsafe extern "C" fn arith_encode(
     qe = *crate::src::jpeg_8c::jaricom::jpeg_aritab
         .as_ptr()
         .offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
-    nl = (qe & 0xff as i32 as libc::c_long) as u8; /* Next_Index_MPS */
+    nl = (qe & 0xff as i32 as isize) as u8; /* Next_Index_MPS */
     qe >>= 8 as i32;
-    nm = (qe & 0xff as i32 as libc::c_long) as u8;
+    nm = (qe & 0xff as i32 as isize) as u8;
     qe >>= 8 as i32;
     /* Encode & estimation procedures per sections D.1.4 & D.1.5 */
     (*e).a -= qe;
@@ -438,7 +438,7 @@ unsafe extern "C" fn arith_encode(
     /* Estimate_after_LPS */
     } else {
         /* Encode the more probable symbol */
-        if (*e).a >= 0x8000 as libc::c_long {
+        if (*e).a >= 0x8000 as isize {
             return;
         }
         if (*e).a < qe {
@@ -461,7 +461,7 @@ unsafe extern "C" fn arith_encode(
         if (*e).ct == 0 as i32 {
             /* Another byte is ready for output */
             temp = (*e).c >> 19 as i32;
-            if temp > 0xff as i32 as libc::c_long {
+            if temp > 0xff as i32 as isize {
                 /* Handle overflow over all stacked 0xFF bytes */
                 if (*e).buffer >= 0 as i32 {
                     if (*e).zc != 0 {
@@ -481,8 +481,8 @@ unsafe extern "C" fn arith_encode(
                 /* new output byte, might overflow later */
                 (*e).zc += (*e).sc; /* carry-over converts stacked 0xFF bytes to 0x00 */
                 (*e).sc = 0 as i32 as crate::jmorecfg_h::INT32;
-                (*e).buffer = (temp & 0xff as i32 as libc::c_long) as i32
-            } else if temp == 0xff as i32 as libc::c_long {
+                (*e).buffer = (temp & 0xff as i32 as isize) as i32
+            } else if temp == 0xff as i32 as isize {
                 (*e).sc += 1
             /* Note: The 3 spacer bits in the C register guarantee
              * that the new buffer byte can't be 0xFF here
@@ -523,13 +523,13 @@ unsafe extern "C" fn arith_encode(
                         }
                     }
                 }
-                (*e).buffer = (temp & 0xff as i32 as libc::c_long) as i32
+                (*e).buffer = (temp & 0xff as i32 as isize) as i32
                 /* new output byte (can still overflow) */
             }
-            (*e).c &= 0x7ffff as libc::c_long;
+            (*e).c &= 0x7ffff as isize;
             (*e).ct += 8 as i32
         }
-        if !((*e).a < 0x8000 as libc::c_long) {
+        if !((*e).a < 0x8000 as isize) {
             break;
         }
     }
@@ -576,7 +576,7 @@ unsafe extern "C" fn emit_restart(
     }
     /* Reset arithmetic encoding variables */
     (*entropy).c = 0 as i32 as crate::jmorecfg_h::INT32;
-    (*entropy).a = 0x10000 as libc::c_long;
+    (*entropy).a = 0x10000 as isize;
     (*entropy).sc = 0 as i32 as crate::jmorecfg_h::INT32;
     (*entropy).zc = 0 as i32 as crate::jmorecfg_h::INT32;
     (*entropy).ct = 11 as i32;
@@ -667,13 +667,13 @@ unsafe extern "C" fn encode_mcu_DC_first(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
                 as i32
             {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
                     as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
@@ -1072,13 +1072,13 @@ unsafe extern "C" fn encode_mcu(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
                 as i32
             {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
                     as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
@@ -1329,7 +1329,7 @@ unsafe extern "C" fn start_pass(
     }
     /* Initialize arithmetic encoding variables */
     (*entropy).c = 0 as i32 as crate::jmorecfg_h::INT32; /* empty */
-    (*entropy).a = 0x10000 as libc::c_long;
+    (*entropy).a = 0x10000 as isize;
     (*entropy).sc = 0 as i32 as crate::jmorecfg_h::INT32;
     (*entropy).zc = 0 as i32 as crate::jmorecfg_h::INT32;
     (*entropy).ct = 11 as i32;

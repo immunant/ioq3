@@ -12557,12 +12557,12 @@ pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
     crate::stdlib::gettimeofday(&mut tp, 0 as *mut crate::stdlib::timezone);
     if sys_timeBase == 0 {
         sys_timeBase = tp.tv_sec as libc::c_ulong;
-        return (tp.tv_usec / 1000 as i32 as libc::c_long) as i32;
+        return (tp.tv_usec / 1000 as i32 as isize) as i32;
     }
     curtime = (tp.tv_sec as libc::c_ulong)
         .wrapping_sub(sys_timeBase)
         .wrapping_mul(1000 as i32 as libc::c_ulong)
-        .wrapping_add((tp.tv_usec / 1000 as i32 as libc::c_long) as libc::c_ulong)
+        .wrapping_add((tp.tv_usec / 1000 as i32 as isize) as libc::c_ulong)
         as i32;
     return curtime;
 }
@@ -13257,7 +13257,7 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
             f,
             buffer.as_mut_ptr() as *const libc::c_void,
             size as crate::stddef_h::size_t,
-        ) != size as libc::c_long)
+        ) != size as isize)
         {
             continue;
         }
@@ -13301,7 +13301,7 @@ Sys_AppendToExecBuffer
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
     let mut size: crate::stddef_h::size_t =
         (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong).wrapping_sub(
-            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as libc::c_long as libc::c_ulong,
+            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as libc::c_ulong,
         );
     let mut length: i32 =
         crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;

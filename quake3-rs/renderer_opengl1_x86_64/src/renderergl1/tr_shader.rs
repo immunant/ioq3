@@ -478,11 +478,11 @@ return a hash value for the filename
 ================
 */
 
-unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32) -> libc::c_long {
+unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32) -> isize {
     let mut i: i32 = 0; // don't include extension
-    let mut hash: libc::c_long = 0; // damn path names
+    let mut hash: isize = 0; // damn path names
     let mut letter: libc::c_char = 0; // damn path names
-    hash = 0 as i32 as libc::c_long;
+    hash = 0 as i32 as isize;
     i = 0 as i32;
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
@@ -513,11 +513,11 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32
         if letter as i32 == '/' as i32 {
             letter = '/' as i32 as libc::c_char
         }
-        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += letter as isize * (i + 119 as i32) as isize;
         i += 1
     }
     hash = hash ^ hash >> 10 as i32 ^ hash >> 20 as i32;
-    hash &= (size - 1 as i32) as libc::c_long;
+    hash &= (size - 1 as i32) as isize;
     return hash;
 }
 #[no_mangle]
@@ -9175,8 +9175,8 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     let mut size: i32 = 0;
     let mut shaderName: [libc::c_char; 64] = [0; 64];
     let mut shaderLine: i32 = 0;
-    let mut sum: libc::c_long = 0 as i32 as libc::c_long;
-    let mut summand: libc::c_long = 0;
+    let mut sum: isize = 0 as i32 as isize;
+    let mut summand: isize = 0;
     // scan for shader files
     shaderFiles = crate::src::renderergl1::tr_main::ri
         .FS_ListFiles
@@ -9318,7 +9318,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     s_shaderText = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
-        (sum + (numShaderFiles * 2 as i32) as libc::c_long) as i32,
+        (sum + (numShaderFiles * 2 as i32) as isize) as i32,
         crate::src::qcommon::q_shared::h_low,
     ) as *mut libc::c_char;
     *s_shaderText.offset(0 as i32 as isize) = '\u{0}' as i32 as libc::c_char;

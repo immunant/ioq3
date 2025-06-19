@@ -254,8 +254,8 @@ pub unsafe extern "C" fn R_LoadPCX(
     }
     if raw
         .b
-        .offset_from(pcx as *mut crate::src::qcommon::q_shared::byte) as libc::c_long
-        >= end.offset_from(769 as i32 as *mut crate::src::qcommon::q_shared::byte) as libc::c_long
+        .offset_from(pcx as *mut crate::src::qcommon::q_shared::byte) as isize
+        >= end.offset_from(769 as i32 as *mut crate::src::qcommon::q_shared::byte) as isize
         || *end.offset(-(769 as i32) as isize) as i32 != 0xc as i32
     {
         crate::src::renderergl1::tr_main::ri

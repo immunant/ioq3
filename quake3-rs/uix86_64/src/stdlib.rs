@@ -83,7 +83,7 @@ pub const _ISpunct: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 4;
 pub const _ISalnum: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 8;
 // ================ END ctype_h ================
 // =============== BEGIN stdint_h ================
-pub type intptr_t = libc::c_long;
+pub type intptr_t = isize;
 // ================ END stdint_h ================
 // =============== BEGIN stdlib_h ================
 pub type __compar_fn_t =

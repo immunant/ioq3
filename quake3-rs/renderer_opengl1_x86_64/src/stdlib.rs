@@ -483,10 +483,10 @@ pub struct __jmp_buf_tag {
 pub type jmp_buf = [__jmp_buf_tag; 1];
 // ================ END include_setjmp_h ================
 // =============== BEGIN setjmp_h ================
-pub type __jmp_buf = [libc::c_long; 8];
+pub type __jmp_buf = [isize; 8];
 // ================ END setjmp_h ================
 // =============== BEGIN stdint_h ================
-pub type intptr_t = libc::c_long;
+pub type intptr_t = isize;
 // ================ END stdint_h ================
 // =============== BEGIN stdint_intn_h ================
 pub type int16_t = __int16_t;
@@ -544,6 +544,6 @@ pub type __int16_t = i16;
 pub type __uint16_t = u16;
 pub type __int32_t = i32;
 pub type __uint32_t = u32;
-pub type __int64_t = libc::c_long;
-pub type __off_t = libc::c_long;
-pub type __off64_t = libc::c_long;
+pub type __int64_t = isize;
+pub type __off_t = isize;
+pub type __off64_t = isize;

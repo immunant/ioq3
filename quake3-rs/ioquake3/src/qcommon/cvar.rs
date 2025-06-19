@@ -154,11 +154,11 @@ return a hash value for the filename
 ================
 */
 
-unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::c_long {
+unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize {
     let mut i: i32 = 0;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     let mut letter: libc::c_char = 0;
-    hash = 0 as i32 as libc::c_long;
+    hash = 0 as i32 as isize;
     i = 0 as i32;
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
@@ -180,10 +180,10 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::
             }
             __res
         }) as libc::c_char;
-        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += letter as isize * (i + 119 as i32) as isize;
         i += 1
     }
-    hash &= (256 as i32 - 1 as i32) as libc::c_long;
+    hash &= (256 as i32 - 1 as i32) as isize;
     return hash;
 }
 /*
@@ -220,7 +220,7 @@ unsafe extern "C" fn Cvar_FindVar(
 ) -> *mut crate::src::qcommon::q_shared::cvar_t {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     hash = generateHashValue(var_name);
     var = hashTable[hash as usize];
     while !var.is_null() {
@@ -521,7 +521,7 @@ pub unsafe extern "C" fn Cvar_Get(
 ) -> *mut crate::src::qcommon::q_shared::cvar_t {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     let mut index: i32 = 0;
     if var_name.is_null() || var_value.is_null() {
         crate::src::qcommon::common::Com_Error(
@@ -1855,7 +1855,7 @@ pub unsafe extern "C" fn Cvar_Register(
     if vmCvar.is_null() {
         return;
     }
-    (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as libc::c_long
+    (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as isize
         as crate::src::qcommon::q_shared::cvarHandle_t;
     (*vmCvar).modificationCount = -(1 as i32);
     Cvar_Update(vmCvar);

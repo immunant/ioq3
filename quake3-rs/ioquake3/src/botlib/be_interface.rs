@@ -385,7 +385,7 @@ pub static mut botlibsetup: i32 = crate::src::qcommon::q_shared::qfalse as i32;
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_MilliSeconds() -> i32 {
-    return (crate::stdlib::clock() * 1000 as i32 as libc::c_long
+    return (crate::stdlib::clock() * 1000 as i32 as isize
         / 1000000 as i32 as crate::stdlib::__clock_t) as i32;
 }
 //end of the function Sys_MilliSeconds

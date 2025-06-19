@@ -59,13 +59,13 @@ pub struct vorbis_look_psy {
     pub tonecurves: *mut *mut *mut f32,
     pub noiseoffset: *mut *mut f32,
     pub ath: *mut f32,
-    pub octave: *mut libc::c_long,
-    pub bark: *mut libc::c_long,
-    pub firstoc: libc::c_long,
-    pub shiftoc: libc::c_long,
+    pub octave: *mut isize,
+    pub bark: *mut isize,
+    pub firstoc: isize,
+    pub shiftoc: isize,
     pub eighth_octave_lines: i32,
     pub total_octave_lines: i32,
-    pub rate: libc::c_long,
+    pub rate: isize,
     pub m_val: f32,
 }
 use ::libc;
@@ -6653,13 +6653,13 @@ pub unsafe extern "C" fn _vp_psy_init(
     mut vi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy,
     mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
     mut n: i32,
-    mut rate: libc::c_long,
+    mut rate: isize,
 ) {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut lo: libc::c_long = -(99 as i32) as libc::c_long;
-    let mut hi: libc::c_long = 1 as i32 as libc::c_long;
-    let mut maxoc: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut lo: isize = -(99 as i32) as isize;
+    let mut hi: isize = 1 as i32 as isize;
+    let mut maxoc: isize = 0;
     crate::stdlib::memset(
         p as *mut libc::c_void,
         0 as i32,
@@ -6670,56 +6670,56 @@ pub unsafe extern "C" fn _vp_psy_init(
     (*p).shiftoc = (crate::stdlib::rint(
         crate::stdlib::log(((*gi).eighth_octave_lines as f32 * 8.0f32) as f64)
             / crate::stdlib::log(2.0f32 as f64),
-    ) - 1 as i32 as f64) as libc::c_long;
+    ) - 1 as i32 as f64) as isize;
     (*p).firstoc = ((crate::stdlib::log((0.25f32 * rate as f32) as f64 * 0.5f64 / n as f64)
         * 1.442695f32 as f64
         - 5.965784f32 as f64)
-        * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
-        - (*gi).eighth_octave_lines as f64) as libc::c_long;
+        * ((1 as i32) << (*p).shiftoc + 1 as i32 as isize) as f64
+        - (*gi).eighth_octave_lines as f64) as isize;
     maxoc = ((crate::stdlib::log(((n as f32 + 0.25f32) * rate as f32) as f64 * 0.5f64 / n as f64)
         * 1.442695f32 as f64
         - 5.965784f32 as f64)
-        * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
-        + 0.5f32 as f64) as libc::c_long;
-    (*p).total_octave_lines = (maxoc - (*p).firstoc + 1 as i32 as libc::c_long) as i32;
+        * ((1 as i32) << (*p).shiftoc + 1 as i32 as isize) as f64
+        + 0.5f32 as f64) as isize;
+    (*p).total_octave_lines = (maxoc - (*p).firstoc + 1 as i32 as isize) as i32;
     (*p).ath = crate::stdlib::malloc(
         (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     ) as *mut f32;
     (*p).octave = crate::stdlib::malloc(
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
-    ) as *mut libc::c_long;
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+    ) as *mut isize;
     (*p).bark = crate::stdlib::malloc(
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
-    ) as *mut libc::c_long;
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+    ) as *mut isize;
     (*p).vi = vi;
     (*p).n = n;
     (*p).rate = rate;
     /* AoTuV HF weighting */
     (*p).m_val = 1.0f64 as f32; /* 48kHz */
-    if rate < 26000 as i32 as libc::c_long {
+    if rate < 26000 as i32 as isize {
         (*p).m_val = 0 as i32 as f32
-    } else if rate < 38000 as i32 as libc::c_long {
+    } else if rate < 38000 as i32 as isize {
         (*p).m_val = 0.94f64 as f32
-    } else if rate > 46000 as i32 as libc::c_long {
+    } else if rate > 46000 as i32 as isize {
         (*p).m_val = 1.275f64 as f32
     } /* 32kHz */
     /* set up the lookups for a given blocksize and sample rate */
-    i = 0 as i32 as libc::c_long;
-    j = 0 as i32 as libc::c_long;
-    while i < (88 as i32 - 1 as i32) as libc::c_long {
+    i = 0 as i32 as isize;
+    j = 0 as i32 as isize;
+    while i < (88 as i32 - 1 as i32) as isize {
         let mut endpos: i32 = crate::stdlib::rint(
             crate::stdlib::exp(
-                ((i + 1 as i32 as libc::c_long) as f64 * 0.125f64 - 2.0f64 + 5.965784f32 as f64)
+                ((i + 1 as i32 as isize) as f64 * 0.125f64 - 2.0f64 + 5.965784f32 as f64)
                     * 0.693147f32 as f64,
             ) * 2 as i32 as f64
                 * n as f64
                 / rate as f64,
         ) as i32;
         let mut base: f32 = ATH[i as usize];
-        if j < endpos as libc::c_long {
-            let mut delta: f32 = (ATH[(i + 1 as i32 as libc::c_long) as usize] - base)
-                / (endpos as libc::c_long - j) as f32;
-            while j < endpos as libc::c_long && j < n as libc::c_long {
+        if j < endpos as isize {
+            let mut delta: f32 = (ATH[(i + 1 as i32 as isize) as usize] - base)
+                / (endpos as isize - j) as f32;
+            while j < endpos as isize && j < n as isize {
                 *(*p).ath.offset(j as isize) = (base as f64 + 100.0f64) as f32;
                 base += delta;
                 j += 1
@@ -6727,74 +6727,74 @@ pub unsafe extern "C" fn _vp_psy_init(
         }
         i += 1
     }
-    while j < n as libc::c_long {
-        *(*p).ath.offset(j as isize) = *(*p).ath.offset((j - 1 as i32 as libc::c_long) as isize);
+    while j < n as isize {
+        *(*p).ath.offset(j as isize) = *(*p).ath.offset((j - 1 as i32 as isize) as isize);
         j += 1
     }
-    i = 0 as i32 as libc::c_long;
-    while i < n as libc::c_long {
+    i = 0 as i32 as isize;
+    while i < n as isize {
         let mut bark: f32 = (13.1f32 as f64
             * crate::stdlib::atan(
-                (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32) as f64,
+                (0.00074f32 * (rate / (2 as i32 * n) as isize * i) as f32) as f64,
             )
             + 2.24f32 as f64
                 * crate::stdlib::atan(
-                    ((rate / (2 as i32 * n) as libc::c_long
+                    ((rate / (2 as i32 * n) as isize
                         * i
-                        * (rate / (2 as i32 * n) as libc::c_long * i)) as f32
+                        * (rate / (2 as i32 * n) as isize * i)) as f32
                         * 1.85e-8f32) as f64,
                 )
-            + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32) as f64)
+            + (1e-4f32 * (rate / (2 as i32 * n) as isize * i) as f32) as f64)
             as f32;
-        while (lo + (*vi).noisewindowlomin as libc::c_long) < i
+        while (lo + (*vi).noisewindowlomin as isize) < i
             && (13.1f32 as f64
                 * crate::stdlib::atan(
-                    (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * lo) as f32) as f64,
+                    (0.00074f32 * (rate / (2 as i32 * n) as isize * lo) as f32) as f64,
                 )
                 + 2.24f32 as f64
                     * crate::stdlib::atan(
-                        ((rate / (2 as i32 * n) as libc::c_long
+                        ((rate / (2 as i32 * n) as isize
                             * lo
-                            * (rate / (2 as i32 * n) as libc::c_long * lo))
+                            * (rate / (2 as i32 * n) as isize * lo))
                             as f32
                             * 1.85e-8f32) as f64,
                     )
-                + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * lo) as f32) as f64)
+                + (1e-4f32 * (rate / (2 as i32 * n) as isize * lo) as f32) as f64)
                 < (bark - (*vi).noisewindowlo) as f64
         {
             lo += 1
         }
-        while hi <= n as libc::c_long
-            && (hi < i + (*vi).noisewindowhimin as libc::c_long
+        while hi <= n as isize
+            && (hi < i + (*vi).noisewindowhimin as isize
                 || (13.1f32 as f64
                     * crate::stdlib::atan(
-                        (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * hi) as f32) as f64,
+                        (0.00074f32 * (rate / (2 as i32 * n) as isize * hi) as f32) as f64,
                     )
                     + 2.24f32 as f64
                         * crate::stdlib::atan(
-                            ((rate / (2 as i32 * n) as libc::c_long
+                            ((rate / (2 as i32 * n) as isize
                                 * hi
-                                * (rate / (2 as i32 * n) as libc::c_long * hi))
+                                * (rate / (2 as i32 * n) as isize * hi))
                                 as f32
                                 * 1.85e-8f32) as f64,
                         )
-                    + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * hi) as f32) as f64)
+                    + (1e-4f32 * (rate / (2 as i32 * n) as isize * hi) as f32) as f64)
                     < (bark + (*vi).noisewindowhi) as f64)
         {
             hi += 1
         }
         *(*p).bark.offset(i as isize) =
-            ((lo - 1 as i32 as libc::c_long) << 16 as i32) + (hi - 1 as i32 as libc::c_long);
+            ((lo - 1 as i32 as isize) << 16 as i32) + (hi - 1 as i32 as isize);
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
-    while i < n as libc::c_long {
+    i = 0 as i32 as isize;
+    while i < n as isize {
         *(*p).octave.offset(i as isize) =
             ((crate::stdlib::log((i as f32 + 0.25f32) as f64 * 0.5f64 * rate as f64 / n as f64)
                 * 1.442695f32 as f64
                 - 5.965784f32 as f64)
-                * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
-                + 0.5f32 as f64) as libc::c_long;
+                * ((1 as i32) << (*p).shiftoc + 1 as i32 as isize) as f64
+                + 0.5f32 as f64) as isize;
         i += 1
     }
     (*p).tonecurves = setup_tone_curves(
@@ -6809,16 +6809,16 @@ pub unsafe extern "C" fn _vp_psy_init(
         (3 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong),
     ) as *mut *mut f32;
-    i = 0 as i32 as libc::c_long;
-    while i < 3 as i32 as libc::c_long {
+    i = 0 as i32 as isize;
+    while i < 3 as i32 as isize {
         let ref mut fresh3 = *(*p).noiseoffset.offset(i as isize);
         *fresh3 = crate::stdlib::malloc(
             (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         ) as *mut f32;
         i += 1
     }
-    i = 0 as i32 as libc::c_long;
-    while i < n as libc::c_long {
+    i = 0 as i32 as isize;
+    while i < n as isize {
         let mut halfoc: f32 =
             ((crate::stdlib::log((i as f64 + 0.5f64) * rate as f64 / (2.0f64 * n as f64))
                 * 1.442695f32 as f64
@@ -6834,8 +6834,8 @@ pub unsafe extern "C" fn _vp_psy_init(
         }
         inthalfoc = halfoc as i32;
         del = halfoc - inthalfoc as f32;
-        j = 0 as i32 as libc::c_long;
-        while j < 3 as i32 as libc::c_long {
+        j = 0 as i32 as isize;
+        while j < 3 as i32 as isize {
             *(*(*p).noiseoffset.offset(j as isize)).offset(i as isize) =
                 ((*(*p).vi).noiseoff[j as usize][inthalfoc as usize] as f64 * (1.0f64 - del as f64)
                     + ((*(*p).vi).noiseoff[j as usize][(inthalfoc + 1 as i32) as usize] * del)
@@ -6945,16 +6945,16 @@ unsafe extern "C" fn seed_loop(
     mut specmax: f32,
 ) {
     let mut vi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy = (*p).vi;
-    let mut n: libc::c_long = (*p).n as libc::c_long;
-    let mut i: libc::c_long = 0;
+    let mut n: isize = (*p).n as isize;
+    let mut i: isize = 0;
     let mut dBoffset: f32 = (*vi).max_curve_dB - specmax;
     /* prime the working vector with peak values */
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < n {
         let mut max: f32 = *f.offset(i as isize);
-        let mut oc: libc::c_long = *(*p).octave.offset(i as isize);
-        while (i + 1 as i32 as libc::c_long) < n
-            && *(*p).octave.offset((i + 1 as i32 as libc::c_long) as isize) == oc
+        let mut oc: isize = *(*p).octave.offset(i as isize);
+        while (i + 1 as i32 as isize) < n
+            && *(*p).octave.offset((i + 1 as i32 as isize) as isize) == oc
         {
             i += 1;
             if *f.offset(i as isize) > max {
@@ -6963,11 +6963,11 @@ unsafe extern "C" fn seed_loop(
         }
         if max + 6.0f32 > *flr.offset(i as isize) {
             oc = oc >> (*p).shiftoc;
-            if oc >= 17 as i32 as libc::c_long {
-                oc = (17 as i32 - 1 as i32) as libc::c_long
+            if oc >= 17 as i32 as isize {
+                oc = (17 as i32 - 1 as i32) as isize
             }
-            if oc < 0 as i32 as libc::c_long {
-                oc = 0 as i32 as libc::c_long
+            if oc < 0 as i32 as isize {
+                oc = 0 as i32 as isize
             }
             seed_curve(
                 seed,
@@ -6983,24 +6983,24 @@ unsafe extern "C" fn seed_loop(
     }
 }
 
-unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: libc::c_long) {
+unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: isize) {
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
             as usize,
     );
-    let mut posstack: *mut libc::c_long = fresh4.as_mut_ptr() as *mut libc::c_long;
+    let mut posstack: *mut isize = fresh4.as_mut_ptr() as *mut isize;
     let mut fresh5 = ::std::vec::from_elem(
         0,
         (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut ampstack: *mut f32 = fresh5.as_mut_ptr() as *mut f32;
-    let mut stack: libc::c_long = 0 as i32 as libc::c_long;
-    let mut pos: libc::c_long = 0 as i32 as libc::c_long;
-    let mut i: libc::c_long = 0;
-    i = 0 as i32 as libc::c_long;
+    let mut stack: isize = 0 as i32 as isize;
+    let mut pos: isize = 0 as i32 as isize;
+    let mut i: isize = 0;
+    i = 0 as i32 as isize;
     while i < n {
-        if stack < 2 as i32 as libc::c_long {
+        if stack < 2 as i32 as isize {
             *posstack.offset(stack as isize) = i;
             let fresh6 = stack;
             stack = stack + 1;
@@ -7008,7 +7008,7 @@ unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: l
         } else {
             loop {
                 if *seeds.offset(i as isize)
-                    < *ampstack.offset((stack - 1 as i32 as libc::c_long) as isize)
+                    < *ampstack.offset((stack - 1 as i32 as isize) as isize)
                 {
                     *posstack.offset(stack as isize) = i;
                     let fresh7 = stack;
@@ -7016,14 +7016,14 @@ unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: l
                     *ampstack.offset(fresh7 as isize) = *seeds.offset(i as isize);
                     break;
                 } else {
-                    if i < *posstack.offset((stack - 1 as i32 as libc::c_long) as isize)
-                        + linesper as libc::c_long
+                    if i < *posstack.offset((stack - 1 as i32 as isize) as isize)
+                        + linesper as isize
                     {
-                        if stack > 1 as i32 as libc::c_long
-                            && *ampstack.offset((stack - 1 as i32 as libc::c_long) as isize)
-                                <= *ampstack.offset((stack - 2 as i32 as libc::c_long) as isize)
-                            && i < *posstack.offset((stack - 2 as i32 as libc::c_long) as isize)
-                                + linesper as libc::c_long
+                        if stack > 1 as i32 as isize
+                            && *ampstack.offset((stack - 1 as i32 as isize) as isize)
+                                <= *ampstack.offset((stack - 2 as i32 as isize) as isize)
+                            && i < *posstack.offset((stack - 2 as i32 as isize) as isize)
+                                + linesper as isize
                         {
                             /* we completely overlap, making stack-1 irrelevant.  pop it */
                             stack -= 1;
@@ -7042,17 +7042,17 @@ unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: l
     }
     /* the stack now contains only the positions that are relevant. Scan
     'em straight through */
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < stack {
-        let mut endpos: libc::c_long = 0;
-        if i < stack - 1 as i32 as libc::c_long
-            && *ampstack.offset((i + 1 as i32 as libc::c_long) as isize)
+        let mut endpos: isize = 0;
+        if i < stack - 1 as i32 as isize
+            && *ampstack.offset((i + 1 as i32 as isize) as isize)
                 > *ampstack.offset(i as isize)
         {
-            endpos = *posstack.offset((i + 1 as i32 as libc::c_long) as isize)
+            endpos = *posstack.offset((i + 1 as i32 as isize) as isize)
         } else {
             endpos =
-                *posstack.offset(i as isize) + linesper as libc::c_long + 1 as i32 as libc::c_long
+                *posstack.offset(i as isize) + linesper as isize + 1 as i32 as isize
             /* +1 is important, else bin 0 is
             discarded in short frames */
         }
@@ -7075,26 +7075,26 @@ unsafe extern "C" fn max_seeds(
     mut seed: *mut f32,
     mut flr: *mut f32,
 ) {
-    let mut n: libc::c_long = (*p).total_octave_lines as libc::c_long; /* for masking */
+    let mut n: isize = (*p).total_octave_lines as isize; /* for masking */
     let mut linesper: i32 = (*p).eighth_octave_lines;
-    let mut linpos: libc::c_long = 0 as i32 as libc::c_long;
-    let mut pos: libc::c_long = 0;
+    let mut linpos: isize = 0 as i32 as isize;
+    let mut pos: isize = 0;
     seed_chase(seed, linesper, n);
     pos = *(*p).octave.offset(0 as i32 as isize)
         - (*p).firstoc
-        - (linesper >> 1 as i32) as libc::c_long;
-    while (linpos + 1 as i32 as libc::c_long) < (*p).n as libc::c_long {
+        - (linesper >> 1 as i32) as isize;
+    while (linpos + 1 as i32 as isize) < (*p).n as isize {
         let mut minV: f32 = *seed.offset(pos as isize);
-        let mut end: libc::c_long = (*(*p).octave.offset(linpos as isize)
+        let mut end: isize = (*(*p).octave.offset(linpos as isize)
             + *(*p)
                 .octave
-                .offset((linpos + 1 as i32 as libc::c_long) as isize)
+                .offset((linpos + 1 as i32 as isize) as isize)
             >> 1 as i32)
             - (*p).firstoc;
         if minV > (*(*p).vi).tone_abs_limit {
             minV = (*(*p).vi).tone_abs_limit
         }
-        while pos + 1 as i32 as libc::c_long <= end {
+        while pos + 1 as i32 as isize <= end {
             pos += 1;
             if *seed.offset(pos as isize) > -9999.0f32 && *seed.offset(pos as isize) < minV
                 || minV == -9999.0f32
@@ -7103,7 +7103,7 @@ unsafe extern "C" fn max_seeds(
             }
         }
         end = pos + (*p).firstoc;
-        while linpos < (*p).n as libc::c_long && *(*p).octave.offset(linpos as isize) <= end {
+        while linpos < (*p).n as isize && *(*p).octave.offset(linpos as isize) <= end {
             if *flr.offset(linpos as isize) < minV {
                 *flr.offset(linpos as isize) = minV
             }
@@ -7111,7 +7111,7 @@ unsafe extern "C" fn max_seeds(
         }
     }
     let mut minV_0: f32 = *seed.offset(((*p).total_octave_lines - 1 as i32) as isize);
-    while linpos < (*p).n as libc::c_long {
+    while linpos < (*p).n as isize {
         if *flr.offset(linpos as isize) < minV_0 {
             *flr.offset(linpos as isize) = minV_0
         }
@@ -7121,7 +7121,7 @@ unsafe extern "C" fn max_seeds(
 
 unsafe extern "C" fn bark_noise_hybridmp(
     mut n: i32,
-    mut b: *const libc::c_long,
+    mut b: *const isize,
     mut f: *const f32,
     mut noise: *mut f32,
     offset: f32,
@@ -7213,7 +7213,7 @@ unsafe extern "C" fn bark_noise_hybridmp(
         if lo >= 0 as i32 {
             break;
         }
-        hi = (*b.offset(i as isize) & 0xffff as i32 as libc::c_long) as i32;
+        hi = (*b.offset(i as isize) & 0xffff as i32 as isize) as i32;
         tN = *N.offset(hi as isize) + *N.offset(-lo as isize);
         tX = *X.offset(hi as isize) - *X.offset(-lo as isize);
         tXX = *XX.offset(hi as isize) + *XX.offset(-lo as isize);
@@ -7232,7 +7232,7 @@ unsafe extern "C" fn bark_noise_hybridmp(
     }
     loop {
         lo = (*b.offset(i as isize) >> 16 as i32) as i32;
-        hi = (*b.offset(i as isize) & 0xffff as i32 as libc::c_long) as i32;
+        hi = (*b.offset(i as isize) & 0xffff as i32 as isize) as i32;
         if hi >= n {
             break;
         }
@@ -7484,7 +7484,7 @@ pub unsafe extern "C" fn _vp_ampmax_decay(
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
-    let mut n: i32 = ((*ci).blocksizes[(*vd).W as usize] / 2 as i32 as libc::c_long) as i32;
+    let mut n: i32 = ((*ci).blocksizes[(*vd).W as usize] / 2 as i32 as isize) as i32;
     let mut secs: f32 = n as f32 / (*vi).rate as f32;
     amp += secs * (*gi).ampmax_att_per_sec;
     if amp < -(9999 as i32) as f32 {
@@ -7887,7 +7887,7 @@ unsafe extern "C" fn noise_normalize(
         );
         j = 0 as i32;
         while j < count {
-            let mut k: i32 = (*sort.offset(j as isize)).offset_from(q) as libc::c_long as i32;
+            let mut k: i32 = (*sort.offset(j as isize)).offset_from(q) as isize as i32;
             if acc as f64 >= (*vi).normal_thresh {
                 *out.offset(k as isize) = unitnorm(*r.offset(k as isize)) as i32;
                 acc -= 1.0f32;

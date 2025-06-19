@@ -401,7 +401,7 @@ pub struct jpeg_error_mgr {
     pub msg_code: i32,
     pub msg_parm: C2RustUnnamed_0,
     pub trace_level: i32,
-    pub num_warnings: libc::c_long,
+    pub num_warnings: isize,
     pub jpeg_message_table: *const *const libc::c_char,
     pub last_jpeg_message: i32,
     pub addon_message_table: *const *const libc::c_char,
@@ -418,8 +418,8 @@ pub union C2RustUnnamed_0 {
 #[derive(Copy, Clone)]
 pub struct jpeg_progress_mgr {
     pub progress_monitor: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
-    pub pass_counter: libc::c_long,
-    pub pass_limit: libc::c_long,
+    pub pass_counter: isize,
+    pub pass_limit: isize,
     pub completed_passes: i32,
     pub total_passes: i32,
 }
@@ -442,7 +442,7 @@ pub struct jpeg_source_mgr {
     pub init_source: Option<unsafe extern "C" fn(_: j_decompress_ptr) -> ()>,
     pub fill_input_buffer:
         Option<unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean>,
-    pub skip_input_data: Option<unsafe extern "C" fn(_: j_decompress_ptr, _: libc::c_long) -> ()>,
+    pub skip_input_data: Option<unsafe extern "C" fn(_: j_decompress_ptr, _: isize) -> ()>,
     pub resync_to_restart:
         Option<unsafe extern "C" fn(_: j_decompress_ptr, _: i32) -> crate::jmorecfg_h::boolean>,
     pub term_source: Option<unsafe extern "C" fn(_: j_decompress_ptr) -> ()>,
@@ -1068,8 +1068,8 @@ pub struct jpeg_memory_mgr {
     >,
     pub free_pool: Option<unsafe extern "C" fn(_: j_common_ptr, _: i32) -> ()>,
     pub self_destruct: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
-    pub max_memory_to_use: libc::c_long,
-    pub max_alloc_chunk: libc::c_long,
+    pub max_memory_to_use: isize,
+    pub max_alloc_chunk: isize,
 }
 pub type jpeg_marker_parser_method =
     Option<unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean>;

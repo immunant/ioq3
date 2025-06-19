@@ -1571,7 +1571,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         12 => {
             if *args.offset(1 as i32 as isize)
-                == crate::src::qcommon::q_shared::EXEC_NOW as i32 as libc::c_long
+                == crate::src::qcommon::q_shared::EXEC_NOW as i32 as isize
                 && (crate::stdlib::strncmp(
                     crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                         as *const libc::c_char,
@@ -1852,7 +1852,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             // Don't allow the ui module to close the console
             crate::src::client::cl_keys::Key_SetCatcher(
                 (*args.offset(1 as i32 as isize)
-                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as libc::c_long)
+                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as isize)
                     as i32,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
@@ -2519,7 +2519,7 @@ pub unsafe extern "C" fn UI_usesUniqueCDKey() -> crate::src::qcommon::q_shared::
         return (crate::src::qcommon::vm::VM_Call(
             uivm,
             crate::ui_public_h::UI_HASUNIQUECDKEY as i32,
-        ) == crate::src::qcommon::q_shared::qtrue as i32 as libc::c_long) as i32
+        ) == crate::src::qcommon::q_shared::qtrue as i32 as isize) as i32
             as crate::src::qcommon::q_shared::qboolean;
     } else {
         return crate::src::qcommon::q_shared::qfalse;

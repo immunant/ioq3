@@ -4150,7 +4150,7 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             text_p = text_p.offset(1);
             if numChars as libc::c_ulong
                 > crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr()).wrapping_sub(
-                    text_p.offset_from(consoleSaveBuffer.as_mut_ptr()) as libc::c_long
+                    text_p.offset_from(consoleSaveBuffer.as_mut_ptr()) as isize
                         as libc::c_ulong,
                 )
             {

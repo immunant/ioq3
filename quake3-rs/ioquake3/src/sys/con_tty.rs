@@ -663,7 +663,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                             % (8 as i32
                                 * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
                                     as i32)) as crate::stdlib::__fd_mask
-                    != 0 as i32 as libc::c_long)
+                    != 0 as i32 as isize)
             {
                 return 0 as *mut libc::c_char;
             }

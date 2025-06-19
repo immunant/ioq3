@@ -282,7 +282,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t)
                 (*out).leaf.numLeafBrushes * 4 as i32,
                 crate::src::qcommon::q_shared::h_high,
             ) as *mut i32;
-            (*out).leaf.firstLeafBrush = indexes.offset_from(cm.leafbrushes) as libc::c_long as i32;
+            (*out).leaf.firstLeafBrush = indexes.offset_from(cm.leafbrushes) as isize as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafBrushes {
                 *indexes.offset(j as isize) = (*in_0).firstBrush + j;
@@ -294,7 +294,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t)
                 crate::src::qcommon::q_shared::h_high,
             ) as *mut i32;
             (*out).leaf.firstLeafSurface =
-                indexes.offset_from(cm.leafsurfaces) as libc::c_long as i32;
+                indexes.offset_from(cm.leafsurfaces) as isize as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafSurfaces {
                 *indexes.offset(j as isize) = (*in_0).firstSurface + j;

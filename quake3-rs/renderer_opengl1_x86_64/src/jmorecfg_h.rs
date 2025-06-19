@@ -34,7 +34,7 @@ pub type JOCTET = u8;
 pub type UINT8 = u8;
 pub type UINT16 = u16;
 pub type INT16 = i16;
-pub type INT32 = libc::c_long;
+pub type INT32 = isize;
 /* Datatype used for image dimensions.  The JPEG standard only supports
  * images up to 64K*64K due to 16-bit fields in SOF markers.  Therefore
  * "unsigned int" is sufficient on all machines.  However, if you need to

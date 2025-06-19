@@ -129,7 +129,7 @@ unsafe extern "C" fn S_FindRIFFChunk(
         // Not the right chunk - skip it
         crate::src::qcommon::files::FS_Seek(
             f,
-            len as libc::c_long,
+            len as isize,
             crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
         );
     }
@@ -210,7 +210,7 @@ unsafe extern "C" fn S_ReadRIFFHeader(
         fmtlen -= 16 as i32;
         crate::src::qcommon::files::FS_Seek(
             file,
-            fmtlen as libc::c_long,
+            fmtlen as isize,
             crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
         );
     }

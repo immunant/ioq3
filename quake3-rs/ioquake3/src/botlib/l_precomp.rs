@@ -109,7 +109,7 @@ pub struct operator_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct value_s {
-    pub intvalue: libc::c_long,
+    pub intvalue: isize,
     pub floatvalue: f32,
     pub parentheses: i32,
     pub prev: *mut value_s,
@@ -1707,8 +1707,8 @@ pub unsafe extern "C" fn PC_ReadLine(
 pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(
     mut token: *mut crate::src::botlib::l_script::token_t,
 ) -> i32 {
-    return ((*token).endwhitespace_p.offset_from((*token).whitespace_p) as libc::c_long
-        > 0 as i32 as libc::c_long) as i32;
+    return ((*token).endwhitespace_p.offset_from((*token).whitespace_p) as isize
+        > 0 as i32 as isize) as i32;
 }
 //end of the function PC_WhiteSpaceBeforeToken
 //============================================================================
@@ -2501,7 +2501,7 @@ pub unsafe extern "C" fn PC_OperatorPriority(mut op: i32) -> i32 {
 pub unsafe extern "C" fn PC_EvaluateTokens(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
     mut tokens: *mut crate::src::botlib::l_script::token_t,
-    mut intvalue: *mut libc::c_long,
+    mut intvalue: *mut isize,
     mut floatvalue: *mut f32,
     mut integer: i32,
 ) -> i32 {
@@ -2545,7 +2545,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
     lastvalue = 0 as *mut value_t;
     firstvalue = lastvalue;
     if !intvalue.is_null() {
-        *intvalue = 0 as i32 as libc::c_long
+        *intvalue = 0 as i32 as isize
     }
     if !floatvalue.is_null() {
         *floatvalue = 0 as i32 as f32
@@ -2609,10 +2609,10 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                         {
                             //end else
                             //DEFINEHASHING
-                            (*v).intvalue = 1 as i32 as libc::c_long; //end if
+                            (*v).intvalue = 1 as i32 as isize; //end if
                             (*v).floatvalue = 1 as i32 as f32
                         } else {
-                            (*v).intvalue = 0 as i32 as libc::c_long; //end if
+                            (*v).intvalue = 0 as i32 as isize; //end if
                             (*v).floatvalue = 0 as i32 as f32
                         }
                         (*v).parentheses = parentheses;
@@ -2680,10 +2680,10 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                     //v = (value_t *) GetClearedMemory(sizeof(value_t));
                     if negativevalue != 0 {
                         //end else
-                        (*v).intvalue = -((*t).intvalue as i32) as libc::c_long; //end if
+                        (*v).intvalue = -((*t).intvalue as i32) as isize; //end if
                         (*v).floatvalue = -(*t).floatvalue
                     } else {
-                        (*v).intvalue = (*t).intvalue as libc::c_long;
+                        (*v).intvalue = (*t).intvalue as isize;
                         (*v).floatvalue = (*t).floatvalue
                     }
                     (*v).parentheses = parentheses;
@@ -2933,7 +2933,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
         //DEBUG_EVAL
         match (*o).operator {
             36 => {
-                (*v1).intvalue = ((*v1).intvalue == 0) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue == 0) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue == 0.) as i32 as f32
                 //end switch
                 //end if
@@ -2978,36 +2978,36 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
             }
             5 => {
                 (*v1).intvalue =
-                    ((*v1).intvalue != 0 && (*v2).intvalue != 0) as i32 as libc::c_long;
+                    ((*v1).intvalue != 0 && (*v2).intvalue != 0) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue != 0. && (*v2).floatvalue != 0.) as i32 as f32
             }
             6 => {
                 (*v1).intvalue =
-                    ((*v1).intvalue != 0 || (*v2).intvalue != 0) as i32 as libc::c_long;
+                    ((*v1).intvalue != 0 || (*v2).intvalue != 0) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue != 0. || (*v2).floatvalue != 0.) as i32 as f32
             }
             7 => {
-                (*v1).intvalue = ((*v1).intvalue >= (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue >= (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue >= (*v2).floatvalue) as i32 as f32
             }
             8 => {
-                (*v1).intvalue = ((*v1).intvalue <= (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue <= (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue <= (*v2).floatvalue) as i32 as f32
             }
             9 => {
-                (*v1).intvalue = ((*v1).intvalue == (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue == (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue == (*v2).floatvalue) as i32 as f32
             }
             10 => {
-                (*v1).intvalue = ((*v1).intvalue != (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue != (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue != (*v2).floatvalue) as i32 as f32
             }
             37 => {
-                (*v1).intvalue = ((*v1).intvalue > (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue > (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue > (*v2).floatvalue) as i32 as f32
             }
             38 => {
-                (*v1).intvalue = ((*v1).intvalue < (*v2).intvalue) as i32 as libc::c_long;
+                (*v1).intvalue = ((*v1).intvalue < (*v2).intvalue) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue < (*v2).floatvalue) as i32 as f32
             }
             21 => (*v1).intvalue >>= (*v2).intvalue,
@@ -3105,7 +3105,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
         return crate::src::qcommon::q_shared::qtrue as i32;
     }
     if !intvalue.is_null() {
-        *intvalue = 0 as i32 as libc::c_long
+        *intvalue = 0 as i32 as isize
     }
     if !floatvalue.is_null() {
         *floatvalue = 0 as i32 as f32
@@ -3123,7 +3123,7 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
 
 pub unsafe extern "C" fn PC_Evaluate(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut intvalue: *mut libc::c_long,
+    mut intvalue: *mut isize,
     mut floatvalue: *mut f32,
     mut integer: i32,
 ) -> i32 {
@@ -3151,7 +3151,7 @@ pub unsafe extern "C" fn PC_Evaluate(
         0 as *mut crate::src::botlib::l_precomp::define_t;
     let mut defined: i32 = crate::src::qcommon::q_shared::qfalse as i32;
     if !intvalue.is_null() {
-        *intvalue = 0 as i32 as libc::c_long
+        *intvalue = 0 as i32 as isize
     }
     if !floatvalue.is_null() {
         *floatvalue = 0 as i32 as f32
@@ -3264,7 +3264,7 @@ pub unsafe extern "C" fn PC_Evaluate(
 
 pub unsafe extern "C" fn PC_DollarEvaluate(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut intvalue: *mut libc::c_long,
+    mut intvalue: *mut isize,
     mut floatvalue: *mut f32,
     mut integer: i32,
 ) -> i32 {
@@ -3293,7 +3293,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
     let mut define: *mut crate::src::botlib::l_precomp::define_t =
         0 as *mut crate::src::botlib::l_precomp::define_t;
     if !intvalue.is_null() {
-        *intvalue = 0 as i32 as libc::c_long
+        *intvalue = 0 as i32 as isize
     }
     if !floatvalue.is_null() {
         *floatvalue = 0 as i32 as f32
@@ -3424,7 +3424,7 @@ pub unsafe extern "C" fn PC_DollarEvaluate(
 pub unsafe extern "C" fn PC_Directive_elif(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut value: libc::c_long = 0; //end if
+    let mut value: isize = 0; //end if
     let mut type_0: i32 = 0;
     let mut skip: i32 = 0;
     PC_PopIndent(source, &mut type_0, &mut skip);
@@ -3444,7 +3444,7 @@ pub unsafe extern "C" fn PC_Directive_elif(
     {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    skip = (value == 0 as i32 as libc::c_long) as i32;
+    skip = (value == 0 as i32 as isize) as i32;
     PC_PushIndent(source, 0x4 as i32, skip);
     return crate::src::qcommon::q_shared::qtrue as i32;
 }
@@ -3460,7 +3460,7 @@ pub unsafe extern "C" fn PC_Directive_elif(
 pub unsafe extern "C" fn PC_Directive_if(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut value: libc::c_long = 0;
+    let mut value: isize = 0;
     let mut skip: i32 = 0;
     if PC_Evaluate(
         source,
@@ -3471,7 +3471,7 @@ pub unsafe extern "C" fn PC_Directive_if(
     {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    skip = (value == 0 as i32 as libc::c_long) as i32;
+    skip = (value == 0 as i32 as isize) as i32;
     PC_PushIndent(source, 0x1 as i32, skip);
     return crate::src::qcommon::q_shared::qtrue as i32;
 }
@@ -3608,7 +3608,7 @@ pub unsafe extern "C" fn UnreadSignToken(mut source: *mut crate::src::botlib::l_
 pub unsafe extern "C" fn PC_Directive_eval(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut value: libc::c_long = 0;
+    let mut value: isize = 0;
     let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
         string: [0; 1024],
         type_0: 0,
@@ -3643,7 +3643,7 @@ pub unsafe extern "C" fn PC_Directive_eval(
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
     PC_UnreadSourceToken(source, &mut token);
-    if value < 0 as i32 as libc::c_long {
+    if value < 0 as i32 as isize {
         UnreadSignToken(source);
     }
     return crate::src::qcommon::q_shared::qtrue as i32;
@@ -3675,7 +3675,7 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
     };
     if PC_Evaluate(
         source,
-        0 as *mut libc::c_long,
+        0 as *mut isize,
         &mut value,
         crate::src::qcommon::q_shared::qfalse as i32,
     ) == 0
@@ -3978,7 +3978,7 @@ pub unsafe extern "C" fn PC_ReadDirective(
 pub unsafe extern "C" fn PC_DollarDirective_evalint(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
 ) -> i32 {
-    let mut value: libc::c_long = 0;
+    let mut value: isize = 0;
     let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
         string: [0; 1024],
         type_0: 0,
@@ -4016,7 +4016,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
     token.floatvalue = token.intvalue as f32;
     //NUMBERVALUE
     PC_UnreadSourceToken(source, &mut token);
-    if value < 0 as i32 as libc::c_long {
+    if value < 0 as i32 as isize {
         UnreadSignToken(source);
     }
     return crate::src::qcommon::q_shared::qtrue as i32;
@@ -4048,7 +4048,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
     };
     if PC_DollarEvaluate(
         source,
-        0 as *mut libc::c_long,
+        0 as *mut isize,
         &mut value,
         crate::src::qcommon::q_shared::qfalse as i32,
     ) == 0

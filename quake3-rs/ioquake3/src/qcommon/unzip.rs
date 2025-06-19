@@ -326,7 +326,7 @@ unsafe extern "C" fn unzlocal_SearchCentralDir(
         filestream,
         0 as i32 as crate::zconf_h::uLong,
         2 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         return 0 as i32 as crate::zconf_h::uLong;
     }
@@ -372,7 +372,7 @@ unsafe extern "C" fn unzlocal_SearchCentralDir(
             filestream,
             uReadPos,
             0 as i32,
-        ) != 0 as i32 as libc::c_long
+        ) != 0 as i32 as isize
         {
             break;
         }
@@ -520,7 +520,7 @@ pub unsafe extern "C" fn unzOpen2(
         us.filestream,
         central_pos,
         0 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         err = -(1 as i32)
     }
@@ -716,7 +716,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
         unz_file_info_internal { offset_curfile: 0 };
     let mut err: i32 = 0 as i32;
     let mut uMagic: crate::zconf_h::uLong = 0;
-    let mut lSeek: libc::c_long = 0 as i32 as libc::c_long;
+    let mut lSeek: isize = 0 as i32 as isize;
     if file.is_null() {
         return -(102 as i32);
     }
@@ -732,7 +732,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
         (*s).pos_in_central_dir
             .wrapping_add((*s).byte_before_the_zipfile),
         0 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         err = -(1 as i32)
     }
@@ -855,8 +855,8 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
     {
         err = -(1 as i32)
     }
-    lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_filename) as libc::c_long
-        as libc::c_long;
+    lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_filename) as isize
+        as isize;
     if err == 0 as i32 && !szFileName.is_null() {
         let mut uSizeRead: crate::zconf_h::uLong = 0;
         if file_info.size_filename < fileNameBufferSize {
@@ -883,7 +883,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
                 err = -(1 as i32)
             }
         }
-        lSeek = (lSeek as libc::c_ulong).wrapping_sub(uSizeRead) as libc::c_long as libc::c_long
+        lSeek = (lSeek as libc::c_ulong).wrapping_sub(uSizeRead) as isize as isize
     }
     if err == 0 as i32 && !extraField.is_null() {
         let mut uSizeRead_0: crate::zconf_h::uLong = 0;
@@ -892,7 +892,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
         } else {
             uSizeRead_0 = extraFieldBufferSize
         }
-        if lSeek != 0 as i32 as libc::c_long {
+        if lSeek != 0 as i32 as isize {
             if Some(
                 (*s).z_filefunc
                     .zseek_file
@@ -903,9 +903,9 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
                 (*s).filestream,
                 lSeek as crate::zconf_h::uLong,
                 1 as i32,
-            ) == 0 as i32 as libc::c_long
+            ) == 0 as i32 as isize
             {
-                lSeek = 0 as i32 as libc::c_long
+                lSeek = 0 as i32 as isize
             } else {
                 err = -(1 as i32)
             }
@@ -930,10 +930,10 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
         }
         lSeek = (lSeek as libc::c_ulong)
             .wrapping_add(file_info.size_file_extra.wrapping_sub(uSizeRead_0))
-            as libc::c_long as libc::c_long
+            as isize as isize
     } else {
-        lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_file_extra) as libc::c_long
-            as libc::c_long
+        lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_file_extra) as isize
+            as isize
     }
     if err == 0 as i32 && !szComment.is_null() {
         let mut uSizeRead_1: crate::zconf_h::uLong = 0;
@@ -944,7 +944,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
         } else {
             uSizeRead_1 = commentBufferSize
         }
-        if lSeek != 0 as i32 as libc::c_long {
+        if lSeek != 0 as i32 as isize {
             if Some(
                 (*s).z_filefunc
                     .zseek_file
@@ -955,7 +955,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
                 (*s).filestream,
                 lSeek as crate::zconf_h::uLong,
                 1 as i32,
-            ) != 0 as i32 as libc::c_long
+            ) != 0 as i32 as isize
             {
                 err = -(1 as i32)
             }
@@ -1292,7 +1292,7 @@ unsafe extern "C" fn unzlocal_CheckCurrentFileCoherencyHeader(
             .offset_curfile
             .wrapping_add((*s).byte_before_the_zipfile),
         0 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         return -(1 as i32);
     }
@@ -1606,7 +1606,7 @@ pub unsafe extern "C" fn unzReadCurrentFile(
                     .pos_in_zipfile
                     .wrapping_add((*pfile_in_zip_read_info).byte_before_the_zipfile),
                 0 as i32,
-            ) != 0 as i32 as libc::c_long
+            ) != 0 as i32 as isize
             {
                 return -(1 as i32);
             }
@@ -1847,7 +1847,7 @@ pub unsafe extern "C" fn unzGetLocalExtrafield(
             .offset_local_extrafield
             .wrapping_add((*pfile_in_zip_read_info).pos_local_extrafield),
         0 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         return -(1 as i32);
     }
@@ -1944,7 +1944,7 @@ pub unsafe extern "C" fn unzGetGlobalComment(
         (*s).filestream,
         (*s).central_pos.wrapping_add(22 as i32 as libc::c_ulong),
         0 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         return -(1 as i32);
     }

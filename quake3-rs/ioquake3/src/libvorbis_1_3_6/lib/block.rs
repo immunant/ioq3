@@ -75,7 +75,7 @@ pub unsafe extern "C" fn vorbis_block_init(
         ::std::mem::size_of::<crate::codec_h::vorbis_block>() as libc::c_ulong,
     );
     (*vb).vd = v;
-    (*vb).localalloc = 0 as i32 as libc::c_long;
+    (*vb).localalloc = 0 as i32 as isize;
     (*vb).localstore = 0 as *mut libc::c_void;
     if (*v).analysisp != 0 {
         (*vb).internal = crate::stdlib::calloc(
@@ -109,9 +109,9 @@ pub unsafe extern "C" fn vorbis_block_init(
 
 pub unsafe extern "C" fn _vorbis_block_alloc(
     mut vb: *mut crate::codec_h::vorbis_block,
-    mut bytes: libc::c_long,
+    mut bytes: isize,
 ) -> *mut libc::c_void {
-    bytes = bytes + (8 as i32 - 1 as i32) as libc::c_long & !(8 as i32 - 1 as i32) as libc::c_long;
+    bytes = bytes + (8 as i32 - 1 as i32) as isize & !(8 as i32 - 1 as i32) as isize;
     if bytes + (*vb).localtop > (*vb).localalloc {
         /* can't just _ogg_realloc... there are outstanding pointers */
         if !(*vb).localstore.is_null() {
@@ -127,7 +127,7 @@ pub unsafe extern "C" fn _vorbis_block_alloc(
         /* highly conservative */
         (*vb).localalloc = bytes;
         (*vb).localstore = crate::stdlib::malloc((*vb).localalloc as libc::c_ulong);
-        (*vb).localtop = 0 as i32 as libc::c_long
+        (*vb).localtop = 0 as i32 as isize
     }
     let mut ret: *mut libc::c_void = ((*vb).localstore as *mut libc::c_char)
         .offset((*vb).localtop as isize) as *mut libc::c_void;
@@ -173,10 +173,10 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorb
             ((*vb).totaluse + (*vb).localalloc) as libc::c_ulong,
         );
         (*vb).localalloc += (*vb).totaluse;
-        (*vb).totaluse = 0 as i32 as libc::c_long
+        (*vb).totaluse = 0 as i32 as isize
     }
     /* pull the ripcord */
-    (*vb).localtop = 0 as i32 as libc::c_long;
+    (*vb).localtop = 0 as i32 as isize;
     (*vb).reap = 0 as *mut crate::codec_h::alloc_chain;
 }
 #[no_mangle]
@@ -227,7 +227,7 @@ unsafe extern "C" fn _vds_shared_init(
     let mut hs: i32 = 0;
     if ci.is_null()
         || (*ci).modes <= 0 as i32
-        || (*ci).blocksizes[0 as i32 as usize] < 64 as i32 as libc::c_long
+        || (*ci).blocksizes[0 as i32 as usize] < 64 as i32 as isize
         || (*ci).blocksizes[1 as i32 as usize] < (*ci).blocksizes[0 as i32 as usize]
     {
         return 1 as i32;
@@ -340,7 +340,7 @@ unsafe extern "C" fn _vds_shared_init(
                 &mut (*ci).psy_g_param as *mut _
                     as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global,
                 ((*ci).blocksizes[(*(*ci).psy_param[i as usize]).blockflag as usize]
-                    / 2 as i32 as libc::c_long) as i32,
+                    / 2 as i32 as isize) as i32,
                 (*vi).rate,
             );
             i += 1
@@ -425,10 +425,10 @@ unsafe extern "C" fn _vds_shared_init(
     }
     /* all 1 (large block) or 0 (small block) */
     /* explicitly set for the sake of clarity */
-    (*v).lW = 0 as i32 as libc::c_long; /* previous window size */
-    (*v).W = 0 as i32 as libc::c_long; /* current window size */
+    (*v).lW = 0 as i32 as isize; /* previous window size */
+    (*v).W = 0 as i32 as isize; /* current window size */
     /* all vector indexes */
-    (*v).centerW = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long;
+    (*v).centerW = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize;
     (*v).pcm_current = (*v).centerW as i32;
     /* initialize all the backend lookups */
     (*b).flr = crate::stdlib::calloc(
@@ -698,17 +698,17 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut work: *mut f32 = fresh8.as_mut_ptr() as *mut f32;
-    let mut j: libc::c_long = 0;
+    let mut j: isize = 0;
     (*v).preextrapolate = 1 as i32;
-    if (*v).pcm_current as libc::c_long - (*v).centerW > (order * 2 as i32) as libc::c_long {
+    if (*v).pcm_current as isize - (*v).centerW > (order * 2 as i32) as isize {
         /* safety */
         i = 0 as i32;
         while i < (*(*v).vi).channels {
             /* need to run the extrapolation in reverse! */
-            j = 0 as i32 as libc::c_long;
-            while j < (*v).pcm_current as libc::c_long {
+            j = 0 as i32 as isize;
+            while j < (*v).pcm_current as isize {
                 *work.offset(j as isize) = *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long) as isize,
+                    ((*v).pcm_current as isize - j - 1 as i32 as isize) as isize,
                 );
                 j += 1
             }
@@ -716,7 +716,7 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             crate::src::libvorbis_1_3_6::lib::lpc::vorbis_lpc_from_data(
                 work,
                 lpc,
-                ((*v).pcm_current as libc::c_long - (*v).centerW) as i32,
+                ((*v).pcm_current as isize - (*v).centerW) as i32,
                 order,
             );
             /* run the predictor filter */
@@ -730,10 +730,10 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
                     .offset(-((*v).centerW as isize)),
                 (*v).centerW,
             );
-            j = 0 as i32 as libc::c_long;
-            while j < (*v).pcm_current as libc::c_long {
+            j = 0 as i32 as isize;
+            while j < (*v).pcm_current as isize {
                 *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long) as isize,
+                    ((*v).pcm_current as isize - j - 1 as i32 as isize) as isize,
                 ) = *work.offset(j as isize);
                 j += 1
             }
@@ -771,19 +771,19 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         suck to encode.  Extrapolate for the sake of cleanliness. */
         vorbis_analysis_buffer(
             v,
-            ((*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long) as i32,
+            ((*ci).blocksizes[1 as i32 as usize] * 3 as i32 as isize) as i32,
         );
         (*v).eofflag = (*v).pcm_current;
-        (*v).pcm_current = ((*v).pcm_current as libc::c_long
-            + (*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long)
+        (*v).pcm_current = ((*v).pcm_current as isize
+            + (*ci).blocksizes[1 as i32 as usize] * 3 as i32 as isize)
             as i32;
         i = 0 as i32;
         while i < (*vi).channels {
             if (*v).eofflag > order * 2 as i32 {
                 /* extrapolate with LPC to fill in */
-                let mut n: libc::c_long = 0;
+                let mut n: isize = 0;
                 /* make a predictor filter */
-                n = (*v).eofflag as libc::c_long;
+                n = (*v).eofflag as isize;
                 if n > (*ci).blocksizes[1 as i32 as usize] {
                     n = (*ci).blocksizes[1 as i32 as usize]
                 }
@@ -803,7 +803,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
                         .offset(-(order as isize)),
                     order,
                     (*(*v).pcm.offset(i as isize)).offset((*v).eofflag as isize),
-                    ((*v).pcm_current - (*v).eofflag) as libc::c_long,
+                    ((*v).pcm_current - (*v).eofflag) as isize,
                 );
             } else {
                 /* not enough data to extrapolate (unlikely to happen due to
@@ -828,7 +828,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         too... in case we're beginning on a cliff! */
         /* clumsy, but simple.  It only runs once, so simple is good. */
         if (*v).preextrapolate == 0
-            && (*v).pcm_current as libc::c_long - (*v).centerW > (*ci).blocksizes[1 as i32 as usize]
+            && (*v).pcm_current as isize - (*v).centerW > (*ci).blocksizes[1 as i32 as usize]
         {
             _preextrapolate_helper(v);
         }
@@ -850,9 +850,9 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     let mut b: *mut crate::codec_internal_h::private_state =
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
     let mut g: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = (*b).psy_g_look;
-    let mut beginW: libc::c_long =
-        (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as libc::c_long;
-    let mut centerNext: libc::c_long = 0;
+    let mut beginW: isize =
+        (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as isize;
+    let mut centerNext: isize = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
     /* check to see if we're started... */
@@ -869,27 +869,27 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     /* we do an envelope search even on a single blocksize; we may still
     be throwing more bits at impulses, and envelope search handles
     marking impulses too. */
-    let mut bp: libc::c_long = crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_search(
+    let mut bp: isize = crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_search(
         v as *mut crate::codec_h::vorbis_dsp_state,
     ); /* not enough data currently to search for a
        full long block */
-    if bp == -(1 as i32) as libc::c_long {
+    if bp == -(1 as i32) as isize {
         if (*v).eofflag == 0 as i32 {
             return 0 as i32;
         }
-        (*v).nW = 0 as i32 as libc::c_long
+        (*v).nW = 0 as i32 as isize
     } else if (*ci).blocksizes[0 as i32 as usize] == (*ci).blocksizes[1 as i32 as usize] {
-        (*v).nW = 0 as i32 as libc::c_long
+        (*v).nW = 0 as i32 as isize
     } else {
         (*v).nW = bp
     }
     centerNext = (*v).centerW
-        + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
-        + (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as libc::c_long;
+        + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
+        + (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as isize;
     /* center of next block + next block maximum right side. */
-    let mut blockbound: libc::c_long =
-        centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as i32 as libc::c_long;
-    if ((*v).pcm_current as libc::c_long) < blockbound {
+    let mut blockbound: isize =
+        centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as i32 as isize;
+    if ((*v).pcm_current as isize) < blockbound {
         return 0 as i32;
     }
     /* fill in the block.  Note that for a short window, lW and nW are *short*
@@ -936,26 +936,26 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     (*vb).pcm = _vorbis_block_alloc(
         vb,
         (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            .wrapping_mul((*vi).channels as libc::c_ulong) as libc::c_long,
+            .wrapping_mul((*vi).channels as libc::c_ulong) as isize,
     ) as *mut *mut f32;
     (*vbi).pcmdelay = _vorbis_block_alloc(
         vb,
         (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            .wrapping_mul((*vi).channels as libc::c_ulong) as libc::c_long,
+            .wrapping_mul((*vi).channels as libc::c_ulong) as isize,
     ) as *mut *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
         let ref mut fresh11 = *(*vbi).pcmdelay.offset(i as isize);
         *fresh11 = _vorbis_block_alloc(
             vb,
-            (((*vb).pcmend as libc::c_long + beginW) as libc::c_ulong)
+            (((*vb).pcmend as isize + beginW) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut f32;
         crate::stdlib::memcpy(
             *(*vbi).pcmdelay.offset(i as isize) as *mut libc::c_void,
             *(*v).pcm.offset(i as isize) as *const libc::c_void,
-            (((*vb).pcmend as libc::c_long + beginW) as libc::c_ulong)
+            (((*vb).pcmend as isize + beginW) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         );
         let ref mut fresh12 = *(*vb).pcm.offset(i as isize);
@@ -970,7 +970,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     eof>0  marks the last 'real' sample in pcm[]
     eof<0  'no more to do'; doesn't get here */
     if (*v).eofflag != 0 {
-        if (*v).centerW >= (*v).eofflag as libc::c_long {
+        if (*v).centerW >= (*v).eofflag as isize {
             (*v).eofflag = -(1 as i32);
             (*vb).eofflag = 1 as i32;
             return 1 as i32;
@@ -978,12 +978,12 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     }
     /* advance storage vectors and clean up */
     let mut new_centerNext: i32 =
-        ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long) as i32;
-    let mut movementW: i32 = (centerNext - new_centerNext as libc::c_long) as i32;
+        ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize) as i32;
+    let mut movementW: i32 = (centerNext - new_centerNext as isize) as i32;
     if movementW > 0 as i32 {
         crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_shift(
             (*b).ve as *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-            movementW as libc::c_long,
+            movementW as isize,
         );
         (*v).pcm_current -= movementW;
         i = 0 as i32;
@@ -998,21 +998,21 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         }
         (*v).lW = (*v).W;
         (*v).W = (*v).nW;
-        (*v).centerW = new_centerNext as libc::c_long;
+        (*v).centerW = new_centerNext as isize;
         if (*v).eofflag != 0 {
             (*v).eofflag -= movementW;
             if (*v).eofflag <= 0 as i32 {
                 (*v).eofflag = -(1 as i32)
             }
             /* do not add padding to end of stream! */
-            if (*v).centerW >= (*v).eofflag as libc::c_long {
+            if (*v).centerW >= (*v).eofflag as isize {
                 (*v).granulepos +=
-                    movementW as libc::c_long - ((*v).centerW - (*v).eofflag as libc::c_long)
+                    movementW as isize - ((*v).centerW - (*v).eofflag as isize)
             } else {
-                (*v).granulepos += movementW as libc::c_long
+                (*v).granulepos += movementW as isize
             }
         } else {
-            (*v).granulepos += movementW as libc::c_long
+            (*v).granulepos += movementW as isize
         }
     }
     /* done */
@@ -1086,9 +1086,9 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     }
     (*v).lW = (*v).W;
     (*v).W = (*vb).W;
-    (*v).nW = -(1 as i32) as libc::c_long;
-    if (*v).sequence == -(1 as i32) as libc::c_long
-        || (*v).sequence + 1 as i32 as libc::c_long != (*vb).sequence
+    (*v).nW = -(1 as i32) as isize;
+    if (*v).sequence == -(1 as i32) as isize
+        || (*v).sequence + 1 as i32 as isize != (*vb).sequence
     {
         (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
         (*b).sample_count = -(1 as i32) as crate::config_types_h::ogg_int64_t
@@ -1205,9 +1205,9 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
             j += 1
         }
         if (*v).centerW != 0 {
-            (*v).centerW = 0 as i32 as libc::c_long
+            (*v).centerW = 0 as i32 as isize
         } else {
-            (*v).centerW = n1 as libc::c_long
+            (*v).centerW = n1 as isize
         }
         /* deal with initial packet state; we do this using the explicit
         pcm_returned==-1 flag otherwise we're sensitive to first block
@@ -1217,9 +1217,9 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
             (*v).pcm_current = thisCenter
         } else {
             (*v).pcm_returned = prevCenter;
-            (*v).pcm_current = (prevCenter as libc::c_long
-                + ((*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
-                    + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
+            (*v).pcm_current = (prevCenter as isize
+                + ((*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize
+                    + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
                     >> hs)) as i32
         }
     }
@@ -1233,27 +1233,27 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     we don't have a starting point to judge where the last frame
     is.  For this reason, vorbisfile will always try to make sure
     it reads the last two marked pages in proper sequence */
-    if (*b).sample_count == -(1 as i32) as libc::c_long {
+    if (*b).sample_count == -(1 as i32) as isize {
         (*b).sample_count = 0 as i32 as crate::config_types_h::ogg_int64_t
     } else {
-        (*b).sample_count += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
-            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
+        (*b).sample_count += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize
+            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
     }
-    if (*v).granulepos == -(1 as i32) as libc::c_long {
-        if (*vb).granulepos != -(1 as i32) as libc::c_long {
+    if (*v).granulepos == -(1 as i32) as isize {
+        if (*vb).granulepos != -(1 as i32) as isize {
             /* only set if we have a position to set to */
             (*v).granulepos = (*vb).granulepos;
             /* is this a short page? */
             if (*b).sample_count > (*v).granulepos {
                 /* corner case; if this is both the first and last audio page,
                 then spec says the end is cut, not beginning */
-                let mut extra: libc::c_long = (*b).sample_count - (*vb).granulepos;
+                let mut extra: isize = (*b).sample_count - (*vb).granulepos;
                 /* we use ogg_int64_t for granule positions because a
                 uint64 isn't universally available.  Unfortunately,
                 that means granposes can be 'negative' and result in
                 extra being negative */
-                if extra < 0 as i32 as libc::c_long {
-                    extra = 0 as i32 as libc::c_long
+                if extra < 0 as i32 as isize {
+                    extra = 0 as i32 as isize
                 }
                 if (*vb).eofflag != 0 {
                     /* trim the end */
@@ -1264,13 +1264,13 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                     /* Guard against corrupt/malicious frames that set EOP and
                     a backdated granpos; don't rewind more samples than we
                     actually have */
-                    if extra > ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long {
-                        extra = ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long
+                    if extra > ((*v).pcm_current - (*v).pcm_returned << hs) as isize {
+                        extra = ((*v).pcm_current - (*v).pcm_returned << hs) as isize
                     }
-                    (*v).pcm_current = ((*v).pcm_current as libc::c_long - (extra >> hs)) as i32
+                    (*v).pcm_current = ((*v).pcm_current as isize - (extra >> hs)) as i32
                 } else {
                     /* trim the beginning */
-                    (*v).pcm_returned = ((*v).pcm_returned as libc::c_long + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
+                    (*v).pcm_returned = ((*v).pcm_returned as isize + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
                                                                                                     spec.  Either way, believe the bitstream } */
                     if (*v).pcm_returned > (*v).pcm_current {
                         (*v).pcm_returned = (*v).pcm_current
@@ -1279,11 +1279,11 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
             }
         }
     } else {
-        (*v).granulepos += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
-            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long;
-        if (*vb).granulepos != -(1 as i32) as libc::c_long && (*v).granulepos != (*vb).granulepos {
+        (*v).granulepos += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize
+            + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
+        if (*vb).granulepos != -(1 as i32) as isize && (*v).granulepos != (*vb).granulepos {
             if (*v).granulepos > (*vb).granulepos {
-                let mut extra_0: libc::c_long = (*v).granulepos - (*vb).granulepos;
+                let mut extra_0: isize = (*v).granulepos - (*vb).granulepos;
                 if extra_0 != 0 {
                     if (*vb).eofflag != 0 {
                         /* else {Shouldn't happen *unless* the bitstream is out of
@@ -1292,18 +1292,18 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                         /* Guard against corrupt/malicious frames that set EOP and
                         a backdated granpos; don't rewind more samples than we
                         actually have */
-                        if extra_0 > ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long {
-                            extra_0 = ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long
+                        if extra_0 > ((*v).pcm_current - (*v).pcm_returned << hs) as isize {
+                            extra_0 = ((*v).pcm_current - (*v).pcm_returned << hs) as isize
                         }
                         /* we use ogg_int64_t for granule positions because a
                         uint64 isn't universally available.  Unfortunately,
                         that means granposes can be 'negative' and result in
                         extra being negative */
-                        if extra_0 < 0 as i32 as libc::c_long {
-                            extra_0 = 0 as i32 as libc::c_long
+                        if extra_0 < 0 as i32 as isize {
+                            extra_0 = 0 as i32 as isize
                         }
                         (*v).pcm_current =
-                            ((*v).pcm_current as libc::c_long - (extra_0 >> hs)) as i32
+                            ((*v).pcm_current as isize - (extra_0 >> hs)) as i32
                     }
                 }
             }
@@ -1383,7 +1383,7 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
     simplicity. */
     /* centerW was advanced by blockin; it would be the center of the
      *next* block */
-    if (*v).centerW == n1 as libc::c_long {
+    if (*v).centerW == n1 as isize {
         /* the data buffer wraps; swap the halves */
         /* slow, sure, small */
         j = 0 as i32;
@@ -1400,10 +1400,10 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
         }
         (*v).pcm_current -= n1;
         (*v).pcm_returned -= n1;
-        (*v).centerW = 0 as i32 as libc::c_long
+        (*v).centerW = 0 as i32 as isize
     }
     /* solidify buffer into contiguous space */
-    if (*v).lW ^ (*v).W == 1 as i32 as libc::c_long {
+    if (*v).lW ^ (*v).W == 1 as i32 as isize {
         /* long/short or short/long */
         j = 0 as i32;
         while j < (*vi).channels {
@@ -1419,7 +1419,7 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
         }
         (*v).pcm_returned += (n1 - n0) / 2 as i32;
         (*v).pcm_current += (n1 - n0) / 2 as i32
-    } else if (*v).lW == 0 as i32 as libc::c_long {
+    } else if (*v).lW == 0 as i32 as isize {
         /* short/short */
         j = 0 as i32;
         while j < (*vi).channels {

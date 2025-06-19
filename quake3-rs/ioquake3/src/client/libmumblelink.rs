@@ -49,7 +49,7 @@ unsafe extern "C" fn GetTickCount() -> crate::stdlib::int32_t {
         tv_usec: 0,
     };
     crate::stdlib::gettimeofday(&mut tv, 0 as *mut crate::stdlib::timezone);
-    return (tv.tv_usec / 1000 as i32 as libc::c_long + tv.tv_sec * 1000 as i32 as libc::c_long)
+    return (tv.tv_usec / 1000 as i32 as isize + tv.tv_sec * 1000 as i32 as isize)
         as crate::stdlib::int32_t;
 }
 /* libmumblelink.h -- mumble link interface

@@ -731,7 +731,7 @@ unsafe extern "C" fn downmix_and_resample(
             (subframe as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long * y.offset_from(tmp) as libc::c_long)
+                    (0 as i32 as isize * y.offset_from(tmp) as isize)
                         as libc::c_ulong,
                 ),
         );
@@ -792,7 +792,7 @@ pub unsafe extern "C" fn tonality_analysis_reset(
         (::std::mem::size_of::<crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState>()
             as libc::c_ulong)
             .wrapping_sub(
-                start.offset_from(tonal as *mut libc::c_char) as libc::c_long as libc::c_ulong,
+                start.offset_from(tonal as *mut libc::c_char) as isize as libc::c_ulong,
             )
             .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
     );
@@ -838,9 +838,9 @@ pub unsafe extern "C" fn tonality_get_info(
         (1 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::celt_h::AnalysisInfo>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
+                (0 as i32 as isize
                     * info_out.offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
-                        as libc::c_long) as libc::c_ulong,
+                        as isize) as libc::c_ulong,
             ),
     );
     tonality_avg = (*info_out).tonality;
@@ -1089,14 +1089,14 @@ unsafe extern "C" fn tonality_analysis(
         (240 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
+                (0 as i32 as isize
                     * (*tonal).inmem.as_mut_ptr().offset_from(
                         (*tonal)
                             .inmem
                             .as_mut_ptr()
                             .offset(720 as i32 as isize)
                             .offset(-(240 as i32 as isize)),
-                    ) as libc::c_long) as libc::c_ulong,
+                    ) as isize) as libc::c_ulong,
             ),
     );
     remaining = len - (720 as i32 - (*tonal).mem_fill);

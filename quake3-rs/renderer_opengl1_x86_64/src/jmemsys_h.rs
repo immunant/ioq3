@@ -8,8 +8,8 @@ pub struct backing_store_struct {
             _: crate::jpeglib_h::j_common_ptr,
             _: backing_store_ptr,
             _: *mut libc::c_void,
-            _: libc::c_long,
-            _: libc::c_long,
+            _: isize,
+            _: isize,
         ) -> (),
     >,
     pub write_backing_store: Option<
@@ -17,8 +17,8 @@ pub struct backing_store_struct {
             _: crate::jpeglib_h::j_common_ptr,
             _: backing_store_ptr,
             _: *mut libc::c_void,
-            _: libc::c_long,
-            _: libc::c_long,
+            _: isize,
+            _: isize,
         ) -> (),
     >,
     pub close_backing_store:

@@ -786,7 +786,7 @@ pub unsafe extern "C" fn AAS_LoadAASLump(
             .FS_Seek
             .expect("non-null function pointer")(
             fp,
-            offset as libc::c_long,
+            offset as isize,
             crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
         ) != 0
         {
@@ -1511,7 +1511,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         .FS_Seek
         .expect("non-null function pointer")(
         fp,
-        0 as i32 as libc::c_long,
+        0 as i32 as isize,
         crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     );
     AAS_DData(

@@ -2731,7 +2731,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
                 b"Protocol %d not supported for demos\n\x00" as *const u8 as *const libc::c_char,
                 protocol,
             );
-            len = ext_test.offset_from(arg.as_mut_ptr()) as libc::c_long as i32;
+            len = ext_test.offset_from(arg.as_mut_ptr()) as isize as i32;
             if len as libc::c_ulong
                 >= (::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
@@ -4538,7 +4538,7 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         // IPv4 address
         if *buffptr as i32 == '\\' as i32 {
             buffptr = buffptr.offset(1);
-            if (buffend.offset_from(buffptr) as libc::c_long as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
                 < (::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 4]>()
                     as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
@@ -4562,7 +4562,7 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
                 break;
             }
             buffptr = buffptr.offset(1);
-            if (buffend.offset_from(buffptr) as libc::c_long as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as isize as libc::c_ulong)
                 < (::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16]>()
                     as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<u16>() as libc::c_ulong)
@@ -5580,7 +5580,7 @@ pub unsafe extern "C" fn CL_InitRef() {
             as unsafe extern "C" fn(
                 _: *const libc::c_char,
                 _: *mut *mut libc::c_void,
-            ) -> libc::c_long,
+            ) -> isize,
     );
     ri.FS_FreeFile = Some(
         crate::src::qcommon::files::FS_FreeFile as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
@@ -5675,7 +5675,7 @@ pub unsafe extern "C" fn CL_InitRef() {
     ri.IN_Shutdown = Some(crate::src::sdl::sdl_input::IN_Shutdown as unsafe extern "C" fn() -> ());
     ri.IN_Restart = Some(crate::src::sdl::sdl_input::IN_Restart as unsafe extern "C" fn() -> ());
     ri.ftol =
-        Some(crate::src::asm::ftola::qftolsse as unsafe extern "C" fn(_: f32) -> libc::c_long);
+        Some(crate::src::asm::ftola::qftolsse as unsafe extern "C" fn(_: f32) -> isize);
     ri.Sys_SetEnv = Some(
         crate::src::sys::sys_unix::Sys_SetEnv
             as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),

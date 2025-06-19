@@ -468,7 +468,7 @@ pub unsafe extern "C" fn trap_FS_GetFileList(
 
 pub unsafe extern "C" fn trap_FS_Seek(
     mut f: crate::src::qcommon::q_shared::fileHandle_t,
-    mut offset: libc::c_long,
+    mut offset: isize,
     mut origin: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(

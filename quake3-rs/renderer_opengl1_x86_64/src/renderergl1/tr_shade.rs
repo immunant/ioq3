@@ -719,14 +719,14 @@ unsafe extern "C" fn R_BindAnimatedImage(mut bundle: *mut crate::tr_local_h::tex
     index = (tess.shaderTime * (*bundle).imageAnimationSpeed as f64 * 1024 as i32 as f64)
         as crate::stdlib::int64_t;
     index >>= 10 as i32;
-    if index < 0 as i32 as libc::c_long {
+    if index < 0 as i32 as isize {
         index = 0 as i32 as crate::stdlib::int64_t
         // may happen with shader time offsets
     }
     // Windows x86 doesn't load renderer DLL with 64 bit modulus
     //index %= bundle->numImageAnimations;
-    while index >= (*bundle).numImageAnimations as libc::c_long {
-        index -= (*bundle).numImageAnimations as libc::c_long
+    while index >= (*bundle).numImageAnimations as isize {
+        index -= (*bundle).numImageAnimations as isize
     }
     crate::src::renderergl1::tr_backend::GL_Bind(
         (*bundle).image[index as usize] as *mut crate::tr_common_h::image_s,

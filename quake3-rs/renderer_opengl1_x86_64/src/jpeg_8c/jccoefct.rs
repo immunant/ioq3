@@ -784,12 +784,12 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
                 1 as i32,
                 0 as i32,
                 crate::src::jpeg_8c::jutils::jround_up(
-                    (*compptr).width_in_blocks as libc::c_long,
-                    (*compptr).h_samp_factor as libc::c_long,
+                    (*compptr).width_in_blocks as isize,
+                    (*compptr).h_samp_factor as isize,
                 ) as crate::jmorecfg_h::JDIMENSION,
                 crate::src::jpeg_8c::jutils::jround_up(
-                    (*compptr).height_in_blocks as libc::c_long,
-                    (*compptr).v_samp_factor as libc::c_long,
+                    (*compptr).height_in_blocks as isize,
+                    (*compptr).v_samp_factor as isize,
                 ) as crate::jmorecfg_h::JDIMENSION,
                 (*compptr).v_samp_factor as crate::jmorecfg_h::JDIMENSION,
             );

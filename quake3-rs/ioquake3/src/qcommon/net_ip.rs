@@ -755,7 +755,7 @@ pub unsafe extern "C" fn NET_GetPacket(
                     % (8 as i32
                         * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
                             as i32)) as crate::stdlib::__fd_mask
-            != 0 as i32 as libc::c_long
+            != 0 as i32 as isize
     {
         fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
             as crate::stdlib::socklen_t;
@@ -835,7 +835,7 @@ pub unsafe extern "C" fn NET_GetPacket(
                     % (8 as i32
                         * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
                             as i32)) as crate::stdlib::__fd_mask
-            != 0 as i32 as libc::c_long
+            != 0 as i32 as isize
     {
         fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
             as crate::stdlib::socklen_t;
@@ -883,7 +883,7 @@ pub unsafe extern "C" fn NET_GetPacket(
                     % (8 as i32
                         * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
                             as i32)) as crate::stdlib::__fd_mask
-            != 0 as i32 as libc::c_long
+            != 0 as i32 as isize
     {
         fromlen = ::std::mem::size_of::<crate::stdlib::sockaddr_storage>() as libc::c_ulong
             as crate::stdlib::socklen_t;
@@ -1735,7 +1735,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         buf.as_mut_ptr() as *mut libc::c_void,
         len as crate::stddef_h::size_t,
         0 as i32,
-    ) == -(1 as i32) as libc::c_long
+    ) == -(1 as i32) as isize
     {
         crate::src::qcommon::common::Com_Printf(
             b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1804,7 +1804,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
             buf.as_mut_ptr() as *mut libc::c_void,
             (3 as i32 + ulen + plen) as crate::stddef_h::size_t,
             0 as i32,
-        ) == -(1 as i32) as libc::c_long
+        ) == -(1 as i32) as isize
         {
             crate::src::qcommon::common::Com_Printf(
                 b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1853,7 +1853,7 @@ pub unsafe extern "C" fn NET_OpenSocks(mut port: i32) {
         buf.as_mut_ptr() as *mut libc::c_void,
         10 as i32 as crate::stddef_h::size_t,
         0 as i32,
-    ) == -(1 as i32) as libc::c_long
+    ) == -(1 as i32) as isize
     {
         crate::src::qcommon::common::Com_Printf(
             b"NET_OpenSocks: send: %s\n\x00" as *const u8 as *const libc::c_char,

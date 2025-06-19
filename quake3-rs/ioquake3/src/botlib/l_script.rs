@@ -2278,7 +2278,7 @@ pub unsafe extern "C" fn ReadSignedFloat(
 
 pub unsafe extern "C" fn ReadSignedInt(
     mut script: *mut crate::src::botlib::l_script::script_t,
-) -> libc::c_long {
+) -> isize {
     let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {
         string: [0; 1024],
         type_0: 0,
@@ -2291,7 +2291,7 @@ pub unsafe extern "C" fn ReadSignedInt(
         linescrossed: 0,
         next: 0 as *mut crate::src::botlib::l_script::token_s,
     };
-    let mut sign: libc::c_long = 1 as i32 as libc::c_long;
+    let mut sign: isize = 1 as i32 as isize;
     PS_ExpectAnyToken(script, &mut token);
     if ::libc::strcmp(
         token.string.as_mut_ptr(),
@@ -2304,9 +2304,9 @@ pub unsafe extern "C" fn ReadSignedInt(
                 b"Missing integer value\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
             );
-            return 0 as i32 as libc::c_long;
+            return 0 as i32 as isize;
         }
-        sign = -(1 as i32) as libc::c_long
+        sign = -(1 as i32) as isize
     }
     if token.type_0 != 3 as i32 || token.subtype == 0x800 as i32 {
         ScriptError(
@@ -2315,9 +2315,9 @@ pub unsafe extern "C" fn ReadSignedInt(
                 as *mut libc::c_char,
             token.string.as_mut_ptr(),
         );
-        return 0 as i32 as libc::c_long;
+        return 0 as i32 as isize;
     }
-    return (sign as libc::c_ulong).wrapping_mul(token.intvalue) as libc::c_long;
+    return (sign as libc::c_ulong).wrapping_mul(token.intvalue) as isize;
 }
 //set script flags
 //end of the function ReadSignedInt

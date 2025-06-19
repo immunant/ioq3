@@ -1551,7 +1551,7 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
         crate::src::qcommon::files::FS_Seek
             as unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-                _: libc::c_long,
+                _: isize,
                 _: i32,
             ) -> i32,
     );

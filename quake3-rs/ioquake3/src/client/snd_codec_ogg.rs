@@ -220,17 +220,17 @@ pub unsafe extern "C" fn S_OGG_Callback_close(mut _datasource: *mut libc::c_void
 // ftell() replacement
 #[no_mangle]
 
-pub unsafe extern "C" fn S_OGG_Callback_tell(mut datasource: *mut libc::c_void) -> libc::c_long {
+pub unsafe extern "C" fn S_OGG_Callback_tell(mut datasource: *mut libc::c_void) -> isize {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
     // check if input is valid
     if datasource.is_null() {
         *::libc::__errno_location() = 9 as i32;
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     // snd_stream_t in the generic pointer
     stream = datasource as *mut crate::src::client::snd_codec::snd_stream_t;
-    return crate::src::qcommon::files::FS_FTell((*stream).file) as libc::c_long;
+    return crate::src::qcommon::files::FS_FTell((*stream).file) as isize;
 }
 // the callback structure
 #[no_mangle]
@@ -256,7 +256,7 @@ pub static mut S_OGG_Callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov
         ),
         close_func: Some(S_OGG_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32),
         tell_func: Some(
-            S_OGG_Callback_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_long,
+            S_OGG_Callback_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> isize,
         ),
     };
     init
@@ -307,7 +307,7 @@ pub unsafe extern "C" fn S_OGG_CodecOpenStream(
         stream as *mut libc::c_void,
         vf as *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
         0 as *const libc::c_char,
-        0 as i32 as libc::c_long,
+        0 as i32 as isize,
         S_OGG_Callbacks as crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks,
     ) != 0 as i32
     {
@@ -334,7 +334,7 @@ pub unsafe extern "C" fn S_OGG_CodecOpenStream(
     // we only support OGGs with one substream
     if crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_streams(
         vf as *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
-    ) != 1 as i32 as libc::c_long
+    ) != 1 as i32 as isize
     {
         crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_clear(
             vf as *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
