@@ -9885,3 +9885,6 @@ pub mod src {
         pub mod zutil;
     } // mod zlib
 } // mod src
+
+// Export main explicitly
+pub use src::sys::sys_main::main;
