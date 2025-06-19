@@ -7,7 +7,7 @@ pub mod stdlib_h {
         return libc::strtol(
             __nptr,
             0 as *mut libc::c_void as *mut *mut libc::c_char,
-            10 as i32,
+            10i32,
         ) as i32;
     }
 }
@@ -122,10 +122,10 @@ pub unsafe extern "C" fn CG_TargetCommand_f() {
     let mut targetNum: i32 = 0;
     let mut test: [libc::c_char; 4] = [0; 4];
     targetNum = CG_CrosshairPlayer();
-    if targetNum == -(1 as i32) {
+    if targetNum == -1i32 {
         return;
     }
-    trap_Argv(1 as i32, test.as_mut_ptr(), 4 as i32);
+    trap_Argv(1i32, test.as_mut_ptr(), 4i32);
     trap_SendClientCommand(va(
         b"gc %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         targetNum,
@@ -145,7 +145,7 @@ unsafe extern "C" fn CG_SizeUp_f() {
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
         va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            cg_viewsize.integer + 10 as i32,
+            cg_viewsize.integer + 10i32,
         ),
     );
 }
@@ -162,7 +162,7 @@ unsafe extern "C" fn CG_SizeDown_f() {
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
         va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            cg_viewsize.integer - 10 as i32,
+            cg_viewsize.integer - 10i32,
         ),
     );
 }
@@ -177,15 +177,15 @@ Debugging command to print the current position
 unsafe extern "C" fn CG_Viewpos_f() {
     CG_Printf(
         b"(%i %i %i) : %i\n\x00" as *const u8 as *const libc::c_char,
-        cg.refdef.vieworg[0 as i32 as usize] as i32,
-        cg.refdef.vieworg[1 as i32 as usize] as i32,
-        cg.refdef.vieworg[2 as i32 as usize] as i32,
-        cg.refdefViewAngles[1 as i32 as usize] as i32,
+        cg.refdef.vieworg[0i32 as usize] as i32,
+        cg.refdef.vieworg[1i32 as usize] as i32,
+        cg.refdef.vieworg[2i32 as usize] as i32,
+        cg.refdefViewAngles[1i32 as usize] as i32,
     );
 }
 
 unsafe extern "C" fn CG_ScoresDown_f() {
-    if (cg.scoresRequestTime + 2000 as i32) < cg.time {
+    if (cg.scoresRequestTime + 2000i32) < cg.time {
         // the scores are more than two seconds out of data,
         // so request new ones
         cg.scoresRequestTime = cg.time;
@@ -194,7 +194,7 @@ unsafe extern "C" fn CG_ScoresDown_f() {
         // displayed, but if this is the first hit, clear them out
         if cg.showScores as u64 == 0 {
             cg.showScores = qtrue;
-            cg.numScores = 0 as i32
+            cg.numScores = 0i32
         }
     } else {
         // show the cached contents even if they just pressed if it
@@ -215,13 +215,13 @@ unsafe extern "C" fn CG_TellTarget_f() {
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
     clientNum = CG_CrosshairPlayer();
-    if clientNum == -(1 as i32) {
+    if clientNum == -1i32 {
         return;
     }
-    trap_Args(message.as_mut_ptr(), 128 as i32);
+    trap_Args(message.as_mut_ptr(), 128i32);
     Com_sprintf(
         command.as_mut_ptr(),
-        128 as i32,
+        128i32,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
@@ -234,13 +234,13 @@ unsafe extern "C" fn CG_TellAttacker_f() {
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
     clientNum = CG_LastAttacker();
-    if clientNum == -(1 as i32) {
+    if clientNum == -1i32 {
         return;
     }
-    trap_Args(message.as_mut_ptr(), 128 as i32);
+    trap_Args(message.as_mut_ptr(), 128i32);
     Com_sprintf(
         command.as_mut_ptr(),
-        128 as i32,
+        128i32,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
@@ -263,7 +263,7 @@ unsafe extern "C" fn CG_StartOrbit_f() {
     if atoi(var.as_mut_ptr()) == 0 {
         return;
     }
-    if cg_cameraOrbit.value != 0 as i32 as f32 {
+    if cg_cameraOrbit.value != 0i32 as f32 {
         trap_Cvar_Set(
             b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
@@ -456,8 +456,8 @@ Cmd_Argc() / Cmd_Argv()
 pub unsafe extern "C" fn CG_ConsoleCommand() -> qboolean {
     let mut cmd: *const libc::c_char = 0 as *const libc::c_char;
     let mut i: i32 = 0;
-    cmd = CG_Argv(0 as i32);
-    i = 0 as i32;
+    cmd = CG_Argv(0i32);
+    i = 0i32;
     while (i as usize)
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as usize)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as usize)
@@ -732,7 +732,7 @@ so it can perform tab completion
 
 pub unsafe extern "C" fn CG_InitConsoleCommands() {
     let mut i: i32 = 0;
-    i = 0 as i32;
+    i = 0i32;
     while (i as usize)
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as usize)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as usize)
