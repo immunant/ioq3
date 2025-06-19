@@ -355,14 +355,14 @@ pub unsafe extern "C" fn jpeg_calc_output_dimensions(
     while ci < (*cinfo).num_components {
         /* Size in samples, after IDCT scaling */
         (*compptr).downsampled_width = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_width as libc::c_long
-                * ((*compptr).h_samp_factor * (*compptr).DCT_h_scaled_size) as libc::c_long,
-            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_width as isize
+                * ((*compptr).h_samp_factor * (*compptr).DCT_h_scaled_size) as isize,
+            ((*cinfo).max_h_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         (*compptr).downsampled_height = crate::src::jpeg_8c::jutils::jdiv_round_up(
-            (*cinfo).image_height as libc::c_long
-                * ((*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size) as libc::c_long,
-            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as libc::c_long,
+            (*cinfo).image_height as isize
+                * ((*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size) as isize,
+            ((*cinfo).max_v_samp_factor * (*cinfo).block_size) as isize,
         ) as crate::jmorecfg_h::JDIMENSION;
         ci += 1;
         compptr = compptr.offset(1)
@@ -504,16 +504,16 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: crate::jpeglib_h::j_de
 unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     let mut master: my_master_ptr = (*cinfo).master as my_master_ptr;
     let mut use_c_buffer: crate::jmorecfg_h::boolean = 0;
-    let mut samplesperrow: libc::c_long = 0;
+    let mut samplesperrow: isize = 0;
     let mut jd_samplesperrow: crate::jmorecfg_h::JDIMENSION = 0;
     /* Initialize dimensions and other stuff */
     jpeg_calc_output_dimensions(cinfo);
     prepare_range_limit_table(cinfo);
     /* Width of an output scanline must be representable as JDIMENSION. */
     samplesperrow =
-        (*cinfo).output_width as libc::c_long * (*cinfo).out_color_components as libc::c_long;
+        (*cinfo).output_width as isize * (*cinfo).out_color_components as isize;
     jd_samplesperrow = samplesperrow as crate::jmorecfg_h::JDIMENSION;
-    if jd_samplesperrow as libc::c_long != samplesperrow {
+    if jd_samplesperrow as isize != samplesperrow {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_WIDTH_OVERFLOW as i32;
         Some(
             (*(*cinfo).err)
@@ -654,9 +654,9 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
             /* For a nonprogressive multiscan file, estimate 1 scan per component. */
             nscans = (*cinfo).num_components
         }
-        (*(*cinfo).progress).pass_counter = 0 as libc::c_long;
+        (*(*cinfo).progress).pass_counter = 0 as isize;
         (*(*cinfo).progress).pass_limit =
-            (*cinfo).total_iMCU_rows as libc::c_long * nscans as libc::c_long;
+            (*cinfo).total_iMCU_rows as isize * nscans as isize;
         (*(*cinfo).progress).completed_passes = 0 as i32;
         (*(*cinfo).progress).total_passes = if (*cinfo).enable_2pass_quant != 0 {
             3 as i32

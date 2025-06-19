@@ -170,15 +170,15 @@ pub struct cin_cache {
     pub status: crate::src::qcommon::q_shared::e_status,
     pub startTime: i32,
     pub lastTime: i32,
-    pub tfps: libc::c_long,
-    pub RoQPlayed: libc::c_long,
-    pub ROQSize: libc::c_long,
+    pub tfps: isize,
+    pub RoQPlayed: isize,
+    pub ROQSize: isize,
     pub RoQFrameSize: u32,
-    pub onQuad: libc::c_long,
-    pub numQuads: libc::c_long,
-    pub samplesPerLine: libc::c_long,
+    pub onQuad: isize,
+    pub numQuads: isize,
+    pub samplesPerLine: isize,
     pub roq_id: u32,
-    pub screenDelta: libc::c_long,
+    pub screenDelta: isize,
     pub VQ0: Option<
         unsafe extern "C" fn(
             _: *mut crate::src::qcommon::q_shared::byte,
@@ -203,7 +203,7 @@ pub struct cin_cache {
             _: *mut libc::c_void,
         ) -> (),
     >,
-    pub samplesPerPixel: libc::c_long,
+    pub samplesPerPixel: isize,
     pub gray: *mut crate::src::qcommon::q_shared::byte,
     pub xsize: u32,
     pub ysize: u32,
@@ -212,16 +212,16 @@ pub struct cin_cache {
     pub half: crate::src::qcommon::q_shared::qboolean,
     pub smootheddouble: crate::src::qcommon::q_shared::qboolean,
     pub inMemory: crate::src::qcommon::q_shared::qboolean,
-    pub normalBuffer0: libc::c_long,
-    pub roq_flags: libc::c_long,
-    pub roqF0: libc::c_long,
-    pub roqF1: libc::c_long,
-    pub t: [libc::c_long; 2],
-    pub roqFPS: libc::c_long,
+    pub normalBuffer0: isize,
+    pub roq_flags: isize,
+    pub roqF0: isize,
+    pub roqF1: isize,
+    pub t: [isize; 2],
+    pub roqFPS: isize,
     pub playonwalls: i32,
     pub buf: *mut crate::src::qcommon::q_shared::byte,
-    pub drawX: libc::c_long,
-    pub drawY: libc::c_long,
+    pub drawX: isize,
+    pub drawY: isize,
 }
 
 #[repr(C)]
@@ -232,10 +232,10 @@ pub struct cinematics_t {
     pub sqrTable: [i16; 256],
     pub mcomp: [i32; 256],
     pub qStatus: [[*mut crate::src::qcommon::q_shared::byte; 32768]; 2],
-    pub oldXOff: libc::c_long,
-    pub oldYOff: libc::c_long,
-    pub oldysize: libc::c_long,
-    pub oldxsize: libc::c_long,
+    pub oldXOff: isize,
+    pub oldYOff: isize,
+    pub oldysize: isize,
+    pub oldxsize: isize,
     pub currentHandle: i32,
 }
 
@@ -254,15 +254,15 @@ pub union C2RustUnnamed_14 {
 *
 ******************************************************************************/
 
-static mut ROQ_YY_tab: [libc::c_long; 256] = [0; 256];
+static mut ROQ_YY_tab: [isize; 256] = [0; 256];
 
-static mut ROQ_UB_tab: [libc::c_long; 256] = [0; 256];
+static mut ROQ_UB_tab: [isize; 256] = [0; 256];
 
-static mut ROQ_UG_tab: [libc::c_long; 256] = [0; 256];
+static mut ROQ_UG_tab: [isize; 256] = [0; 256];
 
-static mut ROQ_VG_tab: [libc::c_long; 256] = [0; 256];
+static mut ROQ_VG_tab: [isize; 256] = [0; 256];
 
-static mut ROQ_VR_tab: [libc::c_long; 256] = [0; 256];
+static mut ROQ_VR_tab: [isize; 256] = [0; 256];
 
 static mut vq2: [u16; 16384] = [0; 16384];
 
@@ -409,7 +409,7 @@ pub unsafe extern "C" fn RllDecodeMonoToMono(
     mut size: u32,
     mut signedOutput: libc::c_char,
     mut flag: u16,
-) -> libc::c_long {
+) -> isize {
     let mut z: u32 = 0;
     let mut prev: i32 = 0;
     if signedOutput != 0 {
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn RllDecodeMonoToMono(
         prev = *fresh0 as i32;
         z = z.wrapping_add(1)
     }
-    return size as libc::c_long;
+    return size as isize;
     //*sizeof(short));
 }
 //-----------------------------------------------------------------------------
@@ -449,7 +449,7 @@ pub unsafe extern "C" fn RllDecodeMonoToStereo(
     mut size: u32,
     mut signedOutput: libc::c_char,
     mut flag: u16,
-) -> libc::c_long {
+) -> isize {
     let mut z: u32 = 0;
     let mut prev: i32 = 0;
     if signedOutput != 0 {
@@ -471,7 +471,7 @@ pub unsafe extern "C" fn RllDecodeMonoToStereo(
         ) = *fresh1;
         z = z.wrapping_add(1)
     }
-    return size as libc::c_long;
+    return size as isize;
     // * 2 * sizeof(short));
 }
 //-----------------------------------------------------------------------------
@@ -495,7 +495,7 @@ pub unsafe extern "C" fn RllDecodeStereoToStereo(
     mut size: u32,
     mut signedOutput: libc::c_char,
     mut flag: u16,
-) -> libc::c_long {
+) -> isize {
     let mut z: u32 = 0;
     let mut zz: *mut u8 = from;
     let mut prevL: i32 = 0;
@@ -519,7 +519,7 @@ pub unsafe extern "C" fn RllDecodeStereoToStereo(
         *to.offset(z.wrapping_add(1 as i32 as u32) as isize) = prevR as i16;
         z = z.wrapping_add(2 as i32 as u32)
     }
-    return (size >> 1 as i32) as libc::c_long;
+    return (size >> 1 as i32) as isize;
     //*sizeof(short));
 }
 //-----------------------------------------------------------------------------
@@ -543,7 +543,7 @@ pub unsafe extern "C" fn RllDecodeStereoToMono(
     mut size: u32,
     mut signedOutput: libc::c_char,
     mut flag: u16,
-) -> libc::c_long {
+) -> isize {
     let mut z: u32 = 0;
     let mut prevL: i32 = 0;
     let mut prevR: i32 = 0;
@@ -566,7 +566,7 @@ pub unsafe extern "C" fn RllDecodeStereoToMono(
         *to.offset(z as isize) = ((prevL + prevR) / 2 as i32) as i16;
         z = z.wrapping_add(1 as i32 as u32)
     }
-    return size as libc::c_long;
+    return size as isize;
 }
 /* *****************************************************************************
 *
@@ -856,18 +856,18 @@ unsafe extern "C" fn ROQ_GenYUVTables() {
     let mut t_vr: f32 = 0.;
     let mut t_ug: f32 = 0.;
     let mut t_vg: f32 = 0.;
-    let mut i: libc::c_long = 0;
+    let mut i: isize = 0;
     t_ub = 1.77200f32 / 2.0f32 * ((1 as i32) << 6 as i32) as f32 + 0.5f32;
     t_vr = 1.40200f32 / 2.0f32 * ((1 as i32) << 6 as i32) as f32 + 0.5f32;
     t_ug = 0.34414f32 / 2.0f32 * ((1 as i32) << 6 as i32) as f32 + 0.5f32;
     t_vg = 0.71414f32 / 2.0f32 * ((1 as i32) << 6 as i32) as f32 + 0.5f32;
-    i = 0 as i32 as libc::c_long;
-    while i < 256 as i32 as libc::c_long {
-        let mut x: f32 = (2 as i32 as libc::c_long * i - 255 as i32 as libc::c_long) as f32;
-        ROQ_UB_tab[i as usize] = (t_ub * x + ((1 as i32) << 5 as i32) as f32) as libc::c_long;
-        ROQ_VR_tab[i as usize] = (t_vr * x + ((1 as i32) << 5 as i32) as f32) as libc::c_long;
-        ROQ_UG_tab[i as usize] = (-t_ug * x) as libc::c_long;
-        ROQ_VG_tab[i as usize] = (-t_vg * x + ((1 as i32) << 5 as i32) as f32) as libc::c_long;
+    i = 0 as i32 as isize;
+    while i < 256 as i32 as isize {
+        let mut x: f32 = (2 as i32 as isize * i - 255 as i32 as isize) as f32;
+        ROQ_UB_tab[i as usize] = (t_ub * x + ((1 as i32) << 5 as i32) as f32) as isize;
+        ROQ_VR_tab[i as usize] = (t_vr * x + ((1 as i32) << 5 as i32) as f32) as isize;
+        ROQ_UG_tab[i as usize] = (-t_ug * x) as isize;
+        ROQ_VG_tab[i as usize] = (-t_vg * x + ((1 as i32) << 5 as i32) as f32) as isize;
         ROQ_YY_tab[i as usize] = i << 6 as i32 | i >> 2 as i32;
         i += 1
     }
@@ -881,34 +881,34 @@ unsafe extern "C" fn ROQ_GenYUVTables() {
 ******************************************************************************/
 
 unsafe extern "C" fn yuv_to_rgb(
-    mut y: libc::c_long,
-    mut u: libc::c_long,
-    mut v: libc::c_long,
+    mut y: isize,
+    mut u: isize,
+    mut v: isize,
 ) -> u16 {
-    let mut r: libc::c_long = 0;
-    let mut g: libc::c_long = 0;
-    let mut b: libc::c_long = 0;
-    let mut YY: libc::c_long = ROQ_YY_tab[y as usize];
+    let mut r: isize = 0;
+    let mut g: isize = 0;
+    let mut b: isize = 0;
+    let mut YY: isize = ROQ_YY_tab[y as usize];
     r = YY + ROQ_VR_tab[v as usize] >> 9 as i32;
     g = YY + ROQ_UG_tab[u as usize] + ROQ_VG_tab[v as usize] >> 8 as i32;
     b = YY + ROQ_UB_tab[u as usize] >> 9 as i32;
-    if r < 0 as i32 as libc::c_long {
-        r = 0 as i32 as libc::c_long
+    if r < 0 as i32 as isize {
+        r = 0 as i32 as isize
     }
-    if g < 0 as i32 as libc::c_long {
-        g = 0 as i32 as libc::c_long
+    if g < 0 as i32 as isize {
+        g = 0 as i32 as isize
     }
-    if b < 0 as i32 as libc::c_long {
-        b = 0 as i32 as libc::c_long
+    if b < 0 as i32 as isize {
+        b = 0 as i32 as isize
     }
-    if r > 31 as i32 as libc::c_long {
-        r = 31 as i32 as libc::c_long
+    if r > 31 as i32 as isize {
+        r = 31 as i32 as isize
     }
-    if g > 63 as i32 as libc::c_long {
-        g = 63 as i32 as libc::c_long
+    if g > 63 as i32 as isize {
+        g = 63 as i32 as isize
     }
-    if b > 31 as i32 as libc::c_long {
-        b = 31 as i32 as libc::c_long
+    if b > 31 as i32 as isize {
+        b = 31 as i32 as isize
     }
     return ((r << 11 as i32) + (g << 5 as i32) + b) as u16;
 }
@@ -921,34 +921,34 @@ unsafe extern "C" fn yuv_to_rgb(
 ******************************************************************************/
 
 unsafe extern "C" fn yuv_to_rgb24(
-    mut y: libc::c_long,
-    mut u: libc::c_long,
-    mut v: libc::c_long,
+    mut y: isize,
+    mut u: isize,
+    mut v: isize,
 ) -> u32 {
-    let mut r: libc::c_long = 0;
-    let mut g: libc::c_long = 0;
-    let mut b: libc::c_long = 0;
-    let mut YY: libc::c_long = ROQ_YY_tab[y as usize];
+    let mut r: isize = 0;
+    let mut g: isize = 0;
+    let mut b: isize = 0;
+    let mut YY: isize = ROQ_YY_tab[y as usize];
     r = YY + ROQ_VR_tab[v as usize] >> 6 as i32;
     g = YY + ROQ_UG_tab[u as usize] + ROQ_VG_tab[v as usize] >> 6 as i32;
     b = YY + ROQ_UB_tab[u as usize] >> 6 as i32;
-    if r < 0 as i32 as libc::c_long {
-        r = 0 as i32 as libc::c_long
+    if r < 0 as i32 as isize {
+        r = 0 as i32 as isize
     }
-    if g < 0 as i32 as libc::c_long {
-        g = 0 as i32 as libc::c_long
+    if g < 0 as i32 as isize {
+        g = 0 as i32 as isize
     }
-    if b < 0 as i32 as libc::c_long {
-        b = 0 as i32 as libc::c_long
+    if b < 0 as i32 as isize {
+        b = 0 as i32 as isize
     }
-    if r > 255 as i32 as libc::c_long {
-        r = 255 as i32 as libc::c_long
+    if r > 255 as i32 as isize {
+        r = 255 as i32 as isize
     }
-    if g > 255 as i32 as libc::c_long {
-        g = 255 as i32 as libc::c_long
+    if g > 255 as i32 as isize {
+        g = 255 as i32 as isize
     }
-    if b > 255 as i32 as libc::c_long {
-        b = 255 as i32 as libc::c_long
+    if b > 255 as i32 as isize {
+        b = 255 as i32 as isize
     }
     return ((r | g << 8 as i32 | b << 16 as i32) as libc::c_ulong
         | (255 as libc::c_ulong) << 24 as i32) as u32;
@@ -965,20 +965,20 @@ unsafe extern "C" fn decodeCodeBook(
     mut input: *mut crate::src::qcommon::q_shared::byte,
     mut roq_flags: u16,
 ) {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut two: libc::c_long = 0;
-    let mut four: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut two: isize = 0;
+    let mut four: isize = 0;
     let mut aptr: *mut u16 = 0 as *mut u16;
     let mut bptr: *mut u16 = 0 as *mut u16;
     let mut cptr: *mut u16 = 0 as *mut u16;
     let mut dptr: *mut u16 = 0 as *mut u16;
-    let mut y0: libc::c_long = 0;
-    let mut y1: libc::c_long = 0;
-    let mut y2: libc::c_long = 0;
-    let mut y3: libc::c_long = 0;
-    let mut cr: libc::c_long = 0;
-    let mut cb: libc::c_long = 0;
+    let mut y0: isize = 0;
+    let mut y1: isize = 0;
+    let mut y2: isize = 0;
+    let mut y3: isize = 0;
+    let mut cr: isize = 0;
+    let mut cb: isize = 0;
     let mut bbptr: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     let mut baptr: *mut crate::src::qcommon::q_shared::byte =
@@ -992,43 +992,43 @@ unsafe extern "C" fn decodeCodeBook(
     let mut icptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
     let mut idptr: C2RustUnnamed_14 = C2RustUnnamed_14 { i: 0 as *mut u32 };
     if roq_flags == 0 {
-        four = 256 as i32 as libc::c_long;
+        four = 256 as i32 as isize;
         two = four
     } else {
-        two = (roq_flags as i32 >> 8 as i32) as libc::c_long;
+        two = (roq_flags as i32 >> 8 as i32) as isize;
         if two == 0 {
-            two = 256 as i32 as libc::c_long
+            two = 256 as i32 as isize
         }
-        four = (roq_flags as i32 & 0xff as i32) as libc::c_long
+        four = (roq_flags as i32 & 0xff as i32) as isize
     }
-    four *= 2 as i32 as libc::c_long;
+    four *= 2 as i32 as isize;
     bptr = vq2.as_mut_ptr();
     if cinTable[currentHandle as usize].half as u64 == 0 {
         if cinTable[currentHandle as usize].smootheddouble as u64 == 0 {
             //
             // normal height
             //
-            if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as libc::c_long {
-                i = 0 as i32 as libc::c_long;
+            if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as isize {
+                i = 0 as i32 as isize;
                 while i < two {
                     let fresh4 = input;
                     input = input.offset(1);
-                    y0 = *fresh4 as libc::c_long;
+                    y0 = *fresh4 as isize;
                     let fresh5 = input;
                     input = input.offset(1);
-                    y1 = *fresh5 as libc::c_long;
+                    y1 = *fresh5 as isize;
                     let fresh6 = input;
                     input = input.offset(1);
-                    y2 = *fresh6 as libc::c_long;
+                    y2 = *fresh6 as isize;
                     let fresh7 = input;
                     input = input.offset(1);
-                    y3 = *fresh7 as libc::c_long;
+                    y3 = *fresh7 as isize;
                     let fresh8 = input;
                     input = input.offset(1);
-                    cr = *fresh8 as libc::c_long;
+                    cr = *fresh8 as isize;
                     let fresh9 = input;
                     input = input.offset(1);
-                    cb = *fresh9 as libc::c_long;
+                    cb = *fresh9 as isize;
                     let fresh10 = bptr;
                     bptr = bptr.offset(1);
                     *fresh10 = yuv_to_rgb(y0, cr, cb);
@@ -1045,7 +1045,7 @@ unsafe extern "C" fn decodeCodeBook(
                 }
                 cptr = vq4.as_mut_ptr();
                 dptr = vq8.as_mut_ptr();
-                i = 0 as i32 as libc::c_long;
+                i = 0 as i32 as isize;
                 while i < four {
                     let fresh14 = input;
                     input = input.offset(1);
@@ -1057,8 +1057,8 @@ unsafe extern "C" fn decodeCodeBook(
                     bptr = vq2
                         .as_mut_ptr()
                         .offset((*fresh15 as i32 * 4 as i32) as isize);
-                    j = 0 as i32 as libc::c_long;
-                    while j < 2 as i32 as libc::c_long {
+                    j = 0 as i32 as isize;
+                    while j < 2 as i32 as isize {
                         let fresh16 = cptr;
                         cptr = cptr.offset(1);
                         *fresh16 = *aptr.offset(0 as i32 as isize);
@@ -1125,28 +1125,28 @@ unsafe extern "C" fn decodeCodeBook(
                     }
                     i += 1
                 }
-            } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as libc::c_long {
+            } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as isize {
                 ibptr.s = bptr;
-                i = 0 as i32 as libc::c_long;
+                i = 0 as i32 as isize;
                 while i < two {
                     let fresh36 = input;
                     input = input.offset(1);
-                    y0 = *fresh36 as libc::c_long;
+                    y0 = *fresh36 as isize;
                     let fresh37 = input;
                     input = input.offset(1);
-                    y1 = *fresh37 as libc::c_long;
+                    y1 = *fresh37 as isize;
                     let fresh38 = input;
                     input = input.offset(1);
-                    y2 = *fresh38 as libc::c_long;
+                    y2 = *fresh38 as isize;
                     let fresh39 = input;
                     input = input.offset(1);
-                    y3 = *fresh39 as libc::c_long;
+                    y3 = *fresh39 as isize;
                     let fresh40 = input;
                     input = input.offset(1);
-                    cr = *fresh40 as libc::c_long;
+                    cr = *fresh40 as isize;
                     let fresh41 = input;
                     input = input.offset(1);
-                    cb = *fresh41 as libc::c_long;
+                    cb = *fresh41 as isize;
                     let fresh42 = ibptr.i;
                     ibptr.i = ibptr.i.offset(1);
                     *fresh42 = yuv_to_rgb24(y0, cr, cb);
@@ -1163,7 +1163,7 @@ unsafe extern "C" fn decodeCodeBook(
                 }
                 icptr.s = vq4.as_mut_ptr();
                 idptr.s = vq8.as_mut_ptr();
-                i = 0 as i32 as libc::c_long;
+                i = 0 as i32 as isize;
                 while i < four {
                     iaptr.s = vq2.as_mut_ptr();
                     let fresh46 = input;
@@ -1173,8 +1173,8 @@ unsafe extern "C" fn decodeCodeBook(
                     let fresh47 = input;
                     input = input.offset(1);
                     ibptr.i = ibptr.i.offset((*fresh47 as i32 * 4 as i32) as isize);
-                    j = 0 as i32 as libc::c_long;
-                    while j < 2 as i32 as libc::c_long {
+                    j = 0 as i32 as isize;
+                    while j < 2 as i32 as isize {
                         let fresh48 = icptr.i;
                         icptr.i = icptr.i.offset(1);
                         *fresh48 = *iaptr.i.offset(0 as i32 as isize);
@@ -1241,9 +1241,9 @@ unsafe extern "C" fn decodeCodeBook(
                     }
                     i += 1
                 }
-            } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as libc::c_long {
+            } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as isize {
                 bbptr = bptr as *mut crate::src::qcommon::q_shared::byte;
-                i = 0 as i32 as libc::c_long;
+                i = 0 as i32 as isize;
                 while i < two {
                     let fresh68 = input;
                     input = input.offset(1);
@@ -1276,7 +1276,7 @@ unsafe extern "C" fn decodeCodeBook(
                 }
                 bcptr = vq4.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
                 bdptr = vq8.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-                i = 0 as i32 as libc::c_long;
+                i = 0 as i32 as isize;
                 while i < four {
                     let fresh75 = input;
                     input = input.offset(1);
@@ -1286,8 +1286,8 @@ unsafe extern "C" fn decodeCodeBook(
                     input = input.offset(1);
                     bbptr = (vq2.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte)
                         .offset((*fresh76 as i32 * 4 as i32) as isize);
-                    j = 0 as i32 as libc::c_long;
-                    while j < 2 as i32 as libc::c_long {
+                    j = 0 as i32 as isize;
+                    while j < 2 as i32 as isize {
                         let fresh77 = bcptr;
                         bcptr = bcptr.offset(1);
                         *fresh77 = *baptr.offset(0 as i32 as isize);
@@ -1355,27 +1355,27 @@ unsafe extern "C" fn decodeCodeBook(
                     i += 1
                 }
             }
-        } else if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as libc::c_long {
-            i = 0 as i32 as libc::c_long;
+        } else if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as isize {
+            i = 0 as i32 as isize;
             while i < two {
                 let fresh97 = input;
                 input = input.offset(1);
-                y0 = *fresh97 as libc::c_long;
+                y0 = *fresh97 as isize;
                 let fresh98 = input;
                 input = input.offset(1);
-                y1 = *fresh98 as libc::c_long;
+                y1 = *fresh98 as isize;
                 let fresh99 = input;
                 input = input.offset(1);
-                y2 = *fresh99 as libc::c_long;
+                y2 = *fresh99 as isize;
                 let fresh100 = input;
                 input = input.offset(1);
-                y3 = *fresh100 as libc::c_long;
+                y3 = *fresh100 as isize;
                 let fresh101 = input;
                 input = input.offset(1);
-                cr = *fresh101 as libc::c_long;
+                cr = *fresh101 as isize;
                 let fresh102 = input;
                 input = input.offset(1);
-                cb = *fresh102 as libc::c_long;
+                cb = *fresh102 as isize;
                 let fresh103 = bptr;
                 bptr = bptr.offset(1);
                 *fresh103 = yuv_to_rgb(y0, cr, cb);
@@ -1385,28 +1385,28 @@ unsafe extern "C" fn decodeCodeBook(
                 let fresh105 = bptr;
                 bptr = bptr.offset(1);
                 *fresh105 = yuv_to_rgb(
-                    (y0 * 3 as i32 as libc::c_long + y2) / 4 as i32 as libc::c_long,
+                    (y0 * 3 as i32 as isize + y2) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh106 = bptr;
                 bptr = bptr.offset(1);
                 *fresh106 = yuv_to_rgb(
-                    (y1 * 3 as i32 as libc::c_long + y3) / 4 as i32 as libc::c_long,
+                    (y1 * 3 as i32 as isize + y3) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh107 = bptr;
                 bptr = bptr.offset(1);
                 *fresh107 = yuv_to_rgb(
-                    (y0 + y2 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long,
+                    (y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh108 = bptr;
                 bptr = bptr.offset(1);
                 *fresh108 = yuv_to_rgb(
-                    (y1 + y3 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long,
+                    (y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
@@ -1420,7 +1420,7 @@ unsafe extern "C" fn decodeCodeBook(
             }
             cptr = vq4.as_mut_ptr();
             dptr = vq8.as_mut_ptr();
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < four {
                 let fresh111 = input;
                 input = input.offset(1);
@@ -1432,8 +1432,8 @@ unsafe extern "C" fn decodeCodeBook(
                 bptr = vq2
                     .as_mut_ptr()
                     .offset((*fresh112 as i32 * 8 as i32) as isize);
-                j = 0 as i32 as libc::c_long;
-                while j < 2 as i32 as libc::c_long {
+                j = 0 as i32 as isize;
+                while j < 2 as i32 as isize {
                     let fresh113 = cptr;
                     cptr = cptr.offset(1);
                     *fresh113 = *aptr.offset(0 as i32 as isize);
@@ -1562,28 +1562,28 @@ unsafe extern "C" fn decodeCodeBook(
                 }
                 i += 1
             }
-        } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as libc::c_long {
+        } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as isize {
             ibptr.s = bptr;
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < two {
                 let fresh153 = input;
                 input = input.offset(1);
-                y0 = *fresh153 as libc::c_long;
+                y0 = *fresh153 as isize;
                 let fresh154 = input;
                 input = input.offset(1);
-                y1 = *fresh154 as libc::c_long;
+                y1 = *fresh154 as isize;
                 let fresh155 = input;
                 input = input.offset(1);
-                y2 = *fresh155 as libc::c_long;
+                y2 = *fresh155 as isize;
                 let fresh156 = input;
                 input = input.offset(1);
-                y3 = *fresh156 as libc::c_long;
+                y3 = *fresh156 as isize;
                 let fresh157 = input;
                 input = input.offset(1);
-                cr = *fresh157 as libc::c_long;
+                cr = *fresh157 as isize;
                 let fresh158 = input;
                 input = input.offset(1);
-                cb = *fresh158 as libc::c_long;
+                cb = *fresh158 as isize;
                 let fresh159 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh159 = yuv_to_rgb24(y0, cr, cb);
@@ -1593,28 +1593,28 @@ unsafe extern "C" fn decodeCodeBook(
                 let fresh161 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh161 = yuv_to_rgb24(
-                    (y0 * 3 as i32 as libc::c_long + y2) / 4 as i32 as libc::c_long,
+                    (y0 * 3 as i32 as isize + y2) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh162 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh162 = yuv_to_rgb24(
-                    (y1 * 3 as i32 as libc::c_long + y3) / 4 as i32 as libc::c_long,
+                    (y1 * 3 as i32 as isize + y3) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh163 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh163 = yuv_to_rgb24(
-                    (y0 + y2 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long,
+                    (y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
                 let fresh164 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh164 = yuv_to_rgb24(
-                    (y1 + y3 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long,
+                    (y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize,
                     cr,
                     cb,
                 );
@@ -1628,7 +1628,7 @@ unsafe extern "C" fn decodeCodeBook(
             }
             icptr.s = vq4.as_mut_ptr();
             idptr.s = vq8.as_mut_ptr();
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < four {
                 iaptr.s = vq2.as_mut_ptr();
                 let fresh167 = input;
@@ -1638,8 +1638,8 @@ unsafe extern "C" fn decodeCodeBook(
                 let fresh168 = input;
                 input = input.offset(1);
                 ibptr.i = ibptr.i.offset((*fresh168 as i32 * 8 as i32) as isize);
-                j = 0 as i32 as libc::c_long;
-                while j < 2 as i32 as libc::c_long {
+                j = 0 as i32 as isize;
+                while j < 2 as i32 as isize {
                     let fresh169 = icptr.i;
                     icptr.i = icptr.i.offset(1);
                     *fresh169 = *iaptr.i.offset(0 as i32 as isize);
@@ -1768,20 +1768,20 @@ unsafe extern "C" fn decodeCodeBook(
                 }
                 i += 1
             }
-        } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as libc::c_long {
+        } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as isize {
             bbptr = bptr as *mut crate::src::qcommon::q_shared::byte;
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < two {
                 let fresh209 = input;
                 input = input.offset(1);
-                y0 = *fresh209 as libc::c_long;
+                y0 = *fresh209 as isize;
                 let fresh210 = input;
                 input = input.offset(1);
-                y1 = *fresh210 as libc::c_long;
+                y1 = *fresh210 as isize;
                 let fresh211 = input;
                 input = input.offset(1);
-                y2 = *fresh211 as libc::c_long;
-                y3 = *input as libc::c_long;
+                y2 = *fresh211 as isize;
+                y3 = *input as isize;
                 input = input.offset(3 as i32 as isize);
                 let fresh212 = bbptr;
                 bbptr = bbptr.offset(1);
@@ -1792,22 +1792,22 @@ unsafe extern "C" fn decodeCodeBook(
                 let fresh214 = bbptr;
                 bbptr = bbptr.offset(1);
                 *fresh214 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y0 * 3 as i32 as libc::c_long + y2) / 4 as i32 as libc::c_long) as isize,
+                    ((y0 * 3 as i32 as isize + y2) / 4 as i32 as isize) as isize,
                 );
                 let fresh215 = bbptr;
                 bbptr = bbptr.offset(1);
                 *fresh215 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y1 * 3 as i32 as libc::c_long + y3) / 4 as i32 as libc::c_long) as isize,
+                    ((y1 * 3 as i32 as isize + y3) / 4 as i32 as isize) as isize,
                 );
                 let fresh216 = bbptr;
                 bbptr = bbptr.offset(1);
                 *fresh216 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y0 + y2 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long) as isize,
+                    ((y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize) as isize,
                 );
                 let fresh217 = bbptr;
                 bbptr = bbptr.offset(1);
                 *fresh217 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y1 + y3 * 3 as i32 as libc::c_long) / 4 as i32 as libc::c_long) as isize,
+                    ((y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize) as isize,
                 );
                 let fresh218 = bbptr;
                 bbptr = bbptr.offset(1);
@@ -1819,7 +1819,7 @@ unsafe extern "C" fn decodeCodeBook(
             }
             bcptr = vq4.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
             bdptr = vq8.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-            i = 0 as i32 as libc::c_long;
+            i = 0 as i32 as isize;
             while i < four {
                 let fresh220 = input;
                 input = input.offset(1);
@@ -1829,8 +1829,8 @@ unsafe extern "C" fn decodeCodeBook(
                 input = input.offset(1);
                 bbptr = (vq2.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte)
                     .offset((*fresh221 as i32 * 8 as i32) as isize);
-                j = 0 as i32 as libc::c_long;
-                while j < 2 as i32 as libc::c_long {
+                j = 0 as i32 as isize;
+                while j < 2 as i32 as isize {
                     let fresh222 = bcptr;
                     bcptr = bcptr.offset(1);
                     *fresh222 = *baptr.offset(0 as i32 as isize);
@@ -1960,19 +1960,19 @@ unsafe extern "C" fn decodeCodeBook(
                 i += 1
             }
         }
-    } else if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as libc::c_long {
-        i = 0 as i32 as libc::c_long;
+    } else if cinTable[currentHandle as usize].samplesPerPixel == 2 as i32 as isize {
+        i = 0 as i32 as isize;
         while i < two {
-            y0 = *input as libc::c_long;
+            y0 = *input as isize;
             input = input.offset(2 as i32 as isize);
-            y2 = *input as libc::c_long;
+            y2 = *input as isize;
             input = input.offset(2 as i32 as isize);
             let fresh262 = input;
             input = input.offset(1);
-            cr = *fresh262 as libc::c_long;
+            cr = *fresh262 as isize;
             let fresh263 = input;
             input = input.offset(1);
-            cb = *fresh263 as libc::c_long;
+            cb = *fresh263 as isize;
             let fresh264 = bptr;
             bptr = bptr.offset(1);
             *fresh264 = yuv_to_rgb(y0, cr, cb);
@@ -1983,7 +1983,7 @@ unsafe extern "C" fn decodeCodeBook(
         }
         cptr = vq4.as_mut_ptr();
         dptr = vq8.as_mut_ptr();
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < four {
             let fresh266 = input;
             input = input.offset(1);
@@ -1995,8 +1995,8 @@ unsafe extern "C" fn decodeCodeBook(
             bptr = vq2
                 .as_mut_ptr()
                 .offset((*fresh267 as i32 * 2 as i32) as isize);
-            j = 0 as i32 as libc::c_long;
-            while j < 2 as i32 as libc::c_long {
+            j = 0 as i32 as isize;
+            while j < 2 as i32 as isize {
                 let fresh268 = cptr;
                 cptr = cptr.offset(1);
                 *fresh268 = *aptr;
@@ -2033,9 +2033,9 @@ unsafe extern "C" fn decodeCodeBook(
             }
             i += 1
         }
-    } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as libc::c_long {
+    } else if cinTable[currentHandle as usize].samplesPerPixel == 1 as i32 as isize {
         bbptr = bptr as *mut crate::src::qcommon::q_shared::byte;
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < two {
             let fresh278 = bbptr;
             bbptr = bbptr.offset(1);
@@ -2053,7 +2053,7 @@ unsafe extern "C" fn decodeCodeBook(
         }
         bcptr = vq4.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
         bdptr = vq8.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < four {
             let fresh280 = input;
             input = input.offset(1);
@@ -2063,8 +2063,8 @@ unsafe extern "C" fn decodeCodeBook(
             input = input.offset(1);
             bbptr = (vq2.as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*fresh281 as i32 * 2 as i32) as isize);
-            j = 0 as i32 as libc::c_long;
-            while j < 2 as i32 as libc::c_long {
+            j = 0 as i32 as isize;
+            while j < 2 as i32 as isize {
                 let fresh282 = bcptr;
                 bcptr = bcptr.offset(1);
                 *fresh282 = *baptr;
@@ -2101,20 +2101,20 @@ unsafe extern "C" fn decodeCodeBook(
             }
             i += 1
         }
-    } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as libc::c_long {
+    } else if cinTable[currentHandle as usize].samplesPerPixel == 4 as i32 as isize {
         ibptr.s = bptr;
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < two {
-            y0 = *input as libc::c_long;
+            y0 = *input as isize;
             input = input.offset(2 as i32 as isize);
-            y2 = *input as libc::c_long;
+            y2 = *input as isize;
             input = input.offset(2 as i32 as isize);
             let fresh292 = input;
             input = input.offset(1);
-            cr = *fresh292 as libc::c_long;
+            cr = *fresh292 as isize;
             let fresh293 = input;
             input = input.offset(1);
-            cb = *fresh293 as libc::c_long;
+            cb = *fresh293 as isize;
             let fresh294 = ibptr.i;
             ibptr.i = ibptr.i.offset(1);
             *fresh294 = yuv_to_rgb24(y0, cr, cb);
@@ -2125,7 +2125,7 @@ unsafe extern "C" fn decodeCodeBook(
         }
         icptr.s = vq4.as_mut_ptr();
         idptr.s = vq8.as_mut_ptr();
-        i = 0 as i32 as libc::c_long;
+        i = 0 as i32 as isize;
         while i < four {
             iaptr.s = vq2.as_mut_ptr();
             let fresh296 = input;
@@ -2139,8 +2139,8 @@ unsafe extern "C" fn decodeCodeBook(
             let fresh298 = input;
             input = input.offset(1);
             ibptr.i = ibptr.i.offset((*fresh298 as i32 * 2 as i32) as isize);
-            j = 0 as i32 as libc::c_long;
-            while j < 2 as i32 as libc::c_long {
+            j = 0 as i32 as isize;
+            while j < 2 as i32 as isize {
                 let fresh299 = icptr.i;
                 icptr.i = icptr.i.offset(1);
                 *fresh299 = *iaptr.i;
@@ -2194,36 +2194,36 @@ unsafe extern "C" fn decodeCodeBook(
 ******************************************************************************/
 
 unsafe extern "C" fn recurseQuad(
-    mut startX: libc::c_long,
-    mut startY: libc::c_long,
-    mut quadSize: libc::c_long,
-    mut xOff: libc::c_long,
-    mut yOff: libc::c_long,
+    mut startX: isize,
+    mut startY: isize,
+    mut quadSize: isize,
+    mut xOff: isize,
+    mut yOff: isize,
 ) {
     let mut scroff: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut bigx: libc::c_long = 0;
-    let mut bigy: libc::c_long = 0;
-    let mut lowx: libc::c_long = 0;
-    let mut lowy: libc::c_long = 0;
-    let mut useY: libc::c_long = 0;
-    let mut offset: libc::c_long = 0;
+    let mut bigx: isize = 0;
+    let mut bigy: isize = 0;
+    let mut lowx: isize = 0;
+    let mut lowy: isize = 0;
+    let mut useY: isize = 0;
+    let mut offset: isize = 0;
     offset = cinTable[currentHandle as usize].screenDelta;
-    lowy = 0 as i32 as libc::c_long;
+    lowy = 0 as i32 as isize;
     lowx = lowy;
-    bigx = cinTable[currentHandle as usize].xsize as libc::c_long;
-    bigy = cinTable[currentHandle as usize].ysize as libc::c_long;
-    if bigx > cinTable[currentHandle as usize].CIN_WIDTH as libc::c_long {
-        bigx = cinTable[currentHandle as usize].CIN_WIDTH as libc::c_long
+    bigx = cinTable[currentHandle as usize].xsize as isize;
+    bigy = cinTable[currentHandle as usize].ysize as isize;
+    if bigx > cinTable[currentHandle as usize].CIN_WIDTH as isize {
+        bigx = cinTable[currentHandle as usize].CIN_WIDTH as isize
     }
-    if bigy > cinTable[currentHandle as usize].CIN_HEIGHT as libc::c_long {
-        bigy = cinTable[currentHandle as usize].CIN_HEIGHT as libc::c_long
+    if bigy > cinTable[currentHandle as usize].CIN_HEIGHT as isize {
+        bigy = cinTable[currentHandle as usize].CIN_HEIGHT as isize
     }
     if startX >= lowx
         && startX + quadSize <= bigx
         && startY + quadSize <= bigy
         && startY >= lowy
-        && quadSize <= 8 as i32 as libc::c_long
+        && quadSize <= 8 as i32 as isize
     {
         useY = startY;
         scroff = cin
@@ -2231,7 +2231,7 @@ unsafe extern "C" fn recurseQuad(
             .as_mut_ptr()
             .offset(
                 ((useY
-                    + (cinTable[currentHandle as usize].CIN_HEIGHT as libc::c_long - bigy
+                    + (cinTable[currentHandle as usize].CIN_HEIGHT as isize - bigy
                         >> 1 as i32)
                     + yOff)
                     * cinTable[currentHandle as usize].samplesPerLine) as isize,
@@ -2242,7 +2242,7 @@ unsafe extern "C" fn recurseQuad(
         cinTable[currentHandle as usize].onQuad = cinTable[currentHandle as usize].onQuad + 1;
         cin.qStatus[1 as i32 as usize][fresh309 as usize] = scroff.offset(offset as isize)
     }
-    if quadSize != 4 as i32 as libc::c_long {
+    if quadSize != 4 as i32 as isize {
         quadSize >>= 1 as i32;
         recurseQuad(startX, startY, quadSize, xOff, yOff);
         recurseQuad(startX + quadSize, startY, quadSize, xOff, yOff);
@@ -2258,42 +2258,42 @@ unsafe extern "C" fn recurseQuad(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn setupQuad(mut xOff: libc::c_long, mut yOff: libc::c_long) {
-    let mut numQuadCels: libc::c_long = 0; // for overflow
-    let mut i: libc::c_long = 0; // eoq
-    let mut x: libc::c_long = 0;
-    let mut y: libc::c_long = 0;
+unsafe extern "C" fn setupQuad(mut xOff: isize, mut yOff: isize) {
+    let mut numQuadCels: isize = 0; // for overflow
+    let mut i: isize = 0; // eoq
+    let mut x: isize = 0;
+    let mut y: isize = 0;
     let mut temp: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
     if xOff == cin.oldXOff
         && yOff == cin.oldYOff
-        && cinTable[currentHandle as usize].ysize as libc::c_long == cin.oldysize
-        && cinTable[currentHandle as usize].xsize as libc::c_long == cin.oldxsize
+        && cinTable[currentHandle as usize].ysize as isize == cin.oldysize
+        && cinTable[currentHandle as usize].xsize as isize == cin.oldxsize
     {
         return;
     }
     cin.oldXOff = xOff;
     cin.oldYOff = yOff;
-    cin.oldysize = cinTable[currentHandle as usize].ysize as libc::c_long;
-    cin.oldxsize = cinTable[currentHandle as usize].xsize as libc::c_long;
+    cin.oldysize = cinTable[currentHandle as usize].ysize as isize;
+    cin.oldxsize = cinTable[currentHandle as usize].xsize as isize;
     numQuadCels = cinTable[currentHandle as usize]
         .xsize
         .wrapping_mul(cinTable[currentHandle as usize].ysize)
-        .wrapping_div(16 as i32 as u32) as libc::c_long;
-    numQuadCels += numQuadCels / 4 as i32 as libc::c_long;
-    numQuadCels += 64 as i32 as libc::c_long;
-    cinTable[currentHandle as usize].onQuad = 0 as i32 as libc::c_long;
-    y = 0 as i32 as libc::c_long;
-    while y < cinTable[currentHandle as usize].ysize as libc::c_long {
-        x = 0 as i32 as libc::c_long;
-        while x < cinTable[currentHandle as usize].xsize as libc::c_long {
-            recurseQuad(x, y, 16 as i32 as libc::c_long, xOff, yOff);
-            x += 16 as i32 as libc::c_long
+        .wrapping_div(16 as i32 as u32) as isize;
+    numQuadCels += numQuadCels / 4 as i32 as isize;
+    numQuadCels += 64 as i32 as isize;
+    cinTable[currentHandle as usize].onQuad = 0 as i32 as isize;
+    y = 0 as i32 as isize;
+    while y < cinTable[currentHandle as usize].ysize as isize {
+        x = 0 as i32 as isize;
+        while x < cinTable[currentHandle as usize].xsize as isize {
+            recurseQuad(x, y, 16 as i32 as isize, xOff, yOff);
+            x += 16 as i32 as isize
         }
-        y += 16 as i32 as libc::c_long
+        y += 16 as i32 as isize
     }
     temp = 0 as *mut crate::src::qcommon::q_shared::byte;
-    i = numQuadCels - 64 as i32 as libc::c_long;
+    i = numQuadCels - 64 as i32 as isize;
     while i < numQuadCels {
         cin.qStatus[0 as i32 as usize][i as usize] = temp;
         cin.qStatus[1 as i32 as usize][i as usize] = temp;
@@ -2328,10 +2328,10 @@ unsafe extern "C" fn readQuadInfo(mut qData: *mut crate::src::qcommon::q_shared:
     cinTable[currentHandle as usize].CIN_HEIGHT = cinTable[currentHandle as usize].ysize as i32;
     cinTable[currentHandle as usize].CIN_WIDTH = cinTable[currentHandle as usize].xsize as i32;
     cinTable[currentHandle as usize].samplesPerLine = cinTable[currentHandle as usize].CIN_WIDTH
-        as libc::c_long
+        as isize
         * cinTable[currentHandle as usize].samplesPerPixel;
     cinTable[currentHandle as usize].screenDelta = cinTable[currentHandle as usize].CIN_HEIGHT
-        as libc::c_long
+        as isize
         * cinTable[currentHandle as usize].samplesPerLine;
     cinTable[currentHandle as usize].half = crate::src::qcommon::q_shared::qfalse;
     cinTable[currentHandle as usize].smootheddouble = crate::src::qcommon::q_shared::qfalse;
@@ -2342,19 +2342,19 @@ unsafe extern "C" fn readQuadInfo(mut qData: *mut crate::src::qcommon::q_shared:
     cinTable[currentHandle as usize].t[1 as i32 as usize] =
         -cinTable[currentHandle as usize].screenDelta;
     cinTable[currentHandle as usize].drawX =
-        cinTable[currentHandle as usize].CIN_WIDTH as libc::c_long;
+        cinTable[currentHandle as usize].CIN_WIDTH as isize;
     cinTable[currentHandle as usize].drawY =
-        cinTable[currentHandle as usize].CIN_HEIGHT as libc::c_long;
+        cinTable[currentHandle as usize].CIN_HEIGHT as isize;
     // rage pro is very slow at 512 wide textures, voodoo can't do it at all
     if crate::src::client::cl_main::cls.glconfig.hardwareType as u32
         == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
         || crate::src::client::cl_main::cls.glconfig.maxTextureSize <= 256 as i32
     {
-        if cinTable[currentHandle as usize].drawX > 256 as i32 as libc::c_long {
-            cinTable[currentHandle as usize].drawX = 256 as i32 as libc::c_long
+        if cinTable[currentHandle as usize].drawX > 256 as i32 as isize {
+            cinTable[currentHandle as usize].drawX = 256 as i32 as isize
         }
-        if cinTable[currentHandle as usize].drawY > 256 as i32 as libc::c_long {
-            cinTable[currentHandle as usize].drawY = 256 as i32 as libc::c_long
+        if cinTable[currentHandle as usize].drawY > 256 as i32 as isize {
+            cinTable[currentHandle as usize].drawY = 256 as i32 as isize
         }
         if cinTable[currentHandle as usize].CIN_WIDTH != 256 as i32
             || cinTable[currentHandle as usize].CIN_HEIGHT != 256 as i32
@@ -2374,13 +2374,13 @@ unsafe extern "C" fn readQuadInfo(mut qData: *mut crate::src::qcommon::q_shared:
 *
 ******************************************************************************/
 
-unsafe extern "C" fn RoQPrepMcomp(mut xoff: libc::c_long, mut yoff: libc::c_long) {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut x: libc::c_long = 0;
-    let mut y: libc::c_long = 0;
-    let mut temp: libc::c_long = 0;
-    let mut temp2: libc::c_long = 0;
+unsafe extern "C" fn RoQPrepMcomp(mut xoff: isize, mut yoff: isize) {
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut x: isize = 0;
+    let mut y: isize = 0;
+    let mut temp: isize = 0;
+    let mut temp2: isize = 0;
     i = cinTable[currentHandle as usize].samplesPerLine;
     j = cinTable[currentHandle as usize].samplesPerPixel;
     if cinTable[currentHandle as usize].xsize
@@ -2392,13 +2392,13 @@ unsafe extern "C" fn RoQPrepMcomp(mut xoff: libc::c_long, mut yoff: libc::c_long
         j = j + j;
         i = i + i
     }
-    y = 0 as i32 as libc::c_long;
-    while y < 16 as i32 as libc::c_long {
-        temp2 = (y + yoff - 8 as i32 as libc::c_long) * i;
-        x = 0 as i32 as libc::c_long;
-        while x < 16 as i32 as libc::c_long {
-            temp = (x + xoff - 8 as i32 as libc::c_long) * j;
-            cin.mcomp[(x * 16 as i32 as libc::c_long + y) as usize] =
+    y = 0 as i32 as isize;
+    while y < 16 as i32 as isize {
+        temp2 = (y + yoff - 8 as i32 as isize) * i;
+        x = 0 as i32 as isize;
+        while x < 16 as i32 as isize {
+            temp = (x + xoff - 8 as i32 as isize) * j;
+            cin.mcomp[(x * 16 as i32 as isize + y) as usize] =
                 (cinTable[currentHandle as usize].normalBuffer0 - (temp2 + temp)) as i32;
             x += 1
         }
@@ -2457,7 +2457,7 @@ unsafe extern "C" fn initRoQ() {
                 _: *mut u8,
             ) -> (),
     ));
-    cinTable[currentHandle as usize].samplesPerPixel = 4 as i32 as libc::c_long;
+    cinTable[currentHandle as usize].samplesPerPixel = 4 as i32 as isize;
     ROQ_GenYUVTables();
     RllSetupTable();
 }
@@ -2549,7 +2549,7 @@ unsafe extern "C" fn RoQInterrupt() {
     {
         match cinTable[currentHandle as usize].roq_id {
             4113 => {
-                if cinTable[currentHandle as usize].numQuads & 1 as i32 as libc::c_long != 0 {
+                if cinTable[currentHandle as usize].numQuads & 1 as i32 as isize != 0 {
                     cinTable[currentHandle as usize].normalBuffer0 =
                         cinTable[currentHandle as usize].t[1 as i32 as usize];
                     RoQPrepMcomp(
@@ -2583,7 +2583,7 @@ unsafe extern "C" fn RoQInterrupt() {
                     );
                     cinTable[currentHandle as usize].buf = cin.linbuf.as_mut_ptr()
                 }
-                if cinTable[currentHandle as usize].numQuads == 0 as i32 as libc::c_long {
+                if cinTable[currentHandle as usize].numQuads == 0 as i32 as isize {
                     // first frame
                     crate::stdlib::memcpy(
                         cin.linbuf
@@ -2592,7 +2592,7 @@ unsafe extern "C" fn RoQInterrupt() {
                             as *mut libc::c_void,
                         cin.linbuf.as_mut_ptr() as *const libc::c_void,
                         (cinTable[currentHandle as usize].samplesPerLine
-                            * cinTable[currentHandle as usize].ysize as libc::c_long)
+                            * cinTable[currentHandle as usize].ysize as isize)
                             as libc::c_ulong,
                     ); // for header
                 }
@@ -2625,7 +2625,7 @@ unsafe extern "C" fn RoQInterrupt() {
             }
             4129 => {
                 if cinTable[currentHandle as usize].silent as u64 == 0 {
-                    if cinTable[currentHandle as usize].numQuads == -(1 as i32) as libc::c_long {
+                    if cinTable[currentHandle as usize].numQuads == -(1 as i32) as isize {
                         crate::src::client::snd_main::S_Update();
                         crate::src::client::snd_dma::s_rawend[0 as i32 as usize] = s_soundtime
                     }
@@ -2649,15 +2649,15 @@ unsafe extern "C" fn RoQInterrupt() {
                 }
             }
             4097 => {
-                if cinTable[currentHandle as usize].numQuads == -(1 as i32) as libc::c_long {
+                if cinTable[currentHandle as usize].numQuads == -(1 as i32) as isize {
                     readQuadInfo(framedata);
-                    setupQuad(0 as i32 as libc::c_long, 0 as i32 as libc::c_long);
+                    setupQuad(0 as i32 as isize, 0 as i32 as isize);
                     cinTable[currentHandle as usize].lastTime = CL_ScaledMilliseconds();
                     cinTable[currentHandle as usize].startTime =
                         cinTable[currentHandle as usize].lastTime
                 }
-                if cinTable[currentHandle as usize].numQuads != 1 as i32 as libc::c_long {
-                    cinTable[currentHandle as usize].numQuads = 0 as i32 as libc::c_long
+                if cinTable[currentHandle as usize].numQuads != 1 as i32 as isize {
+                    cinTable[currentHandle as usize].numQuads = 0 as i32 as isize
                 }
             }
             4144 => {
@@ -2697,11 +2697,11 @@ unsafe extern "C" fn RoQInterrupt() {
                 + *framedata.offset(4 as i32 as isize) as i32 * 65536 as i32) as u32;
         cinTable[currentHandle as usize].roq_flags = (*framedata.offset(6 as i32 as isize) as i32
             + *framedata.offset(7 as i32 as isize) as i32 * 256 as i32)
-            as libc::c_long;
+            as isize;
         cinTable[currentHandle as usize].roqF0 =
-            *framedata.offset(7 as i32 as isize) as i8 as libc::c_long;
+            *framedata.offset(7 as i32 as isize) as i8 as isize;
         cinTable[currentHandle as usize].roqF1 =
-            *framedata.offset(6 as i32 as isize) as i8 as libc::c_long;
+            *framedata.offset(6 as i32 as isize) as i8 as isize;
         if cinTable[currentHandle as usize].RoQFrameSize > 65536 as i32 as u32
             || cinTable[currentHandle as usize].roq_id == 0x1084 as i32 as u32
         {
@@ -2731,7 +2731,7 @@ unsafe extern "C" fn RoQInterrupt() {
     cinTable[currentHandle as usize].RoQPlayed += cinTable[currentHandle as usize]
         .RoQFrameSize
         .wrapping_add(8 as i32 as u32)
-        as libc::c_long;
+        as isize;
 }
 /* *****************************************************************************
 *
@@ -2744,15 +2744,15 @@ unsafe extern "C" fn RoQInterrupt() {
 unsafe extern "C" fn RoQ_init() {
     cinTable[currentHandle as usize].lastTime = CL_ScaledMilliseconds();
     cinTable[currentHandle as usize].startTime = cinTable[currentHandle as usize].lastTime;
-    cinTable[currentHandle as usize].RoQPlayed = 24 as i32 as libc::c_long;
+    cinTable[currentHandle as usize].RoQPlayed = 24 as i32 as isize;
     /*	get frame rate */
     cinTable[currentHandle as usize].roqFPS = (cin.file[6 as i32 as usize] as i32
         + cin.file[7 as i32 as usize] as i32 * 256 as i32)
-        as libc::c_long;
+        as isize;
     if cinTable[currentHandle as usize].roqFPS == 0 {
-        cinTable[currentHandle as usize].roqFPS = 30 as i32 as libc::c_long
+        cinTable[currentHandle as usize].roqFPS = 30 as i32 as isize
     }
-    cinTable[currentHandle as usize].numQuads = -(1 as i32) as libc::c_long;
+    cinTable[currentHandle as usize].numQuads = -(1 as i32) as isize;
     cinTable[currentHandle as usize].roq_id = (cin.file[8 as i32 as usize] as i32
         + cin.file[9 as i32 as usize] as i32 * 256 as i32)
         as u32;
@@ -2762,7 +2762,7 @@ unsafe extern "C" fn RoQ_init() {
         as u32;
     cinTable[currentHandle as usize].roq_flags = (cin.file[14 as i32 as usize] as i32
         + cin.file[15 as i32 as usize] as i32 * 256 as i32)
-        as libc::c_long;
+        as isize;
     if cinTable[currentHandle as usize].RoQFrameSize > 65536 as i32 as u32
         || cinTable[currentHandle as usize].RoQFrameSize == 0
     {
@@ -2910,7 +2910,7 @@ pub unsafe extern "C" fn CIN_RunCinematic(
     }
     cinTable[currentHandle as usize].tfps =
         ((CL_ScaledMilliseconds() - cinTable[currentHandle as usize].startTime) * 3 as i32
-            / 100 as i32) as libc::c_long;
+            / 100 as i32) as isize;
     start = cinTable[currentHandle as usize].startTime;
     while cinTable[currentHandle as usize].tfps != cinTable[currentHandle as usize].numQuads
         && cinTable[currentHandle as usize].status as u32
@@ -2920,7 +2920,7 @@ pub unsafe extern "C" fn CIN_RunCinematic(
         if start != cinTable[currentHandle as usize].startTime {
             cinTable[currentHandle as usize].tfps =
                 ((CL_ScaledMilliseconds() - cinTable[currentHandle as usize].startTime) * 3 as i32
-                    / 100 as i32) as libc::c_long;
+                    / 100 as i32) as isize;
             start = cinTable[currentHandle as usize].startTime
         }
     }
@@ -3005,13 +3005,13 @@ pub unsafe extern "C" fn CIN_PlayCinematic(
         cinTable[currentHandle as usize].fileName.as_mut_ptr(),
         name.as_mut_ptr(),
     );
-    cinTable[currentHandle as usize].ROQSize = 0 as i32 as libc::c_long;
+    cinTable[currentHandle as usize].ROQSize = 0 as i32 as isize;
     cinTable[currentHandle as usize].ROQSize = crate::src::qcommon::files::FS_FOpenFileRead(
         cinTable[currentHandle as usize].fileName.as_mut_ptr(),
         &mut (*cinTable.as_mut_ptr().offset(currentHandle as isize)).iFile,
         crate::src::qcommon::q_shared::qtrue,
     );
-    if cinTable[currentHandle as usize].ROQSize <= 0 as i32 as libc::c_long {
+    if cinTable[currentHandle as usize].ROQSize <= 0 as i32 as isize {
         crate::src::qcommon::common::Com_DPrintf(
             b"play(%s), ROQSize<=0\n\x00" as *const u8 as *const libc::c_char,
             arg,
@@ -3242,8 +3242,8 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
     buf = cinTable[handle as usize].buf;
     crate::src::client::cl_scrn::SCR_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     if cinTable[handle as usize].dirty as u32 != 0
-        && (cinTable[handle as usize].CIN_WIDTH as libc::c_long != cinTable[handle as usize].drawX
-            || cinTable[handle as usize].CIN_HEIGHT as libc::c_long
+        && (cinTable[handle as usize].CIN_WIDTH as isize != cinTable[handle as usize].drawX
+            || cinTable[handle as usize].CIN_HEIGHT as isize
                 != cinTable[handle as usize].drawY)
     {
         let mut buf2: *mut i32 = 0 as *mut i32;
@@ -3568,9 +3568,9 @@ pub unsafe extern "C" fn CIN_UploadCinematic(mut handle: i32) {
         }
         // Resample the video if needed
         if cinTable[handle as usize].dirty as u32 != 0
-            && (cinTable[handle as usize].CIN_WIDTH as libc::c_long
+            && (cinTable[handle as usize].CIN_WIDTH as isize
                 != cinTable[handle as usize].drawX
-                || cinTable[handle as usize].CIN_HEIGHT as libc::c_long
+                || cinTable[handle as usize].CIN_HEIGHT as isize
                     != cinTable[handle as usize].drawY)
         {
             let mut buf2: *mut i32 = 0 as *mut i32;

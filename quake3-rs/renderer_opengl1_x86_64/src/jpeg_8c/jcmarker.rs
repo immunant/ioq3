@@ -563,8 +563,8 @@ unsafe extern "C" fn emit_sof(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut c
         3 as i32 * (*cinfo).num_components + 2 as i32 + 5 as i32 + 1 as i32,
     );
     /* Make sure image isn't bigger than SOF field can handle */
-    if (*cinfo).jpeg_height as libc::c_long > 65535 as libc::c_long
-        || (*cinfo).jpeg_width as libc::c_long > 65535 as libc::c_long
+    if (*cinfo).jpeg_height as isize > 65535 as isize
+        || (*cinfo).jpeg_width as isize > 65535 as isize
     {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_IMAGE_TOO_BIG as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 65535 as i32 as u32 as i32;

@@ -476,7 +476,7 @@ unsafe extern "C" fn get_sof(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh1 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh1 as libc::c_long;
+    length += *fresh1 as isize;
     if bytes_in_buffer == 0 as i32 as libc::c_ulong {
         if Some(
             (*datasrc)
@@ -589,7 +589,7 @@ unsafe extern "C" fn get_sof(
     let fresh7 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
     (*cinfo).num_components = *fresh7 as i32;
-    length -= 8 as i32 as libc::c_long;
+    length -= 8 as i32 as isize;
     let mut _mp: *mut i32 = (*(*cinfo).err).msg_parm.i.as_mut_ptr();
     *_mp.offset(0 as i32 as isize) = (*cinfo).unread_marker;
     *_mp.offset(1 as i32 as isize) = (*cinfo).image_width as i32;
@@ -626,7 +626,7 @@ unsafe extern "C" fn get_sof(
         )
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
-    if length != ((*cinfo).num_components * 3 as i32) as libc::c_long {
+    if length != ((*cinfo).num_components * 3 as i32) as isize {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_LENGTH as i32;
         Some(
             (*(*cinfo).err)
@@ -793,7 +793,7 @@ unsafe extern "C" fn get_sos(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh12 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh12 as libc::c_long;
+    length += *fresh12 as isize;
     if bytes_in_buffer == 0 as i32 as libc::c_ulong {
         if Some(
             (*datasrc)
@@ -820,7 +820,7 @@ unsafe extern "C" fn get_sos(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr, 1 as i32);
-    if length != (n * 2 as i32 + 6 as i32) as libc::c_long
+    if length != (n * 2 as i32 + 6 as i32) as isize
         || n > 4 as i32
         || n == 0 as i32 && (*cinfo).progressive_mode == 0
     {
@@ -1049,9 +1049,9 @@ unsafe extern "C" fn get_dac(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh20 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh20 as libc::c_long;
-    length -= 2 as i32 as libc::c_long;
-    while length > 0 as i32 as libc::c_long {
+    length += *fresh20 as isize;
+    length -= 2 as i32 as isize;
+    while length > 0 as i32 as isize {
         if bytes_in_buffer == 0 as i32 as libc::c_ulong {
             if Some(
                 (*datasrc)
@@ -1088,7 +1088,7 @@ unsafe extern "C" fn get_dac(
         let fresh22 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
         val = *fresh22 as i32;
-        length -= 2 as i32 as libc::c_long;
+        length -= 2 as i32 as isize;
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_DAC as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = index;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = val;
@@ -1134,7 +1134,7 @@ unsafe extern "C" fn get_dac(
             }
         }
     }
-    if length != 0 as i32 as libc::c_long {
+    if length != 0 as i32 as isize {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_LENGTH as i32;
         Some(
             (*(*cinfo).err)
@@ -1200,9 +1200,9 @@ unsafe extern "C" fn get_dht(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh24 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh24 as libc::c_long;
-    length -= 2 as i32 as libc::c_long;
-    while length > 16 as i32 as libc::c_long {
+    length += *fresh24 as isize;
+    length -= 2 as i32 as isize;
+    while length > 16 as i32 as isize {
         if bytes_in_buffer == 0 as i32 as libc::c_ulong {
             if Some(
                 (*datasrc)
@@ -1256,7 +1256,7 @@ unsafe extern "C" fn get_dht(
             count += bits[i as usize] as i32;
             i += 1
         }
-        length -= (1 as i32 + 16 as i32) as libc::c_long;
+        length -= (1 as i32 + 16 as i32) as isize;
         let mut _mp: *mut i32 = (*(*cinfo).err).msg_parm.i.as_mut_ptr();
         *_mp.offset(0 as i32 as isize) = bits[1 as i32 as usize] as i32;
         *_mp.offset(1 as i32 as isize) = bits[2 as i32 as usize] as i32;
@@ -1329,7 +1329,7 @@ unsafe extern "C" fn get_dht(
             huffval[i as usize] = *fresh27;
             i += 1
         }
-        length -= count as libc::c_long;
+        length -= count as isize;
         if index & 0x10 as i32 != 0 {
             /* AC table definition */
             index -= 0x10 as i32;
@@ -1374,7 +1374,7 @@ unsafe extern "C" fn get_dht(
             ::std::mem::size_of::<[crate::jmorecfg_h::UINT8; 256]>() as libc::c_ulong,
         );
     }
-    if length != 0 as i32 as libc::c_long {
+    if length != 0 as i32 as isize {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_LENGTH as i32;
         Some(
             (*(*cinfo).err)
@@ -1438,9 +1438,9 @@ unsafe extern "C" fn get_dqt(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh29 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh29 as libc::c_long;
-    length -= 2 as i32 as libc::c_long;
-    while length > 0 as i32 as libc::c_long {
+    length += *fresh29 as isize;
+    length -= 2 as i32 as isize;
+    while length > 0 as i32 as isize {
         length -= 1;
         if bytes_in_buffer == 0 as i32 as libc::c_ulong {
             if Some(
@@ -1494,10 +1494,10 @@ unsafe extern "C" fn get_dqt(
         }
         quant_ptr = (*cinfo).quant_tbl_ptrs[n as usize];
         if prec != 0 {
-            if length < (64 as i32 * 2 as i32) as libc::c_long {
+            if length < (64 as i32 * 2 as i32) as isize {
                 /* Initialize full table for safety. */
                 i = 0 as i32 as crate::jmorecfg_h::INT32;
-                while i < 64 as i32 as libc::c_long {
+                while i < 64 as i32 as isize {
                     (*quant_ptr).quantval[i as usize] = 1 as i32 as crate::jmorecfg_h::UINT16;
                     i += 1
                 }
@@ -1505,10 +1505,10 @@ unsafe extern "C" fn get_dqt(
             } else {
                 count = 64 as i32 as crate::jmorecfg_h::INT32
             }
-        } else if length < 64 as i32 as libc::c_long {
+        } else if length < 64 as i32 as isize {
             /* Initialize full table for safety. */
             i = 0 as i32 as crate::jmorecfg_h::INT32;
-            while i < 64 as i32 as libc::c_long {
+            while i < 64 as i32 as isize {
                 (*quant_ptr).quantval[i as usize] = 1 as i32 as crate::jmorecfg_h::UINT16;
                 i += 1
             }
@@ -1591,23 +1591,23 @@ unsafe extern "C" fn get_dqt(
         }
         if (*(*cinfo).err).trace_level >= 2 as i32 {
             i = 0 as i32 as crate::jmorecfg_h::INT32;
-            while i < 64 as i32 as libc::c_long {
+            while i < 64 as i32 as isize {
                 let mut _mp: *mut i32 = (*(*cinfo).err).msg_parm.i.as_mut_ptr();
                 *_mp.offset(0 as i32 as isize) = (*quant_ptr).quantval[i as usize] as i32;
                 *_mp.offset(1 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 1 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 1 as i32 as isize) as usize] as i32;
                 *_mp.offset(2 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 2 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 2 as i32 as isize) as usize] as i32;
                 *_mp.offset(3 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 3 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 3 as i32 as isize) as usize] as i32;
                 *_mp.offset(4 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 4 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 4 as i32 as isize) as usize] as i32;
                 *_mp.offset(5 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 5 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 5 as i32 as isize) as usize] as i32;
                 *_mp.offset(6 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 6 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 6 as i32 as isize) as usize] as i32;
                 *_mp.offset(7 as i32 as isize) =
-                    (*quant_ptr).quantval[(i + 7 as i32 as libc::c_long) as usize] as i32;
+                    (*quant_ptr).quantval[(i + 7 as i32 as isize) as usize] as i32;
                 (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_QUANTVALS as i32;
                 Some(
                     (*(*cinfo).err)
@@ -1618,7 +1618,7 @@ unsafe extern "C" fn get_dqt(
                     cinfo as crate::jpeglib_h::j_common_ptr,
                     2 as i32,
                 );
-                i += 8 as i32 as libc::c_long
+                i += 8 as i32 as isize
             }
         }
         length -= count;
@@ -1626,7 +1626,7 @@ unsafe extern "C" fn get_dqt(
             length -= count
         }
     }
-    if length != 0 as i32 as libc::c_long {
+    if length != 0 as i32 as isize {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_LENGTH as i32;
         Some(
             (*(*cinfo).err)
@@ -1684,8 +1684,8 @@ unsafe extern "C" fn get_dri(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh35 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh35 as libc::c_long;
-    if length != 4 as i32 as libc::c_long {
+    length += *fresh35 as isize;
+    if length != 4 as i32 as isize {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_LENGTH as i32;
         Some(
             (*(*cinfo).err)
@@ -1825,7 +1825,7 @@ unsafe extern "C" fn examine_app0(
                 cinfo as crate::jpeglib_h::j_common_ptr, 1 as i32
             );
         }
-        totallen -= 14 as i32 as libc::c_long;
+        totallen -= 14 as i32 as isize;
         if totallen
             != *data.offset(12 as i32 as isize) as crate::jmorecfg_h::INT32
                 * *data.offset(13 as i32 as isize) as crate::jmorecfg_h::INT32
@@ -1975,7 +1975,7 @@ unsafe extern "C" fn examine_app14(
         /* Start of APP14 does not match "Adobe", or too short */
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_APP14 as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            (datalen as libc::c_long + remaining) as i32;
+            (datalen as isize + remaining) as i32;
         Some(
             (*(*cinfo).err)
                 .emit_message
@@ -2033,12 +2033,12 @@ unsafe extern "C" fn get_interesting_appn(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh39 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh39 as libc::c_long;
-    length -= 2 as i32 as libc::c_long;
+    length += *fresh39 as isize;
+    length -= 2 as i32 as isize;
     /* get the interesting part of the marker data */
-    if length >= 14 as i32 as libc::c_long {
+    if length >= 14 as i32 as isize {
         numtoread = 14 as i32 as u32
-    } else if length > 0 as i32 as libc::c_long {
+    } else if length > 0 as i32 as isize {
         numtoread = length as u32
     } else {
         numtoread = 0 as i32 as u32
@@ -2065,7 +2065,7 @@ unsafe extern "C" fn get_interesting_appn(
         b[i as usize] = *fresh40;
         i = i.wrapping_add(1)
     }
-    length -= numtoread as libc::c_long;
+    length -= numtoread as isize;
     /* process it */
     match (*cinfo).unread_marker {
         224 => {
@@ -2091,7 +2091,7 @@ unsafe extern "C" fn get_interesting_appn(
     /* skip any remaining data -- could be lots */
     (*datasrc).next_input_byte = next_input_byte;
     (*datasrc).bytes_in_buffer = bytes_in_buffer;
-    if length > 0 as i32 as libc::c_long {
+    if length > 0 as i32 as isize {
         Some(
             (*(*cinfo).src)
                 .skip_input_data
@@ -2152,9 +2152,9 @@ unsafe extern "C" fn save_marker(
         bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
         let fresh42 = next_input_byte;
         next_input_byte = next_input_byte.offset(1);
-        length += *fresh42 as libc::c_long;
-        length -= 2 as i32 as libc::c_long;
-        if length >= 0 as i32 as libc::c_long {
+        length += *fresh42 as isize;
+        length -= 2 as i32 as isize;
+        if length >= 0 as i32 as isize {
             /* watch out for bogus length word */
             /* figure out how much we want to save */
             let mut limit: u32 = 0;
@@ -2264,7 +2264,7 @@ unsafe extern "C" fn save_marker(
             (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_MISC_MARKER as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).unread_marker;
             (*(*cinfo).err).msg_parm.i[1 as i32 as usize] =
-                (data_length as libc::c_long + length) as i32;
+                (data_length as isize + length) as i32;
             Some(
                 (*(*cinfo).err)
                     .emit_message
@@ -2278,7 +2278,7 @@ unsafe extern "C" fn save_marker(
     /* skip any remaining data -- could be lots */
     (*datasrc).next_input_byte = next_input_byte; /* do before skip_input_data */
     (*datasrc).bytes_in_buffer = bytes_in_buffer;
-    if length > 0 as i32 as libc::c_long {
+    if length > 0 as i32 as isize {
         Some(
             (*(*cinfo).src)
                 .skip_input_data
@@ -2333,8 +2333,8 @@ unsafe extern "C" fn skip_variable(
     bytes_in_buffer = bytes_in_buffer.wrapping_sub(1);
     let fresh46 = next_input_byte;
     next_input_byte = next_input_byte.offset(1);
-    length += *fresh46 as libc::c_long;
-    length -= 2 as i32 as libc::c_long;
+    length += *fresh46 as isize;
+    length -= 2 as i32 as isize;
     (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_MISC_MARKER as i32;
     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).unread_marker;
     (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = length as i32;
@@ -2346,7 +2346,7 @@ unsafe extern "C" fn skip_variable(
     .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr, 1 as i32);
     (*datasrc).next_input_byte = next_input_byte;
     (*datasrc).bytes_in_buffer = bytes_in_buffer;
-    if length > 0 as i32 as libc::c_long {
+    if length > 0 as i32 as isize {
         Some(
             (*(*cinfo).src)
                 .skip_input_data
@@ -3209,7 +3209,7 @@ pub unsafe extern "C" fn jpeg_save_markers(
     mut length_limit: u32,
 ) {
     let mut marker: my_marker_ptr = (*cinfo).marker as my_marker_ptr;
-    let mut maxlength: libc::c_long = 0;
+    let mut maxlength: isize = 0;
     let mut processor: crate::jpeglib_h::jpeg_marker_parser_method = None;
     /* Length limit mustn't be larger than what we can allocate
      * (should only be a concern in a 16-bit environment).
@@ -3218,8 +3218,8 @@ pub unsafe extern "C" fn jpeg_save_markers(
         ((*(*cinfo).mem).max_alloc_chunk as libc::c_ulong)
             .wrapping_sub(
                 ::std::mem::size_of::<crate::jpeglib_h::jpeg_marker_struct>() as libc::c_ulong,
-            ) as libc::c_long;
-    if length_limit as libc::c_long > maxlength {
+            ) as isize;
+    if length_limit as isize > maxlength {
         length_limit = maxlength as u32
     }
     /* Choose processor routine to use.

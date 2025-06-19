@@ -645,8 +645,8 @@ pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...)
             let mut newtime: *mut ::libc::tm = 0 as *mut ::libc::tm;
             let mut aclock: crate::stdlib::time_t = 0;
             opening_qconsole = crate::src::qcommon::q_shared::qtrue;
-            ::libc::time(&mut aclock);
-            newtime = ::libc::localtime(&mut aclock) as *mut ::libc::tm;
+            ::libc::time(&mut aclock as *mut crate::stdlib::time_t as *mut libc::c_long);
+            newtime = ::libc::localtime(&mut aclock as *mut crate::stdlib::time_t as *mut libc::c_long) as *mut ::libc::tm;
             logfile = crate::src::qcommon::files::FS_FOpenFileWrite(
                 b"qconsole.log\x00" as *const u8 as *const libc::c_char,
             );
@@ -1091,7 +1091,7 @@ pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
             o = o.offset(1);
             *fresh1 = *fresh0
         }
-        l = o.offset_from(key.as_mut_ptr()) as libc::c_long as i32;
+        l = o.offset_from(key.as_mut_ptr()) as isize as i32;
         if l < 20 as i32 {
             crate::stdlib::memset(
                 o as *mut libc::c_void,
@@ -1526,11 +1526,11 @@ pub unsafe extern "C" fn Com_RealTime(
 ) -> i32 {
     let mut t: crate::stdlib::time_t = 0;
     let mut tms: *mut ::libc::tm = 0 as *mut ::libc::tm;
-    t = ::libc::time(0 as *mut crate::stdlib::time_t);
+    t = ::libc::time(0 as *mut libc::c_long) as crate::stdlib::time_t;
     if qtime.is_null() {
         return t as i32;
     }
-    tms = ::libc::localtime(&mut t) as *mut ::libc::tm;
+    tms = ::libc::localtime(&mut t as *mut crate::stdlib::time_t as *mut libc::c_long) as *mut ::libc::tm;
     if !tms.is_null() {
         (*qtime).tm_sec = (*tms).tm_sec;
         (*qtime).tm_min = (*tms).tm_min;
@@ -2512,8 +2512,8 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
         );
     }
     // cacheline align
-    s_hunkData = (s_hunkData as crate::stdlib::intptr_t + 31 as i32 as libc::c_long
-        & !(31 as i32) as libc::c_long)
+    s_hunkData = (s_hunkData as crate::stdlib::intptr_t + 31 as i32 as isize
+        & !(31 as i32) as isize)
         as *mut crate::src::qcommon::q_shared::byte;
     Hunk_Clear();
     crate::src::qcommon::cmd::Cmd_AddCommand(
@@ -3695,7 +3695,7 @@ unsafe extern "C" fn Com_InitRand() {
     {
         ::libc::srand(seed);
     } else {
-        ::libc::srand(::libc::time(0 as *mut crate::stdlib::time_t) as u32);
+        ::libc::srand(::libc::time(0 as *mut libc::c_long) as u32);
     };
 }
 // commandLine should not include the executable name (argv[0])
@@ -4130,7 +4130,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
             );
             *brk = tmp;
             accu =
-                (accu as libc::c_long - brk.offset_from(buf.as_mut_ptr()) as libc::c_long) as i32;
+                (accu as isize - brk.offset_from(buf.as_mut_ptr()) as isize) as i32;
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,
                 brk as *const libc::c_void,

@@ -234,48 +234,48 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: crate::jpeglib_h::j_compress_ptr) 
     ) as *mut crate::jmorecfg_h::INT32;
     (*cconvert).rgb_ycc_tab = rgb_ycc_tab;
     i = 0 as i32 as crate::jmorecfg_h::INT32;
-    while i <= 255 as i32 as libc::c_long {
-        *rgb_ycc_tab.offset((i + 0 as i32 as libc::c_long) as isize) =
-            (0.29900f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+    while i <= 255 as i32 as isize {
+        *rgb_ycc_tab.offset((i + 0 as i32 as isize) as isize) =
+            (0.29900f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * i;
-        *rgb_ycc_tab.offset((i + (1 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            (0.58700f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (1 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            (0.58700f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * i;
-        *rgb_ycc_tab.offset((i + (2 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            (0.11400f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (2 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            (0.11400f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * i
                 + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32);
-        *rgb_ycc_tab.offset((i + (3 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            -((0.16874f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (3 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            -((0.16874f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * i;
-        *rgb_ycc_tab.offset((i + (4 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            -((0.33126f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (4 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            -((0.33126f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * i;
         /* We use a rounding fudge-factor of 0.5-epsilon for Cb and Cr.
          * This ensures that the maximum output will round to MAXJSAMPLE
          * not MAXJSAMPLE+1, and thus that we don't have to range-limit.
          */
-        *rgb_ycc_tab.offset((i + (5 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            (0.50000f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (5 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            (0.50000f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * i
                 + ((128 as i32 as crate::jmorecfg_h::INT32) << 16 as i32)
                 + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
-                - 1 as i32 as libc::c_long;
+                - 1 as i32 as isize;
         /*  B=>Cb and R=>Cr tables are the same
             rgb_ycc_tab[i+R_CR_OFF] = FIX(0.50000) * i    + CBCR_OFFSET + ONE_HALF-1;
         */
-        *rgb_ycc_tab.offset((i + (6 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            -((0.41869f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (6 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            -((0.41869f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * i;
-        *rgb_ycc_tab.offset((i + (7 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
-            -((0.08131f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+        *rgb_ycc_tab.offset((i + (7 as i32 * (255 as i32 + 1 as i32)) as isize) as isize) =
+            -((0.08131f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * i;
         i += 1

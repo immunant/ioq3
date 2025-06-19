@@ -38,7 +38,7 @@ pub unsafe extern "C" fn adler32(
     }
     /* initial Adler-32 value (deferred check for len == 1 speed) */
     if buf.is_null() {
-        return 1 as libc::c_long as crate::zconf_h::uLong;
+        return 1 as isize as crate::zconf_h::uLong;
     }
     /* in case short lengths are provided, keep it somewhat fast */
     if len < 16 as i32 as u32 {

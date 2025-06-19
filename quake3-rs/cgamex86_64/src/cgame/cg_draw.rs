@@ -641,7 +641,7 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
                 w,
                 h,
                 cg_items[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-                    as libc::c_long as usize]
+                    as isize as usize]
                     .icon,
             );
         }

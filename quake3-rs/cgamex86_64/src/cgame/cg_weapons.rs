@@ -1218,7 +1218,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         );
     }
     CG_RegisterItemVisuals(
-        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as libc::c_long
+        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as isize
             as i32,
     );
     // load cmodel before model so filecache works
@@ -2305,8 +2305,8 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     // then this is a fake player (like on the single player podiums), so
     // go ahead and use the cent
     if nonPredictedCent.offset_from(crate::src::cgame::cg_main::cg_entities.as_mut_ptr())
-        as libc::c_long
-        != (*cent).currentState.clientNum as libc::c_long
+        as isize
+        != (*cent).currentState.clientNum as isize
     {
         nonPredictedCent = cent
     }

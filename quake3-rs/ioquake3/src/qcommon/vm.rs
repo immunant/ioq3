@@ -1004,7 +1004,7 @@ pub unsafe extern "C" fn VM_ArgPtr(mut intValue: crate::stdlib::intptr_t) -> *mu
     } else {
         return (*currentVM)
             .dataBase
-            .offset((intValue & (*currentVM).dataMask as libc::c_long) as isize)
+            .offset((intValue & (*currentVM).dataMask as isize) as isize)
             as *mut libc::c_void;
     };
 }
@@ -1027,7 +1027,7 @@ pub unsafe extern "C" fn VM_ExplicitArgPtr(
     } else {
         return (*vm)
             .dataBase
-            .offset((intValue & (*vm).dataMask as libc::c_long) as isize)
+            .offset((intValue & (*vm).dataMask as isize) as isize)
             as *mut libc::c_void;
     };
 }
@@ -1411,7 +1411,7 @@ pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut i32) {
         f,
         b"%i: %p (%i) = %i %i %i %i\n\x00" as *const u8 as *const libc::c_char,
         callnum,
-        args.offset_from((*currentVM).dataBase as *mut i32) as libc::c_long as *mut libc::c_void,
+        args.offset_from((*currentVM).dataBase as *mut i32) as isize as *mut libc::c_void,
         *args.offset(0 as i32 as isize),
         *args.offset(1 as i32 as isize),
         *args.offset(2 as i32 as isize),

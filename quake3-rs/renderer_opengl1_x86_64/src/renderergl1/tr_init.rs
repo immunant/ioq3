@@ -1251,9 +1251,9 @@ pub unsafe extern "C" fn RB_ReadPixels(
     ) as *mut crate::src::qcommon::q_shared::byte;
     bufstart = ((buffer as crate::stdlib::intptr_t as libc::c_ulong).wrapping_add(*offset)
         as crate::stdlib::intptr_t
-        + packAlign as libc::c_long
-        - 1 as i32 as libc::c_long
-        & !(packAlign - 1 as i32) as libc::c_long) as *mut libc::c_void
+        + packAlign as isize
+        - 1 as i32 as isize
+        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void
         as *mut crate::src::qcommon::q_shared::byte;
     crate::src::sdl::sdl_glimp::qglReadPixels.expect("non-null function pointer")(
         x,
@@ -1264,7 +1264,7 @@ pub unsafe extern "C" fn RB_ReadPixels(
         0x1401 as i32 as crate::stdlib::GLenum,
         bufstart as *mut libc::c_void,
     );
-    *offset = bufstart.offset_from(buffer) as libc::c_long as crate::stddef_h::size_t;
+    *offset = bufstart.offset_from(buffer) as isize as crate::stddef_h::size_t;
     *padlen = padwidth - linelen;
     return buffer;
 }
@@ -1911,9 +1911,9 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
         .wrapping_sub(1 as i32 as libc::c_ulong)
         & !(4 as i32 - 1 as i32) as libc::c_ulong) as i32;
     avipadlen = (avipadwidth as libc::c_ulong).wrapping_sub(linelen) as i32;
-    cBuf = ((*cmd).captureBuffer as crate::stdlib::intptr_t + packAlign as libc::c_long
-        - 1 as i32 as libc::c_long
-        & !(packAlign - 1 as i32) as libc::c_long) as *mut libc::c_void
+    cBuf = ((*cmd).captureBuffer as crate::stdlib::intptr_t + packAlign as isize
+        - 1 as i32 as isize
+        & !(packAlign - 1 as i32) as isize) as *mut libc::c_void
         as *mut crate::src::qcommon::q_shared::byte;
     crate::src::sdl::sdl_glimp::qglReadPixels.expect("non-null function pointer")(
         0 as i32,
@@ -3245,7 +3245,7 @@ pub unsafe extern "C" fn R_Init() {
     }
     //	Swap_Init();
     if crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as crate::stdlib::intptr_t
-        & 15 as i32 as libc::c_long
+        & 15 as i32 as isize
         != 0
     {
         crate::src::renderergl1::tr_main::ri

@@ -2220,7 +2220,7 @@ unsafe extern "C" fn crc32_little(
     let mut buf4: *const u4 = 0 as *const u4;
     c = crc as u4;
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
+    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as isize != 0 {
         let fresh9 = buf;
         buf = buf.offset(1);
         c = (crc_table[0 as i32 as usize][((c ^ *fresh9 as u32) & 0xff as i32 as u32) as usize]
@@ -2329,7 +2329,7 @@ unsafe extern "C" fn crc32_big(
         .wrapping_add((crc as u4 & 0xff00 as i32 as u32) << 8 as i32)
         .wrapping_add((crc as u4 & 0xff as i32 as u32) << 24 as i32);
     c = !c;
-    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
+    while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as isize != 0 {
         let fresh20 = buf;
         buf = buf.offset(1);
         c = (crc_table[4 as i32 as usize][(c >> 24 as i32 ^ *fresh20 as u32) as usize]
@@ -3098,11 +3098,11 @@ pub unsafe extern "C" fn crc32_combine(
     let mut even: [libc::c_ulong; 32] = [0; 32];
     let mut odd: [libc::c_ulong; 32] = [0; 32];
     /* degenerate case */
-    if len2 == 0 as i32 as libc::c_long {
+    if len2 == 0 as i32 as isize {
         return crc1;
     }
     /* put operator for one zero bit in odd */
-    odd[0 as i32 as usize] = 0xedb88320 as libc::c_long as libc::c_ulong; /* CRC-32 polynomial */
+    odd[0 as i32 as usize] = 0xedb88320 as isize as libc::c_ulong; /* CRC-32 polynomial */
     row = 1 as i32 as libc::c_ulong;
     n = 1 as i32;
     while n < 32 as i32 {
@@ -3120,21 +3120,21 @@ pub unsafe extern "C" fn crc32_combine(
       /* apply zeros operator for this bit of len2 */
     {
         gf2_matrix_square(even.as_mut_ptr(), odd.as_mut_ptr());
-        if len2 & 1 as i32 as libc::c_long != 0 {
+        if len2 & 1 as i32 as isize != 0 {
             crc1 = gf2_matrix_times(even.as_mut_ptr(), crc1)
         }
         len2 >>= 1 as i32;
         /* if no more bits set, then done */
-        if len2 == 0 as i32 as libc::c_long {
+        if len2 == 0 as i32 as isize {
             break;
         }
         /* another iteration of the loop with odd and even swapped */
         gf2_matrix_square(odd.as_mut_ptr(), even.as_mut_ptr());
-        if len2 & 1 as i32 as libc::c_long != 0 {
+        if len2 & 1 as i32 as isize != 0 {
             crc1 = gf2_matrix_times(odd.as_mut_ptr(), crc1)
         }
         len2 >>= 1 as i32;
-        if !(len2 != 0 as i32 as libc::c_long) {
+        if !(len2 != 0 as i32 as isize) {
             break;
         }
         /* if no more bits set, then done */

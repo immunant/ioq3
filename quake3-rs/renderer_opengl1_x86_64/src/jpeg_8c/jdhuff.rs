@@ -510,7 +510,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
         } /* ensures jpeg_huff_decode terminates */
         l += 1
     }
-    (*dtbl).maxcode[17 as i32 as usize] = 0xfffff as libc::c_long;
+    (*dtbl).maxcode[17 as i32 as usize] = 0xfffff as isize;
     /* Compute lookahead tables to speed up decoding.
      * First we set all the table entries to 0, indicating "too long";
      * then we iterate through the Huffman codes that are short enough and
@@ -659,7 +659,7 @@ unsafe extern "C" fn jpeg_fill_bit_buffer(
                 }
             }
             /* OK, load c into get_buffer */
-            get_buffer = get_buffer << 8 as i32 | c as libc::c_long;
+            get_buffer = get_buffer << 8 as i32 | c as isize;
             bits_left += 8 as i32
         }
     } else {
@@ -766,7 +766,7 @@ unsafe extern "C" fn jpeg_huff_decode(
             bits_left = (*state).bits_left
         }
         bits_left -= 1 as i32;
-        code |= ((get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize]) as libc::c_long;
+        code |= ((get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize]) as isize;
         l += 1
     }
     /* Unload the local registers */

@@ -601,11 +601,11 @@ return a hash value for the sfx name
 ================
 */
 
-unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> libc::c_long {
+unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> isize {
     let mut i: i32 = 0; // don't include extension
-    let mut hash: libc::c_long = 0; // damn path names
+    let mut hash: isize = 0; // damn path names
     let mut letter: libc::c_char = 0;
-    hash = 0 as i32 as libc::c_long;
+    hash = 0 as i32 as isize;
     i = 0 as i32;
     while *name.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
@@ -633,10 +633,10 @@ unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> libc::c_lon
         if letter as i32 == '\\' as i32 {
             letter = '/' as i32 as libc::c_char
         }
-        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += letter as isize * (i + 119 as i32) as isize;
         i += 1
     }
-    hash &= (128 as i32 - 1 as i32) as libc::c_long;
+    hash &= (128 as i32 - 1 as i32) as isize;
     return hash;
 }
 /*
@@ -780,7 +780,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
             );
             return 0 as i32;
         }
-        return sfx.offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
+        return sfx.offset_from(s_knownSfx.as_mut_ptr()) as isize
             as crate::src::qcommon::q_shared::sfxHandle_t;
     }
     (*sfx).inMemory = crate::src::qcommon::q_shared::qfalse;
@@ -794,7 +794,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
         );
         return 0 as i32;
     }
-    return sfx.offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
+    return sfx.offset_from(s_knownSfx.as_mut_ptr()) as isize
         as crate::src::qcommon::q_shared::sfxHandle_t;
 }
 /*

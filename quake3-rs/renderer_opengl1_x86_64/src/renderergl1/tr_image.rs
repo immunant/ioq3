@@ -426,11 +426,11 @@ return a hash value for the filename
 ================
 */
 
-unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::c_long {
+unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize {
     let mut i: i32 = 0; // don't include extension
-    let mut hash: libc::c_long = 0; // damn path names
+    let mut hash: isize = 0; // damn path names
     let mut letter: libc::c_char = 0;
-    hash = 0 as i32 as libc::c_long;
+    hash = 0 as i32 as isize;
     i = 0 as i32;
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
@@ -458,10 +458,10 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::
         if letter as i32 == '\\' as i32 {
             letter = '/' as i32 as libc::c_char
         }
-        hash += letter as libc::c_long * (i + 119 as i32) as libc::c_long;
+        hash += letter as isize * (i + 119 as i32) as isize;
         i += 1
     }
-    hash &= (1024 as i32 - 1 as i32) as libc::c_long;
+    hash &= (1024 as i32 - 1 as i32) as isize;
     return hash;
 }
 /*
@@ -1680,7 +1680,7 @@ pub unsafe extern "C" fn R_CreateImage(
     let mut image: *mut crate::tr_common_h::image_t = 0 as *mut crate::tr_common_h::image_t;
     let mut isLightmap: crate::src::qcommon::q_shared::qboolean =
         crate::src::qcommon::q_shared::qfalse;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     let mut glWrapClampMode: i32 = 0;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
         crate::src::renderergl1::tr_main::ri
@@ -2051,7 +2051,7 @@ pub unsafe extern "C" fn R_FindImageFile(
     let mut height: i32 = 0;
     let mut pic: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
-    let mut hash: libc::c_long = 0;
+    let mut hash: isize = 0;
     if name.is_null() {
         return 0 as *mut crate::tr_common_h::image_t;
     }

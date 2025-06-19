@@ -162,17 +162,17 @@ unsafe extern "C" fn op_mem_read(
         return 0 as i32;
     }
     /*Check for a short read.*/
-    _buf_size = if size - pos < _buf_size as libc::c_long {
+    _buf_size = if size - pos < _buf_size as isize {
         (size) - pos
     } else {
-        _buf_size as libc::c_long
+        _buf_size as isize
     } as i32;
     crate::stdlib::memcpy(
         _ptr as *mut libc::c_void,
         (*stream).data.offset(pos as isize) as *const libc::c_void,
         _buf_size as libc::c_ulong,
     );
-    pos += _buf_size as libc::c_long;
+    pos += _buf_size as isize;
     (*stream).pos = pos;
     return _buf_size;
 }

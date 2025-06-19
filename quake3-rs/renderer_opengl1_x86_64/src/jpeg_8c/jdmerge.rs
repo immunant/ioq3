@@ -153,27 +153,27 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: crate::jpeglib_h::j_decompre
         /* The Cb or Cr value we are thinking of is x = i - CENTERJSAMPLE */
         /* Cr=>R value is nearest int to 1.40200 * x */
         *(*upsample).Cr_r_tab.offset(i as isize) =
-            ((1.40200f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+            ((1.40200f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * x
                 + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
                 >> 16 as i32) as i32;
         /* Cb=>B value is nearest int to 1.77200 * x */
         *(*upsample).Cb_b_tab.offset(i as isize) =
-            ((1.77200f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+            ((1.77200f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * x
                 + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
                 >> 16 as i32) as i32;
         /* Cr=>G value is scaled-up -0.71414 * x */
         *(*upsample).Cr_g_tab.offset(i as isize) =
-            -((0.71414f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+            -((0.71414f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * x;
         /* Cb=>G value is scaled-up -0.34414 * x */
         /* We also add in ONE_HALF so that need not do it in inner loop */
         *(*upsample).Cb_g_tab.offset(i as isize) =
-            -((0.34414f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+            -((0.34414f64 * ((1 as isize) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * x
                 + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32);

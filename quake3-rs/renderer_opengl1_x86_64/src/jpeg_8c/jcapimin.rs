@@ -409,8 +409,8 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: crate::jpeglib_h::j_com
         iMCU_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
         while iMCU_row < (*cinfo).total_iMCU_rows {
             if !(*cinfo).progress.is_null() {
-                (*(*cinfo).progress).pass_counter = iMCU_row as libc::c_long;
-                (*(*cinfo).progress).pass_limit = (*cinfo).total_iMCU_rows as libc::c_long;
+                (*(*cinfo).progress).pass_counter = iMCU_row as isize;
+                (*(*cinfo).progress).pass_limit = (*cinfo).total_iMCU_rows as isize;
                 Some(
                     (*(*cinfo).progress)
                         .progress_monitor

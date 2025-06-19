@@ -138,9 +138,9 @@ pub unsafe extern "C" fn ReadNumber(
         next: 0 as *mut crate::src::botlib::l_script::token_s,
     };
     let mut negative: i32 = crate::src::qcommon::q_shared::qfalse as i32;
-    let mut intval: libc::c_long = 0;
-    let mut intmin: libc::c_long = 0 as i32 as libc::c_long;
-    let mut intmax: libc::c_long = 0 as i32 as libc::c_long;
+    let mut intval: isize = 0;
+    let mut intmin: isize = 0 as i32 as isize;
+    let mut intmax: isize = 0 as i32 as isize;
     let mut floatval: f64 = 0.;
     if crate::src::botlib::l_precomp::PC_ExpectAnyToken(
         source as *mut crate::src::botlib::l_precomp::source_s,
@@ -226,27 +226,27 @@ pub unsafe extern "C" fn ReadNumber(
         return crate::src::qcommon::q_shared::qtrue;
     }
     //
-    intval = token.intvalue as libc::c_long;
+    intval = token.intvalue as isize;
     if negative != 0 {
         intval = -intval
     }
     //check bounds
     if (*fd).type_0 & 0xff as i32 == 1 as i32 {
         if (*fd).type_0 & 0x400 as i32 != 0 {
-            intmin = 0 as i32 as libc::c_long; //end if
-            intmax = 255 as i32 as libc::c_long
+            intmin = 0 as i32 as isize; //end if
+            intmax = 255 as i32 as isize
         } else {
-            intmin = -(128 as i32) as libc::c_long; //end else if
-            intmax = 127 as i32 as libc::c_long
+            intmin = -(128 as i32) as isize; //end else if
+            intmax = 127 as i32 as isize
         }
     } //end else if
     if (*fd).type_0 & 0xff as i32 == 2 as i32 {
         if (*fd).type_0 & 0x400 as i32 != 0 {
-            intmin = 0 as i32 as libc::c_long; //end if
-            intmax = 65535 as i32 as libc::c_long
+            intmin = 0 as i32 as isize; //end if
+            intmax = 65535 as i32 as isize
         } else {
-            intmin = -(32768 as i32) as libc::c_long;
-            intmax = 32767 as i32 as libc::c_long
+            intmin = -(32768 as i32) as isize;
+            intmax = 32767 as i32 as isize
         }
     }
     if (*fd).type_0 & 0xff as i32 == 1 as i32 || (*fd).type_0 & 0xff as i32 == 2 as i32 {
@@ -255,12 +255,12 @@ pub unsafe extern "C" fn ReadNumber(
                 intmin as f32
             } else {
                 (*fd).floatmin
-            } as libc::c_long;
+            } as isize;
             intmax = if (intmax as f32) < (*fd).floatmax {
                 intmax as f32
             } else {
                 (*fd).floatmax
-            } as libc::c_long
+            } as isize
         }
         if intval < intmin || intval > intmax {
             crate::src::botlib::l_precomp::SourceError(

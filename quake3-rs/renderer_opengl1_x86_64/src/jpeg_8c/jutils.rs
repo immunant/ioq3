@@ -115,17 +115,17 @@ pub static mut jpeg_natural_order2: [i32; 20] = [
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jdiv_round_up(mut a: libc::c_long, mut b: libc::c_long) -> libc::c_long
+pub unsafe extern "C" fn jdiv_round_up(mut a: isize, mut b: isize) -> isize
 /* Compute a/b rounded up to next integer, ie, ceil(a/b) */
 /* Assumes a >= 0, b > 0 */ {
-    return (a + b - 1 as libc::c_long) / b;
+    return (a + b - 1 as isize) / b;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn jround_up(mut a: libc::c_long, mut b: libc::c_long) -> libc::c_long
+pub unsafe extern "C" fn jround_up(mut a: isize, mut b: isize) -> isize
 /* Compute a rounded up to next multiple of b, ie, ceil(a/b)*b */
 /* Assumes a >= 0, b > 0 */ {
-    a += b - 1 as libc::c_long;
+    a += b - 1 as isize;
     return a - a % b;
 }
 /* On normal machines we can apply MEMCOPY() and MEMZERO() to sample arrays

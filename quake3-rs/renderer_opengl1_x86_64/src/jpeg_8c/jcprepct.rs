@@ -522,10 +522,10 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compre
         .expect("non-null function pointer")(
             cinfo as crate::jpeglib_h::j_common_ptr,
             1 as i32,
-            ((*compptr).width_in_blocks as libc::c_long
-                * (*cinfo).min_DCT_h_scaled_size as libc::c_long
-                * (*cinfo).max_h_samp_factor as libc::c_long
-                / (*compptr).h_samp_factor as libc::c_long)
+            ((*compptr).width_in_blocks as isize
+                * (*cinfo).min_DCT_h_scaled_size as isize
+                * (*cinfo).max_h_samp_factor as isize
+                / (*compptr).h_samp_factor as isize)
                 as crate::jmorecfg_h::JDIMENSION,
             (3 as i32 * rgroup_height) as crate::jmorecfg_h::JDIMENSION,
         );
@@ -652,10 +652,10 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
             .expect("non-null function pointer")(
                 cinfo as crate::jpeglib_h::j_common_ptr,
                 1 as i32,
-                ((*compptr).width_in_blocks as libc::c_long
-                    * (*cinfo).min_DCT_h_scaled_size as libc::c_long
-                    * (*cinfo).max_h_samp_factor as libc::c_long
-                    / (*compptr).h_samp_factor as libc::c_long)
+                ((*compptr).width_in_blocks as isize
+                    * (*cinfo).min_DCT_h_scaled_size as isize
+                    * (*cinfo).max_h_samp_factor as isize
+                    / (*compptr).h_samp_factor as isize)
                     as crate::jmorecfg_h::JDIMENSION,
                 (*cinfo).max_v_samp_factor as crate::jmorecfg_h::JDIMENSION,
             );

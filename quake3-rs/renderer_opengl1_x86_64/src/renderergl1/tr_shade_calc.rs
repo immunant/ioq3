@@ -571,7 +571,7 @@ unsafe extern "C" fn EvalWaveForm(mut wf: *const crate::tr_local_h::waveForm_t) 
             ((((*wf).phase as f64
                 + crate::src::renderergl1::tr_shade::tess.shaderTime * (*wf).frequency as f64)
                 * 1024 as i32 as f64) as crate::stdlib::int64_t
-                & (1024 as i32 - 1 as i32) as libc::c_long) as isize,
+                & (1024 as i32 - 1 as i32) as isize) as isize,
         ) * (*wf).amplitude;
 }
 
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn RB_CalcDeformVertexes(mut ds: *mut crate::tr_local_h::d
                         + crate::src::renderergl1::tr_shade::tess.shaderTime
                             * (*ds).deformationWave.frequency as f64)
                         * 1024 as i32 as f64) as crate::stdlib::int64_t
-                        & (1024 as i32 - 1 as i32) as libc::c_long) as isize,
+                        & (1024 as i32 - 1 as i32) as isize) as isize,
                 ) * (*ds).deformationWave.amplitude;
             offset[0 as i32 as usize] = *normal.offset(0 as i32 as isize) * scale;
             offset[1 as i32 as usize] = *normal.offset(1 as i32 as isize) * scale;
@@ -761,7 +761,7 @@ pub unsafe extern "C" fn RB_CalcBulgeVertexes(mut ds: *mut crate::tr_local_h::de
             * ((*st.offset(0 as i32 as isize) * (*ds).bulgeWidth) as f64 + now))
             as crate::stdlib::int64_t;
         scale = crate::src::renderergl1::tr_main::tr.sinTable
-            [(off & (1024 as i32 - 1 as i32) as libc::c_long) as usize]
+            [(off & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*ds).bulgeHeight;
         *xyz.offset(0 as i32 as isize) += *normal.offset(0 as i32 as isize) * scale;
         *xyz.offset(1 as i32 as isize) += *normal.offset(1 as i32 as isize) * scale;
@@ -794,7 +794,7 @@ pub unsafe extern "C" fn RB_CalcMoveVertexes(mut ds: *mut crate::tr_local_h::def
                 + crate::src::renderergl1::tr_shade::tess.shaderTime
                     * (*ds).deformationWave.frequency as f64)
                 * 1024 as i32 as f64) as crate::stdlib::int64_t
-                & (1024 as i32 - 1 as i32) as libc::c_long) as isize,
+                & (1024 as i32 - 1 as i32) as isize) as isize,
         ) * (*ds).deformationWave.amplitude;
     offset[0 as i32 as usize] = (*ds).moveVector[0 as i32 as usize] * scale;
     offset[1 as i32 as usize] = (*ds).moveVector[1 as i32 as usize] * scale;
@@ -2911,7 +2911,7 @@ pub unsafe extern "C" fn RB_CalcTurbulentTexCoords(
                 * 0.125f64
                 + now)
                 * 1024 as i32 as f64) as crate::stdlib::int64_t
-                & (1024 as i32 - 1 as i32) as libc::c_long) as usize]
+                & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*wf).amplitude;
         *st.offset(1 as i32 as isize) = t + crate::src::renderergl1::tr_main::tr.sinTable
             [(((crate::src::renderergl1::tr_shade::tess.xyz[i as usize][1 as i32 as usize] as f64
@@ -2920,7 +2920,7 @@ pub unsafe extern "C" fn RB_CalcTurbulentTexCoords(
                 * 0.125f64
                 + now)
                 * 1024 as i32 as f64) as crate::stdlib::int64_t
-                & (1024 as i32 - 1 as i32) as libc::c_long) as usize]
+                & (1024 as i32 - 1 as i32) as isize) as usize]
             * (*wf).amplitude;
         i += 1;
         st = st.offset(2 as i32 as isize)
@@ -3020,10 +3020,10 @@ pub unsafe extern "C" fn RB_CalcRotateTexCoords(mut degsPerSecond: f32, mut st: 
     degs = -degsPerSecond as f64 * timeScale;
     index = (degs * (1024 as i32 as f32 / 360.0f32) as f64) as crate::stdlib::int64_t;
     sinValue = crate::src::renderergl1::tr_main::tr.sinTable
-        [(index & (1024 as i32 - 1 as i32) as libc::c_long) as usize];
+        [(index & (1024 as i32 - 1 as i32) as isize) as usize];
     cosValue = crate::src::renderergl1::tr_main::tr.sinTable[(index
-        + (1024 as i32 / 4 as i32) as libc::c_long
-        & (1024 as i32 - 1 as i32) as libc::c_long)
+        + (1024 as i32 / 4 as i32) as isize
+        & (1024 as i32 - 1 as i32) as isize)
         as usize];
     tmi.matrix[0 as i32 as usize][0 as i32 as usize] = cosValue;
     tmi.matrix[1 as i32 as usize][0 as i32 as usize] = -sinValue;

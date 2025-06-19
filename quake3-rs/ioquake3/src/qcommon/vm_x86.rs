@@ -199,10 +199,10 @@ unsafe extern "C" fn Emit4(mut v: i32) {
 unsafe extern "C" fn EmitPtr(mut ptr: *mut libc::c_void) {
     let mut v: crate::stdlib::intptr_t = ptr as crate::stdlib::intptr_t;
     Emit4(v as i32);
-    Emit1((v >> 32 as i32 & 0xff as i32 as libc::c_long) as i32);
-    Emit1((v >> 40 as i32 & 0xff as i32 as libc::c_long) as i32);
-    Emit1((v >> 48 as i32 & 0xff as i32 as libc::c_long) as i32);
-    Emit1((v >> 56 as i32 & 0xff as i32 as libc::c_long) as i32);
+    Emit1((v >> 32 as i32 & 0xff as i32 as isize) as i32);
+    Emit1((v >> 40 as i32 & 0xff as i32 as isize) as i32);
+    Emit1((v >> 48 as i32 & 0xff as i32 as isize) as i32);
+    Emit1((v >> 56 as i32 & 0xff as i32 as isize) as i32);
 }
 
 unsafe extern "C" fn Hex(mut c: i32) -> i32 {
@@ -714,8 +714,8 @@ pub unsafe extern "C" fn EmitJumpIns(
     if pass == 2 as i32 {
         Emit4(
             (*(*vm).instructionPointers.offset(cdest as isize)
-                - compiledOfs as libc::c_long
-                - 4 as i32 as libc::c_long) as i32,
+                - compiledOfs as isize
+                - 4 as i32 as isize) as i32,
         );
     } else {
         compiledOfs += 4 as i32
@@ -746,8 +746,8 @@ pub unsafe extern "C" fn EmitCallIns(mut vm: *mut crate::qcommon_h::vm_t, mut cd
     if pass == 2 as i32 {
         Emit4(
             (*(*vm).instructionPointers.offset(cdest as isize)
-                - compiledOfs as libc::c_long
-                - 4 as i32 as libc::c_long) as i32,
+                - compiledOfs as isize
+                - 4 as i32 as isize) as i32,
         );
     } else {
         compiledOfs += 4 as i32
@@ -1959,9 +1959,9 @@ pub unsafe extern "C" fn VM_CallCompiled(
         as *mut i32) = -(1 as i32);
     // off we go into generated code...
     entryPoint = (*vm).codeBase.offset((*vm).entryOfs as isize) as *mut libc::c_void;
-    opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as libc::c_long
-        - 1 as i32 as libc::c_long
-        & !(16 as i32 - 1 as i32) as libc::c_long) as *mut libc::c_void as *mut i32;
+    opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as isize
+        - 1 as i32 as isize
+        & !(16 as i32 - 1 as i32) as isize) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
     opStackOfs = 0 as i32;
     asm!("movq $5, %rax\nmovq $3, %r8\nmovq $4, %r9\npush %r15\npush %r14\npush %r13\npush %r12\ncallq *%rax\npop %r12\npop %r13\npop %r14\npop %r15\n"

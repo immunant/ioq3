@@ -148,7 +148,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             // set the file position in the actual file with the Q3 function
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
-                offset as libc::c_long,
+                offset as isize,
                 crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
             );
             // something has gone wrong, so we return here
@@ -162,7 +162,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             // set the file position in the actual file with the Q3 function
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
-                offset as libc::c_long,
+                offset as isize,
                 crate::src::qcommon::q_shared::FS_SEEK_CUR as i32,
             );
             // something has gone wrong, so we return here
@@ -176,7 +176,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
             // set the file position in the actual file with the Q3 function
             retVal = crate::src::qcommon::files::FS_Seek(
                 (*stream).file,
-                offset as libc::c_long,
+                offset as isize,
                 crate::src::qcommon::q_shared::FS_SEEK_END as i32,
             );
             // something has gone wrong, so we return here

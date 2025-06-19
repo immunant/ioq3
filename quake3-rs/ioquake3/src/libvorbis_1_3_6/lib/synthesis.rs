@@ -109,7 +109,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
     if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         opb as *mut crate::ogg_h::oggpack_buffer,
         1 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         /* Oops.  This is not an audio data packet */
         return -(135 as i32);
@@ -126,7 +126,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
     if (*ci).mode_param[mode as usize].is_null() {
         return -(136 as i32);
     }
-    (*vb).W = (*(*ci).mode_param[mode as usize]).blockflag as libc::c_long;
+    (*vb).W = (*(*ci).mode_param[mode as usize]).blockflag as isize;
     if (*vb).W != 0 {
         /* this doesn;t get mapped through mode selection as it's used
         only for window selection */
@@ -138,12 +138,12 @@ pub unsafe extern "C" fn vorbis_synthesis(
             opb as *mut crate::ogg_h::oggpack_buffer,
             1 as i32,
         );
-        if (*vb).nW == -(1 as i32) as libc::c_long {
+        if (*vb).nW == -(1 as i32) as isize {
             return -(136 as i32);
         }
     } else {
-        (*vb).lW = 0 as i32 as libc::c_long;
-        (*vb).nW = 0 as i32 as libc::c_long
+        (*vb).lW = 0 as i32 as isize;
+        (*vb).nW = 0 as i32 as isize
     }
     /* more setup */
     (*vb).granulepos = (*op).granulepos;
@@ -154,7 +154,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
     (*vb).pcm = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            .wrapping_mul((*vi).channels as libc::c_ulong) as libc::c_long,
+            .wrapping_mul((*vi).channels as libc::c_ulong) as isize,
     ) as *mut *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -163,7 +163,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
             vb as *mut crate::codec_h::vorbis_block,
             ((*vb).pcmend as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut f32;
         i += 1
     }
@@ -207,7 +207,7 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
     if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         opb as *mut crate::ogg_h::oggpack_buffer,
         1 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         /* Oops.  This is not an audio data packet */
         return -(135 as i32);
@@ -224,7 +224,7 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
     if (*ci).mode_param[mode as usize].is_null() {
         return -(136 as i32);
     }
-    (*vb).W = (*(*ci).mode_param[mode as usize]).blockflag as libc::c_long;
+    (*vb).W = (*(*ci).mode_param[mode as usize]).blockflag as isize;
     if (*vb).W != 0 {
         (*vb).lW = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
             opb as *mut crate::ogg_h::oggpack_buffer,
@@ -234,12 +234,12 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
             opb as *mut crate::ogg_h::oggpack_buffer,
             1 as i32,
         );
-        if (*vb).nW == -(1 as i32) as libc::c_long {
+        if (*vb).nW == -(1 as i32) as isize {
             return -(136 as i32);
         }
     } else {
-        (*vb).lW = 0 as i32 as libc::c_long;
-        (*vb).nW = 0 as i32 as libc::c_long
+        (*vb).lW = 0 as i32 as isize;
+        (*vb).nW = 0 as i32 as isize
     }
     /* more setup */
     (*vb).granulepos = (*op).granulepos;
@@ -255,7 +255,7 @@ pub unsafe extern "C" fn vorbis_synthesis_trackonly(
 pub unsafe extern "C" fn vorbis_packet_blocksize(
     mut vi: *mut crate::codec_h::vorbis_info,
     mut op: *mut crate::ogg_h::ogg_packet,
-) -> libc::c_long {
+) -> isize {
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
@@ -268,7 +268,7 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
     let mut mode: i32 = 0;
     if ci.is_null() || (*ci).modes <= 0 as i32 {
         /* codec setup not properly intialized */
-        return -(129 as i32) as libc::c_long;
+        return -(129 as i32) as isize;
     }
     crate::src::libogg_1_3_3::src::bitwise::oggpack_readinit(
         &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
@@ -279,10 +279,10 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
     if crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         &mut opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
         1 as i32,
-    ) != 0 as i32 as libc::c_long
+    ) != 0 as i32 as isize
     {
         /* Oops.  This is not an audio data packet */
-        return -(135 as i32) as libc::c_long;
+        return -(135 as i32) as isize;
     }
     /* read our mode and pre/post windowsize */
     mode = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
@@ -292,7 +292,7 @@ pub unsafe extern "C" fn vorbis_packet_blocksize(
         ),
     ) as i32;
     if mode == -(1 as i32) || (*ci).mode_param[mode as usize].is_null() {
-        return -(136 as i32) as libc::c_long;
+        return -(136 as i32) as isize;
     }
     return (*ci).blocksizes[(*(*ci).mode_param[mode as usize]).blockflag as usize];
 }
@@ -306,7 +306,7 @@ pub unsafe extern "C" fn vorbis_synthesis_halfrate(
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     /* right now, our MDCT can't handle < 64 sample windows. */
-    if (*ci).blocksizes[0 as i32 as usize] <= 64 as i32 as libc::c_long && flag != 0 {
+    if (*ci).blocksizes[0 as i32 as usize] <= 64 as i32 as isize && flag != 0 {
         return -(1 as i32);
     }
     (*ci).halfrate_flag = if flag != 0 { 1 as i32 } else { 0 as i32 };

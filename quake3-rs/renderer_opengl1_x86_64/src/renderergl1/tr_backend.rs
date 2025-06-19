@@ -1908,7 +1908,7 @@ pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const
     // counting up the number of increments that have happened
     if (*crate::src::renderergl1::tr_init::r_measureOverdraw).integer != 0 {
         let mut i: i32 = 0;
-        let mut sum: libc::c_long = 0 as i32 as libc::c_long;
+        let mut sum: isize = 0 as i32 as isize;
         let mut stencilReadback: *mut u8 = 0 as *mut u8;
         stencilReadback = crate::src::renderergl1::tr_main::ri
             .Hunk_AllocateTempMemory
@@ -1929,7 +1929,7 @@ pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const
         while i < crate::src::renderergl1::tr_init::glConfig.vidWidth
             * crate::src::renderergl1::tr_init::glConfig.vidHeight
         {
-            sum += *stencilReadback.offset(i as isize) as libc::c_long;
+            sum += *stencilReadback.offset(i as isize) as isize;
             i += 1
         }
         backEnd.pc.c_overDraw += sum as f32;
