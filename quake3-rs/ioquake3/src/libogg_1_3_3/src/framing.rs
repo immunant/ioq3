@@ -1234,8 +1234,8 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
     if next.is_null() {
         next = (*oy).data.offset((*oy).fill as isize)
     }
-    (*oy).returned = next.wrapping_offset_from((*oy).data) as libc::c_long as libc::c_int;
-    return -(next.wrapping_offset_from(page) as libc::c_long);
+    (*oy).returned = next.offset_from((*oy).data) as libc::c_long as libc::c_int;
+    return -(next.offset_from(page) as libc::c_long);
 }
 /* sync the stream and get a page.  Keep trying until we find a page.
 Suppress 'sync errors' after reporting the first.

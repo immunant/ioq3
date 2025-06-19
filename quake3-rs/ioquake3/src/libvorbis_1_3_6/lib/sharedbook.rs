@@ -588,7 +588,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             i = 0 as libc::c_int;
             while i < n {
                 let mut position: libc::c_int = (*codep.offset(i as isize))
-                    .wrapping_offset_from(codes)
+                    .offset_from(codes)
                     as libc::c_long as libc::c_int;
                 *sortindex.offset(position as isize) = i;
                 i += 1

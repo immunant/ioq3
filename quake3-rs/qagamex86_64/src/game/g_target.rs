@@ -495,7 +495,7 @@ pub unsafe extern "C" fn Use_Target_Print(
 ) {
     if !(*activator).client.is_null() && (*ent).spawnflags & 4 as libc::c_int != 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            activator.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+            activator.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
                 as libc::c_long as libc::c_int,
             crate::src::qcommon::q_shared::va(
                 b"cp \"%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,

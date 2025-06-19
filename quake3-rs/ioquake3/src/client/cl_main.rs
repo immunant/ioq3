@@ -2756,7 +2756,7 @@ pub unsafe extern "C" fn CL_PlayDemo_f() {
                 b"Protocol %d not supported for demos\n\x00" as *const u8 as *const libc::c_char,
                 protocol,
             );
-            len = ext_test.wrapping_offset_from(arg.as_mut_ptr()) as libc::c_long as libc::c_int;
+            len = ext_test.offset_from(arg.as_mut_ptr()) as libc::c_long as libc::c_int;
             if len as libc::c_ulong
                 >= (::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
@@ -4611,7 +4611,7 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
         // IPv4 address
         if *buffptr as libc::c_int == '\\' as i32 {
             buffptr = buffptr.offset(1);
-            if (buffend.wrapping_offset_from(buffptr) as libc::c_long as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as libc::c_long as libc::c_ulong)
                 < (::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 4]>()
                     as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<libc::c_ushort>() as libc::c_ulong)
@@ -4635,7 +4635,7 @@ pub unsafe extern "C" fn CL_ServersResponsePacket(
                 break;
             }
             buffptr = buffptr.offset(1);
-            if (buffend.wrapping_offset_from(buffptr) as libc::c_long as libc::c_ulong)
+            if (buffend.offset_from(buffptr) as libc::c_long as libc::c_ulong)
                 < (::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 16]>()
                     as libc::c_ulong)
                     .wrapping_add(::std::mem::size_of::<libc::c_ushort>() as libc::c_ulong)

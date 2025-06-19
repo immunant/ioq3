@@ -594,7 +594,7 @@ unsafe extern "C" fn PrintMsg(
         if ent.is_null() {
             -(1 as libc::c_int) as libc::c_long
         } else {
-            ent.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
                 as libc::c_long
         } as libc::c_int,
         crate::src::qcommon::q_shared::va(
@@ -1892,7 +1892,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         i += 1
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
             as libc::c_int,
         crate::src::qcommon::q_shared::va(
             b"tinfo %i %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,

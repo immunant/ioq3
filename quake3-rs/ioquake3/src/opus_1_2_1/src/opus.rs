@@ -490,7 +490,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
             last_size as crate::opus_types_h::opus_int16
     }
     if !payload_offset.is_null() {
-        *payload_offset = data.wrapping_offset_from(data0) as libc::c_long as libc::c_int
+        *payload_offset = data.offset_from(data0) as libc::c_long as libc::c_int
     }
     i = 0 as libc::c_int;
     while i < count {
@@ -503,7 +503,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
     }
     if !packet_offset.is_null() {
         *packet_offset = pad
-            + data.wrapping_offset_from(data0) as libc::c_long as crate::opus_types_h::opus_int32
+            + data.offset_from(data0) as libc::c_long as crate::opus_types_h::opus_int32
     }
     if !out_toc.is_null() {
         *out_toc = toc

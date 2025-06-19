@@ -837,7 +837,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
             .wrapping_add(
                 (0 as libc::c_int as libc::c_long
-                    * oldEBands_intra.wrapping_offset_from(oldEBands) as libc::c_long)
+                    * oldEBands_intra.offset_from(oldEBands) as libc::c_long)
                     as libc::c_ulong,
             ),
     );
@@ -908,7 +908,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 .wrapping_mul(::std::mem::size_of::<libc::c_uchar>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * intra_bits.wrapping_offset_from(intra_buf) as libc::c_long)
+                        * intra_bits.offset_from(intra_buf) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -948,7 +948,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                     .wrapping_mul(::std::mem::size_of::<libc::c_uchar>() as libc::c_ulong)
                     .wrapping_add(
                         (0 as libc::c_int as libc::c_long
-                            * intra_buf.wrapping_offset_from(intra_bits) as libc::c_long)
+                            * intra_buf.offset_from(intra_bits) as libc::c_long)
                             as libc::c_ulong,
                     ),
             );
@@ -961,7 +961,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                     )
                     .wrapping_add(
                         (0 as libc::c_int as libc::c_long
-                            * oldEBands.wrapping_offset_from(oldEBands_intra) as libc::c_long)
+                            * oldEBands.offset_from(oldEBands_intra) as libc::c_long)
                             as libc::c_ulong,
                     ),
             );
@@ -974,7 +974,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                     )
                     .wrapping_add(
                         (0 as libc::c_int as libc::c_long
-                            * error.wrapping_offset_from(error_intra) as libc::c_long)
+                            * error.offset_from(error_intra) as libc::c_long)
                             as libc::c_ulong,
                     ),
             );
@@ -988,7 +988,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * oldEBands.wrapping_offset_from(oldEBands_intra) as libc::c_long)
+                        * oldEBands.offset_from(oldEBands_intra) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -999,7 +999,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * error.wrapping_offset_from(error_intra) as libc::c_long)
+                        * error.offset_from(error_intra) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );

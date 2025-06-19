@@ -765,7 +765,7 @@ unsafe extern "C" fn stereo_merge(
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as libc::c_int as libc::c_long * Y.wrapping_offset_from(X) as libc::c_long)
+                    (0 as libc::c_int as libc::c_long * Y.offset_from(X) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -1008,7 +1008,7 @@ unsafe extern "C" fn deinterleave_hadamard(
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
             .wrapping_add(
-                (0 as libc::c_int as libc::c_long * X.wrapping_offset_from(tmp) as libc::c_long)
+                (0 as libc::c_int as libc::c_long * X.offset_from(tmp) as libc::c_long)
                     as libc::c_ulong,
             ),
     );
@@ -1063,7 +1063,7 @@ unsafe extern "C" fn interleave_hadamard(
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
             .wrapping_add(
-                (0 as libc::c_int as libc::c_long * X.wrapping_offset_from(tmp) as libc::c_long)
+                (0 as libc::c_int as libc::c_long * X.offset_from(tmp) as libc::c_long)
                     as libc::c_ulong,
             ),
     );
@@ -1845,7 +1845,7 @@ unsafe extern "C" fn quant_band(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * lowband_scratch.wrapping_offset_from(lowband) as libc::c_long)
+                        * lowband_scratch.offset_from(lowband) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -2242,7 +2242,7 @@ unsafe extern "C" fn special_hybrid_folding(
             .wrapping_add(
                 (0 as libc::c_int as libc::c_long
                     * (&mut *norm.offset(n1 as isize) as *mut crate::arch_h::celt_norm)
-                        .wrapping_offset_from(
+                        .offset_from(
                             &mut *norm.offset((2 as libc::c_int * n1 - n2) as isize),
                         ) as libc::c_long) as libc::c_ulong,
             ),
@@ -2257,7 +2257,7 @@ unsafe extern "C" fn special_hybrid_folding(
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
                         * (&mut *norm2.offset(n1 as isize) as *mut crate::arch_h::celt_norm)
-                            .wrapping_offset_from(
+                            .offset_from(
                                 &mut *norm2.offset((2 as libc::c_int * n1 - n2) as isize),
                             ) as libc::c_long) as libc::c_ulong,
                 ),
@@ -2804,7 +2804,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * X_save.wrapping_offset_from(X) as libc::c_long)
+                                    * X_save.offset_from(X) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2817,7 +2817,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * Y_save.wrapping_offset_from(Y) as libc::c_long)
+                                    * Y_save.offset_from(Y) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2860,7 +2860,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * X_save2.wrapping_offset_from(X) as libc::c_long)
+                                    * X_save2.offset_from(X) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2873,7 +2873,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * Y_save2.wrapping_offset_from(Y) as libc::c_long)
+                                    * Y_save2.offset_from(Y) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2888,7 +2888,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                     as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as libc::c_int as libc::c_long
-                                        * norm_save2.wrapping_offset_from(
+                                        * norm_save2.offset_from(
                                             norm.offset(
                                                 (M * *eBands.offset(i as isize) as libc::c_int)
                                                     as isize,
@@ -2910,7 +2910,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             .wrapping_mul(::std::mem::size_of::<libc::c_uchar>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * bytes_save.as_mut_ptr().wrapping_offset_from(bytes_buf)
+                                    * bytes_save.as_mut_ptr().offset_from(bytes_buf)
                                         as libc::c_long)
                                     as libc::c_ulong,
                             ),
@@ -2927,7 +2927,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * X.wrapping_offset_from(X_save) as libc::c_long)
+                                    * X.offset_from(X_save) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2940,7 +2940,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             )
                             .wrapping_add(
                                 (0 as libc::c_int as libc::c_long
-                                    * Y.wrapping_offset_from(Y_save) as libc::c_long)
+                                    * Y.offset_from(Y_save) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2985,7 +2985,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                     as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as libc::c_int as libc::c_long
-                                        * X.wrapping_offset_from(X_save2) as libc::c_long)
+                                        * X.offset_from(X_save2) as libc::c_long)
                                         as libc::c_ulong,
                                 ),
                         );
@@ -2997,7 +2997,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                     as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as libc::c_int as libc::c_long
-                                        * Y.wrapping_offset_from(Y_save2) as libc::c_long)
+                                        * Y.offset_from(Y_save2) as libc::c_long)
                                         as libc::c_ulong,
                                 ),
                         );
@@ -3020,7 +3020,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                                         as isize,
                                                 )
                                                 .offset(-(norm_offset as isize))
-                                                .wrapping_offset_from(norm_save2)
+                                                .offset_from(norm_save2)
                                                 as libc::c_long)
                                             as libc::c_ulong,
                                     ),
@@ -3035,7 +3035,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 )
                                 .wrapping_add(
                                     (0 as libc::c_int as libc::c_long
-                                        * bytes_buf.wrapping_offset_from(bytes_save.as_mut_ptr())
+                                        * bytes_buf.offset_from(bytes_save.as_mut_ptr())
                                             as libc::c_long)
                                         as libc::c_ulong,
                                 ),

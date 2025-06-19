@@ -787,7 +787,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
             );
             return 0 as libc::c_int;
         }
-        return sfx.wrapping_offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
+        return sfx.offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
             as crate::src::qcommon::q_shared::sfxHandle_t;
     }
     (*sfx).inMemory = crate::src::qcommon::q_shared::qfalse;
@@ -801,7 +801,7 @@ pub unsafe extern "C" fn S_Base_RegisterSound(
         );
         return 0 as libc::c_int;
     }
-    return sfx.wrapping_offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
+    return sfx.offset_from(s_knownSfx.as_mut_ptr()) as libc::c_long
         as crate::src::qcommon::q_shared::sfxHandle_t;
 }
 /*

@@ -449,7 +449,7 @@ pub unsafe extern "C" fn SV_NumForGentity(
     mut ent: *mut crate::g_public_h::sharedEntity_t,
 ) -> libc::c_int {
     let mut num: libc::c_int = 0;
-    num = ((ent as *mut crate::src::qcommon::q_shared::byte).wrapping_offset_from(
+    num = ((ent as *mut crate::src::qcommon::q_shared::byte).offset_from(
         crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte,
     ) as libc::c_long
         / crate::src::server::sv_main::sv.gentitySize as libc::c_long) as libc::c_int;
@@ -504,7 +504,7 @@ pub unsafe extern "C" fn SV_GEntityForSvEntity(
     mut svEnt: *mut crate::server_h::svEntity_t,
 ) -> *mut crate::g_public_h::sharedEntity_t {
     let mut num: libc::c_int = 0;
-    num = svEnt.wrapping_offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
+    num = svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
         as libc::c_long as libc::c_int;
     return SV_GentityNum(num);
 }

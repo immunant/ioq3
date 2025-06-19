@@ -483,9 +483,9 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
         crate::stdlib::strncpy(
             originalShader.as_mut_ptr(),
             o,
-            n.wrapping_offset_from(o) as libc::c_long as libc::c_ulong,
+            n.offset_from(o) as libc::c_long as libc::c_ulong,
         );
-        originalShader[n.wrapping_offset_from(o) as libc::c_long as usize] =
+        originalShader[n.offset_from(o) as libc::c_long as usize] =
             0 as libc::c_int as libc::c_char;
         n = n.offset(1);
         t = ::libc::strstr(n, b":\x00" as *const u8 as *const libc::c_char);
@@ -495,9 +495,9 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
         crate::stdlib::strncpy(
             newShader.as_mut_ptr(),
             n,
-            t.wrapping_offset_from(n) as libc::c_long as libc::c_ulong,
+            t.offset_from(n) as libc::c_long as libc::c_ulong,
         );
-        newShader[t.wrapping_offset_from(n) as libc::c_long as usize] =
+        newShader[t.offset_from(n) as libc::c_long as usize] =
             0 as libc::c_int as libc::c_char;
         t = t.offset(1);
         o = ::libc::strstr(t, b"@\x00" as *const u8 as *const libc::c_char);
@@ -505,9 +505,9 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
             crate::stdlib::strncpy(
                 timeOffset.as_mut_ptr(),
                 t,
-                o.wrapping_offset_from(t) as libc::c_long as libc::c_ulong,
+                o.offset_from(t) as libc::c_long as libc::c_ulong,
             );
-            timeOffset[o.wrapping_offset_from(t) as libc::c_long as usize] =
+            timeOffset[o.offset_from(t) as libc::c_long as usize] =
                 0 as libc::c_int as libc::c_char;
             o = o.offset(1);
             crate::src::cgame::cg_syscalls::trap_R_RemapShader(
@@ -662,9 +662,9 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
     while *str != 0 {
         if len > 80 as libc::c_int - 1 as libc::c_int {
             if !ls.is_null() {
-                str = str.offset(-(p.wrapping_offset_from(ls) as libc::c_long as isize));
+                str = str.offset(-(p.offset_from(ls) as libc::c_long as isize));
                 str = str.offset(1);
-                p = p.offset(-(p.wrapping_offset_from(ls) as libc::c_long as isize))
+                p = p.offset(-(p.offset_from(ls) as libc::c_long as isize))
             }
             *p = 0 as libc::c_int as libc::c_char;
             crate::src::cgame::cg_main::cgs.teamChatMsgTimes

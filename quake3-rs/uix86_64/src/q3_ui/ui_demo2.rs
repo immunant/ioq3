@@ -764,7 +764,7 @@ unsafe extern "C" fn Demos_MenuInit() {
                 demoname,
                 (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
                     .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                    .wrapping_sub(demoname.wrapping_offset_from(s_demos.names.as_mut_ptr())
+                    .wrapping_sub(demoname.offset_from(s_demos.names.as_mut_ptr())
                         as libc::c_long as libc::c_ulong) as libc::c_int,
             )
         }

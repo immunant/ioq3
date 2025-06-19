@@ -57,7 +57,7 @@ unsafe extern "C" fn op_string_range_dup(
 ) -> *mut libc::c_char {
     let mut len: crate::stddef_h::size_t = 0;
     let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
-    len = _end.wrapping_offset_from(_start) as libc::c_long as crate::stddef_h::size_t;
+    len = _end.offset_from(_start) as libc::c_long as crate::stddef_h::size_t;
     /*This is to help avoid overflow elsewhere, later.*/
     if (len >= 2147483647 as libc::c_int as libc::c_ulong) as libc::c_int as libc::c_long != 0 {
         return 0 as *mut libc::c_char;
@@ -188,7 +188,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
             as *const libc::c_char,
     ) as isize);
     if (*scheme_end as libc::c_int != ':' as i32) as libc::c_int as libc::c_long != 0
-        || scheme_end.wrapping_offset_from(_src) as libc::c_long != 4 as libc::c_int as libc::c_long
+        || scheme_end.offset_from(_src) as libc::c_long != 4 as libc::c_int as libc::c_long
         || crate::src::opusfile_0_9::src::internal::op_strncasecmp(
             _src,
             b"file\x00" as *const u8 as *const libc::c_char,
@@ -235,7 +235,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 return 0 as *const libc::c_char;
             }
             /*An escaped "localhost" can take at most 27 characters.*/
-            if (host_end.wrapping_offset_from(host) as libc::c_long
+            if (host_end.offset_from(host) as libc::c_long
                 > 27 as libc::c_int as libc::c_long) as libc::c_int as libc::c_long
                 != 0
             {
@@ -245,10 +245,10 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 host_buf.as_mut_ptr() as *mut libc::c_void,
                 host as *const libc::c_void,
                 (::std::mem::size_of::<libc::c_char>() as libc::c_ulong).wrapping_mul(
-                    host_end.wrapping_offset_from(host) as libc::c_long as libc::c_ulong,
+                    host_end.offset_from(host) as libc::c_long as libc::c_ulong,
                 ),
             );
-            host_buf[host_end.wrapping_offset_from(host) as libc::c_long as usize] =
+            host_buf[host_end.offset_from(host) as libc::c_long as usize] =
                 '\u{0}' as i32 as libc::c_char;
             op_unescape_url_component(host_buf.as_mut_ptr());
             op_string_tolower(host_buf.as_mut_ptr());
@@ -384,7 +384,7 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
         request = _ap
             .as_va_list()
             .arg::<*mut libc::c_char>()
-            .wrapping_offset_from(0 as *mut libc::c_void as *mut libc::c_char)
+            .offset_from(0 as *mut libc::c_void as *mut libc::c_char)
             as libc::c_long;
         /*If we hit NULL, we're done processing options.*/
         if request == 0 {

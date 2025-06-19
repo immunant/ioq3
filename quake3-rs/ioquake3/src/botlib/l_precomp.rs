@@ -1724,7 +1724,7 @@ pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(
 ) -> libc::c_int {
     return ((*token)
         .endwhitespace_p
-        .wrapping_offset_from((*token).whitespace_p) as libc::c_long
+        .offset_from((*token).whitespace_p) as libc::c_long
         > 0 as libc::c_int as libc::c_long) as libc::c_int;
 }
 //end of the function PC_WhiteSpaceBeforeToken

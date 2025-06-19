@@ -3483,7 +3483,7 @@ unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: libc::c_int) {
         while *s as libc::c_int != 0 && *s as libc::c_int != ' ' as i32 {
             s = s.offset(1)
         }
-        len = s.wrapping_offset_from(start) as libc::c_long as libc::c_int;
+        len = s.offset_from(start) as libc::c_long as libc::c_int;
         if len >= 64 as libc::c_int || len < 5 as libc::c_int {
             CG_Error(
                 b"PrecacheItem: %s has bad precache string\x00" as *const u8 as *const libc::c_char,

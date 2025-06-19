@@ -1134,7 +1134,7 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
         crate::src::qcommon::q_shared::Q_strncpyz(
             s_playermodel.modelskin.as_mut_ptr(),
             buffptr,
-            (pdest.wrapping_offset_from(buffptr) as libc::c_long + 1 as libc::c_int as libc::c_long)
+            (pdest.offset_from(buffptr) as libc::c_long + 1 as libc::c_int as libc::c_long)
                 as libc::c_int,
         );
         ::libc::strcat(
@@ -1142,7 +1142,7 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
             pdest.offset(5 as libc::c_int as isize),
         );
         // separate the model name
-        maxlen = pdest.wrapping_offset_from(buffptr) as libc::c_long as libc::c_int;
+        maxlen = pdest.offset_from(buffptr) as libc::c_long as libc::c_int;
         if maxlen > 16 as libc::c_int {
             maxlen = 16 as libc::c_int
         }
@@ -1353,7 +1353,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 modelskin.as_mut_ptr(),
                 buffptr,
-                (pdest.wrapping_offset_from(buffptr) as libc::c_long
+                (pdest.offset_from(buffptr) as libc::c_long
                     + 1 as libc::c_int as libc::c_long) as libc::c_int,
             );
             ::libc::strcat(
@@ -1369,7 +1369,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 s_playermodel.selectedmodel = i;
                 s_playermodel.modelpage = i / (4 as libc::c_int * 4 as libc::c_int);
                 // separate the model name
-                maxlen = pdest.wrapping_offset_from(buffptr) as libc::c_long as libc::c_int;
+                maxlen = pdest.offset_from(buffptr) as libc::c_long as libc::c_int;
                 if maxlen > 16 as libc::c_int {
                     maxlen = 16 as libc::c_int
                 }

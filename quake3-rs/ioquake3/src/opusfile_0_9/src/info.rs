@@ -169,7 +169,7 @@ pub unsafe extern "C" fn opus_head_parse(
             _head as *mut libc::c_void,
             &mut head as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead
                 as *const libc::c_void,
-            head.mapping.as_mut_ptr().wrapping_offset_from(
+            head.mapping.as_mut_ptr().offset_from(
                 &mut head as *mut crate::src::opusfile_0_9::src::opusfile::OpusHead
                     as *mut libc::c_uchar,
             ) as libc::c_long as libc::c_ulong,

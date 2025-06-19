@@ -7,7 +7,7 @@
 #![allow(unused_mut)]
 #![feature(c_variadic)]
 #![feature(const_raw_ptr_to_usize_cast)]
-#![feature(ptr_wrapping_offset_from)]
+#![feature(ptr_offset_from)]
 #![feature(register_tool)]
 #![register_tool(c2rust)]
 

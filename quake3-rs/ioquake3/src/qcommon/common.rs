@@ -1099,7 +1099,7 @@ pub unsafe extern "C" fn Info_Print(mut s: *const libc::c_char) {
             o = o.offset(1);
             *fresh1 = *fresh0
         }
-        l = o.wrapping_offset_from(key.as_mut_ptr()) as libc::c_long as libc::c_int;
+        l = o.offset_from(key.as_mut_ptr()) as libc::c_long as libc::c_int;
         if l < 20 as libc::c_int {
             crate::stdlib::memset(
                 o as *mut libc::c_void,
@@ -4191,7 +4191,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
             );
             *brk = tmp;
             accu = (accu as libc::c_long
-                - brk.wrapping_offset_from(buf.as_mut_ptr()) as libc::c_long)
+                - brk.offset_from(buf.as_mut_ptr()) as libc::c_long)
                 as libc::c_int;
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,

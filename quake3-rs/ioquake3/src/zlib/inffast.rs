@@ -248,7 +248,7 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
                         );
                         hold >>= op;
                         bits = bits.wrapping_sub(op);
-                        op = out.wrapping_offset_from(beg) as libc::c_long as libc::c_uint;
+                        op = out.offset_from(beg) as libc::c_long as libc::c_uint;
                         if dist > op {
                             current_block_141 = 5873035170358615968;
                             break;
@@ -442,14 +442,14 @@ pub unsafe extern "C" fn inflate_fast(mut strm: crate::zlib_h::z_streamp, mut st
     (*strm).next_in = in_0.offset(1 as libc::c_int as isize);
     (*strm).next_out = out.offset(1 as libc::c_int as isize);
     (*strm).avail_in = if in_0 < last {
-        (5 as libc::c_int as libc::c_long) + last.wrapping_offset_from(in_0) as libc::c_long
+        (5 as libc::c_int as libc::c_long) + last.offset_from(in_0) as libc::c_long
     } else {
-        (5 as libc::c_int as libc::c_long) - in_0.wrapping_offset_from(last) as libc::c_long
+        (5 as libc::c_int as libc::c_long) - in_0.offset_from(last) as libc::c_long
     } as libc::c_uint;
     (*strm).avail_out = if out < end {
-        (257 as libc::c_int as libc::c_long) + end.wrapping_offset_from(out) as libc::c_long
+        (257 as libc::c_int as libc::c_long) + end.offset_from(out) as libc::c_long
     } else {
-        (257 as libc::c_int as libc::c_long) - out.wrapping_offset_from(end) as libc::c_long
+        (257 as libc::c_int as libc::c_long) - out.offset_from(end) as libc::c_long
     } as libc::c_uint;
     (*state).hold = hold;
     (*state).bits = bits;
